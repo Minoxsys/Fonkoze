@@ -1,0 +1,66 @@
+﻿.form-actions, .breadcrumbs, .title_bar, .noprint, .current_user {display: none;}
+
+input {
+    border:none;
+    box-shadow:none;
+    font-size:100%;
+    font-family: Times;
+    width: 100%;
+}
+
+.certificate-input {
+    font-weight: bold;
+    border-bottom: none;
+}
+
+.certificate-signature {
+    margin-top: 30px;
+    margin-bottom: 50px;
+}
+
+.certificate-title {
+    margin-bottom: 30px;
+    text-align: center;
+    display: block;
+}
+
+.certificate-company-logo {
+    display: block;
+}
+
+
+body {
+    width: 100%;
+    margin: 0;
+    float: none;
+    font-family: Times;
+}
+
+.certificate-section-title {
+    display: block;
+    font-weight: bold;
+    padding: 5px;
+}
+
+.left {
+    float: left;
+    margin-left: 30px;
+}
+
+.right {
+    float: right;
+    margin-right: 50px;
+}
+
+.clear {
+    clear: both;
+}
+
+.certificate-section {
+    padding-bottom: 20px;
+}
+
+.bold {
+    font-weight: bold;
+    display: inline;  
+}

@@ -1,0 +1,64 @@
+﻿@model RoleManagerListOutputModel
+@section page_title{
+    Roles
+}
+@section title_bar{
+<h4>
+        Roles</h4>
+}
+@section breadcrumbs{
+    @(Html.ActionLink<HomeController>(it => it.Index(), "Overview"))
+    /@(Html.ActionLink<ConfigurationTypesController>(act=>act.Overview(),"Settings", ConfigurationAreaRegistration.DEFAULT_ROUTE))   
+    > List roles
+}
+@section master_content{
+
+    <div>
+        <div class="page_header">
+            <h2>
+                Roles</h2>
+        </div>
+        <table>
+            <tr>
+                <th>
+                    Name
+                </th>
+                <th>
+                    Description
+                </th>
+                <th>
+                    #Functions
+                </th>
+            </tr>
+@{
+    var itemCount = 0;
+}
+        
+            @foreach (var role in this.Model.Roles)
+   {
+                <tr class="@((itemCount++%2==0) ? "odd": "even")">
+                    <td>
+                        @role.Name
+                    </td>
+                    <td>
+                        @role.Description
+                    </td>
+                    <td>
+                        @(Html.ActionLink<RoleManagerController>(call => call.Edit(role.Id
+                        ), "Assign functions"))
+                    </td>
+                </tr>
+   }
+        </table>
+    </div>
+}
+@section master_actions{
+    <h3>
+        Actions</h3>
+    <div class="page_header_buttons">
+        <a href="@(Html.BuildUrlFromExpression<RoleManagerController>(it => it.Create()))">
+            <button type="button" class="sexybutton sexysimple sexygreen">
+                Create new</button></a>
+    </div>
+   
+}

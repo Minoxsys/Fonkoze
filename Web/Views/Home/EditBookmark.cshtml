@@ -1,0 +1,39 @@
+﻿@model Bookmark
+@section master_content{
+	@using (Html.BeginForm<HomeController>(c => c.EditBookmark(Model.Id)))
+ {
+
+		<legend>Edit Bookmark</legend>	
+
+		<div class="grid_12 suffix_4">
+			<fieldset>
+				@Html.LabelFor(m => m.Url)
+				@Html.TextBoxFor(m => m.Url)
+				<br />
+				@Html.LabelFor(m => m.Notes)
+				@Html.TextAreaFor(m => m.Notes)
+			</fieldset>
+			@Html.HiddenFor(m => m.Id)
+		</div>
+
+		<div class="form_buttons">
+			@Html.SubmitButton("submit-form", "Save", new
+{
+	@class = "sexybutton sexysimple sexyteal"
+}) <span>or </span><a class="cancel" href="@(Html.BuildUrlFromExpression<HomeController>(it => it.Index()))">
+	Cancel</a>
+		</div>
+ }
+}
+@section master_actions{
+
+	<h3>
+		Actions</h3>
+	@using (Html.BeginForm<HomeController>(c => c.DeleteBookmark(Model.Id)))
+ { 
+		@Html.SubmitButton("submit-form", "Delete", new
+{
+	@class = "sexybutton sexysimple sexyred"
+}) 
+ }
+}
