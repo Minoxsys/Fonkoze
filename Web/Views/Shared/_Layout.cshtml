@@ -25,7 +25,6 @@
         <div class="prefix_11 grid_5 current_user">
             @{Html.RenderPartial("_LogOnPartial");}
 
-            <text> [</text> @(Html.ActionLink<ConfigurationTypesController>(it => it.Overview(), "Settings", ConfigurationAreaRegistration.DEFAULT_ROUTE)) <text> ] </text>
         </div>
         @RenderSection("menu", required: false)
         <div class="breadcrumbs">

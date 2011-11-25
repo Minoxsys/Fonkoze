@@ -8,34 +8,37 @@ using Core.Persistence;
 
 namespace Persistence.Commands
 {
-	public class NHibernateSaveOrUpdateCommand<ENTITY> : ISaveOrUpdateCommand<ENTITY> where ENTITY : DomainEntity
-	{
-		INHibernateUnitOfWork unitOfWork;
-		public NHibernateSaveOrUpdateCommand(
-		INHibernateUnitOfWork unitOfWork)
-		{
-			this.unitOfWork = unitOfWork;
+    public class NHibernateSaveOrUpdateCommand<ENTITY> : ISaveOrUpdateCommand<ENTITY> where ENTITY : DomainEntity
+    {
+        INHibernateUnitOfWork unitOfWork;
+        public NHibernateSaveOrUpdateCommand(
+        INHibernateUnitOfWork unitOfWork)
+        {
+            this.unitOfWork = unitOfWork;
 
-		}
-		public void Execute(ENTITY entity)
-		{
-			ITransaction transaction = unitOfWork.CurrentSession.BeginTransaction();
+        }
+        public void Execute(ENTITY entity)
+        {
+            ITransaction transaction = unitOfWork.CurrentSession.BeginTransaction();
 
-			try
-			{
+            entity.Updated = DateTime.UtcNow;
+            try
+            {
+                if (entity.Created == DateTime.MinValue)
+                    entity.Created = DateTime.UtcNow;
 
-				unitOfWork.CurrentSession.SaveOrUpdate(entity);
-				transaction.Commit();
-			}
-			catch (NHibernate.Exceptions.GenericADOException)
-			{
-				transaction.Rollback();
-			}
-			finally
-			{
-				transaction.Dispose();
-				transaction = null;
-			}
-		}
-	}
+                unitOfWork.CurrentSession.SaveOrUpdate(entity);
+                transaction.Commit();
+            }
+            catch (NHibernate.Exceptions.GenericADOException)
+            {
+                transaction.Rollback();
+            }
+            finally
+            {
+                transaction.Dispose();
+                transaction = null;
+            }
+        }
+    }
 }

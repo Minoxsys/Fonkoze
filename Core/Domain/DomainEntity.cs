@@ -19,8 +19,8 @@ namespace Core.Domain
 			private set;
 		}
 
-        public virtual DateTime Created { get; set; }
-        public virtual DateTime Updated { get; set; }
+        public virtual DateTime? Created { get; set; }
+        public virtual DateTime? Updated { get; set; }
         public virtual User ByUser { get; set; }
 
 		/// <summary>

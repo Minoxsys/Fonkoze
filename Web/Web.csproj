@@ -1822,11 +1822,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\img\skins\ButtonTemplate.psd" />
-    <Content Include="Views\Home\AddBookmark.cshtml" />
-    <Content Include="Views\Home\EditBookmark.cshtml" />
-    <Content Include="Views\Home\EmployeeNew.cshtml" />
-    <Content Include="Views\Home\List.cshtml" />
-    <Content Include="Views\Home\OnBoarding.cshtml" />
     <Content Include="Views\RoleManager\Create.cshtml" />
     <Content Include="Views\RoleManager\Edit.cshtml" />
     <Content Include="Views\RoleManager\List.cshtml" />

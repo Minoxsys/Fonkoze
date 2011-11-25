@@ -58,7 +58,7 @@ namespace Web.Controllers
 			set;
 		}
 
-        [Requires(Permissions = "RoleManager.Overview")]
+        //[Requires(Permissions = "RoleManager.Overview")]
 		public ActionResult List()
 		{
 
@@ -66,7 +66,7 @@ namespace Web.Controllers
 			return View(ListOutputModel);
 		}
 
-        [Requires(Permissions = "RoleManager.CRUD")]
+        //[Requires(Permissions = "RoleManager.CRUD")]
 		public ActionResult Create()
 		{
 
@@ -74,7 +74,7 @@ namespace Web.Controllers
 		}
 
 		[HttpPost]
-        [Requires(Permissions = "RoleManager.CRUD")]
+        //[Requires(Permissions = "RoleManager.CRUD")]
 		public ActionResult Create( RoleManagerCreateInputModel input )
 		{
 			if (!this.ModelState.IsValid)
@@ -90,7 +90,7 @@ namespace Web.Controllers
 			return RedirectToAction("List");
 		}
 
-        [Requires(Permissions = "RoleManager.CRUD")]
+        //[Requires(Permissions = "RoleManager.CRUD")]
 		public ActionResult Edit( Guid id )
 		{
 			if (id == Guid.Empty)
@@ -110,7 +110,7 @@ namespace Web.Controllers
 			return View(EditOutputModel);
 		}
         [HttpPost]
-        [Requires(Permissions = "RoleManager.CRUD")]
+        //[Requires(Permissions = "RoleManager.CRUD")]
 		public ActionResult Edit( RoleManagerEditInput model )
 		{
 
@@ -134,7 +134,7 @@ namespace Web.Controllers
 		}
 
 		[HttpPost]
-        [Requires(Permissions = "RoleManager.CRUD")]
+        //[Requires(Permissions = "RoleManager.CRUD")]
 		public EmptyResult Assign( Guid functionId, Guid roleId )
 		{
 
@@ -143,7 +143,7 @@ namespace Web.Controllers
 		}
 
 
-        [Requires(Permissions = "RoleManager.CRUD")]
+        //[Requires(Permissions = "RoleManager.CRUD")]
 		public EmptyResult UnAssign( Guid functionId, Guid roleId )
 		{
 			UnAssignModel.RemoveFunctionFromRole(functionId, roleId);

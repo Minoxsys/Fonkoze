@@ -9,16 +9,20 @@ using AutoMapper;
 using Web.Bootstrap.Converters;
 using Web.Models.Shared;
 using Web.Security;
+using System.ComponentModel.DataAnnotations;
 
 namespace Web.Controllers
 {
-    [HandleError]
     public class HomeController : Controller
     {
 
-        [Requires(Permissions = "Home.Index")]
+        //[Requires(Permissions = "Home.Index")]
         public ActionResult Index()
         {
+            if (!this.ModelState.IsValid)
+            {
+                return new EmptyResult();
+            }
             IndexModel listModel = new IndexModel();
 
 

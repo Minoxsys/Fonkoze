@@ -52,21 +52,21 @@ namespace Web.Controllers
 		[Dependency]
 		public ISaveOrUpdateCommand<User> SaveOrUpdate { get; set; }
 
-        [Requires(Permissions = "UserManager.Overview")]
+        //[Requires(Permissions = "UserManager.Overview")]
 		public ViewResult List()
 		{
 			ListModel.InfoMessage = string.Empty + (string)TempData["info"];
 			return View(ListModel);
 		}
 
-        [Requires(Permissions = "UserManager.CRUD")]
+        //[Requires(Permissions = "UserManager.CRUD")]
 		public ViewResult Create()
 		{
 			return View(CreateModel);
 		}
 
 		[HttpPost]
-        [Requires(Permissions = "UserManager.CRUD")]
+        //[Requires(Permissions = "UserManager.CRUD")]
 		public ActionResult Create( [Bind(Exclude = "Id")]User employee )
 		{
 			if (!this.ModelState.IsValid)
@@ -79,7 +79,7 @@ namespace Web.Controllers
 			return RedirectToAction("List");
 		}
 
-        [Requires(Permissions = "UserManager.CRUD")]
+        //[Requires(Permissions = "UserManager.CRUD")]
 		public ActionResult Edit( Guid id )
 		{
 			EditModel.Load(id);
@@ -89,7 +89,7 @@ namespace Web.Controllers
 
 		}
 
-        [Requires(Permissions = "UserManager.CRUD")]
+        //[Requires(Permissions = "UserManager.CRUD")]
 		public EmptyResult Assign( Guid employeeId, Guid roleId )
 		{
 			AssignModel.LinkUserToRole(employeeId, roleId);
@@ -98,7 +98,7 @@ namespace Web.Controllers
 		}
 
 
-        [Requires(Permissions = "UserManager.CRUD")]
+        //[Requires(Permissions = "UserManager.CRUD")]
 		public EmptyResult UnAssign( Guid employeeId, Guid roleId )
 		{
 			UnAssignModel.RemoveRole(employeeId, roleId);

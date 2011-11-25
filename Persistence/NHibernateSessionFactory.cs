@@ -24,7 +24,7 @@ namespace Persistence
         private readonly Action<FluentConfiguration> databaseCreation;
 
         public NHibernateSessionFactory(IAutomappingConfiguration mappingConfiguration)
-            : this(mappingConfiguration, ConnectWithMySql)
+            : this(mappingConfiguration, ConnectWithSqlServer2008)
         {
 
         }

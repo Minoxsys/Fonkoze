@@ -8,7 +8,6 @@
 }
 @section breadcrumbs{
     @(Html.ActionLink<HomeController>(it => it.Index(), "Overview")) 
-    /@(Html.ActionLink<ConfigurationTypesController>(act=>act.Overview(),"Settings", ConfigurationAreaRegistration.DEFAULT_ROUTE))   
     /@(Html.ActionLink<UserManagerController>(it=>it.List(), "Users") ) 
     > Edit
 
