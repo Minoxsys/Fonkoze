@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Web.Mvc;
-using Microsoft.Practices.Unity;
 using Core.Security;
 using Web.Bootstrap.Container;
 using System.Web.Routing;
 using Web.Controllers;
+using Autofac;
 
 namespace Web.Security
 {
@@ -16,7 +16,7 @@ namespace Web.Security
 		
 		public virtual void OnAuthorization( AuthorizationContext context )
 		{
-			var unityAccessor = context.HttpContext.ApplicationInstance as IUnityContainerAccessor;
+			var unityAccessor = context.HttpContext.ApplicationInstance as IContainerAccessor;
 
 			var permissionsService = unityAccessor.Container.Resolve<IPermissionsService>();
 

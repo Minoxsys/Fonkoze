@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using Microsoft.Practices.Unity;
 using Web.Models.UserManager;
 using Core.Domain;
 using Core.Persistence;
@@ -14,7 +13,7 @@ namespace Web.Controllers
 	public class UserManagerController :
 		Controller
 	{
-		[Dependency]
+		
 		public UserManagerListModel ListModel
 		{
 			get;
@@ -22,34 +21,34 @@ namespace Web.Controllers
 		}
 
 
-		[Dependency]
+		
 		public UserManagerCreateModel CreateModel
 		{
 			get;
 			set;
 		}
 
-		[Dependency]
+		
 		public UserManagerEditModel EditModel
 		{
 			get;
 			set;
 		}
 
-		[Dependency]
+		
 		public UserManagerAssignModel AssignModel
 		{
 			get;
 			set;
 		}
-		[Dependency]
+		
 		public UserManagerUnAssignModel UnAssignModel
 		{
 			get;
 			set;
 		}
 
-		[Dependency]
+		
 		public ISaveOrUpdateCommand<User> SaveOrUpdate { get; set; }
 
         //[Requires(Permissions = "UserManager.Overview")]

@@ -7,14 +7,15 @@ using System.Web.Routing;
 using Web.Bootstrap.Container;
 using Web.Bootstrap.Routes;
 using Persistence;
-using Microsoft.Practices.Unity;
+using Autofac;
+using Autofac.Integration.Mvc;
 
 namespace Web
 {
 	// Note: For instructions on enabling IIS6 or IIS7 classic mode, 
 	// visit http://go.microsoft.com/?LinkId=9394801
 
-	public class MvcApplication : System.Web.HttpApplication, IUnityContainerAccessor
+	public class MvcApplication : System.Web.HttpApplication, IContainerAccessor
 	{
 		public static void RegisterGlobalFilters(GlobalFilterCollection filters)
 		{
@@ -45,11 +46,9 @@ namespace Web
 			container.Resolve<INHibernateUnitOfWork>().Close();
 		}
 
-		private static UnityContainer container;
+		private static IContainer container;
 
-
-
-		IUnityContainer IUnityContainerAccessor.Container
+		IContainer IContainerAccessor.Container
 		{
 			get
 			{
@@ -64,14 +63,11 @@ namespace Web
 		/// </summary>
 		protected virtual void InitializeContainer()
 		{
-			if (container == null)
-			{
-				container = new UnityContainer();
-
-				ContainerRegistrar.Register(container);
-
-				ControllerBuilder.Current.SetControllerFactory(typeof(UnityControllerFactory));
-			}
+            var builder = new ContainerBuilder();
+            builder.RegisterControllers(typeof(MvcApplication).Assembly);
+            ContainerRegistrar.Register(builder);
+            container = builder.Build();
+            DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
 		}
 	}
 }

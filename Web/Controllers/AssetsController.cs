@@ -7,7 +7,6 @@ using System.Text;
 using System.Web;
 using System.Web.Caching;
 using System.Web.Mvc;
-using Microsoft.Practices.Unity;
 using Core.Services;
 using Web.Bootstrap;
 
@@ -27,7 +26,7 @@ namespace Web.Controllers
 		private const string SHARED_FOLDER = "~/Assets/";
 		#endregion
 
-		[Dependency]
+		
 		public MimeTypeResolverService MimeTypes
 		{
 			get;

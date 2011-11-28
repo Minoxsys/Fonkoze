@@ -1,9 +1,9 @@
-﻿using Microsoft.Practices.Unity;
-
+﻿
+using Autofac;
 namespace Web.Bootstrap.Container
 {
-	public interface IUnityContainerAccessor
+	public interface IContainerAccessor
 	{
-		IUnityContainer Container { get; }
+		IContainer Container { get; }
 	}
 }

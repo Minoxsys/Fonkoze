@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using Microsoft.Practices.Unity;
 using Web.Models.RoleManager;
 using Core.Domain;
 using Persistence.Commands;
@@ -15,21 +14,21 @@ using Web.Security;
 namespace Web.Controllers
 {
 	public class RoleManagerController :Controller	{
-		[Dependency]
+		
 		public RoleManagerListOutputModel ListOutputModel
 		{
 			get;
 			set;
 		}
 
-		[Dependency]
+		
 		public RoleManagerCreateOutputModel CreateOutputModel
 		{
 			get;
 			set;
 		}
 
-		[Dependency]
+		
 		public ISaveOrUpdateCommand<Role> SaveOrUpdate
 		{
 			get;
@@ -37,21 +36,21 @@ namespace Web.Controllers
 		}
 
 
-		[Dependency]
+		
 		public RoleManagerEditOutput EditOutputModel
 		{
 			get;
 			set;
 		}
 
-		[Dependency]
+		
 		public RoleManagerAssignModel AssignModel
 		{
 			get;
 			set;
 		}
 	
-		[Dependency]
+		
 		public RoleManagerUnAssignModel UnAssignModel
 		{
 			get;

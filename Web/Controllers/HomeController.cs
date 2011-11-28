@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Web.Mvc;
 using Domain;
-using Microsoft.Practices.Unity;
 using Web.Models.Home;
 using Core.Persistence;
 using AutoMapper;
@@ -16,7 +15,7 @@ namespace Web.Controllers
     public class HomeController : Controller
     {
 
-        //[Requires(Permissions = "Home.Index")]
+        [Requires(Permissions = "Home.Index")]
         public ActionResult Index()
         {
             if (!this.ModelState.IsValid)
@@ -29,7 +28,7 @@ namespace Web.Controllers
             return View(listModel);
         }
 
-       
+
 
 
     }

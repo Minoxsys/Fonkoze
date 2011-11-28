@@ -2,16 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using Microsoft.Practices.Unity;
 using Web.Services;
+using Autofac;
 
 namespace Web.Bootstrap.Container
 {
     public class FileRegistrar
     {
-        public static void Register(IUnityContainer container)
+        public static void Register(ContainerBuilder container)
         {
-            container.RegisterType<IImportService, FileService>();
+            container.RegisterType<FileService>().As<IImportService>();
         }
     }
 }

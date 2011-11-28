@@ -10,7 +10,6 @@ using System.Web.Security;
 using Core.Domain;
 using Persistence;
 using Core.Services;
-using Microsoft.Practices.Unity;
 using Persistence.Queries.Employees;
 using Web.Models.Account;
 using Core.Persistence;
@@ -20,27 +19,27 @@ namespace Web.Controllers
 
 	[HandleError]
 	public class AccountController :Controller	{
-		[Dependency]
+		
 		public IAuthenticationService FormsService
 		{
 			get;
 			set;
 		}
-		[Dependency]
+		
 		public IMembershipService MembershipService
 		{
 			get;
 			set;
 		}
 
-		[Dependency]
+		
 		public IQueryService<User> QueryUser
 		{
 			get;
 			set;
 		}
 
-		[Dependency]
+		
 
 		public ISaveOrUpdateCommand<User> SaveUser
 		{
@@ -48,7 +47,7 @@ namespace Web.Controllers
 			set;
 		}
 
-		[Dependency]
+		
 		public Models.Account.LogOnModel LogOnOutput
 		{
 			get;
