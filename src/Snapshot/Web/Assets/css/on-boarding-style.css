@@ -1,0 +1,69 @@
+
+.on-boarding{}
+
+ul.on-boarding_task_group
+{
+    clear:both;
+    width:100%;
+}
+ul.on-boarding_task_group li
+{
+    list-style:none;
+}
+
+ul.on-boarding_task_group .on-boarding_task_group_title
+{
+    display: block;
+    text-decoration: underline;
+    font-size:130%;
+    font-weight:bold;
+}
+ul.on-boarding_task_group .on-boarding_check_mark,
+ul.on-boarding_task_group .on-barding_task_title,
+ul.on-boarding_task_group .on-boarding_task_assigned,
+ul.on-boarding_task_group .on-boarding_task_description
+ul.on-boarding_task_group .on-boarding_task_due_date
+{
+    float:left;
+    display:inline;
+}
+
+ul.on-boarding_task_group .on-barding_task_title_checked
+{
+    float:left;
+    display:inline;
+    font-size:large;
+    text-decoration: line-through
+         
+}
+ul.on-boarding_task_group .on-boarding_check_mark
+{
+    clear:left;
+    margin-top:0.2em;
+    }
+ul.on-boarding_task_group .on-barding_task_title
+{
+    width: 70%;
+    font-weight:bold;
+    font-size:120%;
+    
+}
+ul.on-boarding_task_group .on-boarding_task_assigned
+{
+    float:right;
+}
+
+ul.on-boarding_task_group .on-boarding_task_description
+{
+    clear:both;
+    width: 70%;
+    color:#828282;
+    float:left;
+}
+
+ul.on-boarding_task_group .on-boarding_task_due_date
+{
+    
+    float:right;
+    color:#828282;
+}

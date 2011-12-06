@@ -1,0 +1,70 @@
+﻿@model Web.Models.UserManager.UserManagerEditModel
+@section page_title{
+    Edit User @Model.User.UserName
+}
+@section title_bar{
+    <h4>
+        Editing @Model.User.UserName</h4>
+}
+@section breadcrumbs{
+    @(Html.ActionLink<HomeController>(it => it.Index(), "Overview")) 
+    /@(Html.ActionLink<UserManagerController>(it=>it.List(), "Users") ) 
+    > Edit
+
+}
+@section master_content{
+    <div class="section">
+        <p class="info request-submitted" style="display: none;">
+            You're request has been submitted. The changes will be applied shortly.
+        </p>
+    </div>
+    @foreach (var role in Model.Roles)
+    {
+        <div class="section">
+            @role.Role.Name
+        </div>
+         
+        if (!@role.IsLinked)
+        {
+        <button class="assign-role sexybutton sexysimple sexygreen" roleId='@role.Role.Id'
+            empId = '@Model.User.Id' action="@Url.Action("Assign")">
+            Assign
+        </button>
+        }
+        else
+        {
+        <button class="unassign-role sexybutton sexysimple sexyred" roleId='@role.Role.Id'
+            empId= '@Model.User.Id' action="@Url.Action("UnAssign")">
+            Remove
+        </button>
+        }
+    }
+}
+@section scripts{
+    <script type="text/javascript" language="javascript"> 
+    $(function () { 
+    function performActionOn(item)
+{ 
+    var action = item.attr('action'); 
+    var roleId = item.attr('roleid'); 
+    var empId= item.attr('empid'); 
+    $.post(action, { EmployeeId: empId, RoleId: roleId });
+     var requestSubmitted= $(".request-submitted"); 
+     requestSubmitted.show("slow").delay(3000).hide('normal');
+    
+    }
+
+     $(".assign-role").click(function () { 
+    var current = $(this); 
+    current.replaceWith("<span>Role is being assigned. Refresh to view changes </span>"); 
+    performActionOn(current);
+    });
+
+     $(".unassign-role").click(function () { var current = $(this);
+         current.replaceWith("<span>Role is being unassigned. Refresh to view changes</span>");
+      performActionOn(current);
+    });
+
+ });
+    </script>
+}

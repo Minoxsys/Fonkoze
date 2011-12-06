@@ -1,0 +1,29 @@
+﻿@model Web.Areas.OnBoarding.Models.Candidate.IOrganigramInformation
+
+<div class="row">
+    <fieldset>
+        <legend>Organigram Information </legend>
+
+        <div class="row of-3">
+            <div class="column">
+                <label for="TeamLeader">
+                    Manager :</label>
+                @Html.TextBoxFor(m => m.Manager.Name, new { @id = "autocomplete", @auturl = Url.RouteUrl<OrganigramController>(it => it.TeamLeaderQuickSearch(null), OnBoardingAreaRegistration.DEFAULT_ROUTE )})                
+                
+                @Html.HiddenFor(m=>m.Manager.Id)                
+
+            </div>
+            <div class="column">
+                <label for="Department">
+                    Department :</label>
+                @Html.DropDownListFor(m => m.Department.Id, Model.Departments)
+            </div>
+            <div class="column">
+                <label for="WorkPosition">
+                    Work Position :</label>
+                @Html.DropDownListFor(m => m.WorkPosition.Id, Model.WorkPositions)
+             
+            </div>
+        </div>
+    </fieldset>
+</div>
