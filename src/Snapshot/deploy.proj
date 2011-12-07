@@ -4,15 +4,14 @@
 		<BuildDirectory>Web</BuildDirectory>
 		<DeploymentDirectory>..\deploy\evozonhr</DeploymentDirectory>
 	</PropertyGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+	<Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 	<Target Name="PrepareDeployment">
 		<ItemGroup>
 			<File Include=".\$(BuildDirectory)\**\*.cshtml" />
 			<File Include=".\$(BuildDirectory)\**\*.config" />
-			<File Include=".\$(BuildDirectory)\**\Core.dll" />
-			<File Include=".\$(BuildDirectory)\**\Domain.dll" />
-			<File Include=".\$(BuildDirectory)\**\Persistence.dll" />
-			<File Include=".\$(BuildDirectory)\*bin*\Web.dll" />
+			<File Include=".\$(BuildDirectory)\*bin*\*.dll" />
+			<File Include=".\$(BuildDirectory)\Global.asax" />
+			<File Include=".\$(BuildDirectory)\Global.asax.cs" />
 			<File Include=".\$(BuildDirectory)\*Assets*\**\*.*" />
 		</ItemGroup>
 		<RemoveDir Directories="$(DeploymentDirectory)"/>
