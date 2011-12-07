@@ -12,15 +12,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{3FE8DDD0-1769-4D46-88D4-F82B5CB54E4F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{87B696C4-4C78-42C1-BE6C-F5327A0EDB26}"
-	ProjectSection(SolutionItems) = preProject
-		scripts\1_DatabaseMigrations.sql = scripts\1_DatabaseMigrations.sql
-		scripts\2_Drop_Existing_Tables.sql = scripts\2_Drop_Existing_Tables.sql
-		scripts\3_CreateUsers.sql = scripts\3_CreateUsers.sql
-		scripts\6_InsertIntoPermissions.sql = scripts\6_InsertIntoPermissions.sql
-		scripts\7_InsertIntoRoles.sql = scripts\7_InsertIntoRoles.sql
-		scripts\8_InserIntoRoleUsers.sql = scripts\8_InserIntoRoleUsers.sql
-		scripts\9_InsertIntoPermissionRoles.sql = scripts\9_InsertIntoPermissionRoles.sql
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Integration", "Integration\Integration.csproj", "{E35EA0B8-653D-454C-A548-889D00F63691}"
 EndProject
