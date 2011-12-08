@@ -17,6 +17,7 @@ using Web.Controllers;
 using Web.Models.Account;
 using Core.Services;
 using Persistence.Queries.Employees;
+using Web.Security;
 
 namespace UnitTests.Controllers
 {
@@ -27,6 +28,8 @@ namespace UnitTests.Controllers
 
 		ISaveOrUpdateCommand<User> saveOrUpdateStub;
 		IQueryService<User> queryServiceStub;
+        IMembershipService authenticateuserService;
+        ISecurePassword securePassword;
 
 		[TestFixtureSetUp]
 		public void BeforeAll()
@@ -34,6 +37,9 @@ namespace UnitTests.Controllers
 			saveOrUpdateStub = MockRepository.GenerateStub<ISaveOrUpdateCommand<User>>();
 
 			queryServiceStub = MockRepository.GenerateStub<IQueryService<User>>();
+
+            securePassword = new SecurePassword();
+            authenticateuserService = new AuthenticateUser(queryServiceStub,securePassword);
 
 		}
 
@@ -73,6 +79,7 @@ namespace UnitTests.Controllers
 		{
 			// Arrange
 			AccountController controller = GetAccountController();
+            controller.AuthenticateUser = authenticateuserService;
 			LogOnModel model = new LogOnModel()
 			{
 				UserName = "someUser",
@@ -80,7 +87,7 @@ namespace UnitTests.Controllers
 				RememberMe = false
 			};
 
-			queryServiceStub.Expect(m => m.Query(null)).IgnoreArguments().Return( new List<User>(){ new User{UserName=model.UserName}}.AsQueryable());
+            queryServiceStub.Expect(call => call.Query()).Repeat.Once().Return(new User[] { new User { UserName = model.UserName, Password = securePassword.EncryptPassword(model.Password) } }.AsQueryable());
 
 			// Act
 			ActionResult result = controller.LogOn(model, null);
@@ -99,14 +106,15 @@ namespace UnitTests.Controllers
 		{
 			// Arrange
 			AccountController controller = GetAccountController();
+            controller.AuthenticateUser = authenticateuserService;
+            //queryServiceStub.Expect(call => call.Query()).Repeat.Once().Return(new User[] { new User { UserName="someUser", Password="goodPassword"} }.AsQueryable());
 			LogOnModel model = new LogOnModel()
 			{
 				UserName = "someUser",
 				Password = "goodPassword",
 				RememberMe = false
 			};
-
-			queryServiceStub.Expect(m => m.Query(null)).IgnoreArguments().Return( new List<User>(){ new User{UserName=model.UserName}}.AsQueryable());
+            queryServiceStub.Expect(call => call.Query()).Repeat.Once().Return(new User[] { new User { UserName = model.UserName, Password = securePassword.EncryptPassword(model.Password) } }.AsQueryable());
 			// Act
 			ActionResult result = controller.LogOn(model, "/someUrl");
 			queryServiceStub.VerifyAllExpectations();
@@ -145,6 +153,9 @@ namespace UnitTests.Controllers
 		{
 			// Arrange
 			AccountController controller = GetAccountController();
+            controller.AuthenticateUser = authenticateuserService;
+            queryServiceStub.Expect(call => call.Query()).Repeat.Once().Return(new User[] {}.AsQueryable());
+
 			LogOnModel model = new LogOnModel()
 			{
 				UserName = "someUser",
@@ -162,37 +173,13 @@ namespace UnitTests.Controllers
 			Assert.AreEqual("The user name or password provided is incorrect.", controller.ModelState[""].Errors[0].ErrorMessage);
 		}
 
-		[Test]
-		public void LogOn_Post_CreatesANewUser_IfQueryUserDoesNotFindOne_ForSuccessfullLogin()
-		{
-			// Arrange
-			AccountController controller = GetAccountController();
-			LogOnModel model = new LogOnModel()
-			{
-				UserName = "someUser",
-				Password = "goodPassword",
-				RememberMe = false
-			};
-			queryServiceStub.Expect(m => m.Query(null)).IgnoreArguments().Return( new List<User>() .AsQueryable());
-
-			saveOrUpdateStub.Expect(m => m.Execute(null)).Repeat.Once();
-			// Act
-			ActionResult result = controller.LogOn(model, null);
-			queryServiceStub.VerifyAllExpectations();
-			saveOrUpdateStub.VerifyAllExpectations();
-			// Assert
-			Assert.IsInstanceOf<RedirectToRouteResult>(result);
-			
-			
-			Assert.IsTrue(((MockFormsAuthenticationService)controller.FormsService).SignIn_WasCalled);
-		}
-		
+				
 		private  AccountController GetAccountController()
 		{
 			AccountController controller = new AccountController()
 			{
 				FormsService = new MockFormsAuthenticationService(),
-				MembershipService = new StubMembershipService(),
+				//MembershipService = new StubMembershipService(),
 				QueryUser = queryServiceStub,
 				SaveUser = saveOrUpdateStub
 			};

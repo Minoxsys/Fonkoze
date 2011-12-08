@@ -37,6 +37,7 @@ namespace Web.Controllers
 
 		public AssetsController()
 		{
+            MimeTypes = new MimeTypeResolverService();
 		}
 
 		#endregion

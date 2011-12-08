@@ -6,7 +6,7 @@ namespace Tests.Unit.Helpers
     [TestFixture]
     public class NullableIntFormatter_Tests
     {
-        private static int? _nullInt;
+        private static int? _nullInt = null;
 
         private static int? _notNullInt = 1;
 

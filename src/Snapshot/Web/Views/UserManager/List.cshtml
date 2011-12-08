@@ -8,7 +8,7 @@ Users list
 }
 @section breadcrumbs{
     @(Html.ActionLink<HomeController>(it => it.Index(), "Overview"))
-    > List users
+> List users
 }
 @section master_content{
     @Html.Partial("InfoMessage", this.Model.InfoMessage)
@@ -25,6 +25,8 @@ Users list
             <th>
                 Roles
             </th>
+            <th>
+            </th>
         </tr>
         @foreach (var employee in this.Model.Users)
         {
@@ -35,6 +37,15 @@ Users list
                 <td>
                     @(Html.ActionLink<UserManagerController>(call => call.Edit(employee.Id
                         ), "Assign roles"))
+                </td>
+                <td>
+                    @{
+            Html.BeginForm<UserManagerController>(m => m.Delete(employee.Id));
+                    }
+                    @Html.SubmitButton("delete-user", "Delete")
+                    @{
+            Html.EndForm();
+                    }
                 </td>
             </tr>
         }
