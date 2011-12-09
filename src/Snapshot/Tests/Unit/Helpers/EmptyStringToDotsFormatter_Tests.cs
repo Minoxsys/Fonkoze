@@ -19,7 +19,7 @@ namespace Tests.Unit.Helpers
             public string Empty2 { get; set; }
             public string String { get; set; }
             public int Int { get; set; }
-            public int? NullInt;
+            public int? NullInt = null;
             public string EmptyField = string.Empty;
 
             public StringTestClass()

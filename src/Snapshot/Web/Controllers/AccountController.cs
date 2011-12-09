@@ -26,7 +26,7 @@ namespace Web.Controllers
 			set;
 		}
 		
-		public IMembershipService MembershipService
+		public IMembershipService AuthenticateUser
 		{
 			get;
 			set;
@@ -64,13 +64,13 @@ namespace Web.Controllers
 		}
 
 		[HttpPost]
-        [ValidateInput(false)]
+        //[ValidateInput(false)]
 		public ActionResult LogOn( LogOnModel model, string returnUrl )
 		{
 			if (ModelState.IsValid)
 			{
 				if (
-					MembershipService.ValidateUser(model.UserName, model.Password))
+                    AuthenticateUser.ValidateUser(model.UserName,model.Password))
 				{
 					FormsService.SignIn(model.UserName, model.RememberMe);
 

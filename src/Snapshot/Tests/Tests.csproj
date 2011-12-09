@@ -115,8 +115,10 @@
     <Compile Include="Unit\Routes\IgnoredRoutesRegistrar_Tests.cs" />
     <Compile Include="Unit\Routes\RoleManagerRoutesRegistrar_Tests.cs" />
     <Compile Include="Unit\Routes\ScriptsRegistrar_Tests.cs" />
+    <Compile Include="Unit\Security\AuthenticateUser_Tests.cs" />
     <Compile Include="Unit\Security\RequiresAttributeTests.cs" />
     <Compile Include="Unit\ModelProviders\UserManagerAssignModelProvider.cs" />
+    <Compile Include="Unit\Security\SecurePassword_Tests.cs" />
     <Compile Include="Utils\AutoMock.cs" />
     <Compile Include="Utils\FakeControllerContext.cs" />
     <Compile Include="Utils\MoqFactory.cs" />

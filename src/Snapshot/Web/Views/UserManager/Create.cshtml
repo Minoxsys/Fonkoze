@@ -14,23 +14,32 @@ Create a new user
 @section master_content{
     @{Html.BeginForm<UserManagerController>(r => r.Create());}
     <div class="grid_12">
-        <div class="column_content">
+        <div class="column_content"><div class="row">@Html.ValidationSummary()</div>
             <div class="six_column page_header">
                 <h2>
                     Create a new user</h2>
             </div>
-            <fieldset class="fieldsCollection ">
+            
+                <fieldset class="fieldsCollection ">
                 <div class="six_column section">
-                    <div class="one column">
-                        <label>
-                            Name:
-                        </label>
-                    </div>
-                    <div class="four column">
-                        &nbsp; @Html.TextBoxFor(m => m.Employee.UserName)
-                    </div>
+                            <div class="one column"></div> 
+                            <label>Name:</label>   
+                    <div class="row of-2">
+                     
+                    <div class="column"> &nbsp;@Html.TextBoxFor(m => m.Employee.UserName)</div>
+                    <label >Client</label>
+                    <div class="column">@Html.DropDownListFor(m =>m.Employee.ClientId,Model.Clients)</div>
+                     </div>
+                    <label>Email</label>
+                    <div class="row">@Html.TextBoxFor(m => m.Employee.Email)</div>
+                    <label>Password</label>
+                    <div class="row">@Html.PasswordFor(m=>m.Employee.Password)</div>
                     <div class="one column">
                         @Html.ValidationMessageFor(m => m.Employee.UserName)
+                    </div><br />
+                    <label>Confirm Password </label>
+                    <div class="one column">
+                        @Html.PasswordFor(m => m.ConfirmedPassword)
                     </div>
                 </div>
                 <div class="six_column section">
@@ -49,5 +58,6 @@ Create a new user
             </div>
         </div>
     </div>
+    
     @{Html.EndForm();}
 }

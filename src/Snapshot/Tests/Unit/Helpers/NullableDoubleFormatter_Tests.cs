@@ -6,7 +6,7 @@ namespace Tests.Unit.Helpers
     [TestFixture]
     public class NullableDoubleFormatter_Tests
     {
-        private static double? _nullDouble;
+        private static double? _nullDouble = null;
 
         private static double? _notNullDouble = 1.2;
 

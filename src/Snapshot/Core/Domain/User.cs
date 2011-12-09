@@ -18,10 +18,14 @@ namespace Core.Domain
 			get;
 			set;
 		}
+        public virtual Guid ClientId { get; set; }
+        public virtual string Password { get; set; }
+        public virtual string Email { get; set; }
 
 		public User()
 		{
 			Roles = new List<Role>();
+            //Client = new Client();
 		}
 
 		public virtual void AddRole( Role role )
