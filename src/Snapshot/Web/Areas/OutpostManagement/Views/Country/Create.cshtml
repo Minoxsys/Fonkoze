@@ -1,0 +1,39 @@
+﻿@model Web.Areas.OutpostManagement.Models.Country.CountryModelOutput
+           
+@section breadcrumbs{
+    @Url.HomeLink("Overview")/ @(Html.ActionLink<CountryController>(it => it.Overview(), "Outpost Management : Countries", OutpostManagementAreaRegistration.DEFAULT_ROUTE)) > Create
+}
+ 
+@section page_title{
+OutpostManagement : Country : Create 
+}
+@section title_bar{
+    <h4>
+        Create Country</h4>
+}
+
+@section master_content{
+    @*<form class="main-form" method="post"  id="llll"> *@
+    <form method="post" 
+          action="@(Url.RouteUrl<CountryController>(it => it.Create(), OutpostManagementAreaRegistration.DEFAULT_ROUTE))"> 
+    @{
+       
+        Html.RenderPartial("CountryInput", Model);
+    }
+
+     @(Html.FormButtons<CountryController>(it => it.Overview(), OutpostManagementAreaRegistration.DEFAULT_ROUTE))
+   
+  
+    </form>
+}
+@section scripts{
+
+        
+    <script type="text/javascript">
+        $(function () {
+            $(".chzn-select").chosen();
+        });     
+
+    </script>
+
+}

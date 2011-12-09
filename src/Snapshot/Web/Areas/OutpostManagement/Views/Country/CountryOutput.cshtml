@@ -1,0 +1,13 @@
+﻿@model Web.Areas.OutpostManagement.Models.Country.CountryModelOutput
+
+ <div class="row">
+      @Html.ValidationSummary()
+
+     @Html.HiddenFor(m => m.Id)
+
+ </div>          
+
+    @{
+        Html.RenderPartial("CountryInformationOutput", Model);
+    }
+

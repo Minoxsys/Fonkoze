@@ -1,7 +1,7 @@
 if exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'PermissionRoles')
 begin
 
-    alter table PermissionRoles  drop constraint RoleId_PFK
+   -- alter table PermissionRoles  drop constraint RoleId_PFK
     
     alter table PermissionRoles  drop constraint PermissionId_FK
 
@@ -30,14 +30,21 @@ begin
     drop table Roles
 end
 
+--if exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'Countries')
+--begin
+--	alter table Countries drop constraint ClientId_FK
+--    drop table Countries
+-- end
 
 if exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'Clients')
 begin
 	alter table Clients drop constraint ByUser_FK
     drop table Clients
 end
+
 if exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'Users')
 begin
 	alter table Users drop constraint ByUser_UFK
     drop table Users
 end
+

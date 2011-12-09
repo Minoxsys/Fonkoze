@@ -61,6 +61,10 @@
     <Reference Include="Microsoft.CSharp">
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.Practices.Unity, Version=1.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Microsoft.Practices.Unity.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Web.Mvc">
       <HintPath>..\packages\Mvc3Futures.3.0.20105.0\lib\Microsoft.Web.Mvc.dll</HintPath>
     </Reference>
@@ -144,6 +148,18 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Areas\OutpostManagement\Controllers\CountryController.cs" />
+    <Compile Include="Areas\OutpostManagement\Controllers\DistrictController.cs" />
+    <Compile Include="Areas\OutpostManagement\Controllers\OutpostController.cs" />
+    <Compile Include="Areas\OutpostManagement\Controllers\RegionController.cs" />
+    <Compile Include="Areas\OutpostManagement\Models\Country\CountryModel.cs" />
+    <Compile Include="Areas\OutpostManagement\Models\Country\CountryModelInput.cs" />
+    <Compile Include="Areas\OutpostManagement\Models\Country\CountryModelOutput.cs" />
+    <Compile Include="Areas\OutpostManagement\Models\Country\Overview.cs" />
+    <Compile Include="Areas\OutpostManagement\Models\District\DistrictModel.cs" />
+    <Compile Include="Areas\OutpostManagement\Models\Outpost\OutpostModel.cs" />
+    <Compile Include="Areas\OutpostManagement\Models\Region\RegionModel.cs" />
+    <Compile Include="Areas\OutpostManagement\OutpostManagementAreaRegistration.cs" />
     <Compile Include="Bootstrap\Container\FileRegistrar.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\UnauthorizedAccessController.cs" />
@@ -1790,7 +1806,11 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Areas\" />
+    <Folder Include="Areas\OutpostManagement\Services\" />
+    <Folder Include="Areas\OutpostManagement\Views\District\" />
+    <Folder Include="Areas\OutpostManagement\Views\Outpost\" />
+    <Folder Include="Areas\OutpostManagement\Views\Region\" />
+    <Folder Include="Areas\OutpostManagement\Views\Shared\" />
     <Folder Include="Assets\img\photos\" />
     <Folder Include="Scripts\" />
   </ItemGroup>
@@ -1817,6 +1837,15 @@
     <Content Include="config\scripts.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Areas\OutpostManagement\Views\Web.config" />
+    <Content Include="Areas\OutpostManagement\Views\Country\Overview.cshtml" />
+    <Content Include="Areas\OutpostManagement\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\OutpostManagement\Views\Country\CountryInput.cshtml" />
+    <Content Include="Areas\OutpostManagement\Views\Country\Create.cshtml" />
+    <Content Include="Areas\OutpostManagement\Views\Country\Edit.cshtml" />
+    <Content Include="Areas\OutpostManagement\Views\Country\CountryInformationInput.cshtml" />
+    <Content Include="Areas\OutpostManagement\Views\Country\CountryOutput.cshtml" />
+    <Content Include="Areas\OutpostManagement\Views\Country\CountryInformationOutput.cshtml" />
     <None Include="Assets\img\skins\ButtonTemplate.psd" />
     <Content Include="Views\RoleManager\Create.cshtml" />
     <Content Include="Views\RoleManager\Edit.cshtml" />
@@ -1848,12 +1877,11 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>False</UseIIS>
+          <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>52924</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>
-          </IISUrl>
+          <IISUrl>http://localhost/Snapshot</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

@@ -102,3 +102,7 @@ INSERT INTO PermissionRoles
            ,'461e581b-e60b-4dfd-a5a8-88229f14379b')
 
 
+--[StockManager].[dbo].[
+
+
+

@@ -1,5 +1,5 @@
 create table Permissions (
-        Id UNIQUEIDENTIFIER not null,
+       Id UNIQUEIDENTIFIER not null,
        Name NVARCHAR(255) null unique,
        Created DATETIME null,
        Updated DATETIME null,
@@ -8,12 +8,12 @@ create table Permissions (
     )
 
     create table PermissionRoles (
-        PermissionId_FK UNIQUEIDENTIFIER not null,
+       PermissionId_FK UNIQUEIDENTIFIER not null,
        RoleId_FK UNIQUEIDENTIFIER not null
     )
 
     create table Roles (
-        Id UNIQUEIDENTIFIER not null,
+       Id UNIQUEIDENTIFIER not null,
        Name NVARCHAR(255) null unique,
        Description NVARCHAR(255) null,
        Created DATETIME null,
@@ -23,7 +23,7 @@ create table Permissions (
     )
 
     create table RoleUsers (
-        RoleId_FK UNIQUEIDENTIFIER not null,
+       RoleId_FK UNIQUEIDENTIFIER not null,
        UserId_FK UNIQUEIDENTIFIER not null
     )
 
@@ -38,14 +38,29 @@ create table Permissions (
        ByUser_FK UNIQUEIDENTIFIER null,
        primary key (Id)
     )
+
 	create table Clients (
-        Id UNIQUEIDENTIFIER not null,
+       Id UNIQUEIDENTIFIER not null,
        Name NVARCHAR(255) null,
        Created DATETIME null,
        Updated DATETIME null,
        ByUser_FK UNIQUEIDENTIFIER null,
        primary key (Id)
     )
+
+	-- Countries
+	CREATE TABLE [StockManager].[dbo].[Countries] (
+       Id UNIQUEIDENTIFIER not null,
+       Name NVARCHAR(255) null,
+       Created DATETIME null,
+       Updated DATETIME null,
+       ByUser_FK UNIQUEIDENTIFIER null,
+       primary key (Id))
+	GO
+
+	-- Regions
+
+
     alter table Clients 
         add constraint ByUser_FK 
         foreign key (ByUser_FK) 
@@ -85,3 +100,12 @@ create table Permissions (
         add constraint ByUser_UFK 
         foreign key (ByUser_FK) 
         references Users
+
+ 	--ALTER TABLE [StockManager].[dbo].Countries
+	--		ADD CONSTRAINT ClientId_FK
+	--	    FOREIGN KEY (Id)
+	--		REFERENCES Clients
+	--GO
+
+ 
+

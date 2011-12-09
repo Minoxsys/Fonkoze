@@ -13,7 +13,12 @@ namespace Persistence.Conventions
 		{
 			// TODO: consider using a valid inflector here 
 			// for correct english names
-			instance.Table(instance.EntityType.Name + "s");
-		}
+            if (instance.EntityType.Name == "Country")
+            {
+                instance.Table("Countries");
+                return;
+            }
+            instance.Table(instance.EntityType.Name + "s");
+        }
 	}
 }

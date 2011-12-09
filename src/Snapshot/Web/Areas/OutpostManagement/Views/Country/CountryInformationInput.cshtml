@@ -1,0 +1,15 @@
+﻿@model Web.Areas.OutpostManagement.Models.Country.CountryModelOutput
+           
+
+@{ var id = new Guid();}
+<fieldset id="fieldsetInformation">
+    <legend>Country Information</legend>
+
+    <div class="row of-2">
+        <div class="column">
+            <label for="Name"> Name<text class="required-text">*</text> </label>
+            @Html.TextBoxFor(m => m.Name, new { maxlength = 250, autofocus = "autofocus", placeholder = "Name" })
+        </div>
+    </div>
+
+</fieldset>

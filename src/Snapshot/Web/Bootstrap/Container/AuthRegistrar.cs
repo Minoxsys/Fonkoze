@@ -15,8 +15,6 @@ namespace Web.Bootstrap.Container
 		{
 			container.RegisterType<FormsAuthenticationService>().As<IAuthenticationService>();
             container.RegisterType<FreeToAllMembershipService>().As<IMembershipService>();
-
-			
 		}
 	}
 }

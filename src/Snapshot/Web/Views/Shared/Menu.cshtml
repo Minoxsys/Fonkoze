@@ -1,1 +1,13 @@
-﻿<h1>No menu</h1>
+﻿<div class="on-boarding">
+    <h1 class="menu-title on-boarding">
+        OutpostManagement</h1>
+    <ul>
+         <li>
+           @(Html.ActionLink<Web.Areas.OutpostManagement.Controllers.CountryController>(it => it.Overview(), "View All", Web.Areas.OutpostManagement.OutpostManagementAreaRegistration.DEFAULT_ROUTE))
+        </li>
+
+        @{
+            var today = DateTime.Today;
+        }
+    </ul>
+</div>
