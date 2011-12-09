@@ -154,6 +154,10 @@
     <Compile Include="Areas\OutpostManagement\Controllers\RegionController.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Country\CountryModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Country\CountryModelInput.cs" />
+    <Compile Include="Areas\OutpostManagement\Models\Region\RegionInputModel.cs" />
+    <Compile Include="Areas\OutpostManagement\Models\Region\RegionOutputModel.cs" />
+    <Compile Include="Areas\OutpostManagement\Models\Region\RegionOverviewModel.cs" />
+    <Compile Include="Areas\OutpostManagement\OutpostManagementAreaRegistration.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Country\CountryModelOutput.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Country\Overview.cs" />
     <Compile Include="Areas\OutpostManagement\Models\District\DistrictModel.cs" />
@@ -1809,7 +1813,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Areas\" />
     <Folder Include="Areas\OutpostManagement\Services\" />
+    <Folder Include="Areas\OutpostManagement\Views\Shared\" />
     <Folder Include="Areas\OutpostManagement\Views\District\" />
     <Folder Include="Areas\OutpostManagement\Views\Outpost\" />
     <Folder Include="Areas\OutpostManagement\Views\Region\" />
@@ -1842,10 +1848,14 @@
   <ItemGroup>
     <Content Include="Areas\OutpostManagement\Views\Web.config" />
     <Content Include="Areas\OutpostManagement\Views\Country\Overview.cshtml" />
+    <Content Include="Areas\OutpostManagement\Views\Region\Overview.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\_ViewStart.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\Country\CountryInput.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\Country\Create.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\Country\Edit.cshtml" />
+    <Content Include="Areas\OutpostManagement\Views\Region\Create.cshtml" />
+    <Content Include="Areas\OutpostManagement\Views\Region\Input.cshtml" />
+    <Content Include="Areas\OutpostManagement\Views\Region\Edit.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\Country\CountryInformationInput.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\Country\CountryOutput.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\Country\CountryInformationOutput.cshtml" />
@@ -1880,7 +1890,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>52924</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>

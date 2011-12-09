@@ -13,6 +13,8 @@
 @section master_content{
 
 <h1>Project start</h1>
+
+<div class="row" >  @(Html.ActionLink<Web.Areas.OutpostManagement.Controllers.RegionController>(call => call.Overview(), "Region", Web.Areas.OutpostManagement.OutpostManagementAreaRegistration.DEFAULT_ROUTE))</div>
 }
 
 @section master_actions{

@@ -5,16 +5,9 @@ namespace Web.Areas.OutpostManagement
     public class OutpostManagementAreaRegistration : AreaRegistration
     {
         public const string DEFAULT_ROUTE = "OutpostManagement_default";
-        public const string AREA_NAME = "OutpostManagement";
-        
-        //public static object DEFAULT_ROUTE { get; set; }
-
-        //DEFAULT_ROUTE = "OutpostManagement_default";
-
         public override string AreaName
         {
-
-          get
+            get
             {
                 return "OutpostManagement";
             }
@@ -23,11 +16,10 @@ namespace Web.Areas.OutpostManagement
         public override void RegisterArea(AreaRegistrationContext context)
         {
             context.MapRoute(
-                "OutpostManagement_default",
+                DEFAULT_ROUTE,
                 "OutpostManagement/{controller}/{action}/{id}",
-                new { action = "Overview", id = UrlParameter.Optional }
+                new { action = "Index", id = UrlParameter.Optional }
             );
         }
-
     }
 }

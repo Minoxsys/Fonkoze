@@ -5,9 +5,10 @@ using System.Web;
 
 namespace Web.Areas.OutpostManagement.Models.Region
 {
-    public class RegionModel
+    public class RegionOutputModel
     {
         public string Name { get; set; }
         public Guid Id { get; set; }
+
     }
 }

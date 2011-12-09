@@ -1,0 +1,59 @@
+﻿@model Web.Areas.OutpostManagement.Models.Region.RegionOverviewModel
+@using Microsoft.Web.Mvc
+@{
+    ViewBag.Title = "Overview";
+}
+@section page_title{
+    Regions: Overview
+}
+@section master_content{
+
+    <table class="searchable">
+        <thead>
+            <tr>
+                <th>
+                    #
+                </th>
+                <th>
+                    Region Name
+                </th>                
+            </tr>
+        </thead>
+
+        <tbody>                        
+            @{
+                var itemNo = 0;
+            }
+
+            @foreach (var region in Model.Regions)
+            {
+                var _class = (itemNo % 2 == 0) ? "odd" : "even";    
+                <tr class="@_class">
+                    <td>
+                      @(Html.ActionLink<Web.Areas.OutpostManagement.Controllers.RegionController>(call => call.Edit(region.Id), "Region", Web.Areas.OutpostManagement.OutpostManagementAreaRegistration.DEFAULT_ROUTE))
+                    </td>
+
+                    <td>@region.Name</td>   
+                                     
+                </tr> 
+            }
+        </tbody>
+    </table>
+}
+@section master_actions{
+    <h3>
+        Actions</h3>
+    <div class="page_header_buttons">
+       @(Html.ActionLink<Web.Areas.OutpostManagement.Controllers.RegionController>( it=>it.Create(),"Create region", Web.Areas.OutpostManagement.OutpostManagementAreaRegistration.DEFAULT_ROUTE))
+    </div>
+}
+@section scripts{
+    <script type="text/javascript">
+        $(function () {
+            $(".searchable").dataTable({
+                "sPaginationType": "full_numbers"
+            });
+        });
+
+    </script>
+}
