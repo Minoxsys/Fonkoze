@@ -5,7 +5,6 @@ using System.Web;
 using System.Web.Mvc;
 using Domain;
 using Web.Controllers;
-using Microsoft.Practices.Unity;
 using AutoMapper;
 //using Web.Areas.OutpostManagement.Services;
 using Web.Bootstrap.Converters;

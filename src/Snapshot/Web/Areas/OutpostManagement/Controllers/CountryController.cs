@@ -10,7 +10,6 @@ using Web.Areas.OutpostManagement.Models.Country;
 using Web.Areas.OutpostManagement.Models.Region;
 using Web.Areas.OutpostManagement.Models.District;
 using Web.Areas.OutpostManagement.Models.Outpost;
-using Microsoft.Practices.Unity;
 using AutoMapper;
 using Web.Bootstrap.Converters;
 using Core.Persistence;
