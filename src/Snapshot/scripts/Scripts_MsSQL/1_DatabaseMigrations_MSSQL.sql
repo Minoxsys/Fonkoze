@@ -66,6 +66,25 @@ begin
     )
 end
 
+if not exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'Regions')
+begin
+	 create table Regions (
+        Id UNIQUEIDENTIFIER not null,
+       Name NVARCHAR(255) null,
+       Created DATETIME null,
+       Updated DATETIME null,
+       ByUser_FK UNIQUEIDENTIFIER null,
+       primary key (Id)
+    )
+end
+
+if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='ByUser_REFK')
+begin
+	alter table Regions 
+        add constraint ByUser_REFK 
+        foreign key (ByUser_FK) 
+        references Users
+end
 if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='ByUser_FK')
 begin
     alter table Clients 

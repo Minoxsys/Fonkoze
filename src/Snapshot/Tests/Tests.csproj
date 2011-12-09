@@ -95,6 +95,7 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Unit\Controllers\AccountControllerTest.cs" />
+    <Compile Include="Unit\Controllers\Areas\OutpostManagement\RegionController_Tests.cs" />
     <Compile Include="Unit\Controllers\UnautorizedAccessController_Tests.cs" />
     <Compile Include="Unit\Controllers\CssControllerTests.cs" />
     <Compile Include="Unit\Controllers\UserManagerTests.cs" />
@@ -125,7 +126,6 @@
     <Compile Include="Utils\MoqRegistrationHandler.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Unit\Controllers\Areas\" />
     <Folder Include="Unit\Routes\Areas\" />
   </ItemGroup>
   <ItemGroup>

@@ -1,0 +1,50 @@
+﻿@model Web.Areas.OutpostManagement.Models.Region.RegionOutputModel
+ @{Html.HiddenFor(m => m.Id);}
+
+@section page_title{
+    Region : Edit
+}
+@section master_content{
+
+    
+         @{Html.BeginForm();}
+            <div class="grid_12">
+        <div class="column_content"><div class="row">@Html.ValidationSummary()</div>
+            <div class="six_column page_header">
+                <h2>
+                    Create a new region</h2>
+            </div>
+            
+                <fieldset class="fieldsCollection ">
+                
+                    @{
+                        Html.RenderPartial("Input", Model);     
+            }
+            </fieldset>
+            <div class="six_column form_buttons">
+                @Html.SubmitButton("submit-form", "Save", new
+           {
+               @class = "sexybutton sexysimple sexyteal"
+           }) <span>or </span><a class="cancel" href="@(Html.BuildUrlFromExpression<RegionController>(it => it.Overview()))">
+                   Cancel</a>
+            </div>
+        </div>
+    </div>
+            
+            @{Html.EndForm();}   
+    
+}
+
+@section master_actions{
+    <h3>
+        Actions</h3>
+    
+      @{
+          Html.BeginForm<RegionController>(m => m.Delete(Model.Id));
+                    }
+                    @Html.SubmitButton("delete-user", "Delete")
+                    @{
+            Html.EndForm();
+                    }
+
+}

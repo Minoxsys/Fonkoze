@@ -144,6 +144,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Areas\OutpostManagement\Controllers\RegionController.cs" />
+    <Compile Include="Areas\OutpostManagement\Models\Region\RegionInputModel.cs" />
+    <Compile Include="Areas\OutpostManagement\Models\Region\RegionModel.cs" />
+    <Compile Include="Areas\OutpostManagement\Models\Region\RegionOutputModel.cs" />
+    <Compile Include="Areas\OutpostManagement\Models\Region\RegionOverviewModel.cs" />
+    <Compile Include="Areas\OutpostManagement\OutpostManagementAreaRegistration.cs" />
     <Compile Include="Bootstrap\Container\FileRegistrar.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\UnauthorizedAccessController.cs" />
@@ -1793,7 +1799,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Areas\" />
+    <Folder Include="Areas\OutpostManagement\Views\Shared\" />
     <Folder Include="Assets\img\photos\" />
     <Folder Include="Scripts\" />
   </ItemGroup>
@@ -1820,6 +1826,12 @@
     <Content Include="config\scripts.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Areas\OutpostManagement\Views\Web.config" />
+    <Content Include="Areas\OutpostManagement\Views\Region\Overview.cshtml" />
+    <Content Include="Areas\OutpostManagement\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\OutpostManagement\Views\Region\Create.cshtml" />
+    <Content Include="Areas\OutpostManagement\Views\Region\Input.cshtml" />
+    <Content Include="Areas\OutpostManagement\Views\Region\Edit.cshtml" />
     <None Include="Assets\img\skins\ButtonTemplate.psd" />
     <Content Include="Views\RoleManager\Create.cshtml" />
     <Content Include="Views\RoleManager\Edit.cshtml" />

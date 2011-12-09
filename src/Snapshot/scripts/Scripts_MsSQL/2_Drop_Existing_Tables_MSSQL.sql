@@ -41,3 +41,10 @@ begin
 	alter table Users drop constraint ByUser_UFK
     drop table Users
 end
+
+if exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'Regions')
+begin
+alter table Regions drop constraint ByUser_REFK
+	drop table Regions
+	
+end
