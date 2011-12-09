@@ -30,11 +30,11 @@ begin
     drop table Roles
 end
 
---if exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'Countries')
---begin
+if exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'Countries')
+begin
 --	alter table Countries drop constraint ClientId_FK
---    drop table Countries
--- end
+    drop table Countries
+end
 
 if exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'Clients')
 begin

@@ -20,6 +20,7 @@ namespace Web.Bootstrap.Container
 
         public static void RegisterWith( ContainerBuilder container )
         {
+            container.RegisterType<MimeTypeResolverService>();
             container.RegisterType<WebApplicationFileService>();
             container.RegisterType<MicrosoftMinifierCssCompresionService>().As<ICssScriptCompressionService>();
             container.RegisterType<MicrosoftMinifierJavascriptCompressionService>().As<IJavaScriptCompressionService>();
