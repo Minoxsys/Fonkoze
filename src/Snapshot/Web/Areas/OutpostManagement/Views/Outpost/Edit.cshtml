@@ -1,25 +1,25 @@
-﻿@model Web.Areas.OutpostManagement.Models.Country.CountryModel
+﻿@model Web.Areas.OutpostManagement.Models.Outpost.OutpostModel
            
 @section breadcrumbs{
-    @Url.HomeLink("Overview")/ @(Html.ActionLink<CountryController>(it => it.Overview(), "OutpostManagement : Countries", OutpostManagementAreaRegistration.DEFAULT_ROUTE)) > Edit
+    @Url.HomeLink("Overview")/ @(Html.ActionLink<OutpostController>(it => it.Overview(), "OutpostManagement : Countries", OutpostManagementAreaRegistration.DEFAULT_ROUTE)) > Edit
 }
 @section page_title{
 On-Boarding Candidate: Edit
 }
 @section title_bar{
     <h4>
-        @Model.Name : Edit Country</h4>
+        @Model.Name : Edit Outpost</h4>
 }
 @section master_content{
     <form class="main-form" 
           method="post" 
           action="">
     @{
-        Html.RenderPartial("Country", @Model);
+        Html.RenderPartial("Outpost", @Model);
         
     }
 
-    @(Html.FormButtons<CountryController>(it => it.Overview(), OutpostManagementAreaRegistration.DEFAULT_ROUTE))
+    @(Html.FormButtons<OutpostController>(it => it.Overview(), OutpostManagementAreaRegistration.DEFAULT_ROUTE))
     </form>
 }
 
@@ -30,7 +30,7 @@ On-Boarding Candidate: Edit
 
  
          <div style="margin:50px 0px 5px 0px"> 
-            @(Html.DeleteButton<CountryController>(it => it.Delete(Model.Id), OutpostManagementAreaRegistration.DEFAULT_ROUTE))
+            @(Html.DeleteButton<OutpostController>(it => it.Delete(Model.Id), OutpostManagementAreaRegistration.DEFAULT_ROUTE))
         </div>
                
     </div>

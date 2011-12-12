@@ -21,7 +21,15 @@ OutpostManagement Countries: Overview
                 <th>
                     Country Name
                 </th>
-            </tr>
+                <th>
+                    Country ISO Code
+                </th>
+                <th>
+                    Phone prefix
+                </th>
+                 <th>
+                </th>
+           </tr>
         </thead>
         <tbody>
             @{
@@ -37,6 +45,17 @@ OutpostManagement Countries: Overview
                     </td>
                      <td>@country.Name
                     </td>
+                     <td>@country.ISOCode
+                    </td>
+                     <td>@country.PhonePrefix
+                    </td>
+                   <td>
+                     @{
+                         Html.BeginForm<CountryController>(m => m.Delete(country.Id));
+                            }
+                            @Html.SubmitButton("delete-user", "Delete")
+                            @{ Html.EndForm();
+                    }</td>
                 </tr> 
             }
         </tbody>
@@ -46,7 +65,7 @@ OutpostManagement Countries: Overview
     <h3>
         Actions</h3>
     <div class="page_header_buttons">
-       @(Html.CreateButton<CountryController>(it => it.Create(), Web.Areas.OutpostManagement.OutpostManagementAreaRegistration.DEFAULT_ROUTE))
+       @(Html.ActionLink<CountryController>(it => it.Create(), "Create", OutpostManagementAreaRegistration.DEFAULT_ROUTE))
     </div>
 }
 @section scripts{

@@ -1,0 +1,27 @@
+﻿@model Web.Areas.OutpostManagement.Models.Outpost.OutpostModel
+           
+
+@{ var id = new Guid();}
+<fieldset id="fieldsetInformation">
+    <legend>Outpost Information</legend>
+
+    <div class="row of-2">
+        <div class="column">
+            <label for="Name"> Name<text class="required-text">*</text> </label>
+            @Html.TextBoxFor(m => m.Name, new { maxlength = 250, autofocus = "autofocus", placeholder = "Name" })
+        </div>
+        <div class="column">
+            <label for="Type"> Type<text class="required-text">*</text> </label>
+            @Html.TextBoxFor(m => m.Type, new { maxlength = 250, autofocus = "autofocus", placeholder = "Type" })
+        </div>
+        <div class="column">
+            <label for="Mobile Number"> Mobile Number<text class="required-text">*</text> </label>
+            @Html.TextBoxFor(m => m.MobileNumber, new { maxlength = 250, autofocus = "autofocus", placeholder = "Number" })
+        </div>
+        <div class="column">
+            <label for="E-mail Address"> E-mail Address<text class="required-text">*</text> </label>
+            @Html.TextBoxFor(m => m.Email, new { maxlength = 250, autofocus = "autofocus", placeholder = "Email" })
+        </div>
+    </div>
+
+</fieldset>

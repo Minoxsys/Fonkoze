@@ -158,14 +158,15 @@ end
 
 if not exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'Countries')
 begin
-
-
 	-- Countries
 CREATE TABLE [Countries] (
        Id UNIQUEIDENTIFIER not null,
-       Name NVARCHAR(255) null,
+       Name NVARCHAR(50) null,
+	   ISOCode NVARCHAR(3) null,
+	   PhonePrefix NVARCHAR(3) null,
        Created DATETIME null,
        Updated DATETIME null,
        ByUser_FK UNIQUEIDENTIFIER null,
        primary key (Id))
 end
+

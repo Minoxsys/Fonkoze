@@ -154,6 +154,9 @@
     <Compile Include="Areas\OutpostManagement\Controllers\RegionController.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Country\CountryModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Country\CountryModelInput.cs" />
+    <Compile Include="Areas\OutpostManagement\Models\Outpost\OutpostModelInput.cs" />
+    <Compile Include="Areas\OutpostManagement\Models\Outpost\OutpostModelOutput.cs" />
+    <Compile Include="Areas\OutpostManagement\Models\Outpost\Overview.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Region\RegionInputModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Region\RegionOutputModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Region\RegionOverviewModel.cs" />
@@ -1812,12 +1815,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Areas\" />
     <Folder Include="Areas\OutpostManagement\Services\" />
-    <Folder Include="Areas\OutpostManagement\Views\Shared\" />
     <Folder Include="Areas\OutpostManagement\Views\District\" />
-    <Folder Include="Areas\OutpostManagement\Views\Outpost\" />
-    <Folder Include="Areas\OutpostManagement\Views\Region\" />
     <Folder Include="Areas\OutpostManagement\Views\Shared\" />
     <Folder Include="Assets\img\photos\" />
     <Folder Include="Scripts\" />
@@ -1858,6 +1857,17 @@
     <Content Include="Areas\OutpostManagement\Views\Country\CountryInformationInput.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\Country\CountryOutput.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\Country\CountryInformationOutput.cshtml" />
+    <Content Include="Areas\OutpostManagement\Views\Outpost\Create.cshtml" />
+    <Content Include="Areas\OutpostManagement\Views\Outpost\Edit.cshtml" />
+    <Content Include="Areas\OutpostManagement\Views\Outpost\Outpost.cshtml" />
+    <Content Include="Areas\OutpostManagement\Views\Outpost\OutpostInformation.cshtml" />
+    <Content Include="Areas\OutpostManagement\Views\Outpost\OutpostInformationInput.cshtml" />
+    <Content Include="Areas\OutpostManagement\Views\Outpost\OutpostInformationOutput.cshtml" />
+    <Content Include="Areas\OutpostManagement\Views\Outpost\OutpostInput.cshtml" />
+    <Content Include="Areas\OutpostManagement\Views\Outpost\OutpostOutput.cshtml" />
+    <Content Include="Areas\OutpostManagement\Views\Outpost\Overview.cshtml" />
+    <Content Include="Areas\OutpostManagement\Views\Country\Country.cshtml" />
+    <Content Include="Areas\OutpostManagement\Views\Country\CountryInformation.cshtml" />
     <None Include="Assets\img\skins\ButtonTemplate.psd" />
     <Content Include="Views\RoleManager\Create.cshtml" />
     <Content Include="Views\RoleManager\Edit.cshtml" />

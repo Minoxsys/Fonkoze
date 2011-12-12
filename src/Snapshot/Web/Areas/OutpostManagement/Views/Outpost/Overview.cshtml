@@ -1,0 +1,83 @@
+﻿@model Web.Areas.OutpostManagement.Models.Outpost.Overview
+           
+@section page_title{
+OutpostManagement Outposts: Overview
+}
+@section title_bar{
+    <h4>
+        OutpostManagement : Outpost</h4>
+}
+@section breadcrumbs{
+   @Url.HomeLink("Overview") > OutpostManagement : Countries
+}
+@section master_content{
+    <table class="searchable">
+        <thead>
+            <tr>
+                <th>
+                    #
+                </th>
+                <th>
+                    Country Name
+                </th>
+                 <th>
+                    Type
+                </th>
+                 <th>
+                    Mobile Number
+                </th>
+                 <th>
+                    E-mail address
+                </th>
+                <th>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                var itemNo = 0;
+            }
+            @foreach (Web.Areas.OutpostManagement.Models.Outpost.OutpostModel outpost in Model.Items)
+            {
+                var _class = (itemNo++ % 2 == 0) ? "odd" : "even";
+       
+                <tr class="@_class">
+                    <td>
+                        @(Html.ActionLink<OutpostController>(it => it.Edit(outpost.Id), "Edit", OutpostManagementAreaRegistration.DEFAULT_ROUTE))
+                    </td>
+                     <td>@outpost.Name
+                    </td>
+                     <td>@outpost.Type
+                    </td>
+                     <td>@outpost.MobileNumber
+                    </td>
+                     <td>@outpost.Email
+                    </td>
+                    <td>
+                         @{ Html.BeginForm<OutpostController>(m => m.Delete(outpost.Id)); }
+                         @Html.SubmitButton("delete-user", "Delete")
+                         @{ Html.EndForm(); }
+                    </td>
+                </tr> 
+            }
+        </tbody>
+    </table>
+}
+@section master_actions{
+    <h3>
+        Actions</h3>
+    <div class="page_header_buttons">
+       @(Html.ActionLink<OutpostController>(it => it.Create(), "Create", Web.Areas.OutpostManagement.OutpostManagementAreaRegistration.DEFAULT_ROUTE))
+    </div>
+}
+@section scripts{
+    <script type="text/javascript">
+        $(function () {
+            $(".searchable").dataTable({
+                "sPaginationType": "full_numbers"
+            });
+        });
+
+    </script>
+}
+

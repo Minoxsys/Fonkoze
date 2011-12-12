@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using Domain;
 using Web.Controllers;
 using Web.Areas.OutpostManagement.Models.Country;
+using Microsoft.Practices.Unity;
 using AutoMapper;
 using Web.Bootstrap.Converters;
 using Core.Persistence;
@@ -25,6 +26,8 @@ namespace Web.Areas.OutpostManagement.Models.Country
     {
 
         public Guid Id { get; set; }
-        public string Name { get; set; }
+        public virtual string Name { get; set; }
+        public virtual string ISOCode { get; set; }
+        public virtual string PhonePrefix { get; set; }
    }
 }
