@@ -56,16 +56,7 @@ Users list
         Actions</h3>
     <div class="page_header_buttons">
         <a href="@(Html.BuildUrlFromExpression<UserManagerController>(it => it.Create()))">
-            <button type="button" class="sexybutton sexysimple sexygreen">
+            <button type="button">
                 Create new</button></a>
     </div>
-    <h3>
-        Information</h3>
-    <p>
-        In order for an employee to appear in this list he must
-        <ul>
-            <li>First exist as a user in the domain</li>
-            <li>Second login to this application at least once</li>
-        </ul>
-    </p>
 }

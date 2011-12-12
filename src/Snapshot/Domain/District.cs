@@ -9,5 +9,7 @@ namespace Domain
     public class District : DomainEntity
     {
         public virtual string Name { get; set; }
+
+        public virtual Region Region { get; set; }
     }
 }

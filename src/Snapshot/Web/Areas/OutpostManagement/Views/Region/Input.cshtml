@@ -3,4 +3,10 @@
     <label for="Name"> Region Name<text class="required-text">*</text>:</label>
         @Html.TextBoxFor(m => m.Name, new { maxlength = 250, autofocus = "autofocus", placeholder = "Name" })
          @Html.HiddenFor(m => m.Id)
+         
+          <label for="Name"> Country </label>
+         <div class="row">
+         @Html.DropDownListFor(m => m.Country.Id,Model.Countries)
+         
+         </div>
 </div>

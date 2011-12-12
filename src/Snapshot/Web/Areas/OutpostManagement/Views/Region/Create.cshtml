@@ -1,34 +1,31 @@
 ﻿@model Web.Areas.OutpostManagement.Models.Region.RegionOutputModel
 @using Microsoft.Web.Mvc
 @section page_title{
-    Region : Create
+Region : Create
+}
+@section breadcrumbs{
+    @Url.HomeLink("Dashboard") / @(Html.ActionLink<RegionController>(act => act.Overview(), "Regions Overview", OutpostManagementAreaRegistration.DEFAULT_ROUTE))
+> Create Region
 }
 @section master_content{
-          
-         @{Html.BeginForm<RegionController>(r => r.Create());}
-            <div class="grid_12">
-        <div class="column_content"><div class="row">@Html.ValidationSummary()</div>
+    @{Html.BeginForm<RegionController>(r => r.Create());}
+    <div class="grid_12">
+        <div class="column_content">
+            <div class="row">@Html.ValidationSummary()</div>
             <div class="six_column page_header">
                 <h2>
                     Create a new region</h2>
             </div>
-            
-                <fieldset class="fieldsCollection ">
-                
-                    @{
-                Html.RenderPartial("Input", Model);     
-            }
+            <fieldset class="fieldsCollection ">
+                @{
+                    Html.RenderPartial("Input", Model);     
+                }
             </fieldset>
             <div class="six_column form_buttons">
-                @Html.SubmitButton("submit-form", "Save", new
-               {
-                   @class = "sexybutton sexysimple sexyteal"
-               }) <span>or </span><a class="cancel" href="@(Html.BuildUrlFromExpression<RegionController>(it => it.Overview()))">
+                @Html.SubmitButton("submit-form", "Save") <span>or </span><a href="@(Html.BuildUrlFromExpression<RegionController>(it => it.Overview()))">
                    Cancel</a>
             </div>
         </div>
     </div>
-            
-            @{Html.EndForm();}          
-        
+    @{Html.EndForm();}
 }

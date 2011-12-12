@@ -65,17 +65,59 @@ begin
        primary key (Id)
     )
 end
-
-if not exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'Regions')
+if not exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'Countries')
 begin
-	 create table Regions (
-        Id UNIQUEIDENTIFIER not null,
+
+
+	-- Countries
+CREATE TABLE [Countries] (
+       Id UNIQUEIDENTIFIER not null,
        Name NVARCHAR(255) null,
        Created DATETIME null,
        Updated DATETIME null,
        ByUser_FK UNIQUEIDENTIFIER null,
+       primary key (Id))
+end
+
+if not exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'Regions')
+begin
+	  create table Regions (
+        Id UNIQUEIDENTIFIER not null,
+       Name NVARCHAR(255) null,
+       Created DATETIME null,
+       Updated DATETIME null,
+       Country_FK UNIQUEIDENTIFIER null,
+       ByUser_FK UNIQUEIDENTIFIER null,
        primary key (Id)
     )
+end
+
+if not exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'Districts')
+begin
+ create table Districts (
+        Id UNIQUEIDENTIFIER not null,
+       Name NVARCHAR(255) null,
+       Created DATETIME null,
+       Updated DATETIME null,
+       Region_FK UNIQUEIDENTIFIER null,
+       ByUser_FK UNIQUEIDENTIFIER null,
+       primary key (Id)
+    )
+end
+
+if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='Region_FK')
+begin
+ alter table Districts 
+        add constraint Region_FK 
+        foreign key (Region_FK) 
+        references Regions
+end
+if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='ByUser_DFK')
+begin
+    alter table Districts 
+        add constraint ByUser_DFK 
+        foreign key (ByUser_FK) 
+        references Users
 end
 
 if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='ByUser_REFK')
@@ -84,6 +126,14 @@ begin
         add constraint ByUser_REFK 
         foreign key (ByUser_FK) 
         references Users
+end
+
+if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='Country_RFK')
+begin
+  alter table Regions 
+        add constraint Country_RFK 
+        foreign key (Country_FK) 
+        references Countries
 end
 if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='ByUser_FK')
 begin
@@ -156,16 +206,4 @@ begin
         references Users
 end
 
-if not exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'Countries')
-begin
 
-
-	-- Countries
-CREATE TABLE [Countries] (
-       Id UNIQUEIDENTIFIER not null,
-       Name NVARCHAR(255) null,
-       Created DATETIME null,
-       Updated DATETIME null,
-       ByUser_FK UNIQUEIDENTIFIER null,
-       primary key (Id))
-end

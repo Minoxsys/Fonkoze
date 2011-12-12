@@ -24,6 +24,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement
         IQueryService<Region> queryService;
         ISaveOrUpdateCommand<Region> saveCommand;
         IDeleteCommand<Region> deleteCommand;
+        IQueryService<Country> queryCountry;
 
         Region entity;
         Guid entityId;
@@ -41,6 +42,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement
             queryService = MockRepository.GenerateMock<IQueryService<Region>>();
             saveCommand = MockRepository.GenerateMock<ISaveOrUpdateCommand<Region>>();
             deleteCommand = MockRepository.GenerateMock<IDeleteCommand<Region>>();
+            queryCountry = MockRepository.GenerateMock<IQueryService<Country>>();
         }
 
         private void SetUpController()
@@ -50,6 +52,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement
             controller.QueryService = queryService;
             controller.SaveOrUpdateCommand = saveCommand;
             controller.DeleteCommand = deleteCommand;
+            controller.QueryCountry = queryCountry;
         }
         private void StubEntity()
         {
@@ -82,14 +85,14 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement
         [Test]
         public void Should_Display_Empty_Model_When_GET_Create()
         {
+            //assert
+           
             //act
             var result = controller.Create() as ViewResult;
 
             //assert
-            Assert.IsNotNull(result.Model);
-            Assert.IsInstanceOf<RegionOutputModel>(result.Model);
-            var viewModel = (RegionOutputModel)result.Model;
-            Assert.AreEqual(null, viewModel.Name);
+            Assert.IsNull(result.Model);
+            
         }
 
         [Test]
@@ -97,7 +100,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement
         {
             //arrange
             var model = new RegionInputModel();
-            SetAllDataForModel(model);
+            model = BuildRegionWithName(REGION_NAME);
             saveCommand.Expect(it => it.Execute(Arg<Region>.Matches(c => c.Name == REGION_NAME)));
 
             //act
@@ -126,7 +129,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement
         {
             //arrange			
             queryService.Expect(it => it.Load(entity.Id)).Return(entity);
-
+            queryCountry.Expect(call => call.Query()).Return(new Country[] { new Country { Name = "Romania"}}.AsQueryable());
             //act
             var result = (ViewResult)controller.Edit(entity.Id);
 
@@ -135,6 +138,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement
             var viewModel = result.Model as RegionOutputModel;
             Assert.AreEqual(REGION_NAME, viewModel.Name);
             Assert.AreEqual(entity.Id, viewModel.Id);
+            Assert.AreEqual(viewModel.Countries[0].Text, "Romania");
         }
 
         [Test]
@@ -142,16 +146,14 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement
         {
             //arrange
             var model = new RegionInputModel();
-            SetAllDataForModel_OnEdit(model);
+            model = BuildRegionWithName(NEW_REGION_NAME);
             
-            queryService.Expect(call => call.Load(entity.Id)).Return(entity);
             saveCommand.Expect(it => it.Execute(Arg<Region>.Matches(c => c.Name == NEW_REGION_NAME && c.Id == entity.Id)));
 
             // Act
             var redirectResult = (RedirectToRouteResult)controller.Edit(new RegionInputModel() { Id = entity.Id, Name = NEW_REGION_NAME });
 
             // Assert
-            queryService.VerifyAllExpectations();
             saveCommand.VerifyAllExpectations();
             Assert.AreEqual("Overview", redirectResult.RouteValues["Action"]);
         }
@@ -181,16 +183,15 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement
             // Assert
             deleteCommand.VerifyAllExpectations();
             Assert.AreEqual("Overview", redirectResult.RouteValues["Action"]);
-        }
-        private void SetAllDataForModel_OnEdit(RegionInputModel model)
+        }       
+        private RegionInputModel BuildRegionWithName( string name)
         {
-            model.Name = NEW_REGION_NAME;
-            model.Id = entity.Id;
-        }
-        private void SetAllDataForModel(RegionInputModel model)
-        {
-            model.Name = REGION_NAME;
+        
+            var model = new RegionInputModel();
+            model.Name = name;
             model.Id = entityId;
+
+            return model;
         }
                
     }

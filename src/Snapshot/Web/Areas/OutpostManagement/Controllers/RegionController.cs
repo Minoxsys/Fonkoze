@@ -8,18 +8,26 @@ using Domain;
 using System.Runtime.CompilerServices;
 using Web.Areas.OutpostManagement.Models.Region;
 using AutoMapper;
+using Web.Areas.OutpostManagement.Models.District;
+using Web.Areas.OutpostManagement.Models.Country;
+using MvcPaging;
 
 
 namespace Web.Areas.OutpostManagement.Controllers
 {
     public class RegionController : Controller
-    {        
+    {
+        public RegionOutputModel RegionOutputModel { get; set; }
+
+        public RegionInputModel RegionInputModel { get; set; }
+
         public IQueryService<Region> QueryService { get; set; }
-        
+
         public ISaveOrUpdateCommand<Region> SaveOrUpdateCommand { get; set; }
 
         public IDeleteCommand<Region> DeleteCommand { get; set; }
 
+        public IQueryService<Country> QueryCountry { get; set; }
 
         public ActionResult Overview()
         {
@@ -27,13 +35,15 @@ namespace Web.Areas.OutpostManagement.Controllers
             RegionModel regionModel = new RegionModel();
             var regions = QueryService.Query().ToList();
 
+
             CreateMapping();
 
             foreach (Region item in regions)
             {
                 regionModel = new RegionModel();
                 Mapper.Map(item, regionModel);
-                overviewModel.Regions.Add(regionModel);                
+                overviewModel.Regions.Add(regionModel);
+
             }
 
             return View(overviewModel);
@@ -41,20 +51,19 @@ namespace Web.Areas.OutpostManagement.Controllers
 
         public ActionResult Create()
         {
-            var regionInputModel = new RegionOutputModel();
-            return View(regionInputModel);
+            return View(RegionOutputModel);
         }
 
         [HttpPost]
         public ActionResult Create(RegionInputModel regionInputModel)
         {
-             if (!ModelState.IsValid)
-                return View("Create", new RegionOutputModel());
+            if (!ModelState.IsValid)
+                return View("Create", RegionOutputModel);
 
-             CreateMapping();
+            CreateMapping();
             var region = new Region();
             Mapper.Map(regionInputModel, region);
-            
+
             SaveOrUpdateCommand.Execute(region);
             return RedirectToAction("Overview");
         }
@@ -62,12 +71,13 @@ namespace Web.Areas.OutpostManagement.Controllers
         [HttpGet]
         public ViewResult Edit(Guid guid)
         {
-            var regionToEdit = QueryService.Load(guid);
-            var viewModel = new RegionOutputModel()
-            {
-                Name = regionToEdit.Name,
-                Id = regionToEdit.Id
-            };
+            Region region = new Region();
+            region = QueryService.Load(guid);
+            CreateMapping();
+            RegionOutputModel viewModel = new RegionOutputModel(QueryCountry);
+            Mapper.Map(region, viewModel);
+
+
             return View(viewModel);
         }
 
@@ -77,9 +87,10 @@ namespace Web.Areas.OutpostManagement.Controllers
             if (!ModelState.IsValid)
                 return View("Edit", regionInputModel);
 
-            var region = QueryService.Load(regionInputModel.Id);
-            region.Name = regionInputModel.Name;
+            Region region = new Region();
 
+            CreateMapping();
+            Mapper.Map(regionInputModel, region);
             SaveOrUpdateCommand.Execute(region);
 
             return RedirectToAction("Overview");
@@ -105,6 +116,13 @@ namespace Web.Areas.OutpostManagement.Controllers
 
             Mapper.CreateMap<RegionInputModel, Region>();
             Mapper.CreateMap<RegionOutputModel, Region>();
+
+            Mapper.CreateMap<Country, CountryModel>();
+            Mapper.CreateMap<CountryModel, Country>();
+
         }
+
+
     }
+
 }

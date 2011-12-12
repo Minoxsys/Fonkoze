@@ -4,37 +4,49 @@
     ViewBag.Title = "Overview";
 }
 @section page_title{
-    Regions: Overview
+Regions: Overview
+}
+@section breadcrumbs{
+    @Url.HomeLink("Dashboard") > Regions
 }
 @section master_content{
-
     <table class="searchable">
         <thead>
             <tr>
                 <th>
-                    #
+                    Region Name
                 </th>
                 <th>
-                    Region Name
-                </th>                
+                    Country
+                </th>
+                <th colspan="2">
+                    Actions
+                </th>
             </tr>
         </thead>
-
-        <tbody>                        
+        <tbody>
             @{
                 var itemNo = 0;
             }
-
             @foreach (var region in Model.Regions)
             {
                 var _class = (itemNo % 2 == 0) ? "odd" : "even";    
                 <tr class="@_class">
-                    <td>
-                      @(Html.ActionLink<Web.Areas.OutpostManagement.Controllers.RegionController>(call => call.Edit(region.Id), "Region", Web.Areas.OutpostManagement.OutpostManagementAreaRegistration.DEFAULT_ROUTE))
+                    <td>@region.Name
                     </td>
-
-                    <td>@region.Name</td>   
-                                     
+                    <td>@region.Country.Name
+                    </td>
+                    <td>@(Html.ActionLink<Web.Areas.OutpostManagement.Controllers.RegionController>(call => call.Edit(region.Id), "Edit", Web.Areas.OutpostManagement.OutpostManagementAreaRegistration.DEFAULT_ROUTE))
+                    </td>
+                    <td>
+                        @{
+                Html.BeginForm<RegionController>(m => m.Delete(region.Id));
+                        }
+                        @Html.SubmitButton("delete-user", "Delete")
+                        @{
+                Html.EndForm();
+                        }
+                    </td>
                 </tr> 
             }
         </tbody>
@@ -44,7 +56,7 @@
     <h3>
         Actions</h3>
     <div class="page_header_buttons">
-       @(Html.ActionLink<Web.Areas.OutpostManagement.Controllers.RegionController>( it=>it.Create(),"Create region", Web.Areas.OutpostManagement.OutpostManagementAreaRegistration.DEFAULT_ROUTE))
+        @(Html.ActionLink<Web.Areas.OutpostManagement.Controllers.RegionController>(it => it.Create(), "Create region", Web.Areas.OutpostManagement.OutpostManagementAreaRegistration.DEFAULT_ROUTE))
     </div>
 }
 @section scripts{

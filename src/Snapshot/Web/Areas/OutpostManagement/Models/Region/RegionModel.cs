@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using Web.Areas.OutpostManagement.Models.Country;
 
 namespace Web.Areas.OutpostManagement.Models.Region
 {
     public class RegionModel
     {
         public string Name { get; set; }
+        public CountryModel Country { get; set; }
         public Guid Id { get; set; }
     }
 }

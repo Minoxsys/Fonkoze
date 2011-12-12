@@ -1,24 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using Domain;
-using Web.Controllers;
-using Web.Areas.OutpostManagement.Models;
 using Web.Areas.OutpostManagement.Models.Country;
-using Web.Areas.OutpostManagement.Models.Region;
-using Web.Areas.OutpostManagement.Models.District;
-using Web.Areas.OutpostManagement.Models.Outpost;
 using AutoMapper;
-using Web.Bootstrap.Converters;
 using Core.Persistence;
-using Persistence.Queries.Employees;
-using System.Net.Mail;
-using Web.Helpers;
-using Web.Security;
-using Web.Validation.ValidDate;
-using System.Globalization;
 
 namespace Web.Areas.OutpostManagement.Controllers
 {
@@ -51,7 +38,7 @@ namespace Web.Areas.OutpostManagement.Controllers
 
             var queryResult = QueryService.Query();
 
-            if (queryResult.ToList().Count()  > 0)
+            if (queryResult.ToList().Count() > 0)
                 queryResult.ToList().ForEach(item =>
                 {
                     var viewModelItem = new CountryModel();
@@ -94,7 +81,7 @@ namespace Web.Areas.OutpostManagement.Controllers
 
             return RedirectToAction("Overview", "Country");
         }
-     
+
 
         //[Requires(Permissions = "OnBoarding.Candidate.CRUD")]
         public ViewResult Edit(Guid countryId)
@@ -108,7 +95,7 @@ namespace Web.Areas.OutpostManagement.Controllers
             return View(countryModel);
         }
 
- 
+
         private static void CreateMappings(Country entity = null)
         {
             Mapper.CreateMap<Country, CountryModel>();
