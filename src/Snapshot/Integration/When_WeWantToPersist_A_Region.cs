@@ -6,6 +6,7 @@ using Domain;
 using NUnit.Framework;
 using NHibernate.Linq;
 using FluentNHibernate.Testing;
+using Core.Domain;
 
 namespace IntegrationTests
 {

@@ -9,6 +9,7 @@ using Core.Persistence;
 using Rhino.Mocks;
 using System.Web.Mvc;
 using Web.Areas.OutpostManagement.Models.Region;
+using Core.Domain;
 
 namespace Tests.Unit.Controllers.Areas.OutpostManagement
 {

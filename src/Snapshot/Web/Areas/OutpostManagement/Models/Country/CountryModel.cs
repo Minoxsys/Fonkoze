@@ -6,7 +6,6 @@ using System.Web.Mvc;
 using Domain;
 using Web.Controllers;
 using Web.Areas.OutpostManagement.Models.Country;
-using Microsoft.Practices.Unity;
 using AutoMapper;
 using Web.Bootstrap.Converters;
 using Core.Persistence;

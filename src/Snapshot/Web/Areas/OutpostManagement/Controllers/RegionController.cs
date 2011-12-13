@@ -12,6 +12,7 @@ using Web.Areas.OutpostManagement.Models.District;
 using Web.Areas.OutpostManagement.Models.Country;
 using MvcPaging;
 using Persistence.Queries;
+using Core.Domain;
 
 
 namespace Web.Areas.OutpostManagement.Controllers
