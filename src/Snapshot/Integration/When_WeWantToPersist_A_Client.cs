@@ -9,6 +9,7 @@ using Persistence;
 using Persistence.Queries.Employees;
 using Persistence.Conventions;
 using NHibernate.Linq;
+using Domain;
 
 
 namespace IntegrationTests

@@ -40,9 +40,9 @@ Regions: Overview
                     </td>
                     <td>
                         @{
-                Html.BeginForm<RegionController>(m => m.Delete(region.Id));
+                Html.BeginForm<RegionController>(m => m.Delete(region.Id),FormMethod.Post, new{ @class="delete-user-form"});
                         }
-                        @Html.SubmitButton("delete-user", "Delete")
+                        @Html.Button("delete-user", "Delete", HtmlButtonType.Submit)
                         @{
                 Html.EndForm();
                         }
@@ -61,11 +61,17 @@ Regions: Overview
 }
 @section scripts{
     <script type="text/javascript">
-        $(function () {
-            $(".searchable").dataTable({
-                "sPaginationType": "full_numbers"
-            });
-        });
+//        $(function () {
+//            $(".delete-user-form").submit(function () {
+//                console.log('trying to submit');
+//                return false;
+//            });
+//        });
+//        $(function () {
+//            $(".searchable").dataTable({
+//                "sPaginationType": "full_numbers"
+//            });
+//        });
 
     </script>
 }

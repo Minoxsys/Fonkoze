@@ -11,6 +11,7 @@ using AutoMapper;
 using Web.Areas.OutpostManagement.Models.District;
 using Web.Areas.OutpostManagement.Models.Country;
 using MvcPaging;
+using Persistence.Queries;
 
 
 namespace Web.Areas.OutpostManagement.Controllers
@@ -29,12 +30,16 @@ namespace Web.Areas.OutpostManagement.Controllers
 
         public IQueryService<Country> QueryCountry { get; set; }
 
+        public RegionQueryService RegionQueryService { get; set; }
+
         public ActionResult Overview()
         {
             RegionOverviewModel overviewModel = new RegionOverviewModel();
             RegionModel regionModel = new RegionModel();
             var regions = QueryService.Query().ToList();
 
+
+            //var regions = RegionQueryService.Query();
 
             CreateMapping();
 

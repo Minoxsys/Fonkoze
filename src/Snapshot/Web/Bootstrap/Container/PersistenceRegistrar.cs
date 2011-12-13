@@ -29,6 +29,7 @@ namespace Web.Bootstrap.Container
             container.Register(c => new NHibernateSessionFactory(c.Resolve<IAutomappingConfiguration>())).As<INHibernateSessionFactory>();
             
             container.RegisterGeneric( typeof(NHibernateQueryService<>)).As(typeof(IQueryService<>));
+            
         }
     }
 }

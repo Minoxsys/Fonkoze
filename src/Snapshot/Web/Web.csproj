@@ -233,6 +233,7 @@
     <Compile Include="Security\SecurePassword.cs" />
     <Compile Include="Services\FileService.cs" />
     <Compile Include="Services\IImportService.cs" />
+    <Compile Include="Services\QueryFetchService.cs" />
     <Compile Include="Validation\Account\MembershipStatusCodeConverter.cs" />
     <Compile Include="Validation\Account\PropertiesMustMatchAttribute.cs" />
     <Compile Include="Validation\Account\ValidatePasswordLengthAttribute.cs" />
