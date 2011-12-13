@@ -5,7 +5,7 @@ using System.Web;
 
 namespace Web.Areas.OutpostManagement.Models.Outpost
 {
-    public class OutpostModel
+    public class OutpostModelInput
     {
         public Guid Id { get; set; }
         public string Name { get; set; }

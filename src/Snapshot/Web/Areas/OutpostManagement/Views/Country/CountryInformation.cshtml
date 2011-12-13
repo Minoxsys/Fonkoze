@@ -1,4 +1,4 @@
-﻿@model Web.Areas.OutpostManagement.Models.Country.CountryModelOutput
+﻿@model Web.Areas.OutpostManagement.Models.Country.CountryModel
            
 
 @{ var id = new Guid();}
@@ -11,11 +11,11 @@
             @Html.TextBoxFor(m => m.Name, new { maxlength = 250, autofocus = "autofocus", placeholder = "Name" })
         </div>
         <div class="column">
-            <label for="ISOCode"> ISOCode<text class="required-text"></text> </label>
+            <label for="ISOCode"> ISOCode<text class="required-text">*</text> </label>
             @Html.TextBoxFor(m => m.ISOCode, new { maxlength = 250, autofocus = "autofocus", placeholder = "ISOCode" })
         </div>
         <div class="column">
-            <label for="PhonePrefix"> Phone prefix<text class="required-text"></text> </label>
+            <label for="PhonePrefix"> Name<text class="required-text">*</text> </label>
             @Html.TextBoxFor(m => m.PhonePrefix, new { maxlength = 250, autofocus = "autofocus", placeholder = "PhonePrefix" })
         </div>
     </div>

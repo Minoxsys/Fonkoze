@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Core.Domain;
 
-namespace Domain
+namespace Core.Domain
 {
     public class Outpost : DomainEntity
     {

@@ -73,6 +73,8 @@ begin
 CREATE TABLE [Countries] (
        Id UNIQUEIDENTIFIER not null,
        Name NVARCHAR(255) null,
+       ISOCode NVARCHAR(3) null,
+       PhonePrefix NVARCHAR(3) null,
        Created DATETIME null,
        Updated DATETIME null,
        ByUser_FK UNIQUEIDENTIFIER null,
@@ -205,5 +207,6 @@ begin
         foreign key (ByUser_FK) 
         references Users
 end
+
 
 

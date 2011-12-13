@@ -3,7 +3,10 @@
         OutpostManagement</h1>
     <ul>
          <li>
-           @(Html.ActionLink<Web.Areas.OutpostManagement.Controllers.CountryController>(it => it.Overview(), "View All", Web.Areas.OutpostManagement.OutpostManagementAreaRegistration.DEFAULT_ROUTE))
+           @(Html.ActionLink<Web.Areas.OutpostManagement.Controllers.CountryController>(it => it.Overview(), "Countries", Web.Areas.OutpostManagement.OutpostManagementAreaRegistration.DEFAULT_ROUTE))
+        </li>
+         <li>
+           @(Html.ActionLink<Web.Areas.OutpostManagement.Controllers.OutpostController>(it => it.Overview(), "Outposts", Web.Areas.OutpostManagement.OutpostManagementAreaRegistration.DEFAULT_ROUTE))
         </li>
 
         @{
