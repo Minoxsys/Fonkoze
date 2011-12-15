@@ -9,23 +9,12 @@ Region : Create
 }
 @section master_content{
     @{Html.BeginForm<RegionController>(r => r.Create());}
-    <div class="grid_12">
-        <div class="column_content">
-            <div class="row">@Html.ValidationSummary()</div>
-            <div class="six_column page_header">
-                <h2>
-                    Create a new region</h2>
-            </div>
-            <fieldset class="fieldsCollection ">
-                @{
-                    Html.RenderPartial("Input", Model);     
-                }
-            </fieldset>
-            <div class="six_column form_buttons">
-                @Html.SubmitButton("submit-form", "Save") <span>or </span><a href="@(Html.BuildUrlFromExpression<RegionController>(it => it.Overview()))">
-                   Cancel</a>
-            </div>
-        </div>
-    </div>
+    <fieldset class="fieldsCollection ">
+        @{
+            Html.RenderPartial("Input", Model);     
+        }
+    </fieldset>
+    @Html.SubmitButton("submit-form", "Save") <span>or </span><a href="@(Html.BuildUrlFromExpression<RegionController>(it => it.Overview()))">
+        Cancel</a>
     @{Html.EndForm();}
 }

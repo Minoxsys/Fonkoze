@@ -30,6 +30,22 @@ begin
     drop table Roles
 end
 
+if exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'Districts')
+begin
+	alter table Districts  drop constraint Region_FK
+	alter table Districts  drop constraint ByUser_DFK
+	drop table Districts
+end
+
+if exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'Regions')
+begin
+	--alter table Regions drop constraint ByUser_REFK
+	--alter table Regions drop constraint Client_RFK
+	--alter table Regions drop constraint Country_RFK
+	drop table Regions
+	
+end
+
 if exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'Countries')
 begin
 --	alter table Countries drop constraint ClientId_FK
@@ -40,13 +56,6 @@ if exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'Cl
 begin
 	alter table Clients drop constraint ByUser_FK
     drop table Clients
-end
-
-if exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'Regions')
-begin
-alter table Regions drop constraint ByUser_REFK
-	drop table Regions
-	
 end
 
 if exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'Users')

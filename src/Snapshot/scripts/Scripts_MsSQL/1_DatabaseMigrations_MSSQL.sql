@@ -86,12 +86,15 @@ begin
 	  create table Regions (
         Id UNIQUEIDENTIFIER not null,
        Name NVARCHAR(255) null,
+       Coordinates NVARCHAR(255) null,
        Created DATETIME null,
        Updated DATETIME null,
        Country_FK UNIQUEIDENTIFIER null,
+       Client_FK UNIQUEIDENTIFIER null,
        ByUser_FK UNIQUEIDENTIFIER null,
        primary key (Id)
     )
+    
 end
 
 if not exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'Districts')
@@ -102,6 +105,7 @@ begin
        Created DATETIME null,
        Updated DATETIME null,
        Region_FK UNIQUEIDENTIFIER null,
+       Client_FK UNIQUEIDENTIFIER null,
        ByUser_FK UNIQUEIDENTIFIER null,
        primary key (Id)
     )
@@ -122,6 +126,13 @@ begin
         references Users
 end
 
+if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='Client_DFK')
+begin
+alter table Districts 
+        add constraint Client_DFK 
+        foreign key (Client_FK) 
+        references Clients
+end
 if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='ByUser_REFK')
 begin
 	alter table Regions 
@@ -130,6 +141,14 @@ begin
         references Users
 end
 
+if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='Client_RFK')
+begin
+alter table Regions 
+        add constraint Client_RFK 
+        foreign key (Client_FK) 
+        references Clients
+end
+       
 if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='Country_RFK')
 begin
   alter table Regions 

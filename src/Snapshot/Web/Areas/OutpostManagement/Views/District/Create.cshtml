@@ -1,0 +1,36 @@
+﻿@model Web.Areas.OutpostManagement.Models.District.DistrictOutputModel
+
+@using Microsoft.Web.Mvc
+@section page_title{
+District : Create
+}
+@section breadcrumbs{
+    @Url.HomeLink("Dashboard") / @(Html.ActionLink<DistrictController>(act => act.Overview(), "Districts Overview", OutpostManagementAreaRegistration.DEFAULT_ROUTE))
+> Create District
+}
+@section master_content{
+ @{Html.BeginForm<DistrictController>(r => r.Create());}
+    <fieldset class="fieldsCollection ">
+        @{
+            Html.RenderPartial("Input", Model);     
+        }
+    </fieldset>
+    @Html.SubmitButton("submit-form", "Save") <span>or </span><a href="@(Html.BuildUrlFromExpression<RegionController>(it => it.Overview()))">
+        Cancel</a>
+    @{Html.EndForm();}
+}
+
+@section scripts{
+    <script type="text/javascript">
+        function onCountrySelected() {
+
+            var e = document.getElementById("Region_Country_Id");
+            var selectedCountry = e.options[e.selectedIndex].text;
+
+            debugger;
+            var url = "/District/GetRegionsForCountry";
+
+            $.get("/District/GetRegionsForCountry", { countryName: selectedCountry }, function (data) { alert(data); });
+        }        
+    </script>
+}

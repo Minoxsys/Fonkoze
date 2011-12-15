@@ -6,6 +6,7 @@ using Core.Domain;
 using Web.Areas.OutpostManagement.Models.Country;
 using AutoMapper;
 using Core.Persistence;
+using Domain;
 
 namespace Web.Areas.OutpostManagement.Controllers
 {

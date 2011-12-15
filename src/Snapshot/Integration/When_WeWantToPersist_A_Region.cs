@@ -14,7 +14,9 @@ namespace IntegrationTests
     public class When_WeWantToPersist_A_Region :GivenAPersistenceSpecification<Region>
     {
         private const string REGION_NAME = "Cluj";
+        private const string COORDINATES = "22 44'";
         private Country COUNTRY = new Country { Name = "Romania" };
+        private Client CLIENT = new Client { Name = "minoxsys" };
 
 
         [Test]
@@ -22,6 +24,8 @@ namespace IntegrationTests
         {
             var region = Specs.CheckProperty(e => e.Name, REGION_NAME)
                 .CheckReference(c => c.Country,COUNTRY)
+                .CheckReference(c => c.Client,CLIENT)
+                .CheckProperty(c=> c.Coordinates,COORDINATES)
                 .VerifyTheMappings();
 
             Assert.IsNotNull(region);
@@ -33,43 +37,43 @@ namespace IntegrationTests
             session.Delete(region);
             session.Flush();
         }
-
-        [Test]
-        public void it_should_add_many_countries()
-        {
+       
+        //[Test]
+        //public void it_should_add_many_countries()
+        //{
            
-            for (int i = 0; i < 2; i++)
-            {
+        //    for (int i = 0; i < 2; i++)
+        //    {
 
-                var region = Specs.CheckProperty(e => e.Name, REGION_NAME + i)
-                   .CheckReference(c => c.Country, new Country {                       
-                       Name = "Country " + i
-                   })
-                   .VerifyTheMappings();
+        //        var region = Specs.CheckProperty(e => e.Name, REGION_NAME + i)
+        //           .CheckReference(c => c.Country, new Country {                       
+        //               Name = "Country " + i
+        //           })
+        //           .VerifyTheMappings();
 
-            }
-            session.Flush();
-            session.Dispose();
+        //    }
+        //    session.Flush();
+        //    session.Dispose();
 
-            session = _sessionFactory.CreateSession();
+        //    session = _sessionFactory.CreateSession();
 
-            //var regions = (from region in session.Query<Region>().Fetch(x => x.Country)
-            //               select region).ToList();
-            var regions = session.Query<Region>().ToList();
+        //    var regions = (from region in session.Query<Region>().Fetch(x => x.Country)
+        //                   select region).ToList();
+        //   // var regions = session.Query<Region>().ToList();
 
-            for (int i = 0; i <regions.Count; i++)
-            {
-                var region = regions[i];
-                Console.WriteLine(region.Name);
-                Console.WriteLine(region.Country.Name);
-            }
+        //    for (int i = 0; i <regions.Count; i++)
+        //    {
+        //        var region = regions[i];
+        //        Console.WriteLine(region.Name);
+        //        Console.WriteLine(region.Country.Name);
+        //    }
 
-            for (int i = 0; i < regions.Count; i++)
-            {
-                session.Delete(regions[i]);
-            }
+        //    for (int i = 0; i < regions.Count; i++)
+        //    {
+        //        session.Delete(regions[i]);
+        //    }
           
-            session.Flush();
+        //    session.Flush();
+        //}
         }
-    }
 }
