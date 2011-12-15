@@ -10,6 +10,9 @@ using Rhino.Mocks;
 using System.Web.Mvc;
 using Web.Areas.OutpostManagement.Models.Region;
 using Core.Domain;
+using Persistence.Queries.Regions;
+
+
 
 namespace Tests.Unit.Controllers.Areas.OutpostManagement
 {
@@ -19,6 +22,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement
         const string DEFAULT_VIEW_NAME = "";
         const string REGION_NAME = "Cluj";
         const string NEW_REGION_NAME = "Timis";
+        const string COORDINATES = "14 44";
         
 
         RegionController controller;
@@ -26,9 +30,14 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement
         ISaveOrUpdateCommand<Region> saveCommand;
         IDeleteCommand<Region> deleteCommand;
         IQueryService<Country> queryCountry;
+        IQueryService<District> queryDistrict;
+        IQueryService<Client> queryClient;
+        IQueryRegion queryRegion; 
 
         Region entity;
+        District district;
         Guid entityId;
+        Guid districtId;
 
         [SetUp]
         public void BeforeEach()
@@ -36,6 +45,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement
             SetUpServices();
             SetUpController();
             StubEntity();
+            StubDistrict();
         }
 
         private void SetUpServices()
@@ -44,6 +54,10 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement
             saveCommand = MockRepository.GenerateMock<ISaveOrUpdateCommand<Region>>();
             deleteCommand = MockRepository.GenerateMock<IDeleteCommand<Region>>();
             queryCountry = MockRepository.GenerateMock<IQueryService<Country>>();
+            queryDistrict = MockRepository.GenerateMock<IQueryService<District>>();
+            queryClient = MockRepository.GenerateMock<IQueryService<Client>>();
+            queryRegion = MockRepository.GenerateMock<IQueryRegion>();
+
         }
 
         private void SetUpController()
@@ -54,6 +68,9 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement
             controller.SaveOrUpdateCommand = saveCommand;
             controller.DeleteCommand = deleteCommand;
             controller.QueryCountry = queryCountry;
+            controller.QueryDistrict = queryDistrict;
+            controller.QueryClients = queryClient;
+            controller.QueryRegion = queryRegion;
         }
         private void StubEntity()
         {
@@ -61,15 +78,24 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement
             entity = MockRepository.GeneratePartialMock<Region>();
             entity.Stub(b => b.Id).Return(entityId);
             entity.Name = REGION_NAME;
+            entity.Coordinates = COORDINATES;
         }
-
+        private void StubDistrict()
+        {
+            districtId = Guid.NewGuid();
+            district = MockRepository.GeneratePartialMock<District>();
+            district.Stub(b => b.Id).Return(districtId);
+            district.Name = "Cluj";
+            district.Region = entity;
+ 
+        }
         [Test]
         public void Should_Return_Data_From_QueryService_in_Overview()
         {
             // Arrange		
             var stubData = new Region[] { entity };
 
-            queryService.Expect(call => call.Query()).Return(stubData.AsQueryable());
+            queryRegion.Expect(call => call.GetAll()).Return(stubData.AsQueryable());
 
             // Act
             var viewResult = (ViewResult)controller.Overview();
@@ -103,6 +129,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement
             var model = new RegionInputModel();
             model = BuildRegionWithName(REGION_NAME);
             saveCommand.Expect(it => it.Execute(Arg<Region>.Matches(c => c.Name == REGION_NAME)));
+            queryClient.Expect(it => it.Load(Guid.Empty)).Return(new Client { Name = "client" });
 
             //act
             var result = (RedirectToRouteResult)controller.Create(new RegionInputModel() { Name = REGION_NAME });
@@ -163,18 +190,20 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement
         public void Should_Redirect_To_Edit_When_POST_Edit_Fails_BecauseOfModelStateNotValid()
         {
             controller.ModelState.AddModelError("Name", "Field required");
+            queryCountry.Expect(call => call.Query()).Return(new Country[] { new Country { Name = "Romania" } }.AsQueryable());
 
             var viewResult = (ViewResult)controller.Edit(new RegionInputModel());
 
+            queryCountry.VerifyAllExpectations();
             Assert.AreEqual("Edit", viewResult.ViewName);
         }
 
 
         [Test]
-        public void Should_goto_Overview_when_Delete()
+        public void Should_goto_Overview_when_Delete_AndThereAre_NoDistrictAsociated()
         {
             //arrange
-            
+            queryDistrict.Expect(call => call.Query()).Repeat.Once().Return(new District[]{}.AsQueryable());
             queryService.Expect(call => call.Load(entity.Id)).Return(entity);
             deleteCommand.Expect(call => call.Execute(Arg<Region>.Matches(b => b.Id == entity.Id)));
 
@@ -184,7 +213,26 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement
             // Assert
             deleteCommand.VerifyAllExpectations();
             Assert.AreEqual("Overview", redirectResult.RouteValues["Action"]);
-        }       
+        }
+
+        [Test]
+        public void Should_GoTo_Overview_WhenDeleteARegion_AndDisplayTempDataError_If_ThereAreDistrictsAsociated()
+        {
+            //arrange
+            queryDistrict.Expect(call => call.Query()).Repeat.Once().Return(new District[] { district }.AsQueryable());
+            queryService.Expect(call => call.Load(entity.Id)).Return(entity);
+
+            //act
+            var redirectResult = (RedirectToRouteResult)controller.Delete(entity.Id);
+
+            //assert
+            queryService.VerifyAllExpectations();
+            queryDistrict.VerifyAllExpectations();
+
+            Assert.That(controller.TempData.ContainsKey("error"));
+            Assert.That(controller.TempData.ContainsValue("The region " +entity.Name + " has districts associated, so it can not be deleted"));
+            
+        }
         private RegionInputModel BuildRegionWithName( string name)
         {
         

@@ -6,20 +6,23 @@ using Web.Areas.OutpostManagement.Models.Country;
 using System.Web.Mvc;
 using Core.Persistence;
 using Core.Domain;
+using Domain;
 
 namespace Web.Areas.OutpostManagement.Models.Region
 {
     public class RegionOutputModel
     {
         public string Name { get; set; }
+        public string Coordinates { get; set; }
         public CountryModel Country { get; set; }
+        public ClientModel Client { get; set; }
         public Guid Id { get; set; }
         public List<SelectListItem> Countries { get; set; }
 
-        public IQueryService<Core.Domain.Country> queryCountry { get; set; }
+        public IQueryService<Domain.Country> queryCountry { get; set; }
 
         public RegionOutputModel() { }
-        public RegionOutputModel(IQueryService<Core.Domain.Country> queryCountry)
+        public RegionOutputModel(IQueryService<Domain.Country> queryCountry)
         {
 
             this.queryCountry = queryCountry;
@@ -29,7 +32,7 @@ namespace Web.Areas.OutpostManagement.Models.Region
 
             var result = queryCountry.Query();
 
-            foreach (Core.Domain.Country item in result)
+            foreach (Domain.Country item in result)
             {
                 var selectListItem = new SelectListItem();
 

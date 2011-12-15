@@ -1,6 +1,6 @@
 ﻿@model Web.Models.Home.IndexModel
 @section page_title{
-    Dashboard
+    Snapshot Application
 }
 
 @section title_bar{
@@ -16,6 +16,9 @@
     </li>
     <li>
         @(Html.ActionLink<Web.Areas.OutpostManagement.Controllers.RegionController>(it => it.Overview(), "Region", Web.Areas.OutpostManagement.OutpostManagementAreaRegistration.DEFAULT_ROUTE))
+    </li>
+    <li>
+        @(Html.ActionLink<Web.Areas.OutpostManagement.Controllers.DistrictController>(it => it.Overview(), "District", Web.Areas.OutpostManagement.OutpostManagementAreaRegistration.DEFAULT_ROUTE))
     </li>
     <li>
         @(Html.ActionLink<Web.Areas.OutpostManagement.Controllers.OutpostController>(it => it.Overview(), "Outposts", Web.Areas.OutpostManagement.OutpostManagementAreaRegistration.DEFAULT_ROUTE))

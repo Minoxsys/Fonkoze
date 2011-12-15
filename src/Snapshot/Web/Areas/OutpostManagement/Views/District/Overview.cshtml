@@ -1,16 +1,17 @@
-﻿@model Web.Areas.OutpostManagement.Models.Region.RegionOverviewModel
+﻿@model Web.Areas.OutpostManagement.Models.District.DistrictOverviewModel
 @using Microsoft.Web.Mvc
 @{
     ViewBag.Title = "Overview";
 }
 @section page_title{
-Regions: Overview
+Districts: Overview
 }
 @section breadcrumbs{
-    @Url.HomeLink("Dashboard") > Regions
+    @Url.HomeLink("Dashboard") > Districts
 }
 @section master_content{
-    @if(Model.Error!=null){
+    @if (Model.Error != null)
+    {
         <div class="error">
             @Model.Error
         </div>
@@ -19,10 +20,10 @@ Regions: Overview
         <thead>
             <tr>
                 <th>
-                    Region Name
+                    District Name
                 </th>
                 <th>
-                    Country
+                    Region
                 </th>
                 <th colspan="2">
                     Actions
@@ -33,19 +34,19 @@ Regions: Overview
             @{
                 var itemNo = 0;
             }
-            @foreach (var region in Model.Regions)
+            @foreach (var district in Model.Districts)
             {
                 var _class = (itemNo % 2 == 0) ? "odd" : "even";    
                 <tr class="@_class">
-                    <td>@region.Name
+                    <td>@district.Name
                     </td>
-                    <td> @if(@region.Country!= null){@region.Country.Name}
+                    <td>@if(@district.Region != null) {@district.Region.Name}
                     </td>
-                    <td>@(Html.ActionLink<Web.Areas.OutpostManagement.Controllers.RegionController>(call => call.Edit(region.Id), "Edit", Web.Areas.OutpostManagement.OutpostManagementAreaRegistration.DEFAULT_ROUTE))
+                    <td>@(Html.ActionLink<Web.Areas.OutpostManagement.Controllers.DistrictController>(call => call.Edit(district.Id), "Edit", Web.Areas.OutpostManagement.OutpostManagementAreaRegistration.DEFAULT_ROUTE))
                     </td>
                     <td>
                         @{
-                Html.BeginForm<RegionController>(m => m.Delete(region.Id), FormMethod.Post, new { @class = "delete-user-form" });
+                Html.BeginForm<DistrictController>(m => m.Delete(district.Id), FormMethod.Post, new { @class = "delete-user-form" });
                         }
                         @Html.Button("delete-user", "Delete", HtmlButtonType.Submit)
                         @{
@@ -61,14 +62,14 @@ Regions: Overview
     <h3>
         Actions</h3>
     <div class="page_header_buttons">
-        @(Html.ActionLink<Web.Areas.OutpostManagement.Controllers.RegionController>(it => it.Create(), "Create region", Web.Areas.OutpostManagement.OutpostManagementAreaRegistration.DEFAULT_ROUTE))
+        @(Html.ActionLink<Web.Areas.OutpostManagement.Controllers.DistrictController>(it => it.Create(), "Create district", Web.Areas.OutpostManagement.OutpostManagementAreaRegistration.DEFAULT_ROUTE))
     </div>
 }
 @section scripts{
     <script type="text/javascript">
         $(function () {
             $(".delete-user-form").submit(function () {
-                return confirm('Are you sure that you want to delete this region?')
+                return confirm('Are you sure that you want to delete this district?')
             });
         });           
     </script>

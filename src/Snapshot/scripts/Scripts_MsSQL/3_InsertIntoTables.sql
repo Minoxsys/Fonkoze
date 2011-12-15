@@ -33,10 +33,10 @@ INSERT INTO [StockManager].[dbo].[Clients]
            ,[Updated]
            ,[ByUser_FK])
      VALUES
-           ( '00000000-0000-0000-0000-000000000000'
+           ( 'BEEC53CE-A73C-4F03-A354-C617F68BC813'
            ,'Minoxsys'
-           ,GETDATE()
-           ,GETDATE()
+           ,'2011-12-14 14:03:43.000'
+           ,'2011-12-14 14:03:43.000'
            ,null)
 end
 GO
