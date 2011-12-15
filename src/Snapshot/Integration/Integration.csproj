@@ -79,6 +79,7 @@
     <Compile Include="SessionFactory.cs" />
     <Compile Include="GivenAPersistenceSpecification.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="When_WeWantToPersist_An_Outpost.cs" />
     <Compile Include="When_WeWantToPersist_A_Client.cs" />
     <Compile Include="When_WeWantToPersist_A_Country.cs" />
     <Compile Include="When_WeWantToPersist_A_Region.cs" />

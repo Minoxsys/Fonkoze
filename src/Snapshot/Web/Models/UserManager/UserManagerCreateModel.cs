@@ -5,6 +5,7 @@ using System.Web;
 using Core.Domain;
 using System.Web.Mvc;
 using Core.Persistence;
+using Domain;
 
 namespace Web.Models.UserManager
 {

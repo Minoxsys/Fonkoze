@@ -17,12 +17,16 @@ using Web.Helpers;
 using Web.Security;
 using Web.Validation.ValidDate;
 using System.Globalization;
+using PagedList;
+using Domain;
+
 
 namespace Web.Areas.OutpostManagement.Controllers
 {
     public class CountryController : Controller
     {
         public IQueryService<Country> QueryService { get; set; }
+        public IQueryService<Client> QueryClient { get; set; }
 
         public ISaveOrUpdateCommand<Country> SaveOrUpdateCommand { get; set; }
 
@@ -56,16 +60,16 @@ namespace Web.Areas.OutpostManagement.Controllers
         //[Requires(Permissions = "Country.CRUD")]
         public ActionResult Create()
         {
-            var model = new CountryModelOutput();
+            var model = new CountryModel();
             return View(model);
         }
 
         [HttpPost]
         [ValidateInput(false)]
         //[Requires(Permissions = "OnBoarding.Candidate.CRUD")]
-        public ActionResult Create(CountryModelInput countryModel)
+        public ActionResult Create(CountryModel countryModel)
         {
-            var model = new CountryModelInput();
+            var model = new CountryModel();
 
             if (!ModelState.IsValid)
             {
@@ -75,6 +79,7 @@ namespace Web.Areas.OutpostManagement.Controllers
             CreateMappings();
             var country = new Country();
             Mapper.Map(countryModel, country);
+            country.Client = QueryClient.Load(Guid.Empty); // hardcoded client id value
 
             SaveOrUpdateCommand.Execute(country);
 
@@ -98,9 +103,9 @@ namespace Web.Areas.OutpostManagement.Controllers
         [HttpPost]
         [ValidateInput(false)]
         //[Requires(Permissions = "OnBoarding.Candidate.CRUD")]
-        public ActionResult Edit(CountryModelInput countryModel)
+        public ActionResult Edit(CountryModel countryModel)
         {
-            var model = new CountryModelInput();
+            var model = new CountryModel();
 
             if (!ModelState.IsValid)
             {
@@ -120,7 +125,7 @@ namespace Web.Areas.OutpostManagement.Controllers
         {
             Mapper.CreateMap<Country, CountryModel>();
 
-            var mapCountry = Mapper.CreateMap<CountryModelInput, Country>();
+            var mapCountry = Mapper.CreateMap<CountryModel, Country>();
 
             if (entity != null)
                 mapCountry.ForMember(m => m.Id, options => options.Ignore());

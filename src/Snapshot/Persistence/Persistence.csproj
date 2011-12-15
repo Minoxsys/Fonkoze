@@ -70,6 +70,9 @@
     <Compile Include="INHibernateUnitOfWork.cs" />
     <Compile Include="NHibernateSessionFactory.cs" />
     <Compile Include="NHibernateUnitOfWork.cs" />
+    <Compile Include="Overrides\CountryAutoMappingOverride.cs" />
+    <Compile Include="Overrides\MobilePhoneAutoMappingOverride.cs" />
+    <Compile Include="Overrides\OutpostAutoMappingOverride.cs" />
     <Compile Include="Overrides\PermissionAutoMappingOverride.cs" />
     <Compile Include="Overrides\RoleAutoMappingOverride.cs">
       <SubType>Code</SubType>

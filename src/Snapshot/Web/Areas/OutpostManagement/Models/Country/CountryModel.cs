@@ -15,7 +15,6 @@ using System.Net.Mail;
 using Web.Helpers;
 using Web.Security;
 using Web.Areas.OutpostManagement;
-//using Web.Areas.Employees.Models.Employee;
 using Web.Validation.ValidDate;
 using System.Globalization;
 using Web.Models.Shared;

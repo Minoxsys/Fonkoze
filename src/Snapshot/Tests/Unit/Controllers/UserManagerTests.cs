@@ -11,6 +11,7 @@ using Core.Domain;
 using Web.Models.UserManager;
 using Core.Services;
 using Web.Security;
+using Domain;
 
 namespace UnitTests.Controllers
 {

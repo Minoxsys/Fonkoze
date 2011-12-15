@@ -9,8 +9,10 @@ namespace Web.Areas.OutpostManagement.Models.Outpost
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
-        public string Type { get; set; }
-        public string MobileNumber { get; set; }
+        public string OutpostType { get; set; }
         public string Email { get; set; }
+        public string MainMobileNumber { get; set; }
+        public string Latitude { get; set; }
+        public string Longitude { get; set; }
     }
 }

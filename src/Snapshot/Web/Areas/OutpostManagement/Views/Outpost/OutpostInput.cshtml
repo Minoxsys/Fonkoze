@@ -1,13 +1,32 @@
-﻿@model Web.Areas.OutpostManagement.Models.Outpost.OutpostModelOutput
+﻿@model Web.Areas.OutpostManagement.Models.Outpost.OutpostModel      
+  
+@{ var id = new Guid();}
 
- <div class="row">
-      @Html.ValidationSummary()
+<fieldset id="fieldsetInformation">
+    <legend>Outpost Information</legend>
 
-     @Html.HiddenFor(m => m.Id)
+    <div class="row of-2">
+       <div class="column">
+            <label for="Name"> Name<text class="required-text">*</text> </label>
+            @Html.TextBoxFor(m => m.Name, new { maxlength = 250, autofocus = "autofocus", placeholder = "Name" })
+        </div>
+        <div class="column">
+            <label for="Type"> Type<text class="required-text">*</text> </label>
+            @Html.TextBoxFor(m => m.OutpostType, new { maxlength = 250, autofocus = "autofocus", placeholder = "Type" })
+        </div>
+        <div class="column">
+            <label for="E-mail Address"> E-mail Address<text class="required-text">*</text> </label>
+            @Html.TextBoxFor(m => m.Email, new { maxlength = 250, autofocus = "autofocus", placeholder = "Email" })
+        </div>
+        <div class="column">
+            <label for="LOngitude"> Longitude<text class="required-text">*</text> </label>
+            @Html.TextBoxFor(m => m.Longitude, new { maxlength = 250, autofocus = "autofocus", placeholder = "Email" })
+        </div>
+        <div class="column">
+            <label for="Latitude"> Latitude<text class="required-text">*</text> </label>
+            @Html.TextBoxFor(m => m.Latitude, new { maxlength = 250, autofocus = "autofocus", placeholder = "Email" })
+        </div>
+    </div>
 
- </div>          
-
-    @{
-        Html.RenderPartial("OutpostInformationInput", Model);
-    }
+</fieldset>
 

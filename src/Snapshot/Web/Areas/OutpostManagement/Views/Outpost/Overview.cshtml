@@ -8,28 +8,86 @@ OutpostManagement Outposts: Overview
         OutpostManagement : Outpost</h4>
 }
 @section breadcrumbs{
-   @Url.HomeLink("Overview") > OutpostManagement : Countries
+   @Url.HomeLink("Overview") > OutpostManagement : Outposts
 }
+ 
+        
+
 @section master_content{
+
+     <form action="" id=formZone method="post" onclick=>
+         <tr>
+             <td> Countries
+             </td>
+             <td> Regions
+             </td>
+             <td> Districts
+             </td>
+           </tr>
+       <table class="searchable">
+       <tr>
+
+              <td>
+                <select id="countryID" name="CountriesDropDownList">    
+                   <option value= "">-- Select a Country --</option>     
+                   @foreach(Domain.Country countryName in Model.Countries) 
+                   {
+                      <option> @countryName.Name  </option>
+                   } 
+                    </select>
+              </td>
+              <td>
+
+             <td>
+                <select id="regionID" name="RegionsDropDownList">    
+                   <option value= "">-- Select a Region --</option>     
+                   @foreach(Domain.Region regionName in Model.Regions) 
+                   {
+                      <option> @regionName.Name  </option>
+                   } 
+                    </select>
+              </td>
+               </td>
+ 
+             <td>
+               <select id="districtID" name="DistrictsDropDownList">    
+                   <option value= "">-- Select a Region --</option>     
+                   @foreach(Domain.District districtName in Model.Districts) 
+                   {
+                      <option> @districtName.Name  </option>
+                   } 
+                    </select>
+               </td>
+        </tr>
+        </table>
+        </form>
+
     <table class="searchable">
         <thead>
             <tr>
                 <th>
                     #
                 </th>
-                <th>
-                    Country Name
+               <th>
+                    Outpost Name
                 </th>
                  <th>
-                    Type
-                </th>
-                 <th>
-                    Mobile Number
+                    Mobile Phone Number
                 </th>
                  <th>
                     E-mail address
                 </th>
                 <th>
+                    Latitude
+                </th>
+                <th>
+                    Longitude
+                </th>
+                 <th>
+                   
+                </th>
+               <th>
+                   Actions
                 </th>
             </tr>
         </thead>
@@ -37,27 +95,36 @@ OutpostManagement Outposts: Overview
             @{
                 var itemNo = 0;
             }
+ 
+
             @foreach (Web.Areas.OutpostManagement.Models.Outpost.OutpostModel outpost in Model.Items)
             {
                 var _class = (itemNo++ % 2 == 0) ? "odd" : "even";
        
-                <tr class="@_class">
-                    <td>
-                        @(Html.ActionLink<OutpostController>(it => it.Edit(outpost.Id), "Edit", OutpostManagementAreaRegistration.DEFAULT_ROUTE))
+               <tr class="@_class">
+                    <td> 
+                        @(Html.ActionLink<OutpostController>(it => it.PhoneListInput(outpost.Id), "Phone List", OutpostManagementAreaRegistration.DEFAULT_ROUTE))
+                                                                                                           
                     </td>
-                     <td>@outpost.Name
+                      <td>
+                      @outpost.Name
                     </td>
-                     <td>@outpost.Type
-                    </td>
-                     <td>@outpost.MobileNumber
+                     <td>@outpost.MainMobileNumber
                     </td>
                      <td>@outpost.Email
                     </td>
-                    <td>
-                         @{ Html.BeginForm<OutpostController>(m => m.Delete(outpost.Id)); }
-                         @Html.SubmitButton("delete-user", "Delete")
-                         @{ Html.EndForm(); }
+                     <td>@outpost.Latitude
                     </td>
+                     <td>@outpost.Longitude
+                    </td>
+                    <td>
+                        @(Html.ActionLink<OutpostController>(it => it.Edit(outpost.Id), "Edit", OutpostManagementAreaRegistration.DEFAULT_ROUTE))
+                    </td>
+                    <td>
+                         @{Html.BeginForm<OutpostController>(m => m.Delete(outpost.Id), FormMethod.Post, new { @class = "delete-user-form" }); }
+                         @Html.Button("delete-user", "Delete", HtmlButtonType.Submit)
+                         @{Html.EndForm();}
+                   </td>
                 </tr> 
             }
         </tbody>
@@ -67,7 +134,7 @@ OutpostManagement Outposts: Overview
     <h3>
         Actions</h3>
     <div class="page_header_buttons">
-       @(Html.ActionLink<OutpostController>(it => it.Create(), "Create", Web.Areas.OutpostManagement.OutpostManagementAreaRegistration.DEFAULT_ROUTE))
+       @(Html.ActionLink<OutpostController>(it => it.Create(), "Create Outpost", Web.Areas.OutpostManagement.OutpostManagementAreaRegistration.DEFAULT_ROUTE))
     </div>
 }
 @section scripts{
@@ -77,6 +144,19 @@ OutpostManagement Outposts: Overview
                 "sPaginationType": "full_numbers"
             });
         });
+
+        $(function () {
+            $(".delete-user-form").submit(function () {
+                return confirm('Are you sure that you want to delete this Outpost ?')
+            });
+        });
+
+        $(function () {
+            $(".to-many-childs").submit(function () {
+                return confirm('Are you sure that you want to delete this Outpost ?')
+            });
+        });
+
 
     </script>
 }

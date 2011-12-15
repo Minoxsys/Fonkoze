@@ -1,10 +1,11 @@
 ﻿@model Web.Areas.OutpostManagement.Models.Outpost.OutpostModel
+
            
 @section breadcrumbs{
-    @Url.HomeLink("Overview")/ @(Html.ActionLink<OutpostController>(it => it.Overview(), "OutpostManagement : Countries", OutpostManagementAreaRegistration.DEFAULT_ROUTE)) > Edit
+    @Url.HomeLink("Overview")/ @(Html.ActionLink<OutpostController>(it => it.Overview(), "OutpostManagement : Outposts", OutpostManagementAreaRegistration.DEFAULT_ROUTE)) > Edit
 }
 @section page_title{
-On-Boarding Candidate: Edit
+OutpostManagement Outposts: Edit
 }
 @section title_bar{
     <h4>
@@ -14,8 +15,9 @@ On-Boarding Candidate: Edit
     <form class="main-form" 
           method="post" 
           action="">
-    @{
-        Html.RenderPartial("Outpost", @Model);
+     @Html.ValidationSummary()
+     @Html.HiddenFor(m => m.Id)    @{
+        Html.RenderPartial("OutpostInput", @Model);
         
     }
 
@@ -28,11 +30,11 @@ On-Boarding Candidate: Edit
         Actions</h3>
     <div class="page_header_buttons">
 
- 
+        @*
          <div style="margin:50px 0px 5px 0px"> 
             @(Html.DeleteButton<OutpostController>(it => it.Delete(Model.Id), OutpostManagementAreaRegistration.DEFAULT_ROUTE))
         </div>
-               
+        *@     
     </div>
 }
 @section scripts{

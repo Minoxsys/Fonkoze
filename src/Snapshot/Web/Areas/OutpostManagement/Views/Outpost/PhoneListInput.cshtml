@@ -1,0 +1,70 @@
+﻿@model Web.Areas.OutpostManagement.Models.Outpost.OverviewPhones
+           
+@section page_title{
+OutpostManagement Phones: Overview
+}
+@section title_bar{
+    <h4>
+        OutpostManagement : Mobile Phones</h4>
+}
+@section breadcrumbs{
+   @Url.HomeLink("Overview") > OutpostManagement : Phones
+}
+
+@section master_content{
+ @Html.HiddenFor(m => m.OutpostId)
+
+   <table class="searchable">
+        <thead>
+            <tr>
+                <th>
+                    #
+                </th>
+                  <th>
+                    Mobile Number
+                </th>
+                 <th>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                var itemNo = 0;
+             }
+            @foreach (Web.Areas.OutpostManagement.Models.Outpost.MobilePhoneModel mobilePhone in Model.Items)
+            {
+                var _class = (itemNo++ % 2 == 0) ? "odd" : "even";
+       
+                <tr class="@_class">
+                    <td>
+                        @(Html.ActionLink<MobilePhoneController>(it => it.Edit(mobilePhone.Id), "Edit", OutpostManagementAreaRegistration.DEFAULT_ROUTE))
+                    </td>
+                     <td>@mobilePhone.MobileNumber</td>
+                    <td>
+                         @{ Html.BeginForm<MobilePhoneController>(m => m.Delete(mobilePhone.Id)); }
+                         @Html.SubmitButton("delete-user", "Delete")
+                         @{ Html.EndForm(); }
+                    </td>
+                </tr> 
+            }
+        </tbody>
+    </table>
+}
+@section master_actions{
+    <h3>
+        Actions</h3>
+    <div class="page_header_buttons">
+       @(Html.ActionLink<MobilePhoneController>(it => it.Create(Model.OutpostId), "New Mobile Phone", Web.Areas.OutpostManagement.OutpostManagementAreaRegistration.DEFAULT_ROUTE))
+    </div>
+}
+@section scripts{
+    <script type="text/javascript">
+        $(function () {
+            $(".searchable").dataTable({
+                "sPaginationType": "full_numbers"
+            });
+        });
+
+    </script>
+}
+

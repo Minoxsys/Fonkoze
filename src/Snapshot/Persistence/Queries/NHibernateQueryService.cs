@@ -29,15 +29,12 @@ namespace Persistence.Queries
 		public IQueryable<ENTITY> Query()
 		{
 			IQueryable<ENTITY> query = unitOfWork.CurrentSession.Query<ENTITY>();
-				
-				//new NhQueryable<ENTITY>(unitOfWork.CurrentSession.GetSessionImplementation());			
-
+			
 			return query;
 		}
 
 		public IQueryable<ENTITY> Query( IDomainQuery<ENTITY> whereQuery )
-		{
-			//IQueryable<ENTITY> query = new NhQueryable<ENTITY>(unitOfWork.CurrentSession.GetSessionImplementation());				
+		{			
 			var query = Query().Where(whereQuery.Expression);
 
 			return query;

@@ -48,10 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Domain\Client.cs" />
-    <Compile Include="Domain\Country.cs" />
     <Compile Include="Domain\DomainEntity.cs" />
-    <Compile Include="Domain\Outpost.cs" />
     <Compile Include="Domain\User.cs" />
     <Compile Include="Domain\Permission.cs" />
     <Compile Include="Persistence\IDeleteCommand.cs" />

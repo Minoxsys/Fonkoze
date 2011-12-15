@@ -1,0 +1,24 @@
+﻿@model Web.Areas.OutpostManagement.Models.Outpost.MobilePhoneModel
+
+ 
+@{ var id = new Guid();}
+<fieldset id="fieldsetInformation">
+    <legend>Mobile Phone Information</legend>
+
+    <div class="row of-2">
+        <div class="column">
+            <label for="Methood"> Contact Method<text class="required-text">*</text> </label>
+            @*@Html.TextBoxFor(m => m., new { maxlength = 250, autofocus = "autofocus", placeholder = "Name" })*@
+        </div>
+         <div class="column">
+            <label for="Method"> Mobile Number / E-mail<text class="required-text"></text> </label>
+            @*@Html.TextBoxFor(m => m., new { maxlength = 250, autofocus = "autofocus", placeholder = "Name" })*@
+        </div>
+     <div class="column">
+            <label for="Name"> Mobile Number<text class="required-text">*</text> </label>
+            @Html.TextBoxFor(m => m.MobileNumber, new { maxlength = 250, autofocus = "autofocus", placeholder = "Name" })
+        </div>
+   </div>
+
+</fieldset>
+
