@@ -9,6 +9,8 @@ using FluentNHibernate.Automapping;
 using Core.Persistence;
 using Persistence;
 using Autofac;
+using Persistence.Queries.Regions;
+using Persistence.Queries.Districts;
 
 
 namespace Web.Bootstrap.Container
@@ -29,6 +31,10 @@ namespace Web.Bootstrap.Container
             container.Register(c => new NHibernateSessionFactory(c.Resolve<IAutomappingConfiguration>())).As<INHibernateSessionFactory>();
             
             container.RegisterGeneric( typeof(NHibernateQueryService<>)).As(typeof(IQueryService<>));
+
+            container.RegisterType<NHibernateQueryRegion>().As<IQueryRegion>();
+
+            container.RegisterType<NHibernateQueryDistrict>().As<IQueryDistrict>();
             
         }
     }

@@ -14,6 +14,8 @@ using MvcPaging;
 using Persistence.Queries;
 using Core.Domain;
 
+using Persistence.Queries.Regions;
+
 
 namespace Web.Areas.OutpostManagement.Controllers
 {
@@ -23,24 +25,27 @@ namespace Web.Areas.OutpostManagement.Controllers
 
         public RegionInputModel RegionInputModel { get; set; }
 
-        public IQueryService<Region> QueryService { get; set; }
-
         public ISaveOrUpdateCommand<Region> SaveOrUpdateCommand { get; set; }
+
+        public IQueryService<Region> QueryService { get; set; }
 
         public IDeleteCommand<Region> DeleteCommand { get; set; }
 
         public IQueryService<Country> QueryCountry { get; set; }
 
-        public RegionQueryService RegionQueryService { get; set; }
+        public IQueryService<District> QueryDistrict { get; set; }
+
+        public IQueryService<Client> QueryClients { get; set; }
+
+        public IQueryRegion QueryRegion { get; set; }
+
+        private const string TEMPDATA_ERROR_KEY = "error";
 
         public ActionResult Overview()
         {
             RegionOverviewModel overviewModel = new RegionOverviewModel();
             RegionModel regionModel = new RegionModel();
-            var regions = QueryService.Query().ToList();
-
-
-            //var regions = RegionQueryService.Query();
+            var regions = QueryRegion.GetAll().ToList();
 
             CreateMapping();
 
@@ -51,7 +56,7 @@ namespace Web.Areas.OutpostManagement.Controllers
                 overviewModel.Regions.Add(regionModel);
 
             }
-
+            overviewModel.Error = (string)TempData[TEMPDATA_ERROR_KEY];
             return View(overviewModel);
         }
 
@@ -69,6 +74,10 @@ namespace Web.Areas.OutpostManagement.Controllers
             CreateMapping();
             var region = new Region();
             Mapper.Map(regionInputModel, region);
+
+            var client = QueryClients.Load(Client.DEFAULT_ID);
+
+            region.Client = client;
 
             SaveOrUpdateCommand.Execute(region);
             return RedirectToAction("Overview");
@@ -91,24 +100,48 @@ namespace Web.Areas.OutpostManagement.Controllers
         public ActionResult Edit(RegionInputModel regionInputModel)
         {
             if (!ModelState.IsValid)
-                return View("Edit", regionInputModel);
+            {
+                var regionOutputModel = MapDataFromInputModelToOutputModel(regionInputModel);
+                return View("Edit", regionOutputModel);
+            }
 
             Region region = new Region();
-
+                      
             CreateMapping();
             Mapper.Map(regionInputModel, region);
+            
             SaveOrUpdateCommand.Execute(region);
 
             return RedirectToAction("Overview");
         }
 
+        private RegionOutputModel MapDataFromInputModelToOutputModel(RegionInputModel regionInputModel)
+        {
+            var regionOutputModel = new RegionOutputModel(QueryCountry);
+            regionOutputModel.Id = regionInputModel.Id;
+            regionOutputModel.Name = regionInputModel.Name;
+            regionOutputModel.Client = regionInputModel.Client;
+            regionOutputModel.Country = regionInputModel.Country;
+            return regionOutputModel;
+        }
+
         [HttpPost]
         public RedirectToRouteResult Delete(Guid guid)
         {
-            var entity = QueryService.Load(guid);
+            var region = QueryService.Load(guid);
 
-            if (entity != null)
-                DeleteCommand.Execute(entity);
+            if (region != null)
+            {
+                var districtResults = QueryDistrict.Query().Where(it => it.Region.Id == region.Id);
+
+                if (districtResults.ToList().Count != 0)
+                {
+                    TempData.Add("error", string.Format("The region {0} has districts associated, so it can not be deleted", region.Name));
+                    return RedirectToAction("Overview");
+                }
+
+                DeleteCommand.Execute(region);
+            }
 
             return RedirectToAction("Overview");
         }
@@ -125,6 +158,9 @@ namespace Web.Areas.OutpostManagement.Controllers
 
             Mapper.CreateMap<Country, CountryModel>();
             Mapper.CreateMap<CountryModel, Country>();
+
+            Mapper.CreateMap<ClientModel, Client>();
+            Mapper.CreateMap<Client, ClientModel>();
 
         }
 

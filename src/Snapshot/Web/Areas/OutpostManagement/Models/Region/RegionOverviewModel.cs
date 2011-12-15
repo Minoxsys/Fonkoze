@@ -9,12 +9,13 @@ namespace Web.Areas.OutpostManagement.Models.Region
     public class RegionOverviewModel
     {
         public List<RegionModel> Regions { get; set; }
-       
 
         public RegionOverviewModel()
         {
             Regions = new List<RegionModel>();
             
         }
+
+        public string Error { get; set; }
     }
 }

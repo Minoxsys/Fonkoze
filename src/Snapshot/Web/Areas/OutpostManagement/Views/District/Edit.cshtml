@@ -1,21 +1,18 @@
-﻿@model Web.Areas.OutpostManagement.Models.Region.RegionOutputModel
+﻿@model Web.Areas.OutpostManagement.Models.District.DistrictOutputModel
+
 @{Html.HiddenFor(m => m.Id);}
 @section page_title{
-Region : Edit
+District : Edit
 }
 @section breadcrumbs{
-    @Url.HomeLink("Dashboard") / @(Html.ActionLink<RegionController>(act => act.Overview(), "Regions Overview", OutpostManagementAreaRegistration.DEFAULT_ROUTE))
-    > Edit Region : @Model.Name
+    @Url.HomeLink("Dashboard") / @(Html.ActionLink<DistrictController>(act => act.Overview(), "Districts Overview", OutpostManagementAreaRegistration.DEFAULT_ROUTE))
+    > Edit District : @Model.Name
 }
 @section master_content{
 
     @{Html.BeginForm();}
-     <div style="display: none">
+   <div style="display: none">
 @Html.HiddenFor(m => m.Client.Id)
-@Html.HiddenFor(m=>m.Client.Name)
-@Html.HiddenFor(m=>m.Client.Created)
-@Html.HiddenFor(m=>m.Client.Updated)
-
 </div>
             <fieldset class="fieldsCollection ">
                 @{

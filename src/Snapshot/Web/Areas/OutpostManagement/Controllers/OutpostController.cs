@@ -16,6 +16,7 @@ using Web.Helpers;
 using Web.Security;
 using Web.Validation.ValidDate;
 using System.Globalization;
+using Domain;
 
 namespace Web.Areas.OutpostManagement.Controllers
 {

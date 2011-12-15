@@ -154,9 +154,13 @@
     <Compile Include="Areas\OutpostManagement\Controllers\RegionController.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Country\CountryModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Country\CountryModelInput.cs" />
+    <Compile Include="Areas\OutpostManagement\Models\District\DistrictInputModel.cs" />
+    <Compile Include="Areas\OutpostManagement\Models\District\DistrictOutputModel.cs" />
+    <Compile Include="Areas\OutpostManagement\Models\District\DistrictOverviewModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Outpost\OutpostModelInput.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Outpost\OutpostModelOutput.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Outpost\Overview.cs" />
+    <Compile Include="Areas\OutpostManagement\Models\Region\ClientModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Region\RegionInputModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Region\RegionOutputModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Region\RegionOverviewModel.cs" />
@@ -236,7 +240,6 @@
     <Compile Include="Security\SecurePassword.cs" />
     <Compile Include="Services\FileService.cs" />
     <Compile Include="Services\IImportService.cs" />
-    <Compile Include="Services\QueryFetchService.cs" />
     <Compile Include="Validation\Account\MembershipStatusCodeConverter.cs" />
     <Compile Include="Validation\Account\PropertiesMustMatchAttribute.cs" />
     <Compile Include="Validation\Account\ValidatePasswordLengthAttribute.cs" />
@@ -1817,7 +1820,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\OutpostManagement\Services\" />
-    <Folder Include="Areas\OutpostManagement\Views\District\" />
     <Folder Include="Areas\OutpostManagement\Views\Shared\" />
     <Folder Include="Assets\img\photos\" />
     <Folder Include="Scripts\" />
@@ -1869,6 +1871,10 @@
     <Content Include="Areas\OutpostManagement\Views\Outpost\Overview.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\Country\Country.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\Country\CountryInformation.cshtml" />
+    <Content Include="Areas\OutpostManagement\Views\District\Overview.cshtml" />
+    <Content Include="Areas\OutpostManagement\Views\District\Create.cshtml" />
+    <Content Include="Areas\OutpostManagement\Views\District\Input.cshtml" />
+    <Content Include="Areas\OutpostManagement\Views\District\Edit.cshtml" />
     <None Include="Assets\img\skins\ButtonTemplate.psd" />
     <Content Include="Views\RoleManager\Create.cshtml" />
     <Content Include="Views\RoleManager\Edit.cshtml" />
