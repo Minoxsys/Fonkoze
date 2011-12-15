@@ -1,16 +1,23 @@
-﻿<div class="on-boarding">
-    <h1 class="menu-title on-boarding">
-        OutpostManagement</h1>
-    <ul>
-         <li>
-           @(Html.ActionLink<Web.Areas.OutpostManagement.Controllers.CountryController>(it => it.Overview(), "Countries", Web.Areas.OutpostManagement.OutpostManagementAreaRegistration.DEFAULT_ROUTE))
+﻿<div class="tabs">
+    <ul class="main-tabs">
+        <li>
+            @Url.HomeLink("Dashboard")
         </li>
-         <li>
-           @(Html.ActionLink<Web.Areas.OutpostManagement.Controllers.OutpostController>(it => it.Overview(), "Outposts", Web.Areas.OutpostManagement.OutpostManagementAreaRegistration.DEFAULT_ROUTE))
+        <li>
+            @Url.HomeLink("Outpost Administration")
         </li>
-
-        @{
-            var today = DateTime.Today;
-        }
+        <li>
+            @Url.HomeLink("Stock Administration")
+        </li>
+        <li>
+            @Url.HomeLink("Alerts")
+        </li>
+        <li>
+            @Url.HomeLink("Reports")
+        </li>
+        <li>
+           @(Html.ActionLink<Web.Controllers.UserManagerController>(e => e.List(), "User Administration", "Default")) 
+        </li>
     </ul>
 </div>
+

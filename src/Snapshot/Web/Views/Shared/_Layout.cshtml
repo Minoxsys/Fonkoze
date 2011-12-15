@@ -2,20 +2,20 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <title>@RenderSection("page_title", required:true)</title>
-    <link href="@(Url.RouteUrl("Css",new { controller = "Css", action = "Index", group = "site" }))"
+    <title>@RenderSection("page_title", required: true)</title>
+    <link href="@(Url.RouteUrl("Css", new { controller = "Css", action = "Index", group = "site" }))"
         rel="stylesheet" type="text/css" media="screen,projection" />
     <!--[if IE 7]>
     <link href="@(Url.RouteUrl("Css", new { controller = "Css", action = "Index", group = "ie" }))"
         rel="stylesheet" type="text/css" media="screen, projection" />
     <![endif]-->
     <!--[if IE 6]>
-    <link href="@(Url.RouteUrl("Css",new { controller = "Css", action = "Index", group = "ie6" }))"
+    <link href="@(Url.RouteUrl("Css", new { controller = "Css", action = "Index", group = "ie6" }))"
         rel="stylesheet" type="text/css" media="screen, projection" />
     <![endif]-->
-    <link href="@(Url.RouteUrl("Css",new { controller = "Css", action = "Index", group = "print" }))" 
+    <link href="@(Url.RouteUrl("Css", new { controller = "Css", action = "Index", group = "print" }))" 
         rel="stylesheet" type="text/css" media="print" />
-    <script src="@(Url.RouteUrl("Javascript",new { controller = "Javascript", action = "Index", group = "frameworks" }))"
+    <script src="@(Url.RouteUrl("Javascript", new { controller = "Javascript", action = "Index", group = "frameworks" }))"
         language="javascript" type="text/javascript"> </script>
     <script src="@(Url.RouteUrl("Javascript", new { controller = "Javascript", action = "Index", group = "site" }))"
         language="javascript" type="text/javascript"> </script>
@@ -24,13 +24,21 @@
     <div class="container_16">
         <div class="prefix_11 grid_5 current_user">
             @{Html.RenderPartial("_LogOnPartial");}
-
-        </div>
-        @RenderSection("menu", required: false)
-        <div class="breadcrumbs">
-            @RenderSection("breadcrumbs", required:false) 
         </div>
         <div class="title_bar">
+            <div class="main-header">
+                <h1>
+                    Snapshot Application</h1>
+            </div>
+        </div>
+        <div class="grid_16">
+            @Html.Partial("Menu")
+        </div>
+        <div class="breadcrumbs">
+            @RenderSection("breadcrumbs", required: false)
+        </div>
+        <div class="section-description">
+            
             @RenderSection("title_bar", required: false)
         </div>
         <section id="main" class="grid_16">           
@@ -38,13 +46,14 @@
         </section>
         <section id="master_content_actions">
         
-            <div class="grid_12">&nbsp;
+            <div class="grid_2 noprint"> &nbsp;
+                @RenderSection("master_actions", required: false)
+            </div>
+
+            <div class="grid_14">&nbsp;
                 @RenderSection("master_content", required: false)
             </div>
             
-            <div class="grid_4 noprint"> &nbsp;
-                @RenderSection("master_actions", required: false)
-            </div>
             
         </section>
         <section id="master_detail">
