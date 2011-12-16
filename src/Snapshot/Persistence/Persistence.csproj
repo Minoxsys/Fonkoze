@@ -70,8 +70,11 @@
     <Compile Include="INHibernateUnitOfWork.cs" />
     <Compile Include="NHibernateSessionFactory.cs" />
     <Compile Include="NHibernateUnitOfWork.cs" />
+    <Compile Include="Overrides\CountryAutoMappingOverride.cs" />
+    <Compile Include="Overrides\MobilePhoneAutoMappingOverride.cs" />
     <Compile Include="Overrides\DistrictAutoMappingOverride.cs" />
     <Compile Include="Overrides\RegionAutoMappingOverride.cs" />
+    <Compile Include="Overrides\OutpostAutoMappingOverride.cs" />
     <Compile Include="Overrides\PermissionAutoMappingOverride.cs" />
     <Compile Include="Overrides\RoleAutoMappingOverride.cs">
       <SubType>Code</SubType>
@@ -82,6 +85,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Queries\Districts\IQueryDistrict.cs" />
     <Compile Include="Queries\Districts\NHibernateQueryDistrict.cs" />
+    <Compile Include="Queries\Regions\IQueryOutposts.cs" />
+    <Compile Include="Queries\Regions\NHibernateQueryOutposts.cs" />
     <Compile Include="Queries\Regions\IQueryRegion.cs" />
     <Compile Include="Queries\Regions\NHibernateQueryRegion.cs" />
     <Compile Include="Queries\User\UserByName.cs" />
@@ -92,6 +97,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Queries\Controllers\" />
+    <Folder Include="Queries\Outposts\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

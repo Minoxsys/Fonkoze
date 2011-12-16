@@ -1,4 +1,4 @@
-﻿@model Web.Areas.OutpostManagement.Models.Country.CountryModelOutput
+﻿@model Web.Areas.OutpostManagement.Models.Country.CountryModel
            
 @section breadcrumbs{
     @Url.HomeLink("Overview")/ @(Html.ActionLink<CountryController>(it => it.Overview(), "Outpost Management : Countries", OutpostManagementAreaRegistration.DEFAULT_ROUTE)) > Create
@@ -16,7 +16,10 @@ OutpostManagement : Country : Create
     @*<form class="main-form" method="post"  id="llll"> *@
     <form method="post" 
           action="@(Url.RouteUrl<CountryController>(it => it.Create(), OutpostManagementAreaRegistration.DEFAULT_ROUTE))"> 
-    @{
+
+     @Html.ValidationSummary()
+     
+     @{
        
         Html.RenderPartial("CountryInput", Model);
     }

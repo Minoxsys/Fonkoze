@@ -11,5 +11,6 @@ namespace Domain
         public virtual string Name { get; set; }
         public virtual string ISOCode { get; set; }
         public virtual string PhonePrefix { get; set; }
+        public virtual Client Client { get; set; }
     }
 }

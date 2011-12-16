@@ -4,8 +4,11 @@ using System.Linq;
 using System.Web.Mvc;
 using Core.Domain;
 using Web.Areas.OutpostManagement.Models.Country;
+using Web.Areas.OutpostManagement.Models.Region;
 using AutoMapper;
 using Core.Persistence;
+using Domain;
+using PagedList;
 using Domain;
 
 namespace Web.Areas.OutpostManagement.Controllers
@@ -13,10 +16,12 @@ namespace Web.Areas.OutpostManagement.Controllers
     public class CountryController : Controller
     {
         public IQueryService<Country> QueryService { get; set; }
+        public IQueryService<Client> QueryClient { get; set; }
 
         public ISaveOrUpdateCommand<Country> SaveOrUpdateCommand { get; set; }
 
         public IDeleteCommand<Country> DeleteCommand { get; set; }
+        public IQueryService<Region> QueryRegion { get; set; }
 
         //[Requires(Permissions = "Country.Overview")]
         public ActionResult Overview()
@@ -46,16 +51,16 @@ namespace Web.Areas.OutpostManagement.Controllers
         //[Requires(Permissions = "Country.CRUD")]
         public ActionResult Create()
         {
-            var model = new CountryModelOutput();
+            var model = new CountryModel();
             return View(model);
         }
 
         [HttpPost]
         [ValidateInput(false)]
         //[Requires(Permissions = "OnBoarding.Candidate.CRUD")]
-        public ActionResult Create(CountryModelInput countryModel)
+        public ActionResult Create(CountryModel countryModel)
         {
-            var model = new CountryModelInput();
+            var model = new CountryModel();
 
             if (!ModelState.IsValid)
             {
@@ -65,6 +70,7 @@ namespace Web.Areas.OutpostManagement.Controllers
             CreateMappings();
             var country = new Country();
             Mapper.Map(countryModel, country);
+            country.Client = QueryClient.Load(Guid.Empty); // hardcoded client id value
 
             SaveOrUpdateCommand.Execute(country);
 
@@ -88,9 +94,9 @@ namespace Web.Areas.OutpostManagement.Controllers
         [HttpPost]
         [ValidateInput(false)]
         //[Requires(Permissions = "OnBoarding.Candidate.CRUD")]
-        public ActionResult Edit(CountryModelInput countryModel)
+        public ActionResult Edit(CountryModel countryModel)
         {
-            var model = new CountryModelInput();
+            var model = new CountryModel();
 
             if (!ModelState.IsValid)
             {
@@ -110,10 +116,22 @@ namespace Web.Areas.OutpostManagement.Controllers
         {
             Mapper.CreateMap<Country, CountryModel>();
 
-            var mapCountry = Mapper.CreateMap<CountryModelInput, Country>();
+            var mapCountry = Mapper.CreateMap<CountryModel, Country>();
 
-            if (entity != null)
-                mapCountry.ForMember(m => m.Id, options => options.Ignore());
+            Mapper.CreateMap<RegionModel, Region>();
+            Mapper.CreateMap<Region, RegionModel>();
+
+            Mapper.CreateMap<Region, RegionInputModel>();
+            Mapper.CreateMap<Region, RegionOutputModel>();
+
+            Mapper.CreateMap<RegionInputModel, Region>();
+            Mapper.CreateMap<RegionOutputModel, Region>();
+
+            Mapper.CreateMap<Country, CountryModel>();
+            Mapper.CreateMap<CountryModel, Country>();
+
+            Mapper.CreateMap<ClientModel, Client>();
+            Mapper.CreateMap<Client, ClientModel>();
         }
 
 
@@ -124,10 +142,20 @@ namespace Web.Areas.OutpostManagement.Controllers
             var country = QueryService.Load(countryId);
 
             if (country != null)
-                DeleteCommand.Execute(country);
+            {
+                var regionResults = QueryRegion.Query().Where(it => it.Country.Id == country.Id);
 
-            return RedirectToAction("Overview", "Country");
-        }
+                if (regionResults.ToList().Count != 0)
+                {
+                    TempData.Add("error", string.Format("The Country {0} has regions associated, so it can not be deleted", country.Name));
+                    return RedirectToAction("Overview");
+                }
+
+                DeleteCommand.Execute(country);
+            } 
+            
+            return RedirectToAction("Overview");
+       }
 
     }
 }

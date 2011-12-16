@@ -7,6 +7,9 @@ using Core.Domain;
 using Web.Controllers;
 using Web.Areas.OutpostManagement.Models;
 using Web.Areas.OutpostManagement.Models.Outpost;
+using Web.Areas.OutpostManagement.Models.Country;
+using Web.Areas.OutpostManagement.Models.Region;
+using Web.Areas.OutpostManagement.Models.District;
 using AutoMapper;
 using Web.Bootstrap.Converters;
 using Core.Persistence;
@@ -17,12 +20,24 @@ using Web.Security;
 using Web.Validation.ValidDate;
 using System.Globalization;
 using Domain;
+using Persistence.Queries.Regions;
 
 namespace Web.Areas.OutpostManagement.Controllers
 {
     public class OutpostController : Controller
     {
+
+        public OutpostModel OutpostModel { get; set; }
+        public OutpostOutputModel OutpostModelOutput { get; set; }
+
+        public IQueryOutposts QueryOutposts { get; set; }
+
         public IQueryService<Outpost> QueryService { get; set; }
+        public IQueryService<MobilePhone> QueryMobilePhone { get; set; }
+        public IQueryService<Country> QueryCountries { get; set; }
+        public IQueryService<Region> QueryRegions { get; set; }
+        public IQueryService<District> QueryDistricts { get; set; }
+        public IQueryService<Client> QueryClients { get; set; }
 
         public ISaveOrUpdateCommand<Outpost> SaveOrUpdateCommand { get; set; }
 
@@ -31,67 +46,140 @@ namespace Web.Areas.OutpostManagement.Controllers
         //[Requires(Permissions = "Country.Overview")]
         public ActionResult Overview()
         {
-            Web.Areas.OutpostManagement.Models.Outpost.Overview model = new Web.Areas.OutpostManagement.Models.Outpost.Overview();
+            OutpostOverviewModel model = new OutpostOverviewModel();
 
-            model.Items = new List<OutpostModel>();
+            model.Outposts = new List<OutpostModel>();
 
             var queryResult = QueryService.Query();
+            var countries = QueryCountries.Query();
+            var regions = QueryRegions.Query();
+            var districts = QueryDistricts.Query();
+
+            CreateMappings();
 
             if (queryResult.ToList().Count() > 0)
                 queryResult.ToList().ForEach(item =>
                 {
-                    OutpostModel viewModelItem = new OutpostModel();
-
+                    var outpostModelItem = new OutpostModel();
                     CreateMappings();
+                    Mapper.Map(item, outpostModelItem);
+                    model.Outposts.Add(outpostModelItem);
+                });
 
+            model.Countries = new List<Domain.Country>();
+
+            foreach (Country country in countries)
+            {
+                model.Countries.Add(country);
+            }
+
+            model.Regions = new List<Domain.Region>();
+            foreach (Region region in regions)
+            {
+                model.Regions.Add(region);
+            }
+
+
+            model.Districts = new List<Domain.District>();
+            foreach (District district in districts)
+            {
+                model.Districts.Add(district);
+            }
+
+            return View(model);
+
+        }
+
+        [HttpGet]
+        public ActionResult PhoneListInput(Guid outpostId)
+        {
+            OverviewPhones model = new OverviewPhones();
+
+            model.Items = new List<MobilePhoneModel>();
+
+            var queryResult = QueryMobilePhone.Query().Where(m => m.Outpost_FK == outpostId);
+            var queryService = QueryService.Query();
+            var queryResultCountries = QueryCountries.Query();
+            var queryResultRegion = QueryRegions.Query();
+            var queryResultCDistrict = QueryDistricts.Query();
+
+            if (queryResult.ToList().Count() > 0)
+
+                queryResult.ToList().ForEach(item =>
+                {
+                    MobilePhoneModel viewModelItem = new MobilePhoneModel();
+                    CreateMappingsPhones();
                     Mapper.Map(item, viewModelItem);
-
                     model.Items.Add(viewModelItem);
                 });
 
             return View(model);
+
         }
 
-        [HttpGet]
+        //[HttpGet]
         //[Requires(Permissions = "Country.CRUD")]
         public ActionResult Create()
         {
-            var model = new OutpostModelOutput();
+            var model = new OutpostOutputModel();
+
+            model.Countries = new List<SelectListItem>();
+            model.Regions = new List<SelectListItem>();
+            model.Districts = new List<SelectListItem>();
+
+            QueryCountries.Query().OrderBy(c => c.Name).ToList().ForEach(item =>
+            {
+                model.Countries.Add(new SelectListItem
+                {
+                    Text = item.Name,
+                    Value = item.Id.ToString("n")
+                });
+            }
+                );
             return View(model);
         }
 
         [HttpPost]
         [ValidateInput(false)]
         //[Requires(Permissions = "OnBoarding.Candidate.CRUD")]
-        public ActionResult Create(OutpostModelInput outpostModel)
+        public ActionResult Create(OutpostInputModel outpostInputModel)
         {
-            var model = new OutpostModelInput();
+            var model = new OutpostInputModel();
 
             if (!ModelState.IsValid)
             {
-                return View(model);
+                return View("Create", model);
             }
-
             CreateMappings();
             var outpost = new Outpost();
-            Mapper.Map(outpostModel, outpost);
-        //  Mapper.Map(countryModel, country);
-
+            var client = QueryClients.Load(Client.DEFAULT_ID);
+            outpost.Client = client;
+            Mapper.Map(outpostInputModel, outpost);
             SaveOrUpdateCommand.Execute(outpost);
-
             return RedirectToAction("Overview", "Outpost");
         }
 
+        private OutpostOutputModel MapDataFromInputModelToOutputModel(OutpostInputModel outpostInputModel)
+        {
+            var _outpostOutputModel = new OutpostOutputModel(QueryCountries, QueryRegions, QueryDistricts);
+            _outpostOutputModel.Id = outpostInputModel.Id;
+            _outpostOutputModel.Name = outpostInputModel.Name;
+            _outpostOutputModel.Client = outpostInputModel.Client;
+            _outpostOutputModel.Country = outpostInputModel.Country;
+            _outpostOutputModel.Region = outpostInputModel.Region;
+            _outpostOutputModel.District = outpostInputModel.District;
+            return _outpostOutputModel;
+        }
 
         [HttpGet]
         //[Requires(Permissions = "Country.CRUD")]
-        public ViewResult Edit(Guid countryId)
+        public ViewResult Edit(Guid outpost)
         {
-            var country = QueryService.Load(countryId);
-            var OutpostModel = new OutpostModel();
+            var _outpost = QueryService.Load(outpost);
+            OutpostOutputModel OutpostModel = new OutpostOutputModel(QueryCountries, QueryRegions, QueryDistricts);
 
             CreateMappings();
-            Mapper.Map(country, OutpostModel);
+            Mapper.Map(_outpost, OutpostModel);
 
             return View(OutpostModel);
         }
@@ -99,34 +187,60 @@ namespace Web.Areas.OutpostManagement.Controllers
         [HttpPost]
         [ValidateInput(false)]
         //[Requires(Permissions = "OnBoarding.Candidate.CRUD")]
-        public ActionResult Edit(OutpostModelInput OutpostModel)
+        public ActionResult Edit(OutpostInputModel outpostInputModel)
         {
-            var model = new OutpostModelInput();
+            var model = new OutpostModel();
+            OutpostOutputModel outpostOutputModel;
 
             if (!ModelState.IsValid)
             {
-                return View(model);
+                outpostOutputModel = MapDataFromInputModelToOutputModel(outpostInputModel);
+                return View("Edit", outpostOutputModel);
             }
 
             CreateMappings();
-            var outpost = new Outpost();
-            Mapper.Map(OutpostModel, outpost);
+            var _outpost = new Outpost();
+            Mapper.Map(outpostInputModel, _outpost);
 
-            SaveOrUpdateCommand.Execute(outpost);
+            SaveOrUpdateCommand.Execute(_outpost);
 
             return RedirectToAction("Overview", "Outpost");
         }
 
-        private static void CreateMappings(Outpost entity = null)
+        private static void CreateMappings()
         {
+            Mapper.CreateMap<OutpostModel, Outpost>();
             Mapper.CreateMap<Outpost, OutpostModel>();
 
-            var mapOutpost = Mapper.CreateMap<OutpostModelInput, Outpost>();
+            Mapper.CreateMap<Outpost, OutpostInputModel>();
+            Mapper.CreateMap<Outpost, OutpostOutputModel>();
 
-            if (entity != null)
-                mapOutpost.ForMember(m => m.Id, options => options.Ignore());
+            Mapper.CreateMap<OutpostInputModel, Outpost>();
+            Mapper.CreateMap<OutpostOutputModel, Outpost>();
+
+            Mapper.CreateMap<Country, CountryModel>();
+            Mapper.CreateMap<CountryModel, Country>();
+
+            Mapper.CreateMap<Region, RegionModel>();
+            Mapper.CreateMap<RegionModel, Region>();
+
+            Mapper.CreateMap<District, DistrictModel>();
+            Mapper.CreateMap<DistrictModel, District>();
+
+            Mapper.CreateMap<ClientModelOutpost, Client>();
+            Mapper.CreateMap<Client, ClientModelOutpost>();
+
         }
 
+        private static void CreateMappingsPhones(MobilePhone entity = null)
+        {
+            Mapper.CreateMap<MobilePhone, MobilePhoneModel>();
+
+            var mapMobilePhone = Mapper.CreateMap<MobilePhoneModel, MobilePhone>();
+
+            if (entity != null)
+                mapMobilePhone.ForMember(m => m.Id, options => options.Ignore());
+        }
 
         [HttpPost]
         //[Requires(Permissions = "OnBoarding.Candidate.CRUD")]
@@ -138,6 +252,26 @@ namespace Web.Areas.OutpostManagement.Controllers
                 DeleteCommand.Execute(country);
 
             return RedirectToAction("Overview", "Outpost");
+        }
+
+        [HttpGet]
+        public JsonResult GetRegionsForCountryData(Guid countryId)
+        {
+            var regions = QueryRegions.Query().Where(m => m.Id == countryId);
+            JsonResult jr = new JsonResult();
+            jr.Data = regions.Select(o => new { o.Id, o.Name });
+            jr.JsonRequestBehavior = JsonRequestBehavior.AllowGet;
+            return jr;
+        }
+
+        [HttpGet]
+        public JsonResult GetDistrictsForRegionData(Guid regionId)
+        {
+            var districts = QueryDistricts.Query().Where(m => m.Id == regionId);
+            JsonResult jr = new JsonResult();
+            jr.Data = districts.Select(o => new { o.Id, o.Name });
+            jr.JsonRequestBehavior = JsonRequestBehavior.AllowGet;
+            return jr;
         }
 
     }

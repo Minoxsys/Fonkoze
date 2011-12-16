@@ -14,7 +14,7 @@ using Web.Helpers;
 using Web.Security;
 using Web.Validation.ValidDate;
 using System.Globalization;
-using Core.Domain;
+
 using Persistence.Queries.Districts;
 using Web.Areas.OutpostManagement.Models.District;
 using Web.Areas.OutpostManagement.Models.Region;

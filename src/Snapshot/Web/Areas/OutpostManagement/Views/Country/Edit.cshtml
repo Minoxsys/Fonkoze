@@ -14,8 +14,12 @@ On-Boarding Candidate: Edit
     <form class="main-form" 
           method="post" 
           action="">
+
+     @Html.ValidationSummary()
+     @Html.HiddenFor(m => m.Id)
+
     @{
-        Html.RenderPartial("Country", @Model);
+        Html.RenderPartial("CountryInput", @Model);
         
     }
 
@@ -28,10 +32,11 @@ On-Boarding Candidate: Edit
         Actions</h3>
     <div class="page_header_buttons">
 
- 
+        @*
          <div style="margin:50px 0px 5px 0px"> 
             @(Html.DeleteButton<CountryController>(it => it.Delete(Model.Id), OutpostManagementAreaRegistration.DEFAULT_ROUTE))
         </div>
+        *@
                
     </div>
 }

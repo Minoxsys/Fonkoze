@@ -1,5 +1,4 @@
 ﻿@model Web.Areas.OutpostManagement.Models.Country.Overview
-           
 @section page_title{
 OutpostManagement Countries: Overview
 }
@@ -8,10 +7,22 @@ OutpostManagement Countries: Overview
         OutpostManagement : Countries</h4>
 }
 @section breadcrumbs{
-   @Url.HomeLink("Overview")
->  OutpostManagement : Countries
+    @Url.HomeLink("Overview")
+> OutpostManagement : Countries
 }
 @section master_content{
+    <table>
+        <tr>
+            <td rowspan = 1>
+                 <div class="page_header_buttons">
+                    @(Html.ActionLink<CountryController>(it => it.Create(), "Add new country", OutpostManagementAreaRegistration.DEFAULT_ROUTE))
+                </div>         
+            </td>
+            <td></td>
+            <td></td>
+
+        </tr>
+    </table>
     <table class="searchable">
         <thead>
             <tr>
@@ -27,9 +38,10 @@ OutpostManagement Countries: Overview
                 <th>
                     Phone prefix
                 </th>
-                 <th>
+                <th rowspan = 2>
+                    Actions
                 </th>
-           </tr>
+            </tr>
         </thead>
         <tbody>
             @{
@@ -45,17 +57,18 @@ OutpostManagement Countries: Overview
                     </td>
                      <td>@(Html.ActionLink<RegionController>(it=>it.Overview(country.Id),@country.Name,OutpostManagementAreaRegistration.DEFAULT_ROUTE))
                     </td>
-                     <td>@country.ISOCode
+                    <td>@country.ISOCode
                     </td>
-                     <td>@country.PhonePrefix
+                    <td>@country.PhonePrefix
                     </td>
-                   <td>
-                     @{
-                         Html.BeginForm<CountryController>(m => m.Delete(country.Id));
-                            }
-                            @Html.SubmitButton("delete-user", "Delete")
-                            @{ Html.EndForm();
-                    }</td>
+                     <td>
+                        @(Html.ActionLink<CountryController>(it => it.Edit(country.Id), "Edit", OutpostManagementAreaRegistration.DEFAULT_ROUTE))
+                    </td>
+                    <td>
+                        @{Html.BeginForm<CountryController>(m => m.Delete(country.Id), FormMethod.Post, new { @class = "delete-user-form" });}
+                        @Html.Button("delete-user", "Delete", HtmlButtonType.Submit)
+                        @{Html.EndForm();}
+                    </td>
                 </tr> 
             }
         </tbody>
@@ -64,11 +77,13 @@ OutpostManagement Countries: Overview
 @section master_actions{
     <h3>
         Actions</h3>
-    <div class="page_header_buttons">
-       @(Html.ActionLink<CountryController>(it => it.Create(), "Create", OutpostManagementAreaRegistration.DEFAULT_ROUTE))
-    </div>
 }
 @section scripts{
-  
+    <script type="text/javascript">
+        $(function () {
+            $(".delete-user-form").submit(function () {
+                return confirm('Are you sure that you want to delete this Country ?')
+            });
+        });   
+    </script>
 }
-

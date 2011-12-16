@@ -17,6 +17,7 @@ namespace Persistence.Commands
             this.unitOfWork = unitOfWork;
 
         }
+
         public void Execute(ENTITY entity)
         {
             ITransaction transaction = unitOfWork.CurrentSession.BeginTransaction();

@@ -1,13 +1,60 @@
-﻿@model Web.Areas.OutpostManagement.Models.Outpost.OutpostModelOutput
-
- <div class="row">
-      @Html.ValidationSummary()
-
-     @Html.HiddenFor(m => m.Id)
-
- </div>          
-
-    @{
-        Html.RenderPartial("OutpostInformationInput", Model);
-    }
-
+﻿@model Web.Areas.OutpostManagement.Models.Outpost.OutpostOutputModel      
+<div class="row">
+    @Html.ValidationSummary()
+</div>
+@{ var id = new Guid();}
+@Html.HiddenFor(m => m.Id)
+<fieldset id="fieldsetInformation">
+    <legend>Outpost Information</legend>
+    <div class="row of-2">
+        <div class="column">
+            <label for="NameC">
+                Country</label>
+            <select name="@Html.NameFor(m => m.Country.Id)">
+            </select>
+        </div>
+        <div class="column">
+            <label for="NameR">
+                Region</label>
+            <select name="@Html.NameFor(m => m.Region.Id)">
+            </select>
+        </div>
+    </div>
+   
+    <div class="row ">
+        <div class="column">
+            <label for="NameD">
+                District</label>
+            <select name="@Html.NameFor(m => m.District.Id)">
+            </select>
+        </div>
+    </div>
+    <div class="row ">
+        <div class="column">
+            <label for="NameD">
+                Name</label>
+            @Html.TextBoxFor(m => m.Name, new { maxlength = 250, autofocus = "autofocus", placeholder = "Name" })
+        </div>
+    </div>
+    <div class="row ">
+        <div class="column">
+            <label for="Name">
+                Coordinates</label>
+            @Html.Button("select-coordinates", "Map", HtmlButtonType.Button)
+        </div>
+    </div>
+    <div class="row of-2">
+        <div class="column">
+            <label for="Longitude">
+                Longitude<text class="required-text">*</text>
+            </label>
+            @Html.TextBoxFor(m => m.Longitude, new { maxlength = 250 })
+        </div>
+        <div class="column">
+            <label for="Latitude">
+                Latitude<text class="required-text">*</text>
+            </label>
+            @Html.TextBoxFor(m => m.Latitude, new { maxlength = 250 })
+        </div>
+    </div>
+</fieldset>

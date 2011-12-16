@@ -14,19 +14,22 @@ using System.Net.Mail;
 using Web.Helpers;
 using Web.Security;
 using Web.Areas.OutpostManagement;
-//using Web.Areas.Employees.Models.Employee;
 using Web.Validation.ValidDate;
 using System.Globalization;
 using Web.Models.Shared;
+using System.ComponentModel.DataAnnotations;
+using Domain;
 
 namespace Web.Areas.OutpostManagement.Models.Country
 {
     public class CountryModel
     {
 
-        public Guid Id { get; set; }
+        [Required]
         public virtual string Name { get; set; }
         public virtual string ISOCode { get; set; }
         public virtual string PhonePrefix { get; set; }
-   }
+        public virtual  ClientModelCountry Client { get; set; }
+        public Guid Id { get; set; }
+    }
 }

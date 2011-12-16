@@ -5,12 +5,14 @@ using System.Web;
 
 namespace Web.Areas.OutpostManagement.Models.Outpost
 {
-    public class OutpostModelOutput
+    public class ClientModelOutpost
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
-        public string Type { get; set; }
-        public string MobileNumber { get; set; }
-        public string Email { get; set; }
+        public DateTime? Created { get; set; }
+        public DateTime? Updated { get; set; }        
+
+        public ClientModelOutpost()
+        { }
     }
 }

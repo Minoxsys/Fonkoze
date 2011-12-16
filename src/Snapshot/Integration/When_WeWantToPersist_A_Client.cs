@@ -11,7 +11,6 @@ using Persistence.Conventions;
 using NHibernate.Linq;
 using Domain;
 
-
 namespace IntegrationTests
 {
     [TestFixture]
