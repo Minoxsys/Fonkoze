@@ -44,7 +44,6 @@ namespace Web.Areas.OutpostManagement.Controllers
         public ActionResult Overview(Guid? countryId)
         {
             RegionOverviewModel overviewModel = new RegionOverviewModel(QueryCountry);
-            RegionModel regionModel = new RegionModel();
             List<Region> regions = new List<Region>();
 
             if (countryId != null)
@@ -53,7 +52,11 @@ namespace Web.Areas.OutpostManagement.Controllers
             }
             else
             {
-                Guid countryIdSelectedImplicit = Guid.Parse(overviewModel.Countries.First().Value);
+                Guid countryIdSelectedImplicit = new Guid();
+                if (overviewModel.Countries.Count > 0)
+                {
+                    countryIdSelectedImplicit = Guid.Parse(overviewModel.Countries.First().Value);
+                }
                 regions = QueryService.Query().Where<Region>(it => it.Country.Id == countryIdSelectedImplicit).ToList();
             }
 
@@ -61,7 +64,7 @@ namespace Web.Areas.OutpostManagement.Controllers
 
             foreach (Region item in regions)
             {
-                regionModel = new RegionModel();
+                var regionModel = new RegionModel();
                 Mapper.Map(item, regionModel);
                 regionModel.DistrictNo = QueryDistrict.Query().Count<District>(it => it.Region.Id == item.Id);
                 overviewModel.Regions.Add(regionModel);
@@ -69,7 +72,9 @@ namespace Web.Areas.OutpostManagement.Controllers
 
             if (countryId != null)
             {
-                overviewModel.Countries.Where<SelectListItem>(it => it.Value == countryId.Value.ToString()).ToList()[0].Selected = true;
+                var selectedCountry = overviewModel.Countries.First<SelectListItem>(it => it.Value == countryId.Value.ToString());
+                    if(selectedCountry != null)
+                   selectedCountry.Selected = true;
             }
             overviewModel.Error = (string)TempData[TEMPDATA_ERROR_KEY];
             return View(overviewModel);
