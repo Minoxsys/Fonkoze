@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace Web.Areas.OutpostManagement.Models.Region
+namespace Web.Areas.OutpostManagement.Models.Client
 {
     public class ClientModel
     {

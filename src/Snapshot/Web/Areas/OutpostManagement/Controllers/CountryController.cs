@@ -10,6 +10,7 @@ using Core.Persistence;
 using Domain;
 using PagedList;
 using Domain;
+using Web.Areas.OutpostManagement.Models.Client;
 
 namespace Web.Areas.OutpostManagement.Controllers
 {
@@ -114,10 +115,6 @@ namespace Web.Areas.OutpostManagement.Controllers
 
         private static void CreateMappings(Country entity = null)
         {
-            Mapper.CreateMap<Country, CountryModel>();
-
-            var mapCountry = Mapper.CreateMap<CountryModel, Country>();
-
             Mapper.CreateMap<RegionModel, Region>();
             Mapper.CreateMap<Region, RegionModel>();
 

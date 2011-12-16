@@ -14,6 +14,7 @@ using Persistence.Queries;
 using Core.Domain;
 
 using Persistence.Queries.Regions;
+using Web.Areas.OutpostManagement.Models.Client;
 
 
 namespace Web.Areas.OutpostManagement.Controllers

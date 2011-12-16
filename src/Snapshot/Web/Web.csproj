@@ -166,7 +166,7 @@
     <Compile Include="Areas\OutpostManagement\Models\District\DistrictOutputModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\District\DistrictOverviewModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Outpost\OutpostOverviewModel.cs" />
-    <Compile Include="Areas\OutpostManagement\Models\Region\ClientModel.cs" />
+    <Compile Include="Areas\OutpostManagement\Models\Client\ClientModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Region\RegionInputModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Region\RegionOutputModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Region\RegionOverviewModel.cs" />
@@ -1912,7 +1912,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>False</UseIIS>
+          <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>52331</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>

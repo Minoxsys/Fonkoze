@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using Web.Areas.OutpostManagement.Models.Region;
 using System.ComponentModel.DataAnnotations;
+using Web.Areas.OutpostManagement.Models.Client;
 
 namespace Web.Areas.OutpostManagement.Models.District
 {

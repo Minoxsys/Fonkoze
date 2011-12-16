@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using Web.Areas.OutpostManagement.Models.Country;
+using Web.Areas.OutpostManagement.Models.Client;
 
 namespace Web.Areas.OutpostManagement.Models.Region
 {

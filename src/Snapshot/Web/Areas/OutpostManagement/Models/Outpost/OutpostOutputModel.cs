@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using Core.Persistence;
 using Core.Domain;
 using Domain;
+using Web.Areas.OutpostManagement.Models.Client;
 
 namespace Web.Areas.OutpostManagement.Models.Outpost
 {
