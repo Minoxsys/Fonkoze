@@ -12,5 +12,7 @@ namespace Web.Areas.OutpostManagement.Models.District
         public string Name { get; set; }
         public RegionModel Region { get; set; }
         public ClientModel Client { get; set; }
+        public int OutpostNo { get; set; }
+
     }
 }

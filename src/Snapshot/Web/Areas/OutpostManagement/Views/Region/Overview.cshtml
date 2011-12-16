@@ -7,7 +7,7 @@
 Regions: Overview
 }
 @section breadcrumbs{
-    @Url.HomeLink("Dashboard") > Regions
+    @Url.HomeLink("Outpost Administration") > Regions
 }
 @section master_content{
     @if(Model.Error!=null){
@@ -15,54 +15,35 @@ Regions: Overview
             @Model.Error
         </div>
     }
+    <div class="page_header_buttons">
+        @(Html.ActionLink<Web.Areas.OutpostManagement.Controllers.RegionController>(it => it.Create(), "Create region", Web.Areas.OutpostManagement.OutpostManagementAreaRegistration.DEFAULT_ROUTE))
+    </div><br />
+
     <table class="searchable">
         <thead>
             <tr>
                 <th>
-                    Region Name
+                    <label>
+                        Country:</label>
+                  
+                   <select name="@(Html.NameFor(m=>m.Countries))">
+                   @{
+                       foreach(var item in Model.Countries){
+                            <option value="@item.Value" @(item.Selected? @"selected='selected'" : @"") >@item.Text</option>
+                       }
+                   }
+                   </select>
+                   
                 </th>
-                <th>
-                    Country
-                </th>
-                <th colspan="2">
-                    Actions
-                </th>
-            </tr>
+           </tr>
         </thead>
         <tbody>
-            @{
-                var itemNo = 0;
-            }
-            @foreach (var region in Model.Regions)
-            {
-                var _class = (itemNo % 2 == 0) ? "odd" : "even";    
-                <tr class="@_class">
-                    <td>@region.Name
-                    </td>
-                    <td> @if(@region.Country!= null){@region.Country.Name}
-                    </td>
-                    <td>@(Html.ActionLink<Web.Areas.OutpostManagement.Controllers.RegionController>(call => call.Edit(region.Id), "Edit", Web.Areas.OutpostManagement.OutpostManagementAreaRegistration.DEFAULT_ROUTE))
-                    </td>
-                    <td>
-                        @{
-                Html.BeginForm<RegionController>(m => m.Delete(region.Id), FormMethod.Post, new { @class = "delete-user-form" });
-                        }
-                        @Html.Button("delete-user", "Delete", HtmlButtonType.Submit)
-                        @{
-                Html.EndForm();
-                        }
-                    </td>
-                </tr> 
-            }
         </tbody>
     </table>
-}
-@section master_actions{
-    <h3>
-        Actions</h3>
-    <div class="page_header_buttons">
-        @(Html.ActionLink<Web.Areas.OutpostManagement.Controllers.RegionController>(it => it.Create(), "Create region", Web.Areas.OutpostManagement.OutpostManagementAreaRegistration.DEFAULT_ROUTE))
-    </div>
+
+     @{
+        Html.RenderPartial("OverviewTable", Model.Regions);
+    }
 }
 @section scripts{
     <script type="text/javascript">
@@ -70,6 +51,26 @@ Regions: Overview
             $(".delete-user-form").submit(function () {
                 return confirm('Are you sure that you want to delete this region?')
             });
-        });           
+
+            $("select[name='@Html.NameFor(m=>m.Countries)']").change(onCountryChanged);
+        });
+
+
+        function onCountryChanged() {
+
+            var e = $(this)[0];
+            var selectedCountryId = e.options[e.selectedIndex].value;
+
+            var drop = $("#region-overview")
+
+            var urlOverview = '@Url.Action("OverviewTable")?countryId=' + selectedCountryId;
+            $.get(urlOverview, function (data) {
+
+                drop.html('')
+
+                $('#region-overview').html(data);
+            });
+
+      }           
     </script>
 }

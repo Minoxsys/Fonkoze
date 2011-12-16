@@ -1,5 +1,3 @@
-use [StockManager]
-
 if not exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'Permissions')
 begin
 create table Permissions (
@@ -176,7 +174,7 @@ end
 if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='ByUser_RDFK')
 begin
    alter table Districts 
-        add constraint By_User_RDFK 
+        add constraint ByUser_RDFK 
         foreign key (Client_FK) 
         references Clients
 End
@@ -207,10 +205,10 @@ begin
         references Users
 end
 
-if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='ByUser_PUFK')
+if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='ByUser_PFK')
 begin      
     alter table Permissions 
-        add constraint ByUser_PUFK 
+        add constraint ByUser_PFK 
         foreign key (ByUser_FK) 
         references Users
 end
@@ -228,7 +226,7 @@ if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CON
 begin 
 
 	alter table PermissionRoles 
-        add constraint Permission_FK 
+        add constraint Permission_PRFK 
         foreign key (Permission_FK) 
         references Permissions
 end
@@ -244,7 +242,7 @@ end
 if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='User_URFK')
 begin
     alter table RoleUsers 
-        add constraint UserId_URFK 
+        add constraint User_URFK 
         foreign key (User_FK) 
         references Users
 end
@@ -252,7 +250,7 @@ end
 if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='User_RUFK')
 begin
   alter table RoleUsers 
-        add constraint Role_RUFK 
+        add constraint User_RUFK 
         foreign key (Role_FK) 
         references Roles
 end
@@ -282,7 +280,7 @@ begin
         references Clients
 end
 
-if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='(ByUser_COUFK')
+if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='ByUser_COUFK')
 begin
 
     alter table Countries 
@@ -302,7 +300,7 @@ begin
 end
 
 
-if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='(ByUser_MPUFK ')
+if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='ByUser_MPUFK ')
 begin
 
  alter table MobilePhones 
@@ -312,7 +310,7 @@ begin
 end
 
 
-if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='(ByUser_OUFK ')
+if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='ByUser_OUFK ')
 begin
 
     alter table Outposts 
@@ -321,7 +319,7 @@ begin
         references Users
 end
 
-if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='(Country_OCFK ')
+if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='Country_OCFK ')
 begin
 
     alter table Outposts 
@@ -330,7 +328,7 @@ begin
         references Countries
 end
 
-if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='(Region_OCFK ')
+if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='Region_OCFK ')
 begin
 
     alter table Outposts 
@@ -339,11 +337,11 @@ begin
         references Regions
 end
 
-if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='(District_ODFK ')
+if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='District_ODFK ')
 begin
 
     alter table Outposts 
-        add constraint ByUser_ODFK 
+        add constraint District_ODFK 
         foreign key (ByUser_FK) 
         references Districts
 end
