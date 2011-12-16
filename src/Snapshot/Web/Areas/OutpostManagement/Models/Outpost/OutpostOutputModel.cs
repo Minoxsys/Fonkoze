@@ -5,7 +5,6 @@ using System.Web;
 using Web.Areas.OutpostManagement.Models.Region;
 using Web.Areas.OutpostManagement.Models.District;
 using Web.Areas.OutpostManagement.Models.Country;
-using Microsoft.SqlServer.Types;
 using System.Web.Mvc;
 using Core.Persistence;
 using Core.Domain;
