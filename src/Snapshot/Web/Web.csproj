@@ -1896,6 +1896,7 @@
     <Content Include="Views\UserManager\Edit.cshtml" />
     <Content Include="Views\UserManager\List.cshtml" />
     <Content Include="Views\UnauthorizedAccess\Index.cshtml" />
+    <Content Include="Views\Shared\_OutpostManagementActions.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

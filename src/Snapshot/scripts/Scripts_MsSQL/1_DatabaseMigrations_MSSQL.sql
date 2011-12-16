@@ -103,7 +103,7 @@ CREATE TABLE [Countries] (
        Id UNIQUEIDENTIFIER not null,
        Name NVARCHAR(50) null,
 	   ISOCode NVARCHAR(3) null,
-	   PhonePrefix NVARCHAR(3) null,
+	   PhonePrefix NVARCHAR(5) null,
        Created DATETIME null,
        Updated DATETIME null,
 	   Client_FK UNIQUEIDENTIFIER null,
@@ -171,10 +171,10 @@ begin
         references Users
 end
 
-if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='ByUser_RDFK')
+if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='ByUser_DClFK')
 begin
    alter table Districts 
-        add constraint ByUser_RDFK 
+        add constraint ByUser_DClFK 
         foreign key (Client_FK) 
         references Clients
 End
@@ -205,10 +205,10 @@ begin
         references Users
 end
 
-if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='ByUser_PFK')
+if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='ByUser_PUFK')
 begin      
     alter table Permissions 
-        add constraint ByUser_PFK 
+        add constraint ByUser_PRFK 
         foreign key (ByUser_FK) 
         references Users
 end

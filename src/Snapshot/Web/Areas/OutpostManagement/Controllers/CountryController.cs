@@ -70,7 +70,7 @@ namespace Web.Areas.OutpostManagement.Controllers
             CreateMappings();
             var country = new Country();
             Mapper.Map(countryModel, country);
-            country.Client = QueryClient.Load(Guid.Empty); // hardcoded client id value
+            country.Client = QueryClient.Load(Client.DEFAULT_ID); // hardcoded client id value
 
             SaveOrUpdateCommand.Execute(country);
 
