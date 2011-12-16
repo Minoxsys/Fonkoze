@@ -65,7 +65,7 @@ namespace Web.Areas.OutpostManagement.Controllers
                     regionSelectedId = Guid.Parse(overviewModel.Regions.First().Value);
                 }
                 districts = QueryService.Query().Where(it => it.Region.Id == regionSelectedId);
-             }
+            }
             else
             {
                 countries = QueryCountry.Query();
@@ -86,8 +86,8 @@ namespace Web.Areas.OutpostManagement.Controllers
                 if (overviewModel.Countries.Count > 0)
                 {
                     var selectedCountry = overviewModel.Countries.First<SelectListItem>(it => it.Value == countryId.Value.ToString());
-                        if(selectedCountry!=null)
-                            selectedCountry.Selected = true;
+                    if (selectedCountry != null)
+                        selectedCountry.Selected = true;
                 }
 
                 var regionsWithRegionId = overviewModel.Regions.Where<SelectListItem>(it => it.Value == regionId.Value.ToString()).ToList();
@@ -105,11 +105,9 @@ namespace Web.Areas.OutpostManagement.Controllers
                     Mapper.Map(item, districtModel);
                     districtModel.OutpostNo = 0;//= QueryOutpost.Query().Count<Outpost>(it => it.District.Id == item.Id);
                     overviewModel.Districts.Add(districtModel);
-
                 }
             }
-            
-            
+
             overviewModel.Error = (string)TempData[TEMPDATA_ERROR_KEY];
             return View(overviewModel);
         }
@@ -140,7 +138,7 @@ namespace Web.Areas.OutpostManagement.Controllers
             Mapper.CreateMap<District, DistrictModel>();
 
             Mapper.CreateMap<DistrictInputModel, District>().ForMember("Region",
-                m=>m.Ignore());
+                m => m.Ignore());
             Mapper.CreateMap<DistrictOutputModel, District>();
 
             Mapper.CreateMap<ClientModel, Client>();
@@ -172,10 +170,9 @@ namespace Web.Areas.OutpostManagement.Controllers
 
             var client = QueryClients.Load(Client.DEFAULT_ID);
             var region = QueryRegion.Load(districtInputModel.Region.Id);
-            var country = QueryCountry.Load(districtInputModel.Region.CountryId);
+
             district.Client = client;
             district.Region = region;
-            district.Region.Country = country;
 
             SaveOrUpdateCommand.Execute(district);
             return RedirectToAction("Overview");
@@ -242,9 +239,10 @@ namespace Web.Areas.OutpostManagement.Controllers
         private DistrictOutputModel MapDatFromInputModelToOutputModel(DistrictInputModel districtInputModel)
         {
             var districtOutputModel = new DistrictOutputModel(QueryCountry, QueryRegion);
-            districtOutputModel.Client = new ClientModel {
+            districtOutputModel.Client = new ClientModel
+            {
                 Id = Client.DEFAULT_ID
-            }; 
+            };
             districtOutputModel.Id = districtInputModel.Id;
             districtOutputModel.Name = districtInputModel.Name;
 
