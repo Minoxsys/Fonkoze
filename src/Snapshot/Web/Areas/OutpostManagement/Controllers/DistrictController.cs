@@ -57,7 +57,12 @@ namespace Web.Areas.OutpostManagement.Controllers
             if ((countryId == null) && (regionId == null))
             {
                 overviewModel = new DistrictOverviewModel(QueryCountry, QueryRegion);
-                Guid regionSelectedId = Guid.Parse(overviewModel.Regions.First().Value);
+                Guid regionSelectedId = new Guid();
+
+                if (overviewModel.Regions.Count > 0)
+                {
+                    regionSelectedId = Guid.Parse(overviewModel.Regions.First().Value);
+                }
                 districts = QueryService.Query().Where(it => it.Region.Id == regionSelectedId);
              }
             else
@@ -77,11 +82,16 @@ namespace Web.Areas.OutpostManagement.Controllers
                 {
                     overviewModel.Regions.Add(new SelectListItem { Text = item.Name, Value = item.Id.ToString() });
                 }
-                overviewModel.Countries.First<SelectListItem>(it => it.Value == countryId.Value.ToString()).Selected = true;
+                if (overviewModel.Countries.Count > 0)
+                {
+                    var selectedCountry = overviewModel.Countries.First<SelectListItem>(it => it.Value == countryId.Value.ToString());
+                        if(selectedCountry!=null)
+                            selectedCountry.Selected = true;
+                }
 
-                var selectedRegion = overviewModel.Regions.Where<SelectListItem>(it => it.Value == regionId.Value.ToString());
-                if(selectedRegion.ToList().Count > 0)
-                    selectedRegion.ToList()[0].Selected = true;
+                var regionsWithRegionId = overviewModel.Regions.Where<SelectListItem>(it => it.Value == regionId.Value.ToString()).ToList();
+                if (regionsWithRegionId.Count > 0)
+                    regionsWithRegionId[0].Selected = true;
 
             }
 
