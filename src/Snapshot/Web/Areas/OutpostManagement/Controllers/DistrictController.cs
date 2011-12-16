@@ -139,7 +139,8 @@ namespace Web.Areas.OutpostManagement.Controllers
             Mapper.CreateMap<DistrictModel, District>();
             Mapper.CreateMap<District, DistrictModel>();
 
-            Mapper.CreateMap<DistrictInputModel, District>();
+            Mapper.CreateMap<DistrictInputModel, District>().ForMember("Region",
+                m=>m.Ignore());
             Mapper.CreateMap<DistrictOutputModel, District>();
 
             Mapper.CreateMap<ClientModel, Client>();
@@ -240,10 +241,12 @@ namespace Web.Areas.OutpostManagement.Controllers
         private DistrictOutputModel MapDatFromInputModelToOutputModel(DistrictInputModel districtInputModel)
         {
             var districtOutputModel = new DistrictOutputModel(QueryCountry, QueryRegion);
-            districtOutputModel.Client = districtInputModel.Client;
+            districtOutputModel.Client = new ClientModel {
+                Id = Client.DEFAULT_ID
+            }; 
             districtOutputModel.Id = districtInputModel.Id;
             districtOutputModel.Name = districtInputModel.Name;
-            districtOutputModel.Region = districtInputModel.Region;
+
             return districtOutputModel;
         }
 

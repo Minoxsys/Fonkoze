@@ -43,6 +43,9 @@ namespace Web.Areas.OutpostManagement.Controllers
 
         public IDeleteCommand<Outpost> DeleteCommand { get; set; }
 
+
+        public OutpostOutputModel CreateOutpost { get; set; }
+
         //[Requires(Permissions = "Country.Overview")]
         public ActionResult Overview()
         {
@@ -121,21 +124,8 @@ namespace Web.Areas.OutpostManagement.Controllers
         //[Requires(Permissions = "Country.CRUD")]
         public ActionResult Create()
         {
-            var model = new OutpostOutputModel();
+            var model = CreateOutpost;
 
-            model.Countries = new List<SelectListItem>();
-            model.Regions = new List<SelectListItem>();
-            model.Districts = new List<SelectListItem>();
-
-            QueryCountries.Query().OrderBy(c => c.Name).ToList().ForEach(item =>
-            {
-                model.Countries.Add(new SelectListItem
-                {
-                    Text = item.Name,
-                    Value = item.Id.ToString("n")
-                });
-            }
-                );
             return View(model);
         }
 

@@ -19,6 +19,7 @@ using System.Globalization;
 using Web.Models.Shared;
 using System.ComponentModel.DataAnnotations;
 using Domain;
+using Web.Areas.OutpostManagement.Models.Client;
 
 namespace Web.Areas.OutpostManagement.Models.Country
 {
@@ -29,7 +30,7 @@ namespace Web.Areas.OutpostManagement.Models.Country
         public virtual string Name { get; set; }
         public virtual string ISOCode { get; set; }
         public virtual string PhonePrefix { get; set; }
-        public virtual  ClientModelCountry Client { get; set; }
+        public virtual  ClientModel Client { get; set; }
         public Guid Id { get; set; }
     }
 }

@@ -13,7 +13,21 @@ namespace Web.Areas.OutpostManagement.Models.District
         public Guid Id { get; set; }
         [Required]
         public string Name { get; set; }
-        public RegionModel Region { get; set; }
-        public ClientModel Client { get; set; }
+        public RegionInputModel Region { get; set; }
+        public ClientInputModel Client { get; set; }
+
+
+        public class RegionInputModel
+        {
+            [Required(ErrorMessage = "Region is required")]
+            public Guid Id { get; set; }
+        }
+
+        public class ClientInputModel
+        {
+            public Guid Id { get; set; }
+        }
     }
+
+   
 }
