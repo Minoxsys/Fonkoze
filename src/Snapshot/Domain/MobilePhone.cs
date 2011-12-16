@@ -10,6 +10,7 @@ namespace Domain
     public class MobilePhone : DomainEntity
     {
         public virtual string MobileNumber { get; set; }
+        public virtual Guid Outpost_FK { get; set; }
         public virtual Outpost Outpost { get; set; }
     }
 }

@@ -55,11 +55,8 @@ namespace Web.Areas.OutpostManagement.Controllers
                 queryResult.ToList().ForEach(item =>
                 {
                     MobilePhoneModel viewModelItem = new MobilePhoneModel();
-
                     CreateMappings();
-
                     Mapper.Map(item, viewModelItem);
-
                     model.Items.Add(viewModelItem);
                 });
 
@@ -91,7 +88,7 @@ namespace Web.Areas.OutpostManagement.Controllers
         //[Requires(Permissions = "OnBoarding.Candidate.CRUD")]
         public ActionResult Create(MobilePhoneModel mobilePhoneModel)
         {
-                var model = new MobilePhoneModel();
+            var model = new MobilePhoneModel();
 
             if (!ModelState.IsValid)
             {
@@ -101,8 +98,8 @@ namespace Web.Areas.OutpostManagement.Controllers
             CreateMappings();
             var mobilePhone = new MobilePhone();
                 
-            Mapper.Map(mobilePhoneModel, mobilePhone);
             mobilePhone.Outpost = QueryOutposts.Load(mobilePhoneModel.OutpostId);
+            Mapper.Map(mobilePhoneModel, mobilePhone);
 
             SaveOrUpdateCommand.Execute(mobilePhone);
 
@@ -123,11 +120,8 @@ namespace Web.Areas.OutpostManagement.Controllers
                 queryResult.ToList().ForEach(item =>
                 {
                     MobilePhoneModel viewModelItem = new MobilePhoneModel();
-
                     CreateMappings();
-
                     Mapper.Map(item, viewModelItem);
-
                     model.Items.Add(viewModelItem);
                 });
 

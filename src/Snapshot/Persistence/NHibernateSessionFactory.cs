@@ -43,7 +43,8 @@ namespace Persistence
                 MsSqlConfiguration.MsSql2008
                     .ConnectionString(c => c.FromConnectionStringWithKey("DbConnection"))
                     .ShowSql()
-                    ).Cache(c =>
+                    )
+                    .Cache(c =>
                     c.UseQueryCache().ProviderClass<HashtableCacheProvider>());
 
         }
@@ -80,7 +81,7 @@ namespace Persistence
                 m.AutoMappings.Add(
                     AutoMap
                     .AssemblyOf<Role>(mappingConfiguration)
-                    .AddEntityAssembly(	typeof(Dummy).Assembly)
+                    .AddEntityAssembly(	typeof(Client).Assembly)
                     .UseOverridesFromAssembly(this.GetType().Assembly)
                     .IgnoreBase<DomainEntity>()
                     .Conventions.Add<TableNamingConvention>()

@@ -25,22 +25,22 @@ OutpostManagement : Edit
         
     }
 
-    @(Html.FormButtons<MobilePhoneController>(it => it.Overview(Model.Id), OutpostManagementAreaRegistration.DEFAULT_ROUTE))
+    @(Html.FormButtons<MobilePhoneController>(it => it.Overview(Model.OutpostId), OutpostManagementAreaRegistration.DEFAULT_ROUTE))
     </form>
 }
 
 @section master_actions{
-    <h3>
+    @*<h3>
         Actions</h3>
-    <div class="page_header_buttons">
+    <div class="page_header_buttons">*@
 
         @*
          <div style="margin:50px 0px 5px 0px"> 
             @(Html.DeleteButton<MobilePhoneController>(it => it.Delete(Model.Id), OutpostManagementAreaRegistration.DEFAULT_ROUTE))
         </div>
-        *@
+       
                
-    </div>
+    </div *@>
 }
 @section scripts{
 

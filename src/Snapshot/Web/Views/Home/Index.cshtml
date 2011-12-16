@@ -1,23 +1,29 @@
 ﻿@model Web.Models.Home.IndexModel
 @section page_title{
-    Dashboard
+    Snapshot Application
 }
-@section menu{
-    
-        <div class="grid_16">
-            @Html.Partial("Menu")
-        </div>
-}
+
 @section title_bar{
 }
 @section master_content{
 
-<h1>Project start</h1>
-
-<div class="row" >  @(Html.ActionLink<Web.Areas.OutpostManagement.Controllers.RegionController>(call => call.Overview(), "Region", Web.Areas.OutpostManagement.OutpostManagementAreaRegistration.DEFAULT_ROUTE))</div>
 }
 
 @section master_actions{
+<ul>
+    <li>
+        @(Html.ActionLink<Web.Areas.OutpostManagement.Controllers.CountryController>(it => it.Overview(), "Countries", Web.Areas.OutpostManagement.OutpostManagementAreaRegistration.DEFAULT_ROUTE))
+    </li>
+    <li>
+        @(Html.ActionLink<Web.Areas.OutpostManagement.Controllers.RegionController>(it => it.Overview(), "Region", Web.Areas.OutpostManagement.OutpostManagementAreaRegistration.DEFAULT_ROUTE))
+    </li>
+    <li>
+        @(Html.ActionLink<Web.Areas.OutpostManagement.Controllers.DistrictController>(it => it.Overview(), "District", Web.Areas.OutpostManagement.OutpostManagementAreaRegistration.DEFAULT_ROUTE))
+    </li>
+    <li>
+        @(Html.ActionLink<Web.Areas.OutpostManagement.Controllers.OutpostController>(it => it.Overview(), "Outposts", Web.Areas.OutpostManagement.OutpostManagementAreaRegistration.DEFAULT_ROUTE))
+    </li>
+</ul>
 }
 @section scripts{
 

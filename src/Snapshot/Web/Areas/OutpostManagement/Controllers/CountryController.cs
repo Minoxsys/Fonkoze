@@ -1,25 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using Core.Domain;
-using Web.Controllers;
-using Web.Areas.OutpostManagement.Models;
 using Web.Areas.OutpostManagement.Models.Country;
-using Microsoft.Practices.Unity;
+using Web.Areas.OutpostManagement.Models.Region;
 using AutoMapper;
-using Web.Bootstrap.Converters;
 using Core.Persistence;
-using Persistence.Queries.Employees;
-using System.Net.Mail;
-using Web.Helpers;
-using Web.Security;
-using Web.Validation.ValidDate;
-using System.Globalization;
+using Domain;
 using PagedList;
 using Domain;
-
 
 namespace Web.Areas.OutpostManagement.Controllers
 {
@@ -31,6 +21,7 @@ namespace Web.Areas.OutpostManagement.Controllers
         public ISaveOrUpdateCommand<Country> SaveOrUpdateCommand { get; set; }
 
         public IDeleteCommand<Country> DeleteCommand { get; set; }
+        public IQueryService<Region> QueryRegion { get; set; }
 
         //[Requires(Permissions = "Country.Overview")]
         public ActionResult Overview()
@@ -41,7 +32,7 @@ namespace Web.Areas.OutpostManagement.Controllers
 
             var queryResult = QueryService.Query();
 
-            if (queryResult.ToList().Count()  > 0)
+            if (queryResult.ToList().Count() > 0)
                 queryResult.ToList().ForEach(item =>
                 {
                     var viewModelItem = new CountryModel();
@@ -127,8 +118,20 @@ namespace Web.Areas.OutpostManagement.Controllers
 
             var mapCountry = Mapper.CreateMap<CountryModel, Country>();
 
-            if (entity != null)
-                mapCountry.ForMember(m => m.Id, options => options.Ignore());
+            Mapper.CreateMap<RegionModel, Region>();
+            Mapper.CreateMap<Region, RegionModel>();
+
+            Mapper.CreateMap<Region, RegionInputModel>();
+            Mapper.CreateMap<Region, RegionOutputModel>();
+
+            Mapper.CreateMap<RegionInputModel, Region>();
+            Mapper.CreateMap<RegionOutputModel, Region>();
+
+            Mapper.CreateMap<Country, CountryModel>();
+            Mapper.CreateMap<CountryModel, Country>();
+
+            Mapper.CreateMap<ClientModel, Client>();
+            Mapper.CreateMap<Client, ClientModel>();
         }
 
 
@@ -139,10 +142,20 @@ namespace Web.Areas.OutpostManagement.Controllers
             var country = QueryService.Load(countryId);
 
             if (country != null)
-                DeleteCommand.Execute(country);
+            {
+                var regionResults = QueryRegion.Query().Where(it => it.Country.Id == country.Id);
 
-            return RedirectToAction("Overview", "Country");
-        }
+                if (regionResults.ToList().Count != 0)
+                {
+                    TempData.Add("error", string.Format("The Country {0} has regions associated, so it can not be deleted", country.Name));
+                    return RedirectToAction("Overview");
+                }
+
+                DeleteCommand.Execute(country);
+            } 
+            
+            return RedirectToAction("Overview");
+       }
 
     }
 }

@@ -15,7 +15,7 @@ namespace Persistence.Queries
 
 		public NHibernateQueryService(INHibernateUnitOfWork unitOfWork)
 		{
-
+            
 			this.unitOfWork = unitOfWork;
 
 		}

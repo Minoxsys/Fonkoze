@@ -13,10 +13,10 @@ OutpostManagement Phones: Overview
 
 @section master_content{
  @Html.HiddenFor(m => m.OutpostId)
-
+ 
    <table class="searchable">
         <thead>
-            <tr>
+        <tr>
                 <th>
                     #
                 </th>
@@ -24,14 +24,19 @@ OutpostManagement Phones: Overview
                     Mobile Number
                 </th>
                  <th>
+                 Actions
                 </th>
-            </tr>
+        </tr>
         </thead>
         <tbody>
             @{
                 var itemNo = 0;
              }
-            @foreach (Web.Areas.OutpostManagement.Models.Outpost.MobilePhoneModel mobilePhone in Model.Items)
+               <tr>
+                @(Html.ActionLink<MobilePhoneController>(it => it.Create(Model.OutpostId), "Add new contact", Web.Areas.OutpostManagement.OutpostManagementAreaRegistration.DEFAULT_ROUTE))
+              </tr>
+            
+             @foreach (Web.Areas.OutpostManagement.Models.Outpost.MobilePhoneModel mobilePhone in Model.Items)
             {
                 var _class = (itemNo++ % 2 == 0) ? "odd" : "even";
        
@@ -51,12 +56,9 @@ OutpostManagement Phones: Overview
     </table>
 }
 @section master_actions{
-    <h3>
-        Actions</h3>
-    <div class="page_header_buttons">
-       @(Html.ActionLink<MobilePhoneController>(it => it.Create(Model.OutpostId), "New Mobile Phone", Web.Areas.OutpostManagement.OutpostManagementAreaRegistration.DEFAULT_ROUTE))
-    </div>
+
 }
+
 @section scripts{
     <script type="text/javascript">
         $(function () {

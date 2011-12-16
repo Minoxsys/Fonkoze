@@ -1,16 +1,14 @@
-﻿@model Web.Areas.OutpostManagement.Models.Outpost.OutpostModel
+﻿@model Web.Areas.OutpostManagement.Models.Outpost.OutpostOutputModel
            
 @section breadcrumbs{
-    @Url.HomeLink("Overview")/ @(Html.ActionLink<CountryController>(it => it.Overview(), "Outpost Management : Outposts", OutpostManagementAreaRegistration.DEFAULT_ROUTE)) > Create
+    @Url.HomeLink("Outpost Administration")/ @(Html.ActionLink<OutpostController>(it => it.Overview(), "Outposts", OutpostManagementAreaRegistration.DEFAULT_ROUTE)) > Create
 }
  
 @section page_title{
 OutpostManagement : Outpost : Create 
 }
 @section title_bar{
-    <h4>
-        Create Outpost</h4>
-}
+    }
 
 @section master_content{
     @*<form class="main-form" method="post"  id="llll"> *@
@@ -28,13 +26,4 @@ OutpostManagement : Outpost : Create
     </form>
 }
 @section scripts{
-
-        
-    <script type="text/javascript">
-        $(function () {
-            $(".chzn-select").chosen();
-        });     
-
-    </script>
-
 }

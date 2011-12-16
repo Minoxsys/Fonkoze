@@ -33,10 +33,10 @@ INSERT INTO [StockManager].[dbo].[Clients]
            ,[Updated]
            ,[ByUser_FK])
      VALUES
-           ( '00000000-0000-0000-0000-000000000000'
+           ( 'BEEC53CE-A73C-4F03-A354-C617F68BC813'
            ,'Minoxsys'
-           ,GETDATE()
-           ,GETDATE()
+           ,'2011-12-14 14:03:43.000'
+           ,'2011-12-14 14:03:43.000'
            ,null)
 end
 GO
@@ -106,22 +106,22 @@ end
 -- RoleUsers 
 GO
 if not exists(select * from RoleUsers 
-	where [RoleId_FK] = '461e581b-e60b-4dfd-a5a8-88229f14379b' and [UserId_FK] = 'E8346290-DE35-47FB-8FEC-D2562DED7F40')
+	where [Role_FK] = '461e581b-e60b-4dfd-a5a8-88229f14379b' and [User_FK] = 'E8346290-DE35-47FB-8FEC-D2562DED7F40')
 begin
 INSERT INTO RoleUsers
-           (RoleId_FK
-           ,UserId_FK)
+           (Role_FK
+           ,User_FK)
      VALUES
            ('461e581b-e60b-4dfd-a5a8-88229f14379b'
             ,'E8346290-DE35-47FB-8FEC-D2562DED7F40' )
 end			
 -- PermissionRoles
 GO
-if not exists(select [PermissionId_FK], [RoleId_FK] from [PermissionRoles] where [PermissionId_FK]='80CDE125-6F44-477D-AAB7-171803030477' and [RoleId_FK] ='461e581b-e60b-4dfd-a5a8-88229f14379b')
+if not exists(select [Permission_FK], [Role_FK] from [PermissionRoles] where [Permission_FK]='80CDE125-6F44-477D-AAB7-171803030477' and [Role_FK] ='461e581b-e60b-4dfd-a5a8-88229f14379b')
 begin
 INSERT INTO PermissionRoles
-           (PermissionId_FK
-           ,RoleId_FK)
+           (Permission_FK
+           ,Role_FK)
      VALUES
            ('80CDE125-6F44-477D-AAB7-171803030477'
            ,'461e581b-e60b-4dfd-a5a8-88229f14379b')

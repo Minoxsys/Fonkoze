@@ -1,0 +1,28 @@
+﻿@model Web.Areas.OutpostManagement.Models.District.DistrictOutputModel
+
+@{Html.HiddenFor(m => m.Id);}
+@section page_title{
+District : Edit
+}
+@section breadcrumbs{
+    @Url.HomeLink("Dashboard") / @(Html.ActionLink<DistrictController>(act => act.Overview(), "Districts Overview", OutpostManagementAreaRegistration.DEFAULT_ROUTE))
+    > Edit District : @Model.Name
+}
+@section master_content{
+
+    @{Html.BeginForm();}
+   <div style="display: none">
+@Html.HiddenFor(m => m.Client.Id)
+</div>
+            <fieldset class="fieldsCollection ">
+                @{
+                    Html.RenderPartial("Input", Model);     
+                }
+            </fieldset>
+            @Html.SubmitButton("submit-form", "Save") <span>or </span><a href="@(Html.BuildUrlFromExpression<RegionController>(it => it.Overview()))">
+                    Cancel</a>
+     
+    @{Html.EndForm();}
+}
+@section master_actions{
+}

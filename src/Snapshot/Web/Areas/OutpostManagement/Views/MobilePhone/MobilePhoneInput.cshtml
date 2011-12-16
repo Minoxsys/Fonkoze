@@ -3,22 +3,30 @@
  
 @{ var id = new Guid();}
 <fieldset id="fieldsetInformation">
-    <legend>Mobile Phone Information</legend>
+    <legend>Contact Details</legend>
 
-    <div class="row of-2">
-        <div class="column">
+ <table>
+     <thead>
+         <th>
             <label for="Methood"> Contact Method<text class="required-text">*</text> </label>
-            @*@Html.TextBoxFor(m => m., new { maxlength = 250, autofocus = "autofocus", placeholder = "Name" })*@
-        </div>
-         <div class="column">
-            <label for="Method"> Mobile Number / E-mail<text class="required-text"></text> </label>
-            @*@Html.TextBoxFor(m => m., new { maxlength = 250, autofocus = "autofocus", placeholder = "Name" })*@
-        </div>
-     <div class="column">
-            <label for="Name"> Mobile Number<text class="required-text">*</text> </label>
+         </th>
+        <th>
+             Mobile Number / E-mail
+        </th>
+        <th>
+            Actions
+        </th>
+    </thead>
+    <tr>
+        <td>
             @Html.TextBoxFor(m => m.MobileNumber, new { maxlength = 250, autofocus = "autofocus", placeholder = "Name" })
-        </div>
-   </div>
-
+       </td>
+        <td>
+            @Html.DropDownList("TipContact", new SelectList(new [] {"E-mail"}), "Mobile Number")
+       </td>
+    </tr>
+ 
+ </table>            
+ 
 </fieldset>
 

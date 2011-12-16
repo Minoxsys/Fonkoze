@@ -1,163 +1,188 @@
-﻿@model Web.Areas.OutpostManagement.Models.Outpost.Overview
-           
+﻿@model Web.Areas.OutpostManagement.Models.Outpost.OutpostOverviewModel
 @section page_title{
 OutpostManagement Outposts: Overview
 }
 @section title_bar{
-    <h4>
-        OutpostManagement : Outpost</h4>
 }
 @section breadcrumbs{
-   @Url.HomeLink("Overview") > OutpostManagement : Outposts
-}
- 
-        
+   @Url.HomeLink("Outpost Administration") > Outposts
+   }
 
 @section master_content{
-
-     <form action="" id=formZone method="post" onclick=>
-         <tr>
-             <td> Countries
-             </td>
-             <td> Regions
-             </td>
-             <td> Districts
-             </td>
-           </tr>
-       <table class="searchable">
-       <tr>
-
-              <td>
-                <select id="countryID" name="CountriesDropDownList">    
-                   <option value= "">-- Select a Country --</option>     
-                   @foreach(Domain.Country countryName in Model.Countries) 
-                   {
-                      <option> @countryName.Name  </option>
-                   } 
-                    </select>
-              </td>
-              <td>
-
-             <td>
-                <select id="regionID" name="RegionsDropDownList">    
-                   <option value= "">-- Select a Region --</option>     
-                   @foreach(Domain.Region regionName in Model.Regions) 
-                   {
-                      <option> @regionName.Name  </option>
-                   } 
-                    </select>
-              </td>
-               </td>
- 
-             <td>
-               <select id="districtID" name="DistrictsDropDownList">    
-                   <option value= "">-- Select a Region --</option>     
-                   @foreach(Domain.District districtName in Model.Districts) 
-                   {
-                      <option> @districtName.Name  </option>
-                   } 
-                    </select>
-               </td>
-        </tr>
-        </table>
-        </form>
-
-    <table class="searchable">
-        <thead>
-            <tr>
-                <th>
-                    #
-                </th>
-               <th>
-                    Outpost Name
-                </th>
-                 <th>
-                    Mobile Phone Number
-                </th>
-                 <th>
-                    E-mail address
-                </th>
-                <th>
-                    Latitude
-                </th>
-                <th>
-                    Longitude
-                </th>
-                 <th>
-                   
-                </th>
-               <th>
-                   Actions
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            @{
-                var itemNo = 0;
-            }
- 
-
-            @foreach (Web.Areas.OutpostManagement.Models.Outpost.OutpostModel outpost in Model.Items)
-            {
-                var _class = (itemNo++ % 2 == 0) ? "odd" : "even";
+    <div>
+        @(Html.ActionLink<OutpostController>(it => it.Create(), "Add New Outpost", Web.Areas.OutpostManagement.OutpostManagementAreaRegistration.DEFAULT_ROUTE))
+    </div>
+    <div>
+        @*<table>
+            <thead>
+                <tr>
+                    <th>
+                        Countries
+                    </th>
+                    <th>
+                        Regions
+                    </th>
+                    <th>
+                        Districts
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <select id="countryID" name="CountriesDDL">
+                         
+                            @foreach (Domain.Country country in Model.Countries)
+                            {
+                                <option>@country.Name</option> 
+                            }
+                        </select>
+                    </td>
+                    <td>
+                        <select id="regionID" name="RegionsDDL">
+                         
+                            @foreach (Domain.Region region in Model.Regions)
+                            {
+                                <option>@region.Name</option> 
+                            }
+                        </select>
+                    </td>
+                    <td>
+                        <select id="districtID" name="DistrictsDDL">
+                         
+                            @foreach (Domain.District district in Model.Districts)
+                            {
+                                <option>@district.Name</option> 
+                            }
+                        </select>
+                    </td>
+                </tr>
+            </tbody>
+        </table>*@
+    </div>
+    <div id="outposts-table">
+        <table class="searchable">
+            <thead>
+                <tr>
+                    @*  <th>
+                        #
+                    </th>*@
+                    <th>
+                        Outpost Name
+                    </th>
+                    <th>
+                        Mobile Phone Number
+                    </th>
+                    <th>
+                        E-mail address
+                    </th>
+                    <th>
+                        Latitude
+                    </th>
+                    <th>
+                        Longitude
+                    </th>
+                    <th>
+                    </th>
+                    <th>
+                        Actions
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    var itemNo = 0;
+                }
+                @foreach (Web.Areas.OutpostManagement.Models.Outpost.OutpostModel outpost in Model.Outposts)
+                {
+                    var _class = (itemNo++ % 2 == 0) ? "odd" : "even";
        
-               <tr class="@_class">
-                    <td> 
-                        @(Html.ActionLink<OutpostController>(it => it.PhoneListInput(outpost.Id), "Phone List", OutpostManagementAreaRegistration.DEFAULT_ROUTE))
-                                                                                                           
-                    </td>
-                      <td>
-                      @outpost.Name
-                    </td>
-                     <td>@outpost.MainMobileNumber
-                    </td>
-                     <td>@outpost.Email
-                    </td>
-                     <td>@outpost.Latitude
-                    </td>
-                     <td>@outpost.Longitude
-                    </td>
-                    <td>
-                        @(Html.ActionLink<OutpostController>(it => it.Edit(outpost.Id), "Edit", OutpostManagementAreaRegistration.DEFAULT_ROUTE))
-                    </td>
-                    <td>
-                         @{Html.BeginForm<OutpostController>(m => m.Delete(outpost.Id), FormMethod.Post, new { @class = "delete-user-form" }); }
-                         @Html.Button("delete-user", "Delete", HtmlButtonType.Submit)
-                         @{Html.EndForm();}
-                   </td>
-                </tr> 
-            }
-        </tbody>
-    </table>
+                    <tr class="@_class">
+                        @* <td>
+                            @(Html.ActionLink<OutpostController>(it => it.PhoneListInput(outpost.Id), "Phone List", OutpostManagementAreaRegistration.DEFAULT_ROUTE))
+                        </td>*@
+                        <td>
+                            @outpost.Name
+                        </td>
+                        <td>@outpost.MainMobileNumber
+                        </td>
+                        <td>@outpost.Email
+                        </td>
+                        <td>@outpost.Latitude
+                        </td>
+                        <td>@outpost.Longitude
+                        </td>
+                        <td>
+                            @(Html.ActionLink<OutpostController>(it => it.Edit(outpost.Id), "Edit", OutpostManagementAreaRegistration.DEFAULT_ROUTE))
+                        </td>
+                        <td>
+                            @{Html.BeginForm<OutpostController>(m => m.Delete(outpost.Id), FormMethod.Post, new { @class = "delete-user-form" }); }
+                            @Html.Button("delete-user", "Delete", HtmlButtonType.Submit)
+                            @{Html.EndForm();}
+                        </td>
+                    </tr> 
+                }
+            </tbody>
+        </table>
+    </div>
 }
 @section master_actions{
-    <h3>
-        Actions</h3>
-    <div class="page_header_buttons">
+    @*<h3>
+        Actions</h3>*@ @*<div class="page_header_buttons">
        @(Html.ActionLink<OutpostController>(it => it.Create(), "Create Outpost", Web.Areas.OutpostManagement.OutpostManagementAreaRegistration.DEFAULT_ROUTE))
-    </div>
+    </div>*@
 }
 @section scripts{
     <script type="text/javascript">
-        $(function () {
-            $(".searchable").dataTable({
-                "sPaginationType": "full_numbers"
+         $(function () {
+                $(".delete-user-form").submit(function () {
+                    return confirm('Are you sure that you want to delete this Outpost ?')
+                });
             });
-        });
-
-        $(function () {
-            $(".delete-user-form").submit(function () {
-                return confirm('Are you sure that you want to delete this Outpost ?')
-            });
-        });
-
-        $(function () {
-            $(".to-many-childs").submit(function () {
-                return confirm('Are you sure that you want to delete this Outpost ?')
-            });
-        });
 
 
+      $(document).ready(function () {
+
+         var e = document.getElementById("countryID");
+         var selectedCountryId = e.options[e.selectedIndex].value;
+
+         $.getJSON('@Url.Action("GetRegionsForCountryData", "Region")?countryId=' + selectedCountryId, function (data) {
+             var drop = $("#regionID")
+             drop.html('')
+
+             $.each(data, function () {
+                 var opt = document.createElement("option");
+                 opt.text = this['Text'];
+                 opt.value = this['Value'];
+
+                 var RegionsDDL = document.getElementById("regionId");
+                 RegionsDDL.options.add(opt);
+             });
+
+         });
+
+     });
+
+     function onCountrySelected() {
+         var e = document.getElementById("countryID");
+         var selectedCountryId = e.options[e.selectedIndex].value;
+
+         $.getJSON('@Url.Action("GetRegionsForCountryData", "Region")?countryId=' + selectedCountryId, function (data) {
+             var drop = $("#regionID")
+             drop.html('')
+
+             $.each(data, function () {
+                 var opt = document.createElement("option");
+                 opt.text = this['Text'];
+                 opt.value = this['Value'];
+
+                 var RegionsDDL = document.getElementById("regionId");
+                 RegionsDDL.options.add(opt);
+             });
+
+         });
+     } 
+     
+       
     </script>
 }
-

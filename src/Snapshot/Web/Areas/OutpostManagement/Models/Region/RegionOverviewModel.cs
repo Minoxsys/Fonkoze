@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using Web.Areas.OutpostManagement.Models.District;
 
 namespace Web.Areas.OutpostManagement.Models.Region
 {
@@ -12,6 +13,9 @@ namespace Web.Areas.OutpostManagement.Models.Region
         public RegionOverviewModel()
         {
             Regions = new List<RegionModel>();
+            
         }
+
+        public string Error { get; set; }
     }
 }

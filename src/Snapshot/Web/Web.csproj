@@ -61,10 +61,7 @@
     <Reference Include="Microsoft.CSharp">
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.Practices.Unity, Version=1.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\Microsoft.Practices.Unity.dll</HintPath>
-    </Reference>
+    <Reference Include="Microsoft.SqlServer.Types, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Web.Mvc">
       <HintPath>..\packages\Mvc3Futures.3.0.20105.0\lib\Microsoft.Web.Mvc.dll</HintPath>
     </Reference>
@@ -160,9 +157,17 @@
     <Compile Include="Areas\OutpostManagement\Controllers\OutpostController.cs" />
     <Compile Include="Areas\OutpostManagement\Controllers\RegionController.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Country\CountryModel.cs" />
-    <Compile Include="Areas\OutpostManagement\Models\Outpost\OverviewPhones.cs" />
+    <Compile Include="Areas\OutpostManagement\Models\Country\ClientModelCountry.cs" />
+    <Compile Include="Areas\OutpostManagement\Models\Outpost\ClientModelOutpost.cs" />
+    <Compile Include="Areas\OutpostManagement\Models\Outpost\OutpostInputModel.cs" />
+    <Compile Include="Areas\OutpostManagement\Models\Outpost\OutpostOutputModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Outpost\MobilePhoneModel.cs" />
-    <Compile Include="Areas\OutpostManagement\Models\Outpost\Overview.cs" />
+    <Compile Include="Areas\OutpostManagement\Models\Outpost\OverviewPhones.cs" />
+    <Compile Include="Areas\OutpostManagement\Models\District\DistrictInputModel.cs" />
+    <Compile Include="Areas\OutpostManagement\Models\District\DistrictOutputModel.cs" />
+    <Compile Include="Areas\OutpostManagement\Models\District\DistrictOverviewModel.cs" />
+    <Compile Include="Areas\OutpostManagement\Models\Outpost\OutpostOverviewModel.cs" />
+    <Compile Include="Areas\OutpostManagement\Models\Region\ClientModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Region\RegionInputModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Region\RegionOutputModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Region\RegionOverviewModel.cs" />
@@ -1825,7 +1830,6 @@
     <Folder Include="App_Data\" />
     <Folder Include="Areas\OutpostManagement\Models\Outpost\MobilePhones\" />
     <Folder Include="Areas\OutpostManagement\Services\" />
-    <Folder Include="Areas\OutpostManagement\Views\District\" />
     <Folder Include="Areas\OutpostManagement\Views\Shared\" />
     <Folder Include="Assets\img\photos\" />
   </ItemGroup>
@@ -1866,13 +1870,15 @@
     <Content Include="Areas\OutpostManagement\Views\Outpost\Edit.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\Outpost\OutpostInput.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\Outpost\Overview.cshtml" />
-    <Content Include="Areas\OutpostManagement\Views\Outpost\_Paging.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\Outpost\PhoneListInput.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\MobilePhone\Create.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\MobilePhone\Edit.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\MobilePhone\MobilePhoneInput.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\MobilePhone\PhoneListInput.cshtml" />
-    <Content Include="Areas\OutpostManagement\Views\Country\ViewUserControl1.cshtml" />
+    <Content Include="Areas\OutpostManagement\Views\District\Overview.cshtml" />
+    <Content Include="Areas\OutpostManagement\Views\District\Create.cshtml" />
+    <Content Include="Areas\OutpostManagement\Views\District\Input.cshtml" />
+    <Content Include="Areas\OutpostManagement\Views\District\Edit.cshtml" />
     <None Include="Assets\img\skins\ButtonTemplate.psd" />
     <Content Include="Views\RoleManager\Create.cshtml" />
     <Content Include="Views\RoleManager\Edit.cshtml" />
@@ -1906,7 +1912,7 @@
         <WebProjectProperties>
           <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>59575</DevelopmentServerPort>
+          <DevelopmentServerPort>52924</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost/Snapshot</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
