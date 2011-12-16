@@ -43,7 +43,7 @@ OutpostManagement Countries: Overview
                     <td>
                         @(Html.ActionLink<CountryController>(it => it.Edit(country.Id), "Edit", OutpostManagementAreaRegistration.DEFAULT_ROUTE))
                     </td>
-                     <td>@country.Name
+                     <td>@(Html.ActionLink<RegionController>(it=>it.Overview(country.Id),@country.Name,OutpostManagementAreaRegistration.DEFAULT_ROUTE))
                     </td>
                      <td>@country.ISOCode
                     </td>

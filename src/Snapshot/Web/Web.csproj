@@ -1871,6 +1871,8 @@
     <Content Include="Areas\OutpostManagement\Views\District\Create.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\District\Input.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\District\Edit.cshtml" />
+    <Content Include="Areas\OutpostManagement\Views\District\OverviewTable.cshtml" />
+    <Content Include="Areas\OutpostManagement\Views\Region\OverviewTable.cshtml" />
     <None Include="Assets\img\skins\ButtonTemplate.psd" />
     <Content Include="Views\RoleManager\Create.cshtml" />
     <Content Include="Views\RoleManager\Edit.cshtml" />
@@ -1904,7 +1906,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>52924</DevelopmentServerPort>
+          <DevelopmentServerPort>52331</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost/Snapshot</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
