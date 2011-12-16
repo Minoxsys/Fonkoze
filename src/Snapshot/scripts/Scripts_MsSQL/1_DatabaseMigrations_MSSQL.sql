@@ -13,8 +13,8 @@ end
 if not exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'PermissionRoles')
 begin
     create table PermissionRoles (
-       PermissionId_FK UNIQUEIDENTIFIER not null,
-       RoleId_FK UNIQUEIDENTIFIER not null
+       Permission_FK UNIQUEIDENTIFIER not null,
+       Role_FK UNIQUEIDENTIFIER not null
     )
 end
 
@@ -34,8 +34,8 @@ end
 if not exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'RoleUsers')
 begin
     create table RoleUsers (
-       RoleId_FK UNIQUEIDENTIFIER not null,
-       UserId_FK UNIQUEIDENTIFIER not null
+       Role_FK UNIQUEIDENTIFIER not null,
+       User_FK UNIQUEIDENTIFIER not null
     )
 end
 
@@ -176,7 +176,7 @@ if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CON
 begin 
     alter table PermissionRoles 
         add constraint RoleId_PFK 
-        foreign key (RoleId_FK) 
+        foreign key (Role_FK) 
         references Roles        
     
 end
@@ -186,7 +186,7 @@ begin
 
 	alter table PermissionRoles 
         add constraint PermissionId_FK 
-        foreign key (PermissionId_FK) 
+        foreign key (Permission_FK) 
         references Permissions
 end
 
@@ -202,12 +202,12 @@ if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CON
 begin
     alter table RoleUsers 
         add constraint UserId_FK 
-        foreign key (UserId_FK) 
+        foreign key (User_FK) 
         references Users
 
     alter table RoleUsers 
         add constraint RoleId_RFK 
-        foreign key (RoleId_FK) 
+        foreign key (Role_FK) 
         references Roles
 end
 
@@ -215,7 +215,7 @@ if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CON
 begin
 	alter table RoleUsers 
         add constraint RoleId_RFK 
-        foreign key (RoleId_FK) 
+        foreign key (Role_FK) 
         references Roles
 end
 

@@ -40,11 +40,22 @@ namespace Web.Areas.OutpostManagement.Controllers
 
         private const string TEMPDATA_ERROR_KEY = "error";
 
-        public ActionResult Overview()
+        [HttpGet]
+        public ActionResult Overview(Guid? countryId)
         {
-            RegionOverviewModel overviewModel = new RegionOverviewModel();
+            RegionOverviewModel overviewModel = new RegionOverviewModel(QueryCountry);
             RegionModel regionModel = new RegionModel();
-            var regions = QueryRegion.GetAll().ToList();
+            List<Region> regions = new List<Region>();
+
+            if (countryId != null)
+            {
+                regions = QueryService.Query().Where<Region>(it => it.Country.Id == countryId.Value).ToList();
+            }
+            else
+            {
+                Guid countryIdSelectedImplicit = Guid.Parse(overviewModel.Countries.First().Value);
+                regions = QueryService.Query().Where<Region>(it => it.Country.Id == countryIdSelectedImplicit).ToList();
+            }
 
             CreateMapping();
 
@@ -52,13 +63,36 @@ namespace Web.Areas.OutpostManagement.Controllers
             {
                 regionModel = new RegionModel();
                 Mapper.Map(item, regionModel);
+                regionModel.DistrictNo = QueryDistrict.Query().Count<District>(it => it.Region.Id == item.Id);
                 overviewModel.Regions.Add(regionModel);
+            }
 
+            if (countryId != null)
+            {
+                overviewModel.Countries.Where<SelectListItem>(it => it.Value == countryId.Value.ToString()).ToList()[0].Selected = true;
             }
             overviewModel.Error = (string)TempData[TEMPDATA_ERROR_KEY];
             return View(overviewModel);
         }
+        public PartialViewResult OverviewTable(Guid? countryId)
+        {
+            var regionList = new List<RegionModel>();
+            if (!countryId.HasValue)
+                return PartialView(regionList);
 
+            var regions = QueryService.Query().Where<Region>(it => it.Country.Id == countryId);
+
+            foreach (Region item in regions)
+            {
+                CreateMapping();
+                var regionModel = new RegionModel();
+                Mapper.Map(item, regionModel);
+                regionModel.DistrictNo = QueryDistrict.Query().Count<District>(it => it.Region.Id == item.Id);
+                regionList.Add(regionModel);
+
+            }
+            return PartialView(regionList);
+        }
         public ActionResult Create()
         {
             return View(RegionOutputModel);
@@ -105,10 +139,10 @@ namespace Web.Areas.OutpostManagement.Controllers
             }
 
             Region region = new Region();
-                      
+
             CreateMapping();
             Mapper.Map(regionInputModel, region);
-            
+
             SaveOrUpdateCommand.Execute(region);
 
             return RedirectToAction("Overview");

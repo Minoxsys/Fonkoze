@@ -6,10 +6,10 @@
            @(Html.ActionLink<Web.Areas.OutpostManagement.Controllers.CountryController>(it => it.Overview(), "Countries", Web.Areas.OutpostManagement.OutpostManagementAreaRegistration.DEFAULT_ROUTE))
         </li>
          <li>
-        @(Html.ActionLink<Web.Areas.OutpostManagement.Controllers.RegionController>(call => call.Overview(), "Region", Web.Areas.OutpostManagement.OutpostManagementAreaRegistration.DEFAULT_ROUTE))
+        @(Html.ActionLink<Web.Areas.OutpostManagement.Controllers.RegionController>(call => call.Overview(null), "Region", Web.Areas.OutpostManagement.OutpostManagementAreaRegistration.DEFAULT_ROUTE))
         </li>
          <li>
-        @(Html.ActionLink<Web.Areas.OutpostManagement.Controllers.DistrictController>(call => call.Overview(), "District", Web.Areas.OutpostManagement.OutpostManagementAreaRegistration.DEFAULT_ROUTE))
+        @(Html.ActionLink<Web.Areas.OutpostManagement.Controllers.DistrictController>(call => call.Overview(null,null), "District", Web.Areas.OutpostManagement.OutpostManagementAreaRegistration.DEFAULT_ROUTE))
         </li>
          <li>
            @(Html.ActionLink<Web.Areas.OutpostManagement.Controllers.OutpostController>(it => it.Overview(), "Outposts", Web.Areas.OutpostManagement.OutpostManagementAreaRegistration.DEFAULT_ROUTE))

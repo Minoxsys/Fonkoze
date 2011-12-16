@@ -21,7 +21,8 @@ namespace Web.Security
         }
         public bool ValidateUser(string userName,string password)
         {
-            var user = queryUsers.Query().Where(it => it.UserName == userName && it.Password == SecurePassword.EncryptPassword(password));
+            string securedPassword = SecurePassword.EncryptPassword(password);
+            var user = queryUsers.Query().Where(it => it.UserName == userName && it.Password == securedPassword);
 
             if (user.ToList().Count != 0)
                 return true;

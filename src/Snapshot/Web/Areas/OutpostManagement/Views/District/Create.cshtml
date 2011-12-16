@@ -1,36 +1,64 @@
 ﻿@model Web.Areas.OutpostManagement.Models.District.DistrictOutputModel
-
 @using Microsoft.Web.Mvc
 @section page_title{
 District : Create
 }
 @section breadcrumbs{
-    @Url.HomeLink("Dashboard") / @(Html.ActionLink<DistrictController>(act => act.Overview(), "Districts Overview", OutpostManagementAreaRegistration.DEFAULT_ROUTE))
+    @Url.HomeLink("Dashboard") / @(Html.ActionLink<DistrictController>(act => act.Overview(null,null), "Districts Overview", OutpostManagementAreaRegistration.DEFAULT_ROUTE))
 > Create District
 }
 @section master_content{
- @{Html.BeginForm<DistrictController>(r => r.Create());}
+    @{Html.BeginForm<DistrictController>(r => r.Create());}
     <fieldset class="fieldsCollection ">
         @{
             Html.RenderPartial("Input", Model);     
         }
     </fieldset>
-    @Html.SubmitButton("submit-form", "Save") <span>or </span><a href="@(Html.BuildUrlFromExpression<RegionController>(it => it.Overview()))">
+    @Html.SubmitButton("submit-form", "Save") <span>or </span><a href="@(Html.BuildUrlFromExpression<RegionController>(it => it.Overview(null)))">
         Cancel</a>
     @{Html.EndForm();}
 }
-
 @section scripts{
     <script type="text/javascript">
-        function onCountrySelected() {
+        $(document).ready(function () {
 
             var e = document.getElementById("Region_Country_Id");
-            var selectedCountry = e.options[e.selectedIndex].text;
+            var selectedCountryId = e.options[e.selectedIndex].value;
 
-            debugger;
-            var url = "/District/GetRegionsForCountry";
+            $.getJSON('@Url.Action("GetRegionsForCountry", "District")?countryId=' + selectedCountryId, function (data) {
+                var drop = $("#Region_Id")
+                drop.html('')
 
-            $.get("/District/GetRegionsForCountry", { countryName: selectedCountry }, function (data) { alert(data); });
+                $.each(data, function () {
+                    var opt = document.createElement("option");
+                    opt.text = this['Text'];
+                    opt.value = this['Value'];
+
+                    var ddlRegions = document.getElementById("Region_Id");
+                    ddlRegions.options.add(opt);
+                });
+
+            });
+
+        });
+        function onCountrySelected() {
+            var e = document.getElementById("Region_Country_Id");
+            var selectedCountryId = e.options[e.selectedIndex].value;
+
+            $.getJSON('@Url.Action("GetRegionsForCountry", "District")?countryId=' + selectedCountryId, function (data) {
+                var drop = $("#Region_Id")
+                drop.html('')
+
+                $.each(data, function () {
+                    var opt = document.createElement("option");
+                    opt.text = this['Text'];
+                    opt.value = this['Value'];
+
+                    var ddlRegions = document.getElementById("Region_Id");          
+                    ddlRegions.options.add(opt);
+                });
+
+            });
         }        
     </script>
 }

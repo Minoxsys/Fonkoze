@@ -17,7 +17,7 @@ end
 if exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'RoleUsers')
 begin
 
-    alter table RoleUsers  drop constraint UserId_FK
+    alter table RoleUsers  drop constraint UserId_FK 
     
     alter table RoleUsers  drop constraint RoleId_RFK
 
@@ -39,9 +39,9 @@ end
 
 if exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'Regions')
 begin
-	--alter table Regions drop constraint ByUser_REFK
-	--alter table Regions drop constraint Client_RFK
-	--alter table Regions drop constraint Country_RFK
+	alter table Regions drop constraint ByUser_REFK
+	alter table Regions drop constraint Client_RFK
+	alter table Regions drop constraint Country_RFK
 	drop table Regions
 	
 end

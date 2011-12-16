@@ -8,6 +8,7 @@ using Rhino.Mocks;
 using System.Web.Mvc;
 using Persistence.Queries.Districts;
 using Web.Areas.OutpostManagement.Models.District;
+using Web.Areas.OutpostManagement.Models.Region;
 
 namespace Tests.Unit.Controllers.Areas.OutpostManagement
 {
@@ -30,8 +31,10 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement
         IQueryDistrict queryDistrict;
 
         District district;
+        Region region;
         Outpost outpost;
         Guid districtId;
+        Guid regionId;
         Guid outpostId;
 
         [SetUp]
@@ -39,8 +42,10 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement
         {
             SetUpServices();
             SetUpController();
+            StubRegion();
             StubDistrict();
             StubOutpost();
+            
 
         }
 
@@ -53,12 +58,21 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement
             outpost.District = district;
         }
 
+        private void StubRegion()
+        {
+            regionId = Guid.NewGuid();
+            region = MockRepository.GeneratePartialMock<Region>();
+            region.Stub(b => b.Id).Return(regionId);
+            region.Name = "Cluj";
+            region.Country = new Country();
+        }
         private void StubDistrict()
         {
             districtId = Guid.NewGuid();
             district = MockRepository.GeneratePartialMock<District>();
             district.Stub(b => b.Id).Return(districtId);
             district.Name = DISTRICT_NAME;
+            district.Region = region;
         }
 
         private void SetUpController()
@@ -97,7 +111,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement
             queryDistrict.Expect(call => call.GetAll()).Return(stubData.AsQueryable());
 
             // Act
-            var viewResult = (ViewResult)controller.Overview();
+            var viewResult = (ViewResult)controller.Overview(null,null);
 
             // Assert
             queryDistrict.VerifyAllExpectations();
@@ -131,7 +145,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement
             queryClient.Expect(it => it.Load(Guid.Empty)).Return(new Client { Name = "client" });
 
             //act
-            var result = (RedirectToRouteResult)controller.Create(new DistrictInputModel() { Name = DISTRICT_NAME });
+            var result = (RedirectToRouteResult)controller.Create(new DistrictInputModel() { Name = DISTRICT_NAME, Region = new RegionModel { Name = region.Name, Id = region.Id} });
 
             //assert
             saveCommand.VerifyAllExpectations();
@@ -177,12 +191,14 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement
             model = BuildDistrictWithName(NEW_DISTRICT_NAME);
 
             saveCommand.Expect(it => it.Execute(Arg<District>.Matches(c => c.Name == NEW_DISTRICT_NAME && c.Id == district.Id)));
-
+            queryRegion.Expect(it => it.Load(region.Id)).Return(region);
             // Act
-            var redirectResult = (RedirectToRouteResult)controller.Edit(new DistrictInputModel() { Id = district.Id, Name = NEW_DISTRICT_NAME });
+            var redirectResult = (RedirectToRouteResult)controller.Edit(new DistrictInputModel() { Id = district.Id, Name = NEW_DISTRICT_NAME, Region = new RegionModel { Name = region.Name, Id = region.Id } });
+
 
             // Assert
             saveCommand.VerifyAllExpectations();
+            queryRegion.VerifyAllExpectations();
             Assert.AreEqual("Overview", redirectResult.RouteValues["Action"]);
         }
 

@@ -11,7 +11,7 @@ namespace Persistence.Conventions
 		protected override string GetKeyName( FluentNHibernate.Member property, Type type )
 		{
 			if (property == null)
-				return type.Name + "Id_FK";
+				return type.Name + "_FK";
 
 			return property.Name + "_FK";
 

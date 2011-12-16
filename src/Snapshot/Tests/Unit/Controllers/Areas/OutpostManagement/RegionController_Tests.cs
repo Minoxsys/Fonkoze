@@ -98,7 +98,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement
             queryRegion.Expect(call => call.GetAll()).Return(stubData.AsQueryable());
 
             // Act
-            var viewResult = (ViewResult)controller.Overview();
+            var viewResult = (ViewResult)controller.Overview(null);
 
             // Assert
             queryService.VerifyAllExpectations();
