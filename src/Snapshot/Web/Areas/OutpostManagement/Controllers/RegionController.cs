@@ -67,6 +67,7 @@ namespace Web.Areas.OutpostManagement.Controllers
                 var regionModel = new RegionModel();
                 Mapper.Map(item, regionModel);
                 regionModel.DistrictNo = QueryDistrict.Query().Count<District>(it => it.Region.Id == item.Id);
+                regionModel.CountryId = item.Country.Id;
                 overviewModel.Regions.Add(regionModel);
             }
 

@@ -22,7 +22,7 @@ District : Create
     <script type="text/javascript">
         $(document).ready(function () {
 
-            var e = document.getElementById("Region_Country_Id");
+            var e = document.getElementById("Region_CountryId");
             var selectedCountryId = e.options[e.selectedIndex].value;
 
             $.getJSON('@Url.Action("GetRegionsForCountry", "District")?countryId=' + selectedCountryId, function (data) {
@@ -42,7 +42,7 @@ District : Create
 
         });
         function onCountrySelected() {
-            var e = document.getElementById("Region_Country_Id");
+            var e = document.getElementById("Region_CountryId");
             var selectedCountryId = e.options[e.selectedIndex].value;
 
             $.getJSON('@Url.Action("GetRegionsForCountry", "District")?countryId=' + selectedCountryId, function (data) {
