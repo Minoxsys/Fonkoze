@@ -20,11 +20,26 @@ namespace Web.Areas.OutpostManagement.Models.Outpost
         public string MainMobileNumber { get; set; }
         public string Latitude { get; set; }
         public string Longitude { get; set; }
-        public CountryModel Country { get; set; }
-        public RegionModel Region { get; set; }
-        public DistrictModel District { get; set; }
+        public DistrictInput District { get; set; }
+        public CountryInput Country { get; set; }
+        public RegionInput Region { get; set; }
         public ClientModel Client { get; set; }
         public  IList<MobilePhone> MobilePhones { get; set; }
         public Guid Id { get; set; }
+
+        public class CountryInput
+        {
+            public Guid Id { get; set; }
+        }
+
+        public class RegionInput
+        {
+            public Guid Id { get; set; }
+        }
+
+        public class DistrictInput
+        {
+            public Guid Id { get; set; }
+        }
    }
 }

@@ -16,6 +16,9 @@ namespace Web.Areas.OutpostManagement.Controllers
 {
     public class CountryController : Controller
     {
+
+        private const string TEMPDATA_ERROR_KEY = "error";
+
         public IQueryService<Country> QueryService { get; set; }
         public IQueryService<Client> QueryClient { get; set; }
 
@@ -44,6 +47,8 @@ namespace Web.Areas.OutpostManagement.Controllers
 
                     model.Items.Add(viewModelItem);
                 });
+
+            model.Error = (string)TempData[TEMPDATA_ERROR_KEY];
 
             return View(model);
         }

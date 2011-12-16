@@ -49,6 +49,11 @@ namespace Web.Areas.OutpostManagement.Models.Outpost
             var Regions = new List<SelectListItem>();
             var Districts = new List<SelectListItem>();
 
+
+            this.Countries = Countries;
+            this.Regions = Regions;
+            this.Districts = Districts;
+
             var Country = new CountryModel();
 
             var result = queryCountry.Query();

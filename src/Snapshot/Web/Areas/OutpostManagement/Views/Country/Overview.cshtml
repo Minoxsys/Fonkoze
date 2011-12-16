@@ -9,6 +9,12 @@ OutpostManagement Countries: Overview
 > Countries
 }
 @section master_content{
+    @if (!string.IsNullOrWhiteSpace(Model.Error))
+    {
+        <div class="error">
+            @Model.Error
+        </div>
+    }
     <div>
         @(Html.ActionLink<CountryController>(it => it.Create(), "Add new country", OutpostManagementAreaRegistration.DEFAULT_ROUTE))
     </div>

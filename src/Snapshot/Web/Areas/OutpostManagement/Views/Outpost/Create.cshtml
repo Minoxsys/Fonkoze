@@ -26,4 +26,62 @@ OutpostManagement : Outpost : Create
     </form>
 }
 @section scripts{
+
+ <script type="text/javascript">
+     $("select[name='@Html.NameFor(m=>m.Country.Id)']").change(function () {
+
+         var e = $(this)[0];
+         var selectedCountryId = e.options[e.selectedIndex].value;
+
+         $.getJSON('@Url.Action("GetRegionsForCountry", "District")?countryId=' + selectedCountryId, function (data) {
+             var drop = $("select[name='@Html.NameFor(m=>m.Region.Id)']")
+             drop.html('')
+
+             var opt = document.createElement("option");
+             opt.text = "- Select Region -";
+             opt.value = '@Guid.Empty.ToString("n")';
+
+             drop.append(opt);
+
+             $.each(data, function () {
+                 var opt = document.createElement("option");
+                 opt.text = this['Text'];
+                 opt.value = this['Value'];
+
+                 drop.append(opt);
+             });
+
+         });
+
+     });
+
+
+     $("select[name='@Html.NameFor(m=>m.Region.Id)']").change(function () {
+
+         var e = $(this)[0];
+         var selectedCountryId = e.options[e.selectedIndex].value;
+
+         $.getJSON('@Url.Action("GetDistrictsForRegionData", "Outpost")?regionId=' + selectedCountryId, function (data) {
+             var drop = $("select[name='@Html.NameFor(m=>m.District.Id)']")
+             drop.html('')
+
+             var opt = document.createElement("option");
+             opt.text = "- Select District -";
+             opt.value = '@Guid.Empty.ToString("n")';
+
+             drop.append(opt);
+
+             $.each(data, function () {
+                 var opt = document.createElement("option");
+                 opt.text = this['Text'];
+                 opt.value = this['Value'];
+
+                 drop.append(opt);
+             });
+
+         });
+
+     });
+    
+    </script>
 }

@@ -11,6 +11,10 @@
             <label for="@Html.NameFor(m => m.Country.Id)">
                 Country</label>
             <select name="@Html.NameFor(m => m.Country.Id)">
+                <option value="@Guid.Empty.ToString()"> - Select Country - </option>
+                @foreach (var item in Model.Countries) { 
+                    <option value="@item.Value" @(item.Selected ? @"selected='selected'" : @"") >@item.Text</option>
+                }
             </select>
         </div>
         <div class="column">

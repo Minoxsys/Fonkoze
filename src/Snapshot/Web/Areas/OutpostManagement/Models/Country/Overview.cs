@@ -10,5 +10,7 @@ namespace Web.Areas.OutpostManagement.Models.Country
     public class Overview
     {
         public List<CountryModel> Items { get; set; }
+
+        public string Error { get; set; }
     }
 }
