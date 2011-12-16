@@ -4,7 +4,7 @@
 Region : Edit
 }
 @section breadcrumbs{
-    @Url.HomeLink("Dashboard") / @(Html.ActionLink<RegionController>(act => act.Overview(), "Regions Overview", OutpostManagementAreaRegistration.DEFAULT_ROUTE))
+    @Url.HomeLink("Outpost Administration") / @(Html.ActionLink<RegionController>(act => act.Overview(), "Regions Overview", OutpostManagementAreaRegistration.DEFAULT_ROUTE))
     > Edit Region : @Model.Name
 }
 @section master_content{

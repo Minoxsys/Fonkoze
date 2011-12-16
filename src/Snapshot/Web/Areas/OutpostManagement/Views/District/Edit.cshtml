@@ -5,7 +5,7 @@
 District : Edit
 }
 @section breadcrumbs{
-    @Url.HomeLink("Dashboard") / @(Html.ActionLink<DistrictController>(act => act.Overview(), "Districts Overview", OutpostManagementAreaRegistration.DEFAULT_ROUTE))
+    @Url.HomeLink("Outpost Administration") / @(Html.ActionLink<DistrictController>(act => act.Overview(), "Districts Overview", OutpostManagementAreaRegistration.DEFAULT_ROUTE))
     > Edit District : @Model.Name
 }
 @section master_content{
