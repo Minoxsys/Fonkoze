@@ -35,7 +35,9 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement
         IQueryRegion queryRegion; 
 
         Region entity;
+        Country country;
         District district;
+        Guid countryId;
         Guid entityId;
         Guid districtId;
 
@@ -90,12 +92,12 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement
  
         }
         //[Test]
-        //public void Should_Return_Data_From_QueryService_in_Overview()
+        //public void Should_Return_DataSpecificToCountryId_From_QueryService_in_Overview()
         //{
         //    // Arrange		
         //    var stubData = new Region[] { entity };
 
-        //    queryRegion.Expect(call => call.GetAll()).Return(stubData.AsQueryable());
+        //    //queryService.Expect(call=>call.Query().Where<Region>(it=>it.Country.Id == country
 
         //    // Act
         //    var viewResult = (ViewResult)controller.Overview(null);

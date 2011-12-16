@@ -127,7 +127,7 @@ namespace Web.Areas.OutpostManagement.Controllers
                 CreateMapping();
                 var districtModel = new DistrictModel();
                 Mapper.Map(item, districtModel);
-                districtModel.OutpostNo = 0;//= QueryOutpost.Query().Count<Outpost>(it => it.District.Id == item.Id);
+                districtModel.OutpostNo = QueryOutpost.Query().Count<Outpost>(it => it.District.Id == item.Id);
                 districtList.Add(districtModel);
 
             }
@@ -172,9 +172,10 @@ namespace Web.Areas.OutpostManagement.Controllers
 
             var client = QueryClients.Load(Client.DEFAULT_ID);
             var region = QueryRegion.Load(districtInputModel.Region.Id);
-
+            var country = QueryCountry.Load(districtInputModel.Region.CountryId);
             district.Client = client;
             district.Region = region;
+            district.Region.Country = country;
 
             SaveOrUpdateCommand.Execute(district);
             return RedirectToAction("Overview");
