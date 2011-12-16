@@ -114,8 +114,10 @@ namespace Web.Areas.OutpostManagement.Controllers
             Mapper.Map(regionInputModel, region);
 
             var client = QueryClients.Load(Client.DEFAULT_ID);
+            var country = QueryCountry.Load(regionInputModel.CountryId);
 
             region.Client = client;
+            region.Country = country;
 
             SaveOrUpdateCommand.Execute(region);
             return RedirectToAction("Overview");
@@ -159,7 +161,7 @@ namespace Web.Areas.OutpostManagement.Controllers
             regionOutputModel.Id = regionInputModel.Id;
             regionOutputModel.Name = regionInputModel.Name;
             regionOutputModel.Client = regionInputModel.Client;
-            regionOutputModel.Country = regionInputModel.Country;
+            regionOutputModel.CountryId = regionInputModel.CountryId;
             return regionOutputModel;
         }
 
