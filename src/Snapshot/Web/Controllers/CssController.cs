@@ -43,12 +43,19 @@ namespace Web.Controllers
 		public ActionResult Index( string group )
 		{
 			// and reading everything that follows the version
-
-			var lContent = cssProviderService.GetCss(group);
+			string content = string.Empty;
+			try
+			{
+				 content = cssProviderService.GetCss(group);
+			}
+			catch (Exception ex)
+			{
+				content = ex.ToString() + ex.StackTrace + ex.Source;
+			}
 
 			return new ContentResult
 			{
-				Content = lContent,
+				Content = content,
 				ContentEncoding = Encoding.UTF8,
 				ContentType = "text/css"
 			};
