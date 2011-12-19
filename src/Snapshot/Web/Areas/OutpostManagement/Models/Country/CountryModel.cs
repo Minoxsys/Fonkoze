@@ -25,7 +25,7 @@ namespace Web.Areas.OutpostManagement.Models.Country
     public class CountryModel
     {
 
-        [Required]
+        [Required(ErrorMessage = "Please enter the name of the country !")]
         public virtual string Name { get; set; }
         public virtual string ISOCode { get; set; }
         public virtual string PhonePrefix { get; set; }

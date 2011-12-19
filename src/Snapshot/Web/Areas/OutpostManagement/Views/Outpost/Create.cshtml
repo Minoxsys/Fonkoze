@@ -5,13 +5,13 @@
 }
  
 @section page_title{
-OutpostManagement : Outpost : Create 
 }
+
 @section title_bar{
-    }
+}
 
 @section master_content{
-    @*<form class="main-form" method="post"  id="llll"> *@
+
     <form method="post" 
           action="@(Url.RouteUrl<OutpostController>(it => it.Create(), OutpostManagementAreaRegistration.DEFAULT_ROUTE))"> 
       @Html.ValidationSummary()
@@ -21,7 +21,6 @@ OutpostManagement : Outpost : Create
     }
 
      @(Html.FormButtons<OutpostController>(it => it.Overview(), OutpostManagementAreaRegistration.DEFAULT_ROUTE))
-   
   
     </form>
 }

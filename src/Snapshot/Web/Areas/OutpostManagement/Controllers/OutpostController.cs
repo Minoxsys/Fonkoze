@@ -50,6 +50,7 @@ namespace Web.Areas.OutpostManagement.Controllers
 
             model.Outposts = new List<OutpostModel>();
 
+
             var queryResult = QueryService.Query();
             var countries = QueryCountries.Query();
             var regions = QueryRegions.Query();
@@ -66,27 +67,36 @@ namespace Web.Areas.OutpostManagement.Controllers
                     model.Outposts.Add(outpostModelItem);
                 });
 
-            model.Countries = new List<Domain.Country>();
+            List<SelectListItem> Countries = new List<SelectListItem>();
 
-            foreach (Country country in countries)
+              if (countries.ToList().Count > 0)
             {
-                model.Countries.Add(country);
+                foreach (var item in countries)
+                {
+                    Countries.Add(new SelectListItem { Text = item.Name, Value = item.Id.ToString() });
+                }
             }
 
-            model.Regions = new List<Domain.Region>();
-            foreach (Region region in regions)
-            {
-                model.Regions.Add(region);
-            }
+              List<SelectListItem> Regions = new List<SelectListItem>();
 
+              if (regions.ToList().Count > 0)
+              {
+                  foreach (var item in regions)
+                  {
+                      Regions.Add(new SelectListItem { Text = item.Name, Value = item.Id.ToString() });
+                  }
+              }
 
-            model.Districts = new List<Domain.District>();
-            foreach (District district in districts)
-            {
-                model.Districts.Add(district);
-            }
-
-            return View(model);
+              List<SelectListItem> Districts = new List<SelectListItem>();
+              if (districts.ToList().Count > 0)
+              {
+                  foreach (var item in regions)
+                  {
+                      Districts.Add(new SelectListItem { Text = item.Name, Value = item.Id.ToString() });
+                  }
+              }
+              model.Countries = Countries;
+              return View(model);
 
         }
 
@@ -122,10 +132,10 @@ namespace Web.Areas.OutpostManagement.Controllers
         public ActionResult Create()
         {
             var model = new OutpostOutputModel();
-
             model.Countries = new List<SelectListItem>();
             model.Regions = new List<SelectListItem>();
             model.Districts = new List<SelectListItem>();
+
 
             QueryCountries.Query().OrderBy(c => c.Name).ToList().ForEach(item =>
             {
@@ -135,7 +145,7 @@ namespace Web.Areas.OutpostManagement.Controllers
                     Value = item.Id.ToString("n")
                 });
             }
-                );
+            );
             return View(model);
         }
 
@@ -255,23 +265,25 @@ namespace Web.Areas.OutpostManagement.Controllers
         }
 
         [HttpGet]
-        public JsonResult GetRegionsForCountryData(Guid countryId)
+        public JsonResult GetRegionsForCountry(Guid? countryId)
         {
-            var regions = QueryRegions.Query().Where(m => m.Id == countryId);
-            JsonResult jr = new JsonResult();
-            jr.Data = regions.Select(o => new { o.Id, o.Name });
-            jr.JsonRequestBehavior = JsonRequestBehavior.AllowGet;
-            return jr;
-        }
+            List<SelectListItem> Regions = new List<SelectListItem>();
 
-        [HttpGet]
-        public JsonResult GetDistrictsForRegionData(Guid regionId)
-        {
-            var districts = QueryDistricts.Query().Where(m => m.Id == regionId);
-            JsonResult jr = new JsonResult();
-            jr.Data = districts.Select(o => new { o.Id, o.Name });
-            jr.JsonRequestBehavior = JsonRequestBehavior.AllowGet;
-            return jr;
+            var regions = QueryRegions.Query().Where(it => it.Country.Id == countryId.Value);
+
+            if (regions.ToList().Count > 0)
+            {
+                foreach (var item in regions)
+                {
+                    Regions.Add(new SelectListItem { Text = item.Name, Value = item.Id.ToString() });
+                }
+            }
+            var jsonResult = new JsonResult();
+            jsonResult.Data = Regions;
+
+            //  ModelState.Add("Regions", ModelState.);
+            return Json(Regions, JsonRequestBehavior.AllowGet);
+
         }
 
     }

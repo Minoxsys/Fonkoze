@@ -57,7 +57,7 @@ namespace Web.Areas.OutpostManagement.Controllers
             if ((countryId == null) && (regionId == null))
             {
                 overviewModel = new DistrictOverviewModel(QueryCountry, QueryRegion);
-                Guid regionSelectedId = Guid.Parse(overviewModel.Regions.First().Value);
+                Guid regionSelectedId = Guid.Parse(overviewModel.Regions.FirstOrDefault().Value);
                 districts = QueryService.Query().Where(it => it.Region.Id == regionSelectedId);
              }
             else

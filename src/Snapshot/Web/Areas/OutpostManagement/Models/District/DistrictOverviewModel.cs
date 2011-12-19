@@ -18,12 +18,14 @@ namespace Web.Areas.OutpostManagement.Models.District
 
         public IQueryService<Domain.Country> QueryCountry { get; set; }
         public IQueryService<Domain.Region> QueryRegion { get; set; }
+
         public DistrictOverviewModel()
         {
             this.Districts = new List<DistrictModel>();
             this.Countries = new List<SelectListItem>();
             this.Regions = new List<SelectListItem>();
         }
+
         public DistrictOverviewModel(IQueryService<Domain.Country> queryCountry, IQueryService<Domain.Region> queryRegion)
         {
             this.QueryCountry = queryCountry;
