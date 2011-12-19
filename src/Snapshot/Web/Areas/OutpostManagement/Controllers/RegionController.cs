@@ -134,7 +134,7 @@ namespace Web.Areas.OutpostManagement.Controllers
             RegionOutputModel viewModel = new RegionOutputModel(QueryCountry);
             Mapper.Map(region, viewModel);
 
-
+            viewModel.Countries.First<SelectListItem>(it => it.Value == region.Country.Id.ToString()).Selected = true;
             return View(viewModel);
         }
 
@@ -152,6 +152,7 @@ namespace Web.Areas.OutpostManagement.Controllers
             CreateMapping();
             Mapper.Map(regionInputModel, region);
 
+            region.Country = QueryCountry.Load(regionInputModel.CountryId);
             SaveOrUpdateCommand.Execute(region);
 
             return RedirectToAction("Overview");

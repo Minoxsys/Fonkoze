@@ -18,3 +18,11 @@ Region : Create
         Cancel</a>
     @{Html.EndForm();}
 }
+
+@section scripts{
+ <script type="text/javascript">
+  $("select[name='@Html.NameFor(m => m.CountryId)']").change(function () {
+      $("select[name='@Html.NameFor(m => m.CountryId)'] option[value='@Guid.Empty.ToString()']").remove();
+        }); 
+ </script>
+}

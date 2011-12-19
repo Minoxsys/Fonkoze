@@ -198,7 +198,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement
         {
             //arrange			
             queryService.Expect(it => it.Load(entity.Id)).Return(entity);
-            queryCountry.Expect(call => call.Query()).Return(new Country[] { new Country { Name = "Romania"}}.AsQueryable());
+            queryCountry.Expect(call => call.Query()).Return(new Country[] { country}.AsQueryable());
             //act
             var result = (ViewResult)controller.Edit(entity.Id);
 
@@ -207,7 +207,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement
             var viewModel = result.Model as RegionOutputModel;
             Assert.AreEqual(REGION_NAME, viewModel.Name);
             Assert.AreEqual(entity.Id, viewModel.Id);
-            Assert.AreEqual(viewModel.Countries[0].Text, "Romania");
+            Assert.AreEqual(viewModel.Countries[0].Text, country.Name);
         }
 
         [Test]
