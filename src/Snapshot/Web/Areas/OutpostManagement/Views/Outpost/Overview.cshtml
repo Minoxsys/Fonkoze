@@ -1,19 +1,23 @@
 ﻿@model Web.Areas.OutpostManagement.Models.Outpost.OutpostOverviewModel
 @section page_title{
-OutpostManagement Outposts: Overview
+
 }
+
 @section title_bar{
 }
+
 @section breadcrumbs{
+<tr></tr>
+<tr></tr>
    @Url.HomeLink("Outpost Administration") > Outposts
-   }
+}
 
 @section master_content{
     <div>
         @(Html.ActionLink<OutpostController>(it => it.Create(), "Add new outpost", Web.Areas.OutpostManagement.OutpostManagementAreaRegistration.DEFAULT_ROUTE))
     </div>
     <div>
-        @*<table>
+        <table>
             <thead>
                 <tr>
                     <th>
@@ -58,7 +62,7 @@ OutpostManagement Outposts: Overview
                     </td>
                 </tr>
             </tbody>
-        </table>*@
+        </table>
     </div>
     <div id="outposts-table">
         <table class="searchable">
@@ -92,9 +96,9 @@ OutpostManagement Outposts: Overview
                     var _class = (itemNo++ % 2 == 0) ? "odd" : "even";
        
                     <tr class="@_class">
-                        @* <td>
-                            @(Html.ActionLink<OutpostController>(it => it.PhoneListInput(outpost.Id), "Phone List", OutpostManagementAreaRegistration.DEFAULT_ROUTE))
-                        </td>*@
+                         <td>
+                            @*@(Html.ActionLink<OutpostController>(it => it.PhoneListInput(outpost.Id), "Contact", OutpostManagementAreaRegistration.DEFAULT_ROUTE))*@
+                        </td>
                         <td>
                             @outpost.Name
                         </td>
@@ -117,12 +121,14 @@ OutpostManagement Outposts: Overview
         </table>
     </div>
 }
+
 @section master_actions{
       @{
           Html.RenderPartial("~/Views/Shared/_OutpostManagementActions.cshtml");
     }
 
 }
+
 @section scripts{
     <script type="text/javascript">
          $(function () {

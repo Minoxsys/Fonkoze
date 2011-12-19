@@ -3,26 +3,31 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using Core.Domain;
-using Domain;
+using System.Web.Mvc;
+using Core.Persistence;
 
 namespace Web.Areas.OutpostManagement.Models.Outpost
 {
     public class OutpostOverviewModel
     {
-        
-        public List<Domain.Country> Countries {get; set;}
-        public List<Domain.Region> Regions {get; set;}
-        public List<Domain.District> Districts {get; set;}
-        public Guid Id;
+
         public List<OutpostModel> Outposts { get; set; }
 
-        public OutpostOverviewModel()
-        {
-            Outposts = new List<OutpostModel>();
-            
-        }
+        public List<SelectListItem> Regions { get; set; }
+        public List<SelectListItem> Countries { get; set; }
+        public List<SelectListItem> Districts { get; set; }
 
         public string Error { get; set; }
-   }
+
+        public IQueryService<Domain.Country> QueryCountry { get; set; }
+        public IQueryService<Domain.Region> QueryRegion { get; set; }
+
+         public OutpostOverviewModel()
+        {
+            this.Districts = new List<SelectListItem>();
+            this.Countries = new List<SelectListItem>();
+            this.Regions = new List<SelectListItem>();
+        }
+
+    }
 }

@@ -8,7 +8,11 @@ OutpostManagement Phones: Overview
         OutpostManagement : Mobile Phones</h4>
 }
 @section breadcrumbs{
+   <tr></tr>   
+   <tr></tr   
    @Url.HomeLink("Overview") > OutpostManagement : Phones
+>
+
 }
 
 @section master_content{
@@ -32,8 +36,9 @@ OutpostManagement Phones: Overview
             @{
                 var itemNo = 0;
              }
+             <tr></tr>
                <tr>
-                @(Html.ActionLink<MobilePhoneController>(it => it.Create(Model.OutpostId), "Add new contact", Web.Areas.OutpostManagement.OutpostManagementAreaRegistration.DEFAULT_ROUTE))
+                @(Html.ActionLink<MobilePhoneController>(it => it.Create(Model.Outpost_FK), "Add new contact din Outpost", Web.Areas.OutpostManagement.OutpostManagementAreaRegistration.DEFAULT_ROUTE))
               </tr>
             
              @foreach (Web.Areas.OutpostManagement.Models.Outpost.MobilePhoneModel mobilePhone in Model.Items)

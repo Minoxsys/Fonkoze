@@ -49,7 +49,7 @@ namespace Web.Areas.OutpostManagement.Controllers
 
             model.Items = new List<MobilePhoneModel>();
 
-            var queryResult = QueryService.Query();
+            var queryResult = QueryService.Query().Where(mm => mm.Outpost_FK == outpostId);
 
             if (queryResult.ToList().Count() > 0)
                 queryResult.ToList().ForEach(item =>
@@ -76,12 +76,6 @@ namespace Web.Areas.OutpostManagement.Controllers
             return View(model);
         }
 
-        //
- 
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
 
         [HttpPost]
         [ValidateInput(false)]

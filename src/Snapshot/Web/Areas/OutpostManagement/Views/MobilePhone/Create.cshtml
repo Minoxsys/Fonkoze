@@ -1,22 +1,18 @@
 ﻿@model Web.Areas.OutpostManagement.Models.Outpost.MobilePhoneModel
            
 @section breadcrumbs{
-    @Url.HomeLink("Overview")/ @(Html.ActionLink<MobilePhoneController>(it => it.Overview(Model.Id), "Outpost Management : Mobile Phones", OutpostManagementAreaRegistration.DEFAULT_ROUTE)) > Create
+    @Url.HomeLink("Overview")/ @(Html.ActionLink<MobilePhoneController>(it => it.Overview(Model.OutpostId), "Outpost Management : Mobile Phones", OutpostManagementAreaRegistration.DEFAULT_ROUTE)) > Create
 }
 
 
 @section page_title{
-OutpostManagement : Mobile Phones : Create 
 }
 @section title_bar{
-    <h4>
-        Create Mobile Phone</h4>
 }
 
 @section master_content{
 
 
-    @*<form class="main-form" method="post"  id="llll"> *@
     <form method="post" 
           action="@(Url.RouteUrl<MobilePhoneController>(it => it.Create(Model.Id), OutpostManagementAreaRegistration.DEFAULT_ROUTE))"> 
            <div class="row">
@@ -29,7 +25,7 @@ OutpostManagement : Mobile Phones : Create
         Html.RenderPartial("MobilePhoneInput", Model);
     }
 
-     @(Html.FormButtons<MobilePhoneController>(it => it.Overview(Model.Id), OutpostManagementAreaRegistration.DEFAULT_ROUTE))
+     @(Html.FormButtons<MobilePhoneController>(it => it.Overview(Model.OutpostId), OutpostManagementAreaRegistration.DEFAULT_ROUTE))
 
 
 

@@ -16,10 +16,10 @@
           method="post" 
           action="">
      @Html.ValidationSummary()
-     @Html.HiddenFor(m => m.Id)    @{
-        Html.RenderPartial("OutpostInput", @Model);
-        
-    }
+     @Html.HiddenFor(m => m.Id)    
+     @{
+       Html.RenderPartial("OutpostInput", @Model);
+     }
 
     @(Html.FormButtons<OutpostController>(it => it.Overview(), OutpostManagementAreaRegistration.DEFAULT_ROUTE))
     </form>

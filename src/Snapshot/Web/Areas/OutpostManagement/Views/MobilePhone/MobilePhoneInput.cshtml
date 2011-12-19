@@ -19,10 +19,10 @@
     </thead>
     <tr>
         <td>
-            @Html.TextBoxFor(m => m.MobileNumber, new { maxlength = 250, autofocus = "autofocus", placeholder = "Name" })
+            @Html.TextBoxFor(m => m.MobileNumber, new { maxlength = 250 })
        </td>
         <td>
-            @Html.DropDownList("TipContact", new SelectList(new [] {"E-mail"}), "Mobile Number")
+            @Html.DropDownList("TipContact", new SelectList(new[] { "Mobile Number" }), "E-mail")
        </td>
     </tr>
  
