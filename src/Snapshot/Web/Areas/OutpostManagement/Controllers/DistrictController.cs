@@ -14,7 +14,6 @@ using Web.Helpers;
 using Web.Security;
 using Web.Validation.ValidDate;
 using System.Globalization;
-
 using Persistence.Queries.Districts;
 using Web.Areas.OutpostManagement.Models.District;
 using Web.Areas.OutpostManagement.Models.Region;
@@ -103,7 +102,7 @@ namespace Web.Areas.OutpostManagement.Controllers
                     CreateMapping();
                     var districtModel = new DistrictModel();
                     Mapper.Map(item, districtModel);
-                    districtModel.OutpostNo = 0;//= QueryOutpost.Query().Count<Outpost>(it => it.District.Id == item.Id);
+                    districtModel.OutpostNo = QueryOutpost.Query().Count<Outpost>(it => it.District.Id == item.Id);
                     overviewModel.Districts.Add(districtModel);
                 }
             }
@@ -232,8 +231,7 @@ namespace Web.Areas.OutpostManagement.Controllers
             var jsonResult = new JsonResult();
             jsonResult.Data = Regions;
 
-            //  ModelState.Add("Regions", ModelState.);
-            return Json(Regions, JsonRequestBehavior.AllowGet);
+          return Json(Regions, JsonRequestBehavior.AllowGet);
 
         }
         private DistrictOutputModel MapDatFromInputModelToOutputModel(DistrictInputModel districtInputModel)
