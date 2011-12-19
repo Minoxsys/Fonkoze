@@ -5,12 +5,22 @@
  
   <label for="Name"> Country </label>
          <div class="row">
-         @Html.DropDownListFor(m => m.Region.CountryId, Model.Countries, new { onChange="onCountrySelected()", @class="countries-dropbox"})
-        
-         </div>
+          <select name="@Html.NameFor(m => m.Region.CountryId)">
+                <option value="@Guid.Empty.ToString()"> - Select Country - </option>
+                @foreach (var item in Model.Countries) { 
+                    <option value="@item.Value" @(item.Selected ? @"selected='selected'" : @"") >@item.Text</option>
+                }
+            </select>
+
+        </div>
  <label for="Name"> Region </label>
          <div class="row">
-         @Html.DropDownListFor(m => m.Region.Id, Model.Regions, new { @class = "regions-dropbox" })
+        <select name="@Html.NameFor(m => m.Region.Id)">
+        <option value="@Guid.Empty.ToString()"> - Select Region - </option>
+                @foreach (var item in Model.Regions) { 
+                    <option value="@item.Value" @(item.Selected ? @"selected='selected'" : @"") >@item.Text</option>
+                }
+            </select>
         
          </div>
 <div class="row">

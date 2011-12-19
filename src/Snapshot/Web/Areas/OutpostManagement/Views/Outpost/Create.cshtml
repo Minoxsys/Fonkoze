@@ -1,39 +1,34 @@
 ﻿@model Web.Areas.OutpostManagement.Models.Outpost.OutpostOutputModel
-           
 @section breadcrumbs{
-    @Url.HomeLink("Outpost Administration")/ @(Html.ActionLink<OutpostController>(it => it.Overview(), "Outposts", OutpostManagementAreaRegistration.DEFAULT_ROUTE)) > Create
+    @Url.HomeLink("Outpost Administration")/ @(Html.ActionLink<OutpostController>(it => it.Overview(), "Outposts", OutpostManagementAreaRegistration.DEFAULT_ROUTE))
+> Create
 }
- 
 @section page_title{
+OutpostManagement : Outpost : Create
 }
 
 @section title_bar{
 }
-
 @section master_content{
-
     <form method="post" 
-          action="@(Url.RouteUrl<OutpostController>(it => it.Create(), OutpostManagementAreaRegistration.DEFAULT_ROUTE))"> 
-      @Html.ValidationSummary()
-     @{
+          action="@(Url.RouteUrl<OutpostController>(it => it.Create(), OutpostManagementAreaRegistration.DEFAULT_ROUTE))">
+    @Html.ValidationSummary()
+    @{
        
         Html.RenderPartial("OutpostInput", Model);
     }
-
-     @(Html.FormButtons<OutpostController>(it => it.Overview(), OutpostManagementAreaRegistration.DEFAULT_ROUTE))
-  
+    @(Html.FormButtons<OutpostController>(it => it.Overview(), OutpostManagementAreaRegistration.DEFAULT_ROUTE))
     </form>
 }
 @section scripts{
-
- <script type="text/javascript">
-     $("select[name='@Html.NameFor(m=>m.Country.Id)']").change(function () {
+    <script type="text/javascript">
+     $("select[name='@Html.NameFor(m => m.Country.Id)']").change(function () {
 
          var e = $(this)[0];
          var selectedCountryId = e.options[e.selectedIndex].value;
 
          $.getJSON('@Url.Action("GetRegionsForCountry", "District")?countryId=' + selectedCountryId, function (data) {
-             var drop = $("select[name='@Html.NameFor(m=>m.Region.Id)']")
+             var drop = $("select[name='@Html.NameFor(m => m.Region.Id)']")
              drop.html('')
 
              var opt = document.createElement("option");
@@ -52,16 +47,18 @@
 
          });
 
+         $("select[name='@Html.NameFor(m => m.Country.Id)'] option[value='@Guid.Empty.ToString()']").remove();
+
      });
 
 
-     $("select[name='@Html.NameFor(m=>m.Region.Id)']").change(function () {
+     $("select[name='@Html.NameFor(m => m.Region.Id)']").change(function () {
 
          var e = $(this)[0];
          var selectedCountryId = e.options[e.selectedIndex].value;
 
          $.getJSON('@Url.Action("GetDistrictsForRegionData", "Outpost")?regionId=' + selectedCountryId, function (data) {
-             var drop = $("select[name='@Html.NameFor(m=>m.District.Id)']")
+             var drop = $("select[name='@Html.NameFor(m => m.District.Id)']")
              drop.html('')
 
              var opt = document.createElement("option");
@@ -79,8 +76,12 @@
              });
 
          });
-
+         $("select[name='@Html.NameFor(m => m.Region.Id)'] option[value='@Guid.Empty.ToString("n")']").remove();
      });
     
+     $("select[name='@Html.NameFor(m => m.District.Id)']").change(function () {
+      $("select[name='@Html.NameFor(m => m.District.Id)'] option[value='@Guid.Empty.ToString("n")']").remove();
+     });
+
     </script>
 }

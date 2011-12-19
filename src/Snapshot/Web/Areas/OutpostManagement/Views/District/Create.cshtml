@@ -20,45 +20,33 @@ District : Create
 }
 @section scripts{
     <script type="text/javascript">
-        $(document).ready(function () {
-
-            var e = document.getElementById("Region_CountryId");
+        $("select[name='@Html.NameFor(m => m.Region.CountryId)']").change(function () {
+            var e = $(this)[0];
             var selectedCountryId = e.options[e.selectedIndex].value;
 
             $.getJSON('@Url.Action("GetRegionsForCountry", "District")?countryId=' + selectedCountryId, function (data) {
-                var drop = $("#Region_Id")
+                var drop = $("select[name='@Html.NameFor(m => m.Region.Id)']")
                 drop.html('')
+                var opt = document.createElement("option");
+                opt.text = "- Select Region -";
+                opt.value = '@Guid.Empty.ToString("n")';
+
+                drop.append(opt);
 
                 $.each(data, function () {
                     var opt = document.createElement("option");
                     opt.text = this['Text'];
                     opt.value = this['Value'];
-
-                    var ddlRegions = document.getElementById("Region_Id");
-                    ddlRegions.options.add(opt);
+                    drop.append(opt);
                 });
 
             });
 
+            $("select[name='@Html.NameFor(m => m.Region.CountryId)'] option[value='@Guid.Empty.ToString()']").remove();
         });
-        function onCountrySelected() {
-            var e = document.getElementById("Region_CountryId");
-            var selectedCountryId = e.options[e.selectedIndex].value;
 
-            $.getJSON('@Url.Action("GetRegionsForCountry", "District")?countryId=' + selectedCountryId, function (data) {
-                var drop = $("#Region_Id")
-                drop.html('')
-
-                $.each(data, function () {
-                    var opt = document.createElement("option");
-                    opt.text = this['Text'];
-                    opt.value = this['Value'];
-
-                    var ddlRegions = document.getElementById("Region_Id");          
-                    ddlRegions.options.add(opt);
-                });
-
-            });
-        }        
+        $("select[name='@Html.NameFor(m => m.Region.Id)']").change(function () {
+            $("select[name='@Html.NameFor(m => m.Region.Id)'] option[value='@Guid.Empty.ToString("n")']").remove();
+        });     
     </script>
 }

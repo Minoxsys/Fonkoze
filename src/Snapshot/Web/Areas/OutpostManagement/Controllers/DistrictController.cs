@@ -148,6 +148,8 @@ namespace Web.Areas.OutpostManagement.Controllers
             Mapper.CreateMap<CountryModel, Country>();
             Mapper.CreateMap<Client, ClientModel>();
 
+            Mapper.CreateMap<DistrictInputModel.ClientInputModel, Client>();
+            Mapper.CreateMap<DistrictInputModel.RegionInputModel, Region>();
             Mapper.CreateMap<District, DistrictOutputModel>();
             Mapper.CreateMap<District, DistrictInputModel>();
         }
@@ -185,7 +187,8 @@ namespace Web.Areas.OutpostManagement.Controllers
             DistrictOutputModel viewModel = new DistrictOutputModel(QueryCountry, QueryRegion);
             Mapper.Map(district, viewModel);
 
-            viewModel.Countries.Where<SelectListItem>(it => it.Value == district.Region.Country.Id.ToString()).ToList()[0].Selected = true;
+            viewModel.Countries.First<SelectListItem>(it => it.Value == district.Region.Country.Id.ToString()).Selected = true;
+            viewModel.Regions.First<SelectListItem>(it => it.Value == district.Region.Id.ToString()).Selected = true;
 
             return View(viewModel);
         }
