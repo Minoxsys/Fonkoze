@@ -10,11 +10,15 @@ using Core.Persistence;
 using Domain;
 using PagedList;
 using Domain;
+using Web.Areas.OutpostManagement.Models.Client;
 
 namespace Web.Areas.OutpostManagement.Controllers
 {
     public class CountryController : Controller
     {
+
+        private const string TEMPDATA_ERROR_KEY = "error";
+
         public IQueryService<Country> QueryService { get; set; }
         public IQueryService<Client> QueryClient { get; set; }
 
@@ -44,6 +48,8 @@ namespace Web.Areas.OutpostManagement.Controllers
                     model.Items.Add(viewModelItem);
                 });
 
+            model.Error = (string)TempData[TEMPDATA_ERROR_KEY];
+
             return View(model);
         }
 
@@ -70,7 +76,7 @@ namespace Web.Areas.OutpostManagement.Controllers
             CreateMappings();
             var country = new Country();
             Mapper.Map(countryModel, country);
-            country.Client = QueryClient.Load(Guid.Empty); // hardcoded client id value
+            country.Client = QueryClient.Load(Client.DEFAULT_ID); // hardcoded client id value
 
             SaveOrUpdateCommand.Execute(country);
 
@@ -114,10 +120,6 @@ namespace Web.Areas.OutpostManagement.Controllers
 
         private static void CreateMappings(Country entity = null)
         {
-            Mapper.CreateMap<Country, CountryModel>();
-
-            var mapCountry = Mapper.CreateMap<CountryModel, Country>();
-
             Mapper.CreateMap<RegionModel, Region>();
             Mapper.CreateMap<Region, RegionModel>();
 

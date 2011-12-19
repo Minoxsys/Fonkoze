@@ -14,7 +14,7 @@
 
 @section master_content{
     <div>
-        @(Html.ActionLink<OutpostController>(it => it.Create(), "Add New Outpost", Web.Areas.OutpostManagement.OutpostManagementAreaRegistration.DEFAULT_ROUTE))
+        @(Html.ActionLink<OutpostController>(it => it.Create(), "Add new outpost", Web.Areas.OutpostManagement.OutpostManagementAreaRegistration.DEFAULT_ROUTE))
     </div>
     <div>
         <table>
@@ -75,12 +75,6 @@
                         Outpost Name
                     </th>
                     <th>
-                        Mobile Phone Number
-                    </th>
-                    <th>
-                        E-mail address
-                    </th>
-                    <th>
                         Latitude
                     </th>
                     <th>
@@ -108,10 +102,7 @@
                         <td>
                             @outpost.Name
                         </td>
-                        <td>@outpost.MainMobileNumber
-                        </td>
-                        <td>@outpost.Email
-                        </td>
+                       
                         <td>@outpost.Latitude
                         </td>
                         <td>@outpost.Longitude
@@ -132,6 +123,10 @@
 }
 
 @section master_actions{
+      @{
+          Html.RenderPartial("~/Views/Shared/_OutpostManagementActions.cshtml");
+    }
+
 }
 
 @section scripts{

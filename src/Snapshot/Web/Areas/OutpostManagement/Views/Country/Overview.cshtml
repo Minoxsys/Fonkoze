@@ -3,27 +3,22 @@
 OutpostManagement Countries: Overview
 }
 @section title_bar{
-    <h4>
-        OutpostManagement : Countries</h4>
 }
 @section breadcrumbs{
-    @Url.HomeLink("Overview")
-> OutpostManagement : Countries
+    @Url.HomeLink("Outpost Administration")
+> Countries
 }
 @section master_content{
+    @if (!string.IsNullOrWhiteSpace(Model.Error))
+    {
+        <div class="error">
+            @Model.Error
+        </div>
+    }
+    <div>
+        @(Html.ActionLink<CountryController>(it => it.Create(), "Add new country", OutpostManagementAreaRegistration.DEFAULT_ROUTE))
+    </div>
     <table>
-        <tr>
-            <td rowspan = 1>
-                 <div class="page_header_buttons">
-                    @(Html.ActionLink<CountryController>(it => it.Create(), "Add new country", OutpostManagementAreaRegistration.DEFAULT_ROUTE))
-                </div>         
-            </td>
-            <td></td>
-            <td></td>
-
-        </tr>
-    </table>
-    <table class="searchable">
         <thead>
             <tr>
                 <th>
@@ -38,7 +33,7 @@ OutpostManagement Countries: Overview
                 <th>
                     Phone prefix
                 </th>
-                <th rowspan = 2>
+                <th colspan="2">
                     Actions
                 </th>
             </tr>
@@ -55,13 +50,13 @@ OutpostManagement Countries: Overview
                     <td>
                         @(Html.ActionLink<CountryController>(it => it.Edit(country.Id), "Edit", OutpostManagementAreaRegistration.DEFAULT_ROUTE))
                     </td>
-                     <td>@(Html.ActionLink<RegionController>(it=>it.Overview(country.Id),@country.Name,OutpostManagementAreaRegistration.DEFAULT_ROUTE))
+                    <td>@(Html.ActionLink<RegionController>(it => it.Overview(country.Id), @country.Name, OutpostManagementAreaRegistration.DEFAULT_ROUTE))
                     </td>
                     <td>@country.ISOCode
                     </td>
                     <td>@country.PhonePrefix
                     </td>
-                     <td>
+                    <td>
                         @(Html.ActionLink<CountryController>(it => it.Edit(country.Id), "Edit", OutpostManagementAreaRegistration.DEFAULT_ROUTE))
                     </td>
                     <td>
@@ -75,8 +70,9 @@ OutpostManagement Countries: Overview
     </table>
 }
 @section master_actions{
-    <h3>
-        Actions</h3>
+    @{
+        Html.RenderPartial("~/Views/Shared/_OutpostManagementActions.cshtml");
+    }
 }
 @section scripts{
     <script type="text/javascript">

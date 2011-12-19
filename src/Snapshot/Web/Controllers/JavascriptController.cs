@@ -43,8 +43,16 @@ namespace Web.Controllers
 		public ActionResult Index(string group)
 		{
 			// and reading everything that follows the version
+			string content = string.Empty;
+			try
+			{
+				 content = scriptProviderService.GetScript(group);
+			}
+			catch (Exception ex)
+			{
+				content = ex.ToString() + ex.StackTrace + ex.Source;
+			}
 
-			var content = scriptProviderService.GetScript(group);
 
 			return new ContentResult
 			{

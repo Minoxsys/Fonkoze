@@ -43,6 +43,9 @@ namespace Web.Areas.OutpostManagement.Controllers
 
         public IDeleteCommand<Outpost> DeleteCommand { get; set; }
 
+
+        public OutpostOutputModel CreateOutpost { get; set; }
+
         //[Requires(Permissions = "Country.Overview")]
         public ActionResult Overview()
         {
@@ -131,21 +134,9 @@ namespace Web.Areas.OutpostManagement.Controllers
         //[Requires(Permissions = "Country.CRUD")]
         public ActionResult Create()
         {
-            var model = new OutpostOutputModel();
-            model.Countries = new List<SelectListItem>();
-            model.Regions = new List<SelectListItem>();
-            model.Districts = new List<SelectListItem>();
+            var model = CreateOutpost;
 
 
-            QueryCountries.Query().OrderBy(c => c.Name).ToList().ForEach(item =>
-            {
-                model.Countries.Add(new SelectListItem
-                {
-                    Text = item.Name,
-                    Value = item.Id.ToString("n")
-                });
-            }
-            );
             return View(model);
         }
 
@@ -158,34 +149,29 @@ namespace Web.Areas.OutpostManagement.Controllers
 
             if (!ModelState.IsValid)
             {
-                return View("Create", model);
+                return View("Create", CreateOutpost );
             }
             CreateMappings();
             var outpost = new Outpost();
             var client = QueryClients.Load(Client.DEFAULT_ID);
             outpost.Client = client;
             Mapper.Map(outpostInputModel, outpost);
+
+            outpost.Country = QueryCountries.Load(outpostInputModel.Country.Id);
+            outpost.Region = QueryRegions.Load(outpostInputModel.Region.Id);
+            outpost.District = QueryDistricts.Load(outpostInputModel.District.Id);
+
             SaveOrUpdateCommand.Execute(outpost);
             return RedirectToAction("Overview", "Outpost");
         }
 
-        private OutpostOutputModel MapDataFromInputModelToOutputModel(OutpostInputModel outpostInputModel)
-        {
-            var _outpostOutputModel = new OutpostOutputModel(QueryCountries, QueryRegions, QueryDistricts);
-            _outpostOutputModel.Id = outpostInputModel.Id;
-            _outpostOutputModel.Name = outpostInputModel.Name;
-            _outpostOutputModel.Client = outpostInputModel.Client;
-            _outpostOutputModel.Country = outpostInputModel.Country;
-            _outpostOutputModel.Region = outpostInputModel.Region;
-            _outpostOutputModel.District = outpostInputModel.District;
-            return _outpostOutputModel;
-        }
+       
 
         [HttpGet]
         //[Requires(Permissions = "Country.CRUD")]
-        public ViewResult Edit(Guid outpost)
+        public ViewResult Edit(Guid outpostId)
         {
-            var _outpost = QueryService.Load(outpost);
+            var _outpost = QueryService.Load(outpostId);
             OutpostOutputModel OutpostModel = new OutpostOutputModel(QueryCountries, QueryRegions, QueryDistricts);
 
             CreateMappings();
@@ -200,17 +186,19 @@ namespace Web.Areas.OutpostManagement.Controllers
         public ActionResult Edit(OutpostInputModel outpostInputModel)
         {
             var model = new OutpostModel();
-            OutpostOutputModel outpostOutputModel;
 
             if (!ModelState.IsValid)
             {
-                outpostOutputModel = MapDataFromInputModelToOutputModel(outpostInputModel);
-                return View("Edit", outpostOutputModel);
+                return new EmptyResult();// View("Edit", outpostOutputModel);
             }
 
             CreateMappings();
             var _outpost = new Outpost();
             Mapper.Map(outpostInputModel, _outpost);
+
+            _outpost.Country = QueryCountries.Load(outpostInputModel.Country.Id);
+            _outpost.Region = QueryRegions.Load(outpostInputModel.Region.Id);
+            _outpost.District = QueryDistricts.Load(outpostInputModel.District.Id);
 
             SaveOrUpdateCommand.Execute(_outpost);
 
@@ -223,9 +211,18 @@ namespace Web.Areas.OutpostManagement.Controllers
             Mapper.CreateMap<Outpost, OutpostModel>();
 
             Mapper.CreateMap<Outpost, OutpostInputModel>();
-            Mapper.CreateMap<Outpost, OutpostOutputModel>();
+            Mapper.CreateMap<Outpost, OutpostOutputModel>()
+                .ForMember("Region", m=> m.Ignore())
+                .ForMember("District", m=> m.Ignore())
+                .ForMember("Country", m=> m.Ignore());
 
-            Mapper.CreateMap<OutpostInputModel, Outpost>();
+                ;
+
+            Mapper.CreateMap<OutpostInputModel, Outpost>()
+                .ForMember("Region", m=> m.Ignore())
+                .ForMember("District", m=> m.Ignore())
+                .ForMember("Country", m=> m.Ignore());
+
             Mapper.CreateMap<OutpostOutputModel, Outpost>();
 
             Mapper.CreateMap<Country, CountryModel>();
@@ -254,28 +251,24 @@ namespace Web.Areas.OutpostManagement.Controllers
 
         [HttpPost]
         //[Requires(Permissions = "OnBoarding.Candidate.CRUD")]
-        public RedirectToRouteResult Delete(Guid countryId)
+        public RedirectToRouteResult Delete(Guid outpostId)
         {
-            var country = QueryService.Load(countryId);
+            var outpost = QueryService.Load(outpostId);
 
-            if (country != null)
-                DeleteCommand.Execute(country);
+            if (outpost != null)
+                DeleteCommand.Execute(outpost);
 
             return RedirectToAction("Overview", "Outpost");
         }
 
-        [HttpGet]
-        public JsonResult GetRegionsForCountry(Guid? countryId)
-        {
-            List<SelectListItem> Regions = new List<SelectListItem>();
 
             var regions = QueryRegions.Query().Where(it => it.Country.Id == countryId.Value);
 
             if (regions.ToList().Count > 0)
             {
-                foreach (var item in regions)
+            var districts = QueryDistricts.Query().Where(m => m.Region.Id == regionId);
                 {
-                    Regions.Add(new SelectListItem { Text = item.Name, Value = item.Id.ToString() });
+            jr.Data = districts.Select(o => new { Value= o.Id, Text = o.Name });
                 }
             }
             var jsonResult = new JsonResult();

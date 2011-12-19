@@ -5,11 +5,11 @@ using System.Web;
 using Web.Areas.OutpostManagement.Models.Region;
 using Web.Areas.OutpostManagement.Models.District;
 using Web.Areas.OutpostManagement.Models.Country;
-using Microsoft.SqlServer.Types;
 using System.Web.Mvc;
 using Core.Persistence;
 using Core.Domain;
 using Domain;
+using Web.Areas.OutpostManagement.Models.Client;
 
 namespace Web.Areas.OutpostManagement.Models.Outpost
 {
@@ -35,7 +35,6 @@ namespace Web.Areas.OutpostManagement.Models.Outpost
         public IQueryService<Domain.Region> queryRegion { get; set; }
         public IQueryService<Domain.District> queryDistrict { get; set; }
 
-        public OutpostOutputModel() { }
 
         public OutpostOutputModel(IQueryService<Domain.Country> queryCountry,
                                   IQueryService<Domain.Region> queryRegion,
@@ -47,6 +46,14 @@ namespace Web.Areas.OutpostManagement.Models.Outpost
             this.queryDistrict = queryDistrict;
 
             var Countries = new List<SelectListItem>();
+            var Regions = new List<SelectListItem>();
+            var Districts = new List<SelectListItem>();
+
+
+            this.Countries = Countries;
+            this.Regions = Regions;
+            this.Districts = Districts;
+
             var Country = new CountryModel();
 
             var result = queryCountry.Query();
@@ -62,7 +69,6 @@ namespace Web.Areas.OutpostManagement.Models.Outpost
 
             var resultRegion = queryRegion.Query();
 
-            var Regions = new List<SelectListItem>();
             var Region = new RegionModel();
 
             if (resultRegion.FirstOrDefault() != null)
@@ -79,7 +85,6 @@ namespace Web.Areas.OutpostManagement.Models.Outpost
 
             var resultDistrict = queryDistrict.Query();
 
-            var Districts = new List<SelectListItem>();
             var District = new DistrictModel();
 
             if (resultDistrict.FirstOrDefault() != null)

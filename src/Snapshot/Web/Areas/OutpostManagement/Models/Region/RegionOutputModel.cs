@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using Core.Persistence;
 using Core.Domain;
 using Domain;
+using Web.Areas.OutpostManagement.Models.Client;
 
 namespace Web.Areas.OutpostManagement.Models.Region
 {
@@ -14,7 +15,7 @@ namespace Web.Areas.OutpostManagement.Models.Region
     {
         public string Name { get; set; }
         public string Coordinates { get; set; }
-        public CountryModel Country { get; set; }
+        public Guid CountryId { get; set; }
         public ClientModel Client { get; set; }
         public Guid Id { get; set; }
         public List<SelectListItem> Countries { get; set; }
@@ -28,7 +29,7 @@ namespace Web.Areas.OutpostManagement.Models.Region
             this.queryCountry = queryCountry;
 
             Countries = new List<SelectListItem>();
-            Country = new CountryModel();
+            
 
             var result = queryCountry.Query();
 

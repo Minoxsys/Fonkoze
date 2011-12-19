@@ -50,6 +50,15 @@ Districts: Overview
         Html.RenderPartial("OverviewTable", Model.Districts);
     }
 }
+
+@section master_actions{
+    @{
+        Html.RenderPartial("~/Views/Shared/_OutpostManagementActions.cshtml");
+    }
+
+
+}
+
 @section scripts{
     <script type="text/javascript">
         $(function () {

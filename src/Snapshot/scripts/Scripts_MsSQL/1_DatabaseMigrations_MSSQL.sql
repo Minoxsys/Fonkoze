@@ -103,7 +103,7 @@ CREATE TABLE [Countries] (
        Id UNIQUEIDENTIFIER not null,
        Name NVARCHAR(50) null,
 	   ISOCode NVARCHAR(3) null,
-	   PhonePrefix NVARCHAR(3) null,
+	   PhonePrefix NVARCHAR(5) null,
        Created DATETIME null,
        Updated DATETIME null,
 	   Client_FK UNIQUEIDENTIFIER null,

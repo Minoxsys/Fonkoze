@@ -10,7 +10,7 @@ namespace Core.Services.Implementations
         {
 			var cssSettings = new CssSettings();
 			cssSettings.ColorNames = CssColor.Hex;
-			cssSettings.ExpandOutput = false;
+			cssSettings.OutputMode = OutputMode.SingleLine;
 
 			var value = new Minifier().MinifyStyleSheet(content, cssSettings);
 			return value;

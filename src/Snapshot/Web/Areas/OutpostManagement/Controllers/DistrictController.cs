@@ -19,6 +19,7 @@ using Persistence.Queries.Districts;
 using Web.Areas.OutpostManagement.Models.District;
 using Web.Areas.OutpostManagement.Models.Region;
 using Web.Areas.OutpostManagement.Models.Country;
+using Web.Areas.OutpostManagement.Models.Client;
 
 namespace Web.Areas.OutpostManagement.Controllers
 {
@@ -57,9 +58,14 @@ namespace Web.Areas.OutpostManagement.Controllers
             if ((countryId == null) && (regionId == null))
             {
                 overviewModel = new DistrictOverviewModel(QueryCountry, QueryRegion);
-                Guid regionSelectedId = Guid.Parse(overviewModel.Regions.FirstOrDefault().Value);
+                Guid regionSelectedId = new Guid();
+
+                if (overviewModel.Regions.Count > 0)
+                {
+                    regionSelectedId = Guid.Parse(overviewModel.Regions.First().Value);
+                }
                 districts = QueryService.Query().Where(it => it.Region.Id == regionSelectedId);
-             }
+            }
             else
             {
                 countries = QueryCountry.Query();
@@ -77,11 +83,16 @@ namespace Web.Areas.OutpostManagement.Controllers
                 {
                     overviewModel.Regions.Add(new SelectListItem { Text = item.Name, Value = item.Id.ToString() });
                 }
-                overviewModel.Countries.First<SelectListItem>(it => it.Value == countryId.Value.ToString()).Selected = true;
+                if (overviewModel.Countries.Count > 0)
+                {
+                    var selectedCountry = overviewModel.Countries.First<SelectListItem>(it => it.Value == countryId.Value.ToString());
+                    if (selectedCountry != null)
+                        selectedCountry.Selected = true;
+                }
 
-                var selectedRegion = overviewModel.Regions.Where<SelectListItem>(it => it.Value == regionId.Value.ToString());
-                if(selectedRegion.ToList().Count > 0)
-                    selectedRegion.ToList()[0].Selected = true;
+                var regionsWithRegionId = overviewModel.Regions.Where<SelectListItem>(it => it.Value == regionId.Value.ToString()).ToList();
+                if (regionsWithRegionId.Count > 0)
+                    regionsWithRegionId[0].Selected = true;
 
             }
 
@@ -94,11 +105,9 @@ namespace Web.Areas.OutpostManagement.Controllers
                     Mapper.Map(item, districtModel);
                     districtModel.OutpostNo = 0;//= QueryOutpost.Query().Count<Outpost>(it => it.District.Id == item.Id);
                     overviewModel.Districts.Add(districtModel);
-
                 }
             }
-            
-            
+
             overviewModel.Error = (string)TempData[TEMPDATA_ERROR_KEY];
             return View(overviewModel);
         }
@@ -116,7 +125,7 @@ namespace Web.Areas.OutpostManagement.Controllers
                 CreateMapping();
                 var districtModel = new DistrictModel();
                 Mapper.Map(item, districtModel);
-                districtModel.OutpostNo = 0;//= QueryOutpost.Query().Count<Outpost>(it => it.District.Id == item.Id);
+                districtModel.OutpostNo = QueryOutpost.Query().Count<Outpost>(it => it.District.Id == item.Id);
                 districtList.Add(districtModel);
 
             }
@@ -128,7 +137,8 @@ namespace Web.Areas.OutpostManagement.Controllers
             Mapper.CreateMap<DistrictModel, District>();
             Mapper.CreateMap<District, DistrictModel>();
 
-            Mapper.CreateMap<DistrictInputModel, District>();
+            Mapper.CreateMap<DistrictInputModel, District>().ForMember("Region",
+                m => m.Ignore());
             Mapper.CreateMap<DistrictOutputModel, District>();
 
             Mapper.CreateMap<ClientModel, Client>();
@@ -229,10 +239,13 @@ namespace Web.Areas.OutpostManagement.Controllers
         private DistrictOutputModel MapDatFromInputModelToOutputModel(DistrictInputModel districtInputModel)
         {
             var districtOutputModel = new DistrictOutputModel(QueryCountry, QueryRegion);
-            districtOutputModel.Client = districtInputModel.Client;
+            districtOutputModel.Client = new ClientModel
+            {
+                Id = Client.DEFAULT_ID
+            };
             districtOutputModel.Id = districtInputModel.Id;
             districtOutputModel.Name = districtInputModel.Name;
-            districtOutputModel.Region = districtInputModel.Region;
+
             return districtOutputModel;
         }
 

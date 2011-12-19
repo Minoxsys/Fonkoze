@@ -5,6 +5,7 @@ using System.Web;
 using Web.Areas.OutpostManagement.Models.Region;
 using System.Web.Mvc;
 using Core.Persistence;
+using Web.Areas.OutpostManagement.Models.Client;
 
 namespace Web.Areas.OutpostManagement.Models.District
 {

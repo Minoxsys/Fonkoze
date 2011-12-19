@@ -8,13 +8,17 @@
     <legend>Outpost Information</legend>
     <div class="row of-2">
         <div class="column">
-            <label for="NameC">
+            <label for="@Html.NameFor(m => m.Country.Id)">
                 Country</label>
             <select name="@Html.NameFor(m => m.Country.Id)">
+                <option value="@Guid.Empty.ToString()"> - Select Country - </option>
+                @foreach (var item in Model.Countries) { 
+                    <option value="@item.Value" @(item.Selected ? @"selected='selected'" : @"") >@item.Text</option>
+                }
             </select>
         </div>
         <div class="column">
-            <label for="NameR">
+            <label for="@Html.NameFor(m => m.Region.Id)">
                 Region</label>
             <select name="@Html.NameFor(m => m.Region.Id)">
             </select>
@@ -23,7 +27,7 @@
    
     <div class="row ">
         <div class="column">
-            <label for="NameD">
+            <label for="Html.NameFor(m => m.District.Id)">
                 District</label>
             <select name="@Html.NameFor(m => m.District.Id)">
             </select>

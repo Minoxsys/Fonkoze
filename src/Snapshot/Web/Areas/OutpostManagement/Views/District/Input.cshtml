@@ -5,7 +5,7 @@
  
   <label for="Name"> Country </label>
          <div class="row">
-         @Html.DropDownListFor(m => m.Region.Country.Id, Model.Countries, new { onChange="onCountrySelected()", @class="countries-dropbox"})
+         @Html.DropDownListFor(m => m.Region.CountryId, Model.Countries, new { onChange="onCountrySelected()", @class="countries-dropbox"})
         
          </div>
  <label for="Name"> Region </label>
@@ -15,7 +15,7 @@
          </div>
 <div class="row">
     <label for="Name"> District Name<text class="required-text">*</text>:</label>
-        @Html.TextBoxFor(m => m.Name, new { maxlength = 250, autofocus = "autofocus", placeholder = "Name" })
+        @Html.TextBoxFor(m => m.Name, new { maxlength = 250, autofocus = "autofocus", placeholder = "District Name" })
          @Html.HiddenFor(m => m.Id)
         
           

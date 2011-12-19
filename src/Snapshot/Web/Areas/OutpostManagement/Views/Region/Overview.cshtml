@@ -45,6 +45,14 @@ Regions: Overview
         Html.RenderPartial("OverviewTable", Model.Regions);
     }
 }
+
+@section master_actions{
+    @{
+        Html.RenderPartial("~/Views/Shared/_OutpostManagementActions.cshtml");
+    }
+
+}
+
 @section scripts{
     <script type="text/javascript">
         $(function () {

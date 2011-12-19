@@ -26,7 +26,7 @@ end
 GO
 if not exists(select [Name] from Clients where [Name]=N'Minoxsys')
 begin
-INSERT INTO [StockManager].[dbo].[Clients]
+INSERT INTO [Clients]
            ([Id]
            ,[Name]
            ,[Created]

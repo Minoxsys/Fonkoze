@@ -156,7 +156,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement
             queryClient.Expect(it => it.Load(Guid.Empty)).Return(new Client { Name = "client" });
 
             //act
-            var result = (RedirectToRouteResult)controller.Create(new DistrictInputModel() { Name = DISTRICT_NAME, Region = new RegionModel { Name = region.Name, Id = region.Id} });
+            var result = (RedirectToRouteResult)controller.Create(new DistrictInputModel() { Name = DISTRICT_NAME, Region = new Web.Areas.OutpostManagement.Models.District.DistrictInputModel.RegionInputModel {Id = region.Id } });
 
             //assert
             saveCommand.VerifyAllExpectations();
@@ -191,7 +191,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement
             var viewModel = result.Model as DistrictOutputModel;
             Assert.AreEqual(DISTRICT_NAME, viewModel.Name);
             Assert.AreEqual(district.Id, viewModel.Id);
-            //Assert.AreEqual(viewModel.Regions[0].Text, "Cluj");
+            
         }
 
         [Test]
@@ -204,7 +204,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement
             saveCommand.Expect(it => it.Execute(Arg<District>.Matches(c => c.Name == NEW_DISTRICT_NAME && c.Id == district.Id)));
             queryRegion.Expect(it => it.Load(region.Id)).Return(region);
             // Act
-            var redirectResult = (RedirectToRouteResult)controller.Edit(new DistrictInputModel() { Id = district.Id, Name = NEW_DISTRICT_NAME, Region = new RegionModel { Name = region.Name, Id = region.Id } });
+            var redirectResult = (RedirectToRouteResult)controller.Edit(new DistrictInputModel() { Id = district.Id, Name = NEW_DISTRICT_NAME, Region = new Web.Areas.OutpostManagement.Models.District.DistrictInputModel.RegionInputModel {Id = region.Id } });
 
 
             // Assert

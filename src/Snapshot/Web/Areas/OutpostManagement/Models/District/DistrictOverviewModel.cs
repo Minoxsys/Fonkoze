@@ -40,9 +40,9 @@ namespace Web.Areas.OutpostManagement.Models.District
             {
                 this.Countries.Add(new SelectListItem { Text = country.Name, Value = country.Id.ToString() });
             }
-           Guid firstCountrySelected = new Guid();
+            Guid firstCountrySelected = new Guid();
 
-            if (countries.ToList().Count != 0)
+            if (countries.ToList().Count > 0)
             {
                 firstCountrySelected = Guid.Parse(this.Countries.First().Value);
             }

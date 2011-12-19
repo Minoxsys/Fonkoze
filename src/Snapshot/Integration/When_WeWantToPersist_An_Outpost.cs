@@ -49,46 +49,46 @@ namespace IntegrationTests
 
        }
 
-       [Test]
-       public void It_ShouldSuccessfullyPersist_An_Outpost_WithOnePhone()
-       {
+       //[Test]
+       //public void It_ShouldSuccessfullyPersist_An_Outpost_WithOnePhone()
+       //{
          
            
-           var outpost = Specs
-                    .CheckProperty(e => e.Name, OUTPOST_NAME)
-                    .CheckProperty(e => e.OutpostType, OUTPOST_TYPE)
-                    .CheckProperty(e => e.Email, OUTPOST_EMAIL)
-                    .CheckProperty(e => e.MainMobileNumber, OUTPOST_MOBILE)
+       //    var outpost = Specs
+       //             .CheckProperty(e => e.Name, OUTPOST_NAME)
+       //             .CheckProperty(e => e.OutpostType, OUTPOST_TYPE)
+       //             .CheckProperty(e => e.Email, OUTPOST_EMAIL)
+       //             .CheckProperty(e => e.MainMobileNumber, OUTPOST_MOBILE)
                    
-                    .VerifyTheMappings();
-           var phone = new MobilePhone
-           {
-               MobileNumber = "07888888",
-               //Outpost=outpost
-           };
-           session.Save(phone);
-           //outpost.AddMobilePhone(phone);
-           //session.Save(outpost);
-           session.Flush();
+       //             .VerifyTheMappings();
+       //    var phone = new MobilePhone
+       //    {
+       //        MobileNumber = "07888888",
+       //        //Outpost=outpost
+       //    };
+       //    session.Save(phone);
+       //    //outpost.AddMobilePhone(phone);
+       //    //session.Save(outpost);
+       //    session.Flush();
 
-           outpost = (from _outpost in session.Query<Outpost>().FetchMany(o=>o.MobilePhones)
-                     where _outpost.Id == outpost.Id
-                     select _outpost).FirstOrDefault();
+       //    outpost = (from _outpost in session.Query<Outpost>().FetchMany(o=>o.MobilePhones)
+       //              where _outpost.Id == outpost.Id
+       //              select _outpost).FirstOrDefault();
 
-           Assert.IsNotNull(outpost.MobilePhones);
+       //    Assert.IsNotNull(outpost.MobilePhones);
 
-           Assert.IsNotNull(outpost);
-           Assert.IsInstanceOf<Guid>(outpost.Id);
-           Assert.AreEqual(outpost.Name, OUTPOST_NAME);
-           Assert.AreEqual(outpost.OutpostType, OUTPOST_TYPE);
-           Assert.AreEqual(outpost.Email, OUTPOST_EMAIL);
-           Assert.AreEqual(outpost.MainMobileNumber, OUTPOST_MOBILE);
-
-
-           session.Delete(outpost);
-           session.Flush();
+       //    Assert.IsNotNull(outpost);
+       //    Assert.IsInstanceOf<Guid>(outpost.Id);
+       //    Assert.AreEqual(outpost.Name, OUTPOST_NAME);
+       //    Assert.AreEqual(outpost.OutpostType, OUTPOST_TYPE);
+       //    Assert.AreEqual(outpost.Email, OUTPOST_EMAIL);
+       //    Assert.AreEqual(outpost.MainMobileNumber, OUTPOST_MOBILE);
 
 
-       }
+       //    session.Delete(outpost);
+       //    session.Flush();
+
+
+       //}
     }
 }

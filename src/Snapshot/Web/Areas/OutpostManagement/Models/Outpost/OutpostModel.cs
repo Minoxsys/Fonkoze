@@ -6,8 +6,8 @@ using Domain;
 using Web.Areas.OutpostManagement.Models.Region;
 using Web.Areas.OutpostManagement.Models.District;
 using Web.Areas.OutpostManagement.Models.Country;
-using Microsoft.SqlServer.Types;
 using System.ComponentModel.DataAnnotations;
+using Web.Areas.OutpostManagement.Models.Client;
 
 namespace Web.Areas.OutpostManagement.Models.Outpost
 {
