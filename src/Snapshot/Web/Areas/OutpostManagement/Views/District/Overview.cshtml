@@ -74,10 +74,8 @@ Districts: Overview
             var reg = document.getElementById("Regions");
             
             var selectedRegionId = reg.options[reg.selectedIndex].value;
-           
-            console.log(reg.selectedIndex);
-            console.log(selectedRegionId);
 
+            $("#Regions option[value='@Guid.Empty.ToString()']").remove();
             var drop = $("#district-overview")
             drop.html('')
 
@@ -103,7 +101,7 @@ Districts: Overview
                 var ddlRegions = document.getElementById("Regions");
                 var opt = document.createElement("option");
                 opt.text = 'Please select a region';
-                opt.value = '0';
+                opt.value = '@Guid.Empty.ToString()';
                 ddlRegions.options.add(opt);
 
                 $.each(data, function () {

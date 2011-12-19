@@ -21,6 +21,7 @@ using Web.Validation.ValidDate;
 using System.Globalization;
 using Domain;
 using Persistence.Queries.Regions;
+using Web.Areas.OutpostManagement.Models.Client;
 
 namespace Web.Areas.OutpostManagement.Controllers
 {
@@ -236,6 +237,9 @@ namespace Web.Areas.OutpostManagement.Controllers
             Mapper.CreateMap<ClientModelOutpost, Client>();
             Mapper.CreateMap<Client, ClientModelOutpost>();
 
+            Mapper.CreateMap<Client, ClientModel>();
+            Mapper.CreateMap<ClientModel, Client>();
+
         }
 
         private static void CreateMappingsPhones(MobilePhone entity = null)
@@ -260,21 +264,30 @@ namespace Web.Areas.OutpostManagement.Controllers
             return RedirectToAction("Overview", "Outpost");
         }
 
-
-            if (regions.ToList().Count > 0)
-            {
+        [HttpGet]
+        public JsonResult GetDistrictsForRegionData(Guid regionId)
+        {
             var districts = QueryDistricts.Query().Where(m => m.Region.Id == regionId);
-                {
-            jr.Data = districts.Select(o => new { Value= o.Id, Text = o.Name });
-                }
-            }
-            var jsonResult = new JsonResult();
-            jsonResult.Data = Regions;
-
-            //  ModelState.Add("Regions", ModelState.);
-            return Json(Regions, JsonRequestBehavior.AllowGet);
-
+            JsonResult jr = new JsonResult();
+            jr.Data = districts.Select(o => new { Value = o.Id, Text = o.Name });
+            jr.JsonRequestBehavior = JsonRequestBehavior.AllowGet;
+            return jr;
         }
+
+        //    if (regions.ToList().Count > 0)
+        //    {
+        //    var districts = QueryDistricts.Query().Where(m => m.Region.Id == regionId);
+        //        {
+        //    jr.Data = districts.Select(o => new { Value= o.Id, Text = o.Name });
+        //        }
+        //    }
+        //    var jsonResult = new JsonResult();
+        //    jsonResult.Data = Regions;
+
+        //    //  ModelState.Add("Regions", ModelState.);
+        //    return Json(Regions, JsonRequestBehavior.AllowGet);
+
+        //}
 
     }
 }
