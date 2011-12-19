@@ -135,7 +135,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement
             queryService.Expect(call => call.Query()).Repeat.Once().Return(new Region[] { entity }.AsQueryable());
 
             // Act
-            var viewResult = (ViewResult)controller.Overview(null);
+            var viewResult = (ViewResult)controller.Overview(Guid.Empty);
 
 
             // Assert
@@ -186,11 +186,31 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement
             //arrange
             controller.ModelState.AddModelError("Name", "Field required");
 
+            queryCountry.Expect(call => call.Query()).Return(new Country[] { country }.AsQueryable());
+
+            var regionInputModel = SetRegionInputModelData_ToPassToCreateMethod();
+
             //act
-            var viewResult = (ViewResult)controller.Create(new RegionInputModel());
+            var viewResult = (ViewResult)controller.Create(regionInputModel);
 
             //assert
             Assert.AreEqual("Create", viewResult.ViewName);
+            Assert.IsInstanceOf<RegionOutputModel>(viewResult.Model);
+
+            var model = (RegionOutputModel)viewResult.Model;
+            Assert.AreEqual(model.CountryId, country.Id);
+            Assert.AreEqual(model.Countries[0].Value, country.Id.ToString());
+            Assert.AreEqual(model.Id, entity.Id);
+            
+
+        }
+
+        private RegionInputModel SetRegionInputModelData_ToPassToCreateMethod()
+        {
+            var regionInputModel = new RegionInputModel();
+            regionInputModel.CountryId = country.Id;
+            regionInputModel.Id = entity.Id;
+            return regionInputModel;
         }
 
         [Test]
@@ -216,14 +236,16 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement
             //arrange
             var model = new RegionInputModel();
             model = BuildRegionWithName(NEW_REGION_NAME);
-            
+
+            queryCountry.Expect(call => call.Load(country.Id)).Return(country);
             saveCommand.Expect(it => it.Execute(Arg<Region>.Matches(c => c.Name == NEW_REGION_NAME && c.Id == entity.Id)));
 
             // Act
-            var redirectResult = (RedirectToRouteResult)controller.Edit(new RegionInputModel() { Id = entity.Id, Name = NEW_REGION_NAME });
+            var redirectResult = (RedirectToRouteResult)controller.Edit(new RegionInputModel() { Id = entity.Id, Name = NEW_REGION_NAME, CountryId = country.Id });
 
             // Assert
             saveCommand.VerifyAllExpectations();
+            queryCountry.VerifyAllExpectations();
             Assert.AreEqual("Overview", redirectResult.RouteValues["Action"]);
         }
 
