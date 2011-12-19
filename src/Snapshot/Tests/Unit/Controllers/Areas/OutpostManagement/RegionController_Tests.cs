@@ -46,6 +46,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement
         {
             SetUpServices();
             SetUpController();
+            StubCountry();
             StubEntity();
             StubDistrict();
         }
@@ -81,6 +82,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement
             entity.Stub(b => b.Id).Return(entityId);
             entity.Name = REGION_NAME;
             entity.Coordinates = COORDINATES;
+            entity.Country = country;
         }
         private void StubDistrict()
         {
@@ -91,26 +93,63 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement
             district.Region = entity;
  
         }
-        //[Test]
-        //public void Should_Return_DataSpecificToCountryId_From_QueryService_in_Overview()
-        //{
-        //    // Arrange		
-        //    var stubData = new Region[] { entity };
+        private void StubCountry()
+        {
+            countryId = Guid.NewGuid();
+            country = MockRepository.GeneratePartialMock<Country>();
+            country.Stub(b => b.Id).Return(countryId);
+            country.Name = "Cluj";
+            
+        }
+        [Test]
+        public void Should_Return_DataSpecificToCountryId_From_QueryService_in_Overview()
+        {
+            // Arrange		
+            
+            queryService.Expect(call => call.Query()).Repeat.Once().Return(new Region[] { entity }.AsQueryable());
+            queryCountry.Expect(call => call.Query()).Return(new Country[] { country }.AsQueryable());
+            queryDistrict.Expect(call => call.Query()).Return(new District[] { district }.AsQueryable());
 
-        //    //queryService.Expect(call=>call.Query().Where<Region>(it=>it.Country.Id == country
+            // Act
+            var viewResult = (ViewResult)controller.Overview(country.Id);
 
-        //    // Act
-        //    var viewResult = (ViewResult)controller.Overview(null);
+            // Assert
+            queryService.VerifyAllExpectations();
+            queryDistrict.VerifyAllExpectations();
+            queryCountry.VerifyAllExpectations();
 
-        //    // Assert
-        //    queryService.VerifyAllExpectations();
+            Assert.IsNotNull(viewResult.Model);
+            var viewModel = (RegionOverviewModel)viewResult.Model;
+            Assert.AreEqual(entity.Name, viewModel.Regions[0].Name);
+            Assert.AreEqual(viewModel.Countries[0].Value, entity.Country.Id.ToString());
+            Assert.AreEqual(viewModel.Regions[0].DistrictNo, 1);
+            Assert.AreEqual(DEFAULT_VIEW_NAME, viewResult.ViewName);
+        }
 
-        //    Assert.IsNotNull(viewResult.Model);
-        //    var viewModel = (RegionOverviewModel)viewResult.Model;
-        //    Assert.AreEqual(stubData[0].Name, viewModel.Regions[0].Name);
-        //    Assert.AreEqual(DEFAULT_VIEW_NAME, viewResult.ViewName);
-        //}
+        [Test]
+        public void Should_Return_DataSpecificToFirstLoadedCountry_WhenCountryIdIsNull_FromQueryService_in_Overview()
+        { 
+            //arrange
+            queryCountry.Expect(call => call.Query()).Return(new Country[] { country }.AsQueryable());
+            queryDistrict.Expect(call => call.Query()).Return(new District[] { district }.AsQueryable());
+            queryService.Expect(call => call.Query()).Repeat.Once().Return(new Region[] { entity }.AsQueryable());
 
+            // Act
+            var viewResult = (ViewResult)controller.Overview(null);
+
+
+            // Assert
+            queryService.VerifyAllExpectations();
+            queryDistrict.VerifyAllExpectations();
+            queryCountry.VerifyAllExpectations();
+
+            Assert.IsNotNull(viewResult.Model);
+            var viewModel = (RegionOverviewModel)viewResult.Model;
+            Assert.AreEqual(entity.Name, viewModel.Regions[0].Name);
+            Assert.AreEqual(viewModel.Countries[0].Value, entity.Country.Id.ToString());
+            Assert.AreEqual(viewModel.Regions[0].DistrictNo, 1);
+            Assert.AreEqual(DEFAULT_VIEW_NAME, viewResult.ViewName);
+        }
         [Test]
         public void Should_Display_Empty_Model_When_GET_Create()
         {

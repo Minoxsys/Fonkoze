@@ -10,7 +10,7 @@ namespace Web.Areas.OutpostManagement.Models.Region
 {
     public class RegionInputModel
     {
-        [Required]
+        [Required(ErrorMessage="Name for region is required")]
         public string Name { get; set; }
         public string Coordinates { get; set; }
         public Guid CountryId {get; set;}

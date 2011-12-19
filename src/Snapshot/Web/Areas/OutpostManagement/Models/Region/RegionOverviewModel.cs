@@ -15,6 +15,7 @@ namespace Web.Areas.OutpostManagement.Models.Region
         public List<SelectListItem> Countries { get; set; }
 
         public IQueryService<Domain.Country> QueryCountry { get; set; }
+
         public RegionOverviewModel()
         {
             Regions = new List<RegionModel>();

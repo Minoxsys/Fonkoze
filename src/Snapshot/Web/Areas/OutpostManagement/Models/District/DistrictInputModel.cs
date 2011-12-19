@@ -11,7 +11,7 @@ namespace Web.Areas.OutpostManagement.Models.District
     public class DistrictInputModel
     {
         public Guid Id { get; set; }
-        [Required]
+        [Required(ErrorMessage="Name for district is required")]
         public string Name { get; set; }
         public RegionInputModel Region { get; set; }
         public ClientInputModel Client { get; set; }
