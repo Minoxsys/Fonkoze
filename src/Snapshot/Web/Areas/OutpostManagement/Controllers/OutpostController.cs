@@ -136,7 +136,6 @@ namespace Web.Areas.OutpostManagement.Controllers
         {
             var model = CreateOutpost;
 
-
             return View(model);
         }
 
@@ -261,8 +260,6 @@ namespace Web.Areas.OutpostManagement.Controllers
             return RedirectToAction("Overview", "Outpost");
         }
 
-
-            var regions = QueryRegions.Query().Where(it => it.Country.Id == countryId.Value);
 
             if (regions.ToList().Count > 0)
             {
