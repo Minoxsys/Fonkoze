@@ -70,7 +70,7 @@ Regions: Overview
             var selectedCountryId = e.options[e.selectedIndex].value;
 
             var drop = $("#region-overview")
-
+            
             var urlOverview = '@Url.Action("OverviewTable")?countryId=' + selectedCountryId;
             $.get(urlOverview, function (data) {
 

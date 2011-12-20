@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using Web.Areas.OutpostManagement.Models.Region;
 using Web.Areas.OutpostManagement.Models.District;
 using Web.Areas.OutpostManagement.Models.Country;
 using System.Web.Mvc;
 using Core.Persistence;
-using Core.Domain;
-using Domain;
 using Web.Areas.OutpostManagement.Models.Client;
 
 namespace Web.Areas.OutpostManagement.Models.Outpost
@@ -27,6 +24,7 @@ namespace Web.Areas.OutpostManagement.Models.Outpost
         public DistrictModel District { get; set; }
         public ClientModel Client { get; set; }
 
+        public List<SelectListItem> Outposts { get; set; }
         public List<SelectListItem> Countries { get; set; }
         public List<SelectListItem> Regions { get; set; }
         public List<SelectListItem> Districts { get; set; }
@@ -35,6 +33,17 @@ namespace Web.Areas.OutpostManagement.Models.Outpost
         public IQueryService<Domain.Region> queryRegion { get; set; }
         public IQueryService<Domain.District> queryDistrict { get; set; }
 
+                public OutpostOutputModel()
+                {
+
+                    this.queryCountry = queryCountry;
+                    this.queryRegion = queryRegion;
+                    this.queryDistrict = queryDistrict;
+
+                    var Countries = new List<SelectListItem>();
+                    var Regions = new List<SelectListItem>();
+                    var Districts = new List<SelectListItem>();
+                }
 
         public OutpostOutputModel(IQueryService<Domain.Country> queryCountry,
                                   IQueryService<Domain.Region> queryRegion,
@@ -80,24 +89,25 @@ namespace Web.Areas.OutpostManagement.Models.Outpost
                     selectListItem.Value = item.Id.ToString();
                     selectListItem.Text = item.Name;
                     Regions.Add(selectListItem);
+
+                    var resultDistrict = queryDistrict.Query();
+
+                    var District = new DistrictModel();
+
+                    if (resultDistrict.FirstOrDefault() != null)
+                    {
+                        foreach (Domain.District item1 in resultDistrict)
+                        {
+                            var selectListItem1 = new SelectListItem();
+
+                            selectListItem.Value = item1.Id.ToString();
+                            selectListItem.Text = item1.Name;
+                            Districts.Add(selectListItem);
+                        }
+                    }
                 }
             }
 
-            var resultDistrict = queryDistrict.Query();
-
-            var District = new DistrictModel();
-
-            if (resultDistrict.FirstOrDefault() != null)
-            {
-                foreach (Domain.District item in resultDistrict)
-                {
-                    var selectListItem = new SelectListItem();
-
-                    selectListItem.Value = item.Id.ToString();
-                    selectListItem.Text = item.Name;
-                    Districts.Add(selectListItem);
-                }
-            }
         }
 
     }

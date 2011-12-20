@@ -237,6 +237,8 @@ namespace Web.Areas.OutpostManagement.Controllers
           return Json(Regions, JsonRequestBehavior.AllowGet);
 
         }
+
+
         private DistrictOutputModel MapDatFromInputModelToOutputModel(DistrictInputModel districtInputModel)
         {
             var districtOutputModel = new DistrictOutputModel(QueryCountry, QueryRegion);

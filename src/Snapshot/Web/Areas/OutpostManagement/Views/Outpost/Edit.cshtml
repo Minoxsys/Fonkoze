@@ -2,7 +2,7 @@
 
            
 @section breadcrumbs{
-   @Url.HomeLink("Outpost Administration")/ @(Html.ActionLink<OutpostController>(it => it.Overview(), "Outposts", OutpostManagementAreaRegistration.DEFAULT_ROUTE))  > Edit
+   @Url.HomeLink("Outpost Administration")/ @(Html.ActionLink<OutpostController>(it => it.OverviewItem(Model.Id), "Outposts", OutpostManagementAreaRegistration.DEFAULT_ROUTE))  > Edit
 }
 @section page_title{
 
@@ -12,18 +12,21 @@
 }
 
 @section master_content{
-    <form class="main-form" 
-          method="post" 
-          action="">
-     @Html.ValidationSummary()
-     @Html.HiddenFor(m => m.Id)    
-     @{
-       Html.RenderPartial("OutpostInput", @Model);
-     }
-
-    @(Html.FormButtons<OutpostController>(it => it.Overview(), OutpostManagementAreaRegistration.DEFAULT_ROUTE))
-    </form>
+    @{Html.BeginForm();}
+   <div style="display: none">
+@Html.HiddenFor(m => m.Client.Id)
+</div>
+            <fieldset class="fieldsCollection ">
+                @{
+                    Html.RenderPartial("OutpostInput", Model);     
+                }
+            </fieldset>
+            @Html.SubmitButton("submit-form", "Save") <span>or </span><a href="@(Html.BuildUrlFromExpression<OutpostController>(it => it.OverviewItem( @Model.Id)))">
+                    Cancel</a>
+     
+    @{Html.EndForm();}
 }
+
 
 @section master_actions{
     @*<h3>

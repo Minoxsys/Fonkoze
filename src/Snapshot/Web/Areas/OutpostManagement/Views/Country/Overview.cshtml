@@ -47,9 +47,6 @@ OutpostManagement Countries: Overview
                 var _class = (itemNo++ % 2 == 0) ? "odd" : "even";
        
                 <tr class="@_class">
-                    <td>
-                        @(Html.ActionLink<CountryController>(it => it.Edit(country.Id), "Edit", OutpostManagementAreaRegistration.DEFAULT_ROUTE))
-                    </td>
                     <td>@(Html.ActionLink<RegionController>(it => it.Overview(country.Id), @country.Name, OutpostManagementAreaRegistration.DEFAULT_ROUTE))
                     </td>
                     <td>@country.ISOCode

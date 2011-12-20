@@ -1,0 +1,68 @@
+﻿@using Web.Areas.OutpostManagement.Models.Outpost
+
+@model List<OutpostModel>
+           
+<div id="outpost-overview">
+        <table>
+            <thead>
+                <tr>
+                    <th>
+                        Outpost Name
+                    </th>
+                    <th>
+                        Contact detail
+                    </th>
+                    <th>
+                        Latitude
+                    </th>
+                    <th>
+                        Longitude
+                    </th>
+                    <th>
+                    </th>
+                    <th colspan="2">
+                        Actions
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    var itemNo = 0;
+                }
+                @foreach (var outpost in Model)
+                {
+                    var _class = (itemNo++ % 2 == 0) ? "odd" : "even";
+       
+                    <tr>
+                        @* <td>
+                            @(Html.ActionLink<OutpostController>(it => it.PhoneListInput(outpost.Id), "Contacts", OutpostManagementAreaRegistration.DEFAULT_ROUTE))
+                        </td>*@
+                        <td>@outpost.MainMobileNumber
+                        </td>
+                        <td>
+                            @outpost.Name
+                        </td>
+                       
+                        <td>@outpost.Latitude
+                        </td>
+                        <td>@outpost.Longitude
+                        </td>
+                        <td>
+                            
+                            @(Html.ActionLink<OutpostController>(it => it.Edit(outpost.Id), "Edit", OutpostManagementAreaRegistration.DEFAULT_ROUTE))
+                        
+                        </td>
+                        <td>
+                        
+                            @{Html.BeginForm<OutpostController>(m => m.Delete(outpost.Id), FormMethod.Post, new { @class = "delete-user-form" }); }
+                            @Html.Button("delete-user", "Delete", HtmlButtonType.Submit)
+                            @{Html.EndForm();}
+                            
+                        </td>
+                    </tr> 
+                }
+            </tbody>
+        </table>
+    </div>
+
+

@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using Domain;
 using Web.Areas.OutpostManagement.Models.Region;
 using Web.Areas.OutpostManagement.Models.District;
 using Web.Areas.OutpostManagement.Models.Country;
-using System.ComponentModel.DataAnnotations;
 using Web.Areas.OutpostManagement.Models.Client;
 
 namespace Web.Areas.OutpostManagement.Models.Outpost
@@ -24,6 +20,7 @@ namespace Web.Areas.OutpostManagement.Models.Outpost
         public DistrictModel District { get; set; }
         public ClientModel Client { get; set; }
         public IList<Domain.MobilePhone> MobilePhones { get; set; }
+        public int StockItemsNo { get; set; }
         public Guid Id { get; set; }
    }
 }
