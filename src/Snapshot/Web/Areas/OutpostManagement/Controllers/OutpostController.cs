@@ -159,8 +159,6 @@ namespace Web.Areas.OutpostManagement.Controllers
 
         }
 
-        //public PartialViewResult OverviewOutpost(Guid? countryId, Guid? regionId, Guid? districtId)
-
         [HttpGet]
         public PartialViewResult OverviewOutpost( Guid? districtId)
         {
@@ -349,7 +347,7 @@ namespace Web.Areas.OutpostManagement.Controllers
             if (outpost != null)
                 DeleteCommand.Execute(outpost);
 
-            return RedirectToAction("Overview", "Outpost");
+            return RedirectToAction("Overview", "Outpost", new { countryId = outpost.Country.Id, regionId = outpost.Region.Id, districtId = outpost.Region.Id});
         }
 
         [HttpGet]

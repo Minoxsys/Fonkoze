@@ -1,18 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using Core.Persistence;
 using Domain;
-using System.Runtime.CompilerServices;
 using Web.Areas.OutpostManagement.Models.Region;
 using AutoMapper;
-using Web.Areas.OutpostManagement.Models.District;
 using Web.Areas.OutpostManagement.Models.Country;
-using Persistence.Queries;
-using Core.Domain;
-
 using Persistence.Queries.Regions;
 using Web.Areas.OutpostManagement.Models.Client;
 
@@ -53,17 +47,7 @@ namespace Web.Areas.OutpostManagement.Controllers
                 {
                     regions = QueryService.Query().Where<Region>(it => it.Country.Id == countryId.Value).ToList();
                 }
-                else
-                {
-                    Guid countryIdSelectedImplicit = new Guid();
-                    if (overviewModel.Countries.Count > 0)
-                    {
-                        countryIdSelectedImplicit = Guid.Parse(overviewModel.Countries.First().Value);
-                    }
-                    regions = QueryService.Query().Where<Region>(it => it.Country.Id == countryIdSelectedImplicit).ToList();
-                }
             }
-            
 
             CreateMapping();
 
@@ -79,8 +63,8 @@ namespace Web.Areas.OutpostManagement.Controllers
             if (countryId != null)
             {
                 var selectedCountry = overviewModel.Countries.Where<SelectListItem>(it => it.Value == countryId.Value.ToString()).ToList();
-                    if(selectedCountry.Count > 0)
-                        overviewModel.Countries.First<SelectListItem>(it => it.Value == countryId.Value.ToString()).Selected = true;
+                if (selectedCountry.Count > 0)
+                    overviewModel.Countries.First<SelectListItem>(it => it.Value == countryId.Value.ToString()).Selected = true;
             }
             overviewModel.Error = (string)TempData[TEMPDATA_ERROR_KEY];
             return View(overviewModel);
@@ -105,7 +89,7 @@ namespace Web.Areas.OutpostManagement.Controllers
             return PartialView(regionList);
         }
         public ActionResult Create()
-        {
+        {           
             return View(RegionOutputModel);
         }
 
@@ -117,16 +101,12 @@ namespace Web.Areas.OutpostManagement.Controllers
                 var regionOutputModel = MapDataFromInputModelToOutputModel(regionInputModel);
                 return View("Create", regionOutputModel);
             }
-
             CreateMapping();
             var region = new Region();
             Mapper.Map(regionInputModel, region);
 
-            var client = QueryClients.Load(Client.DEFAULT_ID);
-            var country = QueryCountry.Load(regionInputModel.CountryId);
-
-            region.Client = client;
-            region.Country = country;
+            region.Client = QueryClients.Load(Client.DEFAULT_ID);
+            region.Country = QueryCountry.Load(regionInputModel.CountryId);
 
             SaveOrUpdateCommand.Execute(region);
             return RedirectToAction("Overview", new { countryId = regionInputModel.CountryId });
@@ -141,7 +121,8 @@ namespace Web.Areas.OutpostManagement.Controllers
             RegionOutputModel viewModel = new RegionOutputModel(QueryCountry);
             Mapper.Map(region, viewModel);
 
-            viewModel.Countries.First<SelectListItem>(it => it.Value == region.Country.Id.ToString()).Selected = true;
+            if ((viewModel.Countries.Count > 0) && (viewModel.Countries.Where<SelectListItem>(it => it.Value == region.Country.Id.ToString()).ToList().Count > 0))
+                viewModel.Countries.First<SelectListItem>(it => it.Value == region.Country.Id.ToString()).Selected = true;
             return View(viewModel);
         }
 
@@ -167,9 +148,9 @@ namespace Web.Areas.OutpostManagement.Controllers
 
         private RegionOutputModel MapDataFromInputModelToOutputModel(RegionInputModel regionInputModel)
         {
-            
+
             var regionOutputModel = new RegionOutputModel(QueryCountry);
-                        
+
             regionOutputModel.Id = regionInputModel.Id;
             regionOutputModel.Name = regionInputModel.Name;
             regionOutputModel.Client = regionInputModel.Client;
@@ -197,7 +178,7 @@ namespace Web.Areas.OutpostManagement.Controllers
                 if (districtResults.ToList().Count != 0)
                 {
                     TempData.Add("error", string.Format("The region {0} has districts associated, so it can not be deleted", region.Name));
-                    return RedirectToAction("Overview",new { countryId = region.Country.Id });
+                    return RedirectToAction("Overview", new { countryId = region.Country.Id });
                 }
 
                 DeleteCommand.Execute(region);

@@ -13,6 +13,7 @@ namespace Web.Areas.OutpostManagement.Models.Region
         public List<RegionModel> Regions { get; set; }
 
         public List<SelectListItem> Countries { get; set; }
+        public Guid countryId { get; set; }
 
         public IQueryService<Domain.Country> QueryCountry { get; set; }
 

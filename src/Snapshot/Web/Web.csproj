@@ -1877,6 +1877,7 @@
     <Content Include="Areas\OutpostManagement\Views\District\OverviewTable.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\Region\OverviewTable.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\District\EditInput.cshtml" />
+    <Content Include="Areas\OutpostManagement\Views\Outpost\OverviewOutpost.cshtml" />
     <None Include="Assets\img\skins\ButtonTemplate.psd" />
     <Content Include="Views\RoleManager\Create.cshtml" />
     <Content Include="Views\RoleManager\Edit.cshtml" />

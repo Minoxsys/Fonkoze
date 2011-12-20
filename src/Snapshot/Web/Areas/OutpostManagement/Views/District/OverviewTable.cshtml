@@ -1,6 +1,6 @@
 ﻿@model List<Web.Areas.OutpostManagement.Models.District.DistrictModel>
 <div id="district-overview">
-    <table>
+    <table id="districts-table">
         <thead>
             <tr>
                 <th>
@@ -22,7 +22,7 @@
             {
                 var _class = (itemNo % 2 == 0) ? "odd" : "even";    
                 <tr class="@_class">
-                    <td>@district.Name
+                    <td>@(Html.ActionLink<Web.Areas.OutpostManagement.Controllers.OutpostController>(call => call.Overview(district.Region.CountryId,district.Region.Id,district.Id), @district.Name, Web.Areas.OutpostManagement.OutpostManagementAreaRegistration.DEFAULT_ROUTE))
                     </td>
                     <td>@district.OutpostNo
                     </td>

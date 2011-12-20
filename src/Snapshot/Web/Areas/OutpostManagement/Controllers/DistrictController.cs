@@ -53,17 +53,11 @@ namespace Web.Areas.OutpostManagement.Controllers
             IQueryable<Region> regions;
             IQueryable<Country> countries;
 
-            //when user gets here without knowing country or region
+           
             if ((countryId == null) && (regionId == null))
             {
-                overviewModel = new DistrictOverviewModel(QueryCountry, QueryRegion);
-                Guid regionSelectedId = new Guid();
-
-                if (overviewModel.Regions.Count > 0)
-                {
-                    regionSelectedId = Guid.Parse(overviewModel.Regions.First().Value);
-                }
-                districts = QueryService.Query().Where(it => it.Region.Id == regionSelectedId);
+                overviewModel = new DistrictOverviewModel(QueryCountry);
+                districts = null;
             }
             else
             {
@@ -96,28 +90,25 @@ namespace Web.Areas.OutpostManagement.Controllers
                         overviewModel.Regions.First<SelectListItem>(it => it.Value == regionId.Value.ToString()).Selected = true;
 
                 }
-                else 
+                else
                 {
-                    overviewModel = new DistrictOverviewModel(QueryCountry, QueryRegion);
-                    Guid regionSelectedId = new Guid();
-
-                    if (overviewModel.Regions.Count > 0)
-                    {
-                        regionSelectedId = Guid.Parse(overviewModel.Regions.First().Value);
-                    }
-                    districts = QueryService.Query().Where(it => it.Region.Id == regionSelectedId);
+                    overviewModel = new DistrictOverviewModel(QueryCountry);
+                    districts = null;
                 }
             }
 
-            if (districts.ToList().Count != 0)
+            if (districts != null)
             {
-                foreach (District item in districts)
+                if (districts.ToList().Count != 0)
                 {
-                    CreateMapping();
-                    var districtModel = new DistrictModel();
-                    Mapper.Map(item, districtModel);
-                    districtModel.OutpostNo = QueryOutpost.Query().Count<Outpost>(it => it.District.Id == item.Id);
-                    overviewModel.Districts.Add(districtModel);
+                    foreach (District item in districts)
+                    {
+                        CreateMapping();
+                        var districtModel = new DistrictModel();
+                        Mapper.Map(item, districtModel);
+                        districtModel.OutpostNo = QueryOutpost.Query().Count<Outpost>(it => it.District.Id == item.Id);
+                        overviewModel.Districts.Add(districtModel);
+                    }
                 }
             }
 

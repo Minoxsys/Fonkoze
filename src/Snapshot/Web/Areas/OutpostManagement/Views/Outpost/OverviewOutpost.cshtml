@@ -37,10 +37,10 @@
                         @* <td>
                             @(Html.ActionLink<OutpostController>(it => it.PhoneListInput(outpost.Id), "Contacts", OutpostManagementAreaRegistration.DEFAULT_ROUTE))
                         </td>*@
-                        <td>@outpost.MainMobileNumber
+                        <td> @outpost.Name
                         </td>
                         <td>
-                            @outpost.Name
+                            @outpost.MainMobileNumber
                         </td>
                        
                         <td>@outpost.Latitude

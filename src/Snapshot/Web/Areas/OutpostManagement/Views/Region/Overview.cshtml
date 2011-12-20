@@ -27,6 +27,7 @@ Regions: Overview
                         Country:</label>
                   
                    <select name="@(Html.NameFor(m=>m.Countries))">
+                   <option value="@Guid.Empty">- Select a country -</option>
                    @{
                        foreach(var item in Model.Countries){
                             <option value="@item.Value" @(item.Selected? @"selected='selected'" : @"") >@item.Text</option>
@@ -78,7 +79,7 @@ Regions: Overview
 
                 $('#region-overview').html(data);
             });
-
+            $("select[name='@Html.NameFor(m => m.Countries)'] option[value='@Guid.Empty.ToString()']").remove();
       }           
     </script>
 }
