@@ -21,6 +21,8 @@ namespace Web.Areas.OutpostManagement.Models.District
         {
             [Required(ErrorMessage = "Region is required")]
             public Guid Id { get; set; }
+
+            public Guid CountryId { get; set; }
         }
 
         public class ClientInputModel

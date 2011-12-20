@@ -1876,7 +1876,11 @@
     <Content Include="Areas\OutpostManagement\Views\District\Edit.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\District\OverviewTable.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\Region\OverviewTable.cshtml" />
+<<<<<<< HEAD
+    <Content Include="Areas\OutpostManagement\Views\Outpost\OverviewOutpost.cshtml" />
+=======
     <Content Include="Areas\OutpostManagement\Views\District\EditInput.cshtml" />
+>>>>>>> 7ea776e537398635221ef3546980212c8b71cecd
     <None Include="Assets\img\skins\ButtonTemplate.psd" />
     <Content Include="Views\RoleManager\Create.cshtml" />
     <Content Include="Views\RoleManager\Edit.cshtml" />

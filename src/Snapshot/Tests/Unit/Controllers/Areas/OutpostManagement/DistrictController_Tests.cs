@@ -48,8 +48,6 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement
             StubRegion();
             StubDistrict();
             StubOutpost();
-            
-
         }
 
         private void StubOutpost()
@@ -68,6 +66,8 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement
             region.Stub(b => b.Id).Return(regionId);
             region.Name = "Cluj";
             region.Country = country;
+            region.Client = new Client();
+
         }
         private void StubCountry()
         {
@@ -75,7 +75,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement
             country = MockRepository.GeneratePartialMock<Country>();
             country.Stub(b => b.Id).Return(countryId);
             country.Name = "Cluj";
-            
+
         }
         private void StubDistrict()
         {
@@ -113,26 +113,64 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement
             queryCountry = MockRepository.GenerateMock<IQueryService<Country>>();
         }
 
-        //[Test]
-        //public void Should_Return_Data_From_QueryService_in_Overview()
-        //{
-        //    // Arrange		
-        //    var stubData = new District[] { district };
+        [Test]
+        public void Should_Return_Data_From_CountryQueryService_And_RegionQueryService_SpecificToCountryLoadedFirst_WhenCountryIdAndRegionIdAreNull_ON_Overview()
+        {
+            // Arrange		
+            queryCountry.Expect(call => call.Query()).Return(new Country[] { country }.AsQueryable());
+            queryRegion.Expect(call => call.Query()).Repeat.Once().Return(new Region[] { region }.AsQueryable());
+            queryService.Expect(call => call.Query()).Repeat.Once().Return(new District[] { district }.AsQueryable());
+            queryOutpost.Expect(call => call.Query()).Repeat.Once().Return(new Outpost[] { outpost }.AsQueryable());
 
-        //    queryDistrict.Expect(call => call.GetAll()).Return(stubData.AsQueryable());
+            // Act
+            var viewResult = (ViewResult)controller.Overview(null, null);
 
-        //    // Act
-        //    var viewResult = (ViewResult)controller.Overview(null,null);
+            // Assert
+            queryDistrict.VerifyAllExpectations();
+            queryRegion.VerifyAllExpectations();
+            queryCountry.VerifyAllExpectations();
+            queryOutpost.VerifyAllExpectations();
+            queryService.VerifyAllExpectations();
 
-        //    // Assert
-        //    queryDistrict.VerifyAllExpectations();
+            Assert.IsNotNull(viewResult.Model);
+            var viewModel = (DistrictOverviewModel)viewResult.Model;
 
-        //    Assert.IsNotNull(viewResult.Model);
-        //    var viewModel = (DistrictOverviewModel)viewResult.Model;
-        //    Assert.AreEqual(stubData[0].Name, viewModel.Districts[0].Name);
-        //    Assert.AreEqual(DEFAULT_VIEW_NAME, viewResult.ViewName);
-        //}
+            Assert.AreEqual(region.Country.Id, country.Id);
+            Assert.AreEqual(district.Region.Id, region.Id);
 
+            Assert.AreEqual(viewModel.Countries[0].Value, country.Id.ToString());
+            Assert.AreEqual(viewModel.Districts[0].Id, district.Id);
+            Assert.AreEqual(viewModel.Regions[0].Value, region.Id.ToString());
+            Assert.AreEqual(region.Country.Id, country.Id);
+            Assert.AreEqual(DEFAULT_VIEW_NAME, viewResult.ViewName);
+        }
+
+        [Test]
+        public void ShouldReturnData_FromCountryServiceSpecificTo_CountryIdNotNull_AndFrom_RegionQueryServiceSpecificToThatCountryId_AndFrom_DistrictsQueryServiceSpecificToRegionIdNotNull_TO_Overview()
+        {
+            //arange
+            queryCountry.Expect(call => call.Query()).Return(new Country[] { country }.AsQueryable());
+            queryRegion.Expect(call => call.Query()).Repeat.Once().Return(new Region[] { region }.AsQueryable());
+            queryService.Expect(call => call.Query()).Repeat.Once().Return(new District[] { district }.AsQueryable());
+            queryOutpost.Expect(call => call.Query()).Repeat.Once().Return(new Outpost[] { outpost }.AsQueryable());
+
+            //act
+            var viewResult = (ViewResult)controller.Overview(country.Id, region.Id);
+
+            //assert
+            Assert.IsNotNull(viewResult.Model);
+            var viewModel = (DistrictOverviewModel)viewResult.Model;
+
+            Assert.AreEqual(region.Country.Id, country.Id);
+            Assert.AreEqual(district.Region.Id, region.Id);
+
+            Assert.AreEqual(viewModel.Countries[0].Value, country.Id.ToString());
+            Assert.AreEqual(viewModel.Districts[0].Id, district.Id);
+            Assert.AreEqual(viewModel.Regions[0].Value, region.Id.ToString());
+            Assert.AreEqual(region.Country.Id, country.Id);
+            Assert.AreEqual(DEFAULT_VIEW_NAME, viewResult.ViewName);
+ 
+        }
         [Test]
         public void Should_Display_Empty_Model_When_GET_Create()
         {
@@ -156,7 +194,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement
             queryClient.Expect(it => it.Load(Guid.Empty)).Return(new Client { Name = "client" });
 
             //act
-            var result = (RedirectToRouteResult)controller.Create(new DistrictInputModel() { Name = DISTRICT_NAME, Region = new Web.Areas.OutpostManagement.Models.District.DistrictInputModel.RegionInputModel {Id = region.Id } });
+            var result = (RedirectToRouteResult)controller.Create(new DistrictInputModel() { Name = DISTRICT_NAME, Region = new Web.Areas.OutpostManagement.Models.District.DistrictInputModel.RegionInputModel { Id = region.Id } });
 
             //assert
             saveCommand.VerifyAllExpectations();
@@ -168,12 +206,31 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement
         {
             //arrange
             controller.ModelState.AddModelError("Name", "Field required");
+            queryCountry.Expect(call => call.Query()).Return(new Country[] { country }.AsQueryable());
+            queryRegion.Expect(call => call.Query()).Repeat.Once().Return(new Region[] { region }.AsQueryable());
 
+            var districtInputModel = SetDistrictInputModelWithData_ToBeTransmitedToCreateMethod();
             //act
-            var viewResult = (ViewResult)controller.Create(new DistrictInputModel());
+            var viewResult = (ViewResult)controller.Create(districtInputModel);
 
             //assert
             Assert.AreEqual("Create", viewResult.ViewName);
+            Assert.IsInstanceOf<DistrictOutputModel>(viewResult.Model);
+
+            var model = (DistrictOutputModel)viewResult.Model;
+
+            Assert.AreEqual(model.Countries[0].Value, country.Id.ToString());
+            Assert.AreEqual(model.Region.CountryId, country.Id);
+            Assert.AreEqual(model.Regions[0].Value, region.Id.ToString());
+        }
+
+        private DistrictInputModel SetDistrictInputModelWithData_ToBeTransmitedToCreateMethod()
+        {
+            var districtInputModel = new DistrictInputModel();
+            districtInputModel.Region = new DistrictInputModel.RegionInputModel();
+            districtInputModel.Region.Id = region.Id;
+            districtInputModel.Region.CountryId = region.Country.Id;
+            return districtInputModel;
         }
 
         [Test]
@@ -191,7 +248,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement
             var viewModel = result.Model as DistrictOutputModel;
             Assert.AreEqual(DISTRICT_NAME, viewModel.Name);
             Assert.AreEqual(district.Id, viewModel.Id);
-            
+
         }
 
         [Test]
@@ -204,7 +261,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement
             saveCommand.Expect(it => it.Execute(Arg<District>.Matches(c => c.Name == NEW_DISTRICT_NAME && c.Id == district.Id)));
             queryRegion.Expect(it => it.Load(region.Id)).Return(region);
             // Act
-            var redirectResult = (RedirectToRouteResult)controller.Edit(new DistrictInputModel() { Id = district.Id, Name = NEW_DISTRICT_NAME, Region = new Web.Areas.OutpostManagement.Models.District.DistrictInputModel.RegionInputModel {Id = region.Id } });
+            var redirectResult = (RedirectToRouteResult)controller.Edit(new DistrictInputModel() { Id = district.Id, Name = NEW_DISTRICT_NAME, Region = new Web.Areas.OutpostManagement.Models.District.DistrictInputModel.RegionInputModel { Id = region.Id } });
 
 
             // Assert
@@ -216,12 +273,17 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement
         [Test]
         public void Should_Redirect_To_Edit_When_POST_Edit_Fails_BecauseOfModelStateNotValid()
         {
+            //arrange
             controller.ModelState.AddModelError("Name", "Field required");
             queryCountry.Expect(it => it.Query()).Return(new Country[] { country }.AsQueryable());
-            
             queryRegion.Expect(call => call.Query()).Return(new Region[] { region }.AsQueryable());
 
-            var viewResult = (ViewResult)controller.Edit(new DistrictInputModel());
+            var districtInputModel = SetDistrictInputModelWithData_ToBeTransmitedToCreateMethod();
+
+            //act
+            var viewResult = (ViewResult)controller.Edit(districtInputModel);
+
+            //assert
             queryCountry.VerifyAllExpectations();
             queryRegion.VerifyAllExpectations();
             Assert.AreEqual("Edit", viewResult.ViewName);
