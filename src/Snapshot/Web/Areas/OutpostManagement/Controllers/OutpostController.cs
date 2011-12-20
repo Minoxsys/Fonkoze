@@ -289,7 +289,7 @@ namespace Web.Areas.OutpostManagement.Controllers
             SaveOrUpdateCommand.Execute(_outpost);
 
             //return RedirectToAction("Overview", "Outpost");
-            return PartialView(outpostsList);
+            return View(outpostInputModel);
 
         }
 
