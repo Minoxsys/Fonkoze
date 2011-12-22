@@ -8,7 +8,7 @@ Region : Create
 > Create Region
 }
 @section master_content{
-    @{Html.BeginForm<RegionController>(r => r.Create(Model.CountryId));}
+    @{Html.BeginForm<RegionController>(r => r.Create());}
     <fieldset class="fieldsCollection ">
         @{
             Html.RenderPartial("Input", Model);     

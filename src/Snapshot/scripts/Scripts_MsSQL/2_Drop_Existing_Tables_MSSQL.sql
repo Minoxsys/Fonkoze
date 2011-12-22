@@ -21,6 +21,17 @@ begin
     drop table RoleUsers
 end
 
+if exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'Outposts')
+begin
+    alter table Outposts  drop constraint Region_OCFK
+    alter table Outposts  drop constraint District_ODFK
+    alter table Outposts  drop constraint Country_OCFK
+	alter table Outposts drop constraint ByUser_OUFK
+	alter table Outposts drop constraint StockItem_OFK
+	drop table Outposts
+end
+
+
 if exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'StockItems')
 begin
 	alter table StockItems  drop constraint ByUser_StIFK
@@ -45,15 +56,6 @@ begin
     drop table MobilePhones
 end
 
-if exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'Outposts')
-begin
-    alter table Outposts  drop constraint Region_OCFK
-    alter table Outposts  drop constraint District_ODFK
-    alter table Outposts  drop constraint Country_OCFK
-	alter table Outposts drop constraint ByUser_OUFK
-	alter table Outposts drop constraint StockItem_OFK
-	drop table Outposts
-end
 
 if exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'Districts')
 begin

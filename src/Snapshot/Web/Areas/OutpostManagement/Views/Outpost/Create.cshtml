@@ -24,9 +24,9 @@ OutpostManagement : Outpost : Create
     @{Html.EndForm();}
 }
 
-
-
 @section scripts{
+<script type="text/javascript">
+
          function onCountryChanged() {
 
             $("select[name='@Html.NameFor(m => m.Region.CountryId)']").change(function () {
