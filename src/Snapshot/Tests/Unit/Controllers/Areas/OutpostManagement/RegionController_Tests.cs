@@ -127,27 +127,23 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement
         }
 
         [Test]
-        public void Should_Return_DataSpecificToFirstLoadedCountry_WhenCountryIdIsNull_FromQueryService_in_Overview()
+        public void Should_Return_AllExistentCountries_AndNoRegions_WhenCountryIdIsNull_FromQueryService_in_Overview()
         { 
             //arrange
             queryCountry.Expect(call => call.Query()).Return(new Country[] { country }.AsQueryable());
-            queryDistrict.Expect(call => call.Query()).Return(new District[] { district }.AsQueryable());
-            queryService.Expect(call => call.Query()).Repeat.Once().Return(new Region[] { entity }.AsQueryable());
+          
 
             // Act
             var viewResult = (ViewResult)controller.Overview(Guid.Empty);
 
 
             // Assert
-            queryService.VerifyAllExpectations();
-            queryDistrict.VerifyAllExpectations();
-            queryCountry.VerifyAllExpectations();
+           queryCountry.VerifyAllExpectations();
 
             Assert.IsNotNull(viewResult.Model);
             var viewModel = (RegionOverviewModel)viewResult.Model;
-            Assert.AreEqual(entity.Name, viewModel.Regions[0].Name);
-            Assert.AreEqual(viewModel.Countries[0].Value, entity.Country.Id.ToString());
-            Assert.AreEqual(viewModel.Regions[0].DistrictNo, 1);
+            Assert.IsNotNull(viewModel.Countries); 
+            Assert.IsEmpty(viewModel.Regions);
             Assert.AreEqual(DEFAULT_VIEW_NAME, viewResult.ViewName);
         }
         [Test]

@@ -41,9 +41,7 @@
                         <td>
                             
                             @(Html.ActionLink<MobilePhoneController>(it => it.Overview(outpost.Id), "Contacts", OutpostManagementAreaRegistration.DEFAULT_ROUTE))
-                            
-                        <td>
-                            @outpost.Name
+                        <td>@outpost.Name
                         </td>
                        </td>
                         <td>@outpost.DetailMethod
