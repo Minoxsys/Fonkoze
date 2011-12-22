@@ -1,0 +1,151 @@
+﻿@model Web.Areas.StockAdministration.Models.StockItem.StockItemOverviewModel
+@using Microsoft.Web.Mvc;
+@section page_title{
+Stock Item: Overview
+}
+@section breadcrumbs{
+    @*@Url.HomeLink("Outpost Administration") > Regions*@
+}
+@section master_actions{
+    @{
+        Html.RenderPartial("~/Views/Shared/_OutpostManagementActions.cshtml");
+    }
+    @{ Html.RenderPartial("~/Views/Shared/_StockAdministrationActions.cshtml");}
+}
+@section master_content{
+    @{Html.RenderPartial("~/Views/Shared/_StockAdministrationHeader.cshtml");}
+    <div class="page_header_buttons">
+        @(Html.ActionLink<Web.Areas.StockAdministration.Controllers.StockItemController>(it => it.Create(), "Add new stock item", Web.Areas.StockAdministration.StockAdministrationAreaRegistration.DEFAULT_ROUTE))
+    </div>
+    <br />
+     <input type="text" id="stockItemSearch" name="stockItemSearch" maxlength="50" placeholder="Stock Items search" style="width:200px; height:30px; margin-left:0px" /> 
+      <input type="text" id="stockgroupSearch" name="stockGroupSearch" maxlength="50" placeholder="Stock Groups search" style="width:200px; height:30px; margin-left:0px" />
+    <table id="stockitems">
+        <thead>
+            <tr>
+                <th>
+                    Stock Item
+                </th>
+                <th>
+                    Stock Group
+                </th>
+                <th>
+                    Description
+                </th>
+                <th>
+                    SMS Reference Code
+                </th>
+                <th>
+                    Lower limit
+                </th>
+                <th>
+                    Upper limit
+                </th>
+                <th colspan="2">
+                    Actions
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                var itemNo = 0;
+            }
+            @foreach (var stockItem in @Model.StockItems)
+            {
+                var _class = (itemNo % 2 == 0) ? "odd" : "even";    
+                <tr class="@_class">
+                    <td>
+                        @stockItem.Name
+                    </td>
+                    <td> @if(@stockItem.StockGroup != null){
+                        @stockItem.StockGroup.Name }
+                    </td>
+                    <td>@stockItem.Description
+                    </td>
+                    <td>@stockItem.SMSReferenceCode
+                    </td>
+                    <td>
+                        @stockItem.LowerLimit
+                    </td>
+                    <td>@stockItem.UpperLimit
+                    </td>
+                    <td>@(Html.ActionLink<StockItemController>(call => call.Edit(stockItem.Id), "Edit", StockAdministrationAreaRegistration.DEFAULT_ROUTE))
+                    </td>
+                    <td>
+                        @{
+                Html.BeginForm<StockItemController>(m => m.Delete(stockItem.Id), FormMethod.Post, new { @class = "delete-user-form" });
+                        }
+                        @Html.Button("delete-user", "Delete", HtmlButtonType.Submit)
+                        @{
+                Html.EndForm();
+                        }
+                    </td>
+                </tr> 
+            }
+        </tbody>
+    </table>
+}
+@section scripts{
+    <script type="text/javascript">
+        $(function () {
+            $(".delete-user-form").submit(function () {
+                return confirm('Are you sure that you want to delete this stock item?')
+            });
+        });
+
+
+        //search for districts by Name
+
+        jQuery.expr[":"].containsNoCase = function (el, i, m) {
+            var search = m[3];
+            if (!search) return false;
+            return eval("/" + search + "/i").test($(el).text());
+        };
+
+        jQuery(document).ready(function () {
+
+            // cancel the search if the user presses the ESC key
+            jQuery('#stockItemSearch').keyup(function (event) {
+                if (event.keyCode == 27) {
+                    resetSearch();
+                }
+            });
+
+            // execute the search
+            jQuery('#stockItemSearch').keyup(function () {
+                // only search when there are 3 or more characters in the textbox
+                if (jQuery('#stockItemSearch').val().length > 0) {
+                    // hide all rows
+                    jQuery('#stockitems tr').hide();
+                    // show the header row
+                    jQuery('#stockitems tr:first').show();
+                    // show the matching rows (using the containsNoCase from Rick Strahl)
+                    jQuery('#stockitems tr td:containsNoCase(\'' + jQuery('#stockItemSearch').val() + '\')').parent().show();
+                }
+                else if (jQuery('#stockItemSearch').val().length == 0) {
+                    // if the user removed all of the text, reset the search
+                    resetSearch();
+                }
+
+                // if there were no matching rows, tell the user
+                if (jQuery('#stockitems tr:visible').length == 1) {
+                    // remove the norecords row if it already exists
+                    jQuery('.norecords').remove();
+                    // add the norecords row
+                    jQuery('#stockitems').append('<tr class="norecords"><td colspan="5" class="Normal">No records were found</td></tr>');
+                }
+            });
+        });
+
+        function resetSearch() {
+            // clear the textbox
+            jQuery('#stockItemSearch').val('');
+            // show all table rows
+            jQuery('#stockitems tr').show();
+            // remove any no records rows
+            jQuery('.norecords').remove();
+            // make sure we re-focus on the textbox for usability
+            jQuery('#stockItemSearch').focus();
+        }
+    </script>
+}

@@ -11,6 +11,7 @@ using Persistence;
 using Autofac;
 using Persistence.Queries.Regions;
 using Persistence.Queries.Districts;
+using Persistence.Queries.StockItems;
 
 
 namespace Web.Bootstrap.Container
@@ -35,6 +36,8 @@ namespace Web.Bootstrap.Container
             container.RegisterType<NHibernateQueryRegion>().As<IQueryRegion>();
 
             container.RegisterType<NHibernateQueryDistrict>().As<IQueryDistrict>();
+
+            container.RegisterType<NHibernateQueryStockItem>().As<IQueryStockItem>();
             
         }
     }

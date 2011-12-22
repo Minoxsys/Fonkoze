@@ -178,6 +178,13 @@
     <Compile Include="Areas\OutpostManagement\Models\District\DistrictModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Outpost\OutpostModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Region\RegionModel.cs" />
+    <Compile Include="Areas\StockAdministration\Controllers\StockItemController.cs" />
+    <Compile Include="Areas\StockAdministration\Models\StockItem\StockGroupModel.cs" />
+    <Compile Include="Areas\StockAdministration\Models\StockItem\StockItemInputModel.cs" />
+    <Compile Include="Areas\StockAdministration\Models\StockItem\StockItemModel.cs" />
+    <Compile Include="Areas\StockAdministration\Models\StockItem\StockItemOutputModel.cs" />
+    <Compile Include="Areas\StockAdministration\Models\StockItem\StockItemOverviewModel.cs" />
+    <Compile Include="Areas\StockAdministration\StockAdministrationAreaRegistration.cs" />
     <Compile Include="Bootstrap\Container\FileRegistrar.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\UnauthorizedAccessController.cs" />
@@ -1774,6 +1781,7 @@
     <Content Include="Assets\css\reset.css" />
     <Content Include="Assets\css\site.css" />
     <Content Include="Assets\css\text.css" />
+    <Content Include="Assets\js\chosen.jquery.js" />
     <Content Include="Assets\js\jquery-ui-1.8.14.min.js" />
     <Content Include="Assets\js\jquery.dataTables.min.js" />
     <Content Include="Assets\js\jquery.meio.mask.js" />
@@ -1826,6 +1834,7 @@
     <Folder Include="App_Data\" />
     <Folder Include="Areas\OutpostManagement\Services\" />
     <Folder Include="Areas\OutpostManagement\Views\Shared\" />
+    <Folder Include="Areas\StockAdministration\Views\Shared\" />
     <Folder Include="Assets\img\photos\" />
   </ItemGroup>
   <ItemGroup>
@@ -1876,6 +1885,12 @@
     <Content Include="Areas\OutpostManagement\Views\Region\OverviewTable.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\District\EditInput.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\Outpost\OverviewOutpost.cshtml" />
+    <Content Include="Areas\StockAdministration\Views\Web.config" />
+    <Content Include="Areas\StockAdministration\Views\StockItem\Overview.cshtml" />
+    <Content Include="Areas\StockAdministration\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\StockAdministration\Views\StockItem\Create.cshtml" />
+    <Content Include="Areas\StockAdministration\Views\StockItem\Input.cshtml" />
+    <Content Include="Areas\StockAdministration\Views\StockItem\Edit.cshtml" />
     <None Include="Assets\img\skins\ButtonTemplate.psd" />
     <Content Include="Views\RoleManager\Create.cshtml" />
     <Content Include="Views\RoleManager\Edit.cshtml" />
@@ -1892,6 +1907,8 @@
     <Content Include="Views\UserManager\List.cshtml" />
     <Content Include="Views\UnauthorizedAccess\Index.cshtml" />
     <Content Include="Views\Shared\_OutpostManagementActions.cshtml" />
+    <Content Include="Views\Shared\_StockAdministrationActions.cshtml" />
+    <Content Include="Views\Shared\_StockAdministrationHeader.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

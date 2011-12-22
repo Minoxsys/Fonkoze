@@ -129,6 +129,7 @@ CREATE TABLE [Outposts] (
 	   District_FK UNIQUEIDENTIFIER null,
 	   Client_FK UNIQUEIDENTIFIER null,
        ByUser_FK UNIQUEIDENTIFIER null,
+       StockItem_FK UNIQUEIDENTIFIER null,
        primary key (Id))
 end
 
@@ -148,8 +149,52 @@ CREATE TABLE [MobilePhones] (
        primary key (Id))
 end
 
-go
+if not exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'StockGroups')
+begin
+ create table StockGroups (
+        Id UNIQUEIDENTIFIER not null,
+       Name NVARCHAR(255) null,
+       Description NVARCHAR(255) null,
+       Created DATETIME null,
+       Updated DATETIME null,
+       ByUser_FK UNIQUEIDENTIFIER null,
+       primary key (Id)
+    )
+end
 
+if not exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'StockItems')
+begin
+ create table StockItems (
+        Id UNIQUEIDENTIFIER not null,
+       Name NVARCHAR(255) null,
+       Description NVARCHAR(255) null,
+       LowerLimit INT null,
+       UpperLimit INT null,
+       SMSReferenceCode NVARCHAR(255) null,
+       Created DATETIME null,
+       Updated DATETIME null,
+       StockGroup_FK UNIQUEIDENTIFIER null,
+       ByUser_FK UNIQUEIDENTIFIER null,
+       primary key (Id)
+    )
+end
+
+go
+if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='StockGroup_FK')
+begin
+alter table StockItems 
+        add constraint StockGroup_FK 
+        foreign key (StockGroup_FK) 
+        references StockGroups
+end
+
+if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='ByUser_StIFK')
+begin
+	alter table StockItems 
+        add constraint ByUser_StIFK 
+        foreign key (ByUser_FK) 
+        references Users
+end
 if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='ByUser_RCoFK')
 begin
     alter table Regions 
@@ -158,6 +203,14 @@ begin
         references Countries
 end
 
+if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='ByUser_SGFK')
+begin
+	alter table StockGroups 
+        add constraint ByUser_SGFK 
+        foreign key (ByUser_FK) 
+        references Users
+
+end
 if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='ByUser_RClFK')
 begin
     alter table Regions 
@@ -208,7 +261,7 @@ begin
         references Users
 end
 
-if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='ByUser_PUFK')
+if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='ByUser_PRFK')
 begin      
     alter table Permissions 
         add constraint ByUser_PRFK 
@@ -356,4 +409,12 @@ begin
         add constraint District_Outposts_FK
         foreign key (ByUser_FK) 
         references Districts
+end
+
+if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='StockItem_OFK ')
+begin
+alter table Outposts 
+        add constraint StockItem_OFK 
+        foreign key (StockItem_FK) 
+        references StockItems
 end
