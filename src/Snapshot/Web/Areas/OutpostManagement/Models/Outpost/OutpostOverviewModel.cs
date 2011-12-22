@@ -14,9 +14,7 @@ namespace Web.Areas.OutpostManagement.Models.Outpost
 {
     public class OutpostOverviewModel
     {
-
- 
-        public string Name { get; set; }
+       public string Name { get; set; }
         public string OutpostType { get; set; }
         public string Email { get; set; }
         public string MainMobileNumber { get; set; }

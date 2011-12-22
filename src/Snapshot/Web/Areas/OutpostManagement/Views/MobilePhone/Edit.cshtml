@@ -1,4 +1,6 @@
-﻿@model Web.Areas.OutpostManagement.Models.Outpost.MobilePhoneModel
+﻿@using Web.Areas.OutpostManagement.Models.MobilePhone
+
+@model MobilePhoneModel
            
           
 @section breadcrumbs{
@@ -9,7 +11,7 @@ OutpostManagement : Edit
 }
 @section title_bar{
     <h4>
-        @Model.MobileNumber : Edit Mobile Phone</h4>
+        @Model.ContactDetail : Edit Mobile Phone</h4>
 }
 @section master_content{
     <form class="main-form" 
@@ -24,8 +26,9 @@ OutpostManagement : Edit
         Html.RenderPartial("MobilePhoneInput", @Model);
         
     }
-
-    @(Html.FormButtons<MobilePhoneController>(it => it.Overview(Model.OutpostId), OutpostManagementAreaRegistration.DEFAULT_ROUTE))
+             @Html.SubmitButton("submit-form", "Save") <span>or </span>
+             <a href="@(Html.BuildUrlFromExpression<MobilePhoneController>(it => it.Overview(@Model.Outpost_FK)))">
+                    Cancel</a>
     </form>
 }
 

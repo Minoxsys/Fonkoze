@@ -12,7 +12,7 @@ OutpostManagement Outposts: Overview
    }
 
 @section master_content{
-        @*
+
     @if (Model.Error != null)
     {
         <div class="error">
@@ -20,7 +20,6 @@ OutpostManagement Outposts: Overview
         </div>
         
     }
-    *@
 
     <div class="page_header_buttons">
         @(Html.ActionLink<OutpostController>(it => it.Create(), "Create Outpost", OutpostManagementAreaRegistration.DEFAULT_ROUTE))
@@ -75,35 +74,35 @@ OutpostManagement Outposts: Overview
 
 @section scripts{
     <script type="text/javascript">
-     $("select[name='@Html.NameFor(m => m.Country.Id)']").change(function () {
+        $("select[name='@Html.NameFor(m => m.Country.Id)']").change(function () {
 
-         var e = $(this)[0];
-         var selectedCountryId = e.options[e.selectedIndex].value;
+            var e = $(this)[0];
+            var selectedCountryId = e.options[e.selectedIndex].value;
 
-         $.getJSON('@Url.Action("GetRegionsForCountry", "District")?countryId=' + selectedCountryId, function (data) {
-             var drop = $("select[name='@Html.NameFor(m => m.Region.Id)']")
-             drop.html('')
+            $.getJSON('@Url.Action("GetRegionsForCountry", "District")?countryId=' + selectedCountryId, function (data) {
+                var drop = $("select[name='@Html.NameFor(m => m.Region.Id)']")
+                drop.html('')
 
-             var opt = document.createElement("option");
-             opt.text = "- Select Region -";
-             opt.value = '@Guid.Empty.ToString("n")';
+                var opt = document.createElement("option");
+                opt.text = "- Select Region -";
+                opt.value = '@Guid.Empty.ToString("n")';
 
-             drop.append(opt);
+                drop.append(opt);
 
-             $.each(data, function () {
-                 var opt = document.createElement("option");
-                 opt.text = this['Text'];
-                 opt.value = this['Value'];
+                $.each(data, function () {
+                    var opt = document.createElement("option");
+                    opt.text = this['Text'];
+                    opt.value = this['Value'];
 
-                 drop.append(opt);
-             });
+                    drop.append(opt);
+                });
 
-         });
+            });
 
             $("select[name='@Html.NameFor(m => m.Region.CountryId)'] option[value='@Guid.Empty.ToString()']").remove();
         });
 
-     
+
         $("select[name='@Html.NameFor(m => m.Region.Id)']").change(function () {
 
             var e = $(this)[0];
@@ -128,8 +127,8 @@ OutpostManagement Outposts: Overview
                 });
 
                 //$("select[name='@Html.NameFor(m => m.District.Id)'] option[value='@Guid.Empty.ToString()']").remove().change(onDistrictChanged); ;
-                 $("select[name='@Html.NameFor(m=>m.District.Id)']").change(onDistrictChanged);
-             
+                $("select[name='@Html.NameFor(m=>m.District.Id)']").change(onDistrictChanged);
+
             });
 
         });
@@ -149,7 +148,7 @@ OutpostManagement Outposts: Overview
             var selectedDistrictId = e.options[e.selectedIndex].value;
 
             var drop = $("#outpost-overview")
-            
+
             var urlOverview = '@Url.Action("OverviewOutpost")?districtId=' + selectedDistrictId;
             $.get(urlOverview, function (data) {
 
@@ -158,9 +157,9 @@ OutpostManagement Outposts: Overview
                 $('#outpost-overview').html(data);
             });
 
- 
+
         }           
-    </script>
+</script>
 
 
      

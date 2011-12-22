@@ -1,18 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
-namespace Web.Areas.OutpostManagement.Models.Outpost
+
+namespace Web.Areas.OutpostManagement.Models.MobilePhone
 {
-    public class ClientModelOutpost
+    public class ClientModelPhones
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
         public DateTime? Created { get; set; }
         public DateTime? Updated { get; set; }        
 
-        public ClientModelOutpost()
+        public ClientModelPhones()
         { }
     }
 }

@@ -19,19 +19,26 @@ namespace IntegrationTests
     {
        readonly string OUTPOST_NAME = "Outpost Test";
        readonly string OUTPOST_TYPE = "Facility";
-       readonly string OUTPOST_EMAIL = "a.b@evozon.com";
-       readonly string OUTPOST_MOBILE = "12345678";
-       //readonly List<MobilePhone> Phones;
+       readonly string OUTPOST_DETAIL = "a.b@evozon.com";
+       readonly string OUTPOST_METHOD = "e-mail";
+       readonly Guid CLIENT_ID =new Guid("BEEC53CE-A73C-4F03-A354-C617F68BC813");
+       readonly List<MobilePhone> Phones;
        //Guid OUTPOST_ID = Guid.Empty;
 
        [Test]
        public void It_ShouldSuccessfullyPersist_An_Outpost()
        {
+           var client = Specs.CheckProperty(e => e.Name, "Alin Stan").VerifyTheMappings();
+
+           Assert.IsNotNull(client);
+           Assert.AreEqual(client.Name, "Alin Stan");
+
            var outpost = Specs
                     .CheckProperty(e => e.Name, OUTPOST_NAME)
                     .CheckProperty(e => e.OutpostType, OUTPOST_TYPE)
-                    .CheckProperty(e => e.Email, OUTPOST_EMAIL)
-                    .CheckProperty(e => e.MainMobileNumber, OUTPOST_MOBILE)
+                    .CheckProperty(e => e.DetailMethod, OUTPOST_DETAIL)
+                    .CheckProperty(e => e.MainMethod, OUTPOST_METHOD)
+                    //.CheckProperty(e => e.Client, OUTPOST_METHOD)
 
                     .VerifyTheMappings();
 
@@ -39,8 +46,9 @@ namespace IntegrationTests
             Assert.IsInstanceOf<Guid>(outpost.Id);
             Assert.AreEqual(outpost.Name, OUTPOST_NAME);
             Assert.AreEqual(outpost.OutpostType, OUTPOST_TYPE);
-            Assert.AreEqual(outpost.Email, OUTPOST_EMAIL);
-            Assert.AreEqual(outpost.MainMobileNumber, OUTPOST_MOBILE);
+            Assert.AreEqual(outpost.DetailMethod, OUTPOST_DETAIL);
+            Assert.AreEqual(outpost.MainMethod, OUTPOST_METHOD);
+            //Assert.AreEqual(outpost.Client.Id, CLIENT_ID);
 
 
             session.Delete(outpost);
@@ -49,46 +57,52 @@ namespace IntegrationTests
 
        }
 
-       //[Test]
-       //public void It_ShouldSuccessfullyPersist_An_Outpost_WithOnePhone()
-       //{
-         
-           
-       //    var outpost = Specs
-       //             .CheckProperty(e => e.Name, OUTPOST_NAME)
-       //             .CheckProperty(e => e.OutpostType, OUTPOST_TYPE)
-       //             .CheckProperty(e => e.Email, OUTPOST_EMAIL)
-       //             .CheckProperty(e => e.MainMobileNumber, OUTPOST_MOBILE)
-                   
-       //             .VerifyTheMappings();
-       //    var phone = new MobilePhone
-       //    {
-       //        MobileNumber = "07888888",
-       //        //Outpost=outpost
-       //    };
-       //    session.Save(phone);
-       //    //outpost.AddMobilePhone(phone);
-       //    //session.Save(outpost);
-       //    session.Flush();
+       [Test]
+       public void It_ShouldSuccessfullyPersist_An_Outpost_WithOnePhone()
+       {
 
-       //    outpost = (from _outpost in session.Query<Outpost>().FetchMany(o=>o.MobilePhones)
-       //              where _outpost.Id == outpost.Id
-       //              select _outpost).FirstOrDefault();
+           var client = Specs.CheckProperty(e => e.Name, "Alin Stan").VerifyTheMappings();
 
-       //    Assert.IsNotNull(outpost.MobilePhones);
+           Assert.IsNotNull(client);
+           Assert.AreEqual(client.Name, "Alin Stan");
 
-       //    Assert.IsNotNull(outpost);
-       //    Assert.IsInstanceOf<Guid>(outpost.Id);
-       //    Assert.AreEqual(outpost.Name, OUTPOST_NAME);
-       //    Assert.AreEqual(outpost.OutpostType, OUTPOST_TYPE);
-       //    Assert.AreEqual(outpost.Email, OUTPOST_EMAIL);
-       //    Assert.AreEqual(outpost.MainMobileNumber, OUTPOST_MOBILE);
+           var outpost = Specs
+                    .CheckProperty(e => e.Name, OUTPOST_NAME)
+                    .CheckProperty(e => e.OutpostType, OUTPOST_TYPE)
+                    .CheckProperty(e => e.DetailMethod, OUTPOST_DETAIL)
+                    .CheckProperty(e => e.MainMethod, OUTPOST_METHOD)
+                    //.CheckProperty(e => e.Client.Id, CLIENT_ID)
+
+                    .VerifyTheMappings();
+           var phone = new MobilePhone
+           {
+               ContactDetail = "07888888"
+               //Outpost=outpost
+           };
+           session.Save(phone);
+           //outpost.AddMobilePhone(phone);
+           //session.Save(outpost);
+           session.Flush();
+
+           outpost = (from _outpost in session.Query<Outpost>().FetchMany(o => o.DetailMethod)
+                      where _outpost.Id == outpost.Id
+                      select _outpost).FirstOrDefault();
+
+           Assert.IsNotNull(outpost.MobilePhones);
+
+           Assert.IsNotNull(outpost);
+           Assert.IsInstanceOf<Guid>(outpost.Id);
+           Assert.AreEqual(outpost.Name, OUTPOST_NAME);
+           Assert.AreEqual(outpost.OutpostType, OUTPOST_TYPE);
+           Assert.AreEqual(outpost.DetailMethod, OUTPOST_DETAIL);
+           Assert.AreEqual(outpost.MainMethod, OUTPOST_METHOD);
+            Assert.AreEqual(outpost.Client, CLIENT_ID);
 
 
-       //    session.Delete(outpost);
-       //    session.Flush();
+           session.Delete(outpost);
+           session.Flush();
 
 
-       //}
+       }
     }
 }

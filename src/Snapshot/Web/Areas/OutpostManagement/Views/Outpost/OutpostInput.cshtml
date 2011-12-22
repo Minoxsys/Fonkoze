@@ -7,37 +7,45 @@
 <fieldset id="fieldsetInformation">
     <legend>Outpost Information</legend>
     <div class="row of-2">
-        <div class="column">
-            <label for="@Html.NameFor(m => m.Country.Id)">
-                Country</label>
-            <select name="@Html.NameFor(m => m.Country.Id)">
-                <option value="@Guid.Empty.ToString()">- Select Country - </option>
+ <label for="Name">
+    Country
+</label>       
+<div class="row">
+             <select name="@Html.NameFor(m => m.Region.CountryId)">
                 @foreach (var item in Model.Countries)
                 { 
                     <option value="@item.Value" @(item.Selected ? @"selected='selected'" : @"") >@item.Text</option>
                 }
             </select>
         </div>
-        <div class="column">
-            <label for="@Html.NameFor(m => m.Region.Id)">
-                Region</label>
-            <select name="@Html.NameFor(m => m.Region.Id)">
+<label for="Name">
+    Region
+</label>    
+<div class="row">
+     <select name="@Html.NameFor(m => m.Region.Id)">
+        @foreach (var item1 in Model.Regions)
+        { 
+            <option value="@item1.Value" @(item1.Selected ? @"selected='selected'" : @"") >@item1.Text</option>
+        }
+    </select>
+ <label for="Name">
+    District
+</label>   
+</div>
+        <div class="row">
+             <select name="@Html.NameFor(m => m.District.Id)">
+                @foreach (var item2 in Model.Districts)
+                { 
+                    <option value="@item2.Value" @(item2.Selected ? @"selected='selected'" : @"") >@item2.Text</option>
+                }
             </select>
-        </div>
-    </div>
-    <div class="row ">
-        <div class="column">
-            <label for="Html.NameFor(m => m.District.Id)">
-                District</label>
-            <select name="@Html.NameFor(m => m.District.Id)">
-            </select>
-        </div>
     </div>
     <div class="row ">
         <div class="column">
             <label for="NameD">
-                Name</label>
-            @Html.TextBoxFor(m => m.Name, new { maxlength = 250})
+                Name
+            </label>
+            @Html.TextBoxFor(m => m.Name, new { maxlength = 20})
         </div>
     </div>
     <div class="row ">
@@ -52,13 +60,13 @@
             <label for="Longitude">
                 Longitude<text class="required-text">*</text>
             </label>
-            @Html.TextBoxFor(m => m.Longitude, new { maxlength = 250 })
+            @Html.TextBoxFor(m => m.Longitude, new { maxlength = 20 })
         </div>
         <div class="column">
             <label for="Latitude">
                 Latitude<text class="required-text">*</text>
             </label>
-            @Html.TextBoxFor(m => m.Latitude, new { maxlength = 250 })
+            @Html.TextBoxFor(m => m.Latitude, new { maxlength = 20 })
         </div>
     </div>
 </fieldset>

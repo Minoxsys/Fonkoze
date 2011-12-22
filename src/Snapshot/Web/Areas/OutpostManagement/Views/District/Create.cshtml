@@ -14,7 +14,7 @@ District : Create
             Html.RenderPartial("Input", Model);     
         }
     </fieldset>
-    @Html.SubmitButton("submit-form", "Save") <span>or </span><a href="@(Html.BuildUrlFromExpression<DistrictController>(it => it.Overview(Model.Region.CountryId,Model.Region.Id)))">
+    @Html.SubmitButton("submit-form", "Save") <span>or </span><a href="@(Html.BuildUrlFromExpression<RegionController>(it => it.Overview(null)))">
         Cancel</a>
     @{Html.EndForm();}
 }

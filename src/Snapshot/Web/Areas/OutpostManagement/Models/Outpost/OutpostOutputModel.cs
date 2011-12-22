@@ -15,35 +15,35 @@ namespace Web.Areas.OutpostManagement.Models.Outpost
         public Guid Id { get; set; }
         public string Name { get; set; }
         public string OutpostType { get; set; }
-        public string Email { get; set; }
-        public string MainMobileNumber { get; set; }
+        public string MainMethod { get; set; }
+        public string DetailMethod { get; set; }
         public string Longitude { get; set; }
         public string Latitude { get; set; }
-        public CountryModel Country { get; set; }
         public RegionModel Region { get; set; }
         public DistrictModel District { get; set; }
         public ClientModel Client { get; set; }
 
-        public List<SelectListItem> Outposts { get; set; }
         public List<SelectListItem> Countries { get; set; }
         public List<SelectListItem> Regions { get; set; }
         public List<SelectListItem> Districts { get; set; }
+
+        public List<SelectListItem> Outposts { get; set; }
 
         public IQueryService<Domain.Country> queryCountry { get; set; }
         public IQueryService<Domain.Region> queryRegion { get; set; }
         public IQueryService<Domain.District> queryDistrict { get; set; }
 
-                public OutpostOutputModel()
-                {
+        public OutpostOutputModel()
+        {
 
-                    this.queryCountry = queryCountry;
-                    this.queryRegion = queryRegion;
-                    this.queryDistrict = queryDistrict;
+            this.queryCountry = queryCountry;
+            this.queryRegion = queryRegion;
+            this.queryDistrict = queryDistrict;
 
-                    var Countries = new List<SelectListItem>();
-                    var Regions = new List<SelectListItem>();
-                    var Districts = new List<SelectListItem>();
-                }
+            var Countries = new List<SelectListItem>();
+            var Regions = new List<SelectListItem>();
+            var Districts = new List<SelectListItem>();
+        }
 
         public OutpostOutputModel(IQueryService<Domain.Country> queryCountry,
                                   IQueryService<Domain.Region> queryRegion,
@@ -63,8 +63,7 @@ namespace Web.Areas.OutpostManagement.Models.Outpost
             this.Regions = Regions;
             this.Districts = Districts;
 
-            var Country = new CountryModel();
-
+ 
             var result = queryCountry.Query();
 
             foreach (Domain.Country item in result)
@@ -75,11 +74,10 @@ namespace Web.Areas.OutpostManagement.Models.Outpost
                 selectListItem.Text = item.Name;
                 Countries.Add(selectListItem);
             }
-
+            
             var resultRegion = queryRegion.Query();
 
-            var Region = new RegionModel();
-
+  
             if (resultRegion.FirstOrDefault() != null)
             {
                 foreach (Domain.Region item in resultRegion)
@@ -90,23 +88,24 @@ namespace Web.Areas.OutpostManagement.Models.Outpost
                     selectListItem.Text = item.Name;
                     Regions.Add(selectListItem);
 
-                    var resultDistrict = queryDistrict.Query();
-
-                    var District = new DistrictModel();
-
-                    if (resultDistrict.FirstOrDefault() != null)
-                    {
-                        foreach (Domain.District item1 in resultDistrict)
-                        {
-                            var selectListItem1 = new SelectListItem();
-
-                            selectListItem.Value = item1.Id.ToString();
-                            selectListItem.Text = item1.Name;
-                            Districts.Add(selectListItem);
-                        }
-                    }
                 }
             }
+
+            var resultDistrict = queryDistrict.Query();
+
+            if (resultDistrict.FirstOrDefault() != null)
+            {
+                foreach (Domain.District item2 in resultDistrict)
+                {
+                    var selectListItem = new SelectListItem();
+
+                    selectListItem.Value = item2.Id.ToString();
+                    selectListItem.Text = item2.Name;
+                    Districts.Add(selectListItem);
+                }
+            }
+
+             
 
         }
 

@@ -1,8 +1,9 @@
 ﻿@using Web.Areas.OutpostManagement.Models.Outpost
 
 @model OutpostOutputModel
+           
 @section breadcrumbs{
-    @Url.HomeLink("Outpost Administration") / @(Html.ActionLink<OutpostController>(act => act.Overview(null, null,null), "Outposts Overview", OutpostManagementAreaRegistration.DEFAULT_ROUTE))
+    @Url.HomeLink("Outpost Administration") / @(Html.ActionLink<OutpostController>(act => act.Overview(null, null, null), "Outposts Overview", OutpostManagementAreaRegistration.DEFAULT_ROUTE))
 > Create
 }
 @section page_title{
@@ -18,7 +19,7 @@ OutpostManagement : Outpost : Create
             Html.RenderPartial("OutpostInput", Model);     
         }
     </fieldset>
-    @Html.SubmitButton("submit-form", "Save") <span>or </span><a href="@(Html.BuildUrlFromExpression<OutpostController>(it => it.Overview(null,null,null)))">
+    @Html.SubmitButton("submit-form", "Save") <span>or </span><a href="@(Html.BuildUrlFromExpression<OutpostController>(it => it.Overview(null, null, null)))">
         Cancel</a>
     @{Html.EndForm();}
 }
@@ -26,67 +27,174 @@ OutpostManagement : Outpost : Create
 
 
 @section scripts{
-    <script type="text/javascript">
-     $("select[name='@Html.NameFor(m => m.Country.Id)']").change(function () {
+         function onCountryChanged() {
 
-         var e = $(this)[0];
-         var selectedCountryId = e.options[e.selectedIndex].value;
+            $("select[name='@Html.NameFor(m => m.Region.CountryId)']").change(function () {
 
-         $.getJSON('@Url.Action("GetRegionsForCountry", "District")?countryId=' + selectedCountryId, function (data) {
-             var drop = $("select[name='@Html.NameFor(m => m.Region.Id)']")
-             drop.html('')
+            var e = $(this)[0];
+            var selectedCountryId = e.options[e.selectedIndex].value;
 
-             var opt = document.createElement("option");
-             opt.text = "- Select Region -";
-             opt.value = '@Guid.Empty.ToString("n")';
+            $.getJSON('@Url.Action("GetRegionsForCountry", "District")?countryId=' + selectedCountryId, function (data) {
+                var drop = $("select[name='@Html.NameFor(m => m.Region.Id)']")
+                drop.html('')
 
-             drop.append(opt);
+                var opt = document.createElement("option");
+                opt.text = "- Select Region -";
+                opt.value = '@Guid.Empty.ToString("n")';
 
-             $.each(data, function () {
-                 var opt = document.createElement("option");
-                 opt.text = this['Text'];
-                 opt.value = this['Value'];
+                drop.append(opt);
 
-                 drop.append(opt);
-             });
+                $.each(data, function () {
+                    var opt = document.createElement("option");
+                    opt.text = this['Text'];
+                    opt.value = this['Value'];
 
-         });
+                    drop.append(opt);
+                });
 
-         $("select[name='@Html.NameFor(m => m.Country.Id)'] option[value='@Guid.Empty.ToString()']").remove();
+            });
 
-     });
+            $("select[name='@Html.NameFor(m => m.Region.CountryId)'] option[value='@Guid.Empty.ToString()']").remove();
+        });
 
 
-     $("select[name='@Html.NameFor(m => m.Region.Id)']").change(function () {
+        $("select[name='@Html.NameFor(m => m.Region.Id)']").change(function () {
 
-         var e = $(this)[0];
-         var selectedCountryId = e.options[e.selectedIndex].value;
+            var e = $(this)[0];
+            var selectedRegionId = e.options[e.selectedIndex].value;
 
-         $.getJSON('@Url.Action("GetDistrictsForRegionData", "Outpost")?regionId=' + selectedCountryId, function (data) {
-             var drop = $("select[name='@Html.NameFor(m => m.District.Id)']")
-             drop.html('')
+            $.getJSON('@Url.Action("GetDistrictsForRegion", "Outpost")?regionId=' + selectedRegionId, function (data) {
+                var drop = $("select[name='@Html.NameFor(m => m.District.Id)']")
+                drop.html('')
 
-             var opt = document.createElement("option");
-             opt.text = "- Select District -";
-             opt.value = '@Guid.Empty.ToString("n")';
+                var opt = document.createElement("option");
+                opt.text = "- Select District -";
+                opt.value = '@Guid.Empty.ToString("n")';
 
-             drop.append(opt);
+                drop.append(opt);
 
-             $.each(data, function () {
-                 var opt = document.createElement("option");
-                 opt.text = this['Text'];
-                 opt.value = this['Value'];
+                $.each(data, function () {
+                    var opt = document.createElement("option");
+                    opt.text = this['Text'];
+                    opt.value = this['Value'];
 
-                 drop.append(opt);
-             });
+                    drop.append(opt);
+                });
 
-         });
-         $("select[name='@Html.NameFor(m => m.Region.Id)'] option[value='@Guid.Empty.ToString("n")']").remove();
-     });
-    
-     $("select[name='@Html.NameFor(m => m.District.Id)']").change(function () {
-      $("select[name='@Html.NameFor(m => m.District.Id)'] option[value='@Guid.Empty.ToString("n")']").remove();
-     });
+                //$("select[name='@Html.NameFor(m => m.District.Id)'] option[value='@Guid.Empty.ToString()']").remove().change(onDistrictChanged); ;
+                $("select[name='@Html.NameFor(m=>m.District.Id)']").change();
 
-    </script>
+            });
+
+        });
+
+        $(function () {
+            $(".delete-user-form").submit(function () {
+                return confirm('Are you sure that you want to delete this Outpost?')
+            });
+
+
+        });
+
+
+        function onDistrictChanged() {
+
+            var e = $(this)[0];
+            var selectedDistrictId = e.options[e.selectedIndex].value;
+
+            var drop = $("#outpost-overview")
+            var urlOverview = '@Url.Action("OverviewOutpost")?districtId=' + selectedDistrictId;
+            $.get(urlOverview, function (data) {
+
+                drop.html('')
+
+                $('#outpost-overview').html(data);
+            });
+
+
+        }      
+        $("select[name='@Html.NameFor(m => m.Region.CountryId)']").change(function () {
+
+            var e = $(this)[0];
+            var selectedCountryId = e.options[e.selectedIndex].value;
+
+            $.getJSON('@Url.Action("GetRegionsForCountry", "District")?countryId=' + selectedCountryId, function (data) {
+                var drop = $("select[name='@Html.NameFor(m => m.Region.Id)']")
+                drop.html('')
+
+                var opt = document.createElement("option");
+                opt.text = "- Select Region -";
+                opt.value = '@Guid.Empty.ToString("n")';
+
+                drop.append(opt);
+
+                $.each(data, function () {
+                    var opt = document.createElement("option");
+                    opt.text = this['Text'];
+                    opt.value = this['Value'];
+
+                    drop.append(opt);
+                });
+
+            });
+
+            $("select[name='@Html.NameFor(m => m.Region.CountryId)'] option[value='@Guid.Empty.ToString()']").remove();
+        });
+
+
+        $("select[name='@Html.NameFor(m => m.Region.Id)']").change(function () {
+
+            var e = $(this)[0];
+            var selectedRegionId = e.options[e.selectedIndex].value;
+
+            $.getJSON('@Url.Action("GetDistrictsForRegion", "Outpost")?regionId=' + selectedRegionId, function (data) {
+                var drop = $("select[name='@Html.NameFor(m => m.District.Id)']")
+                drop.html('')
+
+                var opt = document.createElement("option");
+                opt.text = "- Select District -";
+                opt.value = '@Guid.Empty.ToString("n")';
+
+                drop.append(opt);
+
+                $.each(data, function () {
+                    var opt = document.createElement("option");
+                    opt.text = this['Text'];
+                    opt.value = this['Value'];
+
+                    drop.append(opt);
+                });
+
+                $("select[name='@Html.NameFor(m=>m.District.Id)']").change(onDistrictChanged);
+
+            });
+
+        });
+
+        $(function () {
+            $(".delete-user-form").submit(function () {
+                return confirm('Are you sure that you want to delete this Outpost?')
+            });
+
+
+        });
+
+
+        function onDistrictChanged() {
+
+            var e = $(this)[0];
+            var selectedDistrictId = e.options[e.selectedIndex].value;
+
+            var drop = $("#outpost-overview")
+            var urlOverview = '@Url.Action("OverviewOutpost")?districtId=' + selectedDistrictId;
+            $.get(urlOverview, function (data) {
+
+                drop.html('')
+
+                $('#outpost-overview').html(data);
+            });
+
+
+        }      
+     </script>
 }

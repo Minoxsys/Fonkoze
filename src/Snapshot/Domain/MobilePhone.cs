@@ -9,8 +9,12 @@ namespace Domain
 {
     public class MobilePhone : DomainEntity
     {
-        public virtual string MobileNumber { get; set; }
-        public virtual Guid Outpost_FK { get; set; }
+        public virtual Guid Id { get; set; }
+        public virtual string MethodType { get; set; }
+        public virtual string ContactDetail { get; set; }
+        public virtual string MainMethod { get; set; }
         public virtual Outpost Outpost { get; set; }
+        public virtual Client Client { get; set; }
+        public virtual Guid Outpost_FK { get; set; }
     }
 }

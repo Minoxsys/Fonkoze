@@ -1,44 +1,32 @@
 ﻿@model Web.Areas.OutpostManagement.Models.Country.CountryModel
            
 @section breadcrumbs{
-    @Url.HomeLink("Overview")/ @(Html.ActionLink<CountryController>(it => it.Overview(), "OutpostManagement : Countries", OutpostManagementAreaRegistration.DEFAULT_ROUTE)) > Edit
+    @Url.HomeLink("Overview")/ @(Html.ActionLink<CountryController>(it => it.Overview(), "Outpost Administration > Countries", OutpostManagementAreaRegistration.DEFAULT_ROUTE)) > Edit
 }
 @section page_title{
-On-Boarding Candidate: Edit
+
 }
 @section title_bar{
-    <h4>
-        @Model.Name : Edit Country</h4>
+
 }
 @section master_content{
-    <form class="main-form" 
-          method="post" 
-          action="">
+     @{Html.BeginForm();}
+   <div style="display: none">
+@Html.HiddenFor(m => m.Client.Id)
+</div>
+            <fieldset class="fieldsCollection ">
+                @{
+                    Html.RenderPartial("CountryInput", Model);     
+                }
+            </fieldset>
+            @Html.SubmitButton("submit-form", "Save") <span>or </span><a href="@(Html.BuildUrlFromExpression<CountryController>(it => it.Overview()))">
+                    Cancel</a>
+     
+    @{Html.EndForm();}
 
-     @Html.ValidationSummary()
-     @Html.HiddenFor(m => m.Id)
-
-    @{
-        Html.RenderPartial("CountryInput", @Model);
-        
-    }
-
-    @(Html.FormButtons<CountryController>(it => it.Overview(), OutpostManagementAreaRegistration.DEFAULT_ROUTE))
-    </form>
 }
 
 @section master_actions{
-    <h3>
-        Actions</h3>
-    <div class="page_header_buttons">
-
-        @*
-         <div style="margin:50px 0px 5px 0px"> 
-            @(Html.DeleteButton<CountryController>(it => it.Delete(Model.Id), OutpostManagementAreaRegistration.DEFAULT_ROUTE))
-        </div>
-        *@
-               
-    </div>
 }
 @section scripts{
 

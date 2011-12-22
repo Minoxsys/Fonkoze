@@ -10,8 +10,8 @@ namespace Domain
     {
         public virtual string Name { get; set; }
         public virtual string OutpostType { get; set; }
-        public virtual string Email { get; set; }
-        public virtual string MainMobileNumber { get; set; }
+        public virtual string MainMethod { get; set; }
+        public virtual string DetailMethod { get; set; }
         public virtual string Longitude { get; set; }
         public virtual string Latitude { get; set; }
         public virtual Domain.Country Country { get; set; }

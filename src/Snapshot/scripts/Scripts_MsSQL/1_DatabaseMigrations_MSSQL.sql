@@ -118,8 +118,8 @@ CREATE TABLE [Outposts] (
        Id UNIQUEIDENTIFIER not null,
        Name NVARCHAR(40) null,
        OutpostType NVARCHAR(20) null,
-       Email NVARCHAR(50) null,
-	   MainMobileNumber NVARCHAR(20) null,
+	   MainMethod NVARCHAR(10) null,
+	   DetailMethod NVARCHAR(100) null,
 	   Latitude NVARCHAR(20) null,
 	   Longitude NVARCHAR(20) null,
        Created DATETIME null,
@@ -137,11 +137,14 @@ begin
 	-- MobilePhones
 CREATE TABLE [MobilePhones] (
        Id UNIQUEIDENTIFIER not null,
-       MobileNumber NVARCHAR(50) null,
+       MethodType NVARCHAR(15) null,
+       ContactDetail NVARCHAR(100) null,
+       MainMethod NCHAR(1) NULL,
        Created DATETIME null,
        Updated DATETIME null,
        Outpost_FK UNIQUEIDENTIFIER null,
        ByUser_FK UNIQUEIDENTIFIER null,
+       Client_FK UNIQUEIDENTIFIER not null
        primary key (Id))
 end
 
@@ -291,57 +294,66 @@ End
 
 
 
-if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='Outpost_MPOFK')
+if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='User_MobilePhones_FK ')
 begin
-    alter table [MobilePhones] 
-        add constraint Outpost_MPOFK 
+
+ alter table MobilePhones 
+        add constraint User_MobilePhones_FK 
+        foreign key (ByUser_FK) 
+        references Users
+end
+
+if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='Client_MobilePhones_FK')
+begin
+
+ alter table MobilePhones 
+        add constraint Client_MobilePhones_FK
+        foreign key (Client_FK) 
+        references Clients
+end
+
+if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='Outpost_MobilePhones_FK')
+begin
+
+ alter table MobilePhones 
+        add constraint Outpost_MobilePhones_FK 
         foreign key (Outpost_FK) 
         references Outposts
 end
 
 
-if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='ByUser_MPUFK ')
+if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='User_Outposts_FK ')
 begin
 
- alter table MobilePhones 
-        add constraint ByUser_MPUFK 
+    alter table Outposts 
+        add constraint User_Outposts_FK
         foreign key (ByUser_FK) 
         references Users
 end
 
-
-if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='ByUser_OUFK ')
+if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='Country_Outposts_FK ')
 begin
 
     alter table Outposts 
-        add constraint ByUser_OUFK 
-        foreign key (ByUser_FK) 
-        references Users
-end
-
-if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='Country_OCFK ')
-begin
-
-    alter table Outposts 
-        add constraint Country_OCFK 
+        add constraint Country_Outposts_FK 
         foreign key (ByUser_FK) 
         references Countries
 end
 
-if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='Region_OCFK ')
+if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='Region_Outposts_FK ')
 begin
 
     alter table Outposts 
-        add constraint Region_OCFK 
+        add constraint Region_Outposts_FK 
         foreign key (ByUser_FK) 
         references Regions
 end
 
-if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='District_ODFK ')
+if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='District_Outposts_FK ')
 begin
 
     alter table Outposts 
-        add constraint District_ODFK 
+        add constraint District_Outposts_FK
         foreign key (ByUser_FK) 
         references Districts
 end

@@ -6,19 +6,15 @@ using Domain;
 using Core.Persistence;
 using NHibernate.Linq;
 
-namespace Persistence.Queries.Regions
+namespace Persistence.Queries.Outposts
 {
     public class NHibernateQueryOutposts : IQueryOutposts
     {
         private IQueryService<Outpost> _query;
+
         public NHibernateQueryOutposts(IQueryService<Outpost> query)
         {
             this._query = query;
-        }
-
-        public IQueryable<Domain.Outpost> GetAllCountries()
-        {
-            return _query.Query().Fetch(it => it.Country);
         }
 
         public IQueryable<Domain.Outpost> GetAllRegions()
@@ -28,7 +24,7 @@ namespace Persistence.Queries.Regions
 
         public IQueryable<Domain.Outpost> GetAllDistricts()
         {
-            return _query.Query().Fetch(it => it.Country);
+            return _query.Query().Fetch(it => it.District);
         }
     }
 }

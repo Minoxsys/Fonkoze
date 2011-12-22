@@ -1,21 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using Core.Domain;
-using Web.Controllers;
-using Web.Areas.OutpostManagement.Models;
-using Web.Areas.OutpostManagement.Models.Outpost;
+using Web.Areas.OutpostManagement.Models.MobilePhone;
 using AutoMapper;
-using Web.Bootstrap.Converters;
 using Core.Persistence;
-using Persistence.Queries.Employees;
-using System.Net.Mail;
-using Web.Helpers;
-using Web.Security;
-using Web.Validation.ValidDate;
-using System.Globalization;
+using Core.Domain;
 using Domain;
 
 
@@ -34,6 +24,7 @@ namespace Web.Areas.OutpostManagement.Controllers
            public IQueryable<Country> countries;
            public IQueryable<Region> regions;
            public IQueryable<District> districts;
+           public IQueryService<Client> QueryClients { get; set; }
 
            public ISaveOrUpdateCommand<MobilePhone> SaveOrUpdateCommand { get; set; }
 
@@ -45,10 +36,11 @@ namespace Web.Areas.OutpostManagement.Controllers
 
         public ActionResult Overview(Guid outpostId)
         {
-            Web.Areas.OutpostManagement.Models.Outpost.OverviewPhones model = new Web.Areas.OutpostManagement.Models.Outpost.OverviewPhones();
+            MobilePhonesOverviewModel model = new MobilePhonesOverviewModel();
 
             model.Items = new List<MobilePhoneModel>();
-
+            model.Outpost_FK = outpostId;
+            
             var queryResult = QueryService.Query().Where(mm => mm.Outpost_FK == outpostId);
 
             if (queryResult.ToList().Count() > 0)
@@ -59,7 +51,7 @@ namespace Web.Areas.OutpostManagement.Controllers
                     Mapper.Map(item, viewModelItem);
                     model.Items.Add(viewModelItem);
                 });
-
+            
             countries =  QueryCountries.Query();
             regions = QueryRegions.Query();
             //districts = QueryDistricts.Query();
@@ -72,7 +64,7 @@ namespace Web.Areas.OutpostManagement.Controllers
         public ActionResult Create(Guid outpostId)
         {
             var model = new MobilePhoneModel();
-            model.OutpostId = outpostId;
+            model.Outpost_FK = outpostId;
             return View(model);
         }
 
@@ -91,36 +83,18 @@ namespace Web.Areas.OutpostManagement.Controllers
 
             CreateMappings();
             var mobilePhone = new MobilePhone();
-                
-            mobilePhone.Outpost = QueryOutposts.Load(mobilePhoneModel.OutpostId);
+             
+            mobilePhone.Outpost = QueryOutposts.Load(mobilePhoneModel.Outpost_FK);
+            mobilePhone.Client = QueryClients.Load(Client.DEFAULT_ID); ;
+            
             Mapper.Map(mobilePhoneModel, mobilePhone);
 
             SaveOrUpdateCommand.Execute(mobilePhone);
 
-            return RedirectToAction("PhoneListInput", "MobilePhone", new { outpostId = mobilePhoneModel.OutpostId });
+            return RedirectToAction("Overview", "MobilePhone", new { outpostId = mobilePhoneModel.Outpost_FK });
          }
         
   
-        [HttpGet]
-        public ActionResult PhoneListInput(Guid outpostId)
-        {
-            Web.Areas.OutpostManagement.Models.Outpost.OverviewPhones model = new Web.Areas.OutpostManagement.Models.Outpost.OverviewPhones();
-
-            model.Items = new List<MobilePhoneModel>();
-
-            var queryResult = QueryService.Query();
-
-            if (queryResult.ToList().Count() > 0)
-                queryResult.ToList().ForEach(item =>
-                {
-                    MobilePhoneModel viewModelItem = new MobilePhoneModel();
-                    CreateMappings();
-                    Mapper.Map(item, viewModelItem);
-                    model.Items.Add(viewModelItem);
-                });
-
-            return View(model);
-        }
 
 
         // GET: /OutpostManagement/MobilePhone/Details/5
@@ -148,25 +122,33 @@ namespace Web.Areas.OutpostManagement.Controllers
             {
                 return View(model);
             }
-
+            
             CreateMappings();
             var mobilePhone = new MobilePhone();
             Mapper.Map(mobilePhoneModel, mobilePhone);
-            mobilePhone.Outpost = QueryOutposts.Load(mobilePhoneModel.OutpostId);
+            
+             mobilePhone.Outpost = QueryOutposts.Load(mobilePhoneModel.Outpost_FK);
+             mobilePhone.Client = QueryClients.Load(Client.DEFAULT_ID); ;
 
             SaveOrUpdateCommand.Execute(mobilePhone);
 
-            return RedirectToAction("PhoneListInput", "MobilePhone", new { outpostId = mobilePhoneModel.OutpostId });
+            return RedirectToAction("Overview", "MobilePhone", new { outpostId = mobilePhoneModel.Outpost_FK });
         }
 
         private static void CreateMappings(MobilePhone entity = null)
         {
             Mapper.CreateMap<MobilePhone, MobilePhoneModel>();
+                    //.ForMember("Outpost", m => m.Ignore())
+                    //.ForMember("Client", m => m.Ignore());
+            
 
             var mapMobilePhone = Mapper.CreateMap<MobilePhoneModel, MobilePhone>();
 
-            if (entity != null)
-                mapMobilePhone.ForMember(m => m.Id, options => options.Ignore());
+           // if (entity != null)
+           // {
+            //    mapMobilePhone.ForMember(m => m.Id, options => options.Ignore());
+            //    mapMobilePhone.ForMember(m => m.Outpost_FK, options => options.Ignore());
+            //}
         }
 
 

@@ -156,13 +156,15 @@
     <Compile Include="Areas\OutpostManagement\Controllers\MobilePhoneController.cs" />
     <Compile Include="Areas\OutpostManagement\Controllers\OutpostController.cs" />
     <Compile Include="Areas\OutpostManagement\Controllers\RegionController.cs" />
+    <Compile Include="Areas\OutpostManagement\Models\Country\CountryOutputModel.cs" />
+    <Compile Include="Areas\OutpostManagement\Models\Country\CountryInputModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Country\CountryModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Country\ClientModelCountry.cs" />
-    <Compile Include="Areas\OutpostManagement\Models\Outpost\ClientModelOutpost.cs" />
+    <Compile Include="Areas\OutpostManagement\Models\MobilePhone\ClientModelPhones.cs" />
+    <Compile Include="Areas\OutpostManagement\Models\MobilePhone\MobilePhoneModel.cs" />
+    <Compile Include="Areas\OutpostManagement\Models\MobilePhone\MobilePhonesOverviewModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Outpost\OutpostInputModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Outpost\OutpostOutputModel.cs" />
-    <Compile Include="Areas\OutpostManagement\Models\Outpost\MobilePhoneModel.cs" />
-    <Compile Include="Areas\OutpostManagement\Models\Outpost\OverviewPhones.cs" />
     <Compile Include="Areas\OutpostManagement\Models\District\DistrictInputModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\District\DistrictOutputModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\District\DistrictOverviewModel.cs" />
@@ -176,7 +178,6 @@
     <Compile Include="Areas\OutpostManagement\Models\District\DistrictModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Outpost\OutpostModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Region\RegionModel.cs" />
-    <Compile Include="Areas\OutpostManagement\Views\Outpost\OutpostModelOutput.cs" />
     <Compile Include="Bootstrap\Container\FileRegistrar.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\UnauthorizedAccessController.cs" />
@@ -1823,7 +1824,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Areas\OutpostManagement\Models\Outpost\MobilePhones\" />
     <Folder Include="Areas\OutpostManagement\Services\" />
     <Folder Include="Areas\OutpostManagement\Views\Shared\" />
     <Folder Include="Assets\img\photos\" />
@@ -1865,18 +1865,18 @@
     <Content Include="Areas\OutpostManagement\Views\Outpost\Edit.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\Outpost\OutpostInput.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\Outpost\Overview.cshtml" />
-    <Content Include="Areas\OutpostManagement\Views\Outpost\PhoneListInput.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\MobilePhone\Create.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\MobilePhone\Edit.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\MobilePhone\MobilePhoneInput.cshtml" />
-    <Content Include="Areas\OutpostManagement\Views\MobilePhone\PhoneListInput.cshtml" />
+    <Content Include="Areas\OutpostManagement\Views\MobilePhone\Overview.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\District\Overview.cshtml" />
-    <Content Include="Areas\OutpostManagement\Views\District\Create.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\District\Input.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\District\Edit.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\District\OverviewTable.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\Region\OverviewTable.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\District\EditInput.cshtml" />
+    <Content Include="Areas\OutpostManagement\Views\District\Create.cshtml" />
+    <Content Include="Areas\OutpostManagement\Views\Outpost\OverviewOutpost.cshtml" />
     <None Include="Assets\img\skins\ButtonTemplate.psd" />
     <Content Include="Views\RoleManager\Create.cshtml" />
     <Content Include="Views\RoleManager\Edit.cshtml" />

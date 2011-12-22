@@ -18,7 +18,7 @@ Region : Edit
                     Html.RenderPartial("OutpostInput", Model);     
                 }
             </fieldset>
-            @Html.SubmitButton("submit-form", "Save") <span>or </span><a href="@(Html.BuildUrlFromExpression<OutpostController>(it => it.Overview(null,null,null)))">
+            @Html.SubmitButton("submit-form", "Save") <span>or </span><a href="@(Html.BuildUrlFromExpression<RegionController>(it => it.Overview()))">
                     Cancel</a>
      
     @{Html.EndForm();}

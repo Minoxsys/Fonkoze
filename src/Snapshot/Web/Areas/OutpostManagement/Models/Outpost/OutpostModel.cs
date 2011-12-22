@@ -11,11 +11,10 @@ namespace Web.Areas.OutpostManagement.Models.Outpost
     {
         public string Name { get; set; }
         public string OutpostType { get; set; }
-        public string Email { get; set; }
-        public string MainMobileNumber { get; set; }
+        public string MainMethod { get; set; }
+        public string DetailMethod { get; set; }
         public string Latitude { get; set; }
         public string Longitude { get; set; }
-        public CountryModel Country { get; set; }
         public RegionModel Region { get; set; }
         public DistrictModel District { get; set; }
         public ClientModel Client { get; set; }

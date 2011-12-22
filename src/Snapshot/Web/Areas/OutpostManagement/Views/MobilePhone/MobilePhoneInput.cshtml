@@ -1,4 +1,4 @@
-﻿@model Web.Areas.OutpostManagement.Models.Outpost.MobilePhoneModel
+﻿@model Web.Areas.OutpostManagement.Models.MobilePhone.MobilePhoneModel
 
  
 @{ var id = new Guid();}
@@ -8,7 +8,7 @@
  <table>
      <thead>
          <th>
-            <label for="Methood"> Contact Method<text class="required-text">*</text> </label>
+            <label for="Method"> Contact Method </label>
          </th>
         <th>
              Mobile Number / E-mail
@@ -19,10 +19,10 @@
     </thead>
     <tr>
         <td>
-            @Html.TextBoxFor(m => m.MobileNumber, new { maxlength = 250 })
+            @Html.DropDownList("TipContact", new SelectList(new[] { "Mobile Number" }), "E-mail")
        </td>
         <td>
-            @Html.DropDownList("TipContact", new SelectList(new[] { "Mobile Number" }), "E-mail")
+            @Html.TextBoxFor(m => m.ContactDetail, new { maxlength = 100 })
        </td>
     </tr>
  

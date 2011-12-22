@@ -19,7 +19,7 @@ namespace Web.Areas.OutpostManagement.Controllers
 
         private const string TEMPDATA_ERROR_KEY = "error";
 
-        public IQueryService<Country> QueryService { get; set; }
+        public IQueryService<Country> QueryCountry { get; set; }
         public IQueryService<Client> QueryClient { get; set; }
 
         public ISaveOrUpdateCommand<Country> SaveOrUpdateCommand { get; set; }
@@ -34,7 +34,7 @@ namespace Web.Areas.OutpostManagement.Controllers
 
             model.Items = new List<CountryModel>();
 
-            var queryResult = QueryService.Query();
+            var queryResult = QueryCountry.Query();
 
             if (queryResult.ToList().Count() > 0)
                 queryResult.ToList().ForEach(item =>
@@ -88,7 +88,7 @@ namespace Web.Areas.OutpostManagement.Controllers
         //[Requires(Permissions = "Country.CRUD")]
         public ViewResult Edit(Guid countryId)
         {
-            var country = QueryService.Load(countryId);
+            var country = QueryCountry.Load(countryId);
             var countryModel = new CountryModel();
 
             CreateMappings();
@@ -100,18 +100,19 @@ namespace Web.Areas.OutpostManagement.Controllers
         [HttpPost]
         [ValidateInput(false)]
         //[Requires(Permissions = "OnBoarding.Candidate.CRUD")]
-        public ActionResult Edit(CountryModel countryModel)
+        public ActionResult Edit(CountryInputModel countryInputModel)
         {
-            var model = new CountryModel();
-
             if (!ModelState.IsValid)
             {
-                return View(model);
+                //var countryOutputModel = MapDataFromInputModelToOutputModel(countryInputModel);
+                //return View("Edit", countryOutputModel);
             }
 
+
+            Country region = new Country();
             CreateMappings();
             var country = new Country();
-            Mapper.Map(countryModel, country);
+            Mapper.Map(countryOutputModel, country);
 
             SaveOrUpdateCommand.Execute(country);
 
@@ -120,14 +121,14 @@ namespace Web.Areas.OutpostManagement.Controllers
 
         private static void CreateMappings(Country entity = null)
         {
-            Mapper.CreateMap<RegionModel, Region>();
-            Mapper.CreateMap<Region, RegionModel>();
+            Mapper.CreateMap<CountryModel, Country>();
+            Mapper.CreateMap<Country, CountryModel>();
 
-            Mapper.CreateMap<Region, RegionInputModel>();
-            Mapper.CreateMap<Region, RegionOutputModel>();
+            Mapper.CreateMap<Country, RegionInputModel>();
+            Mapper.CreateMap<Country, RegionOutputModel>();
 
-            Mapper.CreateMap<RegionInputModel, Region>();
-            Mapper.CreateMap<RegionOutputModel, Region>();
+            Mapper.CreateMap<CountryInputModel, Country>();
+            Mapper.CreateMap<CountryOutputModel, Country>();
 
             Mapper.CreateMap<Country, CountryModel>();
             Mapper.CreateMap<CountryModel, Country>();
@@ -141,7 +142,7 @@ namespace Web.Areas.OutpostManagement.Controllers
         //[Requires(Permissions = "OnBoarding.Candidate.CRUD")]
         public RedirectToRouteResult Delete(Guid countryId)
         {
-            var country = QueryService.Load(countryId);
+            var country = QueryCountry.Load(countryId);
 
             if (country != null)
             {
@@ -159,5 +160,20 @@ namespace Web.Areas.OutpostManagement.Controllers
             return RedirectToAction("Overview");
        }
 
+        private CountryOutputModel MapDataFromInputModelToOutputModel(CountryInputModel countryInputModel)
+        {
+
+            var countryOutputModel = new CountryOutputModel();
+
+            countryOutputModel.Id = countryInputModel.Id;
+            countryOutputModel.Name = countryInputModel.Name;
+            countryOutputModel.Client = countryInputModel.Client;
+            countryOutputModel.ISOCode = countryInputModel.ISOCode;
+            countryOutputModel.PhonePrefix = countryInputModel.PhonePrefix;
+            return countryOutputModel;
+        }
+
+
+        public object countryOutputModel { get; set; }
     }
 }

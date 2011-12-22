@@ -1,40 +1,48 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Domain;
 using System.ComponentModel.DataAnnotations;
 using Web.Areas.OutpostManagement.Models.Client;
+using Web.Areas.OutpostManagement.Models.Country;
+
 
 namespace Web.Areas.OutpostManagement.Models.Outpost
 {
     public class OutpostInputModel
     {
-        [Required]
+        public Guid Id { get; set; }
+        [Required(ErrorMessage="Name for outpost is required")]
         public string Name { get; set; }
         public string OutpostType { get; set; }
-        public string Email { get; set; }
-        public string MainMobileNumber { get; set; }
+        public string MainMethod { get; set; }
+        public string DetailMethod { get; set; }
         public string Latitude { get; set; }
         public string Longitude { get; set; }
-        public DistrictInput District { get; set; }
-        public CountryInput Country { get; set; }
-        public RegionInput Region { get; set; }
+        public RegionInputModel Region { get; set; }
+        public DistrictInputModel District { get; set; }
         public ClientModel Client { get; set; }
-        public  IList<MobilePhone> MobilePhones { get; set; }
-        public Guid Id { get; set; }
+        public  IList<Domain.MobilePhone> MobilePhones { get; set; }
 
-        public class CountryInput
+
+        public class RegionInputModel
         {
+            [Required(ErrorMessage = "Region is required")]
+            public Guid Id { get; set; }
+
+            public Guid CountryId { get; set; }
+        }
+
+        public class DistrictInputModel
+        {
+            [Required(ErrorMessage = "District is required")]
             public Guid Id { get; set; }
         }
 
-        public class RegionInput
+        public class ClientInputModel
         {
             public Guid Id { get; set; }
         }
-
-        public class DistrictInput
-        {
-            public Guid Id { get; set; }
-        }
-   }
+  
+    }
 }

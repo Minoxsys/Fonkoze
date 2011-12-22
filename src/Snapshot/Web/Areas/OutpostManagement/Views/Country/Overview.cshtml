@@ -28,12 +28,12 @@ OutpostManagement Countries: Overview
                     Country Name
                 </th>
                 <th>
-                    Country ISO Code
+                    Country Abbreviation
                 </th>
                 <th>
-                    Phone prefix
+                    Phone Country Prefix
                 </th>
-                <th colspan="2">
+                <th colspan="2" align="center">
                     Actions
                 </th>
             </tr>
@@ -57,9 +57,10 @@ OutpostManagement Countries: Overview
                         @(Html.ActionLink<CountryController>(it => it.Edit(country.Id), "Edit", OutpostManagementAreaRegistration.DEFAULT_ROUTE))
                     </td>
                     <td>
-                        @{Html.BeginForm<CountryController>(m => m.Delete(country.Id), FormMethod.Post, new { @class = "delete-user-form" });}
+                        @{Html.BeginForm<CountryController>(m => m.Delete(country.Id), FormMethod.Post, new { @class = "delete-user-form" }); }
                         @Html.Button("delete-user", "Delete", HtmlButtonType.Submit)
                         @{Html.EndForm();}
+
                     </td>
                 </tr> 
             }
