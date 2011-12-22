@@ -21,6 +21,18 @@ begin
     drop table RoleUsers
 end
 
+if exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'StockItems')
+begin
+	alter table StockItems  drop constraint ByUser_StIFK
+	alter table StockItems  drop constraint StockGroup_FK
+	drop table StockItems
+end
+
+if exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'StockGroups')
+begin
+	alter table StockGroups  drop constraint ByUser_SGFK
+	drop table StockGroups
+end
 if exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'Roles')
 begin
 	--alter table Roles drop constraint Role_PRFK
@@ -39,6 +51,7 @@ begin
     alter table Outposts  drop constraint District_ODFK
     alter table Outposts  drop constraint Country_OCFK
 	alter table Outposts drop constraint ByUser_OUFK
+	alter table Outposts drop constraint StockItem_OFK
 	drop table Outposts
 end
 

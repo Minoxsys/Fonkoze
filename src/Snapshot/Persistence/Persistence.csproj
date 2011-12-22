@@ -79,6 +79,7 @@
     <Compile Include="Overrides\RoleAutoMappingOverride.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Overrides\StockItemAutoMappingOverride.cs" />
     <Compile Include="Overrides\UserAutoMappingOverride.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -89,6 +90,8 @@
     <Compile Include="Queries\Regions\NHibernateQueryOutposts.cs" />
     <Compile Include="Queries\Regions\IQueryRegion.cs" />
     <Compile Include="Queries\Regions\NHibernateQueryRegion.cs" />
+    <Compile Include="Queries\StockItem\IQueryStockItem.cs" />
+    <Compile Include="Queries\StockItem\NHibernateQueryStockItem.cs" />
     <Compile Include="Queries\User\UserByName.cs" />
     <Compile Include="Queries\Functions\FunctionByName.cs" />
     <Compile Include="Queries\NHibernateQueryService.cs" />
