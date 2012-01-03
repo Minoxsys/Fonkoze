@@ -138,7 +138,7 @@ CREATE TABLE [MobilePhones] (
        Id UNIQUEIDENTIFIER not null,
        MethodType NVARCHAR(15) null,
        ContactDetail NVARCHAR(100) null,
-       MainMethod NCHAR(1) NULL,
+       MainMethod BIT NULL,
        Created DATETIME null,
        Updated DATETIME null,
        Outpost_FK UNIQUEIDENTIFIER null,
@@ -197,7 +197,7 @@ end
 if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='ByUser_Region_Countries_FK')
 begin
     alter table Regions 
-        add constraint ByUser_Region_Countries_FK 
+        add constraint Region_Countries_FK 
         foreign key (Country_FK) 
         references Countries
 end
@@ -213,7 +213,7 @@ end
 if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='ByUser_Client_Regions_FK')
 begin
     alter table Regions 
-        add constraint ByUser_Client_Regions_FK 
+        add constraint Client_Regions_FK 
         foreign key (Client_FK) 
         references Clients
 end
@@ -408,7 +408,7 @@ begin
 end
 
 
-if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='Outpost_Products_FK ')
+if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='Outpost_Products_OFK ')
 begin
 alter table Products 
         add constraint Outpost_Products_OFK 
