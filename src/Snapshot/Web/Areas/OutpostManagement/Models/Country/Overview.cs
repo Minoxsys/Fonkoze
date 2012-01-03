@@ -9,8 +9,8 @@ namespace Web.Areas.OutpostManagement.Models.Country
 {
     public class Overview
     {
-        public List<CountryModel> Items { get; set; }
-
+        public List<CountryModel> Countries { get; set; }
+        public PagingInfo PagingInfo { get; set; }
         public string Error { get; set; }
     }
 }

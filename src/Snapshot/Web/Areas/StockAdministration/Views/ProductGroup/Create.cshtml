@@ -1,0 +1,33 @@
+﻿@model Web.Areas.StockAdministration.Models.ProductGroup.ProductGroupOutputModel
+@using Microsoft.Web.Mvc
+
+@section page_title{
+Stock Item : Create
+}
+@section breadcrumbs{
+    @*@Url.HomeLink("Outpost Administration") *@/ @(Html.ActionLink<ProductGroupController>(act => act.Overview(), "Districts Overview", StockAdministrationAreaRegistration.DEFAULT_ROUTE))
+> Create District
+}
+@section master_content{
+    @{Html.BeginForm<ProductGroupController>(r => r.Create());}
+    <form class="chosen-form">
+    <fieldset class="fieldsCollection ">
+        @{
+            Html.RenderPartial("Input", Model);     
+        }
+    </fieldset>
+    @Html.SubmitButton("submit-form", "Save") <span>or </span><a href="@(Html.BuildUrlFromExpression<ProductGroupController>(it => it.Overview()))">
+        Cancel</a>
+        </form>
+    @{Html.EndForm();}
+}
+@section scripts{
+    <script type="text/javascript">
+        debugger;
+        $(".chzn-select").Chosen();
+
+//       jQuery(document).ready(function () {
+//            jQuery(".chosen").data("placeholder", "Select Frameworks...").chosen();
+//        });
+    </script>
+}

@@ -1,7 +1,8 @@
-﻿@model Web.Areas.OutpostManagement.Models.Country.CountryModel
+﻿@using Web.Areas.OutpostManagement.Models
+@model Web.Areas.OutpostManagement.Models.Country.CountryOutputModel
            
 @section breadcrumbs{
-    @Url.HomeLink("Overview")/ @(Html.ActionLink<CountryController>(it => it.Overview(), "Outpost Administration > Countries", OutpostManagementAreaRegistration.DEFAULT_ROUTE)) > Edit
+    @Url.HomeLink("Overview")/ @(Html.ActionLink<CountryController>(it => it.Overview(1), "Outpost Administration > Countries", OutpostManagementAreaRegistration.DEFAULT_ROUTE)) > Edit
 }
 @section page_title{
 
@@ -13,21 +14,24 @@
      @{Html.BeginForm();}
    <div style="display: none">
 @Html.HiddenFor(m => m.Client.Id)
+@Html.HiddenFor(m => m.Id)
 </div>
             <fieldset class="fieldsCollection ">
                 @{
                     Html.RenderPartial("CountryInput", Model);     
                 }
             </fieldset>
-            @Html.SubmitButton("submit-form", "Save") <span>or </span><a href="@(Html.BuildUrlFromExpression<CountryController>(it => it.Overview()))">
+            @Html.SubmitButton("submit-form", "Save") <span>or </span><a href="@(Html.BuildUrlFromExpression<CountryController>(it => it.Overview(1))))">
                     Cancel</a>
-     
+          
     @{Html.EndForm();}
 
 }
 
 @section master_actions{
 }
+
+
 @section scripts{
 
         

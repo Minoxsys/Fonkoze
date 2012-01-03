@@ -15,7 +15,6 @@ namespace Web.Areas.OutpostManagement.Models.Outpost
         public Guid Id { get; set; }
         public string Name { get; set; }
         public string OutpostType { get; set; }
-        public string MainMethod { get; set; }
         public string DetailMethod { get; set; }
         public string Longitude { get; set; }
         public string Latitude { get; set; }
@@ -27,7 +26,7 @@ namespace Web.Areas.OutpostManagement.Models.Outpost
         public List<SelectListItem> Regions { get; set; }
         public List<SelectListItem> Districts { get; set; }
 
-        public List<SelectListItem> Outposts { get; set; }
+        //public List<SelectListItem> Outposts { get; set; }
 
         public IQueryService<Domain.Country> queryCountry { get; set; }
         public IQueryService<Domain.Region> queryRegion { get; set; }

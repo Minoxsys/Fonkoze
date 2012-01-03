@@ -1,12 +1,10 @@
 ﻿
 using System;
 using System.Collections.Generic;
-using Web.Areas.OutpostManagement.Models.Client;
 using Web.Areas.OutpostManagement.Models.Region;
 using Web.Areas.OutpostManagement.Models.District;
 using Web.Areas.OutpostManagement.Models.Country;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using Core.Persistence;
 
@@ -15,12 +13,11 @@ namespace Web.Areas.OutpostManagement.Models.Outpost
     public class OutpostOverviewModel
     {
        public string Name { get; set; }
-        public string OutpostType { get; set; }
-        public string Email { get; set; }
-        public string MainMobileNumber { get; set; }
-        public string Longitude { get; set; }
-        public string Latitude { get; set; }
-        public CountryModel Country { get; set; }
+       public string OutpostType { get; set; }
+       public string DetailMethod { get; set; }
+       public string Longitude { get; set; }
+       public string Latitude { get; set; }
+       public CountryModel Country { get; set; }
         public RegionModel Region { get; set; }
         public DistrictModel District { get; set; }
         

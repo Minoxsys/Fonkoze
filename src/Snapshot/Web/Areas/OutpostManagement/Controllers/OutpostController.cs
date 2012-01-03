@@ -23,11 +23,12 @@ namespace Web.Areas.OutpostManagement.Controllers
         public IQueryOutposts QueryOutposts { get; set; }
 
         public IQueryService<Outpost> QueryService { get; set; }
-        public IQueryService<MobilePhone> QueryMobilePhone { get; set; }
+        public IQueryService<Contact> QueryMobilePhone { get; set; }
         public IQueryService<Country> QueryCountry { get; set; }
         public IQueryService<Region> QueryRegion { get; set; }
         public IQueryService<District> QueryDistrict { get; set; }
         public IQueryService<Client> QueryClients { get; set; }
+        public IQueryService<Product> QueryProduct { get; set; }
 
         public ISaveOrUpdateCommand<Outpost> SaveOrUpdateCommand { get; set; }
 
@@ -304,11 +305,24 @@ namespace Web.Areas.OutpostManagement.Controllers
         public RedirectToRouteResult Delete(Guid outpostId)
         {
             var outpost = QueryService.Load(outpostId);
+            var products = QueryProduct.Query().Where(m => m.OutpostId == outpostId);
+
 
             if (outpost != null)
-                DeleteCommand.Execute(outpost);
-
-            return RedirectToAction("Overview", "Outpost", new { countryId = outpost.Country.Id, regionId = outpost.Region.Id, districtId = outpost.Region.Id});
+            {
+                    if (products.ToList().Count != 0)
+                    {
+                        TempData.Add("error", string.Format("The Outpost {0} has products associated, so it can not be deleted", outpost.Name));
+                        return RedirectToAction("Overview", "Outpost", new { countryId = outpost.Country.Id, 
+                                                                             regionId = outpost.Region.Id, 
+                                                                             districtId = outpost.Region.Id });
+                    }
+                    DeleteCommand.Execute(outpost);
+                }
+            
+            return RedirectToAction("Overview", "Outpost", new { countryId = outpost.Country.Id, 
+                                                                 regionId = outpost.Region.Id, 
+                                                                 districtId = outpost.Region.Id});
         }
 
         [HttpGet]

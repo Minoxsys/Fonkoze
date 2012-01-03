@@ -1,36 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using Domain;
-using Web.Controllers;
-using Web.Areas.OutpostManagement.Models.Country;
-using AutoMapper;
-using Web.Bootstrap.Converters;
-using Core.Persistence;
-using Persistence.Queries.Employees;
-using System.Net.Mail;
-using Web.Helpers;
-using Web.Security;
-using Web.Areas.OutpostManagement;
-using Web.Validation.ValidDate;
-using System.Globalization;
-using Web.Models.Shared;
-using System.ComponentModel.DataAnnotations;
-using Domain;
 using Web.Areas.OutpostManagement.Models.Client;
 
 namespace Web.Areas.OutpostManagement.Models.Country
 {
     public class CountryModel
     {
-
-        [Required(ErrorMessage = "Please enter the name of the country !")]
-        public virtual string Name { get; set; }
-        public virtual string ISOCode { get; set; }
-        public virtual string PhonePrefix { get; set; }
-        public virtual  ClientModel Client { get; set; }
+        public string Name { get; set; }
+        public string ISOCode { get; set; }
+        public string PhonePrefix { get; set; }
+        public ClientModel Client { get; set; }
+        public int RegionNo { get; set; }
         public Guid Id { get; set; }
     }
 }

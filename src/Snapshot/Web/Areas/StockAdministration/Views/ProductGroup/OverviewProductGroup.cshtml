@@ -1,0 +1,68 @@
+﻿
+@using Web.Areas.StockAdministration.Models.ProductGroup
+
+@model List<ProductGroupModel>
+           
+ <div id="productgroup-overview">          
+
+    <table id="ProductGroup">
+        <thead>
+            <tr>
+                <th>
+                    Product Group
+                </th>
+                <th>
+                    Description
+                </th>
+                <th>
+                    # of products
+                </th>
+                 <th colspan="4">
+                    Actions
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                var itemNo = 0;
+            }
+            @foreach (var productGroup in Model)
+            {
+                var _class = (itemNo % 2 == 0) ? "odd" : "even";    
+                <tr class="@_class">
+                    <td>
+                        @productGroup.Name
+                    </td>
+                    <td>@productGroup.Description
+                    </td>
+                    <td>@(Html.ActionLink<ProductGroupController>(call => call.Edit(productGroup.Id), "Edit", StockAdministrationAreaRegistration.DEFAULT_ROUTE))
+                    </td>
+                    <td>@(Html.ActionLink<ProductGroupController>(call => call.Edit(productGroup.Id), "Add a new Product", StockAdministrationAreaRegistration.DEFAULT_ROUTE))
+                    </td>
+                    <td>@(Html.ActionLink<ProductGroupController>(call => call.Edit(productGroup.Id), "Send a SMS", StockAdministrationAreaRegistration.DEFAULT_ROUTE))
+                    </td>
+                    <td>@(Html.ActionLink<ProductGroupController>(call => call.Edit(productGroup.Id), "Automatic Weekly Stock Level Request", StockAdministrationAreaRegistration.DEFAULT_ROUTE))
+                    </td>
+                    <td>
+                            @{Html.BeginForm<ProductGroupController>(m => m.Delete(productGroup.Id), FormMethod.Post, new { @class = "delete-user-form" });}
+                            @Html.Button("delete-user", "Delete", HtmlButtonType.Submit)
+                            @{Html.EndForm();}
+                    </td>
+                </tr> 
+            }
+        </tbody>
+    </table>
+    </div>
+
+@section scripts{
+    <script type="text/javascript">
+
+     $(function () {
+            $(".delete-user-form").submit(function () {
+                return confirm('Are you sure that you want to delete this Outpost?')
+            });
+
+        });
+     </script>
+
+});

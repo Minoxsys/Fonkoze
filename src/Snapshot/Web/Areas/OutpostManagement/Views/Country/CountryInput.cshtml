@@ -1,4 +1,4 @@
-﻿@model Web.Areas.OutpostManagement.Models.Country.CountryModel
+﻿@model Web.Areas.OutpostManagement.Models.Country.CountryOutputModel
 
        
 
@@ -9,15 +9,15 @@
     <div class="row of-2">
         <div class="column">
             <label for="Name"> Country Name<text class="required-text">*</text> </label>
-            @Html.TextBoxFor(m => m.Name, new { maxlength = 250, autofocus = "autofocus", placeholder = "Name" })
+            @Html.TextBoxFor(m => m.Name, new { maxlength = 40, autofocus = "autofocus", placeholder = "Name" })
         </div>
         <div class="column">
             <label for="ISOCode"> Country Abbreviation<text class="required-text"></text> </label>
-            @Html.TextBoxFor(m => m.ISOCode, new { maxlength = 250, autofocus = "autofocus", placeholder = "ISOCode" })
+            @Html.TextBoxFor(m => m.ISOCode, new { maxlength = 3, autofocus = "autofocus", placeholder = "ISOCode" })
         </div>
         <div class="column">
             <label for="PhonePrefix"> Phone County Prefix<text class="required-text"></text> </label>
-            @Html.TextBoxFor(m => m.PhonePrefix, new { maxlength = 250, autofocus = "autofocus", placeholder = "PhonePrefix" })
+            @Html.TextBoxFor(m => m.PhonePrefix, new { maxlength = 3, autofocus = "autofocus", placeholder = "PhonePrefix" })
         </div>
     </div>
 

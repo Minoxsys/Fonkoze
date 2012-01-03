@@ -37,7 +37,7 @@ namespace Web.Bootstrap.Container
 
             container.RegisterType<NHibernateQueryDistrict>().As<IQueryDistrict>();
 
-            container.RegisterType<NHibernateQueryStockItem>().As<IQueryStockItem>();
+            //container.RegisterType<NHibernateQueryStockItem>().As<IQueryStockItem>();
             
         }
     }

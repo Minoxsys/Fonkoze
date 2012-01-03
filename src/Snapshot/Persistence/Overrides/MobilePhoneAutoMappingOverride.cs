@@ -8,9 +8,9 @@ using Domain;
 
 namespace Persistence.Overrides
 {
-    public class MobilePhoneAutoMappingOverride : IAutoMappingOverride<MobilePhone>
+    public class MobilePhoneAutoMappingOverride : IAutoMappingOverride<Contact>
     {
-        public void Override(FluentNHibernate.Automapping.AutoMapping<MobilePhone> mapping)
+        public void Override(FluentNHibernate.Automapping.AutoMapping<Contact> mapping)
         {
             mapping.References(p => p.Outpost, "Outpost_FK");
         }

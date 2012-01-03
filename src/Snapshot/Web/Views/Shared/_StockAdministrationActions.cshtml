@@ -1,6 +1,7 @@
 ﻿<ul>
     <li>
-       @(Html.ActionLink<Web.Areas.StockAdministration.Controllers.StockItemController>(it=>it.Overview(),"Stock Administration",Web.Areas.StockAdministration.StockAdministrationAreaRegistration.DEFAULT_ROUTE))
+       @*@(Html.ActionLink<Web.Areas.StockAdministration.Controllers.ProductsController>(it=>it.Overview(),"Stock Administration",Web.Areas.StockAdministration.StockAdministrationAreaRegistration.DEFAULT_ROUTE))*@
+       @(Html.ActionLink<Web.Areas.StockAdministration.Controllers.ProductGroupController>(it=>it.Overview(),"Product Group Administration",Web.Areas.StockAdministration.StockAdministrationAreaRegistration.DEFAULT_ROUTE))
     </li>
     <li>
       Outpost Stock Level

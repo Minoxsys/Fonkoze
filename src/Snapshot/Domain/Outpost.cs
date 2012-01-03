@@ -10,25 +10,27 @@ namespace Domain
     {
         public virtual string Name { get; set; }
         public virtual string OutpostType { get; set; }
-        public virtual string MainMethod { get; set; }
+        //public virtual string MainMethod { get; set; }
         public virtual string DetailMethod { get; set; }
         public virtual string Longitude { get; set; }
         public virtual string Latitude { get; set; }
+        public virtual IList<Domain.Contact> MobilePhones { get; set; }
+        public virtual IList<Domain.Product> Products { get; set; }
         public virtual Domain.Country Country { get; set; }
         public virtual Domain.Region Region { get; set; }
         public virtual Domain.District District { get; set; }
         public virtual Domain.Client Client { get; set; }
-        public virtual IList<Domain.MobilePhone> MobilePhones { get; set; }
 
 
         public Outpost()
         {
-            //MobilePhones = new List<MobilePhone>();
+            MobilePhones = new List<Contact>();
+            Products = new List<Product>();
         }
 
-        public virtual void AddMobilePhone(MobilePhone mobilePhone)
+        public virtual void AddMobilePhone(Contact contact)
         {
-            //MobilePhones.Add(mobilePhone);
+            MobilePhones.Add(contact);
         }
     }
 }

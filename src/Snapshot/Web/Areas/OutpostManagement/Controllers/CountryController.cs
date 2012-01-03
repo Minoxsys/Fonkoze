@@ -2,13 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-using Core.Domain;
+using Web.Areas.OutpostManagement.Models;
 using Web.Areas.OutpostManagement.Models.Country;
-using Web.Areas.OutpostManagement.Models.Region;
 using AutoMapper;
 using Core.Persistence;
-using Domain;
-using PagedList;
 using Domain;
 using Web.Areas.OutpostManagement.Models.Client;
 
@@ -27,44 +24,59 @@ namespace Web.Areas.OutpostManagement.Controllers
         public IDeleteCommand<Country> DeleteCommand { get; set; }
         public IQueryService<Region> QueryRegion { get; set; }
 
+        public int PageSize = 8;
+
         //[Requires(Permissions = "Country.Overview")]
-        public ActionResult Overview()
+        public ActionResult Overview(int page)
         {
-            Overview model = new Overview();
-
-            model.Items = new List<CountryModel>();
-
             var queryResult = QueryCountry.Query();
 
-            if (queryResult.ToList().Count() > 0)
-                queryResult.ToList().ForEach(item =>
+            var paginatedCountries = 
+                  QueryCountry.Query()
+                              .OrderBy(p => p.Name)
+                              .Skip((page - 1)*PageSize)
+                              .Take(PageSize);
+
+            Overview model = 
+                new Overview { Countries = null,
+                               PagingInfo = new PagingInfo
+                               {
+                                    CurrentPage = page,
+                                    ItemsPerPage = PageSize,
+                                    TotalItems = queryResult.Count() 
+                               }, 
+                               Error = ""
+                             };
+
+            model.Countries = new List<CountryModel>();
+
+
+            if (paginatedCountries.ToList().Count() > 0)
+                paginatedCountries.ToList().ForEach(item =>
                 {
                     var viewModelItem = new CountryModel();
-
                     CreateMappings();
-
                     Mapper.Map(item, viewModelItem);
-
-                    model.Items.Add(viewModelItem);
+                    model.Countries.Add(viewModelItem);
                 });
 
             model.Error = (string)TempData[TEMPDATA_ERROR_KEY];
 
             return View(model);
         }
-
+        
         [HttpGet]
         //[Requires(Permissions = "Country.CRUD")]
-        public ActionResult Create()
+        public ActionResult Create(int page)
         {
-            var model = new CountryModel();
+            var model = new CountryOutputModel();
             return View(model);
         }
 
         [HttpPost]
         [ValidateInput(false)]
         //[Requires(Permissions = "OnBoarding.Candidate.CRUD")]
-        public ActionResult Create(CountryModel countryModel)
+        public ActionResult Create(CountryOutputModel countryModel)
         {
             var model = new CountryModel();
 
@@ -72,15 +84,23 @@ namespace Web.Areas.OutpostManagement.Controllers
             {
                 return View(model);
             }
+  
 
             CreateMappings();
             var country = new Country();
             Mapper.Map(countryModel, country);
             country.Client = QueryClient.Load(Client.DEFAULT_ID); // hardcoded client id value
+            var doubleCountry = QueryCountry.Query().Where(m => m.Name == country.Name);
+
+          if (doubleCountry.ToList().Count() > 0)
+          {
+              TempData.Add("error", string.Format("The country {0} is already added, so it can not be re-inserted", country.Name));
+              return RedirectToAction("Overview", "Country", new { page = 1 });
+          }
 
             SaveOrUpdateCommand.Execute(country);
 
-            return RedirectToAction("Overview", "Country");
+            return RedirectToAction("Overview", "Country", new { page = 1});
         }
 
 
@@ -89,7 +109,7 @@ namespace Web.Areas.OutpostManagement.Controllers
         public ViewResult Edit(Guid countryId)
         {
             var country = QueryCountry.Load(countryId);
-            var countryModel = new CountryModel();
+            var countryModel = new CountryOutputModel();
 
             CreateMappings();
             Mapper.Map(country, countryModel);
@@ -104,19 +124,19 @@ namespace Web.Areas.OutpostManagement.Controllers
         {
             if (!ModelState.IsValid)
             {
-                //var countryOutputModel = MapDataFromInputModelToOutputModel(countryInputModel);
-                //return View("Edit", countryOutputModel);
+                var countryOutputModel1 = MapDataFromInputModelToOutputModel(countryInputModel);
+                return View("Edit", countryOutputModel1);
             }
 
 
             Country region = new Country();
             CreateMappings();
             var country = new Country();
-            Mapper.Map(countryOutputModel, country);
+            Mapper.Map(countryInputModel, country);
 
             SaveOrUpdateCommand.Execute(country);
 
-            return RedirectToAction("Overview", "Country");
+            return RedirectToAction("Overview", "Country", new { page = 1 });
         }
 
         private static void CreateMappings(Country entity = null)
@@ -124,14 +144,11 @@ namespace Web.Areas.OutpostManagement.Controllers
             Mapper.CreateMap<CountryModel, Country>();
             Mapper.CreateMap<Country, CountryModel>();
 
-            Mapper.CreateMap<Country, RegionInputModel>();
-            Mapper.CreateMap<Country, RegionOutputModel>();
+            Mapper.CreateMap<Country, CountryInputModel>();
+            Mapper.CreateMap<Country, CountryOutputModel>();
 
             Mapper.CreateMap<CountryInputModel, Country>();
             Mapper.CreateMap<CountryOutputModel, Country>();
-
-            Mapper.CreateMap<Country, CountryModel>();
-            Mapper.CreateMap<CountryModel, Country>();
 
             Mapper.CreateMap<ClientModel, Client>();
             Mapper.CreateMap<Client, ClientModel>();
@@ -151,13 +168,13 @@ namespace Web.Areas.OutpostManagement.Controllers
                 if (regionResults.ToList().Count != 0)
                 {
                     TempData.Add("error", string.Format("The Country {0} has regions associated, so it can not be deleted", country.Name));
-                    return RedirectToAction("Overview");
+                    return RedirectToAction("Overview", new { page = 1});
                 }
 
                 DeleteCommand.Execute(country);
             } 
             
-            return RedirectToAction("Overview");
+            return RedirectToAction("Overview", new { page = 1});
        }
 
         private CountryOutputModel MapDataFromInputModelToOutputModel(CountryInputModel countryInputModel)

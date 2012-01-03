@@ -76,6 +76,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="When_WeWantToPersist_A_StockGroup.cs" />
     <Compile Include="SessionFactory.cs" />
     <Compile Include="GivenAPersistenceSpecification.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -84,6 +85,7 @@
     <Compile Include="When_WeWantToPersist_A_Client.cs" />
     <Compile Include="When_WeWantToPersist_A_Country.cs" />
     <Compile Include="When_WeWantToPersist_A_District.cs" />
+    <Compile Include="When_WeWantToPersist_A_MobilePhone.cs" />
     <Compile Include="When_WeWantToPersist_A_Region.cs" />
     <Compile Include="When_WeWantToPersist_A_User.cs" />
     <Compile Include="When_WeWantToPersist_A_Permission.cs" />

@@ -118,7 +118,6 @@ CREATE TABLE [Outposts] (
        Id UNIQUEIDENTIFIER not null,
        Name NVARCHAR(40) null,
        OutpostType NVARCHAR(20) null,
-	   MainMethod NVARCHAR(10) null,
 	   DetailMethod NVARCHAR(100) null,
 	   Latitude NVARCHAR(20) null,
 	   Longitude NVARCHAR(20) null,
@@ -129,7 +128,6 @@ CREATE TABLE [Outposts] (
 	   District_FK UNIQUEIDENTIFIER null,
 	   Client_FK UNIQUEIDENTIFIER null,
        ByUser_FK UNIQUEIDENTIFIER null,
-       StockItem_FK UNIQUEIDENTIFIER null,
        primary key (Id))
 end
 
@@ -149,10 +147,10 @@ CREATE TABLE [MobilePhones] (
        primary key (Id))
 end
 
-if not exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'StockGroups')
+if not exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'ProductGroups')
 begin
- create table StockGroups (
-        Id UNIQUEIDENTIFIER not null,
+ create table ProductGroups (
+       Id UNIQUEIDENTIFIER not null,
        Name NVARCHAR(255) null,
        Description NVARCHAR(255) null,
        Created DATETIME null,
@@ -162,10 +160,10 @@ begin
     )
 end
 
-if not exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'StockItems')
+if not exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'Products')
 begin
- create table StockItems (
-        Id UNIQUEIDENTIFIER not null,
+ create table Products (
+       Id UNIQUEIDENTIFIER not null,
        Name NVARCHAR(255) null,
        Description NVARCHAR(255) null,
        LowerLimit INT null,
@@ -174,173 +172,171 @@ begin
        Created DATETIME null,
        Updated DATETIME null,
        StockGroup_FK UNIQUEIDENTIFIER null,
+       Outpost_FK UNIQUEIDENTIFIER null,
        ByUser_FK UNIQUEIDENTIFIER null,
        primary key (Id)
     )
 end
 
 go
-if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='StockGroup_FK')
+if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='Product_ProductGroups_FK')
 begin
-alter table StockItems 
-        add constraint StockGroup_FK 
+alter table Products 
+        add constraint Product_ProductGroups_FK 
         foreign key (StockGroup_FK) 
-        references StockGroups
+        references ProductGroups
 end
 
-if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='ByUser_StIFK')
+if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='ByUser_User_Products_FK')
 begin
-	alter table StockItems 
-        add constraint ByUser_StIFK 
+	alter table Products 
+        add constraint ByUser_User_Products_FK 
         foreign key (ByUser_FK) 
         references Users
 end
-if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='ByUser_RCoFK')
+if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='ByUser_Region_Countries_FK')
 begin
     alter table Regions 
-        add constraint ByUser_RCoFK 
+        add constraint ByUser_Region_Countries_FK 
         foreign key (Country_FK) 
         references Countries
 end
 
-if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='ByUser_SGFK')
+if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='ByUser_User_ProductGroups_FK')
 begin
-	alter table StockGroups 
-        add constraint ByUser_SGFK 
+	alter table ProductGroups 
+        add constraint ByUser_User_ProductGroups_FK 
         foreign key (ByUser_FK) 
         references Users
 
 end
-if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='ByUser_RClFK')
+if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='ByUser_Client_Regions_FK')
 begin
     alter table Regions 
-        add constraint ByUser_RClFK 
+        add constraint ByUser_Client_Regions_FK 
         foreign key (Client_FK) 
         references Clients
 end
 
-if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='ByUser_RUFK')
+if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='ByUser_User_Regions_FK')
 begin
     alter table Regions 
-        add constraint ByUser_RUFK 
+        add constraint ByUser_User_Regions_FK 
         foreign key (ByUser_FK) 
         references Users
 end
 
-if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='ByUser_DClFK')
+if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='ByUser_Client_Districts_FK')
 begin
    alter table Districts 
-        add constraint ByUser_DClFK 
+        add constraint ByUser_Client_Districts_FK 
         foreign key (Client_FK) 
         references Clients
 End
 
-if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='Region_DRFK')
+if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='ByUser_User_Districts_FK')
+begin
+
+    alter table Districts 
+        add constraint ByUser_User_Districts_FK 
+        foreign key (ByUser_FK) 
+        references Users
+end
+
+if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='ByUser_User_Clients_FK')
+begin
+    alter table Clients 
+        add constraint ByUser_User_Clients_FK 
+        foreign key (ByUser_FK) 
+        references Users
+end
+
+if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='ByUser_User_Permissions_FK')
+begin      
+    alter table Permissions 
+        add constraint ByUser_User_Permissions_FK 
+        foreign key (ByUser_FK) 
+        references Users
+end
+
+if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='ByUser_User_Roles_FK')
+begin
+    alter table Roles 
+        add constraint ByUser_User_Roles_FK 
+        foreign key (ByUser_FK) 
+        references Users
+end
+
+-- end ByUser Region
+
+
+if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='Region_Districts_FK')
 begin
     alter table Districts 
-        add constraint Region_DRFK 
+        add constraint Region_Districts_FK 
         foreign key (Region_FK) 
         references Regions
 end
 
-if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='ByUser_DUFK')
-begin
 
-    alter table Districts 
-        add constraint ByUser_DUFK 
-        foreign key (ByUser_FK) 
-        references Users
-end
-
-
-if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='ByUser_CUFK')
-begin
-    alter table Clients 
-        add constraint ByUser_CUFK 
-        foreign key (ByUser_FK) 
-        references Users
-end
-
-if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='ByUser_PRFK')
-begin      
-    alter table Permissions 
-        add constraint ByUser_PRFK 
-        foreign key (ByUser_FK) 
-        references Users
-end
-
-if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='Role_PRFK')
+if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='Role_Permissions_FK')
 begin 
     alter table PermissionRoles 
-        add constraint Role_PRFK 
+        add constraint Role_Permissions_FK 
         foreign key (Role_FK) 
         references Roles        
     
 end
 
-if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='Permission_PRFK')
+if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='Permission_PermissionRoles_FK')
 begin 
 
 	alter table PermissionRoles 
-        add constraint Permission_PRFK 
+        add constraint Permission_PermissionRoles_FK 
         foreign key (Permission_FK) 
         references Permissions
 end
 
-if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='ByUser_RUFK')
-begin
-    alter table Roles 
-        add constraint ByUser_RUFK 
-        foreign key (ByUser_FK) 
-        references Users
-end
 
-if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='User_URFK')
+if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='ByUser_User_Users_FK')
 begin
     alter table RoleUsers 
-        add constraint User_URFK 
+        add constraint ByUser_User_Users_FK 
         foreign key (User_FK) 
         references Users
 end
-
-if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='User_RUFK')
+/*
+if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='Role_RolesUsers_FK')
 begin
   alter table RoleUsers 
-        add constraint User_RUFK 
+        add constraint ByUser_User_Roles_FK 
         foreign key (Role_FK) 
         references Roles
 end
-
-if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='Role_RUsFK')
-begin
-	alter table RoleUsers 
-        add constraint Role_RUsFK 
-        foreign key (Role_FK) 
-        references Roles
-end
-
-if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='ByUser_UUFK')
+*/
+/*
+if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='ByUser_User_Users_UFK')
 begin
     alter table Users 
-        add constraint ByUser_UUFK 
+        add constraint ByUser_User_Users_UFK 
         foreign key (ByUser_FK) 
         references Users
 end
+*/
 
-
-if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='Client_CClFK')
+if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='Client_Countries_FK')
 begin
     alter table Countries 
-        add constraint Client_CClFK 
+        add constraint Client_Countries_FK 
         foreign key (Client_FK) 
         references Clients
 end
 
-if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='ByUser_COUFK')
+if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='ByUser_User_Countries_FK')
 begin
 
     alter table Countries 
-        add constraint ByUser_COUFK 
+        add constraint ByUser_User_Countries_FK 
         foreign key (ByUser_FK) 
         references Users
 End
@@ -389,7 +385,7 @@ begin
 
     alter table Outposts 
         add constraint Country_Outposts_FK 
-        foreign key (ByUser_FK) 
+        foreign key (Country_FK) 
         references Countries
 end
 
@@ -398,7 +394,7 @@ begin
 
     alter table Outposts 
         add constraint Region_Outposts_FK 
-        foreign key (ByUser_FK) 
+        foreign key (Region_FK) 
         references Regions
 end
 
@@ -407,14 +403,15 @@ begin
 
     alter table Outposts 
         add constraint District_Outposts_FK
-        foreign key (ByUser_FK) 
+        foreign key (District_FK) 
         references Districts
 end
 
-if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='StockItem_OFK ')
+
+if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='Outpost_Products_FK ')
 begin
-alter table Outposts 
-        add constraint StockItem_OFK 
-        foreign key (StockItem_FK) 
-        references StockItems
+alter table Products 
+        add constraint Outpost_Products_OFK 
+        foreign key (Outpost_FK) 
+        references Outposts
 end

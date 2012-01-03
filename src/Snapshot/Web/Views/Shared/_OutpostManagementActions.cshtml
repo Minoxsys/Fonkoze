@@ -1,6 +1,6 @@
 ﻿<ul>
     <li>
-        @(Html.ActionLink<Web.Areas.OutpostManagement.Controllers.CountryController>(it => it.Overview(), "Countries", Web.Areas.OutpostManagement.OutpostManagementAreaRegistration.DEFAULT_ROUTE))
+        @(Html.ActionLink<Web.Areas.OutpostManagement.Controllers.CountryController>(it => it.Overview(1), "Countries", Web.Areas.OutpostManagement.OutpostManagementAreaRegistration.DEFAULT_ROUTE))
     </li>
     <li>
         @(Html.ActionLink<Web.Areas.OutpostManagement.Controllers.RegionController>(it => it.Overview(Guid.Empty), "Region", Web.Areas.OutpostManagement.OutpostManagementAreaRegistration.DEFAULT_ROUTE))

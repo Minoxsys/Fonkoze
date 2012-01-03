@@ -1,0 +1,59 @@
+﻿@using Web.Areas.OutpostManagement.Models.MobilePhone
+
+@model MobilePhoneModel
+           
+          
+@section breadcrumbs{
+    @Url.HomeLink("Overview")/ @(Html.ActionLink<MobilePhoneController>(it => it.Overview(Model.Id), "OutpostManagement : Mobile Phones", OutpostManagementAreaRegistration.DEFAULT_ROUTE)) > Edit
+}
+@section page_title{
+OutpostManagement : Edit
+}
+@section title_bar{
+    <h4>
+        @Model.ContactDetail : Edit Mobile Phone</h4>
+}
+@section master_content{
+    <form class="main-form" 
+          method="post" 
+          action="">
+           <div class="row">
+     @Html.ValidationSummary()
+     @Html.HiddenFor(m => m.Id)
+     @Html.HiddenFor(m => m.OutpostId)
+
+ </div>      
+    @{
+        Html.RenderPartial("MobilePhoneInput", @Model);
+        
+    }
+             @Html.SubmitButton("submit-form", "Save") <span>or </span>
+             <a href="@(Html.BuildUrlFromExpression<MobilePhoneController>(it => it.Overview(@Model.OutpostId)))">
+                    Cancel</a>
+    </form>
+}
+
+@section master_actions{
+    @*<h3>
+        Actions</h3>
+    <div class="page_header_buttons">*@
+
+        @*
+         <div style="margin:50px 0px 5px 0px"> 
+            @(Html.DeleteButton<MobilePhoneController>(it => it.Delete(Model.Id), OutpostManagementAreaRegistration.DEFAULT_ROUTE))
+        </div>
+       
+               
+    </div *@>
+}
+@section scripts{
+
+        
+    <script type="text/javascript">
+        $(function () {
+            $(".chzn-select").chosen();
+        });     
+
+    </script>
+ 
+}

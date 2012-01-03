@@ -1,7 +1,7 @@
-﻿@model Web.Areas.OutpostManagement.Models.Country.CountryModel
+﻿@model Web.Areas.OutpostManagement.Models.Country.CountryOutputModel
            
 @section breadcrumbs{
-    @Url.HomeLink("Overview")/ @(Html.ActionLink<CountryController>(it => it.Overview(), "Outpost Management : Countries", OutpostManagementAreaRegistration.DEFAULT_ROUTE)) > Create
+    @Url.HomeLink("Overview")/ @(Html.ActionLink<CountryController>(it => it.Overview(1), "Outpost Management : Countries", OutpostManagementAreaRegistration.DEFAULT_ROUTE)) > Create
 }
  
 @section page_title{
@@ -15,7 +15,7 @@ Outpost Administration > Country : Create
 @section master_content{
     @*<form class="main-form" method="post"  id="llll"> *@
     <form method="post" 
-          action="@(Url.RouteUrl<CountryController>(it => it.Create(), OutpostManagementAreaRegistration.DEFAULT_ROUTE))"> 
+          action="@(Url.RouteUrl<CountryController>(it => it.Create(1), OutpostManagementAreaRegistration.DEFAULT_ROUTE))"> 
 
      @Html.ValidationSummary()
      
@@ -24,7 +24,7 @@ Outpost Administration > Country : Create
         Html.RenderPartial("CountryInput", Model);
     }
 
-     @(Html.FormButtons<CountryController>(it => it.Overview(), OutpostManagementAreaRegistration.DEFAULT_ROUTE))
+     @(Html.FormButtons<CountryController>(it => it.Overview(1), OutpostManagementAreaRegistration.DEFAULT_ROUTE))
    
   
     </form>

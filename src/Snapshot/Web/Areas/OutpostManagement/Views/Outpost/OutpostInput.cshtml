@@ -45,7 +45,7 @@
             <label for="NameD">
                 Name
             </label>
-            @Html.TextBoxFor(m => m.Name, new { maxlength = 20})
+            @Html.TextBoxFor(m => m.Name, new { maxlength = 50})
         </div>
     </div>
     <div class="row ">
@@ -54,6 +54,11 @@
                 Coordinates</label>
             @Html.Button("select-coordinates", "Map", HtmlButtonType.Button)
         </div>
+    </div>
+    <div class="row-of-2" >
+        @Html.TextArea("mainTextArea", "Please use the map button in order to select the Outpost's position.After your confirmation the outpost's coordinates will be automatically filled in.")
+         
+        
     </div>
     <div class="row of-2">
         <div class="column">
