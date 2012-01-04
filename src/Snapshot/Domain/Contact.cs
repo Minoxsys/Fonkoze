@@ -9,10 +9,10 @@ namespace Domain
 {
     public class Contact : DomainEntity
     {
-        public virtual Guid Id { get; set; }
+        //public Guid Id { get; set; }
         public virtual string ContactType { get; set; }
         public virtual string ContactDetail { get; set; }
-        public virtual bool MainContact { get; set; }
+        public virtual bool IsMainContact { get; set; }
         public virtual Outpost Outpost { get; set; }
         public virtual Client Client { get; set; }
     }

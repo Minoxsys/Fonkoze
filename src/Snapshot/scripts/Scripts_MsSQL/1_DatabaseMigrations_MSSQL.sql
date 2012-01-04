@@ -131,14 +131,14 @@ CREATE TABLE [Outposts] (
        primary key (Id))
 end
 
-if not exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'MobilePhones')
+if not exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'Contacts')
 begin
-	-- MobilePhones
-CREATE TABLE [MobilePhones] (
+	-- Contacts
+CREATE TABLE [Contacts] (
        Id UNIQUEIDENTIFIER not null,
-       MethodType NVARCHAR(15) null,
+       ContactType NVARCHAR(15) null,
        ContactDetail NVARCHAR(100) null,
-       MainMethod BIT NULL,
+       IsMainContact BIT NULL,
        Created DATETIME null,
        Updated DATETIME null,
        Outpost_FK UNIQUEIDENTIFIER null,
@@ -343,29 +343,29 @@ End
 
 
 
-if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='User_MobilePhones_FK ')
+if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='User_Contacts_FK ')
 begin
 
- alter table MobilePhones 
-        add constraint User_MobilePhones_FK 
+ alter table Contacts 
+        add constraint User_Contacts_FK 
         foreign key (ByUser_FK) 
         references Users
 end
 
-if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='Client_MobilePhones_FK')
+if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='Client_Contacts_FK')
 begin
 
- alter table MobilePhones 
-        add constraint Client_MobilePhones_FK
+ alter table Contacts 
+        add constraint Client_Contacts_FK
         foreign key (Client_FK) 
         references Clients
 end
 
-if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='Outpost_MobilePhones_FK')
+if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='Outpost_Contacts_FK')
 begin
 
- alter table MobilePhones 
-        add constraint Outpost_MobilePhones_FK 
+ alter table Contacts 
+        add constraint Outpost_Contacts_FK 
         foreign key (Outpost_FK) 
         references Outposts
 end

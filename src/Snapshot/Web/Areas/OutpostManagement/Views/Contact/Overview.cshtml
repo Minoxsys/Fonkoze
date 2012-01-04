@@ -1,21 +1,17 @@
 ﻿@using Web.Areas.OutpostManagement.Models.Contact
-
 @model ContactsOverviewModel
-           
 @section page_title{
-<br/>
-<br />
+    <br />
+    <br />
 }
-
 @section title_bar{
-<br/>
-<br />
+    <br />
+    <br />
 }
-
 @section breadcrumbs{
-   @Url.HomeLink("Outpost Administration") :  @(Html.ActionLink<OutpostController>(it => it.Overview(null, null, null), "Outposts", OutpostManagementAreaRegistration.DEFAULT_ROUTE)) > Contact Details
+    @Url.HomeLink("Outpost Administration") : @(Html.ActionLink<OutpostController>(it => it.Overview(null, null, null), "Outposts", OutpostManagementAreaRegistration.DEFAULT_ROUTE))
+> Contact Details
 }
-
 @section master_content{
     @if (!string.IsNullOrWhiteSpace(Model.Error))
     {
@@ -26,38 +22,37 @@
     <div class="page_header_buttons">
         @(Html.ActionLink<ContactController>(it => it.Create(Model.OutpostId), "Add new Contact", OutpostManagementAreaRegistration.DEFAULT_ROUTE))
     </div>
-    
- <table id="Contacts">
+    <table id="Header">
         <thead>
             <tr>
                 <th>
                 </th>
                 <th>
-                     <label>Search:<input type="text" 
-                                   id="contactsSearch" 
-                                   name="contactsSearch" 
-                                   maxlength="50" 
-                                   style="width:200px; 
-                                   height   :30px; 
-                                   margin-left:0px" /> 
-                       </label>
+                    <label>
+                        Search:<input type="text" id="contactsSearch" name="contactsSearch" maxlength="50"
+                            style="width: 200px; height: 30px; margin-left: 0px" />
+                    </label>
                 </th>
             </tr>
         </thead>
     </table>
-
-        <table id="Contacts">
+    <div>
+        <span class='info'>Please select at least a mobile phone number or an e-mail address
+            as contact method for product requests.</span>
+    </div>
+    <table id="Contacts">
         <thead>
             <tr>
                 <th>
                     Contact Method
                 </th>
-                  <th>
+                <th>
                     Contact Detail
                 </th>
-                <th></th>
-                 <th colspan="2" align="center">
-                 Actions
+                <th>
+                </th>
+                <th colspan="2" align="center">
+                    Actions
                 </th>
             </tr>
         </thead>
@@ -70,36 +65,34 @@
                 var _class = (itemNo++ % 2 == 0) ? "odd" : "even";
        
                 <tr class="@_class">
-                   <td>
-                       @contact.ContactType;
-                   </td>
-                   <td>
-                       @contact.ContactDetail
-                   </td>
-                   <td>
-                       @Html.CheckBox("Main-Contact",contact.MainContact)                     
-                   </td>
-                   <td>
-                            @{Html.BeginForm<ContactController>(m => m.Delete(contact.Id, contact.OutpostId), 
-                                  FormMethod.Post, 
-                                  new { @class = "delete-user-form" });}
-                            @Html.Button("delete-user", "Delete", HtmlButtonType.Submit)
-                            @{Html.EndForm();}
-                     </td>
+                    <td>
+                        @contact.ContactType;
+                    </td>
+                    <td>
+                        @contact.ContactDetail
+                    </td>
+                    <td>
+                        @Html.CheckBox(contact.Id.ToString(), contact.IsMainContact)
+                        @*  <input name= "Main-Contact" id="@contact.Id" type="checkbox"  value="@contact.MainContact" />*@
+                        @*@Html.CheckBox(contact.Id.ToString(),contact.MainContact)*@
+                    </td>
+                    <td>
+                        @{Html.BeginForm<ContactController>(m => m.Delete(contact.Id, contact.OutpostId),
+                                FormMethod.Post,
+                                new { @class = "delete-user-form" });}
+                        @Html.Button("delete-user", "Delete", HtmlButtonType.Submit)
+                        @{Html.EndForm();}
+                    </td>
                 </tr> 
             }
         </tbody>
     </table>
-    <input type="checkbox" name="by-contact-type" value="Phone" id="byphone" /> 
 }
-
 @section master_actions{
     @{
         Html.RenderPartial("~/Views/Shared/_OutpostManagementActions.cshtml");
     }
 }
-@*                   //$.getJSON('@Url.Action("SetContactMainMethod", "Contact")?outpostiId=' + contact.OutpostId + ',contactId=' + contact.Id);*@
-
 @section scripts{
     <script type="text/javascript">
 
@@ -109,18 +102,35 @@
             });
         });
 
-
         $(function () {
-            $('#Main-Contact').bind('change', function(event) {
+
+            // Add onclick handler to checkbox w/id checkme
+            $("input[type='checkbox']").click(function () {
+                var phoneId = $(this).attr('name');
+
+                // If checked
                 if ($(this).is(":checked")) {
-                    alert(window.contact.Id);
+                    uncheckAllExcept(phoneId);
+                    $.getJSON('@Url.Action("SetCheckContactMainMethod", "Contact")?phoneId=' + phoneId)
                 }
                 else {
-                    alert("fffff");
+                    $.getJSON('@Url.Action("SetUncheckContactMainMethod", "Contact")?phoneId=' + phoneId)
                 }
+
             });
         });
-        
+
+        function uncheckAllExcept(phoneId) {
+            $("input[type='checkbox']").each(function (idx, val) {
+                var el = $(val);
+                if (el.attr('name') !== phoneId) {
+                    el.attr('checked', false);
+                    el.attr('value', false);
+                }
+
+            });
+        }
+
+
     </script>
 }
-

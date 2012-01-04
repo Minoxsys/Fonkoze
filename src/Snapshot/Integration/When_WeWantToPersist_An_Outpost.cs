@@ -79,8 +79,8 @@ namespace IntegrationTests
 
            session.Save(phone);
            session.Save(phone1);
-           outpost.AddMobilePhone(phone);
-           outpost.AddMobilePhone(phone1);
+           outpost.AddContact(phone);
+           outpost.AddContact(phone1);
            //session.Save(outpost);
            //session.Flush();
 
@@ -88,7 +88,7 @@ namespace IntegrationTests
         //            where _outpost.Id == outpost.Id
         //            select _outpost).FirstOrDefault();
 
-           Assert.IsNotNull(outpost.MobilePhones);
+           Assert.IsNotNull(outpost.Contacts);
 
            Assert.IsNotNull(outpost);
            Assert.IsInstanceOf<Guid>(outpost.Id);

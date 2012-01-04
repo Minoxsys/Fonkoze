@@ -21,6 +21,7 @@ namespace Web.Areas.OutpostManagement.Models.Outpost
         public RegionModel Region { get; set; }
         public DistrictModel District { get; set; }
         public ClientModel Client { get; set; }
+        //public IList<Domain.Contact> Contacts { get; set; }
 
         public List<SelectListItem> Countries { get; set; }
         public List<SelectListItem> Regions { get; set; }

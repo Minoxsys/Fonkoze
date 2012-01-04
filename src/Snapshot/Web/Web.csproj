@@ -273,6 +273,8 @@
     <Content Include="Assets\css\sexybuttons.css" />
     <Content Include="Assets\css\tasklist.css" />
     <Content Include="Assets\css\tasklistreview.css" />
+    <Content Include="Assets\img\bullet_toggle_minus.png" />
+    <Content Include="Assets\img\bullet_toggle_plus.png" />
     <Content Include="Assets\img\chosen-sprite.png" />
     <Content Include="Assets\img\hr\calendar.png" />
     <Content Include="Assets\img\hr\configuration.png" />

@@ -1,10 +1,10 @@
-﻿@using Web.Areas.OutpostManagement.Models.MobilePhone
+﻿@using Web.Areas.OutpostManagement.Models.Contact
 
-@model MobilePhoneModel
+@model ContactModel
            
           
 @section breadcrumbs{
-    @Url.HomeLink("Overview")/ @(Html.ActionLink<MobilePhoneController>(it => it.Overview(Model.Id), "OutpostManagement : Mobile Phones", OutpostManagementAreaRegistration.DEFAULT_ROUTE)) > Edit
+    @Url.HomeLink("Overview")/ @(Html.ActionLink<ContactController>(it => it.Overview(Model.Id), "OutpostManagement : Mobile Phones", OutpostManagementAreaRegistration.DEFAULT_ROUTE)) > Edit
 }
 @section page_title{
 OutpostManagement : Edit
@@ -24,11 +24,11 @@ OutpostManagement : Edit
 
  </div>      
     @{
-        Html.RenderPartial("MobilePhoneInput", @Model);
+        Html.RenderPartial("ContactInput", @Model);
         
     }
              @Html.SubmitButton("submit-form", "Save") <span>or </span>
-             <a href="@(Html.BuildUrlFromExpression<MobilePhoneController>(it => it.Overview(@Model.OutpostId)))">
+             <a href="@(Html.BuildUrlFromExpression<ContactController>(it => it.Overview(@Model.OutpostId)))">
                     Cancel</a>
     </form>
 }

@@ -27,16 +27,13 @@
             @Html.TextBoxFor(m => m.ContactDetail, new { maxlength = 100 })
        </td>
         <td>
-            @Html.CheckBoxFor(m => m.MainContact, new {})
+            @Html.CheckBoxFor(m => m.IsMainContact, new {})
        </td>
 
     </tr>
  
  </table>            
-     <div class="row-of-2" >
-        @Html.TextArea("contactTextArea", "Please select at least a mobile phone number or an e-mail address as contact method for product requests.")        
-    </div>
- 
+    
 </fieldset>
 
  @section scripts

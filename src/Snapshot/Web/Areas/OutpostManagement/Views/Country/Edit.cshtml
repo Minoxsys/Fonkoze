@@ -13,9 +13,9 @@
 @section master_content{
      @{Html.BeginForm();}
    <div style="display: none">
-@Html.HiddenFor(m => m.Client.Id)
-@Html.HiddenFor(m => m.Id)
-</div>
+        @Html.HiddenFor(m => m.Client.Id)
+        @Html.HiddenFor(m => m.Id)
+    </div>
             <fieldset class="fieldsCollection ">
                 @{
                     Html.RenderPartial("CountryInput", Model);     

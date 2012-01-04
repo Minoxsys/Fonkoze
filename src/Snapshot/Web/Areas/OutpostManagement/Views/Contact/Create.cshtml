@@ -1,11 +1,10 @@
 ﻿
-
-
 @using Web.Areas.OutpostManagement.Models.Contact
+
 @model ContactModel
            
 @section breadcrumbs{
-    @Url.HomeLink("Overview")/ @(Html.ActionLink<ContactController>(it => it.Overview(Model.OutpostId), "Outpost Management : Mobile Phones", OutpostManagementAreaRegistration.DEFAULT_ROUTE)) > Create
+    @Url.HomeLink("Overview")/ @(Html.ActionLink<ContactController>(it => it.Overview(Model.OutpostId), "Outpost Management : Contacts", OutpostManagementAreaRegistration.DEFAULT_ROUTE)) > Create
 }
 
 

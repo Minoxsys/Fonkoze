@@ -17,8 +17,8 @@ namespace Web.Areas.OutpostManagement.Models.Outpost
         public RegionModel Region { get; set; }
         public DistrictModel District { get; set; }
         public ClientModel Client { get; set; }
-        public IList<Domain.Contact> MobilePhones { get; set; }
-        public int ProductssNo { get; set; }
+        public IList<Domain.Contact> Contacts { get; set; }
+        public int ProductsNo { get; set; }
         public Guid Id { get; set; }
    }
 }

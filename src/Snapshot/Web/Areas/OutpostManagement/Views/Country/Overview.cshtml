@@ -22,13 +22,14 @@ OutpostManagement Countries: Overview
         </div>
     }
     
+     <div class="page_header_buttons">
+        @(Html.ActionLink<CountryController>(it => it.Create(Model.PagingInfo.CurrentPage), "Add new Country", OutpostManagementAreaRegistration.DEFAULT_ROUTE))
+    </div>
+   
     <table id="Header">
         <thead>
             <tr>
                 <th>
-                    <div class="page_header_buttons">
-                        @(Html.ActionLink<CountryController>(it => it.Create(Model.PagingInfo.CurrentPage), "Add new Country", OutpostManagementAreaRegistration.DEFAULT_ROUTE))
-                    </div>
                 </th>
                 <th></th>
                 <th></th>

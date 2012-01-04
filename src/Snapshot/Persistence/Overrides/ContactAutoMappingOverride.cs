@@ -8,7 +8,7 @@ using Domain;
 
 namespace Persistence.Overrides
 {
-    public class MobilePhoneAutoMappingOverride : IAutoMappingOverride<Contact>
+    public class ContactAutoMappingOverride : IAutoMappingOverride<Contact>
     {
         public void Override(FluentNHibernate.Automapping.AutoMapping<Contact> mapping)
         {

@@ -42,7 +42,7 @@ namespace Web.Areas.OutpostManagement.Controllers
 
         private const string TEMPDATA_ERROR_KEY = "error";
 
- 
+
         //[Requires(Permissions = "Country.Overview")]
         [HttpGet]
         public ActionResult Overview(Guid? countryId, Guid? regionId, Guid? districtId)
@@ -52,7 +52,7 @@ namespace Web.Areas.OutpostManagement.Controllers
             IQueryable<District> districts;
             IQueryable<Region> regions;
             IQueryable<Country> countries;
-            
+
             model = new OutpostOverviewModel();
 
             //model.Outposts = new List<OutpostOutputModel>();
@@ -96,7 +96,7 @@ namespace Web.Areas.OutpostManagement.Controllers
                     foreach (District itemDistrict in districts)
                     {
                         if (itemDistrict.Region.Id == item.Id)
-                        model.Districts.Add(new SelectListItem { Text = item.Name, Value = item.Id.ToString() });
+                            model.Districts.Add(new SelectListItem { Text = item.Name, Value = item.Id.ToString() });
                     }
                 }
 
@@ -120,7 +120,7 @@ namespace Web.Areas.OutpostManagement.Controllers
                 //    districtsWithOutpostId[0].Selected = true;
             }
 
-            
+
             if (outposts.ToList().Count() > 0)
                 outposts.ToList().ForEach(item =>
                 {
@@ -131,12 +131,12 @@ namespace Web.Areas.OutpostManagement.Controllers
                     model.Outposts.Add(outpostModel);
                 });
 
-              return View(model);
+            return View(model);
 
         }
 
         [HttpGet]
-        public PartialViewResult OverviewOutpost( Guid? districtId)
+        public PartialViewResult OverviewOutpost(Guid? districtId)
         {
             var outpostsList = new List<OutpostModel>();
             if (!districtId.HasValue)
@@ -175,7 +175,7 @@ namespace Web.Areas.OutpostManagement.Controllers
 
             if (!ModelState.IsValid)
             {
-                return View("Create", CreateOutpost );
+                return View("Create", CreateOutpost);
             }
             CreateMappings();
             var outpost = new Outpost();
@@ -192,7 +192,7 @@ namespace Web.Areas.OutpostManagement.Controllers
             return RedirectToAction("Overview", "Outpost");
         }
 
-       
+
 
         [HttpGet]
         //[Requires(Permissions = "Country.CRUD")]
@@ -245,7 +245,7 @@ namespace Web.Areas.OutpostManagement.Controllers
             var _outpost = new Outpost();
             Mapper.Map(outpostInputModel, _outpost);
 
-            //_outpost.Country = QueryCountry.Load(outpostInputModel.Region.CountryId);
+            _outpost.Country = QueryCountry.Load(outpostInputModel.Region.CountryId);
 
             if (outpostInputModel.Region != null)
             {
@@ -254,16 +254,19 @@ namespace Web.Areas.OutpostManagement.Controllers
 
             if (outpostInputModel.District != null)
             {
-                
+
                 _outpost.District = QueryDistrict.Load(outpostInputModel.District.Id);
             }
 
             SaveOrUpdateCommand.Execute(_outpost);
 
             return RedirectToAction("Overview",
-                new { countryId = outpostInputModel.Region.CountryId, 
-                      regionId = outpostInputModel.Region.Id,
-                      districtId = outpostInputModel.District.Id});
+                new
+                {
+                    countryId = outpostInputModel.Region.CountryId,
+                    regionId = outpostInputModel.Region.Id,
+                    districtId = outpostInputModel.District.Id
+                });
 
         }
 
@@ -274,9 +277,9 @@ namespace Web.Areas.OutpostManagement.Controllers
 
             Mapper.CreateMap<Outpost, OutpostInputModel>();
             Mapper.CreateMap<Outpost, OutpostOutputModel>();
-                //.ForMember("Region", m => m.Ignore())
-                //.ForMember("District", m => m.Ignore())
-                //.ForMember("Country", m=> m.Ignore());
+            //.ForMember("Region", m => m.Ignore())
+            //.ForMember("District", m => m.Ignore())
+            //.ForMember("Country", m=> m.Ignore());
 
 
             Mapper.CreateMap<OutpostInputModel, Outpost>()
@@ -310,19 +313,25 @@ namespace Web.Areas.OutpostManagement.Controllers
 
             if (outpost != null)
             {
-                    if (products.ToList().Count != 0)
+                if (products.ToList().Count != 0)
+                {
+                    TempData.Add("error", string.Format("The Outpost {0} has products associated, so it can not be deleted", outpost.Name));
+                    return RedirectToAction("Overview", "Outpost", new
                     {
-                        TempData.Add("error", string.Format("The Outpost {0} has products associated, so it can not be deleted", outpost.Name));
-                        return RedirectToAction("Overview", "Outpost", new { countryId = outpost.Country.Id, 
-                                                                             regionId = outpost.Region.Id, 
-                                                                             districtId = outpost.Region.Id });
-                    }
-                    DeleteCommand.Execute(outpost);
+                        countryId = outpost.Country.Id,
+                        regionId = outpost.Region.Id,
+                        districtId = outpost.Region.Id
+                    });
                 }
-            
-            return RedirectToAction("Overview", "Outpost", new { countryId = outpost.Country.Id, 
-                                                                 regionId = outpost.Region.Id, 
-                                                                 districtId = outpost.Region.Id});
+                DeleteCommand.Execute(outpost);
+            }
+
+            return RedirectToAction("Overview", "Outpost", new
+            {
+                countryId = outpost.Country.Id,
+                regionId = outpost.Region.Id,
+                districtId = outpost.Region.Id
+            });
         }
 
         [HttpGet]

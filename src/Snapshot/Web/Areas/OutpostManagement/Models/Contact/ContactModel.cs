@@ -8,7 +8,7 @@ namespace Web.Areas.OutpostManagement.Models.Contact
         public Guid Id { get; set; }
         public string ContactType { get; set; }
         public string ContactDetail { get; set; }
-        public bool MainContact { get; set; }
+        public bool IsMainContact { get; set; }
         public Guid OutpostId { get; set; }
     }
 }

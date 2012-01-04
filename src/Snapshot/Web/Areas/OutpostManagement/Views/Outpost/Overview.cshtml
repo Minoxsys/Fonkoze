@@ -1,4 +1,6 @@
-﻿@using Web.Areas.OutpostManagement.Models.Outpost
+﻿@using Web.Areas.OutpostManagement.HtmlHelpers
+@using Web.Areas.OutpostManagement.Models
+@using Web.Areas.OutpostManagement.Models.Outpost
 
 @model OutpostOverviewModel
            
@@ -80,6 +82,10 @@ OutpostManagement Outposts: Overview
     </table>
     </div>
 
+    <div class="pager">
+  @* @Html.PageLinks(Model.PagingInfo, x => Url.Action("Overview", new {page = x}))*@
+</div>
+
     @{
         Html.RenderPartial("OverviewOutpost", Model.Outposts);
     }
@@ -94,8 +100,7 @@ OutpostManagement Outposts: Overview
 
 @section scripts{
     <script type="text/javascript">
-
-       $("select[name='@Html.NameFor(m => m.Country.Id)']").change(function () {
+        $("select[name='@Html.NameFor(m => m.Country.Id)']").change(function () {
 
             var e = $(this)[0];
             var selectedCountryId = e.options[e.selectedIndex].value;
@@ -147,7 +152,7 @@ OutpostManagement Outposts: Overview
                     drop.append(opt);
                 });
 
-                 $("select[name='@Html.NameFor(m=>m.District.Id)']").change(onDistrictChanged);
+                $("select[name='@Html.NameFor(m=>m.District.Id)']").change(onDistrictChanged);
 
             });
 
@@ -155,7 +160,7 @@ OutpostManagement Outposts: Overview
 
         $(function () {
             $(".delete-user-form").submit(function () {
-                return confirm('Are you sure that you want to delete this Outpost?');
+                return confirm('Are you sure that you want to delete this Outpost?')
             });
         });
 
@@ -165,12 +170,12 @@ OutpostManagement Outposts: Overview
             var e = $(this)[0];
             var selectedDistrictId = e.options[e.selectedIndex].value;
 
-            var drop = $("#outpost-overview");
+            var drop = $("#outpost-overview")
 
             var urlOverview = '@Url.Action("OverviewOutpost")?districtId=' + selectedDistrictId;
             $.get(urlOverview, function (data) {
 
-                drop.html('');
+                drop.html('')
 
                 $('#outpost-overview').html(data);
             });
@@ -230,7 +235,8 @@ OutpostManagement Outposts: Overview
             // make sure we re-focus on the textbox for usability
             jQuery('#outpostSearch').focus();
         };
-      
+
+
 </script>
 }
 
