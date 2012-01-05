@@ -58,7 +58,7 @@ namespace Web.Areas.OutpostManagement.Controllers
             //model.Outposts = new List<OutpostOutputModel>();
 
 
-            //outposts = QueryService.Query();
+            outposts = QueryService.Query();
             //countries = QueryCountry.Query();
             ///regions = QueryRegion.Query();
             //districts = QueryDistrict.Query();
@@ -76,49 +76,60 @@ namespace Web.Areas.OutpostManagement.Controllers
             }
             else
             {
-                var countryS = countryId.Value;
-                countries = QueryCountry.Query().Where(it => it.Id == countryS);
-                regions = QueryRegion.Query().Where<Region>(it => it.Country.Id == countryS);
-                districts = QueryDistrict.Query().Where<District>(it => it.Region.Id == regionId.Value);
-                outposts = QueryService.Query().Where<Outpost>(it => it.District.Id == districtId.Value);
-
-                model = new OutpostOverviewModel();
-
-                foreach (Country item in countries)
+                if ((countryId.Value != Guid.Empty) && (regionId.Value != Guid.Empty) && (districtId.Value != Guid.Empty))
                 {
-                    model.Countries.Add(new SelectListItem { Text = item.Name, Value = item.Id.ToString() });
-                }
+                    var countryS = countryId.Value;
+                    countries = QueryCountry.Query().Where(it => it.Id == countryS);
+                    regions = QueryRegion.Query().Where<Region>(it => it.Country.Id == countryS);
+                    districts = QueryDistrict.Query().Where<District>(it => it.Region.Id == regionId.Value);
+                    outposts = QueryService.Query().Where<Outpost>(it => it.District.Id == districtId.Value);
 
-                foreach (Region item in regions)
-                {
-                    model.Regions.Add(new SelectListItem { Text = item.Name, Value = item.Id.ToString() });
+                    model = new OutpostOverviewModel();
+
+                    foreach (Country item in countries)
+                    {
+                        model.Countries.Add(new SelectListItem { Text = item.Name, Value = item.Id.ToString() });
+                    }
+
+                    foreach (Region item in regions)
+                    {
+                        model.Regions.Add(new SelectListItem { Text = item.Name, Value = item.Id.ToString() });
+
+                     }
 
                     foreach (District itemDistrict in districts)
                     {
-                        if (itemDistrict.Region.Id == item.Id)
-                            model.Districts.Add(new SelectListItem { Text = item.Name, Value = item.Id.ToString() });
+                            model.Districts.Add(new SelectListItem { Text = itemDistrict.Name, Value = itemDistrict.Id.ToString() });
                     }
-                }
 
-                if (model.Countries.Count > 0)
+                    if (model.Countries.Count > 0)
+                    {
+                        var selectedCountry = model.Countries.First<SelectListItem>(it => it.Value == countryId.Value.ToString());
+                        if (selectedCountry != null)
+                            selectedCountry.Selected = true;
+                    }
+
+                    //var selectedRegion = model.Regions.First<SelectListItem>(it => it.Value == regionId.Value.ToString());
+                    //var regionsWithRegionId = model.Regions.Where<SelectListItem>(it => it.Value == regionId.Value.ToString()).ToList();
+                    var regionsWithRegionId = model.Regions.Where(it => it.Value == countryId.Value.ToString()).ToList();
+                    if (regionsWithRegionId.Count > 0)
+                        regionsWithRegionId[0].Selected = true;
+
+                    //var selectedDistrict = model.Districts.First<SelectListItem>(it => it.Value == districtId.Value.ToString());
+                    //var regionsWithDistrictsId = model.Districts.First<SelectListItem>(it => it.Value == districtId.Value.ToString());
+                    var regionsWithDistrictsId = model.Districts.Where(it => it.Value == districtId.Value.ToString()).ToList();
+                    if (regionsWithDistrictsId.Count > 0)
+                        regionsWithDistrictsId[0].Selected = true;
+
+                    //var districtsWithOutpostId = model.Districts.Where<SelectListItem>(it => it.Value == outpostId.Value.ToString()).ToList();
+                    //if (districtsWithOutpostId.Count > 0)
+                    //    districtsWithOutpostId[0].Selected = true;
+                }
+                else
                 {
-                    var selectedCountry = model.Countries.First<SelectListItem>(it => it.Value == countryId.Value.ToString());
-                    if (selectedCountry != null)
-                        selectedCountry.Selected = true;
                 }
-
-                var regionsWithRegionId = model.Regions.Where<SelectListItem>(it => it.Value == regionId.Value.ToString()).ToList();
-                if (regionsWithRegionId.Count > 0)
-                    regionsWithRegionId[0].Selected = true;
-
-                var regionsWithDistrictsId = model.Districts.Where<SelectListItem>(it => it.Value == districtId.Value.ToString()).ToList();
-                if (regionsWithRegionId.Count > 0)
-                    regionsWithRegionId[0].Selected = true;
-
-                //var districtsWithOutpostId = model.Districts.Where<SelectListItem>(it => it.Value == outpostId.Value.ToString()).ToList();
-                //if (districtsWithOutpostId.Count > 0)
-                //    districtsWithOutpostId[0].Selected = true;
             }
+
 
 
             if (outposts.ToList().Count() > 0)
@@ -127,7 +138,6 @@ namespace Web.Areas.OutpostManagement.Controllers
                     CreateMappings();
                     var outpostModel = new OutpostModel();
                     Mapper.Map(item, outpostModel);
-                    //OutpostOutputModel. = QueryOutpost.Query().Count<Outpost>(it => it.District.Id == item.Id);
                     model.Outposts.Add(outpostModel);
                 });
 
@@ -162,6 +172,12 @@ namespace Web.Areas.OutpostManagement.Controllers
         public ActionResult Create()
         {
             var model = CreateOutpost;
+            //model.Region.CountryId = 
+            //model.Region.Id = 
+            //model.Region.DistrictId = 
+            //model.Country = QueryCountry.Load(outpostInputModel.Region.CountryId);
+            //model.Region = QueryRegion.Load(outpostInputModel.Region.Id);
+            //model.District = QueryDistrict.Load(outpostInputModel.District.Id);
 
             return View(model);
         }
@@ -189,7 +205,12 @@ namespace Web.Areas.OutpostManagement.Controllers
             outpost.District = QueryDistrict.Load(outpostInputModel.District.Id);
 
             SaveOrUpdateCommand.Execute(outpost);
-            return RedirectToAction("Overview", "Outpost");
+            return RedirectToAction("Overview", "Outpost", new
+                    {
+                        countryId = outpost.Country.Id,
+                        regionId = outpost.Region.Id,
+                        districtId = outpost.District.Id
+                    });
         }
 
 
@@ -223,6 +244,10 @@ namespace Web.Areas.OutpostManagement.Controllers
             var selectedRegion = outpostModelView.Regions.Where<SelectListItem>(it => it.Value == _outpost.Region.Id.ToString()).ToList();
             if (selectedRegion.Count > 0)
                 outpostModelView.Regions.First<SelectListItem>(it => it.Value == _outpost.Region.Id.ToString()).Selected = true;
+
+            var selectedDistrict = outpostModelView.Regions.Where<SelectListItem>(it => it.Value == _outpost.District.Id.ToString()).ToList();
+            if (selectedDistrict.Count > 0)
+                outpostModelView.Districts.First<SelectListItem>(it => it.Value == _outpost.District.Id.ToString()).Selected = true;
 
             return View(outpostModelView);
         }

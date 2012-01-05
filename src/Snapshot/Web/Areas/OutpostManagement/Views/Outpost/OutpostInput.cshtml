@@ -55,21 +55,21 @@
             @Html.Button("select-coordinates", "Map", HtmlButtonType.Button)
         </div>
     </div>
-    <div class="row-of-2" >
-        @Html.TextArea("mainTextArea", "Please use the map button in order to select the Outpost's position.After your confirmation the outpost's coordinates will be automatically filled in.")
-         
-        
+        <div>
+        <span class='info'>Please use the map button in order to select the Outpost's position.After your confirmation the outpost's coordinates will be automatically filled in.</span>
     </div>
+    <div></div>
     <div class="row of-2">
         <div class="column">
             <label for="Longitude">
-                Longitude<text class="required-text">*</text>
+                Longitude
             </label>
             @Html.TextBoxFor(m => m.Longitude, new { maxlength = 20 })
         </div>
+
         <div class="column">
             <label for="Latitude">
-                Latitude<text class="required-text">*</text>
+                Latitude
             </label>
             @Html.TextBoxFor(m => m.Latitude, new { maxlength = 20 })
         </div>

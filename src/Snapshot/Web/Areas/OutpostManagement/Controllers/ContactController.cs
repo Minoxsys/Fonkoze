@@ -191,8 +191,7 @@ namespace Web.Areas.OutpostManagement.Controllers
                      IList<Contact> contacts = outpost.Contacts;
                      foreach (Contact contact2 in contacts)
                      {
-                         ContactModel viewModelItem = new Conta
-                         ctModel();
+                         ContactModel viewModelItem = new ContactModel();
                          viewModelItem.IsMainContact = contact2.IsMainContact;
                          CreateMappings();
                          Mapper.Map(contact, viewModelItem);

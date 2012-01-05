@@ -96,6 +96,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Unit\Controllers\AccountControllerTest.cs" />
     <Compile Include="Unit\Controllers\Areas\OutpostManagement\DistrictController_Tests.cs" />
+    <Compile Include="Unit\Controllers\Areas\OutpostManagement\OutpostController_Tests.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Unit\Controllers\Areas\OutpostManagement\RegionController_Tests.cs" />
     <Compile Include="Unit\Controllers\Areas\StockAdministration\StockItemController_Tests.cs" />
     <Compile Include="Unit\Controllers\UnautorizedAccessController_Tests.cs" />

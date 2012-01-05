@@ -94,8 +94,6 @@ Districts: Overview
             var selectedCountryId = e.options[e.selectedIndex].value;
 
             $.getJSON('@Url.Action("GetRegionsForCountry", "District")?countryId=' + selectedCountryId, function (data) {
-                var drop = $("#Regions")
-                drop.html('')
 
                 var drop = $("#district-overview")
                 drop.html('')

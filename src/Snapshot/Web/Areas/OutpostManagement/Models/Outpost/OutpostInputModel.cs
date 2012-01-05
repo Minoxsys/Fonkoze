@@ -16,7 +16,9 @@ namespace Web.Areas.OutpostManagement.Models.Outpost
         public string Name { get; set; }
         public string OutpostType { get; set; }
         public string DetailMethod { get; set; }
+        [RegularExpression(@"((\d{2,3}):(\d{2,3}):(\d{2,3}) [N|W])")]        
         public string Latitude { get; set; }
+        [RegularExpression(@"((\d{2,3}):(\d{2,3}):(\d{2,3}) [N|W])")]
         public string Longitude { get; set; }
         public RegionInputModel Region { get; set; }
         public DistrictInputModel District { get; set; }

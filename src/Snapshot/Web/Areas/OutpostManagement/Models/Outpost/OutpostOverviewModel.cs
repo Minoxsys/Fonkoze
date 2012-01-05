@@ -43,8 +43,8 @@ namespace Web.Areas.OutpostManagement.Models.Outpost
         }
 
          public OutpostOverviewModel(IQueryService<Domain.Country> queryCountry, 
-                                      IQueryService<Domain.Region> queryRegion,
-                                      IQueryService<Domain.District> queryDistrict)
+                                     IQueryService<Domain.Region> queryRegion,
+                                     IQueryService<Domain.District> queryDistrict)
         {
             this.QueryCountry = queryCountry;
             this.QueryRegion = queryRegion;

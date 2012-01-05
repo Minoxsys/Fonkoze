@@ -73,8 +73,6 @@
                     </td>
                     <td>
                         @Html.CheckBox(contact.Id.ToString(), contact.IsMainContact)
-                        @*  <input name= "Main-Contact" id="@contact.Id" type="checkbox"  value="@contact.MainContact" />*@
-                        @*@Html.CheckBox(contact.Id.ToString(),contact.MainContact)*@
                     </td>
                     <td>
                         @{Html.BeginForm<ContactController>(m => m.Delete(contact.Id, contact.OutpostId),

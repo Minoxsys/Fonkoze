@@ -2,6 +2,10 @@
 
 @model OutpostOutputModel
            
+@Html.HiddenFor(m => m.Region.CountryId)
+@Html.HiddenFor(m => m.Region.Id)
+@Html.HiddenFor(m => m.District.Id)
+           
 @section breadcrumbs{
     @Url.HomeLink("Outpost Administration") / @(Html.ActionLink<OutpostController>(act => act.Overview(null, null, null), "Outposts Overview", OutpostManagementAreaRegistration.DEFAULT_ROUTE))
 > Create
@@ -13,6 +17,8 @@ OutpostManagement : Outpost : Create
 @section title_bar{
 }
 @section master_content{
+
+
     @{Html.BeginForm<OutpostController>(r => r.Create());}
     <fieldset class="fieldsCollection ">
         @{
@@ -82,7 +88,7 @@ OutpostManagement : Outpost : Create
                 });
 
                 //$("select[name='@Html.NameFor(m => m.District.Id)'] option[value='@Guid.Empty.ToString()']").remove().change(onDistrictChanged); ;
-                $("select[name='@Html.NameFor(m=>m.District.Id)']").change();
+                $("select[name='@Html.NameFor(m => m.District.Id)']").change();
 
             });
 
@@ -165,7 +171,7 @@ OutpostManagement : Outpost : Create
                     drop.append(opt);
                 });
 
-                $("select[name='@Html.NameFor(m=>m.District.Id)']").change(onDistrictChanged);
+                $("select[name='@Html.NameFor(m => m.District.Id)']").change(onDistrictChanged);
 
             });
 
