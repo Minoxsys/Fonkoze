@@ -75,7 +75,9 @@ namespace Web.Areas.OutpostManagement.Models.Outpost
             {
                 this.Regions.Add(new SelectListItem { Text = region.Name, Value = region.Id.ToString() });
 
-                var districts = QueryDistrict.Query().Where(it => it.Region.Id == firstCountrySelected);
+                var regionID = region.Id;
+
+                var districts = QueryDistrict.Query().Where(it => it.Region.Id == regionID);
 
                 foreach (var district in districts)
                 {

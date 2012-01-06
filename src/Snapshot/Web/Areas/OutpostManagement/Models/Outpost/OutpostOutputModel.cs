@@ -92,16 +92,18 @@ namespace Web.Areas.OutpostManagement.Models.Outpost
             }
 
             var resultDistrict = queryDistrict.Query();
-
-            if (resultDistrict.FirstOrDefault() != null)
+            if (resultDistrict != null)
             {
-                foreach (Domain.District item2 in resultDistrict)
+                if (resultDistrict.FirstOrDefault() != null)
                 {
-                    var selectListItem = new SelectListItem();
+                    foreach (Domain.District item2 in resultDistrict)
+                    {
+                        var selectListItem = new SelectListItem();
 
-                    selectListItem.Value = item2.Id.ToString();
-                    selectListItem.Text = item2.Name;
-                    Districts.Add(selectListItem);
+                        selectListItem.Value = item2.Id.ToString();
+                        selectListItem.Text = item2.Name;
+                        Districts.Add(selectListItem);
+                    }
                 }
             }
 
