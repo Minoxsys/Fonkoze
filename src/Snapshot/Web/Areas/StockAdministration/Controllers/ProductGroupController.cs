@@ -67,10 +67,15 @@ namespace Web.Areas.StockAdministration.Controllers
             return View(ProductGroupOutputModel);
         }
 
-        public ViewResult CreateProductGroupForProduct(bool CreateCommingFromProductCreate)
+        public ViewResult CreateProductGroupForProduct(bool CreateCommingFromProductCreate,bool CreateCommingFromProductEdit,Guid? productId)
         {
             var ProductGroupOutputModel = new ProductGroupOutputModel();
             TempData["FromProduct"] = CreateCommingFromProductCreate;
+            TempData["FromProductEdit"] = CreateCommingFromProductEdit;
+            if (productId != null)
+            {
+                TempData["ProductId"] = productId.Value.ToString();
+            }
             return View("Create",ProductGroupOutputModel);
         }
 
@@ -93,15 +98,21 @@ namespace Web.Areas.StockAdministration.Controllers
 
             SaveOrUpdateProductGroup.Execute(ProductGroup);
 
-            if (TempData["FromProduct"].ToString() == false.ToString())
+            if (TempData["FromProduct"] == null && TempData["FromProductEdit"] == null)
             {
                 return RedirectToAction("Overview");
             }
             else
             {
-                var urlBack = Request.UrlReferrer.ToString();
-                return Redirect(urlBack);
-                //return RedirectToAction("CreateProduct", "Product", new { ProductGroupId = ProductGroup.Id });
+                if (TempData["FromProduct"].Equals(true))
+                {
+                    return RedirectToAction("CreateProduct", "Product", new { ProductGroupId = ProductGroup.Id });
+                }
+                else
+                {
+                    return RedirectToAction("EditProduct", "Product", new { guid = TempData["ProductId"] , productGroupId = ProductGroup.Id });
+ 
+                }
  
             }
         }

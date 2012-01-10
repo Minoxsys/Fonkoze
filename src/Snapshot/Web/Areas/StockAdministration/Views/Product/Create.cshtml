@@ -5,7 +5,7 @@
 Stock Item : Create
 }
 @section breadcrumbs{
-    @*@Url.HomeLink("Outpost Administration") *@/ @(Html.ActionLink<ProductController>(act => act.Overview(), "Products Overview", StockAdministrationAreaRegistration.DEFAULT_ROUTE))
+    @*@Url.HomeLink("Outpost Administration") *@/ @(Html.ActionLink<ProductController>(act => act.Overview(null,1), "Products Overview", StockAdministrationAreaRegistration.DEFAULT_ROUTE))
 > Create District
 }
 @section master_content{
@@ -16,20 +16,12 @@ Stock Item : Create
             Html.RenderPartial("Input", Model);     
         }
     </fieldset>
-    @Html.SubmitButton("submit-form", "Save") <span>or </span><a href="@(Html.BuildUrlFromExpression<ProductController>(it => it.Overview()))">
+    @Html.SubmitButton("submit-form", "Save") <span>or </span><a href="@(Html.BuildUrlFromExpression<ProductController>(it => it.Overview(null,1)))">
         Cancel</a>
         </form>
     @{Html.EndForm();}
 }
 @section scripts{
-    <script type="text/javascript">
-//        document.getElementById("productgroup").onclick = function () {
-//            var url = "http://localhost/Snapshot/StockAdministration/ProductGroup/CreateProductGroupForProduct?CreateCommingFromProductCreate=True";
-//            window.open(url, "productgroup");
-//            window.location.pathname = "";
 
-//        }
-//        debugger;
-        $(".chzn-select").Chosen();
-    </script>
+
 }

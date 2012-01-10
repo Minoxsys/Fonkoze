@@ -4,24 +4,22 @@
 Stock Item : Edit
 }
 @section breadcrumbs{
-    @*@Url.HomeLink("Outpost Administration")*@  @(Html.ActionLink<ProductController>(act => act.Overview(), "Products Overview", StockAdministrationAreaRegistration.DEFAULT_ROUTE))
+    @*@Url.HomeLink("Outpost Administration")*@  @(Html.ActionLink<ProductController>(act => act.Overview(null,1), "Products Overview", StockAdministrationAreaRegistration.DEFAULT_ROUTE))
     > Edit Region : @Model.Name
 }
 
 @section master_content{
 
-    @{Html.BeginForm();}
+    @{Html.BeginForm<ProductController>(r => r.Edit(Model.Id));}
    <div style="display: none">
 @Html.HiddenFor(m => m.Id)
-@Html.HiddenFor(m=>m.Outpost.Id)
-@Html.HiddenFor(m=>m.PreviousStockLevel)
 </div>
             <fieldset class="fieldsCollection ">
                 @{
-                    Html.RenderPartial("Input", Model);     
+                    Html.RenderPartial("EditInput", Model);     
                 }
             </fieldset>
-            @Html.SubmitButton("submit-form", "Save") <span>or </span><a href="@(Html.BuildUrlFromExpression<ProductController>(it => it.Overview()))">
+            @Html.SubmitButton("submit-form", "Save") <span>or </span><a href="@(Html.BuildUrlFromExpression<ProductController>(it => it.Overview(null,1)))">
                     Cancel</a>
      
     @{Html.EndForm();}

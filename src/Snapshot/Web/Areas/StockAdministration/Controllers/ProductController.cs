@@ -12,13 +12,12 @@ using Web.Areas.OutpostManagement.Models.Outpost;
 using Web.Areas.OutpostManagement.Models.Region;
 using Web.Areas.OutpostManagement.Models.District;
 using Web.Areas.OutpostManagement.Models.Client;
+using Web.Areas.OutpostManagement.Models;
 
 namespace Web.Areas.StockAdministration.Controllers
 {
     public class ProductController : Controller
     {
-        public IQueryProduct QueryProduct { get; set; }
-
         public IQueryService<Product> QueryService { get; set; }
 
         public ProductOutputModel ProductOutputModel { get; set; }
@@ -29,17 +28,38 @@ namespace Web.Areas.StockAdministration.Controllers
 
         public IDeleteCommand<Product> DeleteProduct { get; set; }
 
-        public IQueryService<Outpost> QueryOutposts { get; set; }
-
-        public ActionResult Overview()
+        public int PageSize = 8;
+          
+        public ActionResult Overview(Guid? productGroupId,int page)
         {
-            var overviewModel = new ProductOverviewModel();
+            var overviewModel = new ProductOverviewModel(QueryProductGroup);
+            List<Product> products = new List<Product>();
+            List<Product> paginatedProducts = new List<Product>();
 
-            var products = QueryProduct.GetAll();
-
-            if (products.ToList().Count > 0)
+            if (productGroupId != null)
             {
-                foreach (Product product in products)
+                products = QueryService.Query().Where(it => it.ProductGroup.Id == productGroupId.Value).ToList();
+                paginatedProducts = QueryService.Query().Where(it => it.ProductGroup.Id == productGroupId.Value)
+                             .OrderBy(p => p.Name)
+                             .Skip((page - 1) * PageSize)
+                             .Take(PageSize).ToList();
+
+                if(overviewModel.ProductGroups.Where(it=>it.Value == productGroupId.Value.ToString()).ToList().Count > 0)
+                {
+                    overviewModel.ProductGroups.First(it=>it.Value == productGroupId.Value.ToString()).Selected = true;
+                }
+ 
+            }
+
+            overviewModel.PagingInfo = new PagingInfo{
+                    CurrentPage = page,
+                    ItemsPerPage = PageSize,
+                    TotalItems = products.Count()
+                };
+
+            if (paginatedProducts.ToList().Count > 0)
+            {
+                foreach (Product product in paginatedProducts)
                 {
                     CreateMappings();
                     var productModel = new ProductModel();
@@ -51,7 +71,42 @@ namespace Web.Areas.StockAdministration.Controllers
 
             return View(overviewModel);
         }
+        public PartialViewResult OverviewTable(Guid? productGroupId)
+        {
+            var productList = new List<ProductModel>();
+            if (!productGroupId.HasValue)
+                return PartialView(productList);
 
+            var products = QueryService.Query().Where<Product>(it => it.ProductGroup.Id == productGroupId);
+
+            foreach (Product item in products)
+            {
+                CreateMappings();
+                var productModel = new ProductModel();
+                Mapper.Map(item, productModel);
+                productList.Add(productModel);
+
+            }
+            return PartialView(productList);
+        }
+        public PartialViewResult SearchForProductWithName(string productName)
+        {
+            var productList = new List<ProductModel>();
+            //if (productName == null)
+            //    return PartialView(productList);
+
+            var products = QueryService.Query().Where<Product>(it => it.Name.Contains(productName));
+
+            foreach (Product item in products)
+            {
+                CreateMappings();
+                var productModel = new ProductModel();
+                Mapper.Map(item, productModel);
+                productList.Add(productModel);
+
+            }
+            return PartialView(productList);
+        }
         private void CreateMappings()
         {
             Mapper.CreateMap<ProductModel, Product>();
@@ -84,12 +139,12 @@ namespace Web.Areas.StockAdministration.Controllers
 
         public ViewResult Create()
         {
-            var productOutputModel = new ProductOutputModel(QueryProductGroup, QueryOutposts);
+            var productOutputModel = new ProductOutputModel(QueryProductGroup);
             return View(productOutputModel);
         }
         public ViewResult CreateProduct(Guid? ProductGroupId)
         {
-            var productOutputModel = new ProductOutputModel(QueryProductGroup, QueryOutposts);
+            var productOutputModel = new ProductOutputModel(QueryProductGroup);
 
             if (ProductGroupId != null)
             {
@@ -120,12 +175,11 @@ namespace Web.Areas.StockAdministration.Controllers
             
             SaveOrUpdateProduct.Execute(product);
 
-            return RedirectToAction("Overview");
-        }
-
+            return RedirectToAction("Overview", new { productGroupId = product.ProductGroup.Id,page=1 });
+        }       
         private ProductOutputModel BuildProductOutputModelFromInputModel(ProductInputModel model)
         {
-            var productOutputModel = new ProductOutputModel(QueryProductGroup,QueryOutposts);
+            var productOutputModel = new ProductOutputModel(QueryProductGroup);
             productOutputModel.Description = model.Description;
             productOutputModel.Id = model.Id;
             productOutputModel.LowerLimit = model.LowerLimit;
@@ -146,7 +200,7 @@ namespace Web.Areas.StockAdministration.Controllers
 
         public ViewResult Edit(Guid guid)
         {
-            var productOutputModel = new ProductOutputModel(QueryProductGroup,QueryOutposts);
+            var productOutputModel = new ProductOutputModel(QueryProductGroup);
 
             var product = QueryService.Load(guid);
 
@@ -159,12 +213,25 @@ namespace Web.Areas.StockAdministration.Controllers
                 productOutputModel.ProductGroups.First(it => it.Value == product.ProductGroup.Id.ToString()).Selected = true; 
             }
 
-            productOutputModel.PreviousStockLevel = product.StockLevel;
-            //productOutputModel.Outpost.Id = product.Outpost.Id;
-
-            return View(productOutputModel);
+         return View(productOutputModel);
         }
+        public ViewResult EditProduct(Guid guid,Guid productGroupId)
+        {
+            var productOutputModel = new ProductOutputModel(QueryProductGroup);
 
+            var product = QueryService.Load(guid);
+
+            CreateMappings();
+
+            Mapper.Map(product, productOutputModel);
+
+            if (productOutputModel.ProductGroups.Where(it => it.Value == productGroupId.ToString()).ToList().Count > 0)
+            {
+                productOutputModel.ProductGroups.First(it => it.Value == productGroupId.ToString()).Selected = true;
+            }
+
+            return View("Edit",productOutputModel);
+        }
         [HttpPost]
         public ActionResult Edit(ProductInputModel model)
         {
@@ -186,7 +253,7 @@ namespace Web.Areas.StockAdministration.Controllers
 
             SaveOrUpdateProduct.Execute(product);
 
-            return RedirectToAction("Overview");
+            return RedirectToAction("Overview", new { productGroupId = product.ProductGroup.Id,page=1 });
         }
 
         [HttpPost]
@@ -196,7 +263,7 @@ namespace Web.Areas.StockAdministration.Controllers
 
             DeleteProduct.Execute(product);
 
-            return RedirectToAction("Overview");
+            return RedirectToAction("Overview", new { productGroupId = product.ProductGroup.Id,page=1 });
         }
     }
 }

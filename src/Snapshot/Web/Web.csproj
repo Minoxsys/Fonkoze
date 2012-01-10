@@ -1913,6 +1913,8 @@
     <Content Include="Areas\StockAdministration\Views\ProductGroup\OverviewProductGroup.cshtml" />
     <Content Include="Areas\StockAdministration\Views\OutpostStockLevel\Overview.cshtml" />
     <Content Include="Areas\StockAdministration\Views\OutpostStockLevel\OverviewItemsStockLevel.cshtml" />
+    <Content Include="Areas\StockAdministration\Views\Product\EditInput.cshtml" />
+    <Content Include="Areas\StockAdministration\Views\Product\OverviewTable.cshtml" />
     <None Include="Assets\img\skins\ButtonTemplate.psd" />
     <Content Include="Views\RoleManager\Create.cshtml" />
     <Content Include="Views\RoleManager\Edit.cshtml" />

@@ -17,11 +17,7 @@ namespace Web.Areas.StockAdministration.Models.Product
         public int UpperLimit { get; set; }
         public String SMSReferenceCode { get; set; }
         public ProductGroupInputModel ProductGroup { get; set; }
-        public string UpdateMethod { get; set; }
-        public int PreviousStockLevel { get; set; }
-        public OutpostModel Outpost { get; set; }
-        public int StockLevel { get; set; }
-       
+               
         public class ProductGroupInputModel
         {
             public Guid Id { get; set; }

@@ -18,21 +18,16 @@ namespace Web.Areas.StockAdministration.Models.Product
         public int UpperLimit { get; set; }
         public String SMSReferenceCode { get; set; }
         public ProductGroupModel ProductGroup { get; set; }
-        public string UpdateMethod { get; set; }
-        public int PreviousStockLevel { get; set; }
-        public int StockLevel { get; set; }
-        public OutpostModel Outpost { get; set; }
         public List<SelectListItem> ProductGroups { get; set; }
 
         public IQueryService<Domain.ProductGroup> QueryProductGroup { get; set; }
 
 
-        public ProductOutputModel(IQueryService<Domain.ProductGroup> queryStockGroup, IQueryService<Outpost> queryOutpost)
+        public ProductOutputModel(IQueryService<Domain.ProductGroup> queryProductGroup)
         {
             this.ProductGroup = new ProductGroupModel();
             this.ProductGroups = new List<SelectListItem>();
-            this.Outpost = new OutpostModel();
-            this.QueryProductGroup = queryStockGroup;
+            this.QueryProductGroup = queryProductGroup;
 
 
             var stockGroups = QueryProductGroup.Query();
