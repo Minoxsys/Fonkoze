@@ -7,7 +7,7 @@ using Domain;
 
 namespace Web.Areas.OutpostManagement.Models.Country
 {
-    public class Overview
+    public class CountryOverviewModel
     {
         public List<CountryModel> Countries { get; set; }
         public PagingInfo PagingInfo { get; set; }

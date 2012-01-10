@@ -6,40 +6,7 @@
 @Html.HiddenFor(m => m.Id)
 <fieldset id="fieldsetInformation">
     <legend>Outpost Information</legend>
-    <div class="row of-2">
- <label for="Name">
-    Country
-</label>       
-<div class="row">
-             <select name="@Html.NameFor(m => m.Region.CountryId)">
-                @foreach (var item in Model.Countries)
-                { 
-                    <option value="@item.Value" @(item.Selected ? @"selected='selected'" : @"") >@item.Text</option>
-                }
-            </select>
-        </div>
-<label for="Name">
-    Region
-</label>    
-<div class="row">
-     <select name="@Html.NameFor(m => m.Region.Id)">
-        @foreach (var item1 in Model.Regions)
-        { 
-            <option value="@item1.Value" @(item1.Selected ? @"selected='selected'" : @"") >@item1.Text</option>
-        }
-    </select>
- <label for="Name">
-    District
-</label>   
-</div>
-        <div class="row">
-             <select name="@Html.NameFor(m => m.District.Id)">
-                @foreach (var item2 in Model.Districts)
-                { 
-                    <option value="@item2.Value" @(item2.Selected ? @"selected='selected'" : @"") >@item2.Text</option>
-                }
-            </select>
-    </div>
+
     <div class="row ">
         <div class="column">
             <label for="NameD">
@@ -58,6 +25,7 @@
         <div>
         <span class='info'>Please use the map button in order to select the Outpost's position.After your confirmation the outpost's coordinates will be automatically filled in.</span>
     </div>
+    <div>&nbsp;</div>
     <div></div>
     <div class="row of-2">
         <div class="column">
@@ -75,3 +43,8 @@
         </div>
     </div>
 </fieldset>
+
+@section scripts{
+<script type="text/javascript">
+    </script>
+}

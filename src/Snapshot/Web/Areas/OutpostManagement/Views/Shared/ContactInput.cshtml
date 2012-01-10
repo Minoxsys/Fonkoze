@@ -15,10 +15,10 @@
         <th>
              Mobile Number / E-mail
         </th>
-        <th>
+@*        <th>
             Actions
         </th>
-    </thead>
+*@    </thead>
     <tr>
         <td>
             @Html.DropDownListFor(m => m.ContactType, new SelectList(new[] { "Mobile Number" , "E-mail"}))
@@ -26,10 +26,10 @@
         <td>
             @Html.TextBoxFor(m => m.ContactDetail, new { maxlength = 100 })
        </td>
-        <td>
+@*        <td>
             @Html.CheckBoxFor(m => m.IsMainContact, new {})
        </td>
-
+*@
     </tr>
  
  </table>            

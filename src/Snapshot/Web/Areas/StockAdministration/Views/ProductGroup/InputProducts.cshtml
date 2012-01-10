@@ -3,11 +3,11 @@
     @Html.ValidationSummary()
 </div>
 <label for="Name">
-    Stock Group
+    Product Group Name
 </label>
 @Html.TextBoxFor(it => it.Name, new { maxlength = 50, autofocus = "autofocus", placeholder = "Product Group Name" })
 <label for="Description">
-    Description</label>
+    Product Group Description</label>
 @Html.TextAreaFor(it => it.Description, new { maxlength = 250, autofocus = "autofocus", placeholder = "Product Group Description" })
 
 

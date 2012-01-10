@@ -300,29 +300,19 @@ end
 
 if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='ByUser_User_Users_FK')
 begin
-    alter table RoleUsers 
+    alter table Users 
         add constraint ByUser_User_Users_FK 
         foreign key (User_FK) 
         references Users
 end
-/*
+
 if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='Role_RolesUsers_FK')
 begin
   alter table RoleUsers 
-        add constraint ByUser_User_Roles_FK 
+        add constraint Role_RolesUsers_FK 
         foreign key (Role_FK) 
         references Roles
 end
-*/
-/*
-if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='ByUser_User_Users_UFK')
-begin
-    alter table Users 
-        add constraint ByUser_User_Users_UFK 
-        foreign key (ByUser_FK) 
-        references Users
-end
-*/
 
 if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='Client_Countries_FK')
 begin

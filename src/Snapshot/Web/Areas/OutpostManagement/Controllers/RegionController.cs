@@ -7,7 +7,7 @@ using Domain;
 using Web.Areas.OutpostManagement.Models.Region;
 using AutoMapper;
 using Web.Areas.OutpostManagement.Models.Country;
-using Persistence.Queries.Regions;
+using Persistence.Queries.Countries;
 using Web.Areas.OutpostManagement.Models.Client;
 
 

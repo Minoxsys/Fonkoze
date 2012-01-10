@@ -9,7 +9,7 @@ using FluentNHibernate.Automapping;
 using Core.Persistence;
 using Persistence;
 using Autofac;
-using Persistence.Queries.Regions;
+using Persistence.Queries.Countries;
 using Persistence.Queries.Districts;
 using Persistence.Queries.StockItems;
 

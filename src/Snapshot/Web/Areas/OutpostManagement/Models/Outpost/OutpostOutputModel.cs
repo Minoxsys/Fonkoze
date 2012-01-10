@@ -4,6 +4,7 @@ using System.Linq;
 using Web.Areas.OutpostManagement.Models.Region;
 using Web.Areas.OutpostManagement.Models.District;
 using Web.Areas.OutpostManagement.Models.Country;
+using Web.Areas.OutpostManagement.Models.Contact;
 using System.Web.Mvc;
 using Core.Persistence;
 using Web.Areas.OutpostManagement.Models.Client;
@@ -21,13 +22,14 @@ namespace Web.Areas.OutpostManagement.Models.Outpost
         public RegionModel Region { get; set; }
         public DistrictModel District { get; set; }
         public ClientModel Client { get; set; }
-        //public IList<Domain.Contact> Contacts { get; set; }
+        public ContactModel Contact { get; set; }
+        public List<Domain.Contact> Contacts { get; set; }
 
         public List<SelectListItem> Countries { get; set; }
         public List<SelectListItem> Regions { get; set; }
         public List<SelectListItem> Districts { get; set; }
 
-        //public List<SelectListItem> Outposts { get; set; }
+        public List<SelectListItem> Outposts { get; set; }
 
         public IQueryService<Domain.Country> queryCountry { get; set; }
         public IQueryService<Domain.Region> queryRegion { get; set; }
@@ -63,7 +65,6 @@ namespace Web.Areas.OutpostManagement.Models.Outpost
             this.Regions = Regions;
             this.Districts = Districts;
 
- 
             var result = queryCountry.Query();
 
             foreach (Domain.Country item in result)

@@ -7,6 +7,7 @@ using Web.Areas.OutpostManagement.Models.Outpost;
 using Web.Areas.OutpostManagement.Models.Country;
 using Web.Areas.OutpostManagement.Models.Region;
 using Web.Areas.OutpostManagement.Models.District;
+using Web.Areas.OutpostManagement.Models.Contact;
 using AutoMapper;
 using Core.Persistence;
 using Domain;
@@ -20,19 +21,21 @@ namespace Web.Areas.OutpostManagement.Controllers
         public OutpostModel OutpostModel { get; set; }
         public OutpostOutputModel OutpostModelOutput { get; set; }
 
-        public IQueryOutposts QueryOutposts { get; set; }
+        //public IQueryOutposts QueryOutposts { get; set; }
 
         public IQueryService<Outpost> QueryService { get; set; }
-        public IQueryService<Contact> QueryMobilePhone { get; set; }
         public IQueryService<Country> QueryCountry { get; set; }
         public IQueryService<Region> QueryRegion { get; set; }
         public IQueryService<District> QueryDistrict { get; set; }
         public IQueryService<Client> QueryClients { get; set; }
         public IQueryService<Product> QueryProduct { get; set; }
+        public IQueryService<Contact> QueryContact { get; set; }
 
         public ISaveOrUpdateCommand<Outpost> SaveOrUpdateCommand { get; set; }
+        public ISaveOrUpdateCommand<Contact> SaveOrUpdateCommandContact { get; set; }
 
         public IDeleteCommand<Outpost> DeleteCommand { get; set; }
+        public IDeleteCommand<Contact> DeleteContactCommand { get; set; }
 
         public OutpostOutputModel OutpostOutputModel { get; set; }
 
@@ -114,11 +117,7 @@ namespace Web.Areas.OutpostManagement.Controllers
                     if (regionsWithDistrictsId.Count > 0)
                         regionsWithDistrictsId[0].Selected = true;
                 }
-                else
-                {
-                }
             }
-
 
             if (outposts != null)
             {
@@ -128,6 +127,11 @@ namespace Web.Areas.OutpostManagement.Controllers
                         CreateMappings();
                         var outpostModel = new OutpostModel();
                         Mapper.Map(item, outpostModel);
+                        foreach (Contact contact in item.Contacts)
+                        {
+                            outpostModel.Contacts.Add(contact);
+                        }
+
                         model.Outposts.Add(outpostModel);
                     });
             }
@@ -158,18 +162,46 @@ namespace Web.Areas.OutpostManagement.Controllers
         }
 
 
+        public ActionResult OverviewContacts(Guid outpostId)
+        {
+            ContactsOverviewModel model = new ContactsOverviewModel();
+
+            model.Items = new List<ContactModel>();
+            model.OutpostId = outpostId;
+            //Outpost outpost;
+
+            var queryResult = QueryService.Query().Where(mm => mm.Id == outpostId);
+
+            if (queryResult.Count() > 0)
+            {
+                foreach (var outpost in queryResult)
+                {
+
+                    IList<Contact> contacts = outpost.Contacts;
+                    foreach (Contact contact in contacts)
+                    {
+                        ContactModel viewModelItem = new ContactModel();
+                        viewModelItem.IsMainContact = contact.IsMainContact;
+                        CreateMappings();
+                        Mapper.Map(contact, viewModelItem);
+                        model.Items.Add(viewModelItem);
+                    }
+
+                }
+            };
+
+            //countries = QueryCountries.Query();
+            //regions = QueryRegions.Query();
+            //districts = QueryDistricts.Query();
+
+            return View(model);
+        }
+
         [HttpGet]
         //[Requires(Permissions = "Country.CRUD")]
         public ActionResult Create()
         {
             var model = CreateOutpost;
-            //model.Region.CountryId = 
-            //model.Region.Id = 
-            //model.Region.DistrictId = 
-            //model.Country = QueryCountry.Load(outpostInputModel.Region.CountryId);
-            //model.Region = QueryRegion.Load(outpostInputModel.Region.Id);
-            //model.District = QueryDistrict.Load(outpostInputModel.District.Id);
-
             return View(model);
         }
 
@@ -208,6 +240,11 @@ namespace Web.Areas.OutpostManagement.Controllers
             if (selectedDistrict.Count > 0)
                 outpostModelView.Districts.First<SelectListItem>(it => it.Value == _outpost.District.Id.ToString()).Selected = true;
 
+            foreach (Contact contact in outpost.Contacts)
+            {
+                outpostModelView.Contacts.Add(contact);
+            }
+
             return View(outpostModelView);
         }
 
@@ -235,16 +272,16 @@ namespace Web.Areas.OutpostManagement.Controllers
 
             outpost.Client = client;
 
-            outpost.Country = QueryCountry.Load(outpostInputModel.Region.CountryId);
-            outpost.Region = QueryRegion.Load(outpostInputModel.Region.Id);
-            outpost.District = QueryDistrict.Load(outpostInputModel.District.Id);
+            outpost.Country = QueryCountry.Load(outpost.Region.Country.Id);
+            outpost.Region = QueryRegion.Load(outpost.Region.Id);
+            outpost.District = QueryDistrict.Load(outpost.District.Id);
 
             SaveOrUpdateCommand.Execute(outpost);
             return RedirectToAction("Overview", "Outpost", new
                     {
-                        countryId = outpostInputModel.Region.CountryId,
-                        regionId = outpostInputModel.Region.Id,
-                        districtId = outpostInputModel.District.Id
+                        countryId = outpost.Region.Country.Id,
+                        regionId = outpost.Region.Id,
+                        districtId = outpost.District.Id
                     });
         }
 
@@ -267,6 +304,7 @@ namespace Web.Areas.OutpostManagement.Controllers
             Mapper.Map(outpostInputModel, _outpost);
 
             _outpost.Country = QueryCountry.Load(outpostInputModel.Region.CountryId);
+            _outpost.Contacts = QueryContact.Query().Where(m => m.Outpost.Id == _outpost.Id).ToList();
 
             if (outpostInputModel.Region != null)
             {
@@ -277,6 +315,12 @@ namespace Web.Areas.OutpostManagement.Controllers
             {
 
                 _outpost.District = QueryDistrict.Load(outpostInputModel.District.Id);
+            }
+
+            foreach (Domain.Contact contact in _outpost.Contacts)
+            {
+                var contactUpdate = QueryContact.Load(contact.Id);
+                SaveOrUpdateCommandContact.Execute(contactUpdate);
             }
 
             SaveOrUpdateCommand.Execute(_outpost);
@@ -334,9 +378,9 @@ namespace Web.Areas.OutpostManagement.Controllers
 
             if (outpost != null)
             {
-                //if (products.ToList().Count != 0)
+                //if (productGroup.ToList().Count != 0)
                 //{
-                    //TempData.Add("error", string.Format("The Outpost {0} has products associated, so it can not be deleted", outpost.Name));
+                    //TempData.Add("error", string.Format("The Outpost {0} has Product Groups associated, so it can not be deleted", outpost.Name));
                     //return RedirectToAction("Overview", "Outpost", new
                     //{
                     //    countryId = outpost.Country.Id,
@@ -344,6 +388,10 @@ namespace Web.Areas.OutpostManagement.Controllers
                     //    districtId = outpost.Region.Id
                     //});
                 //}
+                foreach(Contact contact in outpost.Contacts)
+                {
+                    DeleteContact(outpostId, contact.Id);
+                }
                 DeleteCommand.Execute(outpost);
             }
 
@@ -353,6 +401,29 @@ namespace Web.Areas.OutpostManagement.Controllers
                 regionId = outpost.District.Region.Id,
                 districtId = outpost.District.Id
             });
+        }
+
+        [HttpPost]
+        //[Requires(Permissions = "OnBoarding.Candidate.CRUD")]
+        public RedirectToRouteResult DeleteContact(Guid outpostId, Guid contactId)
+        {
+            //var outposts = QueryService.Query();
+            var outpost = QueryService.Load(outpostId);
+            var contact = QueryContact.Load(contactId);
+
+            //outposts = outposts.Where(m => m.Id == outpostId);
+            if (contact != null)
+            {
+                DeleteContactCommand.Execute(contact);
+            }
+
+            return RedirectToAction("Overview", "Outpost", new
+            {
+                countryId = outpost.District.Region.Country.Id,
+                regionId = outpost.District.Region.Id,
+                districtId = outpost.District.Id
+            });
+
         }
 
         [HttpGet]
@@ -395,6 +466,43 @@ namespace Web.Areas.OutpostManagement.Controllers
 
             return Json(Outposts, JsonRequestBehavior.AllowGet);
 
+        }
+
+        public ActionResult CreateContact(Guid outpostId)
+        {
+            var model = new ContactModel();
+            model.OutpostId = outpostId;
+            model.ContactType = "Mobile Number";
+            return View("CreateContact", model);
+        }
+
+
+        [HttpPost]
+        [ValidateInput(false)]
+        //[Requires(Permissions = "OnBoarding.Candidate.CRUD")]
+        public ActionResult CreateContact(ContactModel contactModel)
+        {
+            var model = new ContactModel();
+
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            CreateMappings();
+            var contact = new Contact();
+
+            Outpost outpost = QueryService.Load(contactModel.OutpostId);
+
+            contact.Client = QueryClients.Load(Client.DEFAULT_ID); ;
+
+            Mapper.Map(contactModel, contact);
+            if (outpost != null)
+                outpost.Contacts.Add(contact);
+
+            SaveOrUpdateCommand.Execute(outpost);
+
+            return RedirectToAction("Overview", "Outpost", new { outpostId = contactModel.OutpostId });
         }
 
         private OutpostOutputModel MapDatFromInputModelToOutputModel(OutpostInputModel outpostInputModel)
@@ -443,6 +551,7 @@ namespace Web.Areas.OutpostManagement.Controllers
             };
 
 
+            outpostOutputModel.Contacts = new List<Contact>();
             outpostOutputModel.Region = new RegionModel();
             outpostOutputModel.District = new DistrictModel();
             outpostOutputModel.Id = outpostInputModel.Id;

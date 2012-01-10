@@ -21,13 +21,14 @@ namespace Web.Areas.StockAdministration.Controllers
         public ProductGroupOutputModel ProductGroupOutputModel { get; set; }
         public IQueryService<ProductGroup> QueryProductGroup { get; set; }
         public ISaveOrUpdateCommand<ProductGroup> SaveOrUpdateProductGroup { get; set; }
-        public IDeleteCommand<ProductGroup> DeleteProductGroup { get; set; }
+        public IDeleteCommand<ProductGroup> DeleteCommand { get; set; }
+        public IQueryService<Product> QueryProduct { get; set; }
 
         public ActionResult Overview()
         {
-            var overviewModel = new ProductGroupsOverviewModel();
+            var overviewModel = new ProductGroupOverviewModel();
 
-            var productGroups= QueryService.Query();
+            var productGroups = QueryService.Query();
 
             if (productGroups.ToList().Count > 0)
             {
@@ -52,7 +53,7 @@ namespace Web.Areas.StockAdministration.Controllers
             Mapper.CreateMap<ProductGroupInputModel, ProductGroup>();
             Mapper.CreateMap<ProductGroupOutputModel, ProductGroupInputModel>();
 
-           // Mapper.CreateMap<ProductsInputModel, Products>();
+            // Mapper.CreateMap<ProductsInputModel, Products>();
             //Mapper.CreateMap<Products, ProductsInputModel>();
 
             Mapper.CreateMap<ProductGroup, ProductGroupOutputModel>();
@@ -64,7 +65,7 @@ namespace Web.Areas.StockAdministration.Controllers
 
         public ViewResult Create()
         {
-            var ProductGroupOutputModel = new ProductGroupOutputModel();
+            //var ProductGroupOutputModel = new ProductGroupOutputModel();
             return View(ProductGroupOutputModel);
         }
 
@@ -101,15 +102,15 @@ namespace Web.Areas.StockAdministration.Controllers
 
         public ViewResult Edit(Guid guid)
         {
-            var ProductGroupOutputModel = new ProductGroupOutputModel();
+            var productGroupOutputModel = new ProductGroupOutputModel();
 
-            var ProductGroup = QueryService.Load(guid);
+            var productGroup = QueryService.Load(guid);
 
             CreateMappings();
 
-            Mapper.Map(ProductGroup, ProductGroupOutputModel);
+            Mapper.Map(productGroup, productGroupOutputModel);
 
-            return View(ProductGroupOutputModel);
+            return View(productGroupOutputModel);
         }
 
         [HttpPost]
@@ -166,11 +167,27 @@ namespace Web.Areas.StockAdministration.Controllers
         }
 
         [HttpPost]
-        public ActionResult Delete(Guid guid)
+        //[Requires(Permissions = "OnBoarding.Candidate.CRUD")]
+        public RedirectToRouteResult Delete(Guid productGroupId)
         {
-            var ProductGroup = QueryService.Load(guid);
+            var productGroup = QueryService.Load(productGroupId);
+            //var productResults = QueryProduct.Query();
 
-            DeleteProductGroup.Execute(ProductGroup);
+            //if (productResults != null)
+            //{
+                if (productGroup != null)
+                {
+                    //productResults = QueryProduct.Query().Where(it => it.ProductGroup.Id == productGroup.Id);
+
+                    //    if (productResults.ToList().Count != 0)
+                    //    {
+                    //        TempData.Add("error", string.Format("The Product Group {0} has regions associated, so it can not be deleted", country.Name));
+                    //        return RedirectToAction("Overview", new { page = 1 });
+                    //    }
+                }
+
+                DeleteCommand.Execute(productGroup);
+            //}
 
             return RedirectToAction("Overview");
         }

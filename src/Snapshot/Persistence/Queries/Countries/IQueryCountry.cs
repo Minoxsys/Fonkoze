@@ -6,8 +6,8 @@ using Domain;
 
 namespace Persistence.Queries.Countries
 {
-    public interface IQueryRegion
+    public interface IQueryCountry
     {
-        IQueryable<Region> GetAll();
+        //IQueryable<Country> GetAll();
     }
 }

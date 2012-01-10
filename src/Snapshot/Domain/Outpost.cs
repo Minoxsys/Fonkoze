@@ -10,12 +10,12 @@ namespace Domain
     {
         public virtual string Name { get; set; }
         public virtual string OutpostType { get; set; }
-        //public virtual string MainMethod { get; set; }
+        //public virtual string IsMainMethod { get; set; }
         public virtual string DetailMethod { get; set; }
         public virtual string Longitude { get; set; }
         public virtual string Latitude { get; set; }
         public virtual IList<Domain.Contact> Contacts { get; set; }
-        public virtual IList<Domain.Product> Products { get; set; }
+        //public virtual IList<Domain.Product> Products { get; set; }
         public virtual Domain.Country Country { get; set; }
         public virtual Domain.Region Region { get; set; }
         public virtual Domain.District District { get; set; }
@@ -25,12 +25,14 @@ namespace Domain
         public Outpost()
         {
             Contacts = new List<Contact>();
-            Products = new List<Product>();
+            //Products = new List<Product>();
         }
 
         public virtual void AddContact(Contact contact)
         {
             Contacts.Add(contact);
         }
+
+
     }
 }

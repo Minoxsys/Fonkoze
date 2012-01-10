@@ -1,9 +1,9 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Web.Areas.OutpostManagement.Models.Region;
 using Web.Areas.OutpostManagement.Models.District;
 using Web.Areas.OutpostManagement.Models.Country;
+using Web.Areas.OutpostManagement.Models.Contact;
 using System.Linq;
 using System.Web.Mvc;
 using Core.Persistence;
@@ -17,20 +17,21 @@ namespace Web.Areas.OutpostManagement.Models.Outpost
        public string DetailMethod { get; set; }
        public string Longitude { get; set; }
        public string Latitude { get; set; }
-       public PagingInfo PagingInfo { get; set; }
        public CountryModel Country { get; set; }
-        public RegionModel Region { get; set; }
-        public DistrictModel District { get; set; }
+       public RegionModel Region { get; set; }
+       public DistrictModel District { get; set; }
         
-        public List<SelectListItem> Countries { get; set; }
-        public List<SelectListItem> Regions { get; set; }
-        public List<SelectListItem> Districts { get; set; }
+       public List<SelectListItem> Countries { get; set; }
+       public List<SelectListItem> Regions { get; set; }
+       public List<SelectListItem> Districts { get; set; }
 
-        public List<OutpostModel> Outposts { get; set; }
+       public List<OutpostModel> Outposts { get; set; }
+       public List<ContactModel> Contact { get; set; }
+       public List<Domain.Contact> Contacts { get; set; }
 
-        public IQueryService<Domain.Country> QueryCountry { get; set; }
-        public IQueryService<Domain.Region> QueryRegion { get; set; }
-        public IQueryService<Domain.District> QueryDistrict { get; set; }
+       public IQueryService<Domain.Country> QueryCountry { get; set; }
+       public IQueryService<Domain.Region> QueryRegion { get; set; }
+       public IQueryService<Domain.District> QueryDistrict { get; set; }
   
         public string Error { get; set; }
 
@@ -39,8 +40,9 @@ namespace Web.Areas.OutpostManagement.Models.Outpost
             this.Districts = new List<SelectListItem>();
             this.Countries = new List<SelectListItem>();
             this.Regions = new List<SelectListItem>();
+            //----------------------------------------
             this.Outposts = new List<OutpostModel>();
-        }
+       }
 
          public OutpostOverviewModel(IQueryService<Domain.Country> queryCountry, 
                                      IQueryService<Domain.Region> queryRegion,
@@ -54,6 +56,7 @@ namespace Web.Areas.OutpostManagement.Models.Outpost
             this.Districts = new List<SelectListItem>();
 
             this.Outposts = new List<OutpostModel>();
+            this.Contact = new List<ContactModel>();
 
             var countries = QueryCountry.Query().OrderBy(it => it.Name);
 

@@ -6,7 +6,7 @@ using Domain;
 using Core.Persistence;
 using NHibernate.Linq;
 
-namespace Persistence.Queries.Regions
+namespace Persistence.Queries.Countries
 {
     public class NHibernateQueryRegion : IQueryRegion
     {

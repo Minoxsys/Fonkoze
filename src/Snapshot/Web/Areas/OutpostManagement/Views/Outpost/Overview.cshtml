@@ -69,10 +69,11 @@ OutpostManagement Outposts: Overview
     <div class="pager">
   @* @Html.PageLinks(Model.PagingInfo, x => Url.Action("Overview", new {page = x}))*@
 </div>
-
+<div>
     @{
         Html.RenderPartial("OverviewOutpost", Model.Outposts);
     }
+    </div>
 }
 
 @section master_actions{

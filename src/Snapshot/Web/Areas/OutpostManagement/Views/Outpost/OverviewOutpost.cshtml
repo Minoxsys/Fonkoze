@@ -7,9 +7,10 @@
         <table id="Outposts">
             <thead>
                 <tr>
-                    <th>
+@*                    <th>
                         Contacts
                     </th>
+*@
                     <th  class="sort-alpha">
                         Outpost Name
                     </th>
@@ -38,12 +39,12 @@
                     var _class = (itemNo++ % 2 == 0) ? "odd" : "even";
        
                     <tr>
-                        <td>
-                            
-                            @(Html.ActionLink<ContactController>(it => it.Overview(outpost.Id), "Contacts", OutpostManagementAreaRegistration.DEFAULT_ROUTE))
+                         @*<td>
+                           @(Html.ActionLink<ContactController>(it => it.Overview(outpost.Id), "Contacts", OutpostManagementAreaRegistration.DEFAULT_ROUTE))
+                        </td>
+                        *@
                         <td>@outpost.Name
                         </td>
-                       </td>
                         <td>@outpost.DetailMethod
                         </td>
                         <td>@outpost.Latitude

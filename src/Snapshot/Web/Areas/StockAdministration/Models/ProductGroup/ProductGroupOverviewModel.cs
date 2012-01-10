@@ -7,13 +7,13 @@ using Domain;
 
 namespace Web.Areas.StockAdministration.Models.ProductGroup
 {
-    public class ProductGroupsOverviewModel
+    public class ProductGroupOverviewModel
     {
         public List<ProductGroupModel> ProductGroups { get; set; }
         public string Error { get; set; }
 
 
-        public ProductGroupsOverviewModel()
+        public ProductGroupOverviewModel()
         {
             this.ProductGroups = new List<ProductGroupModel>();
         }

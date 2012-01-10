@@ -10,7 +10,7 @@ using Rhino.Mocks;
 using System.Web.Mvc;
 using Web.Areas.OutpostManagement.Models.Region;
 using Core.Domain;
-using Persistence.Queries.Regions;
+using Persistence.Queries.Countries;
 
 
 
