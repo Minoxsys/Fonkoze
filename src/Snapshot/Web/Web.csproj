@@ -189,12 +189,12 @@
     <Compile Include="Areas\StockAdministration\Models\ProductGroup\ProductGroupOutputModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\ProductGroup\ProductGroupInputModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\ProductGroup\ProductGroupModel.cs" />
-<<<<<<< HEAD
+
     <Compile Include="Areas\StockAdministration\Models\ProductGroup\ProductGroupOverviewModel.cs" />
-=======
+
     <Compile Include="Areas\StockAdministration\Models\ProductGroup\ProductGroupsOverviewModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\Product\ProductGroupModel.cs" />
->>>>>>> 8c9e48c933eba99d06125e20dab2e84335accfb1
+
     <Compile Include="Areas\StockAdministration\Models\Product\ProductInputModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\Product\ProductModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\Product\ProductOutputModel.cs" />
@@ -1914,14 +1914,14 @@
     <Content Include="Areas\StockAdministration\Views\ProductGroup\Input.cshtml" />
     <Content Include="Areas\StockAdministration\Views\ProductGroup\InputProducts.cshtml" />
     <Content Include="Areas\StockAdministration\Views\ProductGroup\OverviewProductGroup.cshtml" />
-<<<<<<< HEAD
+
     <Content Include="Areas\OutpostManagement\Views\District\Create.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\Contact\Overview.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\Shared\CreateContact.cshtml" />
-=======
+
     <Content Include="Areas\StockAdministration\Views\OutpostStockLevel\Overview.cshtml" />
     <Content Include="Areas\StockAdministration\Views\OutpostStockLevel\OverviewItemsStockLevel.cshtml" />
->>>>>>> 8c9e48c933eba99d06125e20dab2e84335accfb1
+
     <None Include="Assets\img\skins\ButtonTemplate.psd" />
     <Content Include="Views\RoleManager\Create.cshtml" />
     <Content Include="Views\RoleManager\Edit.cshtml" />
