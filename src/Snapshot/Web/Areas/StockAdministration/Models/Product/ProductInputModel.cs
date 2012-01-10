@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.ComponentModel.DataAnnotations;
+using Web.Areas.OutpostManagement.Models.Outpost;
 
 namespace Web.Areas.StockAdministration.Models.Product
 {
@@ -15,23 +16,21 @@ namespace Web.Areas.StockAdministration.Models.Product
         public int LowerLimit { get; set; }
         public int UpperLimit { get; set; }
         public String SMSReferenceCode { get; set; }
-        //public ProductOutputModel.OutpostModel Outpost { get; set; }
-        public StockGroupInputModel StockGroup { get; set; }
-        //public List<OutpostInputModel> Outposts { get; set; }
-
-        public class StockGroupInputModel
+        public ProductGroupInputModel ProductGroup { get; set; }
+        public string UpdateMethod { get; set; }
+        public int PreviousStockLevel { get; set; }
+        public OutpostModel Outpost { get; set; }
+        public int StockLevel { get; set; }
+       
+        public class ProductGroupInputModel
         {
             public Guid Id { get; set; }
         }
-        //public class OutpostInputModel
-        //{
-        //    public Guid Id {get; set;}
-        //}
-
+       
         public ProductInputModel() 
         {
-            this.StockGroup = new StockGroupInputModel();
-            //this.Outpost = new ProductOutputModel.OutpostModel();
+            this.ProductGroup = new ProductGroupInputModel();
+         
         }
     }
 }

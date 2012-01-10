@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Domain;
 
-namespace Persistence.Queries.StockItems
+namespace Persistence.Queries.Products
 {
     public interface IQueryStockGroup
     {

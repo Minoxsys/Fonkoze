@@ -73,13 +73,13 @@
     <Compile Include="Overrides\CountryAutoMappingOverride.cs" />
     <Compile Include="Overrides\ContactAutoMappingOverride.cs" />
     <Compile Include="Overrides\DistrictAutoMappingOverride.cs" />
+    <Compile Include="Overrides\ProductAutoMappingOverride.cs" />
     <Compile Include="Overrides\RegionAutoMappingOverride.cs" />
     <Compile Include="Overrides\OutpostAutoMappingOverride.cs" />
     <Compile Include="Overrides\PermissionAutoMappingOverride.cs" />
     <Compile Include="Overrides\RoleAutoMappingOverride.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Overrides\StockItemAutoMappingOverride.cs" />
     <Compile Include="Overrides\UserAutoMappingOverride.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -1,0 +1,35 @@
+﻿@model Web.Areas.StockAdministration.Models.Product.ProductOutputModel
+@using Microsoft.Web.Mvc
+
+@section page_title{
+Stock Item : Create
+}
+@section breadcrumbs{
+    @*@Url.HomeLink("Outpost Administration") *@/ @(Html.ActionLink<ProductController>(act => act.Overview(), "Products Overview", StockAdministrationAreaRegistration.DEFAULT_ROUTE))
+> Create District
+}
+@section master_content{
+    @{Html.BeginForm<ProductController>(r => r.Create());}
+    <form class="chosen-form">
+    <fieldset class="fieldsCollection ">
+        @{
+            Html.RenderPartial("Input", Model);     
+        }
+    </fieldset>
+    @Html.SubmitButton("submit-form", "Save") <span>or </span><a href="@(Html.BuildUrlFromExpression<ProductController>(it => it.Overview()))">
+        Cancel</a>
+        </form>
+    @{Html.EndForm();}
+}
+@section scripts{
+    <script type="text/javascript">
+//        document.getElementById("productgroup").onclick = function () {
+//            var url = "http://localhost/Snapshot/StockAdministration/ProductGroup/CreateProductGroupForProduct?CreateCommingFromProductCreate=True";
+//            window.open(url, "productgroup");
+//            window.location.pathname = "";
+
+//        }
+//        debugger;
+        $(".chzn-select").Chosen();
+    </script>
+}

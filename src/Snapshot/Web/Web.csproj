@@ -179,12 +179,18 @@
     <Compile Include="Areas\OutpostManagement\Models\District\DistrictModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Outpost\OutpostModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Region\RegionModel.cs" />
+    <Compile Include="Areas\StockAdministration\Controllers\OutpostStockLevelController.cs" />
+    <Compile Include="Areas\StockAdministration\Controllers\ProductController.cs" />
     <Compile Include="Areas\StockAdministration\Controllers\ProductGroupController.cs" />
-    <Compile Include="Areas\StockAdministration\Controllers\ProductsController.cs" />
+    <Compile Include="Areas\StockAdministration\Models\OutpostStockLevel\OutpostList.cs" />
+    <Compile Include="Areas\StockAdministration\Models\OutpostStockLevel\OutpostStockLevelOverviewModel.cs" />
+    <Compile Include="Areas\StockAdministration\Models\OutpostStockLevel\OutpostWithStockGroups.cs" />
+    <Compile Include="Areas\StockAdministration\Models\OutpostStockLevel\ProductGroupWithProducts.cs" />
     <Compile Include="Areas\StockAdministration\Models\ProductGroup\ProductGroupOutputModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\ProductGroup\ProductGroupInputModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\ProductGroup\ProductGroupModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\ProductGroup\ProductGroupsOverviewModel.cs" />
+    <Compile Include="Areas\StockAdministration\Models\Product\ProductGroupModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\Product\ProductInputModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\Product\ProductModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\Product\ProductOutputModel.cs" />
@@ -1892,11 +1898,11 @@
     <Content Include="Areas\OutpostManagement\Views\District\EditInput.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\Outpost\OverviewOutpost.cshtml" />
     <Content Include="Areas\StockAdministration\Views\Web.config" />
-    <Content Include="Areas\StockAdministration\Views\Products\Overview.cshtml" />
+    <Content Include="Areas\StockAdministration\Views\Product\Overview.cshtml" />
     <Content Include="Areas\StockAdministration\Views\_ViewStart.cshtml" />
-    <Content Include="Areas\StockAdministration\Views\Products\Create.cshtml" />
-    <Content Include="Areas\StockAdministration\Views\Products\Input.cshtml" />
-    <Content Include="Areas\StockAdministration\Views\Products\Edit.cshtml" />
+    <Content Include="Areas\StockAdministration\Views\Product\Create.cshtml" />
+    <Content Include="Areas\StockAdministration\Views\Product\Input.cshtml" />
+    <Content Include="Areas\StockAdministration\Views\Product\Edit.cshtml" />
     <Content Include="Areas\StockAdministration\Views\ProductGroup\Create.cshtml" />
     <Content Include="Areas\StockAdministration\Views\ProductGroup\Overview.cshtml" />
     <Content Include="Areas\StockAdministration\Views\ProductGroup\Edit.cshtml" />
@@ -1905,6 +1911,8 @@
     <Content Include="Areas\StockAdministration\Views\ProductGroup\Input.cshtml" />
     <Content Include="Areas\StockAdministration\Views\ProductGroup\InputProducts.cshtml" />
     <Content Include="Areas\StockAdministration\Views\ProductGroup\OverviewProductGroup.cshtml" />
+    <Content Include="Areas\StockAdministration\Views\OutpostStockLevel\Overview.cshtml" />
+    <Content Include="Areas\StockAdministration\Views\OutpostStockLevel\OverviewItemsStockLevel.cshtml" />
     <None Include="Assets\img\skins\ButtonTemplate.psd" />
     <Content Include="Views\RoleManager\Create.cshtml" />
     <Content Include="Views\RoleManager\Edit.cshtml" />
@@ -1941,7 +1949,7 @@
         <WebProjectProperties>
           <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>56421</DevelopmentServerPort>
+          <DevelopmentServerPort>56042</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost/Snapshot</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>

@@ -8,6 +8,6 @@ namespace Persistence.Queries.Products
 {
     public interface IQueryProduct
     {
-        
+        IQueryable<Product> GetAll();
     }
 }

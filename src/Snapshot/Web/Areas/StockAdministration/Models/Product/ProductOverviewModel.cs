@@ -7,11 +7,11 @@ namespace Web.Areas.StockAdministration.Models.Product
 {
     public class ProductOverviewModel
     {
-        public List<ProductModel> StockItems { get; set; }
+        public List<ProductModel> Products { get; set; }
 
         public ProductOverviewModel()
         {
-            this.StockItems = new List<ProductModel>();
+            this.Products = new List<ProductModel>();
         }
     }
 }

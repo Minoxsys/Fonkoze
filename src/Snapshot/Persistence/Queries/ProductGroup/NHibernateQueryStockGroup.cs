@@ -6,7 +6,7 @@ using Core.Persistence;
 using Domain;
 using NHibernate.Linq;
 
-namespace Persistence.Queries.StockItems
+namespace Persistence.Queries.Products
 {
     public class NHibernateQueryStockGroup : IQueryStockGroup
     {

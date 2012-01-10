@@ -7,13 +7,12 @@ using Domain;
 
 namespace Persistence.Overrides
 {
-    public class StockItemAutoMappingOverride : IAutoMappingOverride<Product>
+    public class ProductAutoMappingOverride : IAutoMappingOverride<Product>
     {
         public void Override(FluentNHibernate.Automapping.AutoMapping<Product> mapping)
         {
-            //mapping.References(p => p.StockGroup).Not.LazyLoad();
-            //mapping.HasMany(it => it.Outposts).Cascade.SaveUpdate();
-           
+            mapping.References(p => p.ProductGroup).Not.LazyLoad();
+            mapping.References(p => p.ProductGroup).Cascade.SaveUpdate();    
 
 
         }

@@ -13,13 +13,15 @@ namespace Domain
         public virtual int LowerLimit { get; set; }
         public virtual int UpperLimit { get; set; }
         public virtual String SMSReferenceCode { get; set; }
-        public virtual ProductGroup StockGroup { get; set; }
-        public virtual Guid OutpostId { get; set; }
+        public virtual ProductGroup ProductGroup { get; set; }
+        public virtual string UpdateMethod { get; set; }
+        public virtual int PreviousStockLevel { get; set; }
+        public virtual int StockLevel { get; set; }
+		public virtual Outpost Outpost { get; set; }
 
         public Product()
         {
-            //this.StockGroup = new ProductGroup();
-            //this.Outpost = new List<Outpost>();
+            this.ProductGroup = new ProductGroup();
         }
     }
 }
