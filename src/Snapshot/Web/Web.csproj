@@ -189,12 +189,8 @@
     <Compile Include="Areas\StockAdministration\Models\ProductGroup\ProductGroupOutputModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\ProductGroup\ProductGroupInputModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\ProductGroup\ProductGroupModel.cs" />
-
     <Compile Include="Areas\StockAdministration\Models\ProductGroup\ProductGroupOverviewModel.cs" />
-
-    <Compile Include="Areas\StockAdministration\Models\ProductGroup\ProductGroupsOverviewModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\Product\ProductGroupModel.cs" />
-
     <Compile Include="Areas\StockAdministration\Models\Product\ProductInputModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\Product\ProductModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\Product\ProductOutputModel.cs" />
@@ -1850,7 +1846,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\OutpostManagement\Services\" />
-    <Folder Include="Areas\OutpostManagement\Views\Shared\" />
     <Folder Include="Areas\StockAdministration\Views\Shared\" />
     <Folder Include="Assets\img\photos\" />
   </ItemGroup>
@@ -1915,11 +1910,9 @@
     <Content Include="Areas\StockAdministration\Views\ProductGroup\Input.cshtml" />
     <Content Include="Areas\StockAdministration\Views\ProductGroup\InputProducts.cshtml" />
     <Content Include="Areas\StockAdministration\Views\ProductGroup\OverviewProductGroup.cshtml" />
-
     <Content Include="Areas\OutpostManagement\Views\District\Create.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\Contact\Overview.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\Shared\CreateContact.cshtml" />
-
     <Content Include="Areas\StockAdministration\Views\OutpostStockLevel\Overview.cshtml" />
     <Content Include="Areas\StockAdministration\Views\OutpostStockLevel\OverviewItemsStockLevel.cshtml" />
     <Content Include="Areas\StockAdministration\Views\Product\EditInput.cshtml" />

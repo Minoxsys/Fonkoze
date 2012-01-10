@@ -5,8 +5,8 @@ using System.Web;
 using System.Web.Mvc;
 using Core.Persistence;
 using Domain;
-using Persistence.Queries.Regions;
 using Persistence.Queries.Districts;
+using Persistence.Queries.Countries;
 
 namespace Web.Areas.StockAdministration.Models.OutpostStockLevel
 {
@@ -22,7 +22,6 @@ namespace Web.Areas.StockAdministration.Models.OutpostStockLevel
         public Guid OutpostId { get; set; }
 
         public IQueryService<Country> QueryCountry { get; set; }
-        public IQueryRegion QueryRegion { get; set; }
         public IQueryDistrict QueryDistrict { get; set; }
         public IQueryService<Outpost> QueryOutpost { get; set; }
 

@@ -38,53 +38,53 @@ namespace Web.Areas.StockAdministration.Controllers
             var outpostList = new OutpostList();
             var outpostWithProductGroups = new OutpostWithProductGroups();
 
-            if (OutpostId != null)
-            {
-                var outpost = QueryOutpost.Load(OutpostId.Value);
-                List<Product> productsForOutpost = new List<Product>();
-                if (outpost != null)
-                {
-                    outpostWithProductGroups.Id = OutpostId.Value;
-                    outpostWithProductGroups.Name = outpost.Name;
+        //    if (OutpostId != null)
+        //    {
+        //        var outpost = QueryOutpost.Load(OutpostId.Value);
+        //        List<Product> productsForOutpost = new List<Product>();
+        //        if (outpost != null)
+        //        {
+        //            outpostWithProductGroups.Id = OutpostId.Value;
+        //            outpostWithProductGroups.Name = outpost.Name;
 
-                    if (outpost.Products.Count > 0)
-                    {
-                        foreach (Product item in outpost.Products)
-                        {
-                            productsForOutpost.Add(item);
-                        }
-                    }
+        //            if (outpost.Products.Count > 0)
+        //            {
+        //                foreach (Product item in outpost.Products)
+        //                {
+        //                    productsForOutpost.Add(item);
+        //                }
+        //            }
 
-                }
+        //        }
 
-                var productGroups = QueryProductGroup.Query();
-                var products = QueryProduct.Query();
+        //        var productGroups = QueryProductGroup.Query();
+        //        var products = QueryProduct.Query();
 
-                if (productGroups.ToList().Count > 0)
-                {
-                    foreach (ProductGroup stockGroup in productGroups)
-                    {
-                        var productsForGroup = productsForOutpost.Where(it => it.ProductGroup.Id == stockGroup.Id).ToList();
-                        if (productsForGroup.Count > 0)
-                        {
-                            var productGroupWithItems = new ProductGroupWithProducts();
-                            productGroupWithItems.Id = stockGroup.Id;
-                            productGroupWithItems.Name = stockGroup.Name;
+        //        if (productGroups.ToList().Count > 0)
+        //        {
+        //            foreach (ProductGroup stockGroup in productGroups)
+        //            {
+        //                var productsForGroup = productsForOutpost.Where(it => it.ProductGroup.Id == stockGroup.Id).ToList();
+        //                if (productsForGroup.Count > 0)
+        //                {
+        //                    var productGroupWithItems = new ProductGroupWithProducts();
+        //                    productGroupWithItems.Id = stockGroup.Id;
+        //                    productGroupWithItems.Name = stockGroup.Name;
 
-                            foreach (Product item in productsForGroup)
-                            {
-                                var productModel = new ProductModel();
-                                CreateMappings();
-                                Mapper.Map(item, productModel);
-                                productModel.LastUpdateAt = item.Updated.Value.ToShortDateString();
-                                productGroupWithItems.StockItems.Add(productModel);
+        //                    foreach (Product item in productsForGroup)
+        //                    {
+        //                        var productModel = new ProductModel();
+        //                        CreateMappings();
+        //                        Mapper.Map(item, productModel);
+        //                        productModel.LastUpdateAt = item.Updated.Value.ToShortDateString();
+        //                        productGroupWithItems.StockItems.Add(productModel);
                                 
-                            }
-                            outpostWithProductGroups.StockGroups.Add(productGroupWithItems);
-                        }
-                    }
-                }
-            }
+        //                    }
+        //                    outpostWithProductGroups.StockGroups.Add(productGroupWithItems);
+        //                }
+        //            }
+        //        }
+        //    }
 
             return PartialView(outpostWithProductGroups);
 
