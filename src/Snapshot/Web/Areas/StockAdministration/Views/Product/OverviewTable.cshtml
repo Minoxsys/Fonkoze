@@ -1,0 +1,68 @@
+﻿@model List<Web.Areas.StockAdministration.Models.Product.ProductModel>
+
+ <table id="products-overview" class="paginated">
+        <thead>
+            <tr>
+                <th>
+                    Product
+                </th>
+                <th>
+                    Product Group
+                </th>
+                <th>
+                    Description
+                </th>
+                <th>
+                    SMS Reference Code
+                </th>
+                <th>
+                    Lower limit
+                </th>
+                <th>
+                    Upper limit
+                </th>
+                <th colspan="2">
+                    Actions
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                var itemNo = 0;
+            }
+            @foreach (var product in @Model)
+            {
+                var _class = (itemNo % 2 == 0) ? "odd" : "even";    
+                <tr class="@_class">
+                    <td>
+                        @product.Name
+                    </td>
+                    <td>
+                        @if (@product.ProductGroup != null)
+                        {
+                            @product.ProductGroup.Name }
+                    </td>
+                    <td>@product.Description
+                    </td>
+                    <td>@product.SMSReferenceCode
+                    </td>
+                    <td>
+                        @product.LowerLimit
+                    </td>
+                    <td>@product.UpperLimit
+                    </td>
+                    <td>@(Html.ActionLink<ProductController>(call => call.Edit(product.Id), "Edit", StockAdministrationAreaRegistration.DEFAULT_ROUTE))
+                    </td>
+                    <td>
+                        @{
+                        Html.BeginForm<ProductController>(m => m.Delete(product.Id), FormMethod.Post, new { @class = "delete-user-form" });
+                        }
+                        @Html.Button("delete-user", "Delete", HtmlButtonType.Submit)
+                        @{
+                        Html.EndForm();
+                        }
+                    </td>
+                </tr> 
+            }
+        </tbody>
+    </table>

@@ -16,14 +16,9 @@ namespace IntegrationTests
         private const string SMS_REFERENCE_CODE = "S";
         private const int UPPERLIMIT = 1000;
         private const int LOWERLIMIT = 3;
-        private const int PREVIOUS_STOCK_LEVEL = 22;
-        private const string UPDATE_METHOD = "SMS";
-        private const int STOCK_LEVEL = 11;
 
         private ProductGroup ProductGroup = new ProductGroup();
-        private Outpost Outpost = new Outpost();
-               
-
+         
         [Test]
         public void It_Should_Successfully_Persist_An_StockItem()
         {
@@ -32,12 +27,8 @@ namespace IntegrationTests
                 .CheckProperty(it => it.LowerLimit, LOWERLIMIT)
                 .CheckProperty(it => it.UpperLimit, UPPERLIMIT)
                 .CheckProperty(it => it.Name, NAME)
-                .CheckProperty(it =>it.PreviousStockLevel, PREVIOUS_STOCK_LEVEL)
-                .CheckProperty(it =>it.StockLevel,STOCK_LEVEL)
-                .CheckProperty(it =>it.UpdateMethod,UPDATE_METHOD)
                 .CheckProperty(it => it.SMSReferenceCode, SMS_REFERENCE_CODE)
-                .CheckReference(it => it.ProductGroup, ProductGroup)
-                .CheckReference(it=>it.Outpost,Outpost)
+                .CheckReference(it => it.ProductGroup, ProductGroup)                
                 .VerifyTheMappings();
 
             Assert.IsNotNull(product);

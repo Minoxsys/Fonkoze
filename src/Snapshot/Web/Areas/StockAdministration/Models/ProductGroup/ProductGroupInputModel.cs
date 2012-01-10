@@ -16,6 +16,6 @@ namespace Web.Areas.StockAdministration.Models.ProductGroup
         [Required(ErrorMessage = "Name for Product Group is required!")]
         public String Name { get; set; }
         public String Description { get; set; }
-        public bool CreateCommingFromProduct { get; set; }
+       
     }
 }

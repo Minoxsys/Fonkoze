@@ -22,7 +22,6 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration
         const string PRODUCT_NAME = "StockItem1";
         const string PRODUCT_DESCRIPTION = "Description1";
         const string PRODUCT_SMSREFERENCE_CODE = "004";
-        const string OUTPOST_NAME = "outpost1";
         const int PRODUCT_LOWERLIMIT = 3;
         const int PRODUCT_UPPERLIMIT = 1000;
 
@@ -40,19 +39,17 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration
         public IQueryService<ProductGroup> queryProductGroup;
         public ISaveOrUpdateCommand<Product> saveOrUpdateProduct;
         public IDeleteCommand<Product> deleteProduct;
-        public IQueryProduct queryProduct;
         public IQueryService<Product> queryService;
-        public IQueryService<Outpost> queryOutpost;
-
+       
         [SetUp]
         public void BeforeEach()
         {
             BuildControllerAndServices();
-            StubStockGroup();
-            StubStockItem();
+            StubProductGroup();
+            StubProduct();
         }
        
-        private void StubStockItem()
+        private void StubProduct()
         {
             productId = Guid.NewGuid();
             product = MockRepository.GeneratePartialMock<Product>();
@@ -66,7 +63,7 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration
            
         }
 
-        private void StubStockGroup()
+        private void StubProductGroup()
         {
             productGroupId = Guid.NewGuid();
             productGroup = MockRepository.GeneratePartialMock<ProductGroup>();
@@ -80,37 +77,62 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration
         {
             controller = new ProductController();
 
-            queryProduct = MockRepository.GenerateMock<IQueryProduct>();
             queryProductGroup = MockRepository.GenerateMock<IQueryService<ProductGroup>>();
             saveOrUpdateProduct = MockRepository.GenerateMock<ISaveOrUpdateCommand<Product>>();
             deleteProduct = MockRepository.GenerateMock<IDeleteCommand<Product>>();
             queryService = MockRepository.GenerateMock<IQueryService<Product>>();
-            queryOutpost = MockRepository.GenerateMock<IQueryService<Outpost>>();
-
-            controller.QueryProduct = queryProduct;
+          
             controller.QueryProductGroup = queryProductGroup;
             controller.SaveOrUpdateProduct = saveOrUpdateProduct;
             controller.DeleteProduct = deleteProduct;
             controller.QueryService = queryService;
-            controller.QueryOutposts = queryOutpost;
+            
+        }
+
+        [Test]
+        public void Should_Return_AllProductGroups_AndNoProducta_From_QueryService_on_Overview_WhenProductGroupId_IsNull()
+        {
+            //assert
+            queryProductGroup.Expect(call => call.Query()).Return(new ProductGroup[] { productGroup }.AsQueryable());
+           
+            //act
+            var result = (ViewResult)controller.Overview(null,1);
+
+            //Assert
+            queryProductGroup.VerifyAllExpectations();
+            Assert.AreEqual(DEFAUL_VIEW_NAME, result.ViewName);
+            Assert.IsInstanceOf<ProductOverviewModel>(result.Model);
+
+            var model = (ProductOverviewModel)result.Model;
+
+            Assert.AreEqual(0, model.Products.Count);
+            Assert.AreEqual(1, model.ProductGroups.Count);
 
         }
 
         [Test]
-        public void Should_ReturnData_From_StockItemQueryService_on_Overview()
+        public void Should_Return_AllProductGroups_AndProductsSpecificToProductGroupId_From_QueryService_on_Overview_WhenProductGroupId_IsNotNull()
         {
             //assert
-            queryProduct.Expect(call => call.GetAll()).Return(new Product[] { product }.AsQueryable());
+            queryProductGroup.Expect(call => call.Query()).Return(new ProductGroup[] { productGroup }.AsQueryable());
+            queryService.Expect(call => call.Query()).Return(new Product[] { product }.AsQueryable());
 
             //act
-            var result = (ViewResult)controller.Overview();
+            var result = (ViewResult)controller.Overview(productGroup.Id,1);
 
             //Assert
-            queryProduct.VerifyAllExpectations();
+            queryProductGroup.VerifyAllExpectations();
+            queryService.VerifyAllExpectations();
+
             Assert.AreEqual(DEFAUL_VIEW_NAME, result.ViewName);
+            Assert.IsInstanceOf<ProductOverviewModel>(result.Model);
+
+            var model = (ProductOverviewModel)result.Model;
+
+            Assert.AreEqual(1, model.Products.Count);
+            Assert.AreEqual(1, model.ProductGroups.Count);
 
         }
-
         [Test]
         public void Should_Display_Model_WithLoadedProductGroups_When_GET_Create()
         {
@@ -123,8 +145,7 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration
 
             //assert
             queryProductGroup.VerifyAllExpectations();
-            queryOutpost.VerifyAllExpectations();
-
+           
             Assert.IsInstanceOf<ProductOutputModel>(result.Model);
 
             var model = (ProductOutputModel)result.Model;
@@ -220,7 +241,6 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration
             // Assert
             saveOrUpdateProduct.VerifyAllExpectations();
             queryProductGroup.VerifyAllExpectations();
-            queryOutpost.VerifyAllExpectations();
             Assert.AreEqual("Overview", redirectResult.RouteValues["Action"]);
         }
 

@@ -163,20 +163,17 @@ end
 if not exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'Products')
 begin
  create table Products (
-       Id UNIQUEIDENTIFIER not null,
+        Id UNIQUEIDENTIFIER not null,
        Name NVARCHAR(255) null,
        Description NVARCHAR(255) null,
        LowerLimit INT null,
        UpperLimit INT null,
        SMSReferenceCode NVARCHAR(255) null,
-       UpdateMethod NVARCHAR(255) null,
-       PreviousStockLevel INT null,
-       StockLevel INT null,
        Created DATETIME null,
        Updated DATETIME null,
        ProductGroup_FK UNIQUEIDENTIFIER null,
-       Outpost_FK UNIQUEIDENTIFIER null,
        ByUser_FK UNIQUEIDENTIFIER null,
+       Outpost_FK UNIQUEIDENTIFIER null,
        primary key (Id)
     )
 end
@@ -401,10 +398,10 @@ begin
 end
 
 
-if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='Outpost_Products_OFK ')
-begin
-alter table Products 
-        add constraint Outpost_Products_OFK 
-        foreign key (Outpost_FK) 
-        references Outposts
-end
+--if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='Outpost_Products_OFK ')
+--begin
+--alter table Products 
+--        add constraint Outpost_Products_OFK 
+--        foreign key (Outpost_FK) 
+--        references Outposts
+--end

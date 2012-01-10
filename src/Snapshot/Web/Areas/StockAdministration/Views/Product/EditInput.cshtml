@@ -11,7 +11,7 @@
             </select>
 <div id="productGroupCreate"></div>
 <label> OR </label>
- @(Html.ActionLink<Web.Areas.StockAdministration.Controllers.ProductGroupController>(it => it.CreateProductGroupForProduct(true,false,null), "Add new product group", Web.Areas.StockAdministration.StockAdministrationAreaRegistration.DEFAULT_ROUTE))
+ @(Html.ActionLink<Web.Areas.StockAdministration.Controllers.ProductGroupController>(it => it.CreateProductGroupForProduct(false,true,Model.Id), "Add new product group", Web.Areas.StockAdministration.StockAdministrationAreaRegistration.DEFAULT_ROUTE))
 
 <label for="Name">
     Product

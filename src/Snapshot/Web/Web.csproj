@@ -1850,6 +1850,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\OutpostManagement\Services\" />
+    <Folder Include="Areas\OutpostManagement\Views\Shared\" />
     <Folder Include="Areas\StockAdministration\Views\Shared\" />
     <Folder Include="Assets\img\photos\" />
   </ItemGroup>
@@ -1921,7 +1922,8 @@
 
     <Content Include="Areas\StockAdministration\Views\OutpostStockLevel\Overview.cshtml" />
     <Content Include="Areas\StockAdministration\Views\OutpostStockLevel\OverviewItemsStockLevel.cshtml" />
-
+    <Content Include="Areas\StockAdministration\Views\Product\EditInput.cshtml" />
+    <Content Include="Areas\StockAdministration\Views\Product\OverviewTable.cshtml" />
     <None Include="Assets\img\skins\ButtonTemplate.psd" />
     <Content Include="Views\RoleManager\Create.cshtml" />
     <Content Include="Views\RoleManager\Edit.cshtml" />
