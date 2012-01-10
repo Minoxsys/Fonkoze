@@ -1,0 +1,30 @@
+﻿@model Web.Areas.StockAdministration.Models.Product.ProductOutputModel
+
+@section page_title{
+Stock Item : Edit
+}
+@section breadcrumbs{
+    @*@Url.HomeLink("Outpost Administration")*@  @(Html.ActionLink<ProductController>(act => act.Overview(), "Products Overview", StockAdministrationAreaRegistration.DEFAULT_ROUTE))
+    > Edit Region : @Model.Name
+}
+
+@section master_content{
+
+    @{Html.BeginForm();}
+   <div style="display: none">
+@Html.HiddenFor(m => m.Id)
+@Html.HiddenFor(m=>m.Outpost.Id)
+@Html.HiddenFor(m=>m.PreviousStockLevel)
+</div>
+            <fieldset class="fieldsCollection ">
+                @{
+                    Html.RenderPartial("Input", Model);     
+                }
+            </fieldset>
+            @Html.SubmitButton("submit-form", "Save") <span>or </span><a href="@(Html.BuildUrlFromExpression<ProductController>(it => it.Overview()))">
+                    Cancel</a>
+     
+    @{Html.EndForm();}
+}
+
+

@@ -9,9 +9,12 @@ Stock Item : Create
 > Create District
 }
 @section master_content{
+
     @{Html.BeginForm<ProductGroupController>(r => r.Create());}
-    <form class="chosen-form">
+    <form >
+   
     <fieldset class="fieldsCollection ">
+     
         @{
             Html.RenderPartial("Input", Model);     
         }

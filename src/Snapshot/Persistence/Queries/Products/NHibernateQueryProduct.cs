@@ -10,11 +10,15 @@ namespace Persistence.Queries.Products
 {
     public class NHibernateQueryProduct : IQueryProduct
     {
-        public IQueryService<Domain.Product> queryProduct;
+        public IQueryService<Product> queryProduct;
 
-        public NHibernateQueryProduct(IQueryService<Domain.Product> query)
+        public NHibernateQueryProduct(IQueryService<Product> query)
         {
             this.queryProduct = query;
+        }
+        public IQueryable<Product> GetAll()
+        {
+            return queryProduct.Query().Fetch(it => it.ProductGroup);
         }
     }
 }

@@ -6,7 +6,6 @@ using System.Web.Mvc;
 using Domain;
 using Core.Persistence;
 using Persistence.Queries.Products;
-using Web.Areas.StockAdministration.Models.Product;
 using Web.Areas.StockAdministration.Models.ProductGroup;
 using AutoMapper;
 
@@ -69,6 +68,13 @@ namespace Web.Areas.StockAdministration.Controllers
             return View(ProductGroupOutputModel);
         }
 
+        public ViewResult CreateProductGroupForProduct(bool CreateCommingFromProductCreate)
+        {
+            var ProductGroupOutputModel = new ProductGroupOutputModel();
+            TempData["FromProduct"] = CreateCommingFromProductCreate;
+            return View("Create",ProductGroupOutputModel);
+        }
+
         [HttpPost]
         public ActionResult Create(ProductGroupInputModel model)
         {
@@ -88,7 +94,17 @@ namespace Web.Areas.StockAdministration.Controllers
 
             SaveOrUpdateProductGroup.Execute(ProductGroup);
 
-            return RedirectToAction("Overview");
+            if (TempData["FromProduct"].ToString() == false.ToString())
+            {
+                return RedirectToAction("Overview");
+            }
+            else
+            {
+                var urlBack = Request.UrlReferrer.ToString();
+                return Redirect(urlBack);
+                //return RedirectToAction("CreateProduct", "Product", new { ProductGroupId = ProductGroup.Id });
+ 
+            }
         }
 
         private ProductGroupOutputModel BuildProductsOutputModelFromInputModel(ProductGroupInputModel model)

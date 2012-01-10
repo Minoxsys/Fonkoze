@@ -25,14 +25,23 @@ namespace IntegrationTests
        readonly List<Contact> Phones;
        //Guid OUTPOST_ID = Guid.Empty;
 
+       public Product product1 = new Product { Name = "product1" };
+       public Product product2 = new Product { Name = "product2" };
+
+       private IList<Product> list = new List<Product>();
+
        [Test]
        public void It_ShouldSuccessfullyPersist_An_Outpost()
        {
- 
+
+           list.Add(product1);
+           list.Add(product2);
+
            var outpost = Specs
                     .CheckProperty(e => e.Name, OUTPOST_NAME)
                     .CheckProperty(e => e.OutpostType, OUTPOST_TYPE)
                     .CheckProperty(e => e.DetailMethod, OUTPOST_DETAIL)
+                    .CheckList(e => e.Products,list)
                     //.CheckProperty(e => e.Client, OUTPOST_METHOD)
 
                     .VerifyTheMappings();
@@ -43,7 +52,7 @@ namespace IntegrationTests
             Assert.AreEqual(outpost.OutpostType, OUTPOST_TYPE);
             Assert.AreEqual(outpost.DetailMethod, OUTPOST_DETAIL);
             //Assert.AreEqual(outpost.Client.Id, CLIENT_ID);
-
+            Assert.AreEqual(outpost.Products.Count, 2);
 
             session.Delete(outpost);
             session.Flush();

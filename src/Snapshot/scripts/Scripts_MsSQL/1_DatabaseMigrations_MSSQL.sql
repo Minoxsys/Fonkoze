@@ -169,9 +169,12 @@ begin
        LowerLimit INT null,
        UpperLimit INT null,
        SMSReferenceCode NVARCHAR(255) null,
+       UpdateMethod NVARCHAR(255) null,
+       PreviousStockLevel INT null,
+       StockLevel INT null,
        Created DATETIME null,
        Updated DATETIME null,
-       StockGroup_FK UNIQUEIDENTIFIER null,
+       ProductGroup_FK UNIQUEIDENTIFIER null,
        Outpost_FK UNIQUEIDENTIFIER null,
        ByUser_FK UNIQUEIDENTIFIER null,
        primary key (Id)
@@ -183,7 +186,7 @@ if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CON
 begin
 alter table Products 
         add constraint Product_ProductGroups_FK 
-        foreign key (StockGroup_FK) 
+        foreign key (ProductGroup_FK) 
         references ProductGroups
 end
 

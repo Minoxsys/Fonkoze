@@ -1,6 +1,10 @@
 ﻿@model Web.Areas.StockAdministration.Models.ProductGroup.ProductGroupOutputModel
 <div class="row">
     @Html.ValidationSummary()
+    @Html.HiddenFor(m=>m.CommingFromProductCreate)
+
+    
+    @Model.CommingFromProductCreate = @Model.CommingFromProductCreate;
 </div>
 <label for="Name">
     Stock Group

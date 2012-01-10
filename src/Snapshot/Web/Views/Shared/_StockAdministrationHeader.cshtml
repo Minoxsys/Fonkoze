@@ -1,5 +1,5 @@
 ﻿<span> <label>
-              @*@(Html.ActionButton<Web.Areas.StockAdministration.Controllers.ProductsController>(it => it.Overview(), Web.Areas.StockAdministration.StockAdministrationAreaRegistration.DEFAULT_ROUTE, "Products")) *@
+              @(Html.ActionButton<Web.Areas.StockAdministration.Controllers.ProductController>(it => it.Overview(), Web.Areas.StockAdministration.StockAdministrationAreaRegistration.DEFAULT_ROUTE, "Products"))
               @(Html.ActionButton<Web.Areas.StockAdministration.Controllers.ProductGroupController>(it => it.Overview(), Web.Areas.StockAdministration.StockAdministrationAreaRegistration.DEFAULT_ROUTE, "Product Groups"))
        </label>
 </span>

@@ -1,4 +1,4 @@
-﻿@model Web.Areas.StockAdministration.Models.Products.StockItemOverviewModel
+﻿@model Web.Areas.StockAdministration.Models.Product.ProductOverviewModel
 @using Microsoft.Web.Mvc;
 @section page_title{
 Stock Item: Overview
@@ -13,22 +13,23 @@ Stock Item: Overview
     @{ Html.RenderPartial("~/Views/Shared/_StockAdministrationActions.cshtml");}
 }
 @section master_content{
-@*
     @{Html.RenderPartial("~/Views/Shared/_StockAdministrationHeader.cshtml");}
     <div class="page_header_buttons">
-        @(Html.ActionLink<Web.Areas.StockAdministration.Controllers.ProductsController>(it => it.Create(), "Add new stock item", Web.Areas.StockAdministration.StockAdministrationAreaRegistration.DEFAULT_ROUTE))
+        @(Html.ActionLink<Web.Areas.StockAdministration.Controllers.ProductController>(it => it.Create(), "Add new product", Web.Areas.StockAdministration.StockAdministrationAreaRegistration.DEFAULT_ROUTE))
     </div>
     <br />
-     <input type="text" id="stockItemSearch" name="stockItemSearch" maxlength="50" placeholder="Stock Items search" style="width:200px; height:30px; margin-left:0px" /> 
-      <input type="text" id="stockgroupSearch" name="stockGroupSearch" maxlength="50" placeholder="Stock Groups search" style="width:200px; height:30px; margin-left:0px" />
+    <input type="text" id="stockItemSearch" name="stockItemSearch" maxlength="50" placeholder="Products search"
+        style="width: 200px; height: 30px; margin-left: 0px" />
+    <input type="text" id="stockgroupSearch" name="stockGroupSearch" maxlength="50" placeholder="Product Groups search"
+        style="width: 200px; height: 30px; margin-left: 0px" />
     <table id="stockitems">
         <thead>
             <tr>
                 <th>
-                    Stock Item
+                    Product
                 </th>
                 <th>
-                    Stock Group
+                    Product Group
                 </th>
                 <th>
                     Description
@@ -51,43 +52,43 @@ Stock Item: Overview
             @{
                 var itemNo = 0;
             }
-            @foreach (var stockItem in @Model.StockItems)
+            @foreach (var product in @Model.Products)
             {
                 var _class = (itemNo % 2 == 0) ? "odd" : "even";    
                 <tr class="@_class">
                     <td>
-                        @stockItem.Name
-                    </td>
-                    <td> @if(@stockItem.StockGroup != null){
-                        @stockItem.StockGroup.Name }
-                    </td>
-                    <td>@stockItem.Description
-                    </td>
-                    <td>@stockItem.SMSReferenceCode
+                        @product.Name
                     </td>
                     <td>
-                        @stockItem.LowerLimit
+                        @if (@product.ProductGroup != null)
+                        {
+                            @product.ProductGroup.Name }
                     </td>
-                    <td>@stockItem.UpperLimit
+                    <td>@product.Description
                     </td>
-                    <td>@(Html.ActionLink<StockItemController>(call => call.Edit(stockItem.Id), "Edit", StockAdministrationAreaRegistration.DEFAULT_ROUTE))
+                    <td>@product.SMSReferenceCode
+                    </td>
+                    <td>
+                        @product.LowerLimit
+                    </td>
+                    <td>@product.UpperLimit
+                    </td>
+                    <td>@(Html.ActionLink<ProductController>(call => call.Edit(product.Id), "Edit", StockAdministrationAreaRegistration.DEFAULT_ROUTE))
                     </td>
                     <td>
                         @{
-                Html.BeginForm<StockItemController>(m => m.Delete(stockItem.Id), FormMethod.Post, new { @class = "delete-user-form" });
+                        Html.BeginForm<ProductController>(m => m.Delete(product.Id), FormMethod.Post, new { @class = "delete-user-form" });
                         }
                         @Html.Button("delete-user", "Delete", HtmlButtonType.Submit)
                         @{
-                Html.EndForm();
+                        Html.EndForm();
                         }
                     </td>
                 </tr> 
             }
         </tbody>
     </table>
-    *@
 }
-
 @section scripts{
     <script type="text/javascript">
         $(function () {
@@ -97,7 +98,7 @@ Stock Item: Overview
         });
 
 
-        //search for districts by Name
+        //search for products by Name
 
         jQuery.expr[":"].containsNoCase = function (el, i, m) {
             var search = m[3];

@@ -5,7 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using Core.Persistence;
 using Domain;
-using Web.Areas.StockAdministration.Models.ProductGroup;
+using Web.Areas.OutpostManagement.Models.Outpost;
 
 namespace Web.Areas.StockAdministration.Models.Product
 {
@@ -17,48 +17,38 @@ namespace Web.Areas.StockAdministration.Models.Product
         public int LowerLimit { get; set; }
         public int UpperLimit { get; set; }
         public String SMSReferenceCode { get; set; }
-        public ProductGroupModel StockGroup { get; set; }
+        public ProductGroupModel ProductGroup { get; set; }
+        public string UpdateMethod { get; set; }
+        public int PreviousStockLevel { get; set; }
+        public int StockLevel { get; set; }
         public OutpostModel Outpost { get; set; }
-        public List<SelectListItem> StockGroups { get; set; }
-        public List<SelectListItem> OutpostList { get; set; }
+        public List<SelectListItem> ProductGroups { get; set; }
 
-        public IQueryService<Domain.ProductGroup> QueryStockGroup { get; set; }
-        public IQueryService<Outpost> QueryOutposts { get; set; }
+        public IQueryService<Domain.ProductGroup> QueryProductGroup { get; set; }
+
 
         public ProductOutputModel(IQueryService<Domain.ProductGroup> queryStockGroup, IQueryService<Outpost> queryOutpost)
         {
-            this.StockGroup = new ProductGroupModel();
-            this.StockGroups = new List<SelectListItem>();
-            this.OutpostList = new List<SelectListItem>();
+            this.ProductGroup = new ProductGroupModel();
+            this.ProductGroups = new List<SelectListItem>();
+            this.Outpost = new OutpostModel();
+            this.QueryProductGroup = queryStockGroup;
 
-            this.QueryStockGroup = queryStockGroup;
-            this.QueryOutposts = queryOutpost;
 
-            var stockGroups = QueryStockGroup.Query();
-            var outposts = QueryOutposts.Query();
+            var stockGroups = QueryProductGroup.Query();
+
 
             if (stockGroups.ToList().Count > 0)
             {
-                foreach (var stockGroup in stockGroups)
+                foreach (Domain.ProductGroup stockGroup in stockGroups)
                 {
-                    this.StockGroups.Add(new SelectListItem { Text = stockGroup.Name, Value = stockGroup.Id.ToString() });
-                    
+                    this.ProductGroups.Add(new SelectListItem { Text = stockGroup.Name, Value = stockGroup.Id.ToString() });
+
                 }
             }
 
-            if (outposts.ToList().Count > 0)
-            {
-                foreach (Outpost outpost in outposts)
-                {
-                    this.OutpostList.Add(new SelectListItem { Text = outpost.Name, Value = outpost.Id.ToString() });
-                }
-            }
+
         }
 
-        public class OutpostModel
-        {
-            public Guid Id { get; set;}
-            
-        }
     }
 }
