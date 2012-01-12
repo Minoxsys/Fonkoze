@@ -9,6 +9,8 @@ namespace Web.Areas.StockAdministration.Models.ProductGroup
     {
         public string Name { get; set; }
         public string Description { get; set; }
+        public int ProductsNo { get; set; }
         public Guid Id { get; set; }
+        public string Error { get; set; }
     }
 }

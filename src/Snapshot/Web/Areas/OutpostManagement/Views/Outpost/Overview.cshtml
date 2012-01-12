@@ -34,7 +34,7 @@ OutpostManagement Outposts: Overview
     </div>
  
     <div>
-    <table id="DistrictSearch">
+    <table id="OutpostSearch">
         <thead>
             <tr>
                 <th>
@@ -80,6 +80,7 @@ OutpostManagement Outposts: Overview
     @{
         Html.RenderPartial("~/Views/Shared/_OutpostManagementActions.cshtml");
     }
+        @{ Html.RenderPartial("~/Views/Shared/_StockAdministrationActions.cshtml");}
 }
 
 

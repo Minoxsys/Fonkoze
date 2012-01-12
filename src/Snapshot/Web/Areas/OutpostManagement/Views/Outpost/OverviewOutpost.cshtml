@@ -43,7 +43,10 @@
                            @(Html.ActionLink<ContactController>(it => it.Overview(outpost.Id), "Contacts", OutpostManagementAreaRegistration.DEFAULT_ROUTE))
                         </td>
                         *@
-                        <td>@outpost.Name
+                        <td>
+                        @(Html.ActionLink<StockLevelController>(it => it.OutpostStockLevelOverview(outpost.Id), @outpost.Name, OutpostManagementAreaRegistration.DEFAULT_ROUTE))
+
+                        
                         </td>
                         <td>@outpost.DetailMethod
                         </td>

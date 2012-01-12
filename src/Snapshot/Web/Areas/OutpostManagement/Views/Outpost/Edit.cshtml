@@ -16,38 +16,13 @@
 @section master_content{
     @{Html.BeginForm();}
    <div style="display: none">
-        @Html.HiddenFor(m => m.Client.Id)
-        @Html.HiddenFor(m => m.Region.CountryId)
-        @Html.HiddenFor(m => m.Region.Id)
-        @Html.HiddenFor(m => m.District.Id)
-
-    </div>
-    <div class="row of-2">
-                 <label>
-                        Country:</label>
-                    <select name="@(Html.NameFor(m => m.Countries))">
-                        <option value="@Guid.Empty">- Select a country - </option>
-                        @{
-                            foreach (var item in Model.Countries)
-                            {
-                            <option value="@item.Value" @(item.Selected ? @"selected='selected'" : @"") >@item.Text</option>
-                            }
-                        }
-                    </select>
-                    <label>
-                        Region:</label>
-                    @Html.DropDownList("Regions", Model.Regions, new { onChange = "onRegionChanged()" })
-                    <label>
-                        District:</label>
-                    @Html.DropDownList("Districts", Model.Districts, new { onChange = "onDistrictChanged()" })
-
 
     </div>
 
-     <div>
+          <div>
             <fieldset class="fieldsCollection ">
                 @{
-                    Html.RenderPartial("OutpostInput", Model);     
+                    Html.RenderPartial("EditOutpostInput", Model);     
                 }
             </fieldset>
 
@@ -56,12 +31,14 @@
                  <a href="@(Html.BuildUrlFromExpression<OutpostController>(it => it.Overview(@Model.Region.CountryId, @Model.Region.Id, @Model.District.Id)))">
                         Cancel</a>
             &nbsp;
+         </div>
+         <div>
                 <fieldset class="fieldsContacts ">
                     @{
                         Html.RenderPartial("OverviewContacts", Model);     
                     }
                 </fieldset>
-    </div>
+         </div>
    
     @{Html.EndForm();}
 }
@@ -81,88 +58,67 @@
 }
 @section scripts{
     <script type="text/javascript">
-        $("select[name='@Html.NameFor(m => m.Region.CountryId)'] option[value='@Guid.Empty.ToString()']").remove();
 
-     $(function () {
-         $("select[name='@Html.NameFor(m=>m.Countries)']").change(onCountryChanged);
-    });
+        $("select[name='@Html.NameFor(m => m.Region.CountryId)']").change(function () {
+            var e = $(this)[0];
+            var selectedCountryId = e.options[e.selectedIndex].value;
 
-
-    function onCountryChanged() {
-        var e = $(this)[0];
-        var selectedCountryId = e.options[e.selectedIndex].value;
-
-        $.getJSON('@Url.Action("GetRegionsForCountry", "District")?countryId=' + selectedCountryId, function (data) {
-            var drop = $("#Regions")
-            drop.html('');
-
-            var drop = $("#regions-overview")
-            drop.html('');
-
-            var ddlRegions = document.getElementById("Regions");
-            var opt = document.createElement("option");
-            opt.text = 'Please select a region';
-            opt.value = '@Guid.Empty.ToString()';
-            ddlRegions.options.add(opt);
-
-            $.each(data, function () {
+            $.getJSON('@Url.Action("GetRegionsForCountry", "District")?countryId=' + selectedCountryId, function (data) {
+                var drop = $("select[name='@Html.NameFor(m => m.Region.Id)']")
+                drop.html('')
                 var opt = document.createElement("option");
-                opt.text = this['Text'];
-                opt.value = this['Value'];
-                ddlRegions.options.add(opt);
+                opt.text = "- Select Region -";
+                opt.value = '@Guid.Empty.ToString("n")';
+
+                drop.append(opt);
+
+                $.each(data, function () {
+                    var opt = document.createElement("option");
+                    opt.text = this['Text'];
+                    opt.value = this['Value'];
+                    drop.append(opt);
+                });
+
+
             });
 
+            $("select[name='@Html.NameFor(m => m.Region.CountryId)'] option[value='@Guid.Empty.ToString()']").remove();
         });
 
-        $("select[name='@Html.NameFor(m => m.Countries)'] option[value='@Guid.Empty.ToString()']").remove();
-    }
+        $("select[name='@Html.NameFor(m => m.District.Id)']").change(function () {
+            $("select[name='@Html.NameFor(m => m.District.Id)'] option[value='@Guid.Empty.ToString("n")']").remove();
+        });  
 
-    function onRegionChanged() {
-        var reg = document.getElementById("Regions");
-        var selectedRegionId = reg.options[reg.selectedIndex].value;
 
-        $.getJSON('@Url.Action("GetDistrictsForRegion", "Outpost")?regionId=' + selectedRegionId, function (data) {
-            var drop = $("#Districts")
-            drop.html('');
+        $("select[name='@Html.NameFor(m => m.Region.Id)']").change(function () {
+            var e = $(this)[0];
+            var selectedRegionId = e.options[e.selectedIndex].value;
 
-            var drop = $("#districts-overview")
-            drop.html('');
-
-            var ddlDistricts = document.getElementById("Districts");
-            var opt = document.createElement("option");
-            opt.text = 'Please select a district';
-            opt.value = '@Guid.Empty.ToString()';
-            ddlDistricts.options.add(opt);
-
-            $.each(data, function () {
+            $.getJSON('@Url.Action("GetDistrictsForRegion", "Outpost")?regionId=' + selectedRegionId, function (data) {
+                var drop = $("select[name='@Html.NameFor(m => m.District.Id)']")
+                drop.html('')
                 var opt = document.createElement("option");
-                opt.text = this['Text'];
-                opt.value = this['Value'];
-                ddlDistricts.options.add(opt);
+                opt.text = "- Select District -";
+                opt.value = '@Guid.Empty.ToString("n")';
+
+                drop.append(opt);
+
+                $.each(data, function () {
+                    var opt = document.createElement("option");
+                    opt.text = this['Text'];
+                    opt.value = this['Value'];
+                    drop.append(opt);
+                });
+
+
             });
 
+            $("select[name='@Html.NameFor(m => m.Region.Id)'] option[value='@Guid.Empty.ToString()']").remove();
         });
 
-        $("select[name='@Html.NameFor(m => m.Regions)'] option[value='@Guid.Empty.ToString()']").remove();
-    }
-
-    function onDistrictChanged() {
-
-        var reg = document.getElementById("Districts");
-
-        var selectedDistrictId = reg.options[reg.selectedIndex].value;
-
-        $("#Districts option[value='@Guid.Empty.ToString()']").remove();
-        var drop = $("#outpost-overview")
-        drop.html('')
-
-        var urlOverview = '@Url.Action("OverviewOutpost")?districtId=' + selectedDistrictId;
-        $.get(urlOverview, function (data) {
-            console.log(data);
-            $('#outpost-overview').html(data);
-        });
-
-    }
+        $("select[name='@Html.NameFor(m => m.District.Id)']").change(function () {
+            $("select[name='@Html.NameFor(m => m.District.Id)'] option[value='@Guid.Empty.ToString("n")']").remove();
+        });  
 
     $(function () {
 

@@ -19,6 +19,7 @@ namespace Web.Areas.StockAdministration.Controllers
         public IQueryService<ProductGroup> QueryService { get; set; }
         public ProductGroupOutputModel ProductGroupOutputModel { get; set; }
         public IQueryService<ProductGroup> QueryProductGroup { get; set; }
+        public IQueryService<Product> QueryProducts { get; set; }
         public ISaveOrUpdateCommand<ProductGroup> SaveOrUpdateProductGroup { get; set; }
         public IDeleteCommand<ProductGroup> DeleteCommand { get; set; }
         public IQueryService<Product> QueryProduct { get; set; }
@@ -36,11 +37,16 @@ namespace Web.Areas.StockAdministration.Controllers
                                                        CreateMappings();
                                                        var productGroupModel = new ProductGroupModel();
                                                        Mapper.Map(item, productGroupModel);
+                                                       productGroupModel.ProductsNo = QueryProducts.Query().Count<Product>(it => it.ProductGroup.Id == item.Id);
                                                        overviewModel.ProductGroups.Add(productGroupModel);
 
                                                    });
             }
             //overviewModel.ProductGroups.Add(null);
+            if (TempData.ContainsKey("error"))
+            {
+                overviewModel.Error = (string)TempData["error"];
+            }
             return View(overviewModel);
         }
 
@@ -198,23 +204,23 @@ namespace Web.Areas.StockAdministration.Controllers
         public RedirectToRouteResult Delete(Guid productGroupId)
         {
             var productGroup = QueryService.Load(productGroupId);
-            //var productResults = QueryProduct.Query();
+            var productResults = QueryProduct.Query();
 
-            //if (productResults != null)
-            //{
+            if (productResults != null)
+            {
                 if (productGroup != null)
                 {
-                    //productResults = QueryProduct.Query().Where(it => it.ProductGroup.Id == productGroup.Id);
+                    productResults = QueryProduct.Query().Where(it => it.ProductGroup.Id == productGroup.Id);
 
-                    //    if (productResults.ToList().Count != 0)
-                    //    {
-                    //        TempData.Add("error", string.Format("The Product Group {0} has regions associated, so it can not be deleted", country.Name));
-                    //        return RedirectToAction("Overview", new { page = 1 });
-                    //    }
+                        if (productResults.ToList().Count != 0)
+                        {
+                            TempData.Add("error", string.Format("The Product Group {0} has products associated, so it can not be deleted", productGroup.Name));
+                            return RedirectToAction("Overview", new { page = 1 });
+                        }
                 }
 
                 DeleteCommand.Execute(productGroup);
-            //}
+            }
 
             return RedirectToAction("Overview");
         }

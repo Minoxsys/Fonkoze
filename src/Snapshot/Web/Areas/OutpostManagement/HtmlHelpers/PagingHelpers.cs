@@ -3,7 +3,8 @@ using System.Text;
 using System.Web.Mvc;
 using Web.Areas.OutpostManagement.Models;
 
-namespace Web.Areas.OutpostManagement.HtmlHelpers {
+namespace Web.Areas.OutpostManagement.HtmlHelpers
+{
 
     public static class PagingHelpers {
 

@@ -17,18 +17,22 @@ namespace Web.Areas.OutpostManagement.Models.Outpost
        public string DetailMethod { get; set; }
        public string Longitude { get; set; }
        public string Latitude { get; set; }
+       public bool IsWarehouse { get; set; }
        public CountryModel Country { get; set; }
        public RegionModel Region { get; set; }
        public DistrictModel District { get; set; }
+       public OutpostModel Warehouse { get; set; }
         
        public List<SelectListItem> Countries { get; set; }
        public List<SelectListItem> Regions { get; set; }
        public List<SelectListItem> Districts { get; set; }
+       public List<SelectListItem> Warehouses { get; set; }
 
        public List<OutpostModel> Outposts { get; set; }
        public List<ContactModel> Contact { get; set; }
        public List<Domain.Contact> Contacts { get; set; }
 
+       public IQueryService<Domain.Outpost> QueryWarehouse { get; set; }
        public IQueryService<Domain.Country> QueryCountry { get; set; }
        public IQueryService<Domain.Region> QueryRegion { get; set; }
        public IQueryService<Domain.District> QueryDistrict { get; set; }
@@ -42,18 +46,23 @@ namespace Web.Areas.OutpostManagement.Models.Outpost
             this.Regions = new List<SelectListItem>();
             //----------------------------------------
             this.Outposts = new List<OutpostModel>();
-       }
+            this.Warehouses = new List<SelectListItem>();
+        }
 
          public OutpostOverviewModel(IQueryService<Domain.Country> queryCountry, 
                                      IQueryService<Domain.Region> queryRegion,
-                                     IQueryService<Domain.District> queryDistrict)
+                                     IQueryService<Domain.District> queryDistrict,
+                                     IQueryService<Domain.Outpost> queryWarehouse)
         {
             this.QueryCountry = queryCountry;
             this.QueryRegion = queryRegion;
             this.QueryDistrict = queryDistrict;
+            this.QueryWarehouse = queryWarehouse;
+
             this.Countries = new List<SelectListItem>();
             this.Regions = new List<SelectListItem>();
             this.Districts = new List<SelectListItem>();
+            this.Warehouses = new List<SelectListItem>();
 
             this.Outposts = new List<OutpostModel>();
             this.Contact = new List<ContactModel>();
@@ -87,8 +96,24 @@ namespace Web.Areas.OutpostManagement.Models.Outpost
                     this.Districts.Add(new SelectListItem { Text = district.Name, Value = district.Id.ToString() });
                 }
             }
-             
-             
+
+
+            var resultWarehouse = QueryWarehouse.Query().Where(m => m.IsWarehouse);
+            if (resultWarehouse != null)
+            {
+                if (resultWarehouse.FirstOrDefault() != null)
+                {
+                    foreach (Domain.Outpost item3 in resultWarehouse)
+                    {
+                        var selectListItem = new SelectListItem();
+
+                        selectListItem.Value = item3.Id.ToString();
+                        selectListItem.Text = item3.Name;
+                        Warehouses.Add(selectListItem);
+                    }
+                }
+            }
+
         }
 
 

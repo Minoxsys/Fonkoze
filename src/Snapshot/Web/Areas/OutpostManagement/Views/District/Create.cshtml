@@ -20,9 +20,11 @@ District : Create
 }
 @section scripts{
     <script type="text/javascript">
+
         $("select[name='@Html.NameFor(m => m.Region.CountryId)']").change(function () {
             var e = $(this)[0];
             var selectedCountryId = e.options[e.selectedIndex].value;
+            debugger;
 
             $.getJSON('@Url.Action("GetRegionsForCountry", "District")?countryId=' + selectedCountryId, function (data) {
                 var drop = $("select[name='@Html.NameFor(m => m.Region.Id)']")
@@ -47,6 +49,26 @@ District : Create
 
         $("select[name='@Html.NameFor(m => m.Region.Id)']").change(function () {
             $("select[name='@Html.NameFor(m => m.Region.Id)'] option[value='@Guid.Empty.ToString("n")']").remove();
-        });     
+        });  
+        
+        
+        
+      function onDistrictChanged() {
+
+           var e = $(this)[0];
+           var selectedDistrictId = e.options[e.selectedIndex].value;
+
+           var drop = $("#outpost-overview")
+
+           var urlOverview = '@Url.Action("OverviewOutpost")?districtId=' + selectedDistrictId;
+           $.get(urlOverview, function (data) {
+
+               drop.html('')
+
+               $('#outpost-overview').html(data);
+           });
+
+
+       }    
     </script>
 }

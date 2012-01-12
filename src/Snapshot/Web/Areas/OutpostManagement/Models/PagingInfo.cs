@@ -1,6 +1,7 @@
 ﻿using System;
 
-namespace Web.Areas.OutpostManagement.Models {
+namespace Web.Areas.OutpostManagement.Models
+{
 
     public class PagingInfo {
         public int TotalItems { get; set; }

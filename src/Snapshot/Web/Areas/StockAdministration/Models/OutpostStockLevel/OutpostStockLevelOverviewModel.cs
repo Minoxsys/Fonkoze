@@ -21,11 +21,11 @@ namespace Web.Areas.StockAdministration.Models.OutpostStockLevel
 
         public Guid OutpostId { get; set; }
 
-        public IQueryService<Country> QueryCountry { get; set; }
+        public IQueryService<Domain.Country> QueryCountry { get; set; }
         public IQueryDistrict QueryDistrict { get; set; }
-        public IQueryService<Outpost> QueryOutpost { get; set; }
+        public IQueryService<Domain.Outpost> QueryOutpost { get; set; }
 
-        public OutpostStockLevelOverviewModel(IQueryService<Country> queryCountry)
+        public OutpostStockLevelOverviewModel(IQueryService<Domain.Country> queryCountry)
         {
             this.QueryCountry = queryCountry;
             this.Countries = new List<SelectListItem>();
@@ -35,7 +35,7 @@ namespace Web.Areas.StockAdministration.Models.OutpostStockLevel
 
             if (countries.ToList().Count > 0)
             {
-                foreach (Country country in countries)
+                foreach (Domain.Country country in countries)
                 {
                     this.Countries.Add(new SelectListItem { Text = country.Name, Value = country.Id.ToString() });
                 }

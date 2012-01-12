@@ -1,0 +1,41 @@
+﻿@using Web.Areas.OutpostManagement.Models.StockLevel
+
+@model List<ProductModel>
+           
+ <div id="products-overview">          
+
+        <table id="ProductsSelection">
+            <thead>
+                <tr>
+                    <th  class="sort-alpha">
+                        Products
+                    </th>
+                    <th>
+                        CSMS Reference Code
+                   </th>
+                   <th>
+                        Selected
+                   </th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    var itemNo = 0;
+                }
+                @foreach (var product in Model)
+                {
+                    var _class = (itemNo++ % 2 == 0) ? "odd" : "even";
+       
+                    <tr>
+                        <td>@product.Name
+                        </td>
+                        <td>@product.SMSReferenceCode
+                        </td>
+                        <td>@Html.CheckBox("SelectedProductID")
+                        </td>
+                    </tr> 
+                }
+            </tbody>
+        </table>
+    </div>
+

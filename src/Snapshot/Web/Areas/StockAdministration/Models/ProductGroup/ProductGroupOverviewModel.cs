@@ -10,6 +10,7 @@ namespace Web.Areas.StockAdministration.Models.ProductGroup
     public class ProductGroupOverviewModel
     {
         public List<ProductGroupModel> ProductGroups { get; set; }
+        public int ProductsNo { get; set; }
         public string Error { get; set; }
 
 
@@ -17,5 +18,6 @@ namespace Web.Areas.StockAdministration.Models.ProductGroup
         {
             this.ProductGroups = new List<ProductGroupModel>();
         }
-   }
+
+    }
 }

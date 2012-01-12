@@ -8,34 +8,33 @@
     <legend>Outpost Information</legend>
 
 
-   <div class="row of-2">
-                 <label>
-                     Country:</label>
-                    <select name="@(Html.NameFor(m => m.Region.CountryId))">
-                        <option value="@Guid.Empty">- Select a country - </option>
-                        @{
-                            foreach (var item in Model.Countries)
-                            {
-                            <option value="@item.Value" @(item.Selected ? @"selected='selected'" : @"") >@item.Text</option>
-                            }
-                        }
-                    </select>
-
-                    <label for="Name"> Region </label>
-                    <div class="row">
-                    <select name="@Html.NameFor(m => m.Region.Id)">
-       
-                     </select>
-
-                    <label for="Name"> Distict </label>
-                    <div class="row">
-                    <select name="@Html.NameFor(m => m.District.Id)">
-       
-                     </select>
-
-
-    </div>
-
+<div class="row">
+    <select name="@Html.NameFor(m => m.Region.CountryId)">
+        @foreach (var item in Model.Countries)
+        { 
+            <option value="@item.Value" @(item.Selected ? @"selected='selected'" : @"") >@item.Text</option>
+        }
+    </select>
+</div>
+<label for="Name">
+    Region
+</label>
+<div class="row">
+    <select name="@Html.NameFor(m => m.Region.Id)">
+        @foreach (var item in Model.Regions)
+        { 
+            <option value="@item.Value" @(item.Selected ? @"selected='selected'" : @"") >@item.Text</option>
+        }
+    </select>
+</div>
+<div class="row">
+    <select name="@Html.NameFor(m => m.District.Id)">
+        @foreach (var item in Model.Districts)
+        { 
+            <option value="@item.Value" @(item.Selected ? @"selected='selected'" : @"") >@item.Text</option>
+        }
+    </select>
+</div>
 
     <div class="row ">
         <div class="column">

@@ -16,6 +16,10 @@ namespace Web.Areas.StockAdministration.Models.Product
 
         public IQueryService<Domain.ProductGroup> QueryProductGroup { get; set; }
 
+
+
+        public string Error { get; set; }
+
         public ProductOverviewModel(IQueryService<Domain.ProductGroup> queryProductGroup)
         {
             this.Products = new List<ProductModel>();

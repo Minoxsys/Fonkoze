@@ -105,7 +105,7 @@ namespace Web.Areas.OutpostManagement.Controllers
 
             SaveOrUpdateCommand.Execute(contact);
 
-            return RedirectToAction("Overview", "Contact", new { outpostId = contactModel.OutpostId });
+            return RedirectToAction("Overview", "Outpost", new { outpostId = contactModel.OutpostId });
          }
         
  

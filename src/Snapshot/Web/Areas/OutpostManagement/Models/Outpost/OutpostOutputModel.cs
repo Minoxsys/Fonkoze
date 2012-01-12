@@ -19,21 +19,26 @@ namespace Web.Areas.OutpostManagement.Models.Outpost
         public string DetailMethod { get; set; }
         public string Longitude { get; set; }
         public string Latitude { get; set; }
+        public bool IsWarehouse { get; set; }
         public RegionModel Region { get; set; }
         public DistrictModel District { get; set; }
         public ClientModel Client { get; set; }
         public ContactModel Contact { get; set; }
+        public OutpostModel Warehouse { get; set; }
         public List<Domain.Contact> Contacts { get; set; }
 
         public List<SelectListItem> Countries { get; set; }
         public List<SelectListItem> Regions { get; set; }
         public List<SelectListItem> Districts { get; set; }
+        public List<SelectListItem> Warehouses { get; set; }
 
         public List<SelectListItem> Outposts { get; set; }
 
+        public IQueryService<Domain.Outpost> queryWarehouse { get; set; }
         public IQueryService<Domain.Country> queryCountry { get; set; }
         public IQueryService<Domain.Region> queryRegion { get; set; }
         public IQueryService<Domain.District> queryDistrict { get; set; }
+        //public IQueryService<Domain.Outpost> queryOutposts { get; set; }
 
         public OutpostOutputModel()
         {
@@ -41,29 +46,43 @@ namespace Web.Areas.OutpostManagement.Models.Outpost
             this.queryCountry = queryCountry;
             this.queryRegion = queryRegion;
             this.queryDistrict = queryDistrict;
+            //this.queryOutposts = queryOutposts;
 
             var Countries = new List<SelectListItem>();
             var Regions = new List<SelectListItem>();
             var Districts = new List<SelectListItem>();
+            var Warehouses = new List<SelectListItem>();
         }
 
         public OutpostOutputModel(IQueryService<Domain.Country> queryCountry,
                                   IQueryService<Domain.Region> queryRegion,
-                                  IQueryService<Domain.District> queryDistrict)
+                                  IQueryService<Domain.District> queryDistrict,
+                                  IQueryService<Domain.Outpost> queryWarehouse)
         {
+
 
             this.queryCountry = queryCountry;
             this.queryRegion = queryRegion;
             this.queryDistrict = queryDistrict;
+            this.queryWarehouse = queryWarehouse;
+            //IQueryService<Domain.Outpost>  queryWarehouse = new IQueryService<Domain.Outpost>();
 
             var Countries = new List<SelectListItem>();
             var Regions = new List<SelectListItem>();
             var Districts = new List<SelectListItem>();
+            var Warehouses = new List<SelectListItem>();
+            var Outposts = new List<SelectListItem>();
 
+            Region = new RegionModel();
+            District = new DistrictModel();
+            Client = new ClientModel();
 
             this.Countries = Countries;
             this.Regions = Regions;
             this.Districts = Districts;
+            this.Warehouse = new OutpostModel();
+            this.Outposts = Outposts;
+
 
             var result = queryCountry.Query();
 
@@ -108,7 +127,26 @@ namespace Web.Areas.OutpostManagement.Models.Outpost
                 }
             }
 
-             
+            //var resultOutposts = queryOutposts.Query();
+            //if (resultOutposts != null)
+            //{
+            var resultWarehouse = queryWarehouse.Query().Where(m => m.IsWarehouse);
+                if (resultWarehouse != null)
+                {
+                    if (resultWarehouse.FirstOrDefault() != null)
+                    {
+                        foreach (Domain.Outpost item3 in resultWarehouse)
+                        {
+                            var selectListItem = new SelectListItem();
+
+                            selectListItem.Value = item3.Id.ToString();
+                            selectListItem.Text = item3.Name;
+                            Warehouses.Add(selectListItem);
+                        }
+                    }
+                }
+            //}
+ 
 
         }
 

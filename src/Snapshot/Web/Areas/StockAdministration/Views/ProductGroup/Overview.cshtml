@@ -1,10 +1,9 @@
 ﻿@using Web.Areas.StockAdministration.Models.ProductGroup
-
-@model ProductGroupOverviewModel
-           
 @using Domain
 @using Microsoft.Web.Mvc;
-@using Web.Areas.StockAdministration.Models.ProductGroup
+
+
+@model ProductGroupOverviewModel
 
 @section page_title{
 Product Groups: Overview
@@ -23,24 +22,24 @@ Product Groups: Overview
 
 @section master_content
 {
-    @{Html.RenderPartial("~/Views/Shared/_StockAdministrationHeader.cshtml");}
-       <table id="productGroup">
+   @{Html.RenderPartial("~/Views/Shared/_StockAdministrationHeader.cshtml");}
+
+  <div>
+      @if (Model.Error != null)
+    {
+          <div class="error">
+            @Model.Error
+          </div>
+    }
+    </div>
+    
+      <table id="productGroup">
         <thead>
             <tr>
                 <th>
                     <div class="page_header_buttons">
                         @(Html.ActionLink<ProductGroupController>(it => it.Create(), "Add new Product Group", StockAdministrationAreaRegistration.DEFAULT_ROUTE))
                     </div>
-                </th>
-                <th>
-                     <label>Search:<input type="text" 
-                                   id="ProductGroupSearch" 
-                                   name="ProductGroupSearch" 
-                                   maxlength="50" 
-                                   style="width:200px; 
-                                   height   :30px; 
-                                   margin-left:0px" /> 
-                       </label>
                 </th>
             </tr>
         </thead>
@@ -57,62 +56,9 @@ Product Groups: Overview
             $(".delete-user-form").submit(function () {
                 return confirm('Are you sure that you want to delete this Product Group?')
             });
-        });
+        })
 
 
-        //search for product groups by Name
-
-        jQuery.expr[":"].containsNoCase = function (el, i, m) {
-            var search = m[3];
-            if (!search) return false;
-            return eval("/" + search + "/i").test($(el).text());
-        };
-
-        jQuery(document).ready(function () {
-
-            // cancel the search if the user presses the ESC key
-            jQuery('#ProductGroupSearch').keyup(function (event) {
-                if (event.keyCode == 27) {
-                    resetSearch();
-                }
-            });
-
-            // execute the search
-            jQuery('#ProductGroupSearch').keyup(function () {
-                // only search when there are 3 or more characters in the textbox
-                if (jQuery('#ProductGroupSearch').val().length > 0) {
-                    // hide all rows
-                    jQuery('#ProductGroup tr').hide();
-                    // show the header row
-                    jQuery('#ProductGroup tr:first').show();
-                    // show the matching rows (using the containsNoCase from Rick Strahl)
-                    jQuery('#ProductGroup tr td:containsNoCase(\'' + jQuery('#ProductGroupSearch').val() + '\')').parent().show();
-                }
-                else if (jQuery('#ProductGroupSearch').val().length == 0) {
-                    // if the user removed all of the text, reset the search
-                    resetSearch();
-                }
-
-                // if there were no matching rows, tell the user
-                if (jQuery('#ProductGroup tr:visible').length == 1) {
-                    // remove the norecords row if it already exists
-                    jQuery('.norecords').remove();
-                    // add the norecords row
-                    jQuery('#ProductGroup').append('<tr class="norecords"><td colspan="5" class="Normal">No records were found</td></tr>');
-                }
-            });
-        });
-
-        function resetSearch() {
-            // clear the textbox
-            jQuery('#ProductGroupSearch').val('');
-            // show all table rows
-            jQuery('#ProductGroup tr').show();
-            // remove any no records rows
-            jQuery('.norecords').remove();
-            // make sure we re-focus on the textbox for usability
-            jQuery('#ProductGroupSearch').focus();
-        }
-
+ 
     </script>
 }

@@ -121,8 +121,10 @@ CREATE TABLE [Outposts] (
 	   DetailMethod NVARCHAR(100) null,
 	   Latitude NVARCHAR(20) null,
 	   Longitude NVARCHAR(20) null,
+	   IsWarehouse BIT NOT NULL DEFAULT 'False',
        Created DATETIME null,
        Updated DATETIME null,
+	   Warehouse_FK UNIQUEIDENTIFIER null,
 	   Country_FK UNIQUEIDENTIFIER null,
 	   Region_FK UNIQUEIDENTIFIER null,
 	   District_FK UNIQUEIDENTIFIER null,
@@ -163,7 +165,7 @@ end
 if not exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'Products')
 begin
  create table Products (
-        Id UNIQUEIDENTIFIER not null,
+       Id UNIQUEIDENTIFIER not null,
        Name NVARCHAR(255) null,
        Description NVARCHAR(255) null,
        LowerLimit INT null,
@@ -175,6 +177,49 @@ begin
        ByUser_FK UNIQUEIDENTIFIER null,
        Outpost_FK UNIQUEIDENTIFIER null,
        primary key (Id)
+    )
+end
+
+
+if not exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'OutpostStockLevel')
+begin
+	-- Stock Level
+	CREATE TABLE OutpostStockLevel(
+        Id UNIQUEIDENTIFIER not null,
+		OutpostId UNIQUEIDENTIFIER not null,
+		ProdGroupId UNIQUEIDENTIFIER NOT NULL,
+		ProductId UNIQUEIDENTIFIER NOT NULL,
+		ProdSMSRef NVARCHAR(20) NOT NULL,
+		StockLevel INTEGER NOT NULL,
+		PrevStockLevel INTEGER NOT NULL,
+		UpdatedMethod NCHAR(10) DEFAULT 'System',
+		UpdatedDate DATETIME NULL,
+		Created DATETIME NULL,
+		Updated DATETIME NULL,
+        ByUser_FK UNIQUEIDENTIFIER NULL,
+        Client_FK UNIQUEIDENTIFIER NOT NULL
+        primary key (Id)
+    )
+end
+
+if not exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'OutpostStockLevelHistory')
+begin
+	-- Stock Level
+	CREATE TABLE OutpostStockLevelHistory(
+        Id UNIQUEIDENTIFIER not null,
+		OutpostId UNIQUEIDENTIFIER not null,
+		ProdGroupId UNIQUEIDENTIFIER NOT NULL,
+		ProductId UNIQUEIDENTIFIER NOT NULL,
+		ProdSMSRef NVARCHAR(20) NOT NULL,
+		StockLevel INTEGER NOT NULL,
+		PrevStockLevel INTEGER NOT NULL,
+		UpdatedMethod NCHAR(10) DEFAULT 'System',
+		UpdatedDate DATETIME NULL,
+		Created DATETIME NULL,
+		Updated DATETIME NULL,
+        ByUser_FK UNIQUEIDENTIFIER NULL,
+        Client_FK UNIQUEIDENTIFIER NOT NULL
+        primary key (Id)
     )
 end
 
@@ -297,7 +342,7 @@ begin
         references Permissions
 end
 
-
+/*
 if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='ByUser_User_Users_FK')
 begin
     alter table Users 
@@ -305,6 +350,7 @@ begin
         foreign key (User_FK) 
         references Users
 end
+*/
 
 if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='Role_RolesUsers_FK')
 begin
@@ -357,6 +403,16 @@ begin
  alter table Contacts 
         add constraint Outpost_Contacts_FK 
         foreign key (Outpost_FK) 
+        references Outposts
+end
+
+
+if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='Warehouse_Outpost_FK ')
+begin
+
+    alter table Outposts 
+        add constraint Warehouse_Outpost_FK
+        foreign key (Warehouse_FK) 
         references Outposts
 end
 

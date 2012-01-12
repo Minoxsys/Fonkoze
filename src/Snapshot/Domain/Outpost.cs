@@ -14,6 +14,8 @@ namespace Domain
         public virtual string DetailMethod { get; set; }
         public virtual string Longitude { get; set; }
         public virtual string Latitude { get; set; }
+        public virtual bool IsWarehouse { get; set; }
+        public virtual Outpost Warehouse { get; set; }
         public virtual IList<Domain.Contact> Contacts { get; set; }
         //public virtual IList<Domain.Product> Products { get; set; }
         public virtual Domain.Country Country { get; set; }

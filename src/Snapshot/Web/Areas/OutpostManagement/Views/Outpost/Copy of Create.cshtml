@@ -1,0 +1,130 @@
+﻿@using Web.Areas.OutpostManagement.Models.Outpost
+
+@model OutpostOutputModel
+           
+           
+@section breadcrumbs{
+    @Url.HomeLink("Outpost Administration") / @(Html.ActionLink<OutpostController>(act => act.Overview(null, null, null), "Outposts Overview", OutpostManagementAreaRegistration.DEFAULT_ROUTE))
+> Create
+}
+
+@section page_title{
+Outpost : Create
+}
+
+@section title_bar{
+}
+@section master_content{
+        @Html.HiddenFor(m => m.Client.Id)
+        @Html.HiddenFor(m => m.Region.CountryId)
+        @Html.HiddenFor(m => m.Region.Id)
+        @Html.HiddenFor(m => m.District.Id)
+    @{Html.BeginForm<OutpostController>(r => r.Create());}
+        <fieldset class="fieldsCollection ">
+            @{
+                Html.RenderPartial("OutpostInput", Model);     
+            }
+        </fieldset>
+        @Html.SubmitButton("submit-form", "Save") <span>or </span><a href="@(Html.BuildUrlFromExpression<OutpostController>(it => it.Overview(null, null, null)))">
+            Cancel</a>
+    @{Html.EndForm();}
+
+}
+
+@section scripts{
+<script type="text/javascript">
+    $(function () {
+        $("select[name='@Html.NameFor(m=>m.Countries)']").change(onCountryChanged);
+        debugger;
+    });
+
+
+    function onCountryChanged() {
+        var e = $(this)[0];
+        var selectedCountryId = e.options[e.selectedIndex].value;
+
+        $.getJSON('@Url.Action("GetRegionsForCountry", "District")?countryId=' + selectedCountryId, function (data) {
+            var drop = $("#Regions")
+            drop.html('');
+
+            var drop = $("#regions-overview")
+            drop.html('');
+
+            var ddlRegions = document.getElementById("Regions");
+            var opt = document.createElement("option");
+            opt.text = 'Please select a region';
+            opt.value = '@Guid.Empty.ToString()';
+            ddlRegions.options.add(opt);
+
+            $.each(data, function () {
+                var opt = document.createElement("option");
+                opt.text = this['Text'];
+                opt.value = this['Value'];
+                ddlRegions.options.add(opt);
+            });
+
+        });
+
+        console.log(data);
+        $("select[name='@Html.NameFor(m => m.Region.CountryId)'] option[value='@Guid.Empty.ToString()']").remove()
+    }
+
+    function onRegionChanged() {
+        var reg = document.getElementById("Regions");
+        var selectedRegionId = reg.options[reg.selectedIndex].value;
+
+        $("select[name='@Html.NameFor(m => m.Region.Id)'] option[value='@Guid.Empty.ToString("n")']").remove();
+
+        $.getJSON('@Url.Action("GetDistrictsForRegion", "Outpost")?regionId=' + selectedRegionId, function (data) {
+            var drop = $("#Districts")
+            drop.html('');
+
+            var drop = $("#districts-overview")
+            drop.html('');
+
+            var ddlDistricts = document.getElementById("Districts");
+            var opt = document.createElement("option");
+            opt.text = 'Please select a district';
+            opt.value = '@Guid.Empty.ToString()';
+            ddlDistricts.options.add(opt);
+
+            $.each(data, function () {
+                var opt = document.createElement("option");
+                opt.text = this['Text'];
+                opt.value = this['Value'];
+                ddlDistricts.options.add(opt);
+            });
+
+        });
+        console.log(data);
+
+        $("select[name='@Html.NameFor(m => m.Region.Id)'] option[value='@Guid.Empty.ToString()']").remove();
+    }
+
+        $("select[name='@Html.NameFor(m => m.Region.Id)']").change(function () {
+            $("select[name='@Html.NameFor(m => m.Region.Id)'] option[value='@Guid.Empty.ToString("n")']").remove();
+        });  
+
+
+    function onDistrictChanged() {
+
+        var reg = document.getElementById("Districts");
+
+        var selectedDistrictId = reg.options[reg.selectedIndex].value;
+
+        $("#Districts option[value='@Guid.Empty.ToString()']").remove();
+        var drop = $("#outpost-overview")
+        drop.html('')
+
+        var urlOverview = '@Url.Action("OverviewOutpost")?districtId=' + selectedDistrictId;
+        $.get(urlOverview, function (data) {
+            console.log(data);
+            $('#outpost-overview').html(data);
+        });
+
+    }
+
+
+    
+     </script>
+}

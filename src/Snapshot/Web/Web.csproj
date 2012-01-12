@@ -174,6 +174,9 @@
     <Compile Include="Areas\OutpostManagement\Models\Region\RegionInputModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Region\RegionOutputModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Region\RegionOverviewModel.cs" />
+    <Compile Include="Areas\OutpostManagement\Models\StockLevel\OutpostStockLevelOutputModel.cs" />
+    <Compile Include="Areas\OutpostManagement\Models\StockLevel\OutpostStockLevelInputModel.cs" />
+    <Compile Include="Areas\OutpostManagement\Models\StockLevel\OutpostStockLevelOverviewModel.cs" />
     <Compile Include="Areas\OutpostManagement\OutpostManagementAreaRegistration.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Country\CountryOverviewModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\District\DistrictModel.cs" />
@@ -182,6 +185,7 @@
     <Compile Include="Areas\StockAdministration\Controllers\OutpostStockLevelController.cs" />
     <Compile Include="Areas\StockAdministration\Controllers\ProductController.cs" />
     <Compile Include="Areas\StockAdministration\Controllers\ProductGroupController.cs" />
+    <Compile Include="Areas\OutpostManagement\Controllers\StockLevelController.cs" />
     <Compile Include="Areas\StockAdministration\Models\OutpostStockLevel\OutpostList.cs" />
     <Compile Include="Areas\StockAdministration\Models\OutpostStockLevel\OutpostStockLevelOverviewModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\OutpostStockLevel\OutpostWithStockGroups.cs" />
@@ -195,6 +199,7 @@
     <Compile Include="Areas\StockAdministration\Models\Product\ProductModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\Product\ProductOutputModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\Product\ProductOverviewModel.cs" />
+    <Compile Include="Areas\OutpostManagement\Models\StockLevel\OutpostStockLevelModel.cs" />
     <Compile Include="Areas\StockAdministration\StockAdministrationAreaRegistration.cs" />
     <Compile Include="Bootstrap\Container\FileRegistrar.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -1917,6 +1922,9 @@
     <Content Include="Areas\StockAdministration\Views\OutpostStockLevel\OverviewItemsStockLevel.cshtml" />
     <Content Include="Areas\StockAdministration\Views\Product\EditInput.cshtml" />
     <Content Include="Areas\StockAdministration\Views\Product\OverviewTable.cshtml" />
+    <Content Include="Areas\OutpostManagement\Views\Outpost\EditOutpostInput.cshtml" />
+    <Content Include="Areas\OutpostManagement\Views\StockLevel\OutpostStockLevelOverview.cshtml" />
+    <Content Include="Areas\OutpostManagement\Views\StockLevel\OverviewProducts.cshtml" />
     <None Include="Assets\img\skins\ButtonTemplate.psd" />
     <Content Include="Views\RoleManager\Create.cshtml" />
     <Content Include="Views\RoleManager\Edit.cshtml" />
