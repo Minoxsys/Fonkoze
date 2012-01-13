@@ -66,19 +66,9 @@ namespace Web.Areas.OutpostManagement.Controllers
         {
             var productList = new List<ProductModel>();
 
-            outpostStockLevelOverviewModel.ProdGroupId = productGroupId;
+            var products = QueryProduct.Query().Where(m => m.ProductGroup.Id == productGroupId);
 
-            //foreach (var item in productGroup.Products)
-            //{
-            foreach (var item in productGroup.Products)
-            {
-
-            //    CreateMappings();
-            //    var productModel = new Product();
-            //    Mapper.Map(item, productModel);
-            //    productList.Add(productModel);
-            
-            //}
+            foreach (var item in products)
             {
                 outpostStockLevelOverviewModel.Products.Add(item);
             }
