@@ -160,7 +160,7 @@ namespace Web.Areas.OutpostManagement.Controllers
         {
             var districtList = new List<DistrictModel>();
 
-            if (countryId == null)
+            if (countryId.Value == Guid.Empty)
             {
                 var districts = QueryService.Query().Where(it => it.Name.Contains(districtName)).ToList();
 

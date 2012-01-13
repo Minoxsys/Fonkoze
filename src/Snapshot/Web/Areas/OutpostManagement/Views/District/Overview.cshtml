@@ -87,7 +87,7 @@ Districts: Overview
                 var selectedId = $("select[name='@Html.NameFor(m => m.Regions)']").val();
                 var selectedCountryId = $("select[name='@Html.NameFor(m => m.Countries)']").val();
 
-                if (selectedId == "@Guid.Empty") {
+                if ((selectedId == "@Guid.Empty") || (selectedCountryId == "@Guid.Empty")) {
 
                     timeout = setTimeout("searchDistrictByName('"+selectedCountryId+"')", 1000);
                 }
@@ -103,6 +103,12 @@ Districts: Overview
         });
 
         function searchDistrictByName(selectedCountryId) {
+
+            jQuery('#districtSearch').keyup(function (event) {
+                if (event.keyCode == 27) {
+                    resetSearch();
+                }
+            });
 
             var districtName = document.getElementById("districtSearch").value;
             var drop = $("#district-overview")
