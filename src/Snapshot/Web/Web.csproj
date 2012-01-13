@@ -1929,12 +1929,10 @@
     <Content Include="Views\RoleManager\Create.cshtml" />
     <Content Include="Views\RoleManager\Edit.cshtml" />
     <Content Include="Views\RoleManager\List.cshtml" />
-    <Content Include="Views\Shared\AddressInfoInput.cshtml" />
     <Content Include="Views\Shared\Calendar.cshtml" />
     <Content Include="Views\Shared\FormButtons.cshtml" />
     <Content Include="Views\Shared\InfoMessage.cshtml" />
     <Content Include="Views\Shared\Menu.cshtml" />
-    <Content Include="Views\Shared\OrganigramInformationInput.cshtml" />
     <Content Include="Views\Shared\_LoginLayout.cshtml" />
     <Content Include="Views\UserManager\Create.cshtml" />
     <Content Include="Views\UserManager\Edit.cshtml" />
