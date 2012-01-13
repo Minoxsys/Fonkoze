@@ -17,7 +17,8 @@ Districts: Overview
         </div>
     }
     <div class="page_header_buttons">
-        @(Html.ActionLink<Web.Areas.OutpostManagement.Controllers.DistrictController>(it => it.Create(), "Add new district", Web.Areas.OutpostManagement.OutpostManagementAreaRegistration.DEFAULT_ROUTE))
+     @Html.ActionLink("Add new district", "Create", "District", null, new { id = "create" })
+        
     </div>
     <br />
    
@@ -40,10 +41,20 @@ Districts: Overview
                 <th>
                     <label>
                         Region:</label>
-                    @Html.DropDownList("Regions", Model.Regions, new { onChange = "onRegionChanged()" })
+                    <select name="@(Html.NameFor(m => m.Regions))" id="Regions">
+                    @if(Model.Regions.Count > 0){
+                        <option value="@Guid.Empty">- Select a region - </option>
+                       
+                            foreach (var item in Model.Regions)
+                            {
+                            <option value="@item.Value" @(item.Selected ? @"selected='selected'" : @"") >@item.Text</option>
+                            }
+                        
+                    }
+                    </select>
                 </th>
                 <th><br />
-                     <input type="text" id="districtSearch" name="districtSearch" maxlength="50" placeholder="Districts search" style="width:200px; height:30px; margin-left:0px" />
+                     <input type="text" id="districtSearch"  class="input" name="districtSearch" maxlength="50" placeholder="Districts search" style="width:200px; height:30px; margin-left:0px" />
                 </th>
             </tr>
         </thead>
@@ -61,7 +72,7 @@ Districts: Overview
 }
 @section scripts{
     <script type="text/javascript">
-
+        var timeout;
 
         $(function () {
             $(".delete-user-form").submit(function () {
@@ -69,41 +80,83 @@ Districts: Overview
             });
 
             $("select[name='@Html.NameFor(m => m.Countries)']").change(onCountryChanged);
+
+            $("input").keyup(function () {
+
+                clearTimeout(timeout);
+                var selectedId = $("select[name='@Html.NameFor(m => m.Regions)']").val();
+                var selectedCountryId = $("select[name='@Html.NameFor(m => m.Countries)']").val();
+
+                if (selectedId == "@Guid.Empty") {
+
+                    timeout = setTimeout("searchDistrictByName('"+selectedCountryId+"')", 1000);
+                }
+                else {
+                    SearchDistrictOnFilterSelected();
+                }
+            });
+
+            //            var selectedRegionId = $("select[name='@Html.NameFor(m => m.Regions)']").val();
+            //            var selectedCountryId = $("select[name='@Html.NameFor(m => m.Countries)']").val();
+
+            //            document.getElementById('create').href = '@Url.Action("Create")?countryId=' + selectedCountryId + '&regionId=' + selectedRegionId;
         });
 
-        function onRegionChanged() {
+        function searchDistrictByName(selectedCountryId) {
 
-            var reg = document.getElementById("Regions");
+            var districtName = document.getElementById("districtSearch").value;
+            var drop = $("#district-overview")
 
-            var selectedRegionId = reg.options[reg.selectedIndex].value;
+            var urlOverview = '@Url.Action("SearchForDistrictWithName")?districtName=' + districtName + '&countryId=' + selectedCountryId;
+            clearTimeout(timeout);
+            $.get(urlOverview, function (data) {
 
+                drop.html('')
+
+                $('#district-overview').html(data);
+                clearTimeout(timeout);
+            });
+            //GetAllButtonsForPaginationAndSetOnClickEvent();
+        }
+
+        $("select[name='@Html.NameFor(m => m.Regions)']").change(function () {
+
+            var selectedRegionId = $("select[name='@Html.NameFor(m => m.Regions)']").val();
+            var selectedCountryId = $("select[name='@Html.NameFor(m => m.Countries)']").val();
+
+            document.getElementById('create').href = '@Url.Action("Create")?countryId=' + selectedCountryId + '&regionId=' + selectedRegionId;
+            debugger;
             $("#Regions option[value='@Guid.Empty.ToString()']").remove();
             var drop = $("#district-overview")
             drop.html('')
 
             var urlOverview = '@Url.Action("OverviewTable")?regionId=' + selectedRegionId;
             $.get(urlOverview, function (data) {
-                debugger;
                 console.log(data);
                 $('#district-overview').html(data);
             });
 
-        }
+        });
+
         function onCountryChanged() {
             var e = $(this)[0];
             var selectedCountryId = e.options[e.selectedIndex].value;
+
 
             $.getJSON('@Url.Action("GetRegionsForCountry", "District")?countryId=' + selectedCountryId, function (data) {
 
                 var drop = $("#district-overview")
                 drop.html('')
 
+                var drop = $("#Regions")
+                drop.html('')
+
+                //var ddlRegions = document.getElementById("Regions");
                 var ddlRegions = document.getElementById("Regions");
                 var opt = document.createElement("option");
                 opt.text = 'Please select a region';
                 opt.value = '@Guid.Empty.ToString()';
                 ddlRegions.options.add(opt);
-
                 $.each(data, function () {
                     var opt = document.createElement("option");
                     opt.text = this['Text'];
@@ -113,6 +166,9 @@ Districts: Overview
 
             });
 
+            var selectedRegionId = $("select[name='@Html.NameFor(m => m.Regions)']").val();
+            
+            document.getElementById('create').href = '@Url.Action("Create")?countryId=' + selectedCountryId + '&regionId=' + selectedRegionId;
             $("select[name='@Html.NameFor(m => m.Countries)'] option[value='@Guid.Empty.ToString()']").remove();
         }
 
@@ -124,8 +180,8 @@ Districts: Overview
             return eval("/" + search + "/i").test($(el).text());
         };
 
-        jQuery(document).ready(function () {
-            
+       // jQuery(document).ready(function () {
+          function SearchDistrictOnFilterSelected() {  
             // cancel the search if the user presses the ESC key
             jQuery('#districtSearch').keyup(function (event) {
                 if (event.keyCode == 27) {
@@ -142,7 +198,7 @@ Districts: Overview
                     // show the header row
                     jQuery('#districts-table tr:first').show();
                     // show the matching rows (using the containsNoCase from Rick Strahl)
-                    jQuery('#districts-table tr td:containsNoCase(\'' + jQuery('#districtSearch').val() + '\')').parent().show();
+                    jQuery('#districts-table tr .search:containsNoCase(\'' + jQuery('#districtSearch').val() + '\')').parent().show();
                }
                 else if (jQuery('#districtSearch').val().length == 0) {
                     // if the user removed all of the text, reset the search
@@ -157,7 +213,7 @@ Districts: Overview
                     jQuery('#districts-table').append('<tr class="norecords"><td colspan="5" class="Normal">No records were found</td></tr>');
                 }
             });
-        });
+        }//);
 
         function resetSearch() {
             // clear the textbox

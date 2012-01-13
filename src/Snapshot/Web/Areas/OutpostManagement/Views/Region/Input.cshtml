@@ -8,7 +8,9 @@
     </label>
     <div class="row">
     <select name="@Html.NameFor(m => m.CountryId)">
-                <option value="@Guid.Empty.ToString()"> - Select Country - </option>
+    @if (Model.Countries.Where(it => it.Selected == false).ToList().Count == Model.Countries.Count)
+    {
+                <option value="@Guid.Empty.ToString()"> - Select Country - </option>}
                 @foreach (var item in Model.Countries) { 
                     <option value="@item.Value" @(item.Selected ? @"selected='selected'" : @"") >@item.Text</option>
                 }

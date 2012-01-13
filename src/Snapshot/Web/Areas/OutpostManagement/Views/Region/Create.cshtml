@@ -8,20 +8,26 @@ Region : Create
 > Create Region
 }
 @section master_content{
-    @{Html.BeginForm<RegionController>(r => r.Create());}
+    @{Html.BeginForm<RegionController>(r => r.Create(Guid.Empty));}
     <fieldset class="fieldsCollection ">
         @{
             Html.RenderPartial("Input", Model);     
         }
     </fieldset>
-    @Html.SubmitButton("submit-form", "Save") <span>or </span><a href="@(Html.BuildUrlFromExpression<RegionController>(it => it.Overview(Model.CountryId)))">
+    @Html.SubmitButton("submit-form", "Save") <span>or </span><a href="@(Html.BuildUrlFromExpression<RegionController>(it => it.Overview(Model.CountryId)))" id="cancel">
         Cancel</a>
     @{Html.EndForm();}
 }
 
 @section scripts{
  <script type="text/javascript">
-  $("select[name='@Html.NameFor(m => m.CountryId)']").change(function () {
+     var selectedCountryId = $("select[name='@Html.NameFor(m => m.CountryId)']").val();
+     document.getElementById('cancel').href = '@Url.Action("Overview")?countryId=' + selectedCountryId;
+
+     $("select[name='@Html.NameFor(m => m.CountryId)']").change(function () {
+         var selectedCountryId = $("select[name='@Html.NameFor(m => m.CountryId)']").val();
+         document.getElementById('cancel').href = '@Url.Action("Overview")?countryId=' + selectedCountryId;
+
       $("select[name='@Html.NameFor(m => m.CountryId)'] option[value='@Guid.Empty.ToString()']").remove();
         }); 
  </script>

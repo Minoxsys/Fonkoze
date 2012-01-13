@@ -16,9 +16,8 @@ namespace Web.Areas.StockAdministration.Models.Product
 
         public IQueryService<Domain.ProductGroup> QueryProductGroup { get; set; }
 
-
-
-        public string Error { get; set; }
+        public string ErrorFromCurrentStockLevel { get; set; }
+        public string ErrorFromHistoricalStockLevel { get; set; }
 
         public ProductOverviewModel(IQueryService<Domain.ProductGroup> queryProductGroup)
         {

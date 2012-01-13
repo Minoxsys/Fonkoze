@@ -15,20 +15,35 @@ Stock Item: Overview
 }
 @section master_content{
     @{Html.RenderPartial("~/Views/Shared/_StockAdministrationHeader.cshtml");}
+
+     @if (Model.ErrorFromCurrentStockLevel != null)
+    {
+        <div class="error">
+            @Model.ErrorFromCurrentStockLevel
+        </div>
+    }
+    
+    @if (Model.ErrorFromHistoricalStockLevel != null)
+    {
+        <div class="error">
+            @Model.ErrorFromHistoricalStockLevel
+        </div>
+    }
+    
     <div class="page_header_buttons">
         @(Html.ActionLink<Web.Areas.StockAdministration.Controllers.ProductController>(it => it.Create(), "Add new product", Web.Areas.StockAdministration.StockAdministrationAreaRegistration.DEFAULT_ROUTE))
     </div>
     <br />
-    <div class="pager">
-        @*@Html.PageLinks(Model.PagingInfo, x => Url.Action("Overview", new { productGroupId = Model.ProductGroups.Where(it => it.Selected == true), page = x }))*@
-    </div>
+    @*<div class="pager">*@
+        @*@html.pagelinks(model.paginginfo, x => url.action("overview", new { productgroupid = model.productgroups.where(it => it.selected == true), page = x }))*@
+    @*</div>*@
     <table class="searchable">
         <thead>
             <tr>
                 <th>
                     <label>
                         Product Group:</label>
-                    <select name="@(Html.NameFor(m => m.ProductGroups))">
+                    <select name="@(Html.NameFor(m => m.ProductGroups))" id="ProductGroups">
                         <option value="@Guid.Empty">- Select a product group -</option>
                         @{
                             foreach (var item in Model.ProductGroups)
@@ -57,7 +72,7 @@ Stock Item: Overview
         $(function () {
 
             $(".delete-user-form").submit(function () {
-                return confirm('Are you sure that you want to delete this stock item?')
+                return confirm('Are you sure that you want to delete this product?')
             });
 
             $("select[name='@Html.NameFor(m => m.ProductGroups)']").change(onProductGroupChanged);
@@ -78,11 +93,11 @@ Stock Item: Overview
         });
         function GetAllButtonsForPaginationAndSetOnClickEvent() {
             var myDiv = document.getElementById("pagerDiv");
-            var divs = myDiv.getElementsByTagName("button");
-            debugger;
-            for (var i = 0; i < divs.length; i++) {
-                //do something to each div like
-                divs[i].onclick ="GoToNextPage('" + i + "')";
+            var buttons = myDiv.getElementsByTagName("button");
+           
+           for (var i = 0; i < buttons.length; i++) {
+                
+                buttons[i].onclick = "GoToNextPage('" + i + "')";
 
             }
         }
@@ -130,7 +145,8 @@ Stock Item: Overview
 
                 $('#products-overview').html(data);
             });
-            $("select[name='@Html.NameFor(m => m.ProductGroups)'] option[value='@Guid.Empty.ToString()']").remove();
+            
+            $("select[name='@Html.NameFor(m => m.ProductGroups)'] option[value='@Guid.Empty.ToString()']").attr('text', 'No filter');
             GetAllButtonsForPaginationAndSetOnClickEvent();
         }
 
@@ -182,7 +198,7 @@ Stock Item: Overview
             // clear the textbox
             jQuery('#productSearch').val('');
             // show all table rows
-            jQuery('#stockitems tr').show();
+            jQuery('#products-overview tr').show();
             // remove any no records rows
             jQuery('.norecords').remove();
             // make sure we re-focus on the textbox for usability

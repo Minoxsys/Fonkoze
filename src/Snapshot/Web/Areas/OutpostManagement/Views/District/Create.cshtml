@@ -8,24 +8,28 @@ District : Create
 > Create District
 }
 @section master_content{
-    @{Html.BeginForm<DistrictController>(r => r.Create());}
+    @{Html.BeginForm<DistrictController>(r => r.Create(null,null));}
     <fieldset class="fieldsCollection ">
         @{
             Html.RenderPartial("Input", Model);     
         }
     </fieldset>
-    @Html.SubmitButton("submit-form", "Save") <span>or </span><a href="@(Html.BuildUrlFromExpression<RegionController>(it => it.Overview(null)))">
+    @Html.SubmitButton("submit-form", "Save") <span>or </span><a href="@(Html.BuildUrlFromExpression<DistrictController>(it => it.Overview(null,null)))" id="cancel">
         Cancel</a>
     @{Html.EndForm();}
 }
 @section scripts{
     <script type="text/javascript">
 
+         var selectedRegionId = $("select[name='@Html.NameFor(m => m.Region.Id)']").val();
+         var selectedCountryId = $("select[name='@Html.NameFor(m => m.Region.CountryId)']").val();
+
+        document.getElementById('cancel').href = '@Url.Action("Overview")?countryId=' + selectedCountryId + '&regionId=' + selectedRegionId;
+
         $("select[name='@Html.NameFor(m => m.Region.CountryId)']").change(function () {
             var e = $(this)[0];
             var selectedCountryId = e.options[e.selectedIndex].value;
-            debugger;
-
+            
             $.getJSON('@Url.Action("GetRegionsForCountry", "District")?countryId=' + selectedCountryId, function (data) {
                 var drop = $("select[name='@Html.NameFor(m => m.Region.Id)']")
                 drop.html('')
@@ -43,6 +47,10 @@ District : Create
                 });
 
             });
+
+            var selectedRegionId = $("select[name='@Html.NameFor(m => m.Region.Id)']").val();
+        
+            document.getElementById('cancel').href = '@Url.Action("Overview")?countryId=' + selectedCountryId + '&regionId=' + selectedRegionId;
 
             $("select[name='@Html.NameFor(m => m.Region.CountryId)'] option[value='@Guid.Empty.ToString()']").remove();
         });
@@ -67,7 +75,10 @@ District : Create
 
                $('#outpost-overview').html(data);
            });
+           var selectedRegionId = $("select[name='@Html.NameFor(m => m.Region.Id)']").val();
+         var selectedCountryId = $("select[name='@Html.NameFor(m => m.Region.CountryId)']").val();
 
+        document.getElementById('cancel').href = '@Url.Action("Overview")?countryId=' + selectedCountryId + '&regionId=' + selectedRegionId;
 
        }    
     </script>
