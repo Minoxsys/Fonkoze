@@ -6,6 +6,7 @@ using Web.Areas.OutpostManagement.Models.Country;
 using Web.Areas.OutpostManagement.Models.Contact;
 using Web.Areas.StockAdministration.Models.Product;
 using Web.Areas.StockAdministration.Models.ProductGroup;
+using Domain;
 using System.Linq;
 using System.Web.Mvc;
 using Core.Persistence;
@@ -33,6 +34,12 @@ namespace Web.Areas.OutpostManagement.Models.StockLevel
 
         public OutpostStockLevelOverviewModel()
         {
+            this.Products = new List<Domain.Product>();
+        }
+
+        public void Add(Domain.Product product)
+        {
+            Products.Add(product);
         }
 
     }

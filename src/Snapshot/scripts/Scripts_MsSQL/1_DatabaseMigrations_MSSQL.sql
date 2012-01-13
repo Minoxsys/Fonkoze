@@ -181,10 +181,10 @@ begin
 end
 
 
-if not exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'OutpostStockLevel')
+if not exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'OutpostStockLevels')
 begin
 	-- Stock Level
-	CREATE TABLE OutpostStockLevel(
+	CREATE TABLE OutpostStockLevels(
         Id UNIQUEIDENTIFIER not null,
 		OutpostId UNIQUEIDENTIFIER not null,
 		ProdGroupId UNIQUEIDENTIFIER NOT NULL,
@@ -202,10 +202,10 @@ begin
     )
 end
 
-if not exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'OutpostStockLevelHistory')
+if not exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'HistoryOutpostStockLevel')
 begin
 	-- Stock Level
-	CREATE TABLE OutpostStockLevelHistory(
+	CREATE TABLE HistoryOutpostStockLevels(
         Id UNIQUEIDENTIFIER not null,
 		OutpostId UNIQUEIDENTIFIER not null,
 		ProdGroupId UNIQUEIDENTIFIER NOT NULL,

@@ -63,7 +63,7 @@ namespace Web.Areas.OutpostManagement.Controllers
 
             if ((countryId == null) && (regionId == null) && (districtId == null))
             {
-                model = new OutpostOverviewModel(QueryCountry, QueryRegion, QueryDistrict, QueryWarehouse);
+                model = new OutpostOverviewModel(QueryCountry, QueryRegion, QueryDistrict, QueryService);
                 Guid districtSelectedId = new Guid();
 
                 if (model.Districts.Count > 0)
@@ -155,6 +155,7 @@ namespace Web.Areas.OutpostManagement.Controllers
                 CreateMappings();
                 var outpostModel = new OutpostModel();
                 Mapper.Map(item, outpostModel);
+                //outpostModel.DistrictNo = QueryDistrict.Query().Count<District>(it => it.Region.Id == item.Id);
                 outpostsList.Add(outpostModel);
 
             }
@@ -250,7 +251,7 @@ namespace Web.Areas.OutpostManagement.Controllers
         {
             Outpost outpost = new Outpost();
             var _outpost = QueryService.Load(outpostId);
-            var outpostModelView = new OutpostOutputModel(QueryCountry, QueryRegion, QueryDistrict, QueryWarehouse);
+            var outpostModelView = new OutpostOutputModel(QueryCountry, QueryRegion, QueryDistrict, QueryService);
             CreateMappings();
             Mapper.Map(_outpost, outpostModelView);
 
@@ -514,7 +515,7 @@ namespace Web.Areas.OutpostManagement.Controllers
 
         private OutpostOutputModel MapDatFromInputModelToOutputModel(OutpostInputModel outpostInputModel)
         {
-            var outpostOutputModel = new OutpostOutputModel(QueryCountry, QueryRegion, QueryDistrict, null);
+            var outpostOutputModel = new OutpostOutputModel(QueryCountry, QueryRegion, QueryDistrict, QueryService);
             var countries = QueryCountry.Query().Where(it => it.Id == outpostInputModel.Region.CountryId);
 
             //var districts = QueryDistrict.Query().Where(it1 => it1.Id = outpostInputModel.District.Id);

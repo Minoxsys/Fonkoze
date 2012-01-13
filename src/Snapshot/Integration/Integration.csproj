@@ -85,7 +85,7 @@
     <Compile Include="When_WeWantToPersist_A_Client.cs" />
     <Compile Include="When_WeWantToPersist_A_Country.cs" />
     <Compile Include="When_WeWantToPersist_A_District.cs" />
-    <Compile Include="When_WeWantToPersist_A_MobilePhone.cs" />
+    <Compile Include="When_WeWantToPersist_A_Contact.cs" />
     <Compile Include="When_WeWantToPersist_A_Region.cs" />
     <Compile Include="When_WeWantToPersist_A_User.cs" />
     <Compile Include="When_WeWantToPersist_A_Permission.cs" />
