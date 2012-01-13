@@ -90,29 +90,29 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration
 
         }
 
-         [Test]
-        public void Should_Return_DataSpecificToCountryId_From_QueryService_in_Overview()
-        {
-            // Arrange		
+        // [Test]
+        //public void Should_Return_DataSpecificToCountryId_From_QueryService_in_Overview()
+        //{
+        //    // Arrange		
             
-            queryService.Expect(call => call.Query()).Repeat.Once().Return(new ProductGroup[] { entity }.AsQueryable());
-            //queryProduct.Expect(call => call.Query()).Return(new Product[] { product }.AsQueryable());
-            //queryDistrict.Expect(call => call.Query()).Return(new District[] { district }.AsQueryable());
+        //    queryService.Expect(call => call.Query()).Repeat.Once().Return(new ProductGroup[] { entity }.AsQueryable());
+        //    //queryProduct.Expect(call => call.Query()).Return(new Product[] { product }.AsQueryable());
+        //    //queryDistrict.Expect(call => call.Query()).Return(new District[] { district }.AsQueryable());
 
-            // Act
-            var viewResult = (ViewResult)controller.Overview();
+        //    // Act
+        //    var viewResult = (ViewResult)controller.Overview();
 
-            // Assert
-            queryService.VerifyAllExpectations();
-            //queryProduct.VerifyAllExpectations();
+        //    // Assert
+        //    queryService.VerifyAllExpectations();
+        //    //queryProduct.VerifyAllExpectations();
 
-            Assert.IsNotNull(viewResult.Model);
-            var viewModel = (ProductGroupOverviewModel)viewResult.Model;
-            //Assert.AreEqual(entity.Name, viewModel.Countries[0].Name);
-            //Assert.AreEqual(viewModel.Countries[0].Value, entity.Country.Id.ToString());
-            //Assert.AreEqual(viewModel.Regions[0].DistrictNo, 1);
-            Assert.AreEqual(DEFAULT_VIEW_NAME, viewResult.ViewName);
-        }
+        //    Assert.IsNotNull(viewResult.Model);
+        //    var viewModel = (ProductGroupOverviewModel)viewResult.Model;
+        //    //Assert.AreEqual(entity.Name, viewModel.Countries[0].Name);
+        //    //Assert.AreEqual(viewModel.Countries[0].Value, entity.Country.Id.ToString());
+        //    //Assert.AreEqual(viewModel.Regions[0].DistrictNo, 1);
+        //    Assert.AreEqual(DEFAULT_VIEW_NAME, viewResult.ViewName);
+        //}
 
         //[Test]
         //public void Should_Return_AllExistentCountries_AndNoRegions_WhenCountryIdIsNull_FromQueryService_in_Overview()
@@ -245,39 +245,39 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration
 
 
 
-        [Test]
-        public void Should_GoTo_Overview_WhenDeleteARegion_AndDisplayTempDataError_If_ThereAreDistrictsAsociated()
-        {
-            //arrange
-            //queryProduct.Expect(call => call.Query()).Repeat.Once().Return(new Product[] { product }.AsQueryable());
-            queryService.Expect(call => call.Load(entity.Id)).Return(entity);
+        //[Test]
+        //public void Should_GoTo_Overview_WhenDeleteARegion_AndDisplayTempDataError_If_ThereAreDistrictsAsociated()
+        //{
+        //    //arrange
+        //    //queryProduct.Expect(call => call.Query()).Repeat.Once().Return(new Product[] { product }.AsQueryable());
+        //    queryService.Expect(call => call.Load(entity.Id)).Return(entity);
 
-            //act
-            var redirectResult = (RedirectToRouteResult)controller.Delete(entity.Id);
+        //    //act
+        //    var redirectResult = (RedirectToRouteResult)controller.Delete(entity.Id);
 
-            //assert
-            queryService.VerifyAllExpectations();
-            //queryDistrict.VerifyAllExpectations();
+        //    //assert
+        //    queryService.VerifyAllExpectations();
+        //    //queryDistrict.VerifyAllExpectations();
 
-           //Assert.That(controller.TempData.ContainsKey("error"));
-           //Assert.That(controller.TempData.ContainsValue("The Product Group " +entity.Name + " has products associated, so it can not be deleted"));
+        //   //Assert.That(controller.TempData.ContainsKey("error"));
+        //   //Assert.That(controller.TempData.ContainsValue("The Product Group " +entity.Name + " has products associated, so it can not be deleted"));
             
-        }
+        //}
 
-        [Test]
-        public void Should_goto_Overview_when_Delete_AndThereAre_NoDistrictAsociated()
-        {
-            //arrange
-            queryService.Expect(call => call.Load(entity.Id)).Return(entity);
-            deleteCommand.Expect(call => call.Execute(Arg<ProductGroup>.Matches(b => b.Id == entity.Id)));
+        //[Test]
+        //public void Should_goto_Overview_when_Delete_AndThereAre_NoDistrictAsociated()
+        //{
+        //    //arrange
+        //    queryService.Expect(call => call.Load(entity.Id)).Return(entity);
+        //    deleteCommand.Expect(call => call.Execute(Arg<ProductGroup>.Matches(b => b.Id == entity.Id)));
 
-            // Act
-            var redirectResult = (RedirectToRouteResult)controller.Delete(entity.Id);
+        //    // Act
+        //    var redirectResult = (RedirectToRouteResult)controller.Delete(entity.Id);
 
-            // Assert
-            deleteCommand.VerifyAllExpectations();
-            Assert.AreEqual("Overview", redirectResult.RouteValues["Action"]);
-        }
+        //    // Assert
+        //    deleteCommand.VerifyAllExpectations();
+        //    Assert.AreEqual("Overview", redirectResult.RouteValues["Action"]);
+        //}
         
         private ProductGroupInputModel BuildProductGroupWithName(string name)
         {

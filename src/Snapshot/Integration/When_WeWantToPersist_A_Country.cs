@@ -13,27 +13,27 @@ using NHibernate.Linq;
 
 namespace IntegrationTests
 {
-  [TestFixture]
+    //[TestFixture]
 
-    class When_WeWantToPersist_A_Country : GivenAPersistenceSpecification<Country>
-    {
-          readonly string COUNTRY_NAME = "Romania";
+    //class When_WeWantToPersist_A_Country : GivenAPersistenceSpecification<Country>
+    //{
+    //    readonly string COUNTRY_NAME = "Romania";
 
-          [Test]
-            public void It_ShouldSuccessfullyPersist_A_Country()
-            {
+    //    [Test]
+    //    public void It_ShouldSuccessfullyPersist_A_Country()
+    //    {
 
-                var country = Specs.CheckProperty(e => e.Name, COUNTRY_NAME).VerifyTheMappings();
+    //        var country = Specs.CheckProperty(e => e.Name, COUNTRY_NAME).VerifyTheMappings();
 
-                Assert.IsNotNull(country);
-                Assert.IsInstanceOf<Guid>(country.Id);
-                Assert.AreEqual(country.Name, COUNTRY_NAME);
+    //        Assert.IsNotNull(country);
+    //        Assert.IsInstanceOf<Guid>(country.Id);
+    //        Assert.AreEqual(country.Name, COUNTRY_NAME);
 
-                session.Delete(country);
-                session.Flush();
+    //        session.Delete(country);
+    //        session.Flush();
 
 
-            }
-        }
-    }
+    //    }
+    //}
+}
 
