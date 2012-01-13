@@ -61,39 +61,60 @@ namespace Web.Areas.OutpostManagement.Controllers
             }
             else
             {
-                if ((countryId.Value != Guid.Empty) && (regionId.Value != Guid.Empty))
+                if ((countryId.Value != Guid.Empty) && (regionId.Value == Guid.Empty))
                 {
-                    countries = QueryCountry.Query();
-                    regions = QueryRegion.Query().Where<Region>(it => it.Country.Id == countryId.Value);
-                    districts = QueryService.Query().Where<District>(it => it.Region.Id == regionId.Value);
+                    overviewModel = new DistrictOverviewModel(QueryCountry);
 
-                    overviewModel = new DistrictOverviewModel();
+                    if (overviewModel.Countries.Where(it => it.Value == countryId.Value.ToString()).ToList().Count > 0)
+                        overviewModel.Countries.First(it => it.Value == countryId.Value.ToString()).Selected = true;
+                    var regionsList = QueryRegion.Query().Where(it => it.Country.Id == countryId.Value).ToList();
 
-                    foreach (Country item in countries)
+                    if (regionsList.Count > 0)
                     {
-                        overviewModel.Countries.Add(new SelectListItem { Text = item.Name, Value = item.Id.ToString() });
+                        foreach(Region region  in regionsList)
+                        {
+                            overviewModel.Regions.Add(new SelectListItem { Text = region.Name, Value = region.Id.ToString() });
+                        }
                     }
-
-                    foreach (Region item in regions)
-                    {
-                        overviewModel.Regions.Add(new SelectListItem { Text = item.Name, Value = item.Id.ToString() });
-                    }
-                    if (overviewModel.Countries.Count > 0)
-                    {
-                        var selectedCountry = overviewModel.Countries.First<SelectListItem>(it => it.Value == countryId.Value.ToString());
-                        if (selectedCountry != null)
-                            selectedCountry.Selected = true;
-                    }
-
-                    var regionsWithRegionId = overviewModel.Regions.Where<SelectListItem>(it => it.Value == regionId.Value.ToString()).ToList();
-                    if (regionsWithRegionId.Count > 0)
-                        overviewModel.Regions.First<SelectListItem>(it => it.Value == regionId.Value.ToString()).Selected = true;
+                    districts = null;
 
                 }
                 else
                 {
-                    overviewModel = new DistrictOverviewModel(QueryCountry);
-                    districts = null;
+                    if ((countryId.Value != Guid.Empty) && (regionId.Value != Guid.Empty))
+                    {
+                        countries = QueryCountry.Query();
+                        regions = QueryRegion.Query().Where<Region>(it => it.Country.Id == countryId.Value);
+                        districts = QueryService.Query().Where<District>(it => it.Region.Id == regionId.Value);
+
+                        overviewModel = new DistrictOverviewModel();
+
+                        foreach (Country item in countries)
+                        {
+                            overviewModel.Countries.Add(new SelectListItem { Text = item.Name, Value = item.Id.ToString() });
+                        }
+
+                        foreach (Region item in regions)
+                        {
+                            overviewModel.Regions.Add(new SelectListItem { Text = item.Name, Value = item.Id.ToString() });
+                        }
+                        if (overviewModel.Countries.Count > 0)
+                        {
+                            var selectedCountry = overviewModel.Countries.First<SelectListItem>(it => it.Value == countryId.Value.ToString());
+                            if (selectedCountry != null)
+                                selectedCountry.Selected = true;
+                        }
+
+                        var regionsWithRegionId = overviewModel.Regions.Where<SelectListItem>(it => it.Value == regionId.Value.ToString()).ToList();
+                        if (regionsWithRegionId.Count > 0)
+                            overviewModel.Regions.First<SelectListItem>(it => it.Value == regionId.Value.ToString()).Selected = true;
+
+                    }
+                    else
+                    {
+                        overviewModel = new DistrictOverviewModel(QueryCountry);
+                        districts = null;
+                    }
                 }
             }
 
@@ -135,7 +156,48 @@ namespace Web.Areas.OutpostManagement.Controllers
             }
             return PartialView(districtList);
         }
+        public PartialViewResult SearchForDistrictWithName(string districtName,Guid? countryId)
+        {
+            var districtList = new List<DistrictModel>();
 
+            if (countryId == null)
+            {
+                var districts = QueryService.Query().Where(it => it.Name.Contains(districtName)).ToList();
+
+                if (districts.Count > 0)
+                {
+                    foreach (District district in districts)
+                    {
+                        CreateMapping();
+                        var model = new DistrictModel();
+                        Mapper.Map(district, model);
+                        model.OutpostNo = QueryOutpost.Query().Count(it => it.District.Id == district.Id);
+                        districtList.Add(model);
+                    }
+                }
+            }
+            else
+            {
+                var districts = QueryService.Query().Where(it => it.Region.Country.Id == countryId && it.Name.Contains(districtName)).ToList();
+
+                if (districts.Count > 0)
+                {
+                    foreach (District district in districts)
+                    {
+                        CreateMapping();
+                        var model = new DistrictModel();
+                        Mapper.Map(district, model);
+                        model.OutpostNo = QueryOutpost.Query().Count(it => it.District.Id == district.Id);
+                        districtList.Add(model);
+                    }
+ 
+                }
+ 
+            }
+
+            return PartialView("OverviewTable", districtList);
+
+        }
         private void CreateMapping()
         {
             Mapper.CreateMap<DistrictModel, District>();
@@ -159,8 +221,18 @@ namespace Web.Areas.OutpostManagement.Controllers
             Mapper.CreateMap<District, DistrictInputModel>();
         }
 
-        public ViewResult Create()
+        public ViewResult Create(Guid? countryId, Guid? regionId)
         {
+            if ((countryId != null) && (regionId != null))
+            {
+                DistrictOutputModel = new DistrictOutputModel(QueryCountry,QueryRegion,countryId,regionId);
+            }
+            if ((countryId != null) && (regionId == null))
+            {
+                DistrictOutputModel = new DistrictOutputModel(QueryCountry, QueryRegion, countryId.Value, regionId);
+ 
+            }
+
             return View(DistrictOutputModel);
         }
 

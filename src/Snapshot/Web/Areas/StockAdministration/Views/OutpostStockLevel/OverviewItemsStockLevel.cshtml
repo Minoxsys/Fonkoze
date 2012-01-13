@@ -4,24 +4,24 @@
  {           
 <div>
     <label for="OutpostName" class="big-text">
-        <b> <img alt="minus" src="~/Assets/img/minus.png" /> </b> @item.Name</label> <br />
+        <b> - Outpost Name</b> @item.Name</label> <br />
         @if ((item.StockGroups.Count == 0) && (item.Name != null))
         { <label > There are no product groups for products from this outpost! </label>}
     @foreach (var stockGroup in item.StockGroups)
     {
-        <label for="StockGroupName" class="big-text"><b><img alt="minus" src="~/Assets/img/minus.png" /> @stockGroup.Name</b></label>
+        <label for="StockGroupName" class="big-text"><b>- @stockGroup.Name</b></label>
     
         <table>
             <thead>
                 <tr>
                     <th>
-                        Stock Item
+                        Product
                     </th>
                     <th>
                         Description
                     </th>
                     <th>
-                        Stock Level
+                        Product Stock Level
                     </th>
                     <th>
                         SMS Reference Code

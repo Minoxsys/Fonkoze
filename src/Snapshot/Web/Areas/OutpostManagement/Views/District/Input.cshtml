@@ -7,7 +7,8 @@
          <div class="row">
           <select name="@Html.NameFor(m => m.Region.CountryId)">
                 <option value="@Guid.Empty.ToString()"> - Select Country - </option>
-                @foreach (var item in Model.Countries) { 
+                @foreach (var item in Model.Countries)
+                { 
                     <option value="@item.Value" @(item.Selected ? @"selected='selected'" : @"") >@item.Text</option>
                 }
             </select>
@@ -16,6 +17,15 @@
  <label for="Name"> Region </label>
          <div class="row">
         <select name="@Html.NameFor(m => m.Region.Id)">
+        @if (Model.Regions.Count > 0)
+        {
+            <option value="@Guid.Empty.ToString()"> - Select Region - </option>
+                foreach (var item in Model.Regions)
+                { 
+                    <option value="@item.Value" @(item.Selected ? @"selected='selected'" : @"") >@item.Text</option>
+                }
+
+        }
        
             </select>
         

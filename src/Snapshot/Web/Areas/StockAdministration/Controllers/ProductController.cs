@@ -20,6 +20,10 @@ namespace Web.Areas.StockAdministration.Controllers
     {
         public IQueryService<Product> QueryService { get; set; }
 
+        public IQueryService<OutpostStockLevel> QueryOutpostStockLevel { get; set; }
+
+        public IQueryService<OutpostStockLevelHystorical> QueryOutpostStockLevelHystorical { get; set; }
+
         public ProductOutputModel ProductOutputModel { get; set; }
 
         public IQueryService<ProductGroup> QueryProductGroup { get; set; }
@@ -29,6 +33,9 @@ namespace Web.Areas.StockAdministration.Controllers
         public IDeleteCommand<Product> DeleteProduct { get; set; }
 
         public int PageSize = 8;
+
+        private const string TEMP_DATA_ERROR_HISTORY = "errorHistory";
+        private const string TEMP_DATA_ERROR_CURRENT = "error";
 
         public ActionResult Overview(Guid? productGroupId, int page)
         {
@@ -70,6 +77,10 @@ namespace Web.Areas.StockAdministration.Controllers
                 }
             }
             overviewModel.PartialViewModel.Products = overviewModel.Products;
+
+            overviewModel.ErrorFromCurrentStockLevel = (string)TempData[TEMP_DATA_ERROR_CURRENT];
+            overviewModel.ErrorFromHistoricalStockLevel = (string)TempData[TEMP_DATA_ERROR_HISTORY];
+
             return View(overviewModel);
         }
         public PartialViewResult OverviewTable(Guid? productGroupId)
@@ -342,7 +353,27 @@ namespace Web.Areas.StockAdministration.Controllers
         {
             var product = QueryService.Load(guid);
 
-            DeleteProduct.Execute(product);
+            if (product != null)
+            {
+                var outpostStockLevel = QueryOutpostStockLevel.Query().Where(it => it.ProductId == guid).ToList();
+                //var outpostStockLevelHystorical = QueryOutpostStockLevelHystorical.Query().Where(it => it.ProductId == guid).ToList();
+
+                if (outpostStockLevel.Count > 0)
+                {
+                    TempData.Add("error", string.Format("The product {0} has stock level available, so it can not be deleted", product.Name));
+                    return RedirectToAction("Overview", new { productGroupId = product.ProductGroup.Id, page = 1 });
+                }
+                //if (outpostStockLevelHystorical.Count > 0)
+                //{
+                //    TempData.Add("errorHistory", string.Format("The product {0} has stock level history available , so it can not be deleted", product.Name));
+                //    return RedirectToAction("Overview", new { productGroupId = product.ProductGroup.Id, page = 1 });
+ 
+                //}
+
+                DeleteProduct.Execute(product);
+
+            }
+           
 
             return RedirectToAction("Overview", new { productGroupId = product.ProductGroup.Id, page = 1 });
         }

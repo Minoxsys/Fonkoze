@@ -168,7 +168,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement
             //assert
 
             //act
-            var result = controller.Create() as ViewResult;
+            var result = controller.Create(null,null) as ViewResult;
 
             //assert
             Assert.IsNull(result.Model);
