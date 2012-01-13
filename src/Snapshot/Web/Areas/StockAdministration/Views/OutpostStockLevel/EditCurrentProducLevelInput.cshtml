@@ -1,0 +1,60 @@
+﻿@model Web.Areas.StockAdministration.Models.OutpostStockLevel.OutpostStockLevelOutputModel 
+<div class="row of-2">
+    <div class="column">
+        <label for="Name">
+            <b>Outpost Name</b> <u>@Model.OutpostName</u>
+        </label>
+    </div>
+    <div class="column">
+        <label for="ISOCode">
+            <b>Product Group</b> <u>@Model.ProductGroupName</u>
+        </label>
+    </div>
+</div>
+<div class="row of-2">
+    <div class="column">
+        <label for="PhonePrefix">
+            <b>Product</b> <u>@Model.ProductName</u>
+        </label>
+    </div>
+    <div class="column">
+        <label for="PhonePrefix">
+            <b>Description</b> <u>@Model.ProductDescription</u>
+        </label>
+    </div>
+</div>
+
+<div class="row of-1">
+    <div class="column">
+        <label for="PhonePrefix">
+            <b>SMS Reference Code</b> <u>@Model.ProdSmsRef</u>
+        </label>
+    </div>
+</div>
+
+<div class="row of-2">
+    <div class="column">
+        <label for="PhonePrefix">
+            <b>Update Method</b> <u>@Model.UpdateMethod</u>
+        </label>
+    </div>
+    <div class="column">
+        <label for="PhonePrefix">
+            <b>Last Update At</b> <u>@Model.LastUpdateAt</u>
+        </label>
+    </div>
+</div>
+
+<div class="row of-2">
+    <div class="column">
+        <label for="PhonePrefix">
+            <b>Product Stock Level</b>
+        </label>
+        @Html.TextBoxFor(m => m.StockLevel, new { maxlength = 40, autofocus = "autofocus", placeholder = "Product Stock Level" })
+    </div>
+    <div class="column">
+        <label for="PhonePrefix">
+            <b>Previous Product Stock Level</b> <u>@Model.PrevStockLevel</u>
+        </label>
+    </div>
+</div>

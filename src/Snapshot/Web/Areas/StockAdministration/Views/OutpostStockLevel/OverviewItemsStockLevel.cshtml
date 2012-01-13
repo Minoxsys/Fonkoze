@@ -1,11 +1,15 @@
-﻿@model Web.Areas.StockAdministration.Models.OutpostStockLevel.OutpostWithProductGroups
+﻿@model Web.Areas.StockAdministration.Models.OutpostStockLevel.OutpostList
 <div id="stocklevel-overview">
+ @foreach (var item in Model.Outposts)
+ {           
+<div>
     <label for="OutpostName" class="big-text">
-        <b>Outpost </b> @Model.Name</label> <br />
-        @if ((Model.StockGroups.Count == 0)&&(Model.Name !=null)) { <label > There are no product groups for products from this outpost! </label>}
-    @foreach (var stockGroup in Model.StockGroups)
+        <b> <img alt="minus" src="~/Assets/img/minus.png" /> </b> @item.Name</label> <br />
+        @if ((item.StockGroups.Count == 0) && (item.Name != null))
+        { <label > There are no product groups for products from this outpost! </label>}
+    @foreach (var stockGroup in item.StockGroups)
     {
-        <label for="StockGroupName" class="big-text"><b>@stockGroup.Name</b></label>
+        <label for="StockGroupName" class="big-text"><b><img alt="minus" src="~/Assets/img/minus.png" /> @stockGroup.Name</b></label>
     
         <table>
             <thead>
@@ -31,7 +35,7 @@
                     <th>
                         Previous Stock Level
                     </th>
-                    <th>
+                    <th colspan="2">
                         Action
                     </th>
                 </tr>
@@ -63,8 +67,9 @@
                             @stockItem.PreviousStockLevel
                         </td>
                         <td>
-                            Edit
+                             @(Html.ActionLink<OutpostStockLevelController>(it => it.EditCurrentProductLevel(stockItem.OutpostStockLevelId,false), "Edit",StockAdministrationAreaRegistration.DEFAULT_ROUTE))
                         </td>
+                        <td> View Hystorical</td>
                     </tr> 
                 }
             </tbody>
@@ -72,3 +77,5 @@
  
     }
        </div>
+ }
+ </div>

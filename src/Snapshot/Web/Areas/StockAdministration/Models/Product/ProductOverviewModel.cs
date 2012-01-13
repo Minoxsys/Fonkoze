@@ -12,7 +12,7 @@ namespace Web.Areas.StockAdministration.Models.Product
     {
         public List<ProductModel> Products { get; set; }
         public List<SelectListItem> ProductGroups { get; set; }
-        public PagingInfo PagingInfo { get; set; }
+        public PartialViewModel PartialViewModel { get; set; }
 
         public IQueryService<Domain.ProductGroup> QueryProductGroup { get; set; }
 
