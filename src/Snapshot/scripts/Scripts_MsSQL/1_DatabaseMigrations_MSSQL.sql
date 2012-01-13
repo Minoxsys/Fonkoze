@@ -180,11 +180,10 @@ begin
     )
 end
 
-
-if not exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'OutpostStockLevel')
+if not exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'OutpostStockLevels')
 begin
 	-- Stock Level
-	CREATE TABLE OutpostStockLevel(
+	CREATE TABLE OutpostStockLevels(
         Id UNIQUEIDENTIFIER not null,
 		OutpostId UNIQUEIDENTIFIER not null,
 		ProdGroupId UNIQUEIDENTIFIER NOT NULL,
@@ -192,8 +191,7 @@ begin
 		ProdSMSRef NVARCHAR(20) NOT NULL,
 		StockLevel INTEGER NOT NULL,
 		PrevStockLevel INTEGER NOT NULL,
-		UpdatedMethod NCHAR(10) DEFAULT 'System',
-		UpdatedDate DATETIME NULL,
+		UpdateMethod NCHAR(10) NULL DEFAULT 'System',
 		Created DATETIME NULL,
 		Updated DATETIME NULL,
         ByUser_FK UNIQUEIDENTIFIER NULL,
@@ -202,25 +200,11 @@ begin
     )
 end
 
-if not exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'OutpostStockLevelHistory')
+go
+if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='UNIQUE_ProductIdOnProductGroupWithSMSRef')
 begin
-	-- Stock Level
-	CREATE TABLE OutpostStockLevelHistory(
-        Id UNIQUEIDENTIFIER not null,
-		OutpostId UNIQUEIDENTIFIER not null,
-		ProdGroupId UNIQUEIDENTIFIER NOT NULL,
-		ProductId UNIQUEIDENTIFIER NOT NULL,
-		ProdSMSRef NVARCHAR(20) NOT NULL,
-		StockLevel INTEGER NOT NULL,
-		PrevStockLevel INTEGER NOT NULL,
-		UpdatedMethod NCHAR(10) DEFAULT 'System',
-		UpdatedDate DATETIME NULL,
-		Created DATETIME NULL,
-		Updated DATETIME NULL,
-        ByUser_FK UNIQUEIDENTIFIER NULL,
-        Client_FK UNIQUEIDENTIFIER NOT NULL
-        primary key (Id)
-    )
+ALTER TABLE OutpostStockLevels
+ADD CONSTRAINT UNIQUE_ProductIdOnProductGroupWithSMSRef UNIQUE (ProdGroupId,ProductId,ProdSMSRef)
 end
 
 go

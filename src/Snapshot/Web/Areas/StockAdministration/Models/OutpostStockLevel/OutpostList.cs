@@ -7,6 +7,7 @@ namespace Web.Areas.StockAdministration.Models.OutpostStockLevel
 {
     public class OutpostList
     {
+        
         public List<OutpostWithProductGroups> Outposts { get; set; }
 
         public OutpostList()

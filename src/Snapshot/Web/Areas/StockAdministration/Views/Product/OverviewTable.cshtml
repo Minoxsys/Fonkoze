@@ -1,6 +1,6 @@
-﻿@model List<Web.Areas.StockAdministration.Models.Product.ProductModel>
-
- <table id="products-overview" class="paginated">
+﻿@model Web.Areas.StockAdministration.Models.Product.PartialViewModel
+@using Web.Areas.OutpostManagement.HtmlHelpers;
+ <table id="products-overview">
         <thead>
             <tr>
                 <th>
@@ -30,11 +30,11 @@
             @{
                 var itemNo = 0;
             }
-            @foreach (var product in @Model)
+            @foreach (var product in @Model.Products)
             {
                 var _class = (itemNo % 2 == 0) ? "odd" : "even";    
                 <tr class="@_class">
-                    <td>
+                    <td class="search">
                         @product.Name
                     </td>
                     <td>
@@ -66,3 +66,14 @@
             }
         </tbody>
     </table>
+    
+     <div class="pager" id="pagerDiv">     
+        @Html.PageLinksOnPartialView(Model.PagingInfo, x => Url.Action("Overview", new { page = x }))       
+    </div>
+     <script type="text/javascript">
+         $(function () {
+             debugger;
+             GetAllButtonsForPaginationAndSetOnClickEvent();
+         });
+    </script>
+    
