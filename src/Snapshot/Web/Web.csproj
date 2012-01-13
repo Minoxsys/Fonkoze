@@ -187,6 +187,8 @@
     <Compile Include="Areas\StockAdministration\Controllers\ProductGroupController.cs" />
     <Compile Include="Areas\OutpostManagement\Controllers\StockLevelController.cs" />
     <Compile Include="Areas\StockAdministration\Models\OutpostStockLevel\OutpostList.cs" />
+    <Compile Include="Areas\StockAdministration\Models\OutpostStockLevel\OutpostStockLevelInputModel.cs" />
+    <Compile Include="Areas\StockAdministration\Models\OutpostStockLevel\OutpostStockLevelOutputModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\OutpostStockLevel\OutpostStockLevelOverviewModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\OutpostStockLevel\OutpostWithStockGroups.cs" />
     <Compile Include="Areas\StockAdministration\Models\OutpostStockLevel\ProductGroupWithProducts.cs" />
@@ -194,6 +196,7 @@
     <Compile Include="Areas\StockAdministration\Models\ProductGroup\ProductGroupInputModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\ProductGroup\ProductGroupModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\ProductGroup\ProductGroupOverviewModel.cs" />
+    <Compile Include="Areas\StockAdministration\Models\Product\PartialViewModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\Product\ProductGroupModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\Product\ProductInputModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\Product\ProductModel.cs" />
@@ -1757,6 +1760,7 @@
     <Content Include="Assets\img\icons\silk\zoom.png" />
     <Content Include="Assets\img\icons\silk\zoom_in.png" />
     <Content Include="Assets\img\icons\silk\zoom_out.png" />
+    <Content Include="Assets\img\minus.png" />
     <Content Include="Assets\img\no_avatar.jpg" />
     <Content Include="Assets\img\pass.png" />
     <Content Include="Assets\img\pattern.png" />
@@ -1922,6 +1926,8 @@
     <Content Include="Areas\StockAdministration\Views\OutpostStockLevel\OverviewItemsStockLevel.cshtml" />
     <Content Include="Areas\StockAdministration\Views\Product\EditInput.cshtml" />
     <Content Include="Areas\StockAdministration\Views\Product\OverviewTable.cshtml" />
+    <Content Include="Areas\StockAdministration\Views\OutpostStockLevel\EditCurrentProductLevel.cshtml" />
+    <Content Include="Areas\StockAdministration\Views\OutpostStockLevel\EditCurrentProducLevelInput.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\Outpost\EditOutpostInput.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\StockLevel\OutpostStockLevelOverview.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\StockLevel\OverviewProducts.cshtml" />

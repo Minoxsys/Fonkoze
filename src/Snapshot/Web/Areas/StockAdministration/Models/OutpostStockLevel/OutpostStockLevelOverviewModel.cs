@@ -17,7 +17,7 @@ namespace Web.Areas.StockAdministration.Models.OutpostStockLevel
         public List<SelectListItem> Districts { get; set; }
         public List<SelectListItem> Outposts { get; set; }
 
-        public OutpostWithProductGroups OutpostWithStockGroups { get; set; }
+        public OutpostList OutpostList { get; set; }
 
         public Guid OutpostId { get; set; }
 
@@ -29,7 +29,10 @@ namespace Web.Areas.StockAdministration.Models.OutpostStockLevel
         {
             this.QueryCountry = queryCountry;
             this.Countries = new List<SelectListItem>();
-            this.OutpostWithStockGroups = new OutpostStockLevel.OutpostWithProductGroups();
+            this.Regions = new List<SelectListItem>();
+            this.Districts = new List<SelectListItem>();
+            this.Outposts = new List<SelectListItem>();
+            this.OutpostList = new OutpostStockLevel.OutpostList();
 
             var countries = QueryCountry.Query();
 

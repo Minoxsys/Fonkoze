@@ -18,5 +18,6 @@ namespace Web.Areas.StockAdministration.Models.Product
         public  string UpdateMethod { get; set; }
         public  int PreviousStockLevel { get; set; }
         public  int StockLevel { get; set; }
+        public Guid OutpostStockLevelId { get; set; }
     }
 }

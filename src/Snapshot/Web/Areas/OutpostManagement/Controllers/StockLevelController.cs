@@ -66,15 +66,15 @@ namespace Web.Areas.OutpostManagement.Controllers
 
             var productGroup = QueryService.Load(productGroupId);
             
-            foreach (var item in productGroup.Products)
-            {
+            //foreach (var item in productGroup.Products)
+            //{
 
-                CreateMappings();
-                var productModel = new Product();
-                Mapper.Map(item, productModel);
-                productList.Add(productModel);
+            //    CreateMappings();
+            //    var productModel = new Product();
+            //    Mapper.Map(item, productModel);
+            //    productList.Add(productModel);
 
-            }
+            //}
             return PartialView(productList);
         }
 

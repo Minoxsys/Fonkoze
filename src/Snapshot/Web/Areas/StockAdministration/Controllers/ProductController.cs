@@ -29,8 +29,8 @@ namespace Web.Areas.StockAdministration.Controllers
         public IDeleteCommand<Product> DeleteProduct { get; set; }
 
         public int PageSize = 8;
-          
-        public ActionResult Overview(Guid? productGroupId,int page)
+
+        public ActionResult Overview(Guid? productGroupId, int page)
         {
             var overviewModel = new ProductOverviewModel(QueryProductGroup);
             List<Product> products = new List<Product>();
@@ -44,19 +44,20 @@ namespace Web.Areas.StockAdministration.Controllers
                              .Skip((page - 1) * PageSize)
                              .Take(PageSize).ToList();
 
-                if(overviewModel.ProductGroups.Where(it=>it.Value == productGroupId.Value.ToString()).ToList().Count > 0)
+                if (overviewModel.ProductGroups.Where(it => it.Value == productGroupId.Value.ToString()).ToList().Count > 0)
                 {
-                    overviewModel.ProductGroups.First(it=>it.Value == productGroupId.Value.ToString()).Selected = true;
+                    overviewModel.ProductGroups.First(it => it.Value == productGroupId.Value.ToString()).Selected = true;
                 }
- 
+
             }
 
-            overviewModel.PagingInfo = new PagingInfo{
-                    CurrentPage = page,
-                    ItemsPerPage = PageSize,
-                    TotalItems = products.Count()
-                };
-
+            overviewModel.PartialViewModel = new PartialViewModel();
+            overviewModel.PartialViewModel.PagingInfo = new PagingInfo
+            {
+                CurrentPage = page,
+                ItemsPerPage = PageSize,
+                TotalItems = products.Count()
+            };
             if (paginatedProducts.ToList().Count > 0)
             {
                 foreach (Product product in paginatedProducts)
@@ -65,47 +66,127 @@ namespace Web.Areas.StockAdministration.Controllers
                     var productModel = new ProductModel();
                     Mapper.Map(product, productModel);
                     overviewModel.Products.Add(productModel);
-                    
+
                 }
             }
-
+            overviewModel.PartialViewModel.Products = overviewModel.Products;
             return View(overviewModel);
         }
         public PartialViewResult OverviewTable(Guid? productGroupId)
         {
-            var productList = new List<ProductModel>();
-            if (!productGroupId.HasValue)
-                return PartialView(productList);
+            var partialviewModel = new PartialViewModel();
 
-            var products = QueryService.Query().Where<Product>(it => it.ProductGroup.Id == productGroupId);
+            var productList = new List<ProductModel>();
+
+            if (!productGroupId.HasValue)
+                return PartialView(partialviewModel);
+
+            var allProducts = QueryService.Query().Where<Product>(it => it.ProductGroup.Id == productGroupId).ToList();
+            var products = QueryService.Query().Where<Product>(it => it.ProductGroup.Id == productGroupId)
+                             .OrderBy(p => p.Name)
+                             .Skip((1 - 1) * PageSize)
+                             .Take(PageSize).ToList();
+
+            partialviewModel.PagingInfo = new PagingInfo
+            {
+                CurrentPage = 1,
+                ItemsPerPage = PageSize,
+                TotalItems = allProducts.Count()
+            };
 
             foreach (Product item in products)
             {
                 CreateMappings();
                 var productModel = new ProductModel();
                 Mapper.Map(item, productModel);
-                productList.Add(productModel);
+                partialviewModel.Products.Add(productModel);
 
             }
-            return PartialView(productList);
+            return PartialView(partialviewModel);
         }
         public PartialViewResult SearchForProductWithName(string productName)
         {
+            var partialviewModel = new PartialViewModel();
+
             var productList = new List<ProductModel>();
             //if (productName == null)
             //    return PartialView(productList);
+            var allProducts = QueryService.Query().Where<Product>(it => it.Name.Contains(productName)).ToList();
+            var products = QueryService.Query().Where<Product>(it => it.Name.Contains(productName))
+                             .OrderBy(p => p.Name)
+                             .Skip((1 - 1) * PageSize)
+                             .Take(PageSize).ToList();
 
-            var products = QueryService.Query().Where<Product>(it => it.Name.Contains(productName));
+            partialviewModel.PagingInfo = new PagingInfo
+            {
+                CurrentPage = 1,
+                ItemsPerPage = PageSize,
+                TotalItems = allProducts.Count()
+            };
+            foreach (Product item in products)
+            {
+                CreateMappings();
+                var productModel = new ProductModel();
+                Mapper.Map(item, productModel);
+                partialviewModel.Products.Add(productModel);
+
+            }
+            return PartialView("OverviewTable", partialviewModel);
+        }
+
+        public PartialViewResult GetItemsForPage(int page, Guid productGroupId, string NameToSearchFor)
+        {
+
+            var partialViewModel = new PartialViewModel();
+            var products = new List<Product>();
+            var allproducts = new List<Product>();
+
+            if ((productGroupId != null) && (NameToSearchFor != null))
+            {
+                allproducts = QueryService.Query().Where(it => it.ProductGroup.Id == productGroupId && it.Name.Contains(NameToSearchFor)).ToList(); ;
+                products = QueryService.Query().Where(it => it.ProductGroup.Id == productGroupId && it.Name.Contains(NameToSearchFor))
+                            .OrderBy(p => p.Name)
+                             .Skip((page - 1) * PageSize)
+                             .Take(PageSize).ToList();
+ 
+            }
+            else
+            {
+                if ((productGroupId == null) && (NameToSearchFor != null))
+                {
+                    allproducts = QueryService.Query().Where(it => it.Name.Contains(NameToSearchFor)).ToList(); ;
+                    products = QueryService.Query().Where(it => it.Name.Contains(NameToSearchFor))
+                            .OrderBy(p => p.Name)
+                             .Skip((page - 1) * PageSize)
+                             .Take(PageSize).ToList();
+
+                }
+                else
+                {
+                    allproducts = QueryService.Query().Where(it => it.ProductGroup.Id == productGroupId).ToList(); ;
+                    products = QueryService.Query().Where(it => it.ProductGroup.Id == productGroupId)
+                                .OrderBy(p => p.Name)
+                                 .Skip((page - 1) * PageSize)
+                                 .Take(PageSize).ToList();
+ 
+                }
+            }
+            partialViewModel.PagingInfo = new PagingInfo
+            {
+                CurrentPage = page,
+                ItemsPerPage = PageSize,
+                TotalItems = allproducts.Count()
+            };
 
             foreach (Product item in products)
             {
                 CreateMappings();
                 var productModel = new ProductModel();
                 Mapper.Map(item, productModel);
-                productList.Add(productModel);
+                partialViewModel.Products.Add(productModel);
 
             }
-            return PartialView(productList);
+            return PartialView("OverviewTable", partialViewModel);
         }
         private void CreateMappings()
         {
@@ -130,11 +211,11 @@ namespace Web.Areas.StockAdministration.Controllers
             Mapper.CreateMap<Region, RegionModel>();
             Mapper.CreateMap<RegionModel, Region>();
 
-            Mapper.CreateMap<District,DistrictModel>();
-            Mapper.CreateMap<DistrictModel,District>();
+            Mapper.CreateMap<District, DistrictModel>();
+            Mapper.CreateMap<DistrictModel, District>();
 
             Mapper.CreateMap<Client, ClientModel>();
-            Mapper.CreateMap<ClientModel,Client>();
+            Mapper.CreateMap<ClientModel, Client>();
         }
 
         public ViewResult Create()
@@ -148,12 +229,12 @@ namespace Web.Areas.StockAdministration.Controllers
 
             if (ProductGroupId != null)
             {
-                if(productOutputModel.ProductGroups.Where(it=>it.Value == ProductGroupId.Value.ToString()).ToList().Count > 0)
+                if (productOutputModel.ProductGroups.Where(it => it.Value == ProductGroupId.Value.ToString()).ToList().Count > 0)
                 {
                     productOutputModel.ProductGroups.First(it => it.Value == ProductGroupId.Value.ToString()).Selected = true;
                 }
             }
-            return View("Create",productOutputModel);
+            return View("Create", productOutputModel);
         }
         [HttpPost]
         public ActionResult Create(ProductInputModel model)
@@ -170,13 +251,13 @@ namespace Web.Areas.StockAdministration.Controllers
             var product = new Product();
             Mapper.Map(model, product);
 
-            
+
             product.ProductGroup = QueryProductGroup.Load(model.ProductGroup.Id);
-            
+
             SaveOrUpdateProduct.Execute(product);
 
-            return RedirectToAction("Overview", new { productGroupId = product.ProductGroup.Id,page=1 });
-        }       
+            return RedirectToAction("Overview", new { productGroupId = product.ProductGroup.Id, page = 1 });
+        }
         private ProductOutputModel BuildProductOutputModelFromInputModel(ProductInputModel model)
         {
             var productOutputModel = new ProductOutputModel(QueryProductGroup);
@@ -195,7 +276,7 @@ namespace Web.Areas.StockAdministration.Controllers
                         productOutputModel.ProductGroups.First(it => it.Value == model.ProductGroup.Id.ToString()).Selected = true;
                 }
             }
-          return productOutputModel;
+            return productOutputModel;
         }
 
         public ViewResult Edit(Guid guid)
@@ -210,12 +291,12 @@ namespace Web.Areas.StockAdministration.Controllers
 
             if (productOutputModel.ProductGroups.Where(it => it.Value == product.ProductGroup.Id.ToString()).ToList().Count > 0)
             {
-                productOutputModel.ProductGroups.First(it => it.Value == product.ProductGroup.Id.ToString()).Selected = true; 
+                productOutputModel.ProductGroups.First(it => it.Value == product.ProductGroup.Id.ToString()).Selected = true;
             }
 
-         return View(productOutputModel);
+            return View(productOutputModel);
         }
-        public ViewResult EditProduct(Guid guid,Guid productGroupId)
+        public ViewResult EditProduct(Guid guid, Guid productGroupId)
         {
             var productOutputModel = new ProductOutputModel(QueryProductGroup);
 
@@ -230,7 +311,7 @@ namespace Web.Areas.StockAdministration.Controllers
                 productOutputModel.ProductGroups.First(it => it.Value == productGroupId.ToString()).Selected = true;
             }
 
-            return View("Edit",productOutputModel);
+            return View("Edit", productOutputModel);
         }
         [HttpPost]
         public ActionResult Edit(ProductInputModel model)
@@ -242,18 +323,18 @@ namespace Web.Areas.StockAdministration.Controllers
             }
 
             CreateMappings();
-            
-            
+
+
             var product = new Product();
 
             Mapper.Map(model, product);
 
-            product.ProductGroup = QueryProductGroup.Load(model.ProductGroup.Id);              
-            
+            product.ProductGroup = QueryProductGroup.Load(model.ProductGroup.Id);
+
 
             SaveOrUpdateProduct.Execute(product);
 
-            return RedirectToAction("Overview", new { productGroupId = product.ProductGroup.Id,page=1 });
+            return RedirectToAction("Overview", new { productGroupId = product.ProductGroup.Id, page = 1 });
         }
 
         [HttpPost]
@@ -263,7 +344,7 @@ namespace Web.Areas.StockAdministration.Controllers
 
             DeleteProduct.Execute(product);
 
-            return RedirectToAction("Overview", new { productGroupId = product.ProductGroup.Id,page=1 });
+            return RedirectToAction("Overview", new { productGroupId = product.ProductGroup.Id, page = 1 });
         }
     }
 }
