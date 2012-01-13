@@ -52,7 +52,6 @@
     <Compile Include="Region.cs" />
     <Compile Include="ProductGroup.cs" />
     <Compile Include="Product.cs" />
-    <Compile Include="OutpostStockLevel.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj">
