@@ -23,6 +23,8 @@ namespace Web.Areas.OutpostManagement.Controllers
 
         public OutpostStockLevelInputModel StockLevelInputModel { get; set; }
 
+        public OutpostStockLevelOverviewModel OutpostStockLevelOverviewModel { get; set; }
+
         public ISaveOrUpdateCommand<OutpostStockLevel> SaveOrUpdateCommand { get; set; }
 
         public IQueryService<OutpostStockLevel> QueryService { get; set; }
@@ -59,23 +61,29 @@ namespace Web.Areas.OutpostManagement.Controllers
 
             return View(overviewModel);
         }
- 
-        public PartialViewResult OverviewProducts(Guid productGroupId)
-        {
-            var productList = new List<Product>();
 
-            var productGroup = QueryService.Load(productGroupId);
-            
+        public PartialViewResult OverviewProducts(Guid productGroupId, OutpostStockLevelOverviewModel outpostStockLevelOverviewModel)
+        {
+            var productList = new List<ProductModel>();
+
+            outpostStockLevelOverviewModel.ProdGroupId = productGroupId;
+
             //foreach (var item in productGroup.Products)
             //{
+            foreach (var item in productGroup.Products)
+            {
 
             //    CreateMappings();
             //    var productModel = new Product();
             //    Mapper.Map(item, productModel);
             //    productList.Add(productModel);
-
+            
             //}
-            return PartialView(productList);
+            {
+                outpostStockLevelOverviewModel.Products.Add(item);
+            }
+
+            return PartialView(outpostStockLevelOverviewModel);
         }
 
         public ActionResult Details(int id)
@@ -83,6 +91,12 @@ namespace Web.Areas.OutpostManagement.Controllers
             return View();
         }
 
+        [HttpPost]
+        public ActionResult CreateOutpostStockLevel(OutpostStockLevelOverviewModel outpostStockLevelOverviewModel)
+        {
+            var ggg = outpostStockLevelOverviewModel;
+            return View("OutpostStockLevelOverview", outpostStockLevelOverviewModel);
+       }
         //
         // GET: /StockAdministration/StockLevel/Create
 
@@ -164,21 +178,15 @@ namespace Web.Areas.OutpostManagement.Controllers
         private void CreateMappings()
         {
             Mapper.CreateMap<ProductModel, Product>();
-            Mapper.CreateMap<Product, ProductModel>();
+            //Mapper.CreateMap<Product, ProductModel>();
 
-            Mapper.CreateMap<ProductInputModel.ProductGroupInputModel, ProductGroup>();
-            Mapper.CreateMap<ProductGroup, ProductInputModel.ProductGroupInputModel>();
+            //Mapper.CreateMap<ProductInputModel, Product>();
+            //Mapper.CreateMap<Product, ProductInputModel>();
 
-            Mapper.CreateMap<ProductInputModel, Product>();
-            Mapper.CreateMap<Product, ProductInputModel>();
+            //Mapper.CreateMap<Product, ProductOutputModel>();
+           // Mapper.CreateMap<ProductOutputModel, Product>();
 
-            Mapper.CreateMap<Product, ProductOutputModel>();
-            Mapper.CreateMap<ProductOutputModel, Product>();
-
-
-            Mapper.CreateMap<Client, ClientModel>();
-            Mapper.CreateMap<ClientModel, Client>();
-        }
+       }
 
     }
 }

@@ -54,6 +54,8 @@ OutpostManagement Countries: Overview
 <label id="OutpostID"> @Model.OutpostName</label>
 </div>
 
+    <div>
+    &nbsp;</div>
 
 <div class="row">
 <label>
@@ -66,13 +68,30 @@ OutpostManagement Countries: Overview
                             <option value="@item.Value" @(item.Selected ? @"selected='selected'" : @"") >@item.Text</option>
                             }
                         }
-                    </select></div>
- @*<div>
+                    </select>
+                    </div>
+     <div>
+    &nbsp;</div>
+    <div>
     @{
-        Html.RenderPartial("OverviewProducts", Model.Products);
+        Html.RenderPartial("OverviewProducts", Model);
     }
+    <div>
+    &nbsp;
     </div>
-*@
+    <div>>
+ 
+@{Html.BeginForm("CreateOutpostStockLevel", "StockLevel", this.Model, FormMethod.Post);}
+
+     @Html.SubmitButton("submit-form", "Save") 
+    </div>
+
+    @{Html.EndForm();}
+
+
+
+</div>
+
 }
 
 @section scripts{

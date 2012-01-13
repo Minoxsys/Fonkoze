@@ -52,12 +52,12 @@ namespace Web.Areas.OutpostManagement.Models.Outpost
          public OutpostOverviewModel(IQueryService<Domain.Country> queryCountry, 
                                      IQueryService<Domain.Region> queryRegion,
                                      IQueryService<Domain.District> queryDistrict,
-                                     IQueryService<Domain.Outpost> queryWarehouse)
+                                     IQueryService<Domain.Outpost> queryService)
         {
             this.QueryCountry = queryCountry;
             this.QueryRegion = queryRegion;
             this.QueryDistrict = queryDistrict;
-            this.QueryWarehouse = queryWarehouse;
+            this.QueryWarehouse = queryService;
 
             this.Countries = new List<SelectListItem>();
             this.Regions = new List<SelectListItem>();
@@ -98,10 +98,10 @@ namespace Web.Areas.OutpostManagement.Models.Outpost
             }
 
 
-            var resultWarehouse = QueryWarehouse.Query().Where(m => m.IsWarehouse);
+            var resultWarehouse = QueryWarehouse.Query();
             if (resultWarehouse != null)
             {
-                if (resultWarehouse.FirstOrDefault() != null)
+                if (resultWarehouse.Where(m => m.IsWarehouse) != null)
                 {
                     foreach (Domain.Outpost item3 in resultWarehouse)
                     {
