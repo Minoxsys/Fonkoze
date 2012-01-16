@@ -109,7 +109,7 @@ namespace Web.Areas.OutpostManagement.Models.Outpost
 
                         selectListItem.Value = item3.Id.ToString();
                         selectListItem.Text = item3.Name;
-                        Warehouses.Add(selectListItem);
+                        this.Warehouses.Add(selectListItem);
                     }
                 }
             }

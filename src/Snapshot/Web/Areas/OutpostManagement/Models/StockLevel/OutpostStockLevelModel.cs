@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using Web.Areas.OutpostManagement.Models.Client;
 
 namespace Web.Areas.OutpostManagement.Models.StockLevel
 {
@@ -15,5 +16,7 @@ namespace Web.Areas.OutpostManagement.Models.StockLevel
         public int PrevStockLevel { get; set; }
         public string UpdatedMethod { get; set; }
         public DateTime UpdatedDate { get; set; }
+        public String ProductName { get; set; }
+        public ClientModel Client { get; set; }
     }
 }

@@ -110,10 +110,10 @@
                 // If checked
                 if ($(this).is(":checked")) {
                     uncheckAllExcept(phoneId);
-                    $.getJSON('@Url.Action("SetCheckContactMainMethod", "Contact")?phoneId=' + phoneId)
+                    $.getJSON('@Url.Action("SetCheckContactMainMethod", "Contact")?phoneId=' + phoneId);
                 }
                 else {
-                    $.getJSON('@Url.Action("SetUncheckContactMainMethod", "Contact")?phoneId=' + phoneId)
+                    $.getJSON('@Url.Action("SetUncheckContactMainMethod", "Contact")?phoneId=' + phoneId);
                 }
 
             });

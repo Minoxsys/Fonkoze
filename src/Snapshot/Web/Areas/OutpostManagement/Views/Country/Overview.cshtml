@@ -63,7 +63,7 @@ OutpostManagement Countries: Overview
                 <th>
                     Phone Country Prefix
                 </th>
-                <th colspan="2" align="center">
+                <th align="center">
                     Actions
                 </th>
             </tr>
@@ -83,9 +83,9 @@ OutpostManagement Countries: Overview
                     </td>
                     <td>@country.PhonePrefix
                     </td>
-                    <td>
+                    @*<td>
                         @(Html.ActionLink<CountryController>(it => it.Edit(country.Id), "Edit", OutpostManagementAreaRegistration.DEFAULT_ROUTE))
-                    </td>
+                    </td>*@
                     <td>
                         @{Html.BeginForm<CountryController>(m => m.Delete(country.Id), FormMethod.Post, new { @class = "delete-user-form" }); }
                         @Html.Button("delete-user", "Delete", HtmlButtonType.Submit)

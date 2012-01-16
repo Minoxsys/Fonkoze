@@ -181,6 +181,7 @@ begin
 end
 
 if not exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'OutpostStockLevels')
+if not exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'OutpostStockLevels')
 begin
 	-- Stock Level
 	CREATE TABLE OutpostStockLevels(
@@ -188,10 +189,13 @@ begin
 		OutpostId UNIQUEIDENTIFIER not null,
 		ProdGroupId UNIQUEIDENTIFIER NOT NULL,
 		ProductId UNIQUEIDENTIFIER NOT NULL,
+		ProductName nvarchar(30) not null,
 		ProdSMSRef NVARCHAR(20) NOT NULL,
 		StockLevel INTEGER NOT NULL,
 		PrevStockLevel INTEGER NOT NULL,
 		UpdateMethod NCHAR(10) NULL DEFAULT 'System',
+		UpdatedMethod NCHAR(10) DEFAULT 'System',
+		UpdatedDate DATETIME NULL,
 		Created DATETIME NULL,
 		Updated DATETIME NULL,
         ByUser_FK UNIQUEIDENTIFIER NULL,
@@ -200,8 +204,7 @@ begin
     )
 end
 
-if not exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'HistoryOutpostStockLevel')
-if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='UNIQUE_ProductIdOnProductGroupWithSMSRef')
+if not exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'HistoryOutpostStockLevels')
 begin
 ALTER TABLE OutpostStockLevels
 	CREATE TABLE HistoryOutpostStockLevels(

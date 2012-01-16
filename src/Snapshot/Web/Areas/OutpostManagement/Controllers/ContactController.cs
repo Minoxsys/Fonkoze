@@ -96,16 +96,21 @@ namespace Web.Areas.OutpostManagement.Controllers
             var contact = new Contact();
 
             Outpost outpost = QueryOutposts.Load(contactModel.OutpostId);
+            var contacts = QueryContact.Query().Where(m => m.Outpost.Id == outpost.Id);
             
             contact.Client = QueryClients.Load(Client.DEFAULT_ID); ;
 
             Mapper.Map(contactModel, contact);
             if (outpost != null)
+            {
+                if (contacts.Count() == 0)
+                    contact.IsMainContact = true;
                 outpost.Contacts.Add(contact);
+            }
 
             SaveOrUpdateCommand.Execute(contact);
 
-            return RedirectToAction("Overview", "Outpost", new { outpostId = contactModel.OutpostId });
+            return RedirectToAction("Edit", "Outpost", new { outpostId = contactModel.OutpostId });
          }
         
  
