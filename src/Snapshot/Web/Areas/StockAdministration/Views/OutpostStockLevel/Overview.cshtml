@@ -29,29 +29,47 @@ Stock Item: Overview
                     <label>
                         Region:</label>
                     <select name="@(Html.NameFor(m => m.Regions))" id="Regions">
+                       @{
+                            foreach (var item in Model.Regions)
+                            {
+                            <option value="@item.Value" @(item.Selected ? @"selected='selected'" : @"") >@item.Text</option>
+                            }
+                        }
                     </select>
                 </th>
                 <th>
                     <label>
                         District:</label>
                     <select name="@(Html.NameFor(m => m.Districts))" id="Districts">
+                        @{
+                            foreach (var item in Model.Districts)
+                            {
+                            <option value="@item.Value" @(item.Selected ? @"selected='selected'" : @"") >@item.Text</option>
+                            }
+                        }
                     </select>
                 </th>
                 <th>
                     <label>
                         Outpost:</label>
                     <select name="@(Html.NameFor(m => m.OutpostId))" id="Outposts">
+                     @{
+                            foreach (var item in Model.Outposts)
+                            {
+                            <option value="@item.Value" @(item.Selected ? @"selected='selected'" : @"") >@item.Text</option>
+                            }
+                        }
                     </select>
                 </th>
                 <th>
-                    <button onclick="ViewStockButtonClicked()">View Stock</button>
+                    <button onclick="ViewStockButtonClicked()">View product stock level</button>
                 </th>
             </tr>
         </thead>
         <tbody>
         </tbody>
     </table>
-    @{Html.RenderPartial("OverviewItemsStockLevel", Model.OutpostWithStockGroups);
+    @{Html.RenderPartial("OverviewItemsStockLevel", Model.OutpostList);
     }
 }
 @section  scripts{
@@ -61,10 +79,10 @@ Stock Item: Overview
 
             var outpost = document.getElementById("Outposts");
             var selectedOutpostId = outpost.options[outpost.selectedIndex].value;
-
+            var selectedDistrictId = $("select[name='@Html.NameFor(m => m.Districts)']").val()
             var drop = $("#stocklevel-overview")
-            
-            var urlOverview = '@Url.Action("OverviewItemsStockLevel")?OutpostId=' + selectedOutpostId;
+            debugger;
+            var urlOverview = '@Url.Action("OverviewItemsStockLevel","OutpostStockLevel")?OutpostId=' + selectedOutpostId  + '&DistrictId=' + selectedDistrictId;
             $.get(urlOverview, function (data) {
 
                 drop.html('')
@@ -85,7 +103,7 @@ Stock Item: Overview
                 var drop = $("#Regions")
                 drop.html('')
 
-                debugger;
+               
                 var drop = $("#Districts")
                 drop.html('')
 
@@ -153,8 +171,14 @@ Stock Item: Overview
 
                 var ddlOutposts = document.getElementById("Outposts");
                 var opt = document.createElement("option");
-                opt.text = 'Please select an outpost';
+                opt.text = 'Please chose a option';
                 opt.value = '@Guid.Empty.ToString()';
+
+                ddlOutposts.options.add(opt);
+
+                opt.text = 'All';
+                opt.value = '00000000-0000-0000-0000-000000000001';
+
                 ddlOutposts.options.add(opt);
 
                 $.each(data, function () {

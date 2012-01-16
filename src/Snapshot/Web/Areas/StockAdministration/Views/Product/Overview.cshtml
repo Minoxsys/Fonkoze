@@ -1,7 +1,6 @@
 ﻿@model Web.Areas.StockAdministration.Models.Product.ProductOverviewModel
 @using Microsoft.Web.Mvc;
 @using Web.Areas.OutpostManagement.HtmlHelpers;
-<link rel="stylesheet" href="../../Styles/tables.css" type="text/css" media="screen" />
 @section page_title{
 Stock Item: Overview
 }
@@ -16,19 +15,35 @@ Stock Item: Overview
 }
 @section master_content{
     @{Html.RenderPartial("~/Views/Shared/_StockAdministrationHeader.cshtml");}
+
+     @if (Model.ErrorFromCurrentStockLevel != null)
+    {
+        <div class="error">
+            @Model.ErrorFromCurrentStockLevel
+        </div>
+    }
+    
+    @if (Model.ErrorFromHistoricalStockLevel != null)
+    {
+        <div class="error">
+            @Model.ErrorFromHistoricalStockLevel
+        </div>
+    }
+    
     <div class="page_header_buttons">
         @(Html.ActionLink<Web.Areas.StockAdministration.Controllers.ProductController>(it => it.Create(), "Add new product", Web.Areas.StockAdministration.StockAdministrationAreaRegistration.DEFAULT_ROUTE))
     </div>
-    <br /><div class="pager">
-   @Html.PageLinks(Model.PagingInfo, x => Url.Action("Overview", new {productGroupId = Model.ProductGroups.Where(it=>it.Selected==true),page = x}))
-</div>
+    <br />
+    @*<div class="pager">*@
+        @*@html.pagelinks(model.paginginfo, x => url.action("overview", new { productgroupid = model.productgroups.where(it => it.selected == true), page = x }))*@
+    @*</div>*@
     <table class="searchable">
         <thead>
             <tr>
                 <th>
                     <label>
                         Product Group:</label>
-                    <select name="@(Html.NameFor(m => m.ProductGroups))">
+                    <select name="@(Html.NameFor(m => m.ProductGroups))" id="ProductGroups">
                         <option value="@Guid.Empty">- Select a product group -</option>
                         @{
                             foreach (var item in Model.ProductGroups)
@@ -39,7 +54,7 @@ Stock Item: Overview
                     </select>
                 </th>
                 <th>
-                    <input type="text" id="productSearch" name="productSearch" maxlength="50" placeholder="Products search"
+                    <input type="text" id="productSearch" class="input" name="productSearch" maxlength="50"
                         style="width: 200px; height: 30px; margin-left: 0px; top: 100px" />
                 </th>
             </tr>
@@ -48,33 +63,65 @@ Stock Item: Overview
         </tbody>
     </table>
     @{
-        Html.RenderPartial("OverviewTable", Model.Products);
+        Html.RenderPartial("OverviewTable", Model.PartialViewModel);
     }
-
-    
 }
 @section scripts{
     <script type="text/javascript">
         var timeout;
         $(function () {
+
             $(".delete-user-form").submit(function () {
-                return confirm('Are you sure that you want to delete this stock item?')
+                return confirm('Are you sure that you want to delete this product?')
             });
+
             $("select[name='@Html.NameFor(m => m.ProductGroups)']").change(onProductGroupChanged);
 
-            document.getElementById("productSearch").onchange(searchProductAfter3Seconds);
+            // document.getElementById('productSearch')
+            $("input").keyup(function () {
+
+                clearTimeout(timeout);
+                var selectedId = $("select[name='@Html.NameFor(m => m.ProductGroups)']").val()
+                if (selectedId == "@Guid.Empty") {
+
+                    timeout = setTimeout("searchProductByName()", 1000);
+                }
+                else {
+                    SearchProductOnFilterSelected();
+                }
+            });
         });
-        function searchProductAfter3Seconds() {
-            timeout = setTimeout("searchProductByName()", 3000);
+        function GetAllButtonsForPaginationAndSetOnClickEvent() {
+            var myDiv = document.getElementById("pagerDiv");
+            var buttons = myDiv.getElementsByTagName("button");
+           
+           for (var i = 0; i < buttons.length; i++) {
+                
+                buttons[i].onclick = "GoToNextPage('" + i + "')";
 
+            }
         }
+        function GoToNextPage(page)
+        {
+        var selectedProductGroudId = $("select[name='@Html.NameFor(m => m.ProductGroups)']").val()
+                    //var page = i;
+                    var NameToSearchFor = document.getElementById("productSearch").value;
 
+                    var urlOverview = '@Url.Action("GetItemsForPage")?page=' + page + '&productGroupId=' + page + '&NameToSearchFor=' + NameToSearchFor;
+                    $.get(urlOverview, function (data) {
+
+                        drop.html('')
+
+                        $('#products-overview').html(data);
+                    });
+        }
         function searchProductByName() {
 
             var productName = document.getElementById("productSearch").value;
             var drop = $("#products-overview")
 
             var urlOverview = '@Url.Action("SearchForProductWithName")?productName=' + productName;
+            clearTimeout(timeout);
             $.get(urlOverview, function (data) {
 
                 drop.html('')
@@ -82,6 +129,7 @@ Stock Item: Overview
                 $('#products-overview').html(data);
                 clearTimeout(timeout);
             });
+            GetAllButtonsForPaginationAndSetOnClickEvent();
         }
         function onProductGroupChanged() {
 
@@ -97,61 +145,64 @@ Stock Item: Overview
 
                 $('#products-overview').html(data);
             });
-            $("select[name='@Html.NameFor(m => m.ProductGroups)'] option[value='@Guid.Empty.ToString()']").remove();
+            
+            $("select[name='@Html.NameFor(m => m.ProductGroups)'] option[value='@Guid.Empty.ToString()']").attr('text', 'No filter');
+            GetAllButtonsForPaginationAndSetOnClickEvent();
         }
 
         //search for products by Name
 
-        //jQuery.expr[":"].containsNoCase = function (el, i, m) {
-           // var search = m[3];
-           // if (!search) return false;
-           // return eval("/" + search + "/i").test($(el).text());
-        //};
+        jQuery.expr[":"].containsNoCase = function (el, i, m) {
+            var search = m[3];
+            if (!search) return false;
+            return eval("/" + search + "/i").test($(el).text());
+        };
 
-        //jQuery(document).ready(function () {
+        //jQuery(document).ready(function () { SearchProductOnFilterSelected(); });
 
-            // cancel the search if the user presses the ESC key
-            //jQuery('#productSearch').keyup(function (event) {
-                //if (event.keyCode == 27) {
-                  //  resetSearch();
-               // }
-            //});
-
+        function SearchProductOnFilterSelected() {
+            //cancel the search if the user presses the ESC key
+            jQuery('#productSearch').keyup(function (event) {
+                if (event.keyCode == 27) {
+                    resetSearch();
+                }
+            });
+            debugger;
             // execute the search
             //jQuery('#productSearch').keyup(function () {
-                // only search when there are 3 or more characters in the textbox
-                //if (jQuery('#productSearch').val().length > 0) {
-                    // hide all rows
-                   // jQuery('#products-overview tr').hide();
-                    // show the header row
-                   // jQuery('#products-overview tr:first').show();
-                    // show the matching rows (using the containsNoCase from Rick Strahl)
-                 //   jQuery('#products-overview tr td:containsNoCase(\'' + jQuery('#productSearch').val() + '\')').parent().show();
-               // }
-               // else if (jQuery('#productSearch').val().length == 0) {
-                    // if the user removed all of the text, reset the search
-                  //  resetSearch();
-               // }
+            // only search when there are 3 or more characters in the textbox
+            if (jQuery('#productSearch').val().length > 0) {
+                // hide all rows
+                jQuery('#products-overview tr').hide();
+                // show the header row
+                jQuery('#products-overview tr:first').show();
+                // show the matching rows (using the containsNoCase from Rick Strahl)
+                jQuery('#products-overview tr .search:containsNoCase(\'' + jQuery('#productSearch').val() + '\')').parent().show();
+            }
+            else if (jQuery('#productSearch').val().length == 0) {
+                //if the user removed all of the text, reset the search
+                resetSearch();
+            }
 
-                // if there were no matching rows, tell the user
-               // if (jQuery('#products-overview tr:visible').length == 1) {
-                    // remove the norecords row if it already exists
-                   // jQuery('.norecords').remove();
-                    // add the norecords row
-                   // jQuery('#products-overview').append('<tr class="norecords"><td colspan="5" class="Normal">No records were found</td></tr>');
-                //}
-            //});
-       // });
+            //if there were no matching rows, tell the user
+            if (jQuery('#products-overview tr:visible').length == 1) {
+                // remove the norecords row if it already exists
+                jQuery('.norecords').remove();
+                // add the norecords row
+                jQuery('#products-overview').append('<tr class="norecords"><td colspan="5" class="Normal">No records were found</td></tr>');
+            }
+            // });
+        }
 
-        //function resetSearch() {
+        function resetSearch() {
             // clear the textbox
-           // jQuery('#productSearch').val('');
+            jQuery('#productSearch').val('');
             // show all table rows
-            //jQuery('#stockitems tr').show();
+            jQuery('#products-overview tr').show();
             // remove any no records rows
-            //jQuery('.norecords').remove();
+            jQuery('.norecords').remove();
             // make sure we re-focus on the textbox for usability
-            //jQuery('#productSearch').focus();
+            jQuery('#productSearch').focus();
         }
     </script>
 }
