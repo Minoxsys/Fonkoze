@@ -321,11 +321,11 @@ namespace Web.Areas.OutpostManagement.Controllers
             List<WarehouseData> warehouseData = new List<WarehouseData>()
                                                     { new WarehouseData {warehouseName = "ggg", warehouse = ggg}
                                                         
-                                                    };           
+                                                    };
             ViewData["ListOfWarehouse"] = new SelectList(warehouseData, // items
-                                                 "warehouse", // dataValueField
-                                                 "warehouseName", // dataTextField
-                                                 1); // selectedValue
+                                                  "warehouse", // dataValueField
+                                                  "warehouseName", // dataTextField
+                                                  1); // selectedValue
 
             //ViewBag.SelectedWarehouse = "ListOfWarehouses";
             //ViewData["ListOfWarehouses"] = new SelectListItem();
