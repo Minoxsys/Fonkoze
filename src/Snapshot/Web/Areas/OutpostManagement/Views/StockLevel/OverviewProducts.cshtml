@@ -1,6 +1,6 @@
 ﻿@using Web.Areas.StockAdministration.Models.Product
 
-@model List<ProductModel>
+@model OutpostStockLevelOverviewModel
            
  <div id="products-overview">          
 
@@ -22,7 +22,7 @@
                 @{
                     var itemNo = 0;
                 }
-                @foreach (var product in Model)
+                @foreach (var product in Model.Products)
                 {
                     var _class = (itemNo++ % 2 == 0) ? "odd" : "even";
        
@@ -38,4 +38,27 @@
             </tbody>
         </table>
     </div>
+
+
+
+@section scripts{
+    <script type="text/javascript">
+
+        $(function () {
+
+        // Add onclick handler to checkbox w/id checkme
+        $("input[type='checkbox']").click(function () {
+            var produsctId = $(this).attr('name');
+
+            // If checked
+            if ($(this).is(":checked")) {
+            }
+            else {
+            }
+
+        });
+    });
+
+    </script>
+}
 

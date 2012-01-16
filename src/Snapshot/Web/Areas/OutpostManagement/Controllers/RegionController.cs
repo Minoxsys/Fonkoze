@@ -88,8 +88,16 @@ namespace Web.Areas.OutpostManagement.Controllers
             }
             return PartialView(regionList);
         }
-        public ActionResult Create()
-        {           
+        public ActionResult Create(Guid? countryId)
+        {
+            if (countryId != null)
+            {
+                RegionOutputModel = new RegionOutputModel(QueryCountry);
+
+                if (RegionOutputModel.Countries.Where(it => it.Value == countryId.Value.ToString()).ToList().Count > 0)
+                    RegionOutputModel.Countries.First(it => it.Value == countryId.Value.ToString()).Selected = true;                
+            }
+
             return View(RegionOutputModel);
         }
 

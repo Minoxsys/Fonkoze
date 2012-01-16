@@ -150,12 +150,13 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement
         public void Should_Display_Empty_Model_When_GET_Create()
         {
             //assert
+            queryCountry.Expect(call => call.Query()).Return(new Country[] { country }.AsQueryable());
            
             //act
-            var result = controller.Create() as ViewResult;
+            var result = controller.Create(Guid.Empty) as ViewResult;
 
             //assert
-            Assert.IsNull(result.Model);
+            Assert.IsInstanceOf<RegionOutputModel>(result.Model);
             
         }
 

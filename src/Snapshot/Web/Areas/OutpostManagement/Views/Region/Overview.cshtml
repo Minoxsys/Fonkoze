@@ -16,7 +16,8 @@ Regions: Overview
         </div>
     }
     <div class="page_header_buttons">
-        @(Html.ActionLink<Web.Areas.OutpostManagement.Controllers.RegionController>(it => it.Create(), "Add new region", Web.Areas.OutpostManagement.OutpostManagementAreaRegistration.DEFAULT_ROUTE))
+    @Html.ActionLink("Add new region", "Create", "Region", null, new { id = "create" })
+       @* @(Html.ActionLink<Web.Areas.OutpostManagement.Controllers.RegionController>(it => it.Create(), "Add new region", Web.Areas.OutpostManagement.OutpostManagementAreaRegistration.DEFAULT_ROUTE))*@
     </div><br />
 
     <table class="searchable">
@@ -62,6 +63,11 @@ Regions: Overview
             });
 
             $("select[name='@Html.NameFor(m=>m.Countries)']").change(onCountryChanged);
+
+            var countryId = $("select[name='@Html.NameFor(m => m.Countries)']").val();
+            document.getElementById('create').href = '@Url.Action("Create")?countryId=' + countryId;
+
+           
         });
 
 
@@ -71,7 +77,9 @@ Regions: Overview
             var selectedCountryId = e.options[e.selectedIndex].value;
 
             var drop = $("#region-overview")
-            
+//            '@Url.Action("Create")?countryId=' + countryId;
+            document.getElementById('create').href = '@Url.Action("Create")?countryId=' + selectedCountryId;
+
             var urlOverview = '@Url.Action("OverviewTable")?countryId=' + selectedCountryId;
             $.get(urlOverview, function (data) {
 

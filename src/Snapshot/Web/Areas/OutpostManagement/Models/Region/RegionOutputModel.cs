@@ -33,13 +33,16 @@ namespace Web.Areas.OutpostManagement.Models.Region
 
             var result = queryCountry.Query();
 
-            foreach (Domain.Country item in result)
+            if (result.ToList().Count > 0)
             {
-                var selectListItem = new SelectListItem();
+                foreach (Domain.Country item in result)
+                {
+                    var selectListItem = new SelectListItem();
 
-                selectListItem.Value = item.Id.ToString();
-                selectListItem.Text = item.Name;
-                Countries.Add(selectListItem);
+                    selectListItem.Value = item.Id.ToString();
+                    selectListItem.Text = item.Name;
+                    Countries.Add(selectListItem);
+                }
             }
         }
 

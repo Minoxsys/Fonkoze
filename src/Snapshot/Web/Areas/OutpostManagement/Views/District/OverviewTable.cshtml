@@ -22,7 +22,7 @@
             {
                 var _class = (itemNo % 2 == 0) ? "odd" : "even";    
                 <tr class="@_class">
-                    <td>@(Html.ActionLink<Web.Areas.OutpostManagement.Controllers.OutpostController>(call => call.Overview(district.Region.CountryId,district.Region.Id,district.Id), @district.Name, Web.Areas.OutpostManagement.OutpostManagementAreaRegistration.DEFAULT_ROUTE))
+                    <td id="search">@(Html.ActionLink<Web.Areas.OutpostManagement.Controllers.OutpostController>(call => call.Overview(district.Region.CountryId,district.Region.Id,district.Id), @district.Name, Web.Areas.OutpostManagement.OutpostManagementAreaRegistration.DEFAULT_ROUTE))
                     </td>
                     <td>@district.OutpostNo
                     </td>

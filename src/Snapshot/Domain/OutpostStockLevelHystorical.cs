@@ -6,7 +6,7 @@ using Core.Domain;
 
 namespace Domain
 {
-    class OutpostStockLevelHystorical : DomainEntity
+    public class OutpostStockLevelHystorical : DomainEntity
     {
         public virtual Guid OutpostId { get; set; }
         public virtual Guid ProdGroupId { get; set; }

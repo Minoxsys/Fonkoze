@@ -142,11 +142,11 @@ namespace Web.Areas.StockAdministration.Controllers
                             }
 
                         }
-                        for (int i = 0; i <= currentDataSpecificToDistrictId.Count; i++)
+                        for (int i = 0; i < currentDataSpecificToDistrictId.Count; i++)
                         {
                             var outpostWithProductGroups = new OutpostWithProductGroups();
 
-                            if (i == currentDataSpecificToDistrictId.Count) i--;
+                            //if (i == currentDataSpecificToDistrictId.Count) i--;
 
                             outpostWithProductGroups.Id = currentDataSpecificToDistrictId[i].OutpostId;
                             outpostWithProductGroups.Name = QueryOutpost.Load(currentDataSpecificToDistrictId[i].OutpostId).Name;
