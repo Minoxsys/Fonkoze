@@ -91,12 +91,12 @@ OutpostManagement Countries: Overview
     &nbsp;</div>
     <div>
     @{
-        Html.RenderPartial("OverviewProducts", Model);
+        Html.RenderPartial("OverviewProducts", Model.Products);
     }
     <div>
     &nbsp;
     </div>
-    <div>>
+    <div>
       @Html.SubmitButton("submit-form", "Save") 
     </div>
 
@@ -106,7 +106,7 @@ OutpostManagement Countries: Overview
 
 @{Html.EndForm();}
 
- @{Html.BeginForm<StockLevelController>(m => m.CreateOutpostStockLevel(@Model), FormMethod.Post, new { @class = "save-model-form", @Model.ProductGroupId });}.
+ @{Html.BeginForm<StockLevelController>(m => m.CreateOutpostStockLevel(@Model), FormMethod.Post, new { @class = "save-model-form", @Model.ProductGroupId });}
  @Html.Button("save-model-special", "Save Special", HtmlButtonType.Submit)
  @{Html.EndForm();}
 
@@ -152,7 +152,6 @@ OutpostManagement Countries: Overview
 
                 var e = $(this)[0];
                 var selectedProductGroupId = e.options[e.selectedIndex].value;
-                debugger;
                 var reg = document.getElementById("OutpostId");
 
                 $("#Products option[value='@Guid.Empty.ToString()']").remove();

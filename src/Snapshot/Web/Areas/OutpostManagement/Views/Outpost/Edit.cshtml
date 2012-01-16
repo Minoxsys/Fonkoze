@@ -144,10 +144,8 @@
             $('#ListOfWarehouses').change(function() {
                 var e = $(this)[0];
                 var selectedWarehouseId = e.options[e.selectedIndex].value;
-                debugger;
                 var ccc = $(this)[0][parentElement];
                 var selectedOutpostId = ccc.options[defaultValue];
-                debugger;
 
                 $.getJSON('@Url.Action("SetWarehouse", "Outpost")?outpostId=' + selectedOutpostId + ', warehouseId=' + selectedWarehouseId, function(data) {
 

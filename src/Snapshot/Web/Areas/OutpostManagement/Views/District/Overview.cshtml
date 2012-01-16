@@ -131,7 +131,6 @@ Districts: Overview
             var selectedCountryId = $("select[name='@Html.NameFor(m => m.Countries)']").val();
 
             document.getElementById('create').href = '@Url.Action("Create")?countryId=' + selectedCountryId + '&regionId=' + selectedRegionId;
-            debugger;
             $("#Regions option[value='@Guid.Empty.ToString()']").remove();
             var drop = $("#district-overview")
             drop.html('')
