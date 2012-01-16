@@ -43,7 +43,7 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration
         public IDeleteCommand<Product> deleteProduct;
         public IQueryService<Product> queryService;
        
-        [TestFixtureSetUp]
+        [SetUp]
         public void BeforeEach()
         {
             BuildControllerAndServices();
