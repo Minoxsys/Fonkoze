@@ -1,5 +1,6 @@
 -- Users
 GO
+
 if not exists(select * from Users where [UserName]=N'admin')
 begin
 INSERT INTO Users

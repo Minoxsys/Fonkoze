@@ -206,7 +206,7 @@ end
 
 if not exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'HistoryOutpostStockLevels')
 begin
-ALTER TABLE OutpostStockLevels
+
 	CREATE TABLE HistoryOutpostStockLevels(
         Id UNIQUEIDENTIFIER not null,
 		OutpostId UNIQUEIDENTIFIER not null,

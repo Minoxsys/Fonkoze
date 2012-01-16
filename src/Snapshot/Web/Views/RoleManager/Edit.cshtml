@@ -1,20 +1,18 @@
 ﻿@model Web.Models.RoleManager.RoleManagerEditOutput
 @section page_title{
-    Edit role  @Model.Role.Name
+    Edit role @Model.Role.Name
 }
 @section breadcrumbs{
     @(Html.ActionLink<HomeController>(it => it.Index(), "Overview"))
-    /@(Html.ActionLink<RoleManagerController>(it=>it.List(), "List roles"))
-    > Edit 
+    /@(Html.ActionLink<RoleManagerController>(it => it.List(), "List roles"))
+> Edit
 }
-
 @section title_bar{
     <h4>
         Edit role</h4>
     &nbsp; <span>@Model.Role.Name</span>
 }
 @section master_content{
-
     @Html.Partial("InfoMessage", this.Model.Info)
     @using (Html.BeginForm())
     {
@@ -34,7 +32,7 @@
                     </label>
                 </div>
                 <div class="four column">
-                @Html.HiddenFor(m => m.Role.Id)
+                    @Html.HiddenFor(m => m.Role.Id)
                     &nbsp; @Html.TextBoxFor(m => m.Role.Name)
                 </div>
                 <div class="one column">
@@ -78,24 +76,23 @@
         <hr />
         @foreach (var function in Model.Functions)
         { <div class="six_column section">
-    <div class="three column">
-        @function.Function.Name
-    </div>
-    <div class="three column">
-        @if (!@function.IsLinked)
-        { <button class="assign-role sexybutton sexysimple sexygreen"
+            <div class="three column">
+                @function.Function.Name
+            </div>
+            <div class="three column">
+                @if (!@function.IsLinked)
+                { <button class="assign-role sexybutton sexysimple sexygreen"
 funcId ='@function.Function.Id' roleId = '@Model.Role.Id' action="@Url.Action("Assign")">
-    Assign
-            </button> }
-        else
-        { <button class="unassign-role sexybutton sexysimple sexyred"
+                    Assign
+                </button> }
+                else
+                { <button class="unassign-role sexybutton sexysimple sexyred"
 funcId ='@function.Function.Id' roleId = '@Model.Role.Id' action="@Url.Action("UnAssign")">
-    Remove
-            </button> }
+                    Remove
+                </button> }
+            </div>
+        </div> }
     </div>
-            </div> }
-    </div>
-</div> </div>
 }
 @section scripts{
     <script type="text/javascript" language="javascript">

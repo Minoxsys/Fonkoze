@@ -61,8 +61,8 @@ end
 
 if exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'OutpostStockLevels')
 begin
-ALTER TABLE OutpostStockLevels
-DROP INDEX UNIQUE_ProductIdOnProductGroupWithSMSRef
+DROP TABLE OutpostStockLevels
+
 end
 
 if exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'Clients')

@@ -317,9 +317,7 @@ namespace Web.Areas.StockAdministration.Controllers
         {
             productModel.PreviousStockLevel = allDataWithSameProductGroup[index].PrevStockLevel;
             productModel.StockLevel = allDataWithSameProductGroup[index].StockLevel;
-
             productModel.UpdateMethod = allDataWithSameProductGroup[index].UpdatedMethod;
-
             productModel.OutpostStockLevelId = allDataWithSameProductGroup[index].Id;
             if (allDataWithSameProductGroup[index].Updated != null)
                 productModel.LastUpdateAt = allDataWithSameProductGroup[index].Updated.Value.ToShortDateString();
