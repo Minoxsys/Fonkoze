@@ -2,19 +2,22 @@
 
 @model List<OutpostStockLevelModel>
           
- <div id="products-overview">          
+ <div id="stocklevel-overview">          
 
         <table id="ProductsSelection">
             <thead>
                 <tr>
                     <th  class="sort-alpha">
-                        Product
+                        OutpostId
                     </th>
-                    <th>
+                    <th  class="sort-alpha">
+                        ProductGroup Id
+                    </th>
+                   <th  class="sort-alpha">
+                        Product Name
+                    </th>
+                     <th>
                         SMS Reference Code
-                   </th>
-                   <th>
-                        Selected
                    </th>
                 </tr>
             </thead>
@@ -27,13 +30,14 @@
                     var _class = (itemNo++ % 2 == 0) ? "odd" : "even";
        
                     <tr>
+                        <td>@product.OutpostId
+                        </td>
+                        <td>@product.ProdGroupId
+                        </td>
                         <td>@product.ProductName
                         </td>
                         <td>@product.ProdSmsRef
                         </td>
-                        <td>@Html.CheckBox(product.ProductId.ToString())
-                        </td>
-                        <td>@product.OutpostId + ";"    @product.ProdGroupId.ToString() + ";" + @product.ProductId.ToString()</td>
                     </tr> 
                 }
             </tbody>
@@ -49,10 +53,9 @@
 
             // Add onclick handler to checkbox w/id checkme
             $("input[type='checkbox']").click(function () {
-                var productId = $(this).attr('name');
-                alert("hhhhhhh");
+                var produsctId = $(this).attr('name');
                 debugger;
-
+                
                 // If checked
                 if ($(this).is(":checked")) {
                 }

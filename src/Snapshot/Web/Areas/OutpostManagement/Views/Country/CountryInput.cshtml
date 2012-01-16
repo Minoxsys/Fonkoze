@@ -9,8 +9,8 @@
     <div class="row of-2">
         <div class="column">
             <label for="Name"> Country Name<text class="required-text">*</text> </label>
-            @Html.TextBoxFor(m => m.Name, new { maxlength = 40, autofocus = "autofocus", placeholder = "Name" })
-        </div>
+            @*@Html.TextBoxFor(m => m.Name, new { maxlength = 40, autofocus = "autofocus", placeholder = "CountryName" })*@
+            @Html.DropDownListFor(m => m.Name, new[] { new SelectListItem() { Text = "Romania" }, new SelectListItem() { Text = "Great Britain" }, new SelectListItem { Text = "France" } }, "Choose a Country")       </div>
         <div class="column">
             <label for="ISOCode"> Country Abbreviation<text class="required-text"></text> </label>
             @Html.TextBoxFor(m => m.ISOCode, new { maxlength = 3, autofocus = "autofocus", placeholder = "ISOCode" })

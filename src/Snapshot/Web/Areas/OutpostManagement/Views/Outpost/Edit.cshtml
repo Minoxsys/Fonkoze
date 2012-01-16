@@ -59,6 +59,7 @@
 @section scripts{
     <script type="text/javascript">
 
+
         $("select[name='@Html.NameFor(m => m.Region.CountryId)']").change(function () {
             var e = $(this)[0];
             var selectedCountryId = e.options[e.selectedIndex].value;
@@ -128,15 +129,37 @@
 
             // If checked
             if ($(this).is(":checked")) {
-                uncheckAllExcept(phoneId);
-                $.getJSON('@Url.Action("SetCheckContactMainMethod", "Contact")?phoneId=' + phoneId)
+                window.uncheckAllExcept(phoneId);
+                $.getJSON('@Url.Action("SetCheckContactMainMethod", "Contact")?phoneId=' + phoneId);
             }
             else {
-                $.getJSON('@Url.Action("SetUncheckContactMainMethod", "Contact")?phoneId=' + phoneId)
+                $.getJSON('@Url.Action("SetUncheckContactMainMethod", "Contact")?phoneId=' + phoneId);
             }
 
         });
     });
+
+       
+        $(function() {
+            $('#ListOfWarehouses').change(function() {
+                var e = $(this)[0];
+                var selectedWarehouseId = e.options[e.selectedIndex].value;
+                debugger;
+                var ccc = $(this)[0][parentElement];
+                var selectedOutpostId = ccc.options[defaultValue];
+                debugger;
+
+                $.getJSON('@Url.Action("SetWarehouse", "Outpost")?outpostId=' + selectedOutpostId + ', warehouseId=' + selectedWarehouseId, function(data) {
+
+                    $.each(data, function() {
+                        var opt = document.createElement("option");
+                        opt.text = this['Text'];
+                        opt.value = this['Value'];
+                    });
+
+                });
+            });
+        });
 
     function uncheckAllExcept(phoneId) {
         $("input[type='checkbox']").each(function (idx, val) {

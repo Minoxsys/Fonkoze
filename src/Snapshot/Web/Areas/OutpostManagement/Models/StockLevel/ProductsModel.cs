@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using System.ComponentModel.DataAnnotations;
-using Web.Areas.OutpostManagement.Models.Client;
+using Core.Persistence;
+using System.Web.Mvc;
+using Web.Areas.OutpostManagement.Models;
+using Web.Areas.StockAdministration.Models.Product;
 
-namespace Web.Areas.OutpostManagement.Models.StockLevel
+namespace Web.Areas.OutpostManagement.Models.Product
 {
-    public class OutpostStockLevelOutputModel
+    public class ListProductsModel
     {
         public Guid OutpostId { get; set; }
         public Guid ProdGroupId { get; set; }
@@ -17,9 +19,13 @@ namespace Web.Areas.OutpostManagement.Models.StockLevel
         public int PrevStockLevel { get; set; }
         public string UpdatedMethod { get; set; }
         public DateTime UpdatedDate { get; set; }
-        public String ProductName { get; set; }
-        public ClientModel Client { get; set; }
+        public List<Domain.Product> Products { get; set; }
+
+        public String OutpostName { get; set; }
+        public List<SelectListItem> ProductGroups { get; set; }
+        public List<SelectListItem> ProductList { get; set; }
 
         public string Error { get; set; }
+
     }
 }

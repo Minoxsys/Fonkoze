@@ -71,12 +71,11 @@
                     </td>
                     <td>
                         @{Html.BeginForm<OutpostController>(m => m.DeleteContact( Model.Id, contact.Id),
-                                FormMethod.Post,
-                                new { @class = "delete-user-form" });}
+                                FormMethod.Post, new { @class = "delete-user-form" });}
                         @Html.Button("delete-user", "Delete", HtmlButtonType.Submit)
                         @{Html.EndForm();}                    
                     </td>
-*                </tr> 
+                </tr> 
             }
         </tbody>
     </table>

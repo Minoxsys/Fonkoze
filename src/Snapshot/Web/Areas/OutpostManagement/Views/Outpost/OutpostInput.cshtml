@@ -76,7 +76,7 @@
             <label for="Warehouse">
                 Is this outpost a warehouse ?
             </label>
-            @Html.DropDownListFor(m => m.IsWarehouse, new SelectList(new[] { false, true}))
+            @Html.DropDownListFor(m => m.IsWarehouse, new SelectList(new[] { "No", "Yes"}))
         </div>
 
          <div class="column">

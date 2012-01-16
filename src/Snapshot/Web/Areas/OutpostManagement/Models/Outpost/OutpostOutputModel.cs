@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Web.Areas.OutpostManagement.Models.Region;
 using Web.Areas.OutpostManagement.Models.District;
-using Web.Areas.OutpostManagement.Models.Country;
 using Web.Areas.OutpostManagement.Models.Contact;
 using System.Web.Mvc;
 using Core.Persistence;
@@ -38,7 +37,7 @@ namespace Web.Areas.OutpostManagement.Models.Outpost
         public IQueryService<Domain.Country> queryCountry { get; set; }
         public IQueryService<Domain.Region> queryRegion { get; set; }
         public IQueryService<Domain.District> queryDistrict { get; set; }
-        //public IQueryService<Domain.Outpost> queryOutposts { get; set; }
+        public IQueryService<Domain.Contact> queryContact { get; set; }
 
         public OutpostOutputModel()
         {
@@ -46,7 +45,7 @@ namespace Web.Areas.OutpostManagement.Models.Outpost
             this.queryCountry = queryCountry;
             this.queryRegion = queryRegion;
             this.queryDistrict = queryDistrict;
-            //this.queryOutposts = queryOutposts;
+            this.queryWarehouse = queryWarehouse;
 
             var Countries = new List<SelectListItem>();
             var Regions = new List<SelectListItem>();
@@ -65,23 +64,23 @@ namespace Web.Areas.OutpostManagement.Models.Outpost
             this.queryRegion = queryRegion;
             this.queryDistrict = queryDistrict;
             this.queryWarehouse = queryWarehouse;
+            this.queryContact = queryContact;
             //IQueryService<Domain.Outpost>  queryWarehouse = new IQueryService<Domain.Outpost>();
 
             var Countries = new List<SelectListItem>();
             var Regions = new List<SelectListItem>();
             var Districts = new List<SelectListItem>();
             var Warehouses = new List<SelectListItem>();
-            var Outposts = new List<SelectListItem>();
 
             Region = new RegionModel();
             District = new DistrictModel();
             Client = new ClientModel();
+            Warehouse = new OutpostModel();
 
             this.Countries = Countries;
             this.Regions = Regions;
             this.Districts = Districts;
-            this.Warehouse = new OutpostModel();
-            this.Outposts = Outposts;
+            this.Warehouse = Warehouse;
 
 
             var result = queryCountry.Query();
@@ -127,10 +126,10 @@ namespace Web.Areas.OutpostManagement.Models.Outpost
                 }
             }
 
-            //var resultOutposts = queryOutposts.Query();
-            //if (resultOutposts != null)
-            //{
-            var resultWarehouse = queryWarehouse.Query().Where(m => m.IsWarehouse);
+            var resultOutposts = queryWarehouse.Query();
+            if (resultOutposts != null)
+            {
+                var resultWarehouse = resultOutposts.Where(m => m.IsWarehouse);
                 if (resultWarehouse != null)
                 {
                     if (resultWarehouse.FirstOrDefault() != null)
@@ -145,7 +144,7 @@ namespace Web.Areas.OutpostManagement.Models.Outpost
                         }
                     }
                 }
-            //}
+            }
  
 
         }

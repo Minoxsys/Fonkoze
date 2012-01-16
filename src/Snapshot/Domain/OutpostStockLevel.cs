@@ -14,8 +14,8 @@ namespace Domain
         public virtual string ProdSmsRef { get; set; }
         public virtual int StockLevel { get; set; }
         public virtual int PrevStockLevel { get; set; }
-        public virtual string UpdateMethod { get; set; }
-        public virtual DateTime UpdateDate { get; set; }
-        public virtual IList<Product> Products { get; set; }
+        public virtual string UpdatedMethod { get; set; }
+        public virtual DateTime UpdatedDate { get; set; }
+        public virtual String ProductName { get; set; }
     }
 }
