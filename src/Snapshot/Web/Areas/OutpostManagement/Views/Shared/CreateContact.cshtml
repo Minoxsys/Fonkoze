@@ -21,14 +21,14 @@
            <div class="row">
      @Html.ValidationSummary()
      @Html.HiddenFor(m => m.OutpostId)
-
+     
  </div>      
     @{
        
         Html.RenderPartial("ContactInput", Model);
     }
 
-    @Html.SubmitButton("submit-form", "Save") <span>or </span><a href="@(Html.BuildUrlFromExpression<ContactController>(it => it.Overview(Model.OutpostId)))">
+    @Html.SubmitButton("submit-form", "Save") <span>or </span><a href="@(Html.BuildUrlFromExpression<OutpostController>(it => it.Edit(Model.OutpostId)))">
         Cancel</a>
     @{Html.EndForm();}
 

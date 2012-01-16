@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web.Mvc;
 using Domain;
 using System.ComponentModel.DataAnnotations;
 using Web.Areas.OutpostManagement.Models.Client;
@@ -25,6 +26,7 @@ namespace Web.Areas.OutpostManagement.Models.Outpost
         public RegionInputModel Region { get; set; }
         public DistrictInputModel District { get; set; }
         public ClientModel Client { get; set; }
+        //public List<SelectListItem> Warehouses { get; set; }
 
         public class WarehouseInputModel
         {

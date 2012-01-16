@@ -11,9 +11,11 @@ OutpostManagement Countries: Overview
 }
 @section breadcrumbs{
     @Url.HomeLink("Outpost Administration")
-> Countries
+> OutpostStock Level
 }
+
 @section master_content{
+
     @if (!string.IsNullOrWhiteSpace(Model.Error))
     {
         <div class="error">
@@ -24,7 +26,11 @@ OutpostManagement Countries: Overview
      <div class="page_header_buttons">
         @*@(Html.ActionLink<CountryController>(it => it.Create(), "Add new Country", OutpostManagementAreaRegistration.DEFAULT_ROUTE))*@
     </div>
-   
+   @Html.Hidden(Model.OutpostId.ToString())
+   @Html.Hidden(Model.ProductGroupId.ToString())
+   @Html.Hidden(Model.Products.ToString())
+   @Html.Hidden(Model.StockLevels.ToString())
+
     <table id="Header">
         <thead>
             <tr>
@@ -50,9 +56,19 @@ OutpostManagement Countries: Overview
   @* @Html.PageLinks(Model.PagingInfo, x => Url.Action("Overview", new {page = x})) *@
 </div>
 
+@*@{Html.BeginForm("CreateOutpostStockLevel", "StockLevel", this.Model, FormMethod.Post);}*@
+
+@{Html.BeginForm();}
+
+
+
 <div> 
-<label id="OutpostID"> @Model.OutpostName</label>
+<label id="OutpostName"> @Model.OutpostName</label>
 </div>
+<label id="OutpostID"> @Model.OutpostId</label>
+</div>
+    <div>
+    &nbsp;</div>
 
     <div>
     &nbsp;</div>
@@ -80,13 +96,18 @@ OutpostManagement Countries: Overview
     &nbsp;
     </div>
     <div>>
- 
-@{Html.BeginForm("CreateOutpostStockLevel", "StockLevel", this.Model, FormMethod.Post);}
-
-     @Html.SubmitButton("submit-form", "Save") 
+      @Html.SubmitButton("submit-form", "Save") 
     </div>
 
-    @{Html.EndForm();}
+    @{
+        Html.RenderPartial("OverviewStockLevel", Model.StockLevels);
+    }
+
+@{Html.EndForm();}
+
+ @{Html.BeginForm<StockLevelController>(m => m.CreateOutpostStockLevel(@Model), FormMethod.Post, new { @class = "save-model-form", @Model.ProductGroupId });}.
+ @Html.Button("save-model-special", "Save Special", HtmlButtonType.Submit)
+ @{Html.EndForm();}
 
 
 
@@ -98,33 +119,69 @@ OutpostManagement Countries: Overview
     <script type="text/javascript">
         $(function () {
             $(".delete-user-form").submit(function () {
-                return confirm('Are you sure that you want to delete this Outpost?')
+                return confirm('Are you sure that you want to delete this Outpost?');
             });
 
             $('#ProductGroupId').change(onProductGroupChanged);
+            $('#ProductGroupId').change(onStockLevelChanged);
         });
+
 
 
         function onProductGroupChanged() {
             
             var e = $(this)[0];
             var selectedProductGroupId = e.options[e.selectedIndex].value;
-
+            
             var reg = document.getElementById("Products");
 
             $("#Products option[value='@Guid.Empty.ToString()']").remove();
-            var drop = $("#products-overview")
+            var drop = $("#products-overview");
             drop.html('')
 
             var urlOverview = '@Url.Action("OverviewProducts")?productGroupId=' + selectedProductGroupId;
             $.get(urlOverview, function (data) {
-                console.log(data);
                 $('#products-overview').html(data);
             });
 
 
             };
 
+            function onStockLevelChanged() {
+
+                var e = $(this)[0];
+                var selectedProductGroupId = e.options[e.selectedIndex].value;
+                debugger;
+                var reg = document.getElementById("OutpostId");
+
+                $("#Products option[value='@Guid.Empty.ToString()']").remove();
+                var drop = $("#stocklevel-overview");
+                drop.html('')
+
+                var urlOverview = '@Url.Action("OverviewStockLevel")?productGroupId=' + selectedProductGroupId;
+                $.get(urlOverview, function (data) {
+                    $('#stocklevel-overview').html(data);
+                });
+
+
+            };
+
+            $(function () {
+
+                // Add onclick handler to checkbox w/id checkme
+                $("input[type='checkbox']").click(function () {
+                    var productId = $(this).attr('name');
+                    alert("hhhhhhh");
+                    
+
+                    // If checked
+                    if ($(this).is(":checked")) {
+                    }
+                    else {
+                    }
+
+                });
+            });
 
     </script>
 }

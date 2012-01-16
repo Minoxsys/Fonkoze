@@ -6,79 +6,87 @@
 @Html.HiddenFor(m => m.Id)
 <fieldset id="fieldsetInformation">
     <legend>Outpost Information</legend>
-    <div class="row of-2">
-        <label>
-            Country:</label>
-        <select name="@(Html.NameFor(m => m.Region.CountryId))">
-            <option value="@Guid.Empty">- Select a country - </option>
-            @{
-                foreach (var item in Model.Countries)
-                {
-                <option value="@item.Value" @(item.Selected ? @"selected='selected'" : @"") >@item.Text</option>
-                }
-            }
-        </select>
-        <label for="Name">
-            Region
-        </label>
-        <div class="row">
-            <select name="@Html.NameFor(m => m.Region.Id)">
-            </select>
-            <label for="Name">
-                Distict
+
+
+   <div class="row of-2">
+                 <label>
+                     Country:</label>
+                    <select name="@(Html.NameFor(m => m.Region.CountryId))">
+                        <option value="@Guid.Empty">- Select a country - </option>
+                        @{
+                            foreach (var item in Model.Countries)
+                            {
+                            <option value="@item.Value" @(item.Selected ? @"selected='selected'" : @"") >@item.Text</option>
+                            }
+                        }
+                    </select>
+
+                    <label for="Name"> Region </label>
+                    <div class="row">
+                    <select name="@Html.NameFor(m => m.Region.Id)">
+       
+                     </select>
+
+                    <label for="Name"> Distict </label>
+                    <div class="row">
+                    <select name="@Html.NameFor(m => m.District.Id)">
+       
+                     </select>
+
+
+    </div>
+
+
+    <div class="row ">
+        <div class="column">
+            <label for="NameD">
+                Name
             </label>
-            <div class="row">
-                <select name="@Html.NameFor(m => m.District.Id)">
-                </select>
-            </div>
-            <div class="row ">
-                <div class="column">
-                    <label for="NameD">
-                        Name
-                    </label>
-                    @Html.TextBoxFor(m => m.Name, new { maxlength = 50 })
-                </div>
-            </div>
-            <div class="row ">
-                <div class="column">
-                    <label for="Name">
-                        Coordinates</label>
-                    @Html.Button("select-coordinates", "Map", HtmlButtonType.Button)
-                </div>
-            </div>
-            <div>
-                <span class='info'>Please use the map button in order to select the Outpost's position.After
-                    your confirmation the outpost's coordinates will be automatically filled in.</span>
-            </div>
-            <div>
-                &nbsp;</div>
-            <div>
-            </div>
-            <div class="row of-2">
-                <div class="column">
-                    <label for="Longitude">
-                        Longitude
-                    </label>
-                    @Html.TextBoxFor(m => m.Longitude, new { maxlength = 20 })
-                </div>
-                <div class="column">
-                    <label for="Latitude">
-                        Latitude
-                    </label>
-                    @Html.TextBoxFor(m => m.Latitude, new { maxlength = 20 })
-                </div>
-                <div class="column">
-                    <label for="Warehouse">
-                        Is this outpost a warehouse ?
-                    </label>
-                    @Html.DropDownListFor(m => m.IsWarehouse, new SelectList(new[] { false, true }))
-                </div>
-                <div class="column">
-                    <label for="Warehouse">
-                        If no, please select a warehouse from the list
-                    </label>
-                </div>
-            </div>
+            @Html.TextBoxFor(m => m.Name, new { maxlength = 50})
         </div>
     </div>
+    <div class="row ">
+        <div class="column">
+            <label for="Name">
+                Coordinates</label>
+            @Html.Button("select-coordinates", "Map", HtmlButtonType.Button)
+        </div>
+    </div>
+        <div>
+        <span class='info'>Please use the map button in order to select the Outpost's position.After your confirmation the outpost's coordinates will be automatically filled in.</span>
+    </div>
+    <div>&nbsp;</div>
+    <div></div>
+    <div class="row of-2">
+        <div class="column">
+            <label for="Longitude">
+                Longitude
+            </label>
+            @Html.TextBoxFor(m => m.Longitude, new { maxlength = 20 })
+        </div>
+
+        <div class="column">
+            <label for="Latitude">
+                Latitude
+            </label>
+            @Html.TextBoxFor(m => m.Latitude, new { maxlength = 20 })
+        </div>
+
+         <div class="column">
+            <label for="Warehouse">
+                Is this outpost a warehouse ?
+            </label>
+            @Html.DropDownListFor(m => m.IsWarehouse, new SelectList(new[] { "No", "Yes"}))
+        </div>
+
+         <div class="column">
+            <label for="Warehouse">
+                If no, please select a warehouse from the list
+            </label>
+        </div>
+    </div>
+    
+
+
 </fieldset>
+
