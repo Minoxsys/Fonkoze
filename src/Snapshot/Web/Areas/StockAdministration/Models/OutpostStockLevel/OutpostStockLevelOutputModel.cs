@@ -17,7 +17,7 @@ namespace Web.Areas.StockAdministration.Models.OutpostStockLevel
         public  string UpdateMethod { get; set; }
         public string OutpostName { get; set; }
         public string ProductGroupName { get; set; }
-        public string ProductName { get; set; }
+        public String ProductName { get; set; }
         public string ProductDescription { get; set; }
         public string LastUpdateAt { get; set; }
         public bool EditAreCommingFromFilterByAllOutposts { get; set; }
