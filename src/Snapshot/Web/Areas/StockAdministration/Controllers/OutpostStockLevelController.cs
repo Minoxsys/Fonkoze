@@ -248,7 +248,7 @@ namespace Web.Areas.StockAdministration.Controllers
             outpostStockLevelModel.ProductGroupName = QueryProductGroup.Load(outpostStockLevel.ProdGroupId).Name;
             var product = QueryProduct.Load(outpostStockLevel.ProductId);
             outpostStockLevelModel.ProductDescription = product.Description;
-            outpostStockLevelModel.ProductName = product.Name;
+            outpostStockLevelModel.ProductName = outpostStockLevel.ProductName;
             outpostStockLevelModel.EditAreCommingFromFilterByAllOutposts = EditAreCommingFromFilterByAll;
 
             var outpost = QueryOutpost.Load(outpostStockLevel.OutpostId);
@@ -265,7 +265,8 @@ namespace Web.Areas.StockAdministration.Controllers
         {
             if (!ModelState.IsValid)
             {
-                var outpostStockLevelOutputModel = new OutpostStockLevelOutputModel();
+                var outpostStockLevelOutputModel = BuildOutpostStockLevelOutputModelFromInputModel(inputModel);
+                
                 return View("EditCurrentProductLevel", outpostStockLevelOutputModel);
             }
 
@@ -293,11 +294,30 @@ namespace Web.Areas.StockAdministration.Controllers
             }
 
         }
+
+        private static OutpostStockLevelOutputModel BuildOutpostStockLevelOutputModelFromInputModel(OutpostStockLevelInputModel inputModel)
+        {
+            var outpostStockLevelOutputModel = new OutpostStockLevelOutputModel();
+            outpostStockLevelOutputModel.EditAreCommingFromFilterByAllOutposts = inputModel.EditAreCommingFromFilterByAllOutposts;
+            outpostStockLevelOutputModel.Id = inputModel.Id;
+            outpostStockLevelOutputModel.OutpostId = inputModel.OutpostId;
+            outpostStockLevelOutputModel.OutpostName = inputModel.OutpostName;
+            outpostStockLevelOutputModel.PrevStockLevel = inputModel.PrevStockLevel;
+            outpostStockLevelOutputModel.ProdGroupId = inputModel.ProdGroupId;
+            outpostStockLevelOutputModel.ProdSmsRef = inputModel.ProdSmsRef;
+            outpostStockLevelOutputModel.ProductDescription = inputModel.ProductDescription;
+            outpostStockLevelOutputModel.ProductGroupName = inputModel.ProductGroupName;
+            outpostStockLevelOutputModel.ProductId = inputModel.ProductId;
+            outpostStockLevelOutputModel.ProductName = inputModel.ProductName;
+            outpostStockLevelOutputModel.StockLevel = inputModel.StockLevel;
+            outpostStockLevelOutputModel.UpdateMethod = inputModel.UpdateMethod;
+            return outpostStockLevelOutputModel;
+        }
         private static void FillProductModelWithCurrentStockLevelInformation(List<OutpostStockLevel> allDataWithSameProductGroup, int index, ProductModel productModel)
         {
             productModel.PreviousStockLevel = allDataWithSameProductGroup[index].PrevStockLevel;
             productModel.StockLevel = allDataWithSameProductGroup[index].StockLevel;
-            //productModel.UpdateMethod = allDataWithSameProductGroup[index].UpdateMethod;
+            productModel.UpdateMethod = allDataWithSameProductGroup[index].UpdatedMethod;
             productModel.OutpostStockLevelId = allDataWithSameProductGroup[index].Id;
             if (allDataWithSameProductGroup[index].Updated != null)
                 productModel.LastUpdateAt = allDataWithSameProductGroup[index].Updated.Value.ToShortDateString();
