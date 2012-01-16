@@ -64,8 +64,6 @@ namespace Web.Areas.OutpostManagement.Controllers
 
         public PartialViewResult OverviewProducts(Guid productGroupId, OutpostStockLevelOverviewModel outpostStockLevelOverviewModel)
         {
-            var productList = new List<ProductModel>();
-
             var products = QueryProduct.Query().Where(m => m.ProductGroup.Id == productGroupId);
 
             foreach (var item in products)

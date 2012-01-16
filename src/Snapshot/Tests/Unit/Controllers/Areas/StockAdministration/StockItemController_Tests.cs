@@ -36,12 +36,14 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration
        
         ProductController controller;
 
+        public IQueryService<OutpostStockLevel> queryOutpostStockLevel;
+
         public IQueryService<ProductGroup> queryProductGroup;
         public ISaveOrUpdateCommand<Product> saveOrUpdateProduct;
         public IDeleteCommand<Product> deleteProduct;
         public IQueryService<Product> queryService;
        
-        [SetUp]
+        [TestFixtureSetUp]
         public void BeforeEach()
         {
             BuildControllerAndServices();
@@ -81,7 +83,10 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration
             saveOrUpdateProduct = MockRepository.GenerateMock<ISaveOrUpdateCommand<Product>>();
             deleteProduct = MockRepository.GenerateMock<IDeleteCommand<Product>>();
             queryService = MockRepository.GenerateMock<IQueryService<Product>>();
-          
+
+            queryOutpostStockLevel = MockRepository.GenerateMock<IQueryService<OutpostStockLevel>>();
+
+            controller.QueryOutpostStockLevel = queryOutpostStockLevel;
             controller.QueryProductGroup = queryProductGroup;
             controller.SaveOrUpdateProduct = saveOrUpdateProduct;
             controller.DeleteProduct = deleteProduct;
@@ -273,6 +278,9 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration
         {
             //arrange
             queryService.Expect(call => call.Load(product.Id)).Return(product);
+
+            queryOutpostStockLevel.Expect(call => call.Query()).Return(new OutpostStockLevel[] { }.AsQueryable());
+           
             deleteProduct.Expect(call => call.Execute(product));
 
             //act
