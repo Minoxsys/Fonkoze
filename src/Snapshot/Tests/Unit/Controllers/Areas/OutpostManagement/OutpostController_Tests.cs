@@ -128,35 +128,6 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement
 
         }
 
-        //[Test]
-        //public void Should_Return_Data_From_OutpostQueryService_WhenCountryIdAndRegionIdAndDistrictIdAreNull_ON_Overview()
-        //{
-        //    // Arrange		
-        //    queryCountry.Expect(call => call.Query()).Return(new Country[] { country }.AsQueryable());
-        //    queryRegion.Expect(call => call.Query()).Return(new Region[] { region }.AsQueryable());
-        //    queryDistrict.Expect(call => call.Query()).Return(new District[] { district }.AsQueryable());
-           
-        //    // Act
-        //    var viewResult = (ViewResult)controller.Overview(null, null, null);
-
-        //    // Assert
-        //   queryCountry.VerifyAllExpectations();
-        //   queryRegion.VerifyAllExpectations();
-        //   queryDistrict.VerifyAllExpectations();
-           
-
-        //    Assert.IsNotNull(viewResult.Model);
-        //    var viewModel = (OutpostOverviewModel)viewResult.Model;
-
-        //    Assert.AreEqual(region.Country.Id, country.Id);
-        //    Assert.AreEqual(district.Region.Id, region.Id);
-
-        //    Assert.AreEqual(viewModel.Countries[0].Value, country.Id.ToString());
-        //    Assert.AreEqual(viewModel.Regions[0].Value, region.Id.ToString());
-        //    Assert.AreEqual(viewModel.Districts[0].Value, district.Id.ToString());
-        //    Assert.AreEqual(DEFAULT_VIEW_NAME, viewResult.ViewName);
-        //}
-
         [Test]
         public void ShouldReturnData_FromOutpostServiceSpecificTo_CountryIdNotNull_AndFrom_RegionQueryServiceSpecificToThatCountryId_AndFrom_DistrictsQueryServiceSpecificToRegionIdNotNull_TO_Overview()
         {
@@ -164,7 +135,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement
             queryCountry.Expect(call => call.Query()).Return(new Country[] { country }.AsQueryable());
             queryRegion.Expect(call => call.Query()).Repeat.Once().Return(new Region[] { region }.AsQueryable());
             queryDistrict.Expect(call => call.Query()).Repeat.Once().Return(new District[] { district }.AsQueryable());
-            queryOutpost.Expect(call => call.Query()).Repeat.Once().Return(new Outpost[] { outpost }.AsQueryable());
+            queryOutpost.Expect(call => call.Query()).Return(new Outpost[] { outpost }.AsQueryable());
 
             //act
             var viewResult = (ViewResult)controller.Overview(country.Id, region.Id, district.Id);
