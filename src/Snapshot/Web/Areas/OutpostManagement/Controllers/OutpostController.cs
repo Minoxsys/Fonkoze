@@ -57,15 +57,17 @@ namespace Web.Areas.OutpostManagement.Controllers
             IQueryable<District> districts;
             IQueryable<Region> regions;
             IQueryable<Country> countries;
+            IQueryable<Outpost> warehouses;
 
             model = new OutpostOverviewModel();
             outposts = QueryService.Query();
+            warehouses = QueryService.Query();
 
             model.Outposts = new List<SelectListItem>();
             model.Outpost = new List<OutpostModel>();
             model.Warehouses = new List<SelectListItem>();
 
-            IQueryable<Outpost> warehouses = outposts.Where<Outpost>(it => it.IsWarehouse);
+            warehouses = outposts.Where<Outpost>(it => it.IsWarehouse);
 
             if ((countryId == null) && (regionId == null) && (districtId == null))
             {
@@ -354,51 +356,55 @@ namespace Web.Areas.OutpostManagement.Controllers
             }
 
             CreateMappings();
-            var _outpost = QueryService.Load(outpostInputModel.Id);
-            Mapper.Map(outpostInputModel, _outpost);
+            var outpost = QueryService.Load(outpostInputModel.Id);
+            Mapper.Map(outpostInputModel, outpost);
 
-            _outpost.Country = QueryCountry.Load(outpostInputModel.Region.CountryId);
-            _outpost.Contacts = QueryContact.Query().Where(m => m.Outpost.Id == _outpost.Id).ToList();
+            outpost.Country = QueryCountry.Load(outpostInputModel.Region.CountryId);
+            outpost.Contacts = QueryContact.Query().Where(m => m.Outpost.Id == outpost.Id).ToList();
 
-            if (_outpost.IsWarehouse == true)
+            if (outpost.IsWarehouse == true)
             {
-                _outpost.Warehouse = null;
+                outpost.Warehouse = null;
             }
 
             //var mainContact = QueryContact.Query().Where(m => m.Outpost.Id == _outpost.Id && m.IsMainContact);
 
             if (outpostInputModel.Region != null)
             {
-                _outpost.Region = QueryRegion.Load(outpostInputModel.Region.Id);
+                outpost.Region = QueryRegion.Load(outpostInputModel.Region.Id);
             }
 
             if (outpostInputModel.District != null)
             {
 
-                _outpost.District = QueryDistrict.Load(outpostInputModel.District.Id);
+                outpost.District = QueryDistrict.Load(outpostInputModel.District.Id);
             }
 
-            foreach (Domain.Contact contact in _outpost.Contacts)
+            foreach (Domain.Contact contact in outpost.Contacts)
             {
                 var contactUpdate = QueryContact.Load(contact.Id);
-                if (contactUpdate.IsMainContact)
-                {
-                    _outpost.DetailMethod = contactUpdate.ContactDetail;
-                }
 
-                SaveOrUpdateCommandContact.Execute(contactUpdate);
+                if (contactUpdate != null)
+                {
+                    if (contactUpdate.IsMainContact)
+                    {
+                        outpost.DetailMethod = contactUpdate.ContactDetail;
+                    }
+
+                    SaveOrUpdateCommandContact.Execute(contactUpdate);
+               }
             }
 
-            if (_outpost.Warehouse != null)
+            if (outpost.Warehouse != null)
             {
-                var warehouse = QueryService.Load(_outpost.Warehouse.Id);
+                var warehouse = QueryService.Load(outpost.Warehouse.Id);
                 if (warehouse.Warehouse != null) 
                 {
-                    _outpost.Warehouse.Name = warehouse.Warehouse.Name;
+                    outpost.Warehouse.Name = warehouse.Warehouse.Name;
                 }
             }
 
-            SaveOrUpdateCommand.Execute(_outpost);
+            SaveOrUpdateCommand.Execute(outpost);
 
             return RedirectToAction("Overview",
                 new

@@ -23,23 +23,29 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement
         ISaveOrUpdateCommand<Outpost> saveCommand;
         IDeleteCommand<Outpost> deleteCommand;
         IQueryService<Outpost> queryOutpost;
+        IQueryService<Outpost> queryWarehouse;
 
         IQueryService<Country> queryCountry;
         IQueryService<Region> queryRegion;
         IQueryService<District> queryDistrict;
         IQueryService<Product> queryProduct;
         IQueryService<Client> queryClient;
+        IQueryService<Contact> queryContact;
 
         District district;
         Country country;
         Region region;
         Outpost outpost;
+        Outpost warehouses;
         Product product;
+        Contact contact;
+
         Guid districtId;
         Guid countryId;
         Guid regionId;
         Guid outpostId;
         Guid productId;
+        Guid contactId;
 
         [SetUp]
         public void BeforeEach()
@@ -51,6 +57,8 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement
             StubDistrict();
             StubOutpost();
             StubProduct();
+            StubWarehouse();
+            StubContact();
         }
 
 
@@ -90,6 +98,16 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement
             outpost.Stub(b => b.Id).Return(outpostId);
             outpost.Name = "Outpost1";
             outpost.District = district;
+            //outpost.Contact = contact;
+        }
+
+        private void StubWarehouse()
+        {
+            outpostId = Guid.NewGuid();
+            outpost = MockRepository.GeneratePartialMock<Outpost>();
+            outpost.Stub(b => b.Id).Return(outpostId);
+            outpost.Name = "Outpost1";
+            outpost.District = district;
         }
 
         private void StubProduct()
@@ -99,6 +117,17 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement
             product.Stub(b => b.Id).Return(productId);
             product.Name = "Product1";
             //product.Outpost = outpost;
+        }
+
+        private void StubContact()
+        {
+            contactId = Guid.NewGuid();
+            contact = MockRepository.GeneratePartialMock<Contact>();
+            contact.Outpost = outpost;
+            contact.Stub(b => b.Id).Return(productId);
+            contact.ContactType = "Mobile Phone";
+            contact.ContactDetail = "1234567";
+            contact.IsMainContact = true;
         }
 
         private void SetUpController()
@@ -111,7 +140,9 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement
                             QueryCountry = queryCountry,
                             QueryRegion = queryRegion,
                             QueryDistrict = queryDistrict,
-                            QueryService = queryOutpost
+                            QueryService = queryOutpost,
+                            QueryWarehouse = queryWarehouse,
+                            QueryContact = queryContact
                         };
 
         }
@@ -119,12 +150,14 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement
         private void SetUpServices()
         {
             queryOutpost = MockRepository.GenerateMock<IQueryService<Outpost>>();
+            queryWarehouse = MockRepository.GenerateMock<IQueryService<Outpost>>();
             saveCommand = MockRepository.GenerateMock<ISaveOrUpdateCommand<Outpost>>();
             deleteCommand = MockRepository.GenerateMock<IDeleteCommand<Outpost>>();
             queryCountry = MockRepository.GenerateMock<IQueryService<Country>>(); 
             queryRegion = MockRepository.GenerateMock<IQueryService<Region>>();
             queryDistrict = MockRepository.GenerateMock<IQueryService<District>>();
             queryClient = MockRepository.GenerateMock<IQueryService<Client>>();
+            queryContact = MockRepository.GenerateMock<IQueryService<Contact>>();
 
         }
 
@@ -132,10 +165,12 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement
         public void ShouldReturnData_FromOutpostServiceSpecificTo_CountryIdNotNull_AndFrom_RegionQueryServiceSpecificToThatCountryId_AndFrom_DistrictsQueryServiceSpecificToRegionIdNotNull_TO_Overview()
         {
             //arange
+            queryOutpost.Expect(it => it.Load(outpost.Id)).Return(outpost);
             queryCountry.Expect(call => call.Query()).Return(new Country[] { country }.AsQueryable());
-            queryRegion.Expect(call => call.Query()).Repeat.Once().Return(new Region[] { region }.AsQueryable());
-            queryDistrict.Expect(call => call.Query()).Repeat.Once().Return(new District[] { district }.AsQueryable());
+            queryRegion.Expect(call => call.Query()).Return(new Region[] { region }.AsQueryable());
+            queryDistrict.Expect(call => call.Query()).Return(new District[] { district }.AsQueryable());
             queryOutpost.Expect(call => call.Query()).Return(new Outpost[] { outpost }.AsQueryable());
+            queryWarehouse.Expect(call => call.Query()).Return(new Outpost[] { warehouses }.AsQueryable());
 
             //act
             var viewResult = (ViewResult)controller.Overview(country.Id, region.Id, district.Id);
@@ -193,28 +228,28 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement
             Assert.AreEqual("Overview", result.RouteValues["Action"]);
         }
 
-        //[Test]
-        //public void Should_Redirect_To_Create_When_POST_Create_Fails_BecauseOf_ModelStateNotValid()
-        //{
-        //    //arrange
-        //    controller.ModelState.AddModelError("Name", "Field required");
-        //    queryCountry.Expect(call => call.Query()).Return(new Country[] { country }.AsQueryable());
-        //    queryRegion.Expect(call => call.Query()).Repeat.Once().Return(new Region[] { region }.AsQueryable());
+        [Test]
+        public void Should_Redirect_To_Create_When_POST_Create_Fails_BecauseOf_ModelStateNotValid()
+        {
+            //arrange
+            controller.ModelState.AddModelError("Name", "Field required");
+            queryCountry.Expect(call => call.Query()).Return(new Country[] { country }.AsQueryable());
+            queryRegion.Expect(call => call.Query()).Repeat.Once().Return(new Region[] { region }.AsQueryable());
 
-        //    var outpostInputModel = SetOutpostInputModelWithData_ToBeTransmitedToCreateMethod();
-        //    //act
-        //    var viewResult = (ViewResult)controller.Create(outpostInputModel);
+            var outpostInputModel = SetOutpostInputModelWithData_ToBeTransmitedToCreateMethod();
+            //act
+            var viewResult = (ViewResult)controller.Create(outpostInputModel);
 
-        //    //assert
-        //    Assert.AreEqual("Create", viewResult.ViewName);
-        //    Assert.IsInstanceOf<OutpostOutputModel>(viewResult.Model);
+            //assert
+            Assert.AreEqual("Create", viewResult.ViewName);
+            Assert.IsInstanceOf<OutpostOutputModel>(viewResult.Model);
 
-        //    var model = (OutpostOutputModel)viewResult.Model;
+            var model = (OutpostOutputModel)viewResult.Model;
 
-        //    Assert.AreEqual(model.Countries[0].Value, country.Id.ToString());
-        //    Assert.AreEqual(model.Region.CountryId, country.Id);
-        //    Assert.AreEqual(model.Regions[0].Value, region.Id.ToString());
-        //}
+            Assert.AreEqual(model.Countries[0].Value, country.Id.ToString());
+            Assert.AreEqual(model.Region.CountryId, country.Id);
+            Assert.AreEqual(model.Regions[0].Value, region.Id.ToString());
+        }
 
         private OutpostInputModel SetOutpostInputModelWithData_ToBeTransmitedToCreateMethod()
         {
@@ -228,67 +263,80 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement
             return outpostInputModel;
         }
 
-        //[Test]
-        //public void Should_Load_A_Completed_Edit_Page_When_GET_Edit()
-        //{
-        //    //arrange			
-        //    queryOutpost.Expect(it => it.Load(outpost.Id)).Return(outpost);
-        //    queryCountry.Expect(it => it.Query()).Return(new Country[] { country }.AsQueryable());
-        //    queryRegion.Expect(call => call.Query()).Return(new Region[] { region }.AsQueryable());
-        //    queryDistrict.Expect(call => call.Query()).Return(new District[] { district }.AsQueryable());
-        //    //act
-        //    var result = (ViewResult)controller.Edit(outpost.Id);
+        [Test]
+        public void Should_Load_A_Completed_Edit_Page_When_GET_Edit()
+        {
+            //arrange			
+            queryOutpost.Expect(it => it.Load(outpost.Id)).Return(outpost);
+            queryCountry.Expect(it => it.Query()).Return(new Country[] { country }.AsQueryable());
+            queryRegion.Expect(call => call.Query()).Return(new Region[] { region }.AsQueryable());
+            queryDistrict.Expect(call => call.Query()).Return(new District[] { district }.AsQueryable());
+            queryContact.Expect(call => call.Query()).Return(new Contact[] { contact }.AsQueryable());
+            queryOutpost.Expect(call => call.Query()).Repeat.Once().Return(new Outpost[] { outpost }.AsQueryable());
+            queryWarehouse.Expect(call => call.Query()).Return(new Outpost[] { warehouses }.AsQueryable());
+            //act
+            var result = (ViewResult)controller.Edit(outpost.Id);
 
-        //    //assert
-        //    Assert.IsInstanceOf<OutpostOutputModel>(result.Model);
-        //    var viewModel = result.Model as OutpostOutputModel;
-        //    Assert.AreEqual(OUTPOST_NAME, viewModel.Name);
-        //    Assert.AreEqual(outpost.Id, viewModel.Id);
+            //assert
+            Assert.IsInstanceOf<OutpostOutputModel>(result.Model);
+            var viewModel = result.Model as OutpostOutputModel;
+            Assert.AreEqual(OUTPOST_NAME, viewModel.Name);
+            Assert.AreEqual(outpost.Id, viewModel.Id);
 
-        //}
+        }
 
-        //[Test]
-        //public void Should_redirect_to_Overview_when_POST_Edit_succeedes()
-        //{
-        //    //arrange
-        //    var model = new OutpostInputModel();
-        //    model = BuildOutpostWithName(NEW_OUTPOST_NAME);
+        [Test]
+        public void Should_redirect_to_Overview_when_POST_Edit_succeedes()
+        {
+            //arrange
+            var model = new OutpostInputModel();
+            queryOutpost.Expect(it => it.Load(outpost.Id)).Return(outpost);
+            model = BuildOutpostWithName(NEW_OUTPOST_NAME);
+            queryOutpost.Expect(call => call.Query()).Return(new Outpost[] { outpost }.AsQueryable());
+            queryCountry.Expect(it => it.Query()).Return(new Country[] { country }.AsQueryable());
+            queryDistrict.Expect(call => call.Query()).Return(new District[] { district }.AsQueryable());
+            queryContact.Expect(call => call.Query()).Return(new Contact[] { contact }.AsQueryable());
 
-        //    saveCommand.Expect(it => it.Execute(Arg<Outpost>.Matches(c => c.Name == NEW_OUTPOST_NAME && c.Id == outpost.Id)));
-        //    queryRegion.Expect(it => it.Load(region.Id)).Return(region);
-        //    // Act
-        //    var redirectResult = (RedirectToRouteResult)controller.Edit(new OutpostInputModel() { Id = outpost.Id, 
-        //                                                                                          Name = NEW_OUTPOST_NAME,
-        //                                                                                          Region = new OutpostInputModel.RegionInputModel { CountryId = region.Country.Id, Id = region.Id },
-        //                                                                                          District = new OutpostInputModel.DistrictInputModel { Id = district.Id }
-        //    });
+            saveCommand.Expect(it => it.Execute(Arg<Outpost>.Matches(c => c.Name == NEW_OUTPOST_NAME && c.Id == outpost.Id)));
+            queryRegion.Expect(it => it.Load(region.Id)).Return(region);
+            // Act
+            var redirectResult = (RedirectToRouteResult)controller.Edit(new OutpostInputModel()
+            {
+                Id = outpost.Id,
+                Name = NEW_OUTPOST_NAME,
+                Region = new OutpostInputModel.RegionInputModel { CountryId = region.Country.Id, Id = region.Id },
+                District = new OutpostInputModel.DistrictInputModel { Id = district.Id }
+            });
 
 
-        //    // Assert
-        //    saveCommand.VerifyAllExpectations();
-        //    queryRegion.VerifyAllExpectations();
-        //    Assert.AreEqual("Overview", redirectResult.RouteValues["Action"]);
-        //}
+            // Assert
+            saveCommand.VerifyAllExpectations();
+            queryRegion.VerifyAllExpectations();
+            Assert.AreEqual("Overview", redirectResult.RouteValues["Action"]);
+        }
 
-        //[Test]
-        //public void Should_Redirect_To_Edit_When_POST_Edit_Fails_BecauseOfModelStateNotValid()
-        //{
-        //    //arrange
-        //    controller.ModelState.AddModelError("Name", "Field required");
-        //    queryCountry.Expect(it => it.Query()).Return(new Country[] { country }.AsQueryable());
-        //    queryRegion.Expect(call => call.Query()).Return(new Region[] { region }.AsQueryable());
-        //    queryDistrict.Expect(call => call.Query()).Return(new District[] { district }.AsQueryable());
+        [Test]
+        public void Should_Redirect_To_Edit_When_POST_Edit_Fails_BecauseOfModelStateNotValid()
+        {
+            //arrange
+            controller.ModelState.AddModelError("Name", "Field required");
+            queryOutpost.Expect(it => it.Load(outpost.Id)).Return(outpost);
+            queryOutpost.Expect(call => call.Query()).Repeat.Once().Return(new Outpost[] { outpost }.AsQueryable());
+            queryCountry.Expect(it => it.Query()).Return(new Country[] { country }.AsQueryable());
+            queryRegion.Expect(call => call.Query()).Return(new Region[] { region }.AsQueryable());
+            queryDistrict.Expect(call => call.Query()).Return(new District[] { district }.AsQueryable());
+            queryContact.Expect(call => call.Query()).Return(new Contact[] { contact }.AsQueryable());
 
-        //    var outpostInputModel = SetOutpostInputModelWithData_ToBeTransmitedToCreateMethod();
+            var outpostInputModel = SetOutpostInputModelWithData_ToBeTransmitedToCreateMethod();
 
-        //    //act
-        //    var viewResult = (ViewResult)controller.Edit(outpostInputModel);
+            //act
+            var viewResult = (ViewResult)controller.Edit(outpostInputModel);
 
-        //    //assert
-        //    queryCountry.VerifyAllExpectations();
-        //    queryRegion.VerifyAllExpectations();
-        //    Assert.AreEqual("Edit", viewResult.ViewName);
-        //}
+            //assert
+            queryCountry.VerifyAllExpectations();
+            queryRegion.VerifyAllExpectations();
+            Assert.AreEqual("Edit", viewResult.ViewName);
+        }
 
         [Test]
         public void Should_goto_Overview_when_DeleteAnOutpost_AndThereAre_NoProductsAsociated()
