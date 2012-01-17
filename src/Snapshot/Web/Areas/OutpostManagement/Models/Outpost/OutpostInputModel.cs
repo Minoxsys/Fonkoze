@@ -21,18 +21,13 @@ namespace Web.Areas.OutpostManagement.Models.Outpost
         public string Latitude { get; set; }
         public string Longitude { get; set; }
         public bool IsWarehouse { get; set; }
-        public WarehouseInputModel Warehouse { get; set; }
+        public OutpostModel Warehouse { get; set; }
 
         public RegionInputModel Region { get; set; }
         public DistrictInputModel District { get; set; }
         public ClientModel Client { get; set; }
         //public List<SelectListItem> Warehouses { get; set; }
-
-        public class WarehouseInputModel
-        {
-            public Guid Id { get; set; }
-        }
-        
+         
         public class RegionInputModel
         {
            [Required(ErrorMessage = "Region is required")]

@@ -31,7 +31,7 @@
                  <a href="@(Html.BuildUrlFromExpression<OutpostController>(it => it.Overview(@Model.Region.CountryId, @Model.Region.Id, @Model.District.Id)))">
                         Cancel</a>
             &nbsp;
-         </div>
+         </div> @{Html.EndForm();}
          <div>
                 <fieldset class="fieldsContacts ">
                     @{
@@ -40,7 +40,7 @@
                 </fieldset>
          </div>
    
-    @{Html.EndForm();}
+   
 }
 
 

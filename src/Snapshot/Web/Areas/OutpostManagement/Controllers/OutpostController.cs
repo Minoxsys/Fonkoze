@@ -59,12 +59,17 @@ namespace Web.Areas.OutpostManagement.Controllers
             IQueryable<Country> countries;
 
             model = new OutpostOverviewModel();
-
             outposts = QueryService.Query();
+
+            model.Outposts = new List<SelectListItem>();
+            model.Outpost = new List<OutpostModel>();
+            model.Warehouses = new List<SelectListItem>();
+
             IQueryable<Outpost> warehouses = outposts.Where<Outpost>(it => it.IsWarehouse);
 
             if ((countryId == null) && (regionId == null) && (districtId == null))
             {
+                outposts = QueryService.Query();
                 model = new OutpostOverviewModel(QueryCountry, QueryRegion, QueryDistrict, QueryService);
                 Guid districtSelectedId = new Guid();
 
@@ -82,6 +87,7 @@ namespace Web.Areas.OutpostManagement.Controllers
                 if ((countryId.Value != Guid.Empty) && (regionId.Value != Guid.Empty) && (districtId.Value != Guid.Empty))
                 {
                     var countryS = countryId.Value;
+                    outposts = QueryService.Query();
                     countries = QueryCountry.Query().Where(it => it.Id == countryS);
                     regions = QueryRegion.Query().Where<Region>(it => it.Country.Id == countryS);
                     districts = QueryDistrict.Query().Where<District>(it => it.Region.Id == regionId.Value);
@@ -121,6 +127,15 @@ namespace Web.Areas.OutpostManagement.Controllers
                     if (regionsWithDistrictsId.Count > 0)
                         regionsWithDistrictsId[0].Selected = true;
 
+                    foreach (Outpost item in outposts)
+                    {
+                        var selectListItem = new SelectListItem();
+
+                        selectListItem.Value = item.Id.ToString();
+                        selectListItem.Text = item.Name;
+                        model.Outposts.Add(selectListItem);
+                    }
+
                     foreach (Outpost item in warehouses)
                     {
                         var selectListItem = new SelectListItem();
@@ -134,19 +149,24 @@ namespace Web.Areas.OutpostManagement.Controllers
 
             if (outposts != null)
             {
-                if (outposts.ToList().Count() > 0)
-                    outposts.ToList().ForEach(item =>
+                if (outposts.ToList().Count != 0)
+                {
+                    
+                    foreach (Outpost item in outposts)
                     {
                         CreateMappings();
                         var outpostModel = new OutpostModel();
                         Mapper.Map(item, outpostModel);
+                        outpostModel.Contacts = new List<Contact>();
                         foreach (Contact contact in item.Contacts)
                         {
                             outpostModel.Contacts.Add(contact);
                         }
 
-                        model.Outposts.Add(outpostModel);
-                    });
+                       //districtModel.OutpostNo = QueryOutpost.Query().Count<Outpost>(it => it.District.Id == item.Id);
+                        model.Outpost.Add(outpostModel);
+                    }
+                }
             }
 
             return View(model);
@@ -245,11 +265,14 @@ namespace Web.Areas.OutpostManagement.Controllers
             outpost.Country = QueryCountry.Load(outpostInputModel.Region.CountryId);
             outpost.Region = QueryRegion.Load(outpostInputModel.Region.Id);
             outpost.District = QueryDistrict.Load(outpostInputModel.District.Id);
+
             if (outpostInputModel.IsWarehouse == true)
             {
                 outpostInputModel.Warehouse = null;
             }
+
             SaveOrUpdateCommand.Execute(outpost);
+
             return RedirectToAction("Overview", "Outpost", new
             {
                 countryId = outpostInputModel.Region.CountryId,
@@ -264,12 +287,14 @@ namespace Web.Areas.OutpostManagement.Controllers
         //[Requires(Permissions = "Country.CRUD")]
         public ViewResult Edit(Guid outpostId)
         {
-            Outpost outpost = new Outpost();
             var _outpost = QueryService.Load(outpostId);
+            var _contacts = QueryContact.Query().Where(oo => oo.Outpost.Id == outpostId);
+
             var warehouses = QueryService.Query().Where<Outpost>(it => it.IsWarehouse);
             var outpostModelView = new OutpostOutputModel(QueryCountry, QueryRegion, QueryDistrict, QueryService);
 
             outpostModelView.Warehouses = new List<SelectListItem>();
+
             CreateMappings();
             Mapper.Map(_outpost, outpostModelView);
 
@@ -297,10 +322,10 @@ namespace Web.Areas.OutpostManagement.Controllers
             if (selectedDistrict.Count > 0)
                 outpostModelView.Districts.First<SelectListItem>(it => it.Value == _outpost.District.Id.ToString()).Selected = true;
 
-            foreach (Contact contact in outpost.Contacts)
-            {
-                outpostModelView.Contacts.Add(contact);
-            }
+            //foreach (Contact contact in _contacts)
+            //{
+            //    outpostModelView.Contacts.Add(contact);
+            //}
 
             foreach (Outpost item in warehouses)
             {
@@ -311,49 +336,16 @@ namespace Web.Areas.OutpostManagement.Controllers
                 outpostModelView.Warehouses.Add(selectListItem);
             }
 
-            string answerName;
-            bool answerValue;
-
-            //List<WarehouseData> warehouseData = new List<WarehouseData>();
-
-            Outpost ggg = new Outpost();
-
-            List<WarehouseData> warehouseData = new List<WarehouseData>()
-                                                    { new WarehouseData {warehouseName = "ggg", warehouse = ggg}
-                                                        
-                                                    };
-            ViewData["ListOfWarehouse"] = new SelectList(warehouseData, // items
-                                                  "warehouse", // dataValueField
-                                                  "warehouseName", // dataTextField
-                                                  1); // selectedValue
-
-            //ViewBag.SelectedWarehouse = "ListOfWarehouses";
-            //ViewData["ListOfWarehouses"] = new SelectListItem();
-            return View(outpostModelView);
+             return View(outpostModelView);
         }
 
-        private class WarehouseData
-        {
-            internal string warehouseName { get; set; }
-            internal Outpost warehouse { get; set; }
-        }
-
+ 
         [HttpPost]
         [ValidateInput(false)]
         //[Requires(Permissions = "OnBoarding.Candidate.CRUD")]
         public ActionResult Edit(OutpostInputModel outpostInputModel)
         {
-            var fff = (List<SelectListItem>)ViewData["ListOfWarehouse"];
             var model = new OutpostInputModel();
-            
-            
-
-            //if (outpostInputModel.IsWarehouse == "Yes")
-            //{
-            //    outpostInputModel.IsWarehouse = true;
-            //}
-            //else
-            //{outpostInputModel.IsWarehouse = false;}
             
             if (!ModelState.IsValid)
             {
@@ -373,7 +365,7 @@ namespace Web.Areas.OutpostManagement.Controllers
                 _outpost.Warehouse = null;
             }
 
-            var mainContact = QueryContact.Query().Where(m => m.Outpost.Id == _outpost.Id && m.IsMainContact);
+            //var mainContact = QueryContact.Query().Where(m => m.Outpost.Id == _outpost.Id && m.IsMainContact);
 
             if (outpostInputModel.Region != null)
             {
@@ -393,7 +385,17 @@ namespace Web.Areas.OutpostManagement.Controllers
                 {
                     _outpost.DetailMethod = contactUpdate.ContactDetail;
                 }
+
                 SaveOrUpdateCommandContact.Execute(contactUpdate);
+            }
+
+            if (_outpost.Warehouse != null)
+            {
+                var warehouse = QueryService.Load(_outpost.Warehouse.Id);
+                if (warehouse.Warehouse != null) 
+                {
+                    _outpost.Warehouse.Name = warehouse.Warehouse.Name;
+                }
             }
 
             SaveOrUpdateCommand.Execute(_outpost);

@@ -27,9 +27,10 @@ namespace Web.Areas.OutpostManagement.Models.Outpost
        public List<SelectListItem> Regions { get; set; }
        public List<SelectListItem> Districts { get; set; }
        public List<SelectListItem> Warehouses { get; set; }
-
-       public List<OutpostModel> Outposts { get; set; }
+       public List<SelectListItem> Outposts { get; set; }
+       public List<OutpostModel> Outpost { get; set; }
        public List<ContactModel> Contact { get; set; }
+
        public List<Domain.Contact> Contacts { get; set; }
 
        public IQueryService<Domain.Outpost> QueryWarehouse { get; set; }
@@ -45,8 +46,10 @@ namespace Web.Areas.OutpostManagement.Models.Outpost
             this.Countries = new List<SelectListItem>();
             this.Regions = new List<SelectListItem>();
             //----------------------------------------
-            this.Outposts = new List<OutpostModel>();
+            this.Outposts = new List<SelectListItem>();
             this.Warehouses = new List<SelectListItem>();
+            this.Outpost = new List<OutpostModel>();
+            this.Contact = new List<ContactModel>();
         }
 
          public OutpostOverviewModel(IQueryService<Domain.Country> queryCountry, 
@@ -64,7 +67,7 @@ namespace Web.Areas.OutpostManagement.Models.Outpost
             this.Districts = new List<SelectListItem>();
             this.Warehouses = new List<SelectListItem>();
 
-            this.Outposts = new List<OutpostModel>();
+            this.Outpost = new List<OutpostModel>();
             this.Contact = new List<ContactModel>();
 
             var countries = QueryCountry.Query().OrderBy(it => it.Name);

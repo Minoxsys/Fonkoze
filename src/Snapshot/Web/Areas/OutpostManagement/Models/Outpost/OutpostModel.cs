@@ -21,6 +21,7 @@ namespace Web.Areas.OutpostManagement.Models.Outpost
         public ClientModel Client { get; set; }
         public ContactModel Contact { get; set; }
         public OutpostModel Warehouse { get; set; }
+        public List<OutpostModel> Outpost { get; set; }
         public List<Domain.Contact> Contacts { get; set; }
         public int ProductsNo { get; set; }
         public Guid Id { get; set; }

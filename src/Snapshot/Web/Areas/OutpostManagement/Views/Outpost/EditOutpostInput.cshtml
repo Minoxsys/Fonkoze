@@ -81,12 +81,12 @@
          </div>
 
          <div class="column">
-            <label for="Warehouses">
-                If no, please select a warehouse from the list
-            </label>            
             @if (!Model.IsWarehouse)
             {
-                @Html.DropDownList("ListOfWarehouses", Model.Warehouses, new { outpostID = Model.Id})
+                <label for="Warehouses">
+                    If no, please select a warehouse from the list
+                </label>            
+                    @Html.DropDownList("Warehouse.Id", Model.Warehouses)
             }
 
         </div>

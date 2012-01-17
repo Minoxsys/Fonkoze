@@ -7,10 +7,6 @@
         <table id="Outposts">
             <thead>
                 <tr>
-@*                    <th>
-                        Contacts
-                    </th>
-*@
                     <th  class="sort-alpha">
                         Outpost Name
                     </th>
@@ -24,6 +20,10 @@
                         Longitude
                     </th>
                     <th>
+                        Is Warehouse
+                    </th>
+                    <th>
+                        Warehouse Name
                     </th>
                     <th colspan="2" align="center">
                         Actions
@@ -36,17 +36,11 @@
                 }
                 @foreach (var outpost in Model)
                 {
-                    var _class = (itemNo++ % 2 == 0) ? "odd" : "even";
-       
-                    <tr>
-                         @*<td>
-                           @(Html.ActionLink<ContactController>(it => it.Overview(outpost.Id), "Contacts", OutpostManagementAreaRegistration.DEFAULT_ROUTE))
-                        </td>
-                        *@
-                        <td>
-                        @(Html.ActionLink<StockLevelController>(it => it.OutpostStockLevelOverview(outpost.Id), @outpost.Name, OutpostManagementAreaRegistration.DEFAULT_ROUTE))
+                    var _class = (itemNo++%2 == 0) ? "odd" : "even";
 
-                        
+                    <tr>
+                        <td>
+                            @(Html.ActionLink<StockLevelController>(it => it.OutpostStockLevelOverview(outpost.Id), @outpost.Name, OutpostManagementAreaRegistration.DEFAULT_ROUTE))                        
                         </td>
                         <td>@outpost.DetailMethod
                         </td>
@@ -54,15 +48,22 @@
                         </td>
                         <td>@outpost.Longitude
                         </td>
+                        <td>@outpost.IsWarehouse
+                        </td>
+                        <td>@if (@outpost.Warehouse != null)
+                            {
+                                @outpost.Warehouse.Name
+                            }
+                        </td>
                         <td>
-                        @(Html.ActionLink<OutpostController>(call => call.Edit(outpost.Id), "Edit", OutpostManagementAreaRegistration.DEFAULT_ROUTE))
+                            @(Html.ActionLink<OutpostController>(call => call.Edit(outpost.Id), "Edit", OutpostManagementAreaRegistration.DEFAULT_ROUTE))
                         </td>
                         <td>                   
-                            @{Html.BeginForm<OutpostController>(m => m.Delete(outpost.Id), FormMethod.Post, new { @class = "delete-user-form" });}
+                            @{ Html.BeginForm<OutpostController>(m => m.Delete(outpost.Id), FormMethod.Post, new {@class = "delete-user-form"}); }
                             @Html.Button("delete-user", "Delete", HtmlButtonType.Submit)
-                            @{Html.EndForm();}
+                            @{ Html.EndForm(); }
                         </td>
-                    </tr> 
+                    </tr>
                 }
             </tbody>
         </table>
