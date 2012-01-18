@@ -19,24 +19,24 @@ namespace IntegrationTests
         private Client CLIENT = new Client { Name = "minoxsys" };
 
 
-        //[Test]
-        //public void It_Should_Successfully_Persist_A_Region()
-        //{
-        //    var region = Specs.CheckProperty(e => e.Name, REGION_NAME)
-        //        .CheckReference(c => c.Country,COUNTRY)
-        //        .CheckReference(c => c.Client,CLIENT)
-        //        .CheckProperty(c=> c.Coordinates,COORDINATES)
-        //        .VerifyTheMappings();
+        [Test]
+        public void It_Should_Successfully_Persist_A_Region()
+        {
+            var region = Specs.CheckProperty(e => e.Name, REGION_NAME)
+                .CheckReference(c => c.Country, COUNTRY)
+                .CheckReference(c => c.Client, CLIENT)
+                .CheckProperty(c => c.Coordinates, COORDINATES)
+                .VerifyTheMappings();
 
-        //    Assert.IsNotNull(region);
-        //    Assert.IsInstanceOf<Guid>(region.Id);
-        //    Assert.AreEqual(region.Name, REGION_NAME);
-        //    Assert.IsInstanceOf<Country>(region.Country);
-        //    Assert.AreEqual(region.Country.Name, COUNTRY.Name);
+            Assert.IsNotNull(region);
+            Assert.IsInstanceOf<Guid>(region.Id);
+            Assert.AreEqual(region.Name, REGION_NAME);
+            Assert.IsInstanceOf<Country>(region.Country);
+            Assert.AreEqual(region.Country.Name, COUNTRY.Name);
 
-        //    session.Delete(region);
-        //    session.Flush();
-        //}
+            session.Delete(region);
+            session.Flush();
+        }
        
         //[Test]
         //public void it_should_add_many_countries()

@@ -77,14 +77,20 @@ Stock Item: Overview
 
             $("select[name='@Html.NameFor(m => m.ProductGroups)']").change(onProductGroupChanged);
 
+            
             // document.getElementById('productSearch')
             $("input").keyup(function () {
 
                 clearTimeout(timeout);
                 var selectedId = $("select[name='@Html.NameFor(m => m.ProductGroups)']").val()
                 if (selectedId == "@Guid.Empty") {
-
+                    jQuery('#productSearch').keyup(function (event) {
+                        if (event.keyCode == 27) {
+                            resetSearch();
+                        }
+                    });
                     timeout = setTimeout("searchProductByName()", 1000);
+
                 }
                 else {
                     SearchProductOnFilterSelected();
@@ -117,9 +123,10 @@ Stock Item: Overview
         }
         function searchProductByName() {
 
+       
             var productName = document.getElementById("productSearch").value;
             var drop = $("#products-overview")
-
+            
             var urlOverview = '@Url.Action("SearchForProductWithName")?productName=' + productName;
             clearTimeout(timeout);
             $.get(urlOverview, function (data) {

@@ -3,7 +3,7 @@
        @(Html.ActionLink<Web.Areas.StockAdministration.Controllers.ProductGroupController>(it => it.Overview(), "Product Administration", Web.Areas.StockAdministration.StockAdministrationAreaRegistration.DEFAULT_ROUTE))
        </li>
     <li>
-    @(Html.ActionLink<Web.Areas.StockAdministration.Controllers.OutpostStockLevelController>(it => it.Overview(null,null,null,null), "Outpost Product Level", Web.Areas.StockAdministration.StockAdministrationAreaRegistration.DEFAULT_ROUTE))
+    @(Html.ActionLink<Web.Areas.StockAdministration.Controllers.OutpostStockLevelController>(it => it.Overview(null,null,null,null,false), "Outpost Product Level", Web.Areas.StockAdministration.StockAdministrationAreaRegistration.DEFAULT_ROUTE))
       
     </li>
     <li>

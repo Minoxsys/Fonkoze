@@ -188,10 +188,13 @@
     <Compile Include="Areas\StockAdministration\Controllers\ProductGroupController.cs" />
     <Compile Include="Areas\OutpostManagement\Controllers\StockLevelController.cs" />
     <Compile Include="Areas\StockAdministration\Models\OutpostStockLevel\OutpostList.cs" />
+    <Compile Include="Areas\StockAdministration\Models\OutpostStockLevel\OutpostStockLevelHistoricalInputModel.cs" />
+    <Compile Include="Areas\StockAdministration\Models\OutpostStockLevel\OutpostStockLevelHistoricalOutputModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\OutpostStockLevel\OutpostStockLevelInputModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\OutpostStockLevel\OutpostStockLevelOutputModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\OutpostStockLevel\OutpostStockLevelOverviewModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\OutpostStockLevel\OutpostWithStockGroups.cs" />
+    <Compile Include="Areas\StockAdministration\Models\OutpostStockLevel\ProductGroupOverviewModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\OutpostStockLevel\ProductGroupWithProducts.cs" />
     <Compile Include="Areas\StockAdministration\Models\ProductGroup\ProductGroupOutputModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\ProductGroup\ProductGroupInputModel.cs" />
@@ -1933,6 +1936,10 @@
     <Content Include="Areas\OutpostManagement\Views\StockLevel\OutpostStockLevelOverview.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\StockLevel\OverviewProducts.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\StockLevel\OverviewStockLevel.cshtml" />
+    <Content Include="Areas\StockAdministration\Views\OutpostStockLevel\OverviewItemsStockLevelHistorical.cshtml" />
+    <Content Include="Areas\StockAdministration\Views\OutpostStockLevel\ViewProductsForProductGroupFromHistoricalOverview.cshtml" />
+    <Content Include="Areas\StockAdministration\Views\OutpostStockLevel\EditHistoricalProductLevel.cshtml" />
+    <Content Include="Areas\StockAdministration\Views\OutpostStockLevel\EditOutpostStockLevelHistoricalInput.cshtml" />
     <None Include="Assets\img\skins\ButtonTemplate.psd" />
     <Content Include="Views\RoleManager\Create.cshtml" />
     <Content Include="Views\RoleManager\Edit.cshtml" />
@@ -1965,11 +1972,13 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>False</UseIIS>
+          <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>9245</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost/Snapshot</IISUrl>
+          <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
+          <IISAppRootUrl>http://localhost/Snapshot</IISAppRootUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

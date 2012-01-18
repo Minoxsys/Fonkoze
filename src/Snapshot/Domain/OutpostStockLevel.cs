@@ -15,7 +15,6 @@ namespace Domain
         public virtual int StockLevel { get; set; }
         public virtual int PrevStockLevel { get; set; }
         public virtual string UpdatedMethod { get; set; }
-        public virtual DateTime UpdatedDate { get; set; }
         public virtual String ProductName { get; set; }
     }
 }

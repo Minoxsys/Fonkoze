@@ -22,7 +22,7 @@ namespace Web.Areas.StockAdministration.Controllers
 
         public IQueryService<OutpostStockLevel> QueryOutpostStockLevel { get; set; }
 
-        public IQueryService<OutpostStockLevelHystorical> QueryOutpostStockLevelHystorical { get; set; }
+        public IQueryService<OutpostStockLevelHistorical> QueryOutpostStockLevelHystorical { get; set; }
 
         public ProductOutputModel ProductOutputModel { get; set; }
 
