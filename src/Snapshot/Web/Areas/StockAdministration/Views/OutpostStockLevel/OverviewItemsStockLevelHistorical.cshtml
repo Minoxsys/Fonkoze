@@ -1,0 +1,60 @@
+﻿@model Web.Areas.StockAdministration.Models.OutpostStockLevel.OutpostList
+@{ bool AreCommingFromFilterByAll = Model.Outposts.Count >1;}
+<div id="stocklevel-overview-historical">
+    @foreach (var item in Model.Outposts)
+    {           
+        <div>
+            <label for="OutpostName" class="big-text">
+                <b>- Outpost Name</b> @item.Name</label>
+            <br />
+            @if ((item.StockGroups.Count == 0) && (item.Name != null))
+            { <label>
+            There are no product groups for products from this outpost!
+        </label>}
+            else
+            {    
+                <table>
+                    <thead>
+                        <tr>
+                            <th>
+                                Product Group
+                            </th>
+                            <th>
+                                Last Update At
+                            </th>
+                            <th>
+                                Update Method
+                            </th>
+                            <th>
+                                # of Products
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                var itemNo = 0;
+                        }
+                        @foreach (var stockGroup in item.StockGroups)
+                        {
+                            var _class = (itemNo % 2 == 0) ? "odd" : "even";    
+                            <tr class="@_class">
+                                <td> @(Html.ActionLink<OutpostStockLevelController>(it => it.ViewProductsForProductGroupFromHistoricalOverview(stockGroup.OutpostStockLevelHistoricalId, AreCommingFromFilterByAll), @stockGroup.Name, StockAdministrationAreaRegistration.DEFAULT_ROUTE))
+                                
+                                </td>
+                                <td>
+                                    @stockGroup.LastUpdateAt
+                                </td>
+                                <td>@stockGroup.UpdateMethod
+                                </td>
+                                <td>@stockGroup.NoProducts
+                                </td>
+                            </tr> 
+                        }
+                    </tbody>
+                </table>
+ 
+            }
+            
+        </div>
+    }
+</div>

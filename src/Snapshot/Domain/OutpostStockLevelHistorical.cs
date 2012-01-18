@@ -6,7 +6,7 @@ using Core.Domain;
 
 namespace Domain
 {
-    public class OutpostStockLevelHystorical : DomainEntity
+    public class OutpostStockLevelHistorical : DomainEntity
     {
         public virtual Guid OutpostId { get; set; }
         public virtual Guid ProdGroupId { get; set; }
@@ -15,6 +15,6 @@ namespace Domain
         public virtual int StockLevel { get; set; }
         public virtual int PrevStockLevel { get; set; }
         public virtual string UpdateMethod { get; set; }
-        public virtual DateTime UpdateDate { get; set; }
+        public virtual DateTime? UpdateDate { get; set; }
     }
 }

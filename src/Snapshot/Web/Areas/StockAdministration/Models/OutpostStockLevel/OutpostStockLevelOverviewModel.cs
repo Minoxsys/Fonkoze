@@ -20,6 +20,7 @@ namespace Web.Areas.StockAdministration.Models.OutpostStockLevel
         public OutpostList OutpostList { get; set; }
 
         public Guid OutpostId { get; set; }
+        public bool CommingFromCurrentData { get; set; }
 
         public IQueryService<Domain.Country> QueryCountry { get; set; }
         public IQueryDistrict QueryDistrict { get; set; }

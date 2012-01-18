@@ -180,7 +180,7 @@ begin
     )
 end
 
-if not exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'OutpostStockLevels')
+
 if not exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'OutpostStockLevels')
 begin
 	-- Stock Level
@@ -195,7 +195,6 @@ begin
 		PrevStockLevel INTEGER NOT NULL,
 		UpdateMethod NCHAR(10) NULL DEFAULT 'System',
 		UpdatedMethod NCHAR(10) DEFAULT 'System',
-		UpdatedDate DATETIME NULL,
 		Created DATETIME NULL,
 		Updated DATETIME NULL,
         ByUser_FK UNIQUEIDENTIFIER NULL,
@@ -204,27 +203,31 @@ begin
     )
 end
 
-if not exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'HistoryOutpostStockLevels')
+if not exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'OutpostStockLevelHistoricals')
 begin
-
-	CREATE TABLE HistoryOutpostStockLevels(
+create table OutpostStockLevelHistoricals (
         Id UNIQUEIDENTIFIER not null,
-		OutpostId UNIQUEIDENTIFIER not null,
-		ProdGroupId UNIQUEIDENTIFIER NOT NULL,
-		ProductId UNIQUEIDENTIFIER NOT NULL,
-		ProdSMSRef NVARCHAR(20) NOT NULL,
-		StockLevel INTEGER NOT NULL,
-		PrevStockLevel INTEGER NOT NULL,
-		UpdatedMethod NCHAR(10) DEFAULT 'System',
-		UpdatedDate DATETIME NULL,
-		Created DATETIME NULL,
-		Updated DATETIME NULL,
-        ByUser_FK UNIQUEIDENTIFIER NULL,
-        Client_FK UNIQUEIDENTIFIER NOT NULL
-        primary key (Id)
+       OutpostId UNIQUEIDENTIFIER null,
+       ProdGroupId UNIQUEIDENTIFIER null,
+       ProductId UNIQUEIDENTIFIER null,
+       ProdSmsRef NVARCHAR(255) null,
+       StockLevel INT null,
+       PrevStockLevel INT null,
+       UpdateMethod NVARCHAR(255) null,
+       UpdateDate DATETIME null,
+       Created DATETIME null,
+       Updated DATETIME null,
+       ByUser_FK UNIQUEIDENTIFIER null,
+       primary key (Id)
     )
 end
-
+if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='ByUser_OutpostStockLevelHistoricals_FK')
+begin
+	alter table OutpostStockLevelHistoricals 
+        add constraint ByUser_OutpostStockLevelHistoricals_FK 
+        foreign key (ByUser_FK) 
+        references Users
+end
 go
 if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='Product_ProductGroups_FK')
 begin

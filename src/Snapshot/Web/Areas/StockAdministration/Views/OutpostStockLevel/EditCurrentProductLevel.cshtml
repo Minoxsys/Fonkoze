@@ -30,7 +30,7 @@
                     Html.RenderPartial("EditCurrentProducLevelInput", Model);     
                 }
             </fieldset>
-            @Html.SubmitButton("submit-form", "Save") <span>or </span><a href="@(Html.BuildUrlFromExpression<OutpostStockLevelController>(it => it.Overview(Model.CountryId,Model.RegionId,Model.DistrictId,Model.OutpostId))))">
+            @Html.SubmitButton("submit-form", "Save") <span>or </span><a href="@(Html.BuildUrlFromExpression<OutpostStockLevelController>(it => it.Overview(Model.CountryId,Model.RegionId,Model.DistrictId,Model.OutpostId,true))))">
                     Cancel</a>
           
     @{Html.EndForm();}

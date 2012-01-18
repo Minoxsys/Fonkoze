@@ -75,6 +75,11 @@ Districts: Overview
         var timeout;
 
         $(function () {
+            var selectedRegionId = $("select[name='@Html.NameFor(m => m.Regions)']").val();
+            var selectedCountryId = $("select[name='@Html.NameFor(m => m.Countries)']").val();
+
+            document.getElementById('create').href = '@Url.Action("Create")?countryId=' + selectedCountryId + '&regionId=' + selectedRegionId;
+
             $(".delete-user-form").submit(function () {
                 return confirm('Are you sure that you want to delete this district?')
             });
@@ -95,11 +100,7 @@ Districts: Overview
                     SearchDistrictOnFilterSelected();
                 }
             });
-
-            //            var selectedRegionId = $("select[name='@Html.NameFor(m => m.Regions)']").val();
-            //            var selectedCountryId = $("select[name='@Html.NameFor(m => m.Countries)']").val();
-
-            //            document.getElementById('create').href = '@Url.Action("Create")?countryId=' + selectedCountryId + '&regionId=' + selectedRegionId;
+            
         });
 
         function searchDistrictByName(selectedCountryId) {
@@ -161,6 +162,7 @@ Districts: Overview
                 var opt = document.createElement("option");
                 opt.text = 'Please select a region';
                 opt.value = '@Guid.Empty.ToString()';
+                opt.selected = true;
                 ddlRegions.options.add(opt);
                 $.each(data, function () {
                     var opt = document.createElement("option");

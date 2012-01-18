@@ -101,6 +101,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Unit\Controllers\Areas\OutpostManagement\RegionController_Tests.cs" />
+    <Compile Include="Unit\Controllers\Areas\StockAdministration\OutpostStockLevelController_Tests.cs" />
     <Compile Include="Unit\Controllers\Areas\StockAdministration\ProductGroupController_Tests.cs" />
     <Compile Include="Unit\Controllers\Areas\StockAdministration\StockItemController_Tests.cs" />
     <Compile Include="Unit\Controllers\UnautorizedAccessController_Tests.cs" />

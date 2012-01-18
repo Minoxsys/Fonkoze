@@ -15,7 +15,7 @@ Stock Item: Overview
                 <th>
                     <label>
                         Country:</label>
-                    <select name="@(Html.NameFor(m => m.Countries))">
+                    <select name="@(Html.NameFor(m => m.Countries))" id="Countries">
                         <option value="@Guid.Empty">- Select a country - </option>
                         @{
                             foreach (var item in Model.Countries)
@@ -29,7 +29,7 @@ Stock Item: Overview
                     <label>
                         Region:</label>
                     <select name="@(Html.NameFor(m => m.Regions))" id="Regions">
-                       @{
+                        @{
                             foreach (var item in Model.Regions)
                             {
                             <option value="@item.Value" @(item.Selected ? @"selected='selected'" : @"") >@item.Text</option>
@@ -53,7 +53,7 @@ Stock Item: Overview
                     <label>
                         Outpost:</label>
                     <select name="@(Html.NameFor(m => m.OutpostId))" id="Outposts">
-                     @{
+                        @{
                             foreach (var item in Model.Outposts)
                             {
                             <option value="@item.Value" @(item.Selected ? @"selected='selected'" : @"") >@item.Text</option>
@@ -62,48 +62,186 @@ Stock Item: Overview
                     </select>
                 </th>
                 <th>
-                    <button onclick="ViewStockButtonClicked()">View product stock level</button>
+                    <button onclick="ViewStockButtonClicked()">
+                        View product stock level</button>
                 </th>
             </tr>
         </thead>
         <tbody>
         </tbody>
     </table>
-    @{Html.RenderPartial("OverviewItemsStockLevel", Model.OutpostList);
-    }
+    <span>
+        <button onclick="CurrentButtonClicked()">
+            Current Product Stock Level</button>
+        <button onclick="HistoricalButtonClicked()">
+            Historical Product Stock Level</button></span>
+   
+
+       @{ Html.RenderPartial("OverviewItemsStockLevel", Model.OutpostList);   }        
+    
+
+        @{Html.RenderPartial("OverviewItemsStockLevelHistorical",Model.OutpostList);}
+       
+    
+     
 }
 @section  scripts{
     <script type="text/javascript">
+        var dropHistorical = $("#stocklevel-overview-historical");
+        dropHistorical.html('');
+
+        function ViewHistoricalStockLevelButtonClicked(id) {
+
+            var selectedDistrictId = $("select[name='@Html.NameFor(m => m.Districts)']").val()
+            var drop = $("#stocklevel-overview-historical")
+            var dropCurrent = $("#stocklevel-overview")
+
+            var urlOverview = '@Url.Action("OverviewItemsStockLevelHistorical", "OutpostStockLevel")?OutpostId=' + id + '&DistrictId=' + selectedDistrictId;
+            $.get(urlOverview, function (data) {
+
+                drop.html('')
+                $('#stocklevel-overview-historical').html(data);
+                dropCurrent.html('');
+
+            });
+        }
+        function CurrentButtonClicked() {
+
+            var outpost = document.getElementById("Outposts");
+            var country = document.getElementById("Countries");
+            var region = document.getElementById("Regions");
+            var guidEmpty = "@Guid.Empty";
+
+            if (country.options[country.selectedIndex].value == guidEmpty)
+            { alert(" Please choose an option for each filter! "); }
+            else {
+                if (region.options[region.selectedIndex].value == guidEmpty) {
+                    alert("Please choose an option for region,district and outpost too!");
+                }
+                else {
+                    if ($("select[name='@Html.NameFor(m => m.Districts)']").val() == guidEmpty) {
+                        alert("Please choose an option for district and outpost too!");
+                    }
+                    else {
+                        var selectedOutpostId = outpost.options[outpost.selectedIndex].value;
+                        var selectedDistrictId = $("select[name='@Html.NameFor(m => m.Districts)']").val()
+                        var drop = $("#stocklevel-overview")
+
+                        
+                            var urlOverview = '@Url.Action("OverviewItemsStockLevel", "OutpostStockLevel")?OutpostId=' + selectedOutpostId + '&DistrictId=' + selectedDistrictId;
+                            $.get(urlOverview, function (data) {
+
+                                drop.html('');
+                                $('#stocklevel-overview').html(data);
+                                var dropHistorical = $("#stocklevel-overview-historical");
+                                dropHistorical.html('');
+
+                            });
+                       }
+                }
+            }
+
+        }
 
         function ViewStockButtonClicked() {
 
             var outpost = document.getElementById("Outposts");
-            var selectedOutpostId = outpost.options[outpost.selectedIndex].value;
-            var selectedDistrictId = $("select[name='@Html.NameFor(m => m.Districts)']").val()
-            var drop = $("#stocklevel-overview")
-            debugger;
-            var urlOverview = '@Url.Action("OverviewItemsStockLevel","OutpostStockLevel")?OutpostId=' + selectedOutpostId  + '&DistrictId=' + selectedDistrictId;
-            $.get(urlOverview, function (data) {
+            var country = document.getElementById("Countries");
+            var region = document.getElementById("Regions");
+            var guidEmpty = "@Guid.Empty";
 
-                drop.html('')
+            if (country.options[country.selectedIndex].value == guidEmpty)
+            { alert(" Please choose an option for each filter! "); }
+            else {
+                if (region.options[region.selectedIndex].value == guidEmpty) {
+                    alert("Please choose an option for region,district and outpost too!");
+                }
+                else {
+                    if ($("select[name='@Html.NameFor(m => m.Districts)']").val() == guidEmpty) {
+                        alert("Please choose an option for district and outpost too!");
+                    }
+                    else {
+                        var selectedOutpostId = outpost.options[outpost.selectedIndex].value;
+                        var selectedDistrictId = $("select[name='@Html.NameFor(m => m.Districts)']").val()
+                        var drop = $("#stocklevel-overview")
 
-                $('#stocklevel-overview').html(data);
-                debugger;
-            });
+                        if (drop.html().length > 0) {
+                            var urlOverview = '@Url.Action("OverviewItemsStockLevel", "OutpostStockLevel")?OutpostId=' + selectedOutpostId + '&DistrictId=' + selectedDistrictId;
+                            $.get(urlOverview, function (data) {
+
+                                drop.html('');
+                                $('#stocklevel-overview').html(data);
+                                var dropHistorical = $("#stocklevel-overview-historical");
+                                dropHistorical.html('');
+
+                            });
+                        }
+                        else {
+                            var dropHistorical = $("#stocklevel-overview-historical");
+                            var urlOverview = '@Url.Action("OverviewItemsStockLevelHistorical", "OutpostStockLevel")?OutpostId=' + selectedOutpostId + '&DistrictId=' + selectedDistrictId;
+                            $.get(urlOverview, function (data) {
+
+                                dropHistorical.html('')
+                                $('#stocklevel-overview-historical').html(data);
+                                drop.html('');
+
+                            });
+
+                        }
+
+
+                    }
+                }
+            }
+
+        }  
+        function HistoricalButtonClicked() {
+
+            var outpost = document.getElementById("Outposts");
+            var country = document.getElementById("Countries");
+            var region = document.getElementById("Regions");
+            var guidEmpty = "@Guid.Empty";
+            if (country.options[country.selectedIndex].value == guidEmpty)
+            { alert(" Please chose an option for each filter! "); }
+            else {
+                if (region.options[region.selectedIndex].value == guidEmpty) {
+                    alert("Please chose an option for region,district and outpost too!");
+                }
+                else {
+                    if ($("select[name='@Html.NameFor(m => m.Districts)']").val() == guidEmpty) {
+                        alert("Please chose an option for district and outpost too!");
+                    }
+                    else {
+                        var selectedOutpostId = outpost.options[outpost.selectedIndex].value;
+                        var selectedDistrictId = $("select[name='@Html.NameFor(m => m.Districts)']").val()
+                        var drop = $("#stocklevel-overview-historical")
+                        var dropCurrent = $("#stocklevel-overview")
+
+                        var urlOverview = '@Url.Action("OverviewItemsStockLevelHistorical", "OutpostStockLevel")?OutpostId=' + selectedOutpostId + '&DistrictId=' + selectedDistrictId;
+                        $.get(urlOverview, function (data) {
+
+                            drop.html('')
+                            dropCurrent.html('');
+                            $('#stocklevel-overview-historical').html(data);
+
+                        });
+
+                    }
+                }
+            }
 
         }
-
         $("select[name='@Html.NameFor(m => m.Countries)']").change(function () {
             var e = $(this)[0];
             var selectedCountryId = e.options[e.selectedIndex].value;
 
-           
+
             $.getJSON('@Url.Action("GetRegionsForCountry", "OutpostStockLevel")?countryId=' + selectedCountryId, function (data) {
 
                 var drop = $("#Regions")
                 drop.html('')
 
-               
+
                 var drop = $("#Districts")
                 drop.html('')
 
