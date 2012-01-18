@@ -77,7 +77,6 @@ Regions: Overview
             var selectedCountryId = e.options[e.selectedIndex].value;
 
             var drop = $("#region-overview")
-//            '@Url.Action("Create")?countryId=' + countryId;
             document.getElementById('create').href = '@Url.Action("Create")?countryId=' + selectedCountryId;
 
             var urlOverview = '@Url.Action("OverviewTable")?countryId=' + selectedCountryId;
