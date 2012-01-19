@@ -36,7 +36,7 @@
                     var _class = (itemNo++%2 == 0) ? "odd" : "even";
 
                     <tr>
-                        <td>
+                        <td class="search">
                             @(Html.ActionLink<StockLevelController>(it => it.OutpostStockLevelOverview(outpost.Id, null), @outpost.Name, OutpostManagementAreaRegistration.DEFAULT_ROUTE))                        
                         </td>
                         <td>@outpost.DetailMethod

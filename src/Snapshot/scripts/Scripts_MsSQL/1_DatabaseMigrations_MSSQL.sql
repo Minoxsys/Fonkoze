@@ -184,7 +184,6 @@ end
 
 =======
 >>>>>>> outposts
-if not exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'OutpostStockLevels')
 begin
 	-- Stock Level
 	CREATE TABLE OutpostStockLevels(
@@ -197,10 +196,7 @@ begin
 		ProdSMSRef NVARCHAR(20) NOT NULL,
 		StockLevel INTEGER NOT NULL,
 		PrevStockLevel INTEGER NOT NULL,
-<<<<<<< HEAD
-		UpdateMethod NCHAR(10) NULL DEFAULT 'System',
-		UpdatedMethod NCHAR(10) DEFAULT 'System',
-=======
+		UpdatedMethod NCHAR(10) NULL DEFAULT 'SMS',
 		UpdatedMethod NCHAR(10) NULL DEFAULT 'SMS',
 >>>>>>> outposts
 		Created DATETIME NULL,

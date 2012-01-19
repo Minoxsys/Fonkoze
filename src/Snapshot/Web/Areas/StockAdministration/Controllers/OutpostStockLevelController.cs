@@ -271,6 +271,7 @@ namespace Web.Areas.StockAdministration.Controllers
                                 foreach (var product in productGroup)
                                 {
                                     CreateMappings();
+                                                                       
                                     var productModel = new ProductModel();
                                     var productEntity = QueryProduct.Load(product.ProductId);
                                     Mapper.Map(productEntity, productModel);
@@ -311,7 +312,7 @@ namespace Web.Areas.StockAdministration.Controllers
 
                         foreach (var productItem in productGroup)
                         {
-                            CreateMappings();
+                            CreateMappings();         
                             var productModel = new ProductModel();
                             var productEntity = QueryProduct.Load(productItem.ProductId);
                             Mapper.Map(productEntity, productModel);
@@ -345,7 +346,7 @@ namespace Web.Areas.StockAdministration.Controllers
 
             outpostStockLevelModel.OutpostName = QueryOutpost.Load(outpostStockLevel.OutpostId).Name;
             outpostStockLevelModel.ProductGroupName = QueryProductGroup.Load(outpostStockLevel.ProdGroupId).Name;
-            var product = QueryProduct.Load(outpostStockLevel.ProductId);
+            var product = QueryProduct.Load(outpostStockLevel.ProdGroupId);
             outpostStockLevelModel.ProductDescription = product.Description;
             outpostStockLevelModel.ProductName = outpostStockLevel.ProductName;
             outpostStockLevelModel.EditAreCommingFromFilterByAllOutposts = EditAreCommingFromFilterByAll;
