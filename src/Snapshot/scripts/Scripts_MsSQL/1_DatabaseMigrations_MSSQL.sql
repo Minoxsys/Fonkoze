@@ -180,7 +180,10 @@ begin
     )
 end
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> outposts
 if not exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'OutpostStockLevels')
 begin
 	-- Stock Level
@@ -189,12 +192,17 @@ begin
 		OutpostId UNIQUEIDENTIFIER not null,
 		ProdGroupId UNIQUEIDENTIFIER NOT NULL,
 		ProductId UNIQUEIDENTIFIER NOT NULL,
+		ProductGroupName nvarchar(30) not null,
 		ProductName nvarchar(30) not null,
 		ProdSMSRef NVARCHAR(20) NOT NULL,
 		StockLevel INTEGER NOT NULL,
 		PrevStockLevel INTEGER NOT NULL,
+<<<<<<< HEAD
 		UpdateMethod NCHAR(10) NULL DEFAULT 'System',
 		UpdatedMethod NCHAR(10) DEFAULT 'System',
+=======
+		UpdatedMethod NCHAR(10) NULL DEFAULT 'SMS',
+>>>>>>> outposts
 		Created DATETIME NULL,
 		Updated DATETIME NULL,
         ByUser_FK UNIQUEIDENTIFIER NULL,

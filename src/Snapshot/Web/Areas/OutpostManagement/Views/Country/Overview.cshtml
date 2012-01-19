@@ -24,27 +24,7 @@ OutpostManagement Countries: Overview
      <div class="page_header_buttons">
         @(Html.ActionLink<CountryController>(it => it.Create(Model.PagingInfo.CurrentPage), "Add new Country", OutpostManagementAreaRegistration.DEFAULT_ROUTE))
     </div>
-   
-    <table id="Header">
-        <thead>
-            <tr>
-                <th>
-                </th>
-                <th></th>
-                <th></th>
-                <th>
-                     <label>Search:<input type="text" 
-                                   id="CountrySearch" 
-                                   name="CountrySearch" 
-                                   maxlength="50" 
-                                   style="width:200px; 
-                                   height   :30px; 
-                                   margin-left:0px" /> 
-                       </label>
-                </th>
-            </tr>
-        </thead>
-    </table>
+   <div>&nbsp;</div>
 
 <div class="pager">
    @Html.PageLinks(Model.PagingInfo, x => Url.Action("Overview", new {page = x}))
@@ -88,7 +68,7 @@ OutpostManagement Countries: Overview
                     </td>*@
                     <td>
                         @{Html.BeginForm<CountryController>(m => m.Delete(country.Id), FormMethod.Post, new { @class = "delete-user-form" }); }
-                        @Html.Button("delete-user", "Delete", HtmlButtonType.Submit)
+                        @Html.Button("delete-user", "Remove", HtmlButtonType.Submit)
                         @{Html.EndForm();}
 
                     </td>

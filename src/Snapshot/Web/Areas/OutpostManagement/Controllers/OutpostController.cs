@@ -196,6 +196,48 @@ namespace Web.Areas.OutpostManagement.Controllers
             return PartialView(outpostsList);
         }
 
+        public PartialViewResult SearchForOutpostWithName(string outpostName, Guid? districtId)
+        {
+            var outpostList = new List<OutpostModel>();
+
+            if (districtId.Value == Guid.Empty)
+            {
+                var outposts = QueryService.Query().Where(it => it.Name.Contains(outpostName)).ToList();
+
+                if (outposts.Count > 0)
+                {
+                    foreach (Outpost outpost in outposts)
+                    {
+                        CreateMappings();
+                        var model = new OutpostModel();
+                        Mapper.Map(outpost, model);
+                        //model.OutpostNo = QueryOutpost.Query().Count(it => it.District.Id == district.Id);
+                        outpostList.Add(model);
+                    }
+                }
+            }
+            else
+            {
+                var outposts = QueryService.Query().Where(it => it.District.Id == districtId && it.Name.Contains(outpostName)).ToList();
+
+                if (outposts.Count > 0)
+                {
+                    foreach (Outpost outpost in outposts)
+                    {
+                        CreateMappings();
+                        var model = new OutpostModel();
+                        Mapper.Map(outpost, model);
+                        //model.OutpostNo = QueryOutpost.Query().Count(it => it.District.Id == districtId);
+                        outpostList.Add(model);
+                    }
+
+                }
+
+            }
+
+            return PartialView("OverviewOutpost", outpostList);
+
+        }
 
         public ActionResult OverviewContacts(Guid outpostId)
         {
@@ -237,6 +279,23 @@ namespace Web.Areas.OutpostManagement.Controllers
         public ActionResult Create()
         {
             var model = CreateOutpost;
+            model.Warehouse = new OutpostModel();
+            model.Warehouses = new List<SelectListItem>();
+            var resultWarehouse = QueryService.Query().Where(m => m.IsWarehouse);
+            if (resultWarehouse != null)
+            {
+                if (resultWarehouse.FirstOrDefault() != null)
+                {
+                    foreach (Domain.Outpost item3 in resultWarehouse)
+                    {
+                        var selectListItem = new SelectListItem();
+
+                        selectListItem.Value = item3.Id.ToString();
+                        selectListItem.Text = item3.Name;
+                        model.Warehouses.Add(selectListItem);
+                    }
+                }
+            }
             return View(model);
         }
 
@@ -257,6 +316,7 @@ namespace Web.Areas.OutpostManagement.Controllers
                 outpostsOutputModel = MapDatFromInputModelToOutputModel(outpostInputModel);
                 return View("Create", outpostsOutputModel);
             }
+
             CreateMappings();
             var outpost = new Outpost();
             var client = QueryClients.Load(Client.DEFAULT_ID);
@@ -555,14 +615,23 @@ namespace Web.Areas.OutpostManagement.Controllers
         }
 
         [HttpGet]
-        public JsonResult SetWarehouse(Guid outpostId, Guid warehouseId)
+        public JsonResult GetProductsList(Guid? productId)
         {
-            var outpost = QueryService.Load(outpostId);
-            if (outpost != null)
+            List<SelectListItem> Outposts = new List<SelectListItem>();
+
+            var outposts = QueryService.Query().Where(it => it.District.Id == productId.Value);
+
+            if (outposts.ToList().Count > 0)
             {
-                
+                foreach (var item in outposts)
+                {
+                    Outposts.Add(new SelectListItem { Text = item.Name, Value = item.Id.ToString() });
+                }
             }
-            return null;
+            var jsonResult = new JsonResult();
+            jsonResult.Data = Outposts;
+
+            return Json(Outposts, JsonRequestBehavior.AllowGet);
 
         }
 

@@ -1,64 +1,52 @@
 ﻿@using Web.Areas.OutpostManagement.Models.StockLevel
 
-@model List<OutpostStockLevelModel>
+@model OutpostStockLevelOutputModel
           
  <div id="products-overview">          
 
-        <table id="ProductsSelection">
-            <thead>
-                <tr>
-                    <th  class="sort-alpha">
-                        Product
-                    </th>
-                    <th>
-                        SMS Reference Code
-                   </th>
-                   <th>
-                        Selected
-                   </th>
-                </tr>
-            </thead>
-            <tbody>
-                @{
-                    var itemNo = 0;
-                }
-                @foreach (var product in Model)
-                {
-                    var _class = (itemNo++ % 2 == 0) ? "odd" : "even";
-       
-                    <tr>
-                        <td>@product.ProductName
-                        </td>
-                        <td>@product.ProdSmsRef
-                        </td>
-                        <td>@Html.CheckBox(product.ProductId.ToString())
-                        </td>
-                        <td>@product.OutpostId + ";"    @product.ProdGroupId.ToString() + ";" + @product.ProductId.ToString()</td>
-                    </tr> 
-                }
-            </tbody>
-        </table>
-    </div>
-
+                <div id="products-overview">
+                    <table name="ProductsTable" id="ProductsTableId">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th  class="sort-alpha">
+                                    Product Name
+                                </th>
+                                <th>
+                                    SMS Reference Code
+                                </th>
+                                <th>
+                                    Selected
+                               </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                
+                            @for (int i = 0; i < Model.Products.Count; i++ )
+                            {
+                                //var product = Model.Products[i];
+                                var _class = (i % 2 == 0) ? "odd" : "even";
+        
+                               <tr>
+                                    <td>@Html.HiddenFor(m => m.Products[i].ProductId)
+                                    </td>
+                                    <td>@Html.DisplayFor(m => m.Products[i].ProductName)
+                                    </td>
+                                    <td>@Html.DisplayFor(m => m.Products[i].ProdSmsRef)
+                                    </td>
+                                    <td>@Html.CheckBoxFor(m => m.Products[i].Selected)
+                                    </td>
+                                </tr> 
+                            }
+                        </tbody>
+                </table>
+            </div>
+</div>
 
 
 @section scripts{
     <script type="text/javascript">
 
-        $(function () {
-
-            // Add onclick handler to checkbox w/id checkme
-            $("input[type='checkbox']").click(function () {
-                var productId = $(this).attr('name');
-
-                // If checked
-                if ($(this).is(":checked")) {
-                }
-                else {
-                }
-
-            });
-        });
 
     </script>
 }

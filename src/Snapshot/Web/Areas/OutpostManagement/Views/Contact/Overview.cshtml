@@ -14,29 +14,19 @@
 > Contact Details
 }
 @section master_content{
+    <div>&nbsp;</div>
+
     @if (!string.IsNullOrWhiteSpace(Model.Error))
     {
         <div class="error">
             @Model.Error
         </div>
     }
+    
     <div class="page_header_buttons">
         @(Html.ActionLink<ContactController>(it => it.Create(Model.OutpostId), "Add new Contact", OutpostManagementAreaRegistration.DEFAULT_ROUTE))
     </div>
-    <table id="Header">
-        <thead>
-            <tr>
-                <th>
-                </th>
-                <th>
-                    <label>
-                        Search:<input type="text" id="contactsSearch" name="contactsSearch" maxlength="50"
-                            style="width: 200px; height: 30px; margin-left: 0px" />
-                    </label>
-                </th>
-            </tr>
-        </thead>
-    </table>
+
     <div>
         <span class='info'>Please select at least a mobile phone number or an e-mail address
             as contact method for product requests.</span>

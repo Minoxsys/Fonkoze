@@ -60,6 +60,9 @@ OutpostManagement Outposts: Overview
                         District:</label>
                     @Html.DropDownList("Districts", Model.Districts, new { onChange = "onDistrictChanged()" })
                 </th>
+                <th><br />
+                     <input type="text" id="outpostSearch"  class="input" name="outpostSearch" maxlength="50" placeholder="Outposts search" style="width:200px; height:30px; margin-left:0px" />
+                </th>
          </thead>
         <tbody>
         </tbody>
@@ -77,21 +80,35 @@ OutpostManagement Outposts: Overview
 }
 
 @section master_actions{
-    @{
-        Html.RenderPartial("~/Views/Shared/_OutpostManagementActions.cshtml");
-    }
-        @{ Html.RenderPartial("~/Views/Shared/_StockAdministrationActions.cshtml");}
+    @{ Html.RenderPartial("~/Views/Shared/_OutpostManagementActions.cshtml"); }
+    @{ Html.RenderPartial("~/Views/Shared/_StockAdministrationActions.cshtml");}
 }
 
 
 @section scripts{
     <script type="text/javascript">
+        var timeout;
+
         $(function () {
             $(".delete-user-form").submit(function () {
                 return confirm('Are you sure that you want to delete this Outpost?');
             });
 
             $("select[name='@Html.NameFor(m=>m.Countries)']").change(onCountryChanged);
+
+            $("input").keyup(function () {
+                clearTimeout(timeout);
+                var selectedDistrictId = $("select[name='@Html.NameFor(m => m.Districts)']").val();
+                var selectedRegionId = $("select[name='@Html.NameFor(m => m.Regions)']").val();
+                var selectedCountryId = $("select[name='@Html.NameFor(m => m.Countries)']").val();
+ 
+                if (selectedDistrictId == "@Guid.Empty") {
+                  timeout = setTimeout("searchOutpostByName('" + selectedDistrictId + "')", 1000);
+                }
+                else {
+                    SearchOutpostsOnFilterSelected();
+                }
+            });
         });
 
 
@@ -169,6 +186,88 @@ OutpostManagement Outposts: Overview
                 $('#outpost-overview').html(data);
             });
 
+        }
+
+        function searchOutpostByName(selectedDistrictId) {
+
+            jQuery('#outpostSearch').keyup(function (event) {
+                if (event.keyCode == 27) {
+                    resetSearch();
+                }
+            });
+
+
+            var outpostName = document.getElementById("outpostSearch").value;
+            var drop = $("#outpost-overview")
+
+
+            var urlOverview = '@Url.Action("SearchForOutpostWithName")?outpostName=' + outpostName + '&districtId=' + selectedDistrictId;
+            clearTimeout(timeout);
+            $.get(urlOverview, function (data) {
+
+                drop.html('')
+
+                $('#outpost-overview').html(data);
+                clearTimeout(timeout);
+            });
+            //GetAllButtonsForPaginationAndSetOnClickEvent();
+        }
+
+        //search for outposts by Name
+
+        jQuery.expr[":"].containsNoCase = function (el, i, m) {
+            debugger;
+            var search = m[3];
+            if (!search) return false;
+            return eval("/" + search + "/i").test($(el).text());
+        };
+
+        // jQuery(document).ready(function () {
+        function SearchOutpostsOnFilterSelected() {
+            // cancel the search if the user presses the ESC key
+            jQuery('#outpostSearch').keyup(function (event) {
+                if (event.keyCode == 27) {
+                    resetSearch();
+                }
+            });
+
+            // execute the search
+            jQuery('#outpostSearch').keyup(function () {
+
+                // only search when there are 3 or more characters in the textbox
+                if (jQuery('#outpostSearch').val().length > 0) {
+                    // hide all rows
+                    jQuery('#outposts-table tr').hide();
+                    // show the header row
+                    debugger;
+                    jQuery('#outposts-table tr:first').show();
+                    // show the matching rows (using the containsNoCase from Rick Strahl)
+                    jQuery('#outposts-table tr .search:containsNoCase(\'' + jQuery('#outpostSearch').val() + '\')').parent().show();
+                }
+                else if (jQuery('#outpostSearch').val().length == 0) {
+                    // if the user removed all of the text, reset the search
+                    resetSearch();
+                }
+
+                // if there were no matching rows, tell the user
+                if (jQuery('#outposts-table tr:visible').length == 1) {
+                    // remove the norecords row if it already exists
+                    jQuery('.norecords').remove();
+                    // add the norecords row
+                    jQuery('#outposts-table').append('<tr class="norecords"><td colspan="7" class="Normal">No records were found</td></tr>');
+                }
+            });
+        } //);
+
+        function resetSearch() {
+            // clear the textbox
+            jQuery('#outpostSearch').val('');
+            // show all table rows
+            jQuery('#outposts-table tr').show();
+            // remove any no records rows
+            jQuery('.norecords').remove();
+            // make sure we re-focus on the textbox for usability
+            jQuery('#outpostSearch').focus();
         }
 
     </script>

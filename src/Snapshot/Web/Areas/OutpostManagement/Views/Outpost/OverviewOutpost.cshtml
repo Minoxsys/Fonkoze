@@ -4,7 +4,7 @@
            
  <div id="outpost-overview">          
 
-        <table id="Outposts">
+        <table id="outposts-table">
             <thead>
                 <tr>
                     <th  class="sort-alpha">
@@ -13,11 +13,8 @@
                     <th>
                         Contact Method
                    </th>
-                   <th>
-                        Latitude
-                    </th>
-                    <th>
-                        Longitude
+                   <th colspan=2 align="center">
+                       Co-ordinates
                     </th>
                     <th>
                         Is Warehouse
@@ -40,7 +37,7 @@
 
                     <tr>
                         <td>
-                            @(Html.ActionLink<StockLevelController>(it => it.OutpostStockLevelOverview(outpost.Id), @outpost.Name, OutpostManagementAreaRegistration.DEFAULT_ROUTE))                        
+                            @(Html.ActionLink<StockLevelController>(it => it.OutpostStockLevelOverview(outpost.Id, null), @outpost.Name, OutpostManagementAreaRegistration.DEFAULT_ROUTE))                        
                         </td>
                         <td>@outpost.DetailMethod
                         </td>
@@ -48,7 +45,13 @@
                         </td>
                         <td>@outpost.Longitude
                         </td>
-                        <td>@outpost.IsWarehouse
+                        <td>@if(@outpost.IsWarehouse)
+                            {
+                             <label>Yes</label>
+                            }
+                            else{
+                             <label>No</label>
+                            }
                         </td>
                         <td>@if (@outpost.Warehouse != null)
                             {
@@ -59,7 +62,7 @@
                             @(Html.ActionLink<OutpostController>(call => call.Edit(outpost.Id), "Edit", OutpostManagementAreaRegistration.DEFAULT_ROUTE))
                         </td>
                         <td>                   
-                            @{ Html.BeginForm<OutpostController>(m => m.Delete(outpost.Id), FormMethod.Post, new {@class = "delete-user-form"}); }
+                            @{ Html.BeginForm<OutpostController>(m => m.Delete(outpost.Id), FormMethod.Post, new { @class = "delete-user-form" }); }
                             @Html.Button("delete-user", "Delete", HtmlButtonType.Submit)
                             @{ Html.EndForm(); }
                         </td>
@@ -72,17 +75,6 @@
 @section scripts{
     <script type="text/javascript">
 
-     $(function () {
-            $(".delete-user-form").submit(function () {
-                return confirm('Are you sure that you want to delete this Outpost?');
-            });
-
-        });
-
-
-
-
 
      </script>
-
 }
