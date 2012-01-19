@@ -278,9 +278,9 @@ namespace Web.Areas.OutpostManagement.Controllers
         //[Requires(Permissions = "Country.CRUD")]
         public ActionResult Create()
         {
-            var model = CreateOutpost;
-            model.Warehouse = new OutpostModel();
-            model.Warehouses = new List<SelectListItem>();
+            var model = new OutpostOutputModel();
+           model.Warehouse = new OutpostModel();
+           model.Warehouses = new List<SelectListItem>();
             var resultWarehouse = QueryService.Query().Where(m => m.IsWarehouse);
             if (resultWarehouse != null)
             {
