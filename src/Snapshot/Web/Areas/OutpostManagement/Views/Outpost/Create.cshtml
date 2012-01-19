@@ -28,6 +28,11 @@ Outpost : Create
     <div>&nbsp;</div>
 }
 
+@section master_actions{
+    @{ Html.RenderPartial("~/Views/Shared/_OutpostManagementActions.cshtml"); }
+    @{ Html.RenderPartial("~/Views/Shared/_StockAdministrationActions.cshtml");}
+}
+
 @section scripts{
 <script type="text/javascript">
 

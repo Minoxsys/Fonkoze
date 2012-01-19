@@ -1,7 +1,8 @@
-﻿@using Web.Areas.OutpostManagement.Models.StockLevel
+﻿
+@using Web.Areas.OutpostManagement.Models.StockLevel
 
 
-@model OutpostStockLevelOverviewModel
+@model OutpostStockLevelOutputModel
 
 
 @section page_title{
@@ -22,15 +23,14 @@ OutpostManagement Countries: Overview
             @Model.Error 
         </div>
     }
-  
+    
+ 
+
      <div class="page_header_buttons">
         @*@(Html.ActionLink<CountryController>(it => it.Create(), "Add new Country", OutpostManagementAreaRegistration.DEFAULT_ROUTE))*@
     </div>
-   @Html.Hidden(Model.OutpostId.ToString())
-   @Html.Hidden(Model.ProductGroupId.ToString())
-   @Html.Hidden(Model.Products.ToString())
-   @Html.Hidden(Model.StockLevels.ToString())
-
+ 
+    <div>
     <table id="Header">
         <thead>
             <tr>
@@ -51,81 +51,115 @@ OutpostManagement Countries: Overview
             </tr>
         </thead>
     </table>
-
-<div class="pager">
-  @* @Html.PageLinks(Model.PagingInfo, x => Url.Action("Overview", new {page = x})) *@
-</div>
-
-@*@{Html.BeginForm("CreateOutpostStockLevel", "StockLevel", this.Model, FormMethod.Post);}*@
-
-@{Html.BeginForm();}
+    </div>
 
 
 
-<div> 
-<label id="OutpostName"> @Model.OutpostName</label>
-</div>
-<div>
-<label id="OutpostID"> @Model.OutpostId</label>
-</div>
+@using (Html.BeginForm<StockLevelController>(m => m.CreateOutpostStockLevel(null, Model.OutpostId), FormMethod.Post))
+{
+    @Html.HiddenFor(m=>m.OutpostId)
+    @Html.HiddenFor(m => m.ProductGroupName)
+  
+    <div>
+        <label id="OutpostId"> @Model.OutpostName</label>
+    </div>
+    
+    <div>
+        &nbsp;
+     </div>
+
     <div>
     &nbsp;</div>
 
-    <div>
-    &nbsp;</div>
-
-<div class="row">
-<label>
+    <div class="row">
+    <label>
                      Product Group:</label>
-                    <select name="ProductGroupName" id="ProductGroupId">
+                    <select name="ProductGroupId" id="ProductGroupId">
                         <option value="@Guid.Empty">- Select a Product Group - </option>
                         @{
                             foreach (var item in Model.ProductGroups)
                             {
-                            <option value="@item.Value" @(item.Selected ? @"selected='selected'" : @"") >@item.Text</option>
+                               <option value="@item.Value" @(item.Selected ? @"selected='selected'" : @"") >@item.Text</option>
                             }
                         }
                     </select>
-                    </div>
+     </div>
      <div>
-    &nbsp;</div>
-    <div>
-    @{
-        Html.RenderPartial("OverviewProducts", Model.Products);
-    }
-    <div>
-    &nbsp;
-    </div>
-    <div>
-      @Html.SubmitButton("submit-form", "Save") 
-    </div>
+        &nbsp;
+     </div>
+    
+    
+            <div>
+            @{
+                Html.RenderPartial("OverviewProducts", Model);
+            }
+            </div>
+                            
+            <div>
+                &nbsp;
+            </div>
+    
+            <div>
+                @Html.SubmitButton("submit-form", "Save") 
+             </div>
 
-    @{
-        Html.RenderPartial("OverviewStockLevel", Model.StockLevels);
-    }
+          <div id="stocklevel-overview">          
 
-@{Html.EndForm();}
-
- @{Html.BeginForm<StockLevelController>(m => m.CreateOutpostStockLevel(@Model), FormMethod.Post, new { @class = "save-model-form", @Model.ProductGroupId });}
- @Html.Button("save-model-special", "Save Special", HtmlButtonType.Submit)
- @{Html.EndForm();}
-
-
-
-</div>
-
+                <table id="ProductsSelection">
+                    <thead>
+                        <tr>
+                            <th  class="sort-alpha">
+                                Group Name
+                            </th>
+                            <th  class="sort-alpha">
+                                Product Name
+                            </th>
+                             <th>
+                                SMS Reference Code
+                           </th>
+                             <th>
+                                Product Stock Level
+                           </th>
+                             <th>
+                                Update
+                           </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            var itemNo = 0;
+                        }
+                        @foreach (var item in Model.StockLevels)
+                        {
+                            var _class = (itemNo++ % 2 == 0) ? "odd" : "even";
+       
+                            <tr>
+                                 <td>@Model.ProductGroupName
+                                </td>
+                                <td>@item.ProductName
+                                </td>
+                                <td>@item.ProdSmsRef
+                                </td>
+                                <td>@item.PrevStockLevel
+                                </td>
+                                <td>@item.Updated
+                                </td>
+                            </tr> 
+                        }
+                    </tbody>
+                </table>
+            </div>
+                
+        }
 }
+
 
 @section scripts{
     <script type="text/javascript">
-        $(function () {
-            $(".delete-user-form").submit(function () {
-                return confirm('Are you sure that you want to delete this Outpost?');
-            });
 
-            $('#ProductGroupId').change(onProductGroupChanged);
-            $('#ProductGroupId').change(onStockLevelChanged);
-        });
+                 $(function () {
+                               $('#ProductGroupId').change(onProductGroupChanged);
+                           });
 
 
 
@@ -133,56 +167,42 @@ OutpostManagement Countries: Overview
             
             var e = $(this)[0];
             var selectedProductGroupId = e.options[e.selectedIndex].value;
+
             
             var reg = document.getElementById("Products");
-
+ 
+            
             $("#Products option[value='@Guid.Empty.ToString()']").remove();
             var drop = $("#products-overview");
-            drop.html('')
+            drop.html('');
 
-            var urlOverview = '@Url.Action("OverviewProducts")?productGroupId=' + selectedProductGroupId;
+
+            var urlOverview = '@Url.Action("OverviewProducts")?outpostId=@Model.OutpostId&productGroupId=' + selectedProductGroupId;
             $.get(urlOverview, function (data) {
-                $('#products-overview').html(data);
+             $('#products-overview').html(data);
+          });
+        };
+
+        function onStockLevelChanged() {
+
+            var e = $(this)[0];
+            var selectedProductGroupId = e.options[e.selectedIndex].value;
+            debugger;
+
+
+
+            $("#Products option[value='@Guid.Empty.ToString()']").remove();
+            var drop = $("#stocklevel-overview");
+            drop.html('');
+
+
+            var urlOverview = '@Url.Action("OverviewStockLevel")?outpostId=@Model.OutpostId&productGroupId=' + selectedProductGroupId;
+            $.get(urlOverview, function (data) {
+                $('#stocklevel-overview').html(data);
             });
-
-
-            };
-
-            function onStockLevelChanged() {
-
-                var e = $(this)[0];
-                var selectedProductGroupId = e.options[e.selectedIndex].value;
-                var reg = document.getElementById("OutpostId");
-
-                $("#Products option[value='@Guid.Empty.ToString()']").remove();
-                var drop = $("#stocklevel-overview");
-                drop.html('')
-
-                var urlOverview = '@Url.Action("OverviewStockLevel")?productGroupId=' + selectedProductGroupId;
-                $.get(urlOverview, function (data) {
-                    $('#stocklevel-overview').html(data);
-                });
-
-
-            };
-
-            $(function () {
-
-                // Add onclick handler to checkbox w/id checkme
-                $("input[type='checkbox']").click(function () {
-                    var productId = $(this).attr('name');
-                    alert("hhhhhhh");
-                    
-
-                    // If checked
-                    if ($(this).is(":checked")) {
-                    }
-                    else {
-                    }
-
-                });
-            });
-
+        };
+        
     </script>
 }
+
 

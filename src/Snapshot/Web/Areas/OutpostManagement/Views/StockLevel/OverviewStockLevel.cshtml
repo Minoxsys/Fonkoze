@@ -1,6 +1,6 @@
 ﻿@using Web.Areas.OutpostManagement.Models.StockLevel
 
-@model List<OutpostStockLevelModel>
+@model OutpostStockLevelOutputModel
           
  <div id="stocklevel-overview">          
 
@@ -8,16 +8,20 @@
             <thead>
                 <tr>
                     <th  class="sort-alpha">
-                        OutpostId
+                        Group Name
                     </th>
                     <th  class="sort-alpha">
-                        ProductGroup Id
-                    </th>
-                   <th  class="sort-alpha">
                         Product Name
+                    </th>
                     </th>
                      <th>
                         SMS Reference Code
+                   </th>
+                     <th>
+                        Product Stock Level
+                   </th>
+                     <th>
+                        Update
                    </th>
                 </tr>
             </thead>
@@ -25,25 +29,27 @@
                 @{
                     var itemNo = 0;
                 }
-                @foreach (var product in Model)
+                @foreach (var item in Model.StockLevels)
                 {
                     var _class = (itemNo++ % 2 == 0) ? "odd" : "even";
        
                     <tr>
-                        <td>@product.OutpostId
+                         <td>@Model.ProductGroupName
                         </td>
-                        <td>@product.ProdGroupId
+                        <td>@item.ProductName
                         </td>
-                        <td>@product.ProductName
+                        <td>@item.ProdSmsRef
                         </td>
-                        <td>@product.ProdSmsRef
+                        <td>@item.PrevStockLevel
+                        </td>
+                        <td>@item.Updated
                         </td>
                     </tr> 
                 }
             </tbody>
         </table>
     </div>
-
+}
 
 
 @section scripts{

@@ -173,7 +173,7 @@ namespace Web.Areas.StockAdministration.Controllers
                                 {
                                     CreateMappings();
                                     var product = new Product();
-                                    product = QueryProduct.Load(allDataWithSameProductGroup[index].ProductId);
+                                    product = QueryProduct.Load(allDataWithSameProductGroup[index].ProdGroupId);
                                     var productModel = new ProductModel();
 
                                     Mapper.Map(product, productModel);
@@ -217,7 +217,7 @@ namespace Web.Areas.StockAdministration.Controllers
                         {
                             CreateMappings();
                             var product = new Product();
-                            product = QueryProduct.Load(allDataWithSameProductGroup[index].ProductId);
+                            product = QueryProduct.Load(allDataWithSameProductGroup[index].ProdGroupId);
                             var productModel = new ProductModel();
 
                             Mapper.Map(product, productModel);
@@ -246,7 +246,7 @@ namespace Web.Areas.StockAdministration.Controllers
 
             outpostStockLevelModel.OutpostName = QueryOutpost.Load(outpostStockLevel.OutpostId).Name;
             outpostStockLevelModel.ProductGroupName = QueryProductGroup.Load(outpostStockLevel.ProdGroupId).Name;
-            var product = QueryProduct.Load(outpostStockLevel.ProductId);
+            var product = QueryProduct.Load(outpostStockLevel.ProdGroupId);
             outpostStockLevelModel.ProductDescription = product.Description;
             outpostStockLevelModel.ProductName = outpostStockLevel.ProductName;
             outpostStockLevelModel.EditAreCommingFromFilterByAllOutposts = EditAreCommingFromFilterByAll;

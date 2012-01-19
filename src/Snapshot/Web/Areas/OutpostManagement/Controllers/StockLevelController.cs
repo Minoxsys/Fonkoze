@@ -20,11 +20,11 @@ namespace Web.Areas.OutpostManagement.Controllers
         //
         // GET: /StockAdministration/StockLevel/
 
-        public OutpostStockLevelOutputModel StockLevelOutputModel { get; set; }
+        //public OutpostStockLevelOutput1Model StockLevelOutputModel { get; set; }
 
         public OutpostStockLevelInputModel StockLevelInputModel { get; set; }
 
-        public OutpostStockLevelOverviewModel OutpostStockLevelOverviewModel { get; set; }
+        public OutpostStockLevelOutputModel OutpostStockLevelOverviewModel { get; set; }
 
         public ISaveOrUpdateCommand<OutpostStockLevel> SaveOrUpdateCommand { get; set; }
 
@@ -43,11 +43,11 @@ namespace Web.Areas.OutpostManagement.Controllers
         private const string TEMPDATA_ERROR_KEY = "error";
 
         [HttpGet]
-        public ActionResult OutpostStockLevelOverview([Bind(Include="Products, StockLevels, ProductGroups, OutpostId, ProdGroupId")] Guid outpostId)
+        public ActionResult OutpostStockLevelOverview( Guid outpostId, Guid? productGroupId)
         {
-            var overviewModel = new OutpostStockLevelOverviewModel();
+            var overviewModel = new OutpostStockLevelOutputModel();
             var productGroups = QueryProductGroup.Query();
-            CreateMappings();
+            var stockLevels = QueryStockLevel.Query().Where(it => it.OutpostId == outpostId);
 
             overviewModel.ProductGroups = new List<SelectListItem>();
             foreach (var item in productGroups)
@@ -58,180 +58,212 @@ namespace Web.Areas.OutpostManagement.Controllers
             var _outpost = QueryOutposts.Load(outpostId);
             overviewModel.OutpostId = _outpost.Id;
             overviewModel.OutpostName = _outpost.Name;
+            if (productGroupId != null)
+            {
+                var productGroupId1 = new Guid(productGroupId.ToString());
+                overviewModel.ProductGroupId = productGroupId1;
+            }
+
             if (overviewModel.StockLevels == null)
                 overviewModel.StockLevels = new List<OutpostStockLevelModel>();
 
             if (overviewModel.Products == null)
-                overviewModel.Products = new List<OutpostStockLevelModel>();
+                overviewModel.Products = new List<SelectedProductlModel>();
+
+            if (overviewModel.StockLevels == null)
+                overviewModel.StockLevels = new List<OutpostStockLevelModel>();
+
+
+            stockLevels.ToList().ForEach(stockLevelItem => overviewModel
+                .StockLevels
+                .Add(new OutpostStockLevelModel
+                {
+                    OutpostId = overviewModel.OutpostId,
+                    ProdGroupId = overviewModel.ProductGroupId,
+                    ProductGroupName = stockLevelItem.ProductGroupName,
+                    ProductName = stockLevelItem.ProductName,
+                    ProductId = stockLevelItem.ProductId,
+                    ProdSmsRef = stockLevelItem.ProdSmsRef,
+                    StockLevel = stockLevelItem.StockLevel,
+                    PrevStockLevel = stockLevelItem.PrevStockLevel,
+                    Updated = DateTime.Now
+
+                }));
 
             return View(overviewModel);
         }
 
-        public PartialViewResult OverviewProducts([Bind(Include = "Products, StockLevels, ProductGroups, OutpostId, ProdGroupId")] Guid productGroupId)
+        public PartialViewResult OverviewProducts(Guid outpostId, Guid productGroupId)
                                                   
         {
-            //outpostStockLevelOverviewModel
-            var productsList = new List<OutpostStockLevelModel>();
-            var products = QueryProduct.Query().Where(m => m.ProductGroup.Id == productGroupId);
+            var overviewModel = new OutpostStockLevelOutputModel();
+            var products = QueryProduct.Query().Where(p=>p.ProductGroup.Id == productGroupId);
+            var productGroup = QueryProductGroup.Load(productGroupId);
+            var stockLevels = QueryStockLevel.Query().Where(it => it.OutpostId == outpostId);
+          
 
-            foreach (var item in products)
+            var _outpost = QueryOutposts.Load(outpostId);
+
+            overviewModel.OutpostId = _outpost.Id;
+            overviewModel.ProductGroupId = productGroupId;
+            overviewModel.ProductGroupName = productGroup.Name;
+
+            var productsList = QueryProduct.Query().Where(m => m.ProductGroup.Id == overviewModel.ProductGroupId);
+            var stockLevelList = QueryStockLevel.Query().Where(m => m.ProdGroupId == overviewModel.ProductGroupId && m.OutpostId == overviewModel.OutpostId);
+
+
+            if (overviewModel.Products == null)
             {
-                var outpostStockLevelModel = new OutpostStockLevelModel();
-                var outpostStockLevel = new OutpostStockLevel();
-                //outpostStockLevel.OutpostId = OutpostId;
-                outpostStockLevel.ProdGroupId = productGroupId;
-                outpostStockLevel.ProductId = item.Id;
-                outpostStockLevel.ProdSmsRef = item.SMSReferenceCode;
-                outpostStockLevel.ProductName = item.Name;
-                Mapper.Map(outpostStockLevel, outpostStockLevelModel);
-                productsList.Add(outpostStockLevelModel);
-                //outpostStockLevelOverviewModel.Products.Add(outpostStockLevelModel);
-                
+                overviewModel.Products = new List<SelectedProductlModel>();
+
+                foreach (var prditem in productsList)
+                {
+                    var slitem = stockLevelList.Where(m => m.ProductId == prditem.Id);
+
+                    if (slitem.Count() == 0)
+                    {
+                        overviewModel.Products.Add(new SelectedProductlModel
+                                                {
+                                                    ProductId = prditem.Id,
+                                                    ProductGroupName = overviewModel.ProductGroupName,
+                                                    ProdSmsRef = prditem.SMSReferenceCode,
+                                                    ProductName = prditem.Name,
+                                                    Updated = DateTime.Now,
+                                                    Selected = false
+                                                });
+                    }
+                    else
+                    {
+                        overviewModel.Products.Add(new SelectedProductlModel
+                        {
+                            ProductId = prditem.Id,
+                            ProductGroupName = overviewModel.ProductGroupName,
+                            ProdSmsRef = prditem.SMSReferenceCode,
+                            ProductName = prditem.Name,
+                            Updated = DateTime.Now,
+                            Selected = true
+                        });
+                    }
+                }
             }
-            return PartialView(productsList);
+
+            if (overviewModel.StockLevels == null)
+                overviewModel.StockLevels = new List<OutpostStockLevelModel>();
+
+ 
+            stockLevels.ToList().ForEach(stockLevelItem => overviewModel
+                .StockLevels
+                .Add(new OutpostStockLevelModel
+                {
+                    OutpostId = overviewModel.OutpostId,
+                    ProdGroupId = overviewModel.ProductGroupId,
+                    ProductGroupName = stockLevelItem.ProductGroupName,
+                    ProductName = stockLevelItem.ProductName,
+                    ProductId = stockLevelItem.ProductId,
+                    ProdSmsRef = stockLevelItem.ProdSmsRef,
+                    StockLevel = stockLevelItem.StockLevel,
+                    PrevStockLevel = stockLevelItem.PrevStockLevel,
+                    Updated = DateTime.Now
+
+                }));
+            //products.ToList().ForEach(prditem => overviewModel
+                //    .Products.Add(new SelectedProductlModel
+                //    {
+                //        ProductId = prditem.Id,
+                //        ProductGroupName = overviewModel.ProductGroupName,
+                //        ProdSmsRef = prditem.SMSReferenceCode,
+                //        ProductName = prditem.Name,
+                //        Updated = DateTime.Now,
+                //        Selected = new bool()
+                //    }));
+
+            return PartialView(overviewModel);
         }
 
 
-        public PartialViewResult OverviewStockLevel([Bind(Include = "Products, StockLevels, ProductGroups, OutpostId, ProdGroupId")] Guid productGroupId)
+        public PartialViewResult OverviewStockLevel(Guid outpostId, Guid productGroupId)
         {
-            var stockLevel = QueryStockLevel.Query().Where(it => it.ProdGroupId == productGroupId);
+            var overviewModel = new OutpostStockLevelOutputModel();
+            var stockLevels = QueryStockLevel.Query().Where(it => it.OutpostId == outpostId);
+            var _outpost = QueryOutposts.Load(outpostId);
 
-            var stockLevelList = new List<OutpostStockLevelModel>();
-            foreach (var item in stockLevel)
+            overviewModel.OutpostId = _outpost.Id;
+            overviewModel.ProductGroupId = productGroupId;
+            //overviewModel.ProductGroupName = productGroup.Name;
+
+            if (overviewModel.StockLevels == null)
+                overviewModel.StockLevels = new List<OutpostStockLevelModel>();
+
+            stockLevels.ToList().ForEach(stockLevelItem => overviewModel
+                .StockLevels
+                .Add(new OutpostStockLevelModel
             {
-                var outpostStockLevelModel = new OutpostStockLevelModel();
+                OutpostId = overviewModel.OutpostId,
+                ProdGroupId = overviewModel.ProductGroupId,
+                ProductGroupName = stockLevelItem.ProductGroupName,
+                ProductName = stockLevelItem.ProductName,
+                ProductId = stockLevelItem.ProductId,
+                ProdSmsRef = stockLevelItem.ProdSmsRef,
+                StockLevel = stockLevelItem.StockLevel,
+                PrevStockLevel = stockLevelItem.PrevStockLevel,
+                Updated = DateTime.Now
 
-                Mapper.Map(item, outpostStockLevelModel);
-                stockLevelList.Add(outpostStockLevelModel);
-                //OutpostStockLevelOverviewModel.StockLevels.Add(outpostStockLevelModel);
-            }
+            }));
             
-            return PartialView(stockLevelList);
+            return PartialView(overviewModel);
         }
 
 
         [HttpPost]
-        public ActionResult OutpostStockLevelOverview([Bind(Include = "Products, StockLevels, ProductGroups, OutpostId, ProdGroupId")] OutpostStockLevelOverviewModel overviewModel)
+        public ActionResult OutpostStockLevelOverview(OutpostStockLevelOutputModel overviewModel)
         {
-            var productGroups = QueryProductGroup.Query();
-            CreateMappings();
-            overviewModel.ProductGroups = new List<SelectListItem>();
-            foreach (var item in productGroups)
-            {
-                overviewModel.ProductGroups.Add(new SelectListItem { Text = item.Name, Value = item.Id.ToString() });
-            }
-            UpdateModel(overviewModel);
-            return View("OutpostStockLevelOverview", overviewModel);
+
+            return RedirectToAction("OutpostStockLevelOverview", "StockLevel", new { outpostId = overviewModel.OutpostId });
         }
 
         [HttpPost]
-        public ActionResult CreateOutpostStockLevel(OutpostStockLevelOverviewModel outpostStockLevelOverviewModel)
+        public ActionResult CreateOutpostStockLevel(OutpostStockLevelInputModel outpostStockLevelInputModel, Guid outpostId)
         {
-            var overviewModel = outpostStockLevelOverviewModel;//var _outpost = QueryOutposts.Query().Where(m => m.Name == outpostStockLevelOverviewModel.OutpostName);
-            //OutpostStockLevelOverviewModel outpostStockLevelOverviewModel1 = (OutpostStockLevelOverviewModel)DependencyResolver.Current.GetService(typeof(OutpostStockLevelOverviewModel));
-            var productGroups = QueryProductGroup.Query();
-            overviewModel.ProductGroups = new List<SelectListItem>();
+            var overviewModel = outpostStockLevelInputModel;
+            var productGroup = QueryProductGroup.Load(overviewModel.ProductGroupId);
+            overviewModel.ProductGroupName = productGroup.Name;
+            var stockLevels = QueryStockLevel.Query().Where(it => it.OutpostId == outpostId);
 
-            overviewModel.ProductGroups = new List<SelectListItem>();
-            foreach (var item in productGroups)
+
+
+            var stockLevel = new OutpostStockLevel();
+            var client = QueryClients.Load(Client.DEFAULT_ID);
+
+
+            foreach (var item in overviewModel.Products)
             {
-                overviewModel.ProductGroups.Add(new SelectListItem { Text = item.Name, Value = item.Id.ToString() });
+                if (item.Selected)
+                {
+                    var product = QueryProduct.Load(item.ProductId);
+                    stockLevel.OutpostId = overviewModel.OutpostId;
+                    stockLevel.ProductGroupName = overviewModel.ProductGroupName;
+                    stockLevel.ProdGroupId = overviewModel.ProductGroupId;
+                    stockLevel.ProductId = item.ProductId;
+                    stockLevel.ProductName = product.Name;
+                    stockLevel.ProdSmsRef = product.SMSReferenceCode;
+                    stockLevel.StockLevel = 0;
+                    stockLevel.PrevStockLevel = 0;
+                    stockLevel.UpdatedMethod = "SMS";
+                    stockLevel.Client = client;
+
+                    var stockLevelCheck = stockLevels.Where(m => m.ProductId == item.ProductId);
+
+                    if (stockLevelCheck.Count() == 0)
+                    {
+                        SaveOrUpdateCommand.Execute(stockLevel);
+                    }
+                }
             }
-            return View("OutpostStockLevelOverview", outpostStockLevelOverviewModel);
-       }
-        //
-        // GET: /StockAdministration/StockLevel/Create
 
-        public ActionResult Create()
-        {
-            return View();
-        } 
-
-        //
-        // POST: /StockAdministration/StockLevel/Create
-
-        [HttpPost]
-        public ActionResult Create(FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add insert logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
+            return RedirectToAction("OutpostStockLevelOverview", "StockLevel", new { outpostId = overviewModel.OutpostId, productGroupId = overviewModel.ProductGroupId });
         }
-        
-        //
-        // GET: /StockAdministration/StockLevel/Edit/5
  
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
 
-        //
-        // POST: /StockAdministration/StockLevel/Edit/5
-
-        [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add update logic here
-
-                return RedirectToAction("Overview");
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        //
-        // GET: /StockAdministration/StockLevel/Delete/5
- 
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        //
-        // POST: /StockAdministration/StockLevel/Delete/5
-
-        [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add delete logic here
- 
-                return RedirectToAction("Overview");
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        private static void CreateMappings(OutpostStockLevel entity = null)
-        {
-            Mapper.CreateMap<OutpostStockLevelModel, OutpostStockLevel>();
-            Mapper.CreateMap<OutpostStockLevel, OutpostStockLevelModel>();
-
-            Mapper.CreateMap<OutpostStockLevel, OutpostStockLevelInputModel>();
-            Mapper.CreateMap<OutpostStockLevel, OutpostStockLevelOutputModel>();
-
-            Mapper.CreateMap<OutpostStockLevelInputModel, OutpostStockLevel>();
-            Mapper.CreateMap<OutpostStockLevelOutputModel, OutpostStockLevel>();
-
-            Mapper.CreateMap<ClientModel, Client>();
-            Mapper.CreateMap<Client, ClientModel>();
-       
-        }
 
     }
 }

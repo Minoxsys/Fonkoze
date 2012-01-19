@@ -77,9 +77,10 @@
                        })
                 </div>
                 <div class="column">
-                    <label for="Warehouse">
-                        If no, please select a warehouse from the list
-                    </label>
+                <label for="Warehouses">
+                    If no, please select a warehouse from the list
+                </label>            
+                    @Html.DropDownList("Warehouse.Id", Model.Warehouses)
                 </div>
             </div>
         </div>
