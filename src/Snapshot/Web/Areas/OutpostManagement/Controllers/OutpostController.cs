@@ -283,6 +283,7 @@ namespace Web.Areas.OutpostManagement.Controllers
                     }
                 }
             }
+
             return View(model);
         }
 
