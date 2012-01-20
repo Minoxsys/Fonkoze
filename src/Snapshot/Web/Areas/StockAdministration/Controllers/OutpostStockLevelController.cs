@@ -346,7 +346,7 @@ namespace Web.Areas.StockAdministration.Controllers
 
             outpostStockLevelModel.OutpostName = QueryOutpost.Load(outpostStockLevel.OutpostId).Name;
             outpostStockLevelModel.ProductGroupName = QueryProductGroup.Load(outpostStockLevel.ProdGroupId).Name;
-            var product = QueryProduct.Load(outpostStockLevel.ProdGroupId);
+            var product = QueryProduct.Load(outpostStockLevel.ProductId);
             outpostStockLevelModel.ProductDescription = product.Description;
             outpostStockLevelModel.ProductName = outpostStockLevel.ProductName;
             outpostStockLevelModel.EditAreCommingFromFilterByAllOutposts = EditAreCommingFromFilterByAll;
