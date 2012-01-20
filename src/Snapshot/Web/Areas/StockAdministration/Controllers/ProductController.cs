@@ -351,7 +351,7 @@ namespace Web.Areas.StockAdministration.Controllers
 
             //product.ProductGroup = QueryProductGroup.Load(model.ProductGroup.Id);
 
-            var products = QueryService.Query().Where(it => it.ProductGroup.Id == model.ProductGroup.Id && it.Name == model.Name).ToList();
+            var products = QueryService.Query().Where(it => it.ProductGroup.Id == model.ProductGroup.Id && it.Name == model.Name && it.Id !=model.Id).ToList();
 
             if (products.Count > 0)
             {
