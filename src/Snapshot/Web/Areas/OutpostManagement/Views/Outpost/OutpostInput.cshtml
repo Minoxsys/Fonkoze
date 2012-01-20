@@ -6,31 +6,41 @@
 @Html.HiddenFor(m => m.Id)
 <fieldset id="fieldsetInformation">
     <legend>Outpost Information</legend>
-    <div class="row of-2">
-        <label>
-            Country:</label>
-        <select name="@(Html.NameFor(m => m.Region.CountryId))">
-            <option value="@Guid.Empty">- Select a country - </option>
-            @{
-                foreach (var item in Model.Countries)
-                {
-                <option value="@item.Value" @(item.Selected ? @"selected='selected'" : @"") >@item.Text</option>
+  <label for="Name"> Country </label>
+   <label for="Name"> Country </label>
+         <div class="row">
+          <select name="@Html.NameFor(m => m.Region.CountryId)">
+                <option value="@Guid.Empty.ToString()"> - Select Country - </option>
+                @foreach (var item in Model.Countries)
+                { 
+                    <option value="@item.Value" @(item.Selected ? @"selected='selected'" : @"") >@item.Text</option>
                 }
-            }
-        </select>
-        <label for="Name">
-            Region
-        </label>
-        <div class="row">
-            <select name="@Html.NameFor(m => m.Region.Id)">
             </select>
-            <label for="Name">
-                Distict
-            </label>
-            <div class="row">
-                <select name="@Html.NameFor(m => m.District.Id)">
-                </select>
-            </div>
+
+        </div>
+  <label for="Name"> Region </label>
+         <div class="row">
+          <select name="@Html.NameFor(m => m.Region.Id)">
+                <option value="@Guid.Empty.ToString()"> - Select Region - </option>
+                @foreach (var item in Model.Regions)
+                { 
+                    <option value="@item.Value" @(item.Selected ? @"selected='selected'" : @"") >@item.Text</option>
+                }
+            </select>
+
+        </div>
+<label for="Name"> District </label>
+         <div class="row">
+        <select name="@Html.NameFor(m => m.District.Id)">
+        @if (Model.Districts.Count > 0)
+        {
+            <option value="@Guid.Empty.ToString()"> - Select District - </option>
+                foreach (var item in Model.Districts)
+                { 
+                    <option value="@item.Value" @(item.Selected ? @"selected='selected'" : @"") >@item.Text</option>
+                }
+
+        }
             <div class="row ">
                 <div class="column">
                     <label for="NameD">
