@@ -22,8 +22,6 @@ namespace Web.Areas.OutpostManagement.Controllers
         public OutpostModel OutpostModel { get; set; }
         public OutpostOutputModel OutpostModelOutput { get; set; }
 
-        //public IQueryOutposts QueryOutposts { get; set; }
-
         public IQueryService<Outpost> QueryWarehouse { get; set; }
         public IQueryService<Outpost> QueryService { get; set; }
         public IQueryService<Country> QueryCountry { get; set; }
@@ -48,7 +46,6 @@ namespace Web.Areas.OutpostManagement.Controllers
         private const string TEMPDATA_ERROR_KEY = "error";
 
 
-        //[Requires(Permissions = "Country.Overview")]
         [HttpGet]
         public ActionResult Overview(Guid? countryId, Guid? regionId, Guid? districtId)
         {
@@ -94,7 +91,6 @@ namespace Web.Areas.OutpostManagement.Controllers
                     regions = QueryRegion.Query().Where<Region>(it => it.Country.Id == countryS);
                     districts = QueryDistrict.Query().Where<District>(it => it.Region.Id == regionId.Value);
                     outposts = outposts.Where<Outpost>(it => it.District.Id == districtId.Value);
-                    //warehouses = outposts.Where<Outpost>(it => it.IsWarehouse);
 
                     model = new OutpostOverviewModel();
 
@@ -165,7 +161,6 @@ namespace Web.Areas.OutpostManagement.Controllers
                             outpostModel.Contacts.Add(contact);
                         }
 
-                       //districtModel.OutpostNo = QueryOutpost.Query().Count<Outpost>(it => it.District.Id == item.Id);
                         model.Outpost.Add(outpostModel);
                     }
                 }
@@ -189,7 +184,6 @@ namespace Web.Areas.OutpostManagement.Controllers
                 CreateMappings();
                 var outpostModel = new OutpostModel();
                 Mapper.Map(item, outpostModel);
-                //outpostModel.DistrictNo = QueryDistrict.Query().Count<District>(it => it.Region.Id == item.Id);
                 outpostsList.Add(outpostModel);
 
             }
@@ -211,7 +205,6 @@ namespace Web.Areas.OutpostManagement.Controllers
                         CreateMappings();
                         var model = new OutpostModel();
                         Mapper.Map(outpost, model);
-                        //model.OutpostNo = QueryOutpost.Query().Count(it => it.District.Id == district.Id);
                         outpostList.Add(model);
                     }
                 }
@@ -227,7 +220,6 @@ namespace Web.Areas.OutpostManagement.Controllers
                         CreateMappings();
                         var model = new OutpostModel();
                         Mapper.Map(outpost, model);
-                        //model.OutpostNo = QueryOutpost.Query().Count(it => it.District.Id == districtId);
                         outpostList.Add(model);
                     }
 
@@ -267,15 +259,10 @@ namespace Web.Areas.OutpostManagement.Controllers
                 }
             };
 
-            //countries = QueryCountries.Query();
-            //regions = QueryRegions.Query();
-            //districts = QueryDistricts.Query();
-
             return View(model);
         }
 
         [HttpGet]
-        //[Requires(Permissions = "Country.CRUD")]
         public ActionResult Create()
         {
            var model = CreateOutpost;
@@ -301,7 +288,6 @@ namespace Web.Areas.OutpostManagement.Controllers
 
         [HttpPost]
         [ValidateInput(false)]
-        //[Requires(Permissions = "OnBoarding.Candidate.CRUD")]
         public ActionResult Create(OutpostInputModel outpostInputModel)
         {
             var model = new OutpostInputModel();
@@ -346,7 +332,6 @@ namespace Web.Areas.OutpostManagement.Controllers
 
 
         [HttpGet]
-        //[Requires(Permissions = "Country.CRUD")]
         public ViewResult Edit(Guid outpostId)
         {
             var _outpost = QueryService.Load(outpostId);
@@ -384,11 +369,6 @@ namespace Web.Areas.OutpostManagement.Controllers
             if (selectedDistrict.Count > 0)
                 outpostModelView.Districts.First<SelectListItem>(it => it.Value == _outpost.District.Id.ToString()).Selected = true;
 
-            //foreach (Contact contact in _contacts)
-            //{
-            //    outpostModelView.Contacts.Add(contact);
-            //}
-
             foreach (Outpost item in warehouses)
             {
                 var selectListItem = new SelectListItem();
@@ -404,7 +384,6 @@ namespace Web.Areas.OutpostManagement.Controllers
  
         [HttpPost]
         [ValidateInput(false)]
-        //[Requires(Permissions = "OnBoarding.Candidate.CRUD")]
         public ActionResult Edit(OutpostInputModel outpostInputModel)
         {
             var model = new OutpostInputModel();
@@ -426,8 +405,6 @@ namespace Web.Areas.OutpostManagement.Controllers
             {
                 outpost.Warehouse = null;
             }
-
-            //var mainContact = QueryContact.Query().Where(m => m.Outpost.Id == _outpost.Id && m.IsMainContact);
 
             if (outpostInputModel.Region != null)
             {
@@ -483,16 +460,12 @@ namespace Web.Areas.OutpostManagement.Controllers
 
             Mapper.CreateMap<Outpost, OutpostInputModel>();
             Mapper.CreateMap<Outpost, OutpostOutputModel>();
-            //.ForMember("Region", m => m.Ignore())
-            //.ForMember("District", m => m.Ignore())
-            //.ForMember("Country", m=> m.Ignore());
 
 
             Mapper.CreateMap<OutpostInputModel, Outpost>()
                     .ForMember("Region", m => m.Ignore())
                     .ForMember("District", m => m.Ignore())
                     .ForMember("Country", m => m.Ignore());
-                    //.ForMember("Warehouses", m => m.Ignore());
 
             Mapper.CreateMap<OutpostOutputModel, Outpost>();
 
@@ -517,25 +490,13 @@ namespace Web.Areas.OutpostManagement.Controllers
         }
 
         [HttpPost]
-        //[Requires(Permissions = "OnBoarding.Candidate.CRUD")]
         public RedirectToRouteResult Delete(Guid outpostId)
         {
             var outpost = QueryService.Load(outpostId);
-            //var products = QueryProduct.Query().Where(m => m.OutpostId == outpostId);
 
 
             if (outpost != null)
             {
-                //if (productGroup.ToList().Count != 0)
-                //{
-                    //TempData.Add("error", string.Format("The Outpost {0} has Product Groups associated, so it can not be deleted", outpost.Name));
-                    //return RedirectToAction("Overview", "Outpost", new
-                    //{
-                    //    countryId = outpost.Country.Id,
-                    //    regionId = outpost.Region.Id,
-                    //    districtId = outpost.Region.Id
-                    //});
-                //}
                 foreach(Contact contact in outpost.Contacts)
                 {
                     DeleteContact(outpostId, contact.Id);
@@ -552,14 +513,11 @@ namespace Web.Areas.OutpostManagement.Controllers
         }
 
         [HttpPost]
-        //[Requires(Permissions = "OnBoarding.Candidate.CRUD")]
         public RedirectToRouteResult DeleteContact(Guid outpostID, Guid contactId)
         {
-            //var outposts = QueryService.Query();
             var outpost = QueryService.Load(outpostID);
             var contact = QueryContact.Load(contactId);
 
-            //outposts = outposts.Where(m => m.Id == outpostId);
             if (contact != null)
             {
                 DeleteContactCommand.Execute(contact);
@@ -647,7 +605,6 @@ namespace Web.Areas.OutpostManagement.Controllers
 
         [HttpPost]
         [ValidateInput(false)]
-        //[Requires(Permissions = "OnBoarding.Candidate.CRUD")]
         public ActionResult CreateContact(ContactModel contactModel)
         {
             var model = new ContactModel();
@@ -685,9 +642,6 @@ namespace Web.Areas.OutpostManagement.Controllers
         {
             var outpostOutputModel = new OutpostOutputModel(QueryCountry, QueryRegion, QueryDistrict, QueryService);
             var countries = QueryCountry.Query().Where(it => it.Id == outpostInputModel.Region.CountryId);
-
-            //var districts = QueryDistrict.Query().Where(it1 => it1.Id = outpostInputModel.District.Id);
-            //var outposts = QueryOutpost.Query().Where(it2 => it2.District.Id = outpostInputModel.District.Id);
 
             if (countries.ToList().Count > 0)
             {
