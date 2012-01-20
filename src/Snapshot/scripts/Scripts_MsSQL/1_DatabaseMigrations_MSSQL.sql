@@ -180,10 +180,6 @@ begin
     )
 end
 
-<<<<<<< HEAD
-
-=======
->>>>>>> outposts
 begin
 	-- Stock Level
 	CREATE TABLE OutpostStockLevels(
@@ -196,9 +192,8 @@ begin
 		ProdSMSRef NVARCHAR(20) NOT NULL,
 		StockLevel INTEGER NOT NULL,
 		PrevStockLevel INTEGER NOT NULL,
-		UpdatedMethod NCHAR(10) NULL DEFAULT 'SMS',
-		UpdatedMethod NCHAR(10) NULL DEFAULT 'SMS',
->>>>>>> outposts
+		UpdatedMethod NCHAR(10) NULL DEFAULT 'SMS',		
+
 		Created DATETIME NULL,
 		Updated DATETIME NULL,
         ByUser_FK UNIQUEIDENTIFIER NULL,
@@ -351,15 +346,6 @@ begin
         references Permissions
 end
 
-/*
-if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='ByUser_User_Users_FK')
-begin
-    alter table Users 
-        add constraint ByUser_User_Users_FK 
-        foreign key (User_FK) 
-        references Users
-end
-*/
 
 if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='Role_RolesUsers_FK')
 begin
@@ -462,11 +448,3 @@ begin
         references Districts
 end
 
-
---if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='Outpost_Products_OFK ')
---begin
---alter table Products 
---        add constraint Outpost_Products_OFK 
---        foreign key (Outpost_FK) 
---        references Outposts
---end

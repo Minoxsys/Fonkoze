@@ -74,12 +74,6 @@
     <Reference Include="NHibernate.ByteCode.Castle, Version=3.1.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
       <HintPath>..\packages\NHibernate.Castle.3.1.0.4000\lib\Net35\NHibernate.ByteCode.Castle.dll</HintPath>
     </Reference>
-    <Reference Include="PagedList">
-      <HintPath>..\packages\PagedList.1.10\lib\net40\PagedList.dll</HintPath>
-    </Reference>
-    <Reference Include="PagedList.Mvc">
-      <HintPath>..\packages\PagedList.Mvc.3.11\lib\net40\PagedList.Mvc.dll</HintPath>
-    </Reference>
     <Reference Include="System.Data.Entity">
       <Private>True</Private>
     </Reference>
@@ -281,7 +275,6 @@
     <Compile Include="Validation\Account\MembershipStatusCodeConverter.cs" />
     <Compile Include="Validation\Account\PropertiesMustMatchAttribute.cs" />
     <Compile Include="Validation\Account\ValidatePasswordLengthAttribute.cs" />
-    <Compile Include="Validation\IBAN\IBAN.cs" />
     <Compile Include="Validation\ValidDate\ValidDate.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -1811,7 +1804,6 @@
     <Content Include="Assets\js\jquery-ui-1.8.14.min.js" />
     <Content Include="Assets\js\jquery.dataTables.min.js" />
     <Content Include="Assets\js\jquery.meio.mask.js" />
-    <Content Include="Content\PagedList.css" />
     <Content Include="Global.asax" />
     <Content Include="Assets\js\jquery-1.5.1-vsdoc.js" />
     <Content Include="Assets\js\jquery-1.5.1.js" />
@@ -1823,8 +1815,6 @@
     <Content Include="Assets\js\jquery.validate.min.js" />
     <Content Include="Assets\js\modernizr-1.7.js" />
     <Content Include="Assets\js\modernizr-1.7.min.js" />
-    <Content Include="Scripts\PagedList\PagedList.Mvc.js" />
-    <Content Include="Scripts\PagedList\PagedList.Mvc.Template.html" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>

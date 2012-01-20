@@ -44,7 +44,6 @@
     <Compile Include="Contact.cs" />
     <Compile Include="Country.cs" />
     <Compile Include="District.cs" />
-    <Compile Include="Dummy.cs" />
     <Compile Include="Outpost.cs" />
     <Compile Include="OutpostStockLevel.cs" />
     <Compile Include="OutpostStockLevelHistorical.cs" />
