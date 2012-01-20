@@ -39,7 +39,7 @@ OutpostManagement Countries: Overview
                 <th></th>
                 <th></th>
                 <th>
-                     <label>Search:<input type="text" 
+                     <label><input type="text" 
                                    id="StockLevelSearch" 
                                    name="StockLevelSearch" 
                                    maxlength="50" 
@@ -65,11 +65,8 @@ OutpostManagement Countries: Overview
     </div>
     
     <div>
-        &nbsp;
-     </div>
-
-    <div>
-    &nbsp;</div>
+    &nbsp;
+    </div>
 
     <div class="row">
     <label>
@@ -83,9 +80,6 @@ OutpostManagement Countries: Overview
                             }
                         }
                     </select>
-     </div>
-     <div>
-        &nbsp;
      </div>
     
     
@@ -102,6 +96,9 @@ OutpostManagement Countries: Overview
             <div>
                 @Html.SubmitButton("submit-form", "Save") 
              </div>
+           <div>
+                &nbsp;
+            </div>
 
           <div id="stocklevel-overview">          
 
@@ -127,14 +124,14 @@ OutpostManagement Countries: Overview
                     </thead>
                     <tbody>
                         @{
-                            var itemNo = 0;
+                var itemNo = 0;
                         }
                         @foreach (var item in Model.StockLevels)
                         {
                             var _class = (itemNo++ % 2 == 0) ? "odd" : "even";
        
                             <tr>
-                                 <td>@Model.ProductGroupName
+                                 <td>@item.ProductGroupName
                                 </td>
                                 <td>@item.ProductName
                                 </td>
@@ -150,7 +147,7 @@ OutpostManagement Countries: Overview
                 </table>
             </div>
                 
-        }
+}
 }
 
 
