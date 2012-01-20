@@ -219,6 +219,7 @@ create table OutpostHistoricalStockLevels (
        primary key (Id)
     )
 end
+
 if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='ByUser_OutpostHistoricalStockLevels_FK')
 begin
 	alter table OutpostHistoricalStockLevels 
