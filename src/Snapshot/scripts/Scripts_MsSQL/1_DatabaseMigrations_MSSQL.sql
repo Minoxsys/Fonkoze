@@ -179,7 +179,7 @@ begin
        primary key (Id)
     )
 end
-
+if not exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'OutpostStockLevels')
 begin
 	-- Stock Level
 	CREATE TABLE OutpostStockLevels(
@@ -192,8 +192,7 @@ begin
 		ProdSMSRef NVARCHAR(20) NOT NULL,
 		StockLevel INTEGER NOT NULL,
 		PrevStockLevel INTEGER NOT NULL,
-		UpdatedMethod NCHAR(10) NULL DEFAULT 'SMS',		
-
+		UpdatedMethod NCHAR(10) NULL DEFAULT 'SMS',
 		Created DATETIME NULL,
 		Updated DATETIME NULL,
         ByUser_FK UNIQUEIDENTIFIER NULL,
@@ -202,9 +201,9 @@ begin
     )
 end
 
-if not exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'OutpostStockLevelHistoricals')
+if not exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'OutpostHistoricalStockLevels')
 begin
-create table OutpostStockLevelHistoricals (
+create table OutpostHistoricalStockLevels (
         Id UNIQUEIDENTIFIER not null,
        OutpostId UNIQUEIDENTIFIER null,
        ProdGroupId UNIQUEIDENTIFIER null,
@@ -220,10 +219,10 @@ create table OutpostStockLevelHistoricals (
        primary key (Id)
     )
 end
-if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='ByUser_OutpostStockLevelHistoricals_FK')
+if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='ByUser_OutpostHistoricalStockLevels_FK')
 begin
-	alter table OutpostStockLevelHistoricals 
-        add constraint ByUser_OutpostStockLevelHistoricals_FK 
+	alter table OutpostHistoricalStockLevels 
+        add constraint ByUser_OutpostHistoricalStockLevels_FK 
         foreign key (ByUser_FK) 
         references Users
 end

@@ -26,9 +26,9 @@ namespace Web.Areas.StockAdministration.Controllers
 
         public IQueryService<OutpostStockLevel> QueryOutpostStockLevel { get; set; }
 
-        public ISaveOrUpdateCommand<OutpostStockLevelHistorical> SaveOrUpdateOutpostStockLevelHistorical { get; set; }
+        public ISaveOrUpdateCommand<OutpostHistoricalStockLevel> SaveOrUpdateOutpostStockLevelHistorical { get; set; }
 
-        public IQueryService<OutpostStockLevelHistorical> QueryOutpostStockLevelHistorical { get; set; }
+        public IQueryService<OutpostHistoricalStockLevel> QueryOutpostStockLevelHistorical { get; set; }
 
         public ISaveOrUpdateCommand<OutpostStockLevel> SaveOrUpdateOutpostStockLevel { get; set; }
 
@@ -144,8 +144,8 @@ namespace Web.Areas.StockAdministration.Controllers
                 //all
                 if (OutpostId == Guid.Parse(GUID_FOR_ALL_OPTION_ON_OUTPOST_LIST))
                 {
-                    var historicalData = new List<OutpostStockLevelHistorical>();
-                    var historicalDataSpecificToDistrict = new List<OutpostStockLevelHistorical>();
+                    var historicalData = new List<OutpostHistoricalStockLevel>();
+                    var historicalDataSpecificToDistrict = new List<OutpostHistoricalStockLevel>();
                     var outpostsForDistrictId = new List<Outpost>();
 
                     outpostsForDistrictId = QueryOutpost.Query().Where(it => it.District.Id == DistrictId.Value).ToList();
@@ -513,9 +513,9 @@ namespace Web.Areas.StockAdministration.Controllers
         }
 
 
-        private static OutpostStockLevelHistorical SetHistoricalOutpostStockLevelToPreviousOutpostStockLevelOfCurrent(OutpostStockLevel previousOutpostStockLevel)
+        private static OutpostHistoricalStockLevel SetHistoricalOutpostStockLevelToPreviousOutpostStockLevelOfCurrent(OutpostStockLevel previousOutpostStockLevel)
         {
-            var outpostStockLevelHistorical = new OutpostStockLevelHistorical();
+            var outpostStockLevelHistorical = new OutpostHistoricalStockLevel();
             outpostStockLevelHistorical.OutpostId = previousOutpostStockLevel.OutpostId;
             outpostStockLevelHistorical.PrevStockLevel = previousOutpostStockLevel.PrevStockLevel;
             outpostStockLevelHistorical.ProdGroupId = previousOutpostStockLevel.ProdGroupId;
@@ -637,11 +637,11 @@ namespace Web.Areas.StockAdministration.Controllers
             Mapper.CreateMap<OutpostStockLevelInputModel, OutpostStockLevel>();
             Mapper.CreateMap<OutpostStockLevel, OutpostStockLevelInputModel>();
 
-            Mapper.CreateMap<OutpostStockLevelHistoricalOutputModel, OutpostStockLevelHistorical>();
-            Mapper.CreateMap<OutpostStockLevelHistorical, OutpostStockLevelHistoricalOutputModel>();
+            Mapper.CreateMap<OutpostStockLevelHistoricalOutputModel, OutpostHistoricalStockLevel>();
+            Mapper.CreateMap<OutpostHistoricalStockLevel, OutpostStockLevelHistoricalOutputModel>();
 
-            Mapper.CreateMap<OutpostStockLevelHistoricalInputModel, OutpostStockLevelHistorical>();
-            Mapper.CreateMap<OutpostStockLevelHistorical, OutpostStockLevelHistoricalInputModel>();
+            Mapper.CreateMap<OutpostStockLevelHistoricalInputModel, OutpostHistoricalStockLevel>();
+            Mapper.CreateMap<OutpostHistoricalStockLevel, OutpostStockLevelHistoricalInputModel>();
         }
     }
 }

@@ -31,7 +31,7 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration
         const String DISTRICT_NAME = "district";
 
         List<OutpostStockLevel> outpostStockLevels;
-        List<OutpostStockLevelHistorical> outpostStockLevelsHistorical;
+        List<OutpostHistoricalStockLevel> outpostStockLevelsHistorical;
         List<ProductGroup> productGroups;
         List<Product> products;
 
@@ -39,7 +39,7 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration
 
         IQueryService<Product> queryProduct;
         IQueryService<OutpostStockLevel> queryOutpostStockLevel;
-        IQueryService<OutpostStockLevelHistorical> queryOutpostStockLevelHistorical;
+        IQueryService<OutpostHistoricalStockLevel> queryOutpostStockLevelHistorical;
         IQueryService<ProductGroup> queryProductGroup;
         IQueryService<Outpost> queryOutpost;
         IQueryService<Country> queryCountry;
@@ -47,7 +47,7 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration
         IQueryService<District> queryDistrict;
 
         ISaveOrUpdateCommand<OutpostStockLevel> saveOrUpdateOutpostStockLevel;
-        ISaveOrUpdateCommand<OutpostStockLevelHistorical> saveOrUpdateOutpostStockLevelHistorical;
+        ISaveOrUpdateCommand<OutpostHistoricalStockLevel> saveOrUpdateOutpostStockLevelHistorical;
 
 
 
@@ -74,9 +74,9 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration
             queryProductGroup = MockRepository.GenerateMock<IQueryService<ProductGroup>>();
             queryOutpost = MockRepository.GenerateMock<IQueryService<Outpost>>();
             queryOutpostStockLevel = MockRepository.GenerateMock<IQueryService<OutpostStockLevel>>();
-            queryOutpostStockLevelHistorical = MockRepository.GenerateMock<IQueryService<OutpostStockLevelHistorical>>();
+            queryOutpostStockLevelHistorical = MockRepository.GenerateMock<IQueryService<OutpostHistoricalStockLevel>>();
             saveOrUpdateOutpostStockLevel = MockRepository.GenerateMock<ISaveOrUpdateCommand<OutpostStockLevel>>();
-            saveOrUpdateOutpostStockLevelHistorical = MockRepository.GenerateMock<ISaveOrUpdateCommand<OutpostStockLevelHistorical>>();
+            saveOrUpdateOutpostStockLevelHistorical = MockRepository.GenerateMock<ISaveOrUpdateCommand<OutpostHistoricalStockLevel>>();
 
             controller = new OutpostStockLevelController();
 
@@ -137,14 +137,14 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration
         public void StubOutpostStockLevelList_And_OutpostStockLevelHistoricalList()
         {
             outpostStockLevels = new List<OutpostStockLevel>();
-            outpostStockLevelsHistorical = new List<OutpostStockLevelHistorical>();
+            outpostStockLevelsHistorical = new List<OutpostHistoricalStockLevel>();
             for (int i = 0; i < 20; i++)
             {
                 var outpostStockLevel = new OutpostStockLevel();
-                var outpostStockLevelHistorical = new OutpostStockLevelHistorical();
+                var outpostStockLevelHistorical = new OutpostHistoricalStockLevel();
 
                 var outpostStockLevelHistoricalId = Guid.NewGuid();
-                outpostStockLevelHistorical = MockRepository.GeneratePartialMock<OutpostStockLevelHistorical>();
+                outpostStockLevelHistorical = MockRepository.GeneratePartialMock<OutpostHistoricalStockLevel>();
                 outpostStockLevelHistorical.Stub(it=>it.Id).Return(outpostStockLevelHistoricalId);
 
                 var outpostStockLevelId = Guid.NewGuid();
@@ -443,7 +443,7 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration
                 //&&c.PrevStockLevel == outpostStockLevels[0].StockLevel
                 )));
 
-            saveOrUpdateOutpostStockLevelHistorical.Expect(it => it.Execute(Arg<OutpostStockLevelHistorical>.Matches(c => c.OutpostId == outpostStockLevels[0].OutpostId
+            saveOrUpdateOutpostStockLevelHistorical.Expect(it => it.Execute(Arg<OutpostHistoricalStockLevel>.Matches(c => c.OutpostId == outpostStockLevels[0].OutpostId
                 && c.ProdGroupId == outpostStockLevels[0].ProdGroupId
                 && c.ProductId == outpostStockLevels[0].ProductId)));
 

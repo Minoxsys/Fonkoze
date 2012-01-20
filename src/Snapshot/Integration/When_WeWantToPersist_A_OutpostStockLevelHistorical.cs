@@ -9,7 +9,7 @@ using NUnit.Framework;
 namespace IntegrationTests
 {
     [TestFixture]
-    public class When_WeWantToPersist_A_OutpostStockLevelHistorical:GivenAPersistenceSpecification<OutpostStockLevelHistorical>
+    public class When_WeWantToPersist_A_OutpostStockLevelHistorical:GivenAPersistenceSpecification<OutpostHistoricalStockLevel>
     {
         Guid OUTPOST_ID = Guid.NewGuid();
         Guid PRODUCT_ID = Guid.NewGuid();

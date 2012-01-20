@@ -1926,6 +1926,10 @@
     <Content Include="Areas\OutpostManagement\Views\StockLevel\OverviewStockLevel.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\StockLevel\OutpostStockLevelOverview.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\StockLevel\OverviewProducts.cshtml" />
+    <Content Include="Areas\StockAdministration\Views\OutpostStockLevel\EditHistoricalProductLevel.cshtml" />
+    <Content Include="Areas\StockAdministration\Views\OutpostStockLevel\EditOutpostStockLevelHistoricalInput.cshtml" />
+    <Content Include="Areas\StockAdministration\Views\OutpostStockLevel\OverviewItemsStockLevelHistorical.cshtml" />
+    <Content Include="Areas\StockAdministration\Views\OutpostStockLevel\ViewProductsForProductGroupFromHistoricalOverview.cshtml" />
     <None Include="Assets\img\skins\ButtonTemplate.psd" />
     <Content Include="Views\RoleManager\Create.cshtml" />
     <Content Include="Views\RoleManager\Edit.cshtml" />

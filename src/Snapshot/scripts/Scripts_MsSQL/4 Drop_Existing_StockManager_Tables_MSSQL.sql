@@ -65,9 +65,9 @@ drop table OutpostStockLevels
 
 end
 
-if exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'OutpostStockLevelHistoricals')
+if exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'OutpostHistoricalStockLevels')
 begin
-drop table OutpostStockLevelHistoricals
+drop table OutpostHistoricalStockLevels
 
 end
 
