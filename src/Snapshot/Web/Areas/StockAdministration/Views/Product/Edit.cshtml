@@ -9,7 +9,12 @@ Stock Item : Edit
 }
 
 @section master_content{
-
+ @if (Model.errorFromUniqueProductName != null)
+    {
+        <div class="error">
+            @Model.errorFromUniqueProductName
+        </div>
+    }
     @{Html.BeginForm<ProductController>(r => r.Edit(Model.Id));}
    <div style="display: none">
 @Html.HiddenFor(m => m.Id)

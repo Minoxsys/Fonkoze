@@ -31,7 +31,8 @@ Stock Item: Overview
     }
     
     <div class="page_header_buttons">
-        @(Html.ActionLink<Web.Areas.StockAdministration.Controllers.ProductController>(it => it.Create(), "Add new product", Web.Areas.StockAdministration.StockAdministrationAreaRegistration.DEFAULT_ROUTE))
+     @Html.ActionLink("Add new product", "Create", "Product", null, new { id = "create" })
+        
     </div>
     <br />
     @*<div class="pager">*@
@@ -70,6 +71,9 @@ Stock Item: Overview
     <script type="text/javascript">
         var timeout;
         $(function () {
+
+            var selectedProductGroupId = $("select[name='@Html.NameFor(m => m.ProductGroups)']").val();
+            document.getElementById('create').href = '@Url.Action("Create")?productGroupId=' + selectedProductGroupId;
 
             $(".delete-user-form").submit(function () {
                 return confirm('Are you sure that you want to delete this product?')
@@ -152,8 +156,12 @@ Stock Item: Overview
 
                 $('#products-overview').html(data);
             });
-            
+
             $("select[name='@Html.NameFor(m => m.ProductGroups)'] option[value='@Guid.Empty.ToString()']").attr('text', 'No filter');
+
+            var selectedProductGroupId = $("select[name='@Html.NameFor(m => m.ProductGroups)']").val();
+            document.getElementById('create').href = '@Url.Action("Create")?productGroupId=' + selectedProductGroupId;
+
             GetAllButtonsForPaginationAndSetOnClickEvent();
         }
 

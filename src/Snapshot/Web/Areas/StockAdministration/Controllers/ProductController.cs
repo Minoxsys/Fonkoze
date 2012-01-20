@@ -36,7 +36,7 @@ namespace Web.Areas.StockAdministration.Controllers
 
         private const string TEMP_DATA_ERROR_HISTORY = "errorHistory";
         private const string TEMP_DATA_ERROR_CURRENT = "error";
-
+       
         public ActionResult Overview(Guid? productGroupId, int page)
         {
             var overviewModel = new ProductOverviewModel(QueryProductGroup);
@@ -229,10 +229,14 @@ namespace Web.Areas.StockAdministration.Controllers
             Mapper.CreateMap<ClientModel, Client>();
         }
 
-        public ViewResult Create()
+        public ViewResult Create(Guid? ProductGroupId)
         {
             var productOutputModel = new ProductOutputModel(QueryProductGroup);
-            return View(productOutputModel);
+
+            if (productOutputModel.ProductGroups.Where(it => it.Value == ProductGroupId.Value.ToString()).ToList().Count > 0)
+                productOutputModel.ProductGroups.First(it => it.Value == ProductGroupId.Value.ToString()).Selected = true;
+
+           return View(productOutputModel);
         }
         public ViewResult CreateProduct(Guid? ProductGroupId)
         {
@@ -245,6 +249,7 @@ namespace Web.Areas.StockAdministration.Controllers
                     productOutputModel.ProductGroups.First(it => it.Value == ProductGroupId.Value.ToString()).Selected = true;
                 }
             }
+               
             return View("Create", productOutputModel);
         }
         [HttpPost]
@@ -259,15 +264,27 @@ namespace Web.Areas.StockAdministration.Controllers
 
             CreateMappings();
 
-            var product = new Product();
-            Mapper.Map(model, product);
+            var products = QueryService.Query().Where(it => it.ProductGroup.Id == model.ProductGroup.Id && it.Name == model.Name).ToList();
+
+            if (products.Count > 0)
+            {
+                var productOutputModel = BuildProductOutputModelFromInputModel(model);
+                productOutputModel.errorFromUniqueProductName = string.Format("The Product Group {0} already contains a product with the name {1}! Please insert a different name!", products[0].ProductGroup.Name, products[0].Name);
+                return View("Create", productOutputModel);
+
+            }
+            else
+            {
+                var product = new Product();
+                Mapper.Map(model, product);
 
 
-            product.ProductGroup = QueryProductGroup.Load(model.ProductGroup.Id);
+                product.ProductGroup = QueryProductGroup.Load(model.ProductGroup.Id);
 
-            SaveOrUpdateProduct.Execute(product);
+                SaveOrUpdateProduct.Execute(product);
 
-            return RedirectToAction("Overview", new { productGroupId = product.ProductGroup.Id, page = 1 });
+                return RedirectToAction("Overview", new { productGroupId = product.ProductGroup.Id, page = 1 });
+            }
         }
         private ProductOutputModel BuildProductOutputModelFromInputModel(ProductInputModel model)
         {
@@ -321,7 +338,6 @@ namespace Web.Areas.StockAdministration.Controllers
             {
                 productOutputModel.ProductGroups.First(it => it.Value == productGroupId.ToString()).Selected = true;
             }
-
             return View("Edit", productOutputModel);
         }
         [HttpPost]
@@ -331,21 +347,30 @@ namespace Web.Areas.StockAdministration.Controllers
             {
                 var productOutputModel = BuildProductOutputModelFromInputModel(model);
                 return View("Edit", productOutputModel);
+            }            
+
+            //product.ProductGroup = QueryProductGroup.Load(model.ProductGroup.Id);
+
+            var products = QueryService.Query().Where(it => it.ProductGroup.Id == model.ProductGroup.Id && it.Name == model.Name).ToList();
+
+            if (products.Count > 0)
+            {
+                var productOutputModel = BuildProductOutputModelFromInputModel(model);
+                productOutputModel.errorFromUniqueProductName = string.Format("The Product Group {0} already contains a product with the name {1}! Please insert a different name!", products[0].ProductGroup.Name, products[0].Name);
+                return View("Edit", productOutputModel);
+
             }
+            else
+            {
+                CreateMappings();
 
-            CreateMappings();
+                var product = new Product();
+                Mapper.Map(model, product);
+                product.ProductGroup = QueryProductGroup.Load(model.ProductGroup.Id);
+                SaveOrUpdateProduct.Execute(product);
 
-
-            var product = new Product();
-
-            Mapper.Map(model, product);
-
-            product.ProductGroup = QueryProductGroup.Load(model.ProductGroup.Id);
-
-
-            SaveOrUpdateProduct.Execute(product);
-
-            return RedirectToAction("Overview", new { productGroupId = product.ProductGroup.Id, page = 1 });
+                return RedirectToAction("Overview", new { productGroupId = product.ProductGroup.Id, page = 1 });
+            }
         }
 
         [HttpPost]
@@ -356,19 +381,19 @@ namespace Web.Areas.StockAdministration.Controllers
             if (product != null)
             {
                 var outpostStockLevel = QueryOutpostStockLevel.Query().Where(it => it.ProductId == guid).ToList();
-                //var outpostStockLevelHystorical = QueryOutpostStockLevelHystorical.Query().Where(it => it.ProductId == guid).ToList();
+                var outpostStockLevelHystorical = QueryOutpostStockLevelHystorical.Query().Where(it => it.ProductId == guid).ToList();
 
                 if (outpostStockLevel.Count > 0)
                 {
                     TempData.Add("error", string.Format("The product {0} has stock level available, so it can not be deleted", product.Name));
                     return RedirectToAction("Overview", new { productGroupId = product.ProductGroup.Id, page = 1 });
                 }
-                //if (outpostStockLevelHystorical.Count > 0)
-                //{
-                //    TempData.Add("errorHistory", string.Format("The product {0} has stock level history available , so it can not be deleted", product.Name));
-                //    return RedirectToAction("Overview", new { productGroupId = product.ProductGroup.Id, page = 1 });
- 
-                //}
+                if (outpostStockLevelHystorical.Count > 0)
+                {
+                    TempData.Add("errorHistory", string.Format("The product {0} has stock level history available , so it can not be deleted", product.Name));
+                    return RedirectToAction("Overview", new { productGroupId = product.ProductGroup.Id, page = 1 });
+
+                }
 
                 DeleteProduct.Execute(product);
 

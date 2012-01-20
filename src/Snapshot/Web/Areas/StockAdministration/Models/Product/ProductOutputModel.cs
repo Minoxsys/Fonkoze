@@ -21,7 +21,7 @@ namespace Web.Areas.StockAdministration.Models.Product
         public List<SelectListItem> ProductGroups { get; set; }
 
         public IQueryService<Domain.ProductGroup> QueryProductGroup { get; set; }
-
+        public String errorFromUniqueProductName { get; set; }
 
         public ProductOutputModel(IQueryService<Domain.ProductGroup> queryProductGroup)
         {

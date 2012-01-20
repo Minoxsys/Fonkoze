@@ -9,19 +9,35 @@ Stock Item : Create
 > Create District
 }
 @section master_content{
-    @{Html.BeginForm<ProductController>(r => r.Create());}
+  @if (Model.errorFromUniqueProductName != null)
+    {
+        <div class="error">
+            @Model.errorFromUniqueProductName
+        </div>
+    }
+    @{Html.BeginForm<ProductController>(r => r.Create(Guid.Empty));}
     <form class="chosen-form">
     <fieldset class="fieldsCollection ">
         @{
             Html.RenderPartial("Input", Model);     
         }
     </fieldset>
-    @Html.SubmitButton("submit-form", "Save") <span>or </span><a href="@(Html.BuildUrlFromExpression<ProductController>(it => it.Overview(null,1)))">
+    @Html.SubmitButton("submit-form", "Save") <span>or </span><a href="@(Html.BuildUrlFromExpression<ProductController>(it => it.Overview(null,1)))" id="cancel">
         Cancel</a>
         </form>
     @{Html.EndForm();}
 }
 @section scripts{
+<script type="text/javascript">
+
+    var selectedProductGroupId = $("select[name='@Html.NameFor(m => m.ProductGroup.Id)']").val();
+    document.getElementById('cancel').href = '@Url.Action("Overview")?productGroupId=' + selectedProductGroupId + '&page=1';
+
+    $("select[name='@Html.NameFor(m => m.ProductGroup.Id)']").change(function () {
+        var selectedProductGroupId = $("select[name='@Html.NameFor(m => m.ProductGroup.Id)']").val();
+        document.getElementById('cancel').href = '@Url.Action("Overview")?productGroupId=' + selectedProductGroupId + '&page=1';
+    });
+</script>
 
 
 }

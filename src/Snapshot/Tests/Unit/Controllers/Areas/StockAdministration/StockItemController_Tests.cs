@@ -42,6 +42,7 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration
         public ISaveOrUpdateCommand<Product> saveOrUpdateProduct;
         public IDeleteCommand<Product> deleteProduct;
         public IQueryService<Product> queryService;
+        public IQueryService<OutpostHistoricalStockLevel> queryHistoricalOutpostStockLevel;
        
         [SetUp]
         public void BeforeEach()
@@ -83,7 +84,7 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration
             saveOrUpdateProduct = MockRepository.GenerateMock<ISaveOrUpdateCommand<Product>>();
             deleteProduct = MockRepository.GenerateMock<IDeleteCommand<Product>>();
             queryService = MockRepository.GenerateMock<IQueryService<Product>>();
-
+            queryHistoricalOutpostStockLevel = MockRepository.GenerateMock<IQueryService<OutpostHistoricalStockLevel>>();
             queryOutpostStockLevel = MockRepository.GenerateMock<IQueryService<OutpostStockLevel>>();
 
             controller.QueryOutpostStockLevel = queryOutpostStockLevel;
@@ -91,6 +92,7 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration
             controller.SaveOrUpdateProduct = saveOrUpdateProduct;
             controller.DeleteProduct = deleteProduct;
             controller.QueryService = queryService;
+            controller.QueryOutpostStockLevelHystorical = queryHistoricalOutpostStockLevel;
             
         }
 
@@ -146,7 +148,7 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration
            
 
             //act
-            var result = controller.Create() as ViewResult;
+            var result = controller.Create(Guid.Empty) as ViewResult;
 
             //assert
             queryProductGroup.VerifyAllExpectations();
@@ -169,6 +171,7 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration
 
             saveOrUpdateProduct.Expect(it => it.Execute(Arg<Product>.Matches(c => c.Name == model.Name && c.Id == model.Id)));
             queryProductGroup.Expect(it => it.Load(productGroupId)).Return(productGroup);
+            queryService.Expect(it=>it.Query()).Return(new Product[]{}.AsQueryable());
             
 
             //act
@@ -239,7 +242,7 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration
 
             queryProductGroup.Expect(call => call.Load(productGroup.Id)).Return(productGroup);
             saveOrUpdateProduct.Expect(it => it.Execute(Arg<Product>.Matches(c => c.Name == PRODUCT_NAME && c.Id == product.Id && c.ProductGroup.Id == productGroup.Id)));
-           
+            queryService.Expect(call => call.Query()).Return(new Product[] { }.AsQueryable());
             // Act
             var redirectResult = (RedirectToRouteResult)controller.Edit(model);
 
@@ -280,6 +283,7 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration
             queryService.Expect(call => call.Load(product.Id)).Return(product);
 
             queryOutpostStockLevel.Expect(call => call.Query()).Return(new OutpostStockLevel[] { }.AsQueryable());
+            queryHistoricalOutpostStockLevel.Expect(call => call.Query()).Return(new OutpostHistoricalStockLevel[] { }.AsQueryable());
            
             deleteProduct.Expect(call => call.Execute(product));
 

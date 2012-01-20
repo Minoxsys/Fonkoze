@@ -179,6 +179,8 @@ begin
        primary key (Id)
     )
 end
+
+
 if not exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'OutpostStockLevels')
 begin
 	-- Stock Level
@@ -218,6 +220,12 @@ create table OutpostHistoricalStockLevels (
        ByUser_FK UNIQUEIDENTIFIER null,
        primary key (Id)
     )
+end
+
+if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='UniqueProductNameForProductGroup')
+begin
+	ALTER TABLE Products
+	ADD CONSTRAINT UniqueProductNameForProductGroup UNIQUE (Name,ProductGroup_FK)
 end
 if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='ByUser_OutpostHistoricalStockLevels_FK')
 begin
