@@ -59,7 +59,7 @@
                             }
                         </td>
                         <td>
-                            @(Html.ActionLink<OutpostController>(call => call.Edit(outpost.Id), "Edit", OutpostManagementAreaRegistration.DEFAULT_ROUTE))
+                            @(Html.ActionLink<OutpostController>(call => call.Edit(outpost.Id, @outpost.Region.CountryId, @outpost.Region.Id, @outpost.District.Id), "Edit", OutpostManagementAreaRegistration.DEFAULT_ROUTE))
                         </td>
                         <td>                   
                             @{ Html.BeginForm<OutpostController>(m => m.Delete(outpost.Id), FormMethod.Post, new { @class = "delete-user-form" }); }
