@@ -399,7 +399,6 @@ namespace Web.Areas.OutpostManagement.Controllers
             var outpost = QueryService.Load(outpostInputModel.Id);
             Mapper.Map(outpostInputModel, outpost);
 
-            outpost.Country = QueryCountry.Load(outpostInputModel.Region.CountryId);
             outpost.Contacts = QueryContact.Query().Where(m => m.Outpost.Id == outpost.Id).ToList();
 
             if (outpost.IsWarehouse == true)
@@ -447,9 +446,9 @@ namespace Web.Areas.OutpostManagement.Controllers
             return RedirectToAction("Overview",
                 new
                 {
-                    countryId = outpostInputModel.Region.CountryId,
-                    regionId = outpostInputModel.Region.Id,
-                    districtId = outpostInputModel.District.Id
+                    countryId = outpost.Country.Id,
+                    regionId = outpost.Region.Id,
+                    districtId = outpost.District.Id
                 });
 
         }
