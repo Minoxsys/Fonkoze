@@ -84,6 +84,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Queries\Contacts\ContactByOutpostIdAndMainMethod.cs" />
     <Compile Include="Queries\Countries\IQueryCountry.cs" />
     <Compile Include="Queries\Countries\NHibernateQueryCountry.cs" />
     <Compile Include="Queries\Districts\IQueryDistrict.cs" />

@@ -202,7 +202,10 @@
     <Compile Include="Areas\StockAdministration\Models\Product\ProductOverviewModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\StockLevel\OutpostStockLevelModel.cs" />
     <Compile Include="Areas\StockAdministration\StockAdministrationAreaRegistration.cs" />
+    <Compile Include="Bootstrap\Container\EmailRegistrar.cs" />
     <Compile Include="Bootstrap\Container\FileRegistrar.cs" />
+    <Compile Include="Bootstrap\Container\URLRegistrar.cs" />
+    <Compile Include="Controllers\EmailRequestController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\UnauthorizedAccessController.cs" />
     <Compile Include="Global.asax.cs">
@@ -243,6 +246,9 @@
     <Compile Include="Models\Account\ChangePasswordModel.cs" />
     <Compile Include="Models\Account\LogOnModel.cs" />
     <Compile Include="Models\Account\RegisterModel.cs" />
+    <Compile Include="Models\EmailRequest\EmailCreateModel.cs" />
+    <Compile Include="Models\EmailRequest\EmailRequestModel.cs" />
+    <Compile Include="Models\EmailRequest\ReferenceModel.cs" />
     <Compile Include="Models\Home\AboutModel.cs" />
     <Compile Include="Models\Home\IndexModel.cs" />
     <Compile Include="Models\RoleManager\RoleManagerAssignModel.cs" />
@@ -270,8 +276,12 @@
     <Compile Include="Security\AuthenticateUser.cs" />
     <Compile Include="Security\RequiresAttribute.cs" />
     <Compile Include="Security\SecurePassword.cs" />
+    <Compile Include="Services\EmailService\EmailService.cs" />
+    <Compile Include="Services\EmailService\IEmailService.cs" />
     <Compile Include="Services\FileService.cs" />
     <Compile Include="Services\IImportService.cs" />
+    <Compile Include="Services\UrlService\IURLService.cs" />
+    <Compile Include="Services\UrlService\URLService.cs" />
     <Compile Include="Validation\Account\MembershipStatusCodeConverter.cs" />
     <Compile Include="Validation\Account\PropertiesMustMatchAttribute.cs" />
     <Compile Include="Validation\Account\ValidatePasswordLengthAttribute.cs" />
@@ -1946,6 +1956,8 @@
     <Content Include="Views\Shared\_OutpostManagementActions.cshtml" />
     <Content Include="Views\Shared\_StockAdministrationActions.cshtml" />
     <Content Include="Views\Shared\_StockAdministrationHeader.cshtml" />
+    <Content Include="Views\EmailRequest\Create.cshtml" />
+    <Content Include="Views\EmailRequest\Overview.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
