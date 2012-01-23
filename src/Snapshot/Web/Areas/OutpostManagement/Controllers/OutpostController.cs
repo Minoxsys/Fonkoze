@@ -117,7 +117,7 @@ namespace Web.Areas.OutpostManagement.Controllers
                             selectedCountry.Selected = true;
                     }
 
-                    var regionsWithRegionId = model.Regions.Where(it => it.Value == countryId.Value.ToString()).ToList();
+                    var regionsWithRegionId = model.Regions.Where(it => it.Value == regionId.Value.ToString()).ToList();
                     if (regionsWithRegionId.Count > 0)
                         regionsWithRegionId[0].Selected = true;
 
