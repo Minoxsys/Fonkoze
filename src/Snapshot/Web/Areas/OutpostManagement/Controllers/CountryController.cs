@@ -33,9 +33,6 @@ namespace Web.Areas.OutpostManagement.Controllers
         //[Requires(Permissions = "Country.Overview")]
         public ActionResult Overview(int page)
         {
-            var loggedUser = this.User.Identity.Name.ToString();
-            var currentUser = QueryUsers.Query().Where(m => m.UserName == loggedUser).FirstOrDefault();
-            var currentClient = currentUser.ClientId;
 
             var queryResult = QueryCountry.Query();
 
@@ -89,22 +86,21 @@ namespace Web.Areas.OutpostManagement.Controllers
         public ActionResult Create(CountryInputModel countryModel)
         {
             var model = new CountryOutputModel();
+            var loggedUser = User.Identity.Name;
+            var currentUser = QueryUsers.Query().FirstOrDefault(m => m.UserName == loggedUser);
+            var currentClient = currentUser.ClientId;
 
-            if (!ModelState.IsValid)
+            if ((!ModelState.IsValid) || (currentUser.ClientId == null))
             {
                 var countryOutputModel1 = MapDataFromInputModelToOutputModel(countryModel);
                 return View("Create", countryOutputModel1);
             }
 
-            var loggedUser = this.User.Identity.Name.ToString();
-            var currentUser = QueryUsers.Query().Where(m => m.UserName == loggedUser).FirstOrDefault();
-            var currentClient = currentUser.ClientId;
-
             CreateMappings();
             var country = new Country();
             Mapper.Map(countryModel, country);
 
-            country.Client = QueryClients.Load(currentClient); 
+            country.Client = QueryClients.Load(currentClient);
 
             var doubleCountry = QueryCountry.Query();
 
@@ -119,7 +115,7 @@ namespace Web.Areas.OutpostManagement.Controllers
                 }
             }
             SaveOrUpdateCommand.Execute(country);
-
+            
             return RedirectToAction("Overview", "Country", new { page = 1});
         }
 
