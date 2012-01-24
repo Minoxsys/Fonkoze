@@ -103,7 +103,9 @@ namespace Web.Areas.OutpostManagement.Controllers
             CreateMappings();
             var country = new Country();
             Mapper.Map(countryModel, country);
+
             country.Client = QueryClients.Load(currentClient); 
+
             var doubleCountry = QueryCountry.Query();
 
             if (doubleCountry != null)
