@@ -12,9 +12,8 @@ namespace Web.Bootstrap.Routes
         public const string SHARED = "Shared";
 		public static void Register( RouteCollection routes)
 		{
-		    
 		    routes.MapRoute(SHARED,
-				"shared/{*file}",
+				"resources/{*file}",
 				new
 				{
 					controller = "Assets",
@@ -22,6 +21,7 @@ namespace Web.Bootstrap.Routes
 					file = UrlParameter.Optional
 				}
 				);
+		    
 		}
 	}
 }

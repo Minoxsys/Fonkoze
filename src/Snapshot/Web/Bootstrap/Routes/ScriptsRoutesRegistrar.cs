@@ -10,14 +10,14 @@ namespace Web.Bootstrap.Routes
 			var version = AppSettings.ScriptsVersion;
 
 			routes.MapRoute("Javascript",
-				"js/{group}/version(" + version + ")",
+				"js/{group}/_" + version,
 				new
 				{
 					controller = "Javascript",
 					action = "Index"
 				});
 			routes.MapRoute("Css",
-				"css/{group}/version(" + version + ")",
+				"css/{group}/" + version,
 				new
 				{
 					controller = "Css",

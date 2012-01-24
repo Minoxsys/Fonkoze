@@ -5,33 +5,58 @@
 @section page_title{
     Log On
 }
-@using (Html.BeginForm())
-{
-    <div class="login ">
-        <h1>
-            Provide your credentials</h1>
-        <hr />
-        @Html.ValidationSummary(true, "Login was unsuccessful. Please correct the errors and try again.")
-        <h3>
-            User name</h3>
-        <div class="editor-field">
-            @Html.TextBoxFor(m => m.UserName)
-            @Html.ValidationMessageFor(m => m.UserName)
-        </div>
-        <h3>
-            Password
-        </h3>
-        <div class="editor-field">
-            @Html.PasswordFor(m => m.Password)
-            @Html.ValidationMessageFor(m => m.Password)
-        </div>
-        <div class="space">
-            &nbsp;</div>
-        
+<script type="text/javascript">
 
-        <div>
-            <input class="sexybutton sexysimple sexygreen" type="submit" value="Sign in" />
-        </div>
-    </div>
+    Ext.onReady(function () {
+        var viewport = Ext.getCmp(window.res.viewport);
+        Ext.log('a', window.location);
+        console.log(window.location);
+
+        viewport.add(
+                 {
+                     xtype: 'form',
+                     height: 150,
+                     bodyPadding: 30,
+                     width: 400,
+                     padding: 0,
+                     title: 'Login',
+                     url: window.location.pathname,
+                     standardSubmit: true,
+                     buttons: [
+                     {
+                         text: 'Submit',
+                         formBind: true, //only enabled once the form is valid
+                         disabled: true,
+                         handler: function () {
+                             var form = this.up('form').getForm();
+                             if (form.isValid()) {
+                                 form.submit({
+                                     success: function (form, action) {
+                                         Ext.Msg.alert('Success', action.result.msg);
+                                     },
+                                     failure: function (form, action) {
+                                         Ext.Msg.alert('Failed', action.result.msg);
+                                     }
+                                 });
+                             }
+                         }
+                     }],
+
+                     items: [
+                     {
+                         xtype: 'textfield',
+                         name: 'UserName',
+                         fieldLabel: 'Username',
+                         anchor: '100%'
+                     },
+                    {
+                        xtype: 'textfield',
+                        inputType: 'password',
+                        name: 'Password',
+                        fieldLabel: 'Password',
+                        anchor: '100%'
+                    }]
+                 });
+    });
     
-}
+</script>

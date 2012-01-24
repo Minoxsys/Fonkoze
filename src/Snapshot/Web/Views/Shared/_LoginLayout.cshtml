@@ -9,20 +9,27 @@
     <link href="@(Html.BuildUrlFromExpression<CssController>(req => req.Index("ie")))"
         rel="stylesheet" type="text/css" media="screen, projection" />
     <![endif]-->
-    <!--[if IE 6]>
-    <link href="@(Html.BuildUrlFromExpression<CssController>(req => req.Index("ie6")))"
-        rel="stylesheet" type="text/css" media="screen, projection" />
-    <![endif]-->
     <script src="@(Html.BuildUrlFromExpression<JavascriptController>(req => req.Index("frameworks")))"
-        language="javascript" type="text/javascript"> </script>
-    <script src="@(Html.BuildUrlFromExpression<JavascriptController>(req => req.Index("site")))"
         language="javascript" type="text/javascript"> </script>
 </head>
 <body>
-    <div class="container_16">
-        <section id="main" class="grid_16">
-            @RenderBody()
-        </section>
-    </div>
+    <script type="text/javascript">
+    window.res = {
+        viewport: 'SnapshotViewport'
+    }
+    Ext.onReady(function(){
+        var viewport = Ext.create('Ext.container.Viewport', {
+            id: res.viewport,
+            renderTo:Ext.getBody(),
+            layout: {
+                align: 'center',
+                type: 'vbox',
+            }
+        });
+
+    });
+
+    </script>
+    @RenderBody()
 </body>
 </html>
