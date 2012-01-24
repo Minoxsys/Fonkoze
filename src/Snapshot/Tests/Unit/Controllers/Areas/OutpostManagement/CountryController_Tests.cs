@@ -12,6 +12,7 @@ using Web.Areas.OutpostManagement.Models.Region;
 using Web.Areas.OutpostManagement.Models.Country;
 using Core.Domain;
 using Persistence.Queries.Countries;
+using MvcContrib.TestHelper.Fakes;
 
 
 
@@ -34,6 +35,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement
         IQueryService<Country> queryCountry;
         IQueryService<Region> queryRegion;
         IQueryService<Client> queryClient;
+        IQueryService<User> queryUser;
         
 
         Country entity;
@@ -57,18 +59,22 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement
             deleteCommand = MockRepository.GenerateMock<IDeleteCommand<Country>>();
             queryClient = MockRepository.GenerateMock<IQueryService<Client>>();
             queryRegion = MockRepository.GenerateMock<IQueryService<Region>>();
+            queryUser = MockRepository.GenerateMock<IQueryService<User>>();
 
         }
 
         private void SetUpController()
         {
             controller = new CountryController();
+            FakeControllerContext.Builder.HttpContext.User = new FakePrincipal(new FakeIdentity("username"), new string[] { });
+            FakeControllerContext.Initialize(controller);
 
             controller.QueryCountry = queryCountry;
             controller.SaveOrUpdateCommand = saveCommand;
             controller.DeleteCommand = deleteCommand;
             controller.QueryClients = queryClient;
             controller.QueryRegion = queryRegion;
+            controller.QueryUsers = queryUser;
         }
 
         private void StubEntity()
@@ -132,6 +138,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement
             model = BuildCountryWithName(COUNTRY_NAME);
             saveCommand.Expect(it => it.Execute(Arg<Country>.Matches(c => c.Name == COUNTRY_NAME)));
             queryClient.Expect(it => it.Load(Guid.Empty)).Return(new Client { Name = "client" });
+            queryUser.Expect(it => it.Query()).Return(new User[] { new User{ UserName = "username" }}.AsQueryable());
 
             //act
             var result = (RedirectToRouteResult)controller.Create(new CountryInputModel() { Name = COUNTRY_NAME });
@@ -141,25 +148,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement
             Assert.AreEqual("Overview", result.RouteValues["Action"]);
         }
 
-        [Test]
-        public void Should_Redirect_To_Create_When_POST_Create_Fails_BecauseOf_ModelStateNotValid()
-        {
-            //arrange
-            controller.ModelState.AddModelError("Name", "Field required");
-
-            var countryInputModel = SetCountryInputModelData_ToPassToCreateMethod();
-
-            //act
-            var viewResult = (ViewResult)controller.Create(countryInputModel);
-
-            //assert
-            Assert.AreEqual("Create", viewResult.ViewName);
-            Assert.IsInstanceOf<CountryOutputModel>(viewResult.Model);
-
-            var model = (CountryOutputModel)viewResult.Model;
-            Assert.AreEqual(model.Id, entity.Id);            
-
-        }
+      
 
         private CountryInputModel SetCountryInputModelData_ToPassToCreateMethod()
         {

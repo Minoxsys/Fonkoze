@@ -6,6 +6,7 @@ using Web.Areas.OutpostManagement.Models;
 using Web.Areas.OutpostManagement.Models.Country;
 using AutoMapper;
 using Core.Persistence;
+using Core.Domain;
 using Domain;
 using Web.Areas.OutpostManagement.Models.Client;
 
@@ -18,6 +19,7 @@ namespace Web.Areas.OutpostManagement.Controllers
 
         public IQueryService<Country> QueryCountry { get; set; }
         public IQueryService<Client> QueryClients { get; set; }
+        public IQueryService<User> QueryUsers { get; set; }
 
         public ISaveOrUpdateCommand<Country> SaveOrUpdateCommand { get; set; }
 
@@ -31,6 +33,7 @@ namespace Web.Areas.OutpostManagement.Controllers
         //[Requires(Permissions = "Country.Overview")]
         public ActionResult Overview(int page)
         {
+
             var queryResult = QueryCountry.Query();
 
             var paginatedCountries =
@@ -83,18 +86,22 @@ namespace Web.Areas.OutpostManagement.Controllers
         public ActionResult Create(CountryInputModel countryModel)
         {
             var model = new CountryOutputModel();
+            var loggedUser = User.Identity.Name;
+            var currentUser = QueryUsers.Query().FirstOrDefault(m => m.UserName == loggedUser);
+            var currentClient = currentUser.ClientId;
 
-            if (!ModelState.IsValid)
+            if ((!ModelState.IsValid) || (currentUser.ClientId == null))
             {
                 var countryOutputModel1 = MapDataFromInputModelToOutputModel(countryModel);
                 return View("Create", countryOutputModel1);
             }
-  
 
             CreateMappings();
             var country = new Country();
             Mapper.Map(countryModel, country);
-            country.Client = QueryClients.Load(Client.DEFAULT_ID); // hardcoded client id value
+
+            country.Client = QueryClients.Load(currentClient);
+
             var doubleCountry = QueryCountry.Query();
 
             if (doubleCountry != null)
@@ -108,7 +115,7 @@ namespace Web.Areas.OutpostManagement.Controllers
                 }
             }
             SaveOrUpdateCommand.Execute(country);
-
+            
             return RedirectToAction("Overview", "Country", new { page = 1});
         }
 
