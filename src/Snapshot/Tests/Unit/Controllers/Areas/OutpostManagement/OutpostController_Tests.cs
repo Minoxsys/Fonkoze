@@ -205,52 +205,6 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement
         }
 
 
-        [Test]
-        public void Should_Save_Outpost_When_Save_Succedes()
-        {
-            //arrange
-            var model = new OutpostInputModel();
-            model = BuildOutpostWithName(OUTPOST_NAME);
-            saveCommand.Expect(it => it.Execute(Arg<Outpost>.Matches(c => c.Name == OUTPOST_NAME)));
-            queryClient.Expect(it => it.Load(Guid.Empty)).Return(new Client { Name = "client" });
-
-            //act
-
-            var result = (RedirectToRouteResult)controller.Create(new OutpostInputModel()
-            {
-                Name = OUTPOST_NAME,
-                Region = new OutpostInputModel.RegionInputModel { CountryId = region.Country.Id, Id = region.Id },
-                District = new OutpostInputModel.DistrictInputModel { Id = district.Id }
-            });
-
-            //assert
-            saveCommand.VerifyAllExpectations();
-            Assert.AreEqual("Overview", result.RouteValues["Action"]);
-        }
-
-        [Test]
-        public void Should_Redirect_To_Create_When_POST_Create_Fails_BecauseOf_ModelStateNotValid()
-        {
-            //arrange
-            controller.ModelState.AddModelError("Name", "Field required");
-            queryCountry.Expect(call => call.Query()).Return(new Country[] { country }.AsQueryable());
-            queryRegion.Expect(call => call.Query()).Repeat.Once().Return(new Region[] { region }.AsQueryable());
-
-            var outpostInputModel = SetOutpostInputModelWithData_ToBeTransmitedToCreateMethod();
-            //act
-            var viewResult = (ViewResult)controller.Create(outpostInputModel);
-
-            //assert
-            Assert.AreEqual("Create", viewResult.ViewName);
-            Assert.IsInstanceOf<OutpostOutputModel>(viewResult.Model);
-
-            var model = (OutpostOutputModel)viewResult.Model;
-
-            Assert.AreEqual(model.Countries[0].Value, country.Id.ToString());
-            Assert.AreEqual(model.Region.CountryId, country.Id);
-            Assert.AreEqual(model.Regions[0].Value, region.Id.ToString());
-        }
-
         private OutpostInputModel SetOutpostInputModelWithData_ToBeTransmitedToCreateMethod()
         {
             var outpostInputModel = new OutpostInputModel()
@@ -285,35 +239,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement
 
         }
 
-        [Test]
-        public void Should_redirect_to_Overview_when_POST_Edit_succeedes()
-        {
-            //arrange
-            var model = new OutpostInputModel();
-            queryOutpost.Expect(it => it.Load(outpost.Id)).Return(outpost);
-            model = BuildOutpostWithName(NEW_OUTPOST_NAME);
-            queryOutpost.Expect(call => call.Query()).Return(new Outpost[] { outpost }.AsQueryable());
-            queryCountry.Expect(it => it.Query()).Return(new Country[] { country }.AsQueryable());
-            queryDistrict.Expect(call => call.Query()).Return(new District[] { district }.AsQueryable());
-            queryContact.Expect(call => call.Query()).Return(new Contact[] { contact }.AsQueryable());
-
-            saveCommand.Expect(it => it.Execute(Arg<Outpost>.Matches(c => c.Name == NEW_OUTPOST_NAME && c.Id == outpost.Id)));
-            queryRegion.Expect(it => it.Load(region.Id)).Return(region);
-            // Act
-            var redirectResult = (RedirectToRouteResult)controller.Edit(new OutpostInputModel()
-            {
-                Id = outpost.Id,
-                Name = NEW_OUTPOST_NAME,
-                Region = new OutpostInputModel.RegionInputModel { CountryId = region.Country.Id, Id = region.Id },
-                District = new OutpostInputModel.DistrictInputModel { Id = district.Id }
-            });
-
-
-            // Assert
-            saveCommand.VerifyAllExpectations();
-            queryRegion.VerifyAllExpectations();
-            Assert.AreEqual("Overview", redirectResult.RouteValues["Action"]);
-        }
+ 
 
         [Test]
         public void Should_Redirect_To_Edit_When_POST_Edit_Fails_BecauseOfModelStateNotValid()
