@@ -28,48 +28,38 @@ namespace Web.Areas.OutpostManagement.Controllers
         public CountryOutputModel CountryOutputModel { get; set; }
         
 
-        public int PageSize = 8;
+        public int PageSize = 50;
 
         //[Requires(Permissions = "Country.Overview")]
-        public ActionResult Overview(int page)
+        public ActionResult Overview()
         {
-
-            var queryResult = QueryCountry.Query();
-
-            var paginatedCountries =
-                  queryResult
-                              .OrderBy(p => p.Name)
-                              .Skip((page - 1)*PageSize)
-                              .Take(PageSize);
 
             CountryOverviewModel model =
                 new CountryOverviewModel
                 {
                     Countries = null,
-                    PagingInfo = new PagingInfo
-                    {
-                        CurrentPage = page,
-                        ItemsPerPage = PageSize,
-                        TotalItems = queryResult.Count() 
-                    }, 
                     Error = ""
                 };
-
-            model.Countries = new List<CountryModel>();
-
-
-            if (paginatedCountries.ToList().Count() > 0)
-                paginatedCountries.ToList().ForEach(item =>
-                {
-                    var viewModelItem = new CountryModel();
-                    CreateMappings();
-                    Mapper.Map(item, viewModelItem);
-                    model.Countries.Add(viewModelItem);
-                });
 
             model.Error = (string)TempData[TEMPDATA_ERROR_KEY];
 
             return View(model);
+        }
+        [HttpGet]
+        public JsonResult Index()
+        {
+            return Json(new
+            {
+                Countries = new CountryModel[]{
+                    new CountryModel{
+                        Name = "Romania",
+                        ISOCode= "RO",
+                        PhonePrefix = "0040"
+                    }
+                
+                },
+                TotalItems = 100
+            }, JsonRequestBehavior.AllowGet);
         }
         
         [HttpGet]
