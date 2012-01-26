@@ -1,29 +1,53 @@
-﻿<!DOCTYPE html>
-<html>
+﻿    @using Web.Areas.OutpostManagement;
+@using Web.Areas.OutpostManagement.Controllers;
+@using Web.Bootstrap.Routes;
+<!DOCTYPE html>
+    <html>
 <head>
     <meta charset="utf-8" />
     <title>@RenderSection("page_title", required: true)</title>
-    <link href="@(Html.BuildUrlFromExpression<CssController>(req => req.Index("site")))"
+    <link href="@(Url.RouteUrl<CssController>(req => req.Index("site"), "Css"))"
         rel="stylesheet" type="text/css" media="screen,projection" />
-    <!--[if IE 7]>
-    <link href="@(Html.BuildUrlFromExpression<CssController>(req => req.Index("ie")))"
+    <!--[if IE]>
+    <link href="@(Url.RouteUrl<CssController>(req => req.Index("ie"), DefaultRouteRegistrar.DEFAULT_ROUTE))"
         rel="stylesheet" type="text/css" media="screen, projection" />
     <![endif]-->
-    <script src="@(Html.BuildUrlFromExpression<JavascriptController>(req => req.Index("frameworks")))"
+    <script src="@(Url.RouteUrl<JavascriptController>(req => req.Index("frameworks"), DefaultRouteRegistrar.DEFAULT_ROUTE))"
         language="javascript" type="text/javascript"> </script>
 </head>
 <body>
  <script type="text/javascript">
+    function navigateTo(endpoint){
+        var loc = window.location;
+
+        window.location.href = loc.protocol + '//' +  loc.host + endpoint;
+    }
+    function _t(text){
+        return text;
+    }
     window.res = {
         viewport: 'SnapshotViewport',
+        link:{
+            administration:'@(Url.RouteUrl<CountryController>( x=>x.Overview() ,  OutpostManagementAreaRegistration.DEFAULT_ROUTE ))'
+        },
         header:{
             id:'Header',
             navigation:{
-                id:'Navigation'
+                id:'Navigation',
+                toggleGroup: 'navigation-toggle-group',
+                logo: 'Logo',
+                dashboard:'Dashboard',
+                administration: 'Administration',
+                alerts:'Alerts',
+                analysisAndReports:'AnalysisAndReports'
+
             },
             subnavigation:{
                 id:'SubNavigation'
-                }
+            }
+        },
+        content:{
+            id:'Content'
         }
     }
    
@@ -32,6 +56,7 @@
             id: res.viewport,
             renderTo:Ext.getBody(),
 
+                padding: '0 120 0 170',
             layout: {
                 type: 'fit',
             },
@@ -50,17 +75,74 @@
                             xtype: 'container',
                             height: 70,
                             id: res.header.navigation.id,
+                            layout:'column',
+                            items:[
+                            {
+                                xtype: 'container',
+                                height: 70,
+                                id: res.header.navigation.logo,
+                                padding: 0,
+                                width: 150
+                            },
+                            {
+                                xtype: 'button',
+                                id: res.header.navigation.dashboard,
+                                height: 70,
+                                padding: 0,
+                                width: 170,
+                                toggleGroup:res.header.navigation.toggleGroup,
+                                enableToggle:true,
+                                pressed:true,
+                                text: 'Dashboard'
+                            },
+                            {
+                                xtype: 'button',
+                                id: res.header.navigation.administration,
+                                height: 70,
+                                padding: 0,
+                                width: 170,
+                                toggleGroup:res.header.navigation.toggleGroup,
+                                handler:function(){
+                                    navigateTo( res.link.administration ); 
+                                },
+                                enableToggle:true,
+                                text: 'Administration'
+                            },
+                            {
+                                xtype: 'button',
+                                id: res.header.navigation.alerts,
+                                height: 70,
+                                padding: 0,
+                                width: 170,
+                                toggleGroup:res.header.navigation.toggleGroup,
+                                enableToggle:true,
+                                text: 'Alerts'
+                            },
+                            {
+                                xtype: 'button',
+                                id: res.header.navigation.analysisAndReports,
+                                height: 70,
+                                padding: 0,
+                                width: 170,
+                                toggleGroup:res.header.navigation.toggleGroup,
+                                enableToggle:true,
+                                text: 'Analysis and Reports'
+                            }] 
                         },
                         {
                             xtype: 'container',
                             id: res.header.subnavigation.id,
-                            flex: 1
+                            flex: 1,
+                             layout: {
+                                align: 'stretch',
+                                type: 'hbox'
+                            },
                         }
                     ]
                 },
                 {
                     xtype: 'container',
-                    id: 'Content',
+                    id: res.content.id,
                     layout: {
                         type: 'fit'
                     },

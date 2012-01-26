@@ -1,0 +1,79 @@
+﻿<script type="text/javascript">
+    window.res.content.maincontent = {
+        id: 'MainContent',
+        sidebar: {
+            id: 'SideBar',
+            group: 'SideBarGroup',
+            country: 'Country',
+            region: 'Region',
+            district: 'District',
+            outpost: 'Outpost'
+        }
+    };
+    Ext.onReady(function () {
+
+        var contentRes = window.res.content;
+
+        var content = Ext.getCmp(contentRes.id);
+
+        content.add(
+            {
+                xtype: 'container',
+                layout: {
+                    align: 'stretch',
+                    type: 'hbox'
+                },
+                items: [
+                     {
+                         xtype: 'container',
+                         id: contentRes.maincontent.id,
+                         layout: {
+                             align: 'stretch',
+                             type: 'vbox'
+                         },
+                         flex: 1
+                     },
+                    {
+                        xtype: 'container',
+                        id: 'SideBar',
+                        width: 210,
+                        layout: {
+                            align: 'stretch',
+                            type: 'vbox'
+                        },
+                        items: [
+                            {
+                                xtype: 'button',
+                                toggleGroup: contentRes.maincontent.sidebar.group,
+                                enableToggle: true,
+                                pressed: true,
+                                text: 'Country'
+                            },
+                            {
+                                xtype: 'button',
+                                toggleGroup: contentRes.maincontent.sidebar.group,
+                                enableToggle: true,
+                                text: 'Region'
+                            },
+                            {
+                                xtype: 'button',
+                                toggleGroup: contentRes.maincontent.sidebar.group,
+                                enableToggle: true,
+                                text: 'District'
+                            },
+                            {
+                                xtype: 'button',
+                                toggleGroup: contentRes.maincontent.sidebar.group,
+                                enableToggle: true,
+                                text: 'Outpost'
+                            }
+                        ]
+                    }
+
+                ]
+
+            }
+        );
+
+    });
+</script>

@@ -6,6 +6,7 @@ using Web.Areas.OutpostManagement.Models;
 using Web.Areas.OutpostManagement.Models.Country;
 using AutoMapper;
 using Core.Persistence;
+using Core.Domain;
 using Domain;
 using Web.Areas.OutpostManagement.Models.Client;
 
@@ -18,6 +19,7 @@ namespace Web.Areas.OutpostManagement.Controllers
 
         public IQueryService<Country> QueryCountry { get; set; }
         public IQueryService<Client> QueryClients { get; set; }
+        public IQueryService<User> QueryUsers { get; set; }
 
         public ISaveOrUpdateCommand<Country> SaveOrUpdateCommand { get; set; }
 
@@ -26,47 +28,38 @@ namespace Web.Areas.OutpostManagement.Controllers
         public CountryOutputModel CountryOutputModel { get; set; }
         
 
-        public int PageSize = 8;
+        public int PageSize = 50;
 
         //[Requires(Permissions = "Country.Overview")]
-        public ActionResult Overview(int page)
+        public ActionResult Overview()
         {
-            var queryResult = QueryCountry.Query();
-
-            var paginatedCountries =
-                  queryResult
-                              .OrderBy(p => p.Name)
-                              .Skip((page - 1)*PageSize)
-                              .Take(PageSize);
 
             CountryOverviewModel model =
                 new CountryOverviewModel
                 {
                     Countries = null,
-                    PagingInfo = new PagingInfo
-                    {
-                        CurrentPage = page,
-                        ItemsPerPage = PageSize,
-                        TotalItems = queryResult.Count() 
-                    }, 
                     Error = ""
                 };
-
-            model.Countries = new List<CountryModel>();
-
-
-            if (paginatedCountries.ToList().Count() > 0)
-                paginatedCountries.ToList().ForEach(item =>
-                {
-                    var viewModelItem = new CountryModel();
-                    CreateMappings();
-                    Mapper.Map(item, viewModelItem);
-                    model.Countries.Add(viewModelItem);
-                });
 
             model.Error = (string)TempData[TEMPDATA_ERROR_KEY];
 
             return View(model);
+        }
+        [HttpGet]
+        public JsonResult Index()
+        {
+            return Json(new
+            {
+                Countries = new CountryModel[]{
+                    new CountryModel{
+                        Name = "Romania",
+                        ISOCode= "RO",
+                        PhonePrefix = "0040"
+                    }
+                
+                },
+                TotalItems = 100
+            }, JsonRequestBehavior.AllowGet);
         }
         
         [HttpGet]
@@ -83,18 +76,22 @@ namespace Web.Areas.OutpostManagement.Controllers
         public ActionResult Create(CountryInputModel countryModel)
         {
             var model = new CountryOutputModel();
+            var loggedUser = User.Identity.Name;
+            var currentUser = QueryUsers.Query().FirstOrDefault(m => m.UserName == loggedUser);
+            var currentClient = currentUser.ClientId;
 
-            if (!ModelState.IsValid)
+            if ((!ModelState.IsValid) || (currentUser.ClientId == null))
             {
                 var countryOutputModel1 = MapDataFromInputModelToOutputModel(countryModel);
                 return View("Create", countryOutputModel1);
             }
-  
 
             CreateMappings();
             var country = new Country();
             Mapper.Map(countryModel, country);
-            country.Client = QueryClients.Load(Client.DEFAULT_ID); // hardcoded client id value
+
+            country.Client = QueryClients.Load(currentClient);
+
             var doubleCountry = QueryCountry.Query();
 
             if (doubleCountry != null)
@@ -108,7 +105,7 @@ namespace Web.Areas.OutpostManagement.Controllers
                 }
             }
             SaveOrUpdateCommand.Execute(country);
-
+            
             return RedirectToAction("Overview", "Country", new { page = 1});
         }
 

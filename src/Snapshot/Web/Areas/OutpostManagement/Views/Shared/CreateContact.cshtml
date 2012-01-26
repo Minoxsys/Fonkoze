@@ -28,7 +28,7 @@
         Html.RenderPartial("ContactInput", Model);
     }
 
-    @Html.SubmitButton("submit-form", "Save") <span>or </span><a href="@(Html.BuildUrlFromExpression<OutpostController>(it => it.Edit(Model.OutpostId)))">
+    @Html.SubmitButton("submit-form", "Save") <span>or </span><a href="@(Html.BuildUrlFromExpression<OutpostController>(it => it.OverviewContacts(Model.OutpostId)))">
         Cancel</a>
     @{Html.EndForm();}
 

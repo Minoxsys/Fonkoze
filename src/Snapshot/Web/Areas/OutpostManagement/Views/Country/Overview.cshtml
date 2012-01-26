@@ -1,374 +1,88 @@
 ﻿@using Web.Areas.OutpostManagement.HtmlHelpers
 @using Web.Areas.OutpostManagement.Models.Country
-
-
 @model CountryOverviewModel
-           
 @section page_title{
-OutpostManagement Countries: Overview
+Outpost Management Countries: Overview
 }
-@section title_bar{
+@{
+    Html.RenderPartial("_SubNavigation");
+    Html.RenderPartial("_OutpostAdministrationSideBar");
 }
-@section breadcrumbs{
-    @Url.HomeLink("Outpost Administration")
-> Countries
-}
-@section master_content{
-    @if (!string.IsNullOrWhiteSpace(Model.Error))
-    {
-        <div class="error">
-            @Model.Error
-        </div>
-    }
+
+<script type="text/javascript">
+    Ext.onReady(function () {
     
-     <div class="page_header_buttons">
-        @(Html.ActionLink<CountryController>(it => it.Create(Model.PagingInfo.CurrentPage), "Add new Country", OutpostManagementAreaRegistration.DEFAULT_ROUTE))
-    </div>
-   <div>&nbsp;</div>
-
-<div class="pager">
-   @Html.PageLinks(Model.PagingInfo, x => Url.Action("Overview", new {page = x}))
-</div>
-
-
-    <table id="CountryGroup" class="sortable paginated">
-        <thead>
-            <tr>
-                <th class="sort-alpha">
-                    Country Name
-                </th>
-                <th>
-                    Country Abbreviation
-                </th>
-                <th>
-                    Phone Country Prefix
-                </th>
-                <th align="center">
-                    Actions
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            @{
-                var itemNo = 0;
-            }
-            @foreach (CountryModel country in Model.Countries)
-            {
-                var _class = (itemNo++ % 2 == 0) ? "odd" : "even";
-       
-                <tr class="@_class">
-                    <td>@(Html.ActionLink<RegionController>(it => it.Overview(country.Id), @country.Name, OutpostManagementAreaRegistration.DEFAULT_ROUTE))
-                    </td>
-                    <td>@country.ISOCode
-                    </td>
-                    <td>@country.PhonePrefix
-                    </td>
-                    @*<td>
-                        @(Html.ActionLink<CountryController>(it => it.Edit(country.Id), "Edit", OutpostManagementAreaRegistration.DEFAULT_ROUTE))
-                    </td>*@
-                    <td>
-                        @{Html.BeginForm<CountryController>(m => m.Delete(country.Id), FormMethod.Post, new { @class = "delete-user-form" }); }
-                        @Html.Button("delete-user", "Remove", HtmlButtonType.Submit)
-                        @{Html.EndForm();}
-
-                    </td>
-                </tr> 
-            }
-        </tbody>
-    </table>
-
-
-}
-
-@section master_actions{
-    @{
-        Html.RenderPartial("~/Views/Shared/_OutpostManagementActions.cshtml");
-    }
-        @{ Html.RenderPartial("~/Views/Shared/_StockAdministrationActions.cshtml");}
-}
-
-@section scripts{
-    <script type="text/javascript">
-        $(function () {
-            $(".delete-user-form").submit(function () {
-                return confirm('Are you sure that you want to delete this Country ?')
-            });
-        });
-
-        //search for countries by Name
-
-        jQuery.expr[":"].containsNoCase = function (el, i, m) {
-            var search = m[3];
-            if (!search) return false;
-            return eval("/" + search + "/i").test($(el).text());
-        };
-
-        jQuery(document).ready(function () {
-
-            // cancel the search if the user presses the ESC key
-            jQuery('#CountrySearch').keyup(function (event) {
-                if (event.keyCode == 27) {
-                    resetSearch();
-                }
-            });
-
-            // execute the search
-            jQuery('#CountrySearch').keyup(function () {
-                // only search when there are 3 or more characters in the textbox
-                if (jQuery('#CountrySearch').val().length > 0) {
-                    // hide all rows
-                    jQuery('#CountryGroup tr').hide();
-                    // show the header row
-                    jQuery('#CountryGroup tr:first').show();
-                    // show the matching rows (using the containsNoCase from Rick Strahl)
-                    jQuery('#CountryGroup tr td:containsNoCase(\'' + jQuery('#CountrySearch').val() + '\')').parent().show();
-                }
-                else if (jQuery('#CountrySearch').val().length == 0) {
-                    // if the user removed all of the text, reset the search
-                    resetSearch();
-                }
-
-                // if there were no matching rows, tell the user
-                if (jQuery('#CountryGroup tr:visible').length == 1) {
-                    // remove the norecords row if it already exists
-                    jQuery('.norecords').remove();
-                    // add the norecords row
-                    jQuery('#CountryGroup').append('<tr class="norecords"><td colspan="5" class="Normal">No records were found</td></tr>');
-                }
-            });
-        });
-
-        function resetSearch() {
-            // clear the textbox
-            jQuery('#CountrySearch').val('');
-            // show all table rows
-            jQuery('#CountryGroup tr').show();
-            // remove any no records rows
-            jQuery('.norecords').remove();
-            // make sure we re-focus on the textbox for usability
-            jQuery('#CountrySearch').focus();
-        }
-
-
-        jQuery.fn.alternateRowColors = function () {
-            $('tbody tr:odd', this)
-                .removeClass('even').addClass('odd');
-            $('tbody tr:even', this)
-                .removeClass('odd').addClass('even');
-            return this;
-        };
-
-        $(document).ready(function () {
-            $('#CountryGroup.sortable').each(function () {
-                var $table = $(this);
-                $table.alternateRowColors();
-                $('th', $table).each(function (column) {
-                    var $header = $(this);
-                    var findSortKey;
-                    if ($header.is('.sort-alpha')) {
-                        findSortKey = function ($cell) {
-                            return $cell.find('.sort-key').text().toUpperCase()
-                                    + ' ' + $cell.text().toUpperCase();
-                        };
-                    }
-                    else if ($header.is('.sort-numeric')) {
-                        findSortKey = function ($cell) {
-                            var key = $cell.text().replace(/^[^\d.]*/, '');
-                            key = parseFloat(key);
-                            return isNaN(key) ? 0 : key;
-                        };
-                    }
-                    else if ($header.is('.sort-date')) {
-                        findSortKey = function ($cell) {
-                            return Date.parse('1 ' + $cell.text());
-                        };
-                    }
-
-                    if (findSortKey) {
-                        $header.addClass('clickable').hover(function () {
-                            $header.addClass('hover');
-                        }, function () {
-                            $header.removeClass('hover');
-                        }).click(function () {
-                            var sortDirection = 1;
-                            if ($header.is('.sorted-asc')) {
-                                sortDirection = -1;
-                            }
-                            
-                            var rows = $table.find('tbody > tr').get();
-                            $.each(rows, function (index, row) {
-                                var $cell = $(row).children('td').eq(column);
-                                row.sortKey = findSortKey($cell);
-                            });
-                            
-                            rows.sort(function (a, b) {
-                                if (a.sortKey < b.sortKey) return -sortDirection;
-                                if (a.sortKey > b.sortKey) return sortDirection;
-                                return 0;
-                            });
-                            
-                            $.each(rows, function (index, row) {
-                                $table.children('tbody').append(row);
-                                row.sortKey = null;
-                            });
-                            
-                            $table.find('th').removeClass('sorted-asc')
-                               .removeClass('sorted-desc');
-                            if (sortDirection == 1) {
-                                $header.addClass('sorted-asc');
-                            }
-                            else {
-                                $header.addClass('sorted-desc');
-                            }
-                            
-                            $table.find('td').removeClass('sorted')
-                                  .filter(':nth-child(' + (column + 1) + ')')
-                                  .addClass('sorted');
-                            
-                            $table.alternateRowColors();
-                            $table.trigger('repaginate');
-                        });
-                    }
-                });
-            });
-        });
-
-        $(document).ready(function () {
-            $('table.striped').bind('stripe', function () {
-                $('tbody', this).each(function () {
-                    $(this).find('tr:visible:not(:has(th))')
-        .removeClass('odd').addClass('even')
-        .filter(function (index) {
-            return (index % 6) < 3;
-        }).removeClass('even').addClass('odd');
-                });
-            }).trigger('stripe');
-        });
-
-        $(document).ready(function () {
-            var $authorCells = $('table.striped td:nth-child(3)');
-            var $tooltip = $('<div id="tooltip"></div>').appendTo('body');
-
-            var positionTooltip = function (event) {
-                var tPosX = event.pageX;
-                var tPosY = event.pageY + 20;
-                $tooltip.css({ top: tPosY, left: tPosX });
-            };
-            var showTooltip = function (event) {
-                var authorName = $(this).text();
-                var action = 'Highlight';
-                if ($(this).parent().is('.highlight')) {
-                    action = 'Unhighlight';
-                }
-                $tooltip
-      .text(action + ' all articles by ' + authorName)
-      .show();
-                positionTooltip(event);
-            };
-            var hideTooltip = function () {
-                $tooltip.hide();
-            };
-
-            $authorCells
-    .addClass('clickable')
-    .hover(showTooltip, hideTooltip)
-    .mousemove(positionTooltip)
-    .click(function (event) {
-        var authorName = $(this).text();
-        $authorCells.each(function (index) {
-            if (authorName == $(this).text()) {
-                $(this).parent().toggleClass('highlight');
-            }
-            else {
-                $(this).parent().removeClass('highlight');
-            }
-        });
-        showTooltip.call(this, event);
+        var administrationBtnId = window.res.header.navigation.administration;
+        var administrationBtn = Ext.getCmp(administrationBtnId);
+        administrationBtn.toggle(true);
     });
+</script>
+<script type="text/javascript">
+Ext.onReady(function(){
+    window.feature = {};
+    window.feature.store = Ext.create('Ext.data.Store', {
+        pageSize: 50,
+        remoteSort: true,
+        fields:[
+            'Name'
+        ],
+        proxy: {
+            // load using script tags for cross domain, if the data in on the same domain as
+            // this page, an HttpProxy would be better
+            type: 'ajax',
+            url: '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Country", action = "Index" })',
+            reader: {
+                type:'json',
+                root: 'Countries',
+                totalProperty: 'TotalItems'
+            },
+            // sends single sort as multi parameter
+            simpleSortMode: true
+        },
+        sorters: [{
+            property: 'Name',
+            direction: 'DESC'
+        }]
+    });
+    window.feature.grid = Ext.create('Ext.grid.Panel', {
+        title: 'Countries',
+        store: window.feature.store,
+        disableSelection: true,
+        loadMask: true,
+        // grid columns
+        columns:[{
+            text: "Name",
+            dataIndex: 'Name',
+            flex: 1,
+            sortable: true
+        },
+        {
+            text: "Country Abbreviation",
+            dataIndex: 'ISOCode',
+            sortable: true
+        },
+
+        {
+            text: "Phone Prefix",
+            dataIndex: 'PhonePrefix',
+            sortable: true
+        },
+
+            
+        ],
+        // paging bar on the bottom
+        bbar: Ext.create('Ext.PagingToolbar', {
+            store: window.feature.store,
+            displayInfo: true,
+            displayMsg: 'Displaying topics {0} - {1} of {2}',
+            emptyMsg: "No topics to display",
+        })
+    });
+
+        var contentRes = window.res.content;
+        var mainContent = Ext.getCmp(contentRes.maincontent.id);
+
+        mainContent.add(window.feature.grid);
+        window.feature.store.loadPage(1);
         });
-
-        $(document).ready(function () {
-            var collapseIcon = '../images/bullet_toggle_minus.png';
-            var collapseText = 'Collapse this section';
-            var expandIcon = '../images/bullet_toggle_plus.png';
-            var expandText = 'Expand this section';
-            $('table.collapsible tbody').each(function () {
-                var $section = $(this);
-                $('<img />').attr('src', collapseIcon)
-      .attr('alt', collapseText)
-      .prependTo($section.find('th'))
-      .addClass('clickable')
-      .click(function () {
-          if ($section.is('.collapsed')) {
-              $section.removeClass('collapsed')
-            .find('tr:not(:has(th)):not(.filtered)')
-            .fadeIn('fast');
-              $(this).attr('src', collapseIcon)
-            .attr('alt', collapseText);
-          }
-          else {
-              $section.addClass('collapsed')
-            .find('tr:not(:has(th))')
-            .fadeOut('fast', function () {
-                $(this).css('display', 'none');
-            });
-              $(this).attr('src', expandIcon)
-            .attr('alt', expandText);
-          }
-          $section.parent().trigger('stripe');
-      });
-            });
-        });
-
-        $(document).ready(function () {
-            $('table.filterable').each(function () {
-                var $table = $(this);
-
-                $table.find('th').each(function (column) {
-                    if ($(this).is('.filter-column')) {
-                        var $filters = $('<div class="filters"></div>');
-                        $('<h3></h3>')
-          .text('Filter by ' + $(this).text() + ':')
-          .appendTo($filters);
-
-                        $('<div class="filter">all</div>').click(function () {
-                            $table.find('tbody tr').removeClass('filtered');
-                            $(this).addClass('active')
-            .siblings().removeClass('active');
-                            $table.trigger('stripe');
-                        }).addClass('clickable active').appendTo($filters);
-
-                        var keywords = {};
-                        $table.find('td:nth-child(' + (column + 1) + ')')
-          .each(function () {
-              keywords[$(this).text()] = $(this).text();
-          });
-
-                        $.each(keywords, function (index, keyword) {
-                            $('<div class="filter"></div>').text(keyword)
-            .bind('click', { key: keyword }, function (event) {
-                $('tr:not(:has(th))', $table).each(function () {
-                    var value = $('td', this).eq(column).text();
-                    if (value == event.data['key']) {
-                        $(this).removeClass('filtered');
-                    }
-                    else {
-                        $(this).addClass('filtered');
-                    }
-                });
-                $(this).addClass('active')
-                .siblings().removeClass('active');
-                $table.trigger('stripe');
-            }).addClass('clickable').appendTo($filters);
-                        });
-
-                        $filters.insertBefore($table);
-                    }
-                });
-            });
-        });
-
-
-
-    </script>
-}
+</script>
