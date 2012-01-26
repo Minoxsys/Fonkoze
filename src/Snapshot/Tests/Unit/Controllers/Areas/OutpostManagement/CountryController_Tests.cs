@@ -104,7 +104,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement
             //queryDistrict.Expect(call => call.Query()).Return(new District[] { district }.AsQueryable());
 
             // Act
-            var viewResult = (ViewResult)controller.Overview(1);
+            var viewResult = (ViewResult)controller.Overview();
 
             // Assert
             queryCountry.VerifyAllExpectations();
