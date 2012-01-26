@@ -275,7 +275,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement
             queryOutpost.Expect(call => call.Query()).Repeat.Once().Return(new Outpost[] { outpost }.AsQueryable());
             queryWarehouse.Expect(call => call.Query()).Return(new Outpost[] { warehouses }.AsQueryable());
             //act
-            var result = (ViewResult)controller.Edit(outpost.Id);
+            var result = (ViewResult)controller.Edit(outpost.Id, country.Id, region.Id, district.Id);
 
             //assert
             Assert.IsInstanceOf<OutpostOutputModel>(result.Model);

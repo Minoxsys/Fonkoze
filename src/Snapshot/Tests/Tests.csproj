@@ -104,6 +104,9 @@
     <Compile Include="Unit\Controllers\Areas\StockAdministration\OutpostStockLevelController_Tests.cs" />
     <Compile Include="Unit\Controllers\Areas\StockAdministration\ProductGroupController_Tests.cs" />
     <Compile Include="Unit\Controllers\Areas\StockAdministration\StockItemController_Tests.cs" />
+    <Compile Include="Unit\Controllers\EmailRequestControllerTest\CreateMethod.cs" />
+    <Compile Include="Unit\Controllers\EmailRequestControllerTest\ObjectMother.cs" />
+    <Compile Include="Unit\Controllers\EmailRequestControllerTest\ResponseMethod.cs" />
     <Compile Include="Unit\Controllers\UnautorizedAccessController_Tests.cs" />
     <Compile Include="Unit\Controllers\CssControllerTests.cs" />
     <Compile Include="Unit\Controllers\UserManagerTests.cs" />

@@ -14,7 +14,5 @@ namespace Web.Bootstrap
 		public static string ScriptsVersion = ConfigurationManager.AppSettings["ScriptsVersion"];
 
         public static string SendMailFrom = ConfigurationManager.AppSettings["SendMail.From"];
-        public static string SendMailToGirls = ConfigurationManager.AppSettings["SendMail.ToGirls"];
-        public static string SendMailToIT = ConfigurationManager.AppSettings["SendMail.ToIt"];
 	}
 }

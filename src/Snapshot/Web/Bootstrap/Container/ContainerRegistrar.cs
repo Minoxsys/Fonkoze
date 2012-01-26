@@ -28,6 +28,10 @@ namespace Web.Bootstrap.Container
 
             FileRegistrar.Register(container);
 
+            EmailRegistrar.Register(container);
+
+            URLRegistrar.Register(container);
+
             container.RegisterSource(new AnyConcreteTypeNotAlreadyRegisteredSource(type =>
                     type.Assembly.FullName.StartsWith("Web")
                 )

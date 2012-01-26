@@ -262,28 +262,55 @@ namespace Web.Areas.OutpostManagement.Controllers
             return View(model);
         }
 
-        [HttpGet]
-        public ActionResult Create()
+        
+        public ActionResult Create(Guid districtId)
         {
-           var model = CreateOutpost;
-           model.Warehouse = new OutpostModel();
-           model.Warehouses = new List<SelectListItem>();
+
+            OutpostOutputModel.District = new DistrictModel();
+            OutpostOutputModel.Region = new RegionModel();
+
+            //var district = new Domain.District(); ;
+
+            if (districtId != null)
+            {
+                var district = QueryDistrict.Load(districtId);
+                var countryId = district.Region.Country.Id;
+                var regionId = district.Region.Id;
+                OutpostOutputModel = new OutpostOutputModel(QueryCountry, QueryRegion, QueryDistrict, QueryService, countryId, regionId, districtId);
+            }
+            else
+            {
+                var countryId = new Guid();
+                var regionId = new Guid();
+
+                OutpostOutputModel = new OutpostOutputModel(QueryCountry, QueryRegion, QueryDistrict, QueryService, countryId, regionId, districtId);
+            }
+
+           OutpostOutputModel.Warehouses = new List<SelectListItem>();
+
             var resultWarehouse = QueryService.Query().Where(m => m.IsWarehouse);
             if (resultWarehouse != null)
             {
                 if (resultWarehouse.FirstOrDefault() != null)
                 {
+
+                    var selectListItem = new SelectListItem();
+                    selectListItem.Value = new Guid().ToString();
+                    selectListItem.Text = "Please select a Warehouse";
+                    OutpostOutputModel.Warehouses.Add(selectListItem);
+ 
                     foreach (Domain.Outpost item3 in resultWarehouse)
                     {
-                        var selectListItem = new SelectListItem();
+                        selectListItem = new SelectListItem();
 
                         selectListItem.Value = item3.Id.ToString();
                         selectListItem.Text = item3.Name;
-                        model.Warehouses.Add(selectListItem);
+                        OutpostOutputModel.Warehouses.Add(selectListItem);
                     }
                 }
             }
-            return View(model);
+
+            return View(OutpostOutputModel);
         }
 
         [HttpPost]
@@ -291,6 +318,10 @@ namespace Web.Areas.OutpostManagement.Controllers
         public ActionResult Create(OutpostInputModel outpostInputModel)
         {
             var model = new OutpostInputModel();
+            if (outpostInputModel.Warehouse.Id.ToString() == "00000000-0000-0000-0000-000000000000")
+            {
+                outpostInputModel.Warehouse = null;
+            }
 
             if (!ModelState.IsValid)
             {
@@ -319,6 +350,7 @@ namespace Web.Areas.OutpostManagement.Controllers
                 outpostInputModel.Warehouse = null;
             }
 
+
             SaveOrUpdateCommand.Execute(outpost);
 
             return RedirectToAction("Overview", "Outpost", new
@@ -332,13 +364,13 @@ namespace Web.Areas.OutpostManagement.Controllers
 
 
         [HttpGet]
-        public ViewResult Edit(Guid outpostId)
+        public ViewResult Edit(Guid outpostId, Guid countryId, Guid regionId, Guid districtId)
         {
             var _outpost = QueryService.Load(outpostId);
             var _contacts = QueryContact.Query().Where(oo => oo.Outpost.Id == outpostId);
 
             var warehouses = QueryService.Query().Where<Outpost>(it => it.IsWarehouse);
-            var outpostModelView = new OutpostOutputModel(QueryCountry, QueryRegion, QueryDistrict, QueryService);
+            var outpostModelView = new OutpostOutputModel(QueryCountry, QueryRegion, QueryDistrict, QueryService, countryId, regionId, districtId);
 
             outpostModelView.Warehouses = new List<SelectListItem>();
 
@@ -640,8 +672,12 @@ namespace Web.Areas.OutpostManagement.Controllers
 
         private OutpostOutputModel MapDatFromInputModelToOutputModel(OutpostInputModel outpostInputModel)
         {
-            var outpostOutputModel = new OutpostOutputModel(QueryCountry, QueryRegion, QueryDistrict, QueryService);
-            var countries = QueryCountry.Query().Where(it => it.Id == outpostInputModel.Region.CountryId);
+            var countryId = outpostInputModel.Region.CountryId;
+            var regionId = outpostInputModel.Region.Id;
+            var districtId = outpostInputModel.District.Id;
+
+            var outpostOutputModel = new OutpostOutputModel(QueryCountry, QueryRegion, QueryDistrict, QueryService, countryId, regionId, districtId);
+            var countries = QueryCountry.Query().Where(it => it.Id == countryId);
 
             if (countries.ToList().Count > 0)
             {

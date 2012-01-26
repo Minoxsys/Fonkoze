@@ -30,7 +30,7 @@ OutpostManagement Outposts: Overview
     }
 
     <div class="page_header_buttons">
-        @(Html.ActionLink<OutpostController>(it => it.Create(), "Add new Outpost", OutpostManagementAreaRegistration.DEFAULT_ROUTE))
+         @Html.ActionLink("Add new Outpost", "Create", "Outpost", new { id = "createOutpost" })
     </div>
  
     <div>
@@ -38,31 +38,50 @@ OutpostManagement Outposts: Overview
         <thead>
             <tr>
                 <th>
-                    <label>
-                        Country:</label>
+                    <label>Country:</label>
                     <select name="@(Html.NameFor(m => m.Countries))">
                         <option value="@Guid.Empty">- Select a country - </option>
                         @{
                             foreach (var item in Model.Countries)
                             {
-                            <option value="@item.Value" @(item.Selected ? @"selected='selected'" : @"") >@item.Text</option>
+                                <option value="@item.Value" @(item.Selected ? @"selected='selected'" : @"") >@item.Text</option>
                             }
                         }
                     </select>
                 </th>
-                <th>
-                    <label>
-                        Region:</label>
-                    @Html.DropDownList("Regions", Model.Regions, new { onChange = "onRegionChanged()" })
+               <th>
+                    <label>Region:</label>
+                    <select name="@(Html.NameFor(m => m.Regions))" id="Regions">
+                    @if(Model.Regions.Count > 0){
+                        <option value="@Guid.Empty">- Select a region - </option>
+                       
+                            foreach (var item in Model.Regions)
+                            {
+                                <option value="@item.Value" @(item.Selected ? @"selected='selected'" : @"") >@item.Text</option>
+                            }
+                        
+                    }
+                    </select>
                 </th>
                 <th>
-                    <label>
-                        District:</label>
-                    @Html.DropDownList("Districts", Model.Districts, new { onChange = "onDistrictChanged()" })
+                <th>
+                    <label>District:</label>
+                    <select name="@(Html.NameFor(m => m.Districts))" id="Districts">
+                    @if(Model.Districts.Count > 0){
+                        <option value="@Guid.Empty">- Select a district - </option>
+                       
+                            foreach (var item in Model.Districts)
+                            {
+                                <option value="@item.Value" @(item.Selected ? @"selected='selected'" : @"") >@item.Text</option>
+                            }
+                        
+                    }
+                    </select>
                 </th>
                 <th><br />
                      <input type="text" id="outpostSearch"  class="input" name="outpostSearch" maxlength="50" placeholder="Outposts search" style="width:200px; height:30px; margin-left:0px" />
                 </th>
+              </tr>
          </thead>
         <tbody>
         </tbody>
@@ -72,10 +91,8 @@ OutpostManagement Outposts: Overview
     <div class="pager">
   @* @Html.PageLinks(Model.PagingInfo, x => Url.Action("Overview", new {page = x}))*@
 </div>
-<div>
-    @{
-        Html.RenderPartial("OverviewOutpost", Model.Outpost);
-    }
+    <div>
+        @{ Html.RenderPartial("OverviewOutpost", Model.Outpost); }
     </div>
 }
 
@@ -90,11 +107,18 @@ OutpostManagement Outposts: Overview
         var timeout;
 
         $(function () {
+            var selectedRegionId = $("select[name='@Html.NameFor(m => m.Regions)']").val();
+            var selectedCountryId = $("select[name='@Html.NameFor(m => m.Countries)']").val();
+            var selectedDistrictId = $("select[name='@Html.NameFor(m => m.Districts)']").val();
+            $("select[name='@Html.NameFor(m=>m.Countries)']").change(onCountryChanged);
+            $("select[name='@Html.NameFor(m=>m.Regions)']").change(onRegionChanged);
+            $("select[name='@Html.NameFor(m=>m.Districts)']").change(onDistrictChanged);
+
+
             $(".delete-user-form").submit(function () {
                 return confirm('Are you sure that you want to delete this Outpost?');
             });
 
-            $("select[name='@Html.NameFor(m=>m.Countries)']").change(onCountryChanged);
 
             $("input").keyup(function () {
                 clearTimeout(timeout);
@@ -167,14 +191,17 @@ OutpostManagement Outposts: Overview
 
             });
 
+            document.getElementById('createOutpost').href = '@Url.Action("Create")?countryId=' + selectedCountryId + '&regionId=' + selectedRegionId;
             $("select[name='@Html.NameFor(m => m.Regions)'] option[value='@Guid.Empty.ToString()']").remove();
         }
 
         function onDistrictChanged() {
-
+            debugger;
             var reg = document.getElementById("Districts");
-
             var selectedDistrictId = reg.options[reg.selectedIndex].value;
+            document.getElementById('createOutpost').href = '@Url.Action("Create")?districtId=' + selectedDistrictId;
+            debugger;
+
 
             $("#Districts option[value='@Guid.Empty.ToString()']").remove();
             var drop = $("#outpost-overview")
@@ -183,9 +210,11 @@ OutpostManagement Outposts: Overview
             var urlOverview = '@Url.Action("OverviewOutpost")?districtId=' + selectedDistrictId;
             $.get(urlOverview, function (data) {
                 console.log(data);
+ 
+
                 $('#outpost-overview').html(data);
             });
-
+            $("select[name='@Html.NameFor(m => m.Districts)'] option[value='@Guid.Empty.ToString()']").remove();
         }
 
         function searchOutpostByName(selectedDistrictId) {

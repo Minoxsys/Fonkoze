@@ -56,7 +56,10 @@ namespace Web.Areas.OutpostManagement.Models.Outpost
         public OutpostOutputModel(IQueryService<Domain.Country> queryCountry,
                                   IQueryService<Domain.Region> queryRegion,
                                   IQueryService<Domain.District> queryDistrict,
-                                  IQueryService<Domain.Outpost> queryWarehouse)
+                                  IQueryService<Domain.Outpost> queryWarehouse,
+                                  Guid? countryId,
+                                  Guid? regionId,
+                                  Guid? districtId)
         {
 
 
@@ -65,7 +68,6 @@ namespace Web.Areas.OutpostManagement.Models.Outpost
             this.queryDistrict = queryDistrict;
             this.queryWarehouse = queryWarehouse;
             this.queryContact = queryContact;
-            //IQueryService<Domain.Outpost>  queryWarehouse = new IQueryService<Domain.Outpost>();
 
             var Countries = new List<SelectListItem>();
             var Regions = new List<SelectListItem>();
@@ -82,10 +84,10 @@ namespace Web.Areas.OutpostManagement.Models.Outpost
             this.Districts = Districts;
             this.Warehouse = Warehouse;
 
+            var countries = queryCountry.Query().OrderBy(m => m.Name).ToList();
 
-            var result = queryCountry.Query();
 
-            foreach (Domain.Country item in result)
+            foreach (Domain.Country item in countries)
             {
                 var selectListItem = new SelectListItem();
 
@@ -93,37 +95,47 @@ namespace Web.Areas.OutpostManagement.Models.Outpost
                 selectListItem.Text = item.Name;
                 Countries.Add(selectListItem);
             }
-            
-            var resultRegion = queryRegion.Query();
 
-  
-            if (resultRegion.FirstOrDefault() != null)
+            if (countryId != null)
             {
-                foreach (Domain.Region item in resultRegion)
+                if (this.Countries.Where(it => it.Value == countryId.Value.ToString()).ToList().Count > 0)
+                    this.Countries.First(it => it.Value == countryId.Value.ToString()).Selected = true;
+
+                var regions = queryRegion.Query().Where(it => it.Country.Id == countryId.Value).ToList();
+
+                foreach (Domain.Region region in regions)
                 {
-                    var selectListItem = new SelectListItem();
-
-                    selectListItem.Value = item.Id.ToString();
-                    selectListItem.Text = item.Name;
-                    Regions.Add(selectListItem);
-
-                }
-            }
-
-            var resultDistrict = queryDistrict.Query();
-            if (resultDistrict != null)
-            {
-                if (resultDistrict.FirstOrDefault() != null)
-                {
-                    foreach (Domain.District item2 in resultDistrict)
+                    if (regionId != null)
                     {
-                        var selectListItem = new SelectListItem();
-
-                        selectListItem.Value = item2.Id.ToString();
-                        selectListItem.Text = item2.Name;
-                        Districts.Add(selectListItem);
+                        this.Regions.Add(new SelectListItem { Text = region.Name, Value = region.Id.ToString(), Selected = region.Id == regionId });
+                    }
+                    else
+                    {
+                        this.Regions.Add(new SelectListItem { Text = region.Name, Value = region.Id.ToString() });
                     }
                 }
+
+            }
+
+            if (regionId != null)
+            {
+                if (this.Regions.Where(it => it.Value == regionId.Value.ToString()).ToList().Count > 0)
+                    this.Regions.First(it => it.Value == regionId.Value.ToString()).Selected = true;
+
+                var districts = queryDistrict.Query().Where(it => it.Region.Id == regionId.Value).ToList();
+
+                foreach (Domain.District district in districts)
+                {
+                    if (regionId != null)
+                    {
+                        this.Districts.Add(new SelectListItem { Text = district.Name, Value = district.Id.ToString(), Selected = district.Id == districtId });
+                    }
+                    else
+                    {
+                        this.Districts.Add(new SelectListItem { Text = district.Name, Value = district.Id.ToString() });
+                    }
+                }
+
             }
 
             var resultOutposts = queryWarehouse.Query();
@@ -134,9 +146,14 @@ namespace Web.Areas.OutpostManagement.Models.Outpost
                 {
                     if (resultWarehouse.FirstOrDefault() != null)
                     {
+                        var selectListItem = new SelectListItem();
+                        selectListItem.Value = null;
+                        selectListItem.Text = "Please select a Warehouse";
+                        Warehouses.Add(selectListItem);
+ 
                         foreach (Domain.Outpost item3 in resultWarehouse)
                         {
-                            var selectListItem = new SelectListItem();
+                            selectListItem = new SelectListItem();
 
                             selectListItem.Value = item3.Id.ToString();
                             selectListItem.Text = item3.Name;
