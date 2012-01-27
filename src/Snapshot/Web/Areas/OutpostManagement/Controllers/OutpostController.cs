@@ -14,6 +14,8 @@ using Core.Persistence;
 using Domain;
 using Web.Areas.OutpostManagement.Models.Client;
 
+using NHibernate.Linq;
+
 namespace Web.Areas.OutpostManagement.Controllers
 {
     public class OutpostController : Controller
@@ -145,6 +147,13 @@ namespace Web.Areas.OutpostManagement.Controllers
                         selectListItem.Text = item.Name;
                         model.Warehouses.Add(selectListItem);
                      }
+                    model.Warehouses.Add(new SelectListItem
+                    {
+                        Selected=true,
+                        Text="No Warehouse",
+                        Value = Guid.Empty.ToString()
+
+                    });
                 }
             }
 
@@ -299,7 +308,7 @@ namespace Web.Areas.OutpostManagement.Controllers
 
                     var selectListItem = new SelectListItem();
                     selectListItem.Value = new Guid().ToString();
-                    selectListItem.Text = "Please select a Warehouse";
+                    selectListItem.Text = "No warehouse selected";
                     OutpostOutputModel.Warehouses.Add(selectListItem);
  
                     foreach (Domain.Outpost item3 in resultWarehouse)
@@ -321,7 +330,7 @@ namespace Web.Areas.OutpostManagement.Controllers
         public ActionResult Create(OutpostInputModel outpostInputModel)
         {
             var model = new OutpostInputModel();
-            if (outpostInputModel.Warehouse.Id.ToString() == "00000000-0000-0000-0000-000000000000")
+            if (outpostInputModel.Warehouse != null && outpostInputModel.Warehouse.Id == Guid.Empty)
             {
                 outpostInputModel.Warehouse = null;
             }
@@ -367,10 +376,11 @@ namespace Web.Areas.OutpostManagement.Controllers
 
 
         [HttpGet]
-        public ViewResult Edit(Guid outpostId, Guid countryId, Guid regionId, Guid districtId)
+        public ViewResult Edit(Guid? outpostId, Guid? countryId, Guid? regionId, Guid? districtId)
         {
-            var _outpost = QueryService.Load(outpostId);
-            var _contacts = QueryContact.Query().Where(oo => oo.Outpost.Id == outpostId);
+            var _outpost = QueryService.Load(outpostId.Value);
+            
+            var _contacts = QueryContact.Query().Where(oo => oo.Outpost.Id == _outpost.Id);
 
             var warehouses = QueryService.Query().Where<Outpost>(it => it.IsWarehouse);
             var outpostModelView = new OutpostOutputModel(QueryCountry, QueryRegion, QueryDistrict, QueryService, countryId, regionId, districtId);
@@ -412,6 +422,7 @@ namespace Web.Areas.OutpostManagement.Controllers
                 selectListItem.Text = item.Name;
                 outpostModelView.Warehouses.Add(selectListItem);
             }
+
 
              return View(outpostModelView);
         }
