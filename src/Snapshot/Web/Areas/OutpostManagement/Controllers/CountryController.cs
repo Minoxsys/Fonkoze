@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using System.Web.Script.Serialization;
 using Web.Areas.OutpostManagement.Models;
 using Web.Areas.OutpostManagement.Models.Country;
 using AutoMapper;
@@ -26,87 +27,78 @@ namespace Web.Areas.OutpostManagement.Controllers
         public IDeleteCommand<Country> DeleteCommand { get; set; }
         public IQueryService<Region> QueryRegion { get; set; }
         public CountryOutputModel CountryOutputModel { get; set; }
-        
+
 
         public int PageSize = 50;
 
         //[Requires(Permissions = "Country.Overview")]
         public ActionResult Overview()
         {
+            var countryOverviewModel = new CountryOverviewModel();
 
-            CountryOverviewModel model =
-                new CountryOverviewModel
-                {
-                    Countries = null,
-                    Error = ""
-                };
+            var worldRecords = this.QueryWorldCountryRecords.Query().ToList();
 
-            model.Error = (string)TempData[TEMPDATA_ERROR_KEY];
+            countryOverviewModel.WorldRecords = new JavaScriptSerializer().Serialize(worldRecords);
 
-            return View(model);
+            return View(countryOverviewModel);
         }
+
         [HttpGet]
-        public JsonResult Index()
+        public JsonResult Index(CountryIndexModel indexModel)
         {
-            return Json(new
+            var pageSize = indexModel.limit.Value - indexModel.start.Value;
+
+            var countryDataQuery = this.QueryCountry.Query()
+                .Where( c=>c.Client.Id == Client.DEFAULT_ID)
+                .Take(pageSize)
+                .Skip(indexModel.start.Value);
+
+            var totalItems = countryDataQuery.Count();
+
+            var countryModelListProjection = (from countryData in countryDataQuery.ToList()
+                         select new CountryModel
+                         {
+                             Id = countryData.Id,
+                             ISOCode = countryData.ISOCode,
+                             Name = countryData.Name,
+                             PhonePrefix = countryData.PhonePrefix,
+                         }).ToArray();
+
+            return Json(new CountryIndexOutputModel
             {
-                Countries = new CountryModel[]{
-                    new CountryModel{
-                        Name = "Romania",
-                        ISOCode= "RO",
-                        PhonePrefix = "0040"
-                    }
-                
-                },
-                TotalItems = 100
+                Countries = countryModelListProjection,
+                TotalItems = totalItems
             }, JsonRequestBehavior.AllowGet);
         }
-        
+
         [HttpGet]
         //[Requires(Permissions = "Country.CRUD")]
         public ActionResult Create(int page)
         {
-             return View(CountryOutputModel);
+            return View(CountryOutputModel);
         }
 
 
         [HttpPost]
         [ValidateInput(false)]
         //[Requires(Permissions = "OnBoarding.Candidate.CRUD")]
-        public ActionResult Create(CountryInputModel countryModel)
+        public EmptyResult Create(CountryInputModel countryModel)
         {
             var model = new CountryOutputModel();
             var loggedUser = User.Identity.Name;
             var currentUser = QueryUsers.Query().FirstOrDefault(m => m.UserName == loggedUser);
-            var currentClient = currentUser.ClientId;
+            var currentClientId = currentUser.ClientId;
 
-            if ((!ModelState.IsValid) || (currentUser.ClientId == null))
-            {
-                var countryOutputModel1 = MapDataFromInputModelToOutputModel(countryModel);
-                return View("Create", countryOutputModel1);
-            }
+            var country = new Country{
+                Client = QueryClients.Load(currentClientId),
+                Name = countryModel.Name,
+                ISOCode = countryModel.ISOCode,
+                PhonePrefix = countryModel.PhonePrefix
+            };
 
-            CreateMappings();
-            var country = new Country();
-            Mapper.Map(countryModel, country);
-
-            country.Client = QueryClients.Load(currentClient);
-
-            var doubleCountry = QueryCountry.Query();
-
-            if (doubleCountry != null)
-            {
-                doubleCountry = doubleCountry.Where(m => m.Name == country.Name);
-
-                if (doubleCountry.ToList().Count() > 0)
-                {
-                    TempData.Add("error", string.Format("The country {0} is already added, so it can not be re-inserted", country.Name));
-                    return RedirectToAction("Overview", "Country", new { page = 1 });
-                }
-            }
             SaveOrUpdateCommand.Execute(country);
-            
-            return RedirectToAction("Overview", "Country", new { page = 1});
+
+            return new EmptyResult();
         }
 
 
@@ -174,18 +166,18 @@ namespace Web.Areas.OutpostManagement.Controllers
                 {
                     regionResults = regionResults.Where(it => it.Country.Name == country.Name);
 
-                        if (regionResults.ToList().Count != 0)
-                        {
-                            TempData.Add("error", string.Format("The Country {0} has regions associated, so it can not be deleted", country.Name));
-                            return RedirectToAction("Overview", new { page = 1 });
-                        }
+                    if (regionResults.ToList().Count != 0)
+                    {
+                        TempData.Add("error", string.Format("The Country {0} has regions associated, so it can not be deleted", country.Name));
+                        return RedirectToAction("Overview", new { page = 1 });
                     }
+                }
 
-            } 
-            
-            DeleteCommand.Execute(country);            
-            return RedirectToAction("Overview", new { page = 1});
-       }
+            }
+
+            DeleteCommand.Execute(country);
+            return RedirectToAction("Overview", new { page = 1 });
+        }
 
 
         private CountryOutputModel MapDataFromInputModelToOutputModel(CountryInputModel countryInputModel)
@@ -203,5 +195,7 @@ namespace Web.Areas.OutpostManagement.Controllers
 
 
         public object countryOutputModel { get; set; }
+
+        public IQueryService<WorldCountryRecord> QueryWorldCountryRecords { get; set; }
     }
 }

@@ -20,26 +20,16 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.CountryControllerTests
         }
 
         [Test]
-        public void Get_WithParam_Page_ReturnsTheViewModel_WithTheFirstPageLoaded()
+        public void Get_ReturnsTheViewModel_WithTheWorldCountriesLoaded()
         {
-            const int PAGE_NUMBER = 1;
-            // Arrange		
-
-            objectMother.queryCountry.Expect(call => call.Query()).Return(new Country[] { objectMother.fakeCountry }.AsQueryable());
-           
-
+            objectMother.queryWorldCountryRecords.Expect(call => call.Query()).Return( objectMother.WorldCountryRecords());
             // Act
             var viewResult = (ViewResult)objectMother.controller.Overview();
 
            // Assert
+            objectMother.queryWorldCountryRecords.VerifyAllExpectations();
 
             Assert.IsNotNull(viewResult.Model);
-
-            var viewModel = (CountryOverviewModel)viewResult.Model;
-
-            Assert.IsNotNull(viewModel);
-
-            Assert.That(viewModel.Countries.Count, Is.EqualTo(1));
 
             Assert.AreEqual(ObjectMother.DEFAULT_VIEW_NAME, viewResult.ViewName);
         

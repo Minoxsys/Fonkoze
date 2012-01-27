@@ -156,6 +156,8 @@
     <Compile Include="Areas\OutpostManagement\Models\Contact\ContactModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Contact\ContactsOverviewModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Country\CountriesList.cs" />
+    <Compile Include="Areas\OutpostManagement\Models\Country\CountryIndexModel.cs" />
+    <Compile Include="Areas\OutpostManagement\Models\Country\CountryIndexOutputModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Country\CountryOutputModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Country\CountryInputModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Country\CountryModel.cs" />
