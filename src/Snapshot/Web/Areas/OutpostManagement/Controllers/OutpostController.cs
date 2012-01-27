@@ -93,6 +93,9 @@ namespace Web.Areas.OutpostManagement.Controllers
                     outposts = outposts.Where<Outpost>(it => it.District.Id == districtId.Value);
 
                     model = new OutpostOverviewModel();
+                    model.Country = new CountryModel { Id = countryId.Value };
+                    model.Region = new RegionModel { Id = regionId.Value };
+                    model.District = new DistrictModel { Id = districtId.Value };
 
                     foreach (Country item in countries)
                     {
@@ -263,7 +266,7 @@ namespace Web.Areas.OutpostManagement.Controllers
         }
 
         
-        public ActionResult Create(Guid districtId)
+        public ActionResult Create(Guid? districtId)
         {
 
             OutpostOutputModel.District = new DistrictModel();
@@ -271,9 +274,9 @@ namespace Web.Areas.OutpostManagement.Controllers
 
             //var district = new Domain.District(); ;
 
-            if (districtId != null)
+            if (districtId.HasValue)
             {
-                var district = QueryDistrict.Load(districtId);
+                var district = QueryDistrict.Load(districtId.Value);
                 var countryId = district.Region.Country.Id;
                 var regionId = district.Region.Id;
                 OutpostOutputModel = new OutpostOutputModel(QueryCountry, QueryRegion, QueryDistrict, QueryService, countryId, regionId, districtId);
