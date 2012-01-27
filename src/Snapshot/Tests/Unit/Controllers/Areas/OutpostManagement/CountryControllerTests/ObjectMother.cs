@@ -8,6 +8,7 @@ using Web.Areas.OutpostManagement.Controllers;
 using Core.Persistence;
 using Core.Domain;
 using MvcContrib.TestHelper.Fakes;
+using Web.Areas.OutpostManagement.Models.Country;
 
 namespace Tests.Unit.Controllers.Areas.OutpostManagement.CountryControllerTests
 {
@@ -20,6 +21,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.CountryControllerTests
         internal IQueryService<Region> queryRegion;
         internal IQueryService<Client> queryClient;
         internal IQueryService<User> queryUser;
+        internal IQueryService<WorldCountryRecord> queryWorldCountryRecords;
 
 
         internal Country fakeCountry;
@@ -51,6 +53,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.CountryControllerTests
             queryClient = MockRepository.GenerateMock<IQueryService<Client>>();
             queryRegion = MockRepository.GenerateMock<IQueryService<Region>>();
             queryUser = MockRepository.GenerateMock<IQueryService<User>>();
+            queryWorldCountryRecords = MockRepository.GenerateMock<IQueryService<WorldCountryRecord>>();
 
         }
 
@@ -66,6 +69,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.CountryControllerTests
             controller.QueryClients = queryClient;
             controller.QueryRegion = queryRegion;
             controller.QueryUsers = queryUser;
+            controller.QueryWorldCountryRecords = queryWorldCountryRecords;
         }
 
         internal void StubEntity()
@@ -83,6 +87,35 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.CountryControllerTests
             region.Stub(b => b.Id).Return(regionId);
             region.Name = "Transilvania";
             region.Country = fakeCountry;
+        }
+
+        internal IQueryable<Country> PageOfCountryData(CountryIndexModel indexModel)
+        {
+            List<Country> countryPageList = new List<Country>();
+            var client = MockRepository.GeneratePartialMock<Client>();
+            client.Stub(c => c.Id).Return(Client.DEFAULT_ID);
+            
+            for (int i = indexModel.start.Value; i < indexModel.limit.Value; i++)
+            {
+                countryPageList.Add(new Country
+                {
+                    Name=String.Format("CountryAtIndex{0}",i),
+                    ISOCode=String.Format("C{0}",i),
+                    PhonePrefix = String.Format("{0:00000}", i),
+                    Client = client
+                });
+            }
+            return countryPageList.AsQueryable();
+        }
+
+        internal IQueryable<WorldCountryRecord> WorldCountryRecords()
+        {
+            var listOfCountryRecords = new List<WorldCountryRecord>();
+            listOfCountryRecords.Add(new WorldCountryRecord());
+            listOfCountryRecords[0].Name = "Romania";
+            listOfCountryRecords[0].ISOCode = "RO";
+            listOfCountryRecords[0].PhonePrefix = "0040";
+            return listOfCountryRecords.AsQueryable();
         }
     }
 }

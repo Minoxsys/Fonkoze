@@ -94,27 +94,6 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement
             region.Country = entity;
         }
 
-         [Test]
-        public void Should_Return_DataSpecificToCountryId_From_QueryService_in_Overview()
-        {
-            // Arrange		
-            
-            queryCountry.Expect(call => call.Query()).Repeat.Once().Return(new Country[] { entity }.AsQueryable());
-            //queryRegion.Expect(call => call.Query()).Return(new Region[] { region }.AsQueryable());
-            //queryDistrict.Expect(call => call.Query()).Return(new District[] { district }.AsQueryable());
-
-            // Act
-            var viewResult = (ViewResult)controller.Overview();
-
-            // Assert
-            queryCountry.VerifyAllExpectations();
-            queryRegion.VerifyAllExpectations();
-
-            Assert.IsNotNull(viewResult.Model);
-            var viewModel = (CountryOverviewModel)viewResult.Model;
-            Assert.AreEqual(entity.Name, viewModel.Countries[0].Name);
-            Assert.AreEqual(DEFAULT_VIEW_NAME, viewResult.ViewName);
-        }
 
 
         [Test]
@@ -130,32 +109,8 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement
             
         }
 
-        [Test]
-        public void Should_Save_Country_When_Save_Succedes()
-        {
-            //arrange
-            var model = new CountryInputModel();
-            model = BuildCountryWithName(COUNTRY_NAME);
-            saveCommand.Expect(it => it.Execute(Arg<Country>.Matches(c => c.Name == COUNTRY_NAME)));
-            queryClient.Expect(it => it.Load(Guid.Empty)).Return(new Client { Name = "client" });
-            queryUser.Expect(it => it.Query()).Return(new User[] { new User{ UserName = "username" }}.AsQueryable());
+       
 
-            //act
-            var result = (RedirectToRouteResult)controller.Create(new CountryInputModel() { Name = COUNTRY_NAME });
-
-            //assert
-            saveCommand.VerifyAllExpectations();
-            Assert.AreEqual("Overview", result.RouteValues["Action"]);
-        }
-
-      
-
-        private CountryInputModel SetCountryInputModelData_ToPassToCreateMethod()
-        {
-            var countryInputModel = new CountryInputModel();
-            countryInputModel.Id = entity.Id;
-            return countryInputModel;
-        }
 
         [Test]
         public void Should_Load_A_Completed_Edit_Page_When_GET_Edit()

@@ -71,6 +71,12 @@ drop table OutpostHistoricalStockLevels
 
 end
 
+if exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'WorldCountryRecords')
+begin
+
+    drop table WorldCountryRecords
+end
+
 if exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'Clients')
 begin
     drop table Clients
@@ -82,9 +88,14 @@ begin
     drop table Users
 end
 
+<<<<<<< HEAD
 if exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'EmailRequests')
 begin
 drop table EmailRequests
 
 end
+=======
+
+
+>>>>>>> Added missing WorldCountryRecord, implemented country add scenario (happy flow only )
 

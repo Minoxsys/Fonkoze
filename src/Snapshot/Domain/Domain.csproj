@@ -52,6 +52,7 @@
     <Compile Include="Region.cs" />
     <Compile Include="ProductGroup.cs" />
     <Compile Include="Product.cs" />
+    <Compile Include="WorldCountryRecord.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj">
