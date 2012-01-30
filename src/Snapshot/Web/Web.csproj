@@ -292,6 +292,8 @@
   <ItemGroup>
     <Content Include="Assets\css\ext-all.css" />
     <Content Include="Assets\css\ext-ie.css" />
+    <Content Include="Assets\img\delete.png" />
+    <Content Include="Assets\img\edit.png" />
     <Content Include="Assets\js\ext-all-dev-w-comments.js" />
     <Content Include="Assets\js\ext-all.js" />
     <Content Include="Assets\js\jquery-1.7.1.min.js" />
@@ -1523,7 +1525,6 @@
     <Folder Include="App_Data\" />
     <Folder Include="Areas\OutpostManagement\Services\" />
     <Folder Include="Areas\StockAdministration\Views\Shared\" />
-    <Folder Include="Assets\img\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
