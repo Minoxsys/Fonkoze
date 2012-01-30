@@ -6,13 +6,13 @@ using System.Security.Principal;
 
 namespace Core.Security
 {
-	public class EvozonPrincipal : IPrincipal
+	public class CustomPrincipal : IPrincipal
 	{
 		IPermissionsService functionRight;
 		IIdentity identity;
         string userName;
 
-        public EvozonPrincipal(IPermissionsService functionRight, IIdentity identity, string userName)
+        public CustomPrincipal(IPermissionsService functionRight, IIdentity identity, string userName)
 		{
 			this.functionRight = functionRight;
 

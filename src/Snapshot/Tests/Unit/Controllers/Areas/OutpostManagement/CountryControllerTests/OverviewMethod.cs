@@ -20,8 +20,22 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.CountryControllerTests
         }
 
         [Test]
+        public void GetsTheCurrentUserAndItsClient()
+        {
+            objectMother.QueryCountriesToReturnsEmptyResult();
+            objectMother.QueryWorldCountryRecordsReturnsEmptyResult();
+
+            objectMother.controller.Overview();
+
+
+
+        }
+
+        [Test]
         public void Get_ReturnsTheViewModel_WithTheWorldCountriesLoaded()
         {
+            objectMother.QueryCountriesToReturnsEmptyResult();
+
             objectMother.queryWorldCountryRecords.Expect(call => call.Query()).Return( objectMother.WorldCountryRecords());
             // Act
             var viewResult = (ViewResult)objectMother.controller.Overview();
@@ -33,6 +47,26 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.CountryControllerTests
 
             Assert.AreEqual(ObjectMother.DEFAULT_VIEW_NAME, viewResult.ViewName);
         
+        }
+
+        [Test]
+        public void Get_Returns_OnlyTheCountries_ThatDoNetBelong_ToTheUser_Currently()
+        {
+            var currentUserCountries = objectMother.CurrentUserCountries();
+            var worldCountryRecord = objectMother.WorldCountryRecords();
+
+            objectMother.queryWorldCountryRecords.Expect(call => call.Query()).Return(worldCountryRecord);
+            objectMother.queryCountry.Expect(call => call.Query()).Return(currentUserCountries);
+
+            var viewResult = (ViewResult)objectMother.controller.Overview();
+
+            objectMother.queryCountry.VerifyAllExpectations();
+
+            var model = viewResult.Model as CountryOverviewModel;
+
+            Assert.IsNotNull(model);
+
+            Assert.That(model.WorldRecords, Is.EqualTo("[]"));
         }
     }
 }

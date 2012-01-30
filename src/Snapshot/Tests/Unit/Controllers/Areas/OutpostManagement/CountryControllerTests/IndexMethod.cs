@@ -31,6 +31,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.CountryControllerTests
             };
 
             var pageOfData = objectMother.PageOfCountryData(indexModel);
+
             objectMother.queryCountry.Expect(call => call.Query()).Return(pageOfData);
             //act
 

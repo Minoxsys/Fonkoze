@@ -72,7 +72,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement
             controller.QueryCountry = queryCountry;
             controller.SaveOrUpdateCommand = saveCommand;
             controller.DeleteCommand = deleteCommand;
-            controller.QueryClients = queryClient;
+            controller.LoadClient = queryClient;
             controller.QueryRegion = queryRegion;
             controller.QueryUsers = queryUser;
         }

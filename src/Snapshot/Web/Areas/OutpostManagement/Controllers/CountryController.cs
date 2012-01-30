@@ -16,27 +16,37 @@ namespace Web.Areas.OutpostManagement.Controllers
     public class CountryController : Controller
     {
 
-        private const string TEMPDATA_ERROR_KEY = "error";
 
         public IQueryService<Country> QueryCountry { get; set; }
-        public IQueryService<Client> QueryClients { get; set; }
+        public IQueryService<Client> LoadClient { get; set; }
         public IQueryService<User> QueryUsers { get; set; }
+
+        public IQueryService<Region> QueryRegion { get; set; }
+        public IQueryService<WorldCountryRecord> QueryWorldCountryRecords { get; set; }
+
 
         public ISaveOrUpdateCommand<Country> SaveOrUpdateCommand { get; set; }
 
         public IDeleteCommand<Country> DeleteCommand { get; set; }
-        public IQueryService<Region> QueryRegion { get; set; }
+
         public CountryOutputModel CountryOutputModel { get; set; }
 
+        private const string TEMPDATA_ERROR_KEY = "error";
+        private Client _client;
+        private Core.Domain.User _user;
 
-        public int PageSize = 50;
-
-        //[Requires(Permissions = "Country.Overview")]
         public ActionResult Overview()
         {
+            LoadUserAndClient();
+
             var countryOverviewModel = new CountryOverviewModel();
 
-            var worldRecords = this.QueryWorldCountryRecords.Query().ToList();
+            var userSelectedCountries = this.QueryCountry.Query().Where(c=>c.Client == _client).Select(c=>c.Name);
+
+            var worldRecords = (from worldRec in this.QueryWorldCountryRecords.Query()
+                               where !userSelectedCountries.Contains(worldRec.Name)
+                               select worldRec).ToList();
+             
 
             countryOverviewModel.WorldRecords = new JavaScriptSerializer().Serialize(worldRecords);
 
@@ -46,10 +56,12 @@ namespace Web.Areas.OutpostManagement.Controllers
         [HttpGet]
         public JsonResult Index(CountryIndexModel indexModel)
         {
+            LoadUserAndClient();
+
             var pageSize = indexModel.limit.Value - indexModel.start.Value;
 
             var countryDataQuery = this.QueryCountry.Query()
-                .Where( c=>c.Client.Id == Client.DEFAULT_ID)
+                .Where( c=>c.Client.Id == _client.Id)
                 .Take(pageSize)
                 .Skip(indexModel.start.Value);
 
@@ -78,19 +90,15 @@ namespace Web.Areas.OutpostManagement.Controllers
             return View(CountryOutputModel);
         }
 
-
         [HttpPost]
         [ValidateInput(false)]
         //[Requires(Permissions = "OnBoarding.Candidate.CRUD")]
         public EmptyResult Create(CountryInputModel countryModel)
         {
-            var model = new CountryOutputModel();
-            var loggedUser = User.Identity.Name;
-            var currentUser = QueryUsers.Query().FirstOrDefault(m => m.UserName == loggedUser);
-            var currentClientId = currentUser.ClientId;
+            LoadUserAndClient();
 
             var country = new Country{
-                Client = QueryClients.Load(currentClientId),
+                Client = this._client,
                 Name = countryModel.Name,
                 ISOCode = countryModel.ISOCode,
                 PhonePrefix = countryModel.PhonePrefix
@@ -135,6 +143,20 @@ namespace Web.Areas.OutpostManagement.Controllers
             SaveOrUpdateCommand.Execute(country);
 
             return RedirectToAction("Overview", "Country", new { page = 1 });
+        }
+
+        private void LoadUserAndClient()
+        {
+            var loggedUser = User.Identity.Name;
+            this._user = QueryUsers.Query().FirstOrDefault(m => m.UserName == loggedUser);
+
+            if (_user == null) throw new NullReferenceException("User is not logged in");
+
+            var clientId = Client.DEFAULT_ID;
+            if (_user.ClientId != Guid.Empty)
+                clientId = _user.ClientId;
+
+            this._client = LoadClient.Load(clientId);
         }
 
         private static void CreateMappings(Country entity = null)
@@ -194,8 +216,5 @@ namespace Web.Areas.OutpostManagement.Controllers
         }
 
 
-        public object countryOutputModel { get; set; }
-
-        public IQueryService<WorldCountryRecord> QueryWorldCountryRecords { get; set; }
     }
 }
