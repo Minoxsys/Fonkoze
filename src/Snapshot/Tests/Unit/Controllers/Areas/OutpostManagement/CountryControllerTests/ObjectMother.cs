@@ -19,8 +19,8 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.CountryControllerTests
         internal IDeleteCommand<Country> deleteCommand;
         internal IQueryService<Country> queryCountry;
         internal IQueryService<Region> queryRegion;
-        internal IQueryService<Client> queryClient;
-        internal IQueryService<User> queryUser;
+        internal IQueryService<Client> loadClient;
+        internal IQueryService<User> queryUsers;
         internal IQueryService<WorldCountryRecord> queryWorldCountryRecords;
 
 
@@ -29,6 +29,11 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.CountryControllerTests
         internal Guid regionId;
         internal Guid entityId;
 
+        internal Client client;
+        internal User user;
+
+        internal Guid ClientId = Guid.NewGuid();
+
         internal const string DEFAULT_VIEW_NAME = "";
         internal const string COUNTRY_NAME = "Romania";
         internal const string NEW_COUNTRY_NAME = "France";
@@ -36,10 +41,14 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.CountryControllerTests
         internal const string NEW_REGION_NAME = "Timis";
         internal const string COORDINATES = "14 44";
 
+
+        internal const string FAKE_USERNAME = "username";
+
         internal void Init()
         {
             SetUpServices();
             SetUpController();
+            StubUserAndItsClient();
             StubRegion();
             StubEntity();
         }
@@ -50,25 +59,26 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.CountryControllerTests
             queryCountry = MockRepository.GenerateMock<IQueryService<Country>>();
             saveCommand = MockRepository.GenerateMock<ISaveOrUpdateCommand<Country>>();
             deleteCommand = MockRepository.GenerateMock<IDeleteCommand<Country>>();
-            queryClient = MockRepository.GenerateMock<IQueryService<Client>>();
+
             queryRegion = MockRepository.GenerateMock<IQueryService<Region>>();
-            queryUser = MockRepository.GenerateMock<IQueryService<User>>();
             queryWorldCountryRecords = MockRepository.GenerateMock<IQueryService<WorldCountryRecord>>();
+
+            queryRegion.Stub(m => m.Query()).Return(new Region[] { }.AsQueryable());
 
         }
 
         internal void SetUpController()
         {
             controller = new CountryController();
-            FakeControllerContext.Builder.HttpContext.User = new FakePrincipal(new FakeIdentity("username"), new string[] { });
+
+            FakeControllerContext.Builder.HttpContext.User = new FakePrincipal(new FakeIdentity(FAKE_USERNAME), new string[] { });
             FakeControllerContext.Initialize(controller);
 
-            controller.QueryCountry = queryCountry;
             controller.SaveOrUpdateCommand = saveCommand;
             controller.DeleteCommand = deleteCommand;
-            controller.QueryClients = queryClient;
+
+            controller.QueryCountry = queryCountry;
             controller.QueryRegion = queryRegion;
-            controller.QueryUsers = queryUser;
             controller.QueryWorldCountryRecords = queryWorldCountryRecords;
         }
 
@@ -89,11 +99,34 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.CountryControllerTests
             region.Country = fakeCountry;
         }
 
+        internal void StubUserAndItsClient()
+        {
+
+            loadClient = MockRepository.GenerateStub<IQueryService<Client>>();
+            queryUsers = MockRepository.GenerateStub<IQueryService<User>>();
+
+            this.client = MockRepository.GeneratePartialMock<Client>();
+            client.Stub(c => c.Id).Return(ClientId);
+            client.Name = "Minoxsys";
+
+            this.user = MockRepository.GeneratePartialMock<User>();
+            user.Stub(c=>c.Id).Return(Guid.NewGuid());
+            user.Stub(c => c.ClientId).Return(client.Id);
+            user.UserName = FAKE_USERNAME;
+            user.Password = "asdf";
+
+            loadClient.Stub(c => c.Load(ClientId)).Return(client);
+            queryUsers.Stub(c=>c.Query()).Return( new []{user}.AsQueryable());
+
+            controller.LoadClient = loadClient;
+            controller.QueryUsers = queryUsers;
+
+        }
+
+
         internal IQueryable<Country> PageOfCountryData(CountryIndexModel indexModel)
         {
             List<Country> countryPageList = new List<Country>();
-            var client = MockRepository.GeneratePartialMock<Client>();
-            client.Stub(c => c.Id).Return(Client.DEFAULT_ID);
             
             for (int i = indexModel.start.Value; i < indexModel.limit.Value; i++)
             {
@@ -116,6 +149,34 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.CountryControllerTests
             listOfCountryRecords[0].ISOCode = "RO";
             listOfCountryRecords[0].PhonePrefix = "0040";
             return listOfCountryRecords.AsQueryable();
+        }
+
+        internal IQueryable<Country> CurrentUserCountries()
+        {
+            var listOfCountryRecords = new List<Country>();
+
+            var client = this.client;
+
+
+            listOfCountryRecords.Add(new Country());
+            listOfCountryRecords[0].Name = "Romania";
+            listOfCountryRecords[0].ISOCode = "RO";
+            listOfCountryRecords[0].PhonePrefix = "0040";
+
+            listOfCountryRecords[0].Client = client;
+            return listOfCountryRecords.AsQueryable();
+        }
+
+        internal void QueryCountriesToReturnsEmptyResult()
+        {
+            this.queryCountry.Expect(call=>call.Query()).Return(new Country[]{}.AsQueryable());
+
+        }
+
+
+        internal void QueryWorldCountryRecordsReturnsEmptyResult()
+        {
+            this.queryWorldCountryRecords.Expect(call => call.Query()).Return(new WorldCountryRecord[] { }.AsQueryable());
         }
     }
 }
