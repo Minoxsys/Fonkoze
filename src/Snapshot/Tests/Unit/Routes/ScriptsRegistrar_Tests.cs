@@ -15,7 +15,7 @@ namespace UnitTests.Routes
 	[TestFixture]
 	public class ScriptsRegistrar_Tests
 	{
-		[Test]
+		[SetUp]
 		public void BeforeEach()
 		{
 			var routes = RouteTable.Routes;
@@ -28,13 +28,13 @@ namespace UnitTests.Routes
 		[Test]
 		public void MapsRoute_Css()
 		{
-			"~/".ShouldMapTo<CssController>(action => action.Index("group"));
+			"~/css/group/ver1".ShouldMapTo<CssController>(action => action.Index("group"));
 		}
 
 		[Test]
 		public void MapRoute_Js()
 		{
-			"~/".ShouldMapTo<JavascriptController>(action => action.Index("group"));
+			"~/js/group/_ver1".ShouldMapTo<JavascriptController>(action => action.Index("group"));
 		}
 	}
 }

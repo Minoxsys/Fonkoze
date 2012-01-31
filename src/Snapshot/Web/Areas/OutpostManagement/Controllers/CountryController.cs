@@ -41,7 +41,7 @@ namespace Web.Areas.OutpostManagement.Controllers
 
             var countryOverviewModel = new CountryOverviewModel();
 
-            var userSelectedCountries = this.QueryCountry.Query().Where(c=>c.Client == _client).Select(c=>c.Name);
+            var userSelectedCountries = this.QueryCountry.Query().Where(c=>c.Client == _client).Select(c=>c.Name).ToList();
 
             var worldRecords = (from worldRec in this.QueryWorldCountryRecords.Query()
                                where !userSelectedCountries.Contains(worldRec.Name)
