@@ -162,6 +162,7 @@
     <Compile Include="Areas\OutpostManagement\Models\Country\CountryInputModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Country\CountryModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Country\ClientModelCountry.cs" />
+    <Compile Include="Areas\OutpostManagement\Models\District\DistrictIndexModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Outpost\OutpostInputModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Outpost\OutpostOutputModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\District\DistrictInputModel.cs" />
@@ -1565,11 +1566,7 @@
     <Content Include="Areas\OutpostManagement\Views\Contact\Edit.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\Shared\OverviewContacts.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\District\Overview.cshtml" />
-    <Content Include="Areas\OutpostManagement\Views\District\Input.cshtml" />
-    <Content Include="Areas\OutpostManagement\Views\District\Edit.cshtml" />
-    <Content Include="Areas\OutpostManagement\Views\District\OverviewTable.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\Region\OverviewTable.cshtml" />
-    <Content Include="Areas\OutpostManagement\Views\District\EditInput.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\Outpost\OverviewOutpost.cshtml" />
     <Content Include="Areas\StockAdministration\Views\Web.config" />
     <Content Include="Areas\StockAdministration\Views\Product\Overview.cshtml" />
@@ -1585,7 +1582,6 @@
     <Content Include="Areas\StockAdministration\Views\ProductGroup\Input.cshtml" />
     <Content Include="Areas\StockAdministration\Views\ProductGroup\InputProducts.cshtml" />
     <Content Include="Areas\StockAdministration\Views\ProductGroup\OverviewProductGroup.cshtml" />
-    <Content Include="Areas\OutpostManagement\Views\District\Create.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\Contact\Overview.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\Shared\CreateContact.cshtml" />
     <Content Include="Areas\StockAdministration\Views\OutpostStockLevel\Overview.cshtml" />

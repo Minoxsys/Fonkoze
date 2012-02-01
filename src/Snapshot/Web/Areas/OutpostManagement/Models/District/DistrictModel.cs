@@ -11,6 +11,8 @@ namespace Web.Areas.OutpostManagement.Models.District
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
+        public Guid RegionId { get; set; }
+        public Guid ClientId { get; set; }
         public RegionModel Region { get; set; }
         public ClientModel Client { get; set; }
         public int OutpostNo { get; set; }

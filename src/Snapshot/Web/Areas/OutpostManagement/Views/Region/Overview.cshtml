@@ -17,7 +17,7 @@ Regions: Overview
     }
     <div class="page_header_buttons">
     @Html.ActionLink("Add new region", "Create", "Region", null, new { id = "create" })
-       @* @(Html.ActionLink<Web.Areas.OutpostManagement.Controllers.RegionController>(it => it.Create(), "Add new region", Web.Areas.OutpostManagement.OutpostManagementAreaRegistration.DEFAULT_ROUTE))*@
+      
     </div><br />
 
     <table class="searchable">
@@ -46,6 +46,8 @@ Regions: Overview
      @{
         Html.RenderPartial("OverviewTable", Model.Regions);
     }
+
+    <div id="layout"></div>
 }
 
 @section master_actions{
@@ -56,6 +58,11 @@ Regions: Overview
 }
 
 @section scripts{
+
+<script type="text/javascript">
+
+
+</script>
     <script type="text/javascript">
         $(function () {
             $(".delete-user-form").submit(function () {

@@ -54,12 +54,17 @@
                                 toggleGroup: contentRes.maincontent.sidebar.group,
                                 enableToggle: true,
                                 text: 'Region'
+
                             },
                             {
                                 xtype: 'button',
+                                id: window.res.content.maincontent.sidebar.district,
                                 toggleGroup: contentRes.maincontent.sidebar.group,
                                 enableToggle: true,
-                                text: 'District'
+                                text: 'District',
+                                handler: function () {
+                                    navigateTo(window.res.link.district);
+                                }
                             },
                             {
                                 xtype: 'button',
