@@ -126,8 +126,6 @@ Ext.onReady(function(){
             'Name', 'ISOCode', 'PhonePrefix'
         ],
         proxy: {
-            // load using script tags for cross domain, if the data in on the same domain as
-            // this page, an HttpProxy would be better
             type: 'ajax',
             url: '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Country", action = "Index" })',
             reader: {
@@ -148,6 +146,8 @@ Ext.onReady(function(){
         store: window.feature.store,
         disableSelection: true,
         loadMask: true,
+        flex:3,
+        autoScroll:true,
         // grid columns
         columns:[{
             text: "Name",
@@ -173,7 +173,7 @@ Ext.onReady(function(){
             cls: 'cop-grid-column',
             items: [
                 {
-                    icon:'../../resources/img/delete.png',
+                    icon:'@(Url.RouteUrl<Web.Controllers.AssetsController>( _ => _.Shared("img/delete.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED ))',
                     tooltip: _t('Remove this area'),
                     handler: function(grid, rowIndex, colIndex){
                         var record = grid.store.getAt(rowIndex);
@@ -185,7 +185,7 @@ Ext.onReady(function(){
 
             
         ],
-        // paging bar on the bottom
+//         paging bar on the bottom
         bbar: Ext.create('Ext.PagingToolbar', {
             store: window.feature.store,
             displayInfo: true,
@@ -199,8 +199,9 @@ Ext.onReady(function(){
 
         mainContent.add( {
                     xtype: 'container',
-                    margin: 20,
                     id:'TopContainer',
+                    autoScroll:true,
+                    margin:'20 50 20 0',
                     layout: {
                         align: 'stretch',
                         type: 'vbox'
@@ -234,9 +235,14 @@ Ext.onReady(function(){
                                 }
                             ]
                         },
-                       window.feature.grid
+                       window.feature.grid,
+                        {
+                            xtype:'container',
+                            height:150
+                        },
                     ]
                 });
+        
         window.feature.store.loadPage(1);
         });
 </script>
