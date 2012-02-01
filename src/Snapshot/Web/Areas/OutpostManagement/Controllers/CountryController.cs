@@ -61,8 +61,20 @@ namespace Web.Areas.OutpostManagement.Controllers
             var pageSize = indexModel.limit.Value - indexModel.start.Value;
 
             var countryDataQuery = this.QueryCountry.Query()
-                .Where( c=>c.Client.Id == _client.Id)
-                .Take(pageSize)
+                .Where( c=>c.Client.Id == _client.Id);
+
+
+            if (indexModel.dir == "ASC")
+            {
+                countryDataQuery = countryDataQuery.OrderBy(c => c.Name);
+            }
+            else
+            {
+                countryDataQuery = countryDataQuery.OrderByDescending(c => c.Name);
+            }
+
+                
+            countryDataQuery = countryDataQuery.Take(pageSize)
                 .Skip(indexModel.start.Value);
 
             var totalItems = countryDataQuery.Count();
