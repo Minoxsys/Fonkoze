@@ -49,8 +49,8 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.CountryControllerTests
             SetUpServices();
             SetUpController();
             StubUserAndItsClient();
-            StubRegion();
             StubEntity();
+            StubRegion();
         }
 
 
@@ -88,6 +88,8 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.CountryControllerTests
             fakeCountry = MockRepository.GeneratePartialMock<Country>();
             fakeCountry.Stub(b => b.Id).Return(entityId);
             fakeCountry.Name = COUNTRY_NAME;
+
+            queryCountry.Stub(c => c.Load(entityId)).Return(fakeCountry);
         }
 
         internal void StubRegion()
@@ -177,6 +179,28 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.CountryControllerTests
         internal void QueryWorldCountryRecordsReturnsEmptyResult()
         {
             this.queryWorldCountryRecords.Expect(call => call.Query()).Return(new WorldCountryRecord[] { }.AsQueryable());
+        }
+
+
+        internal IQueryable<Country> ExpectQueryCountryToReturnPageOfCountryDataBasedOn(CountryIndexModel indexModel)
+        {
+            var pageOfData = this.PageOfCountryData(indexModel);
+
+            this.queryCountry.Expect(call => call.Query()).Return(pageOfData);
+            return pageOfData;
+        }
+
+        internal IQueryable<Region> RegionForCountry()
+        {
+            return new Region[]{region}.AsQueryable();
+        }
+
+        internal void SetupQueryRegionToReturnARegionForThisCountry()
+        {
+            this.queryRegion = MockRepository.GenerateMock<IQueryService<Region>>();
+
+            this.queryRegion.Expect(call => call.Query()).Return(RegionForCountry());
+            this.controller.QueryRegion = queryRegion;
         }
     }
 }
