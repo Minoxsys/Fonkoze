@@ -82,3 +82,9 @@ begin
     drop table Users
 end
 
+if exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'EmailRequests')
+begin
+drop table EmailRequests
+
+end
+

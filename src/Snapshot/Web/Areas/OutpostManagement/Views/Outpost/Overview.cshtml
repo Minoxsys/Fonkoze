@@ -30,7 +30,16 @@ OutpostManagement Outposts: Overview
     }
 
     <div class="page_header_buttons">
-         @Html.ActionLink("Add new Outpost", "Create", "Outpost", new { id = "createOutpost" })
+        
+         @if (Model.District != null)
+         {
+             @Html.ActionLink("Add new Outpost", "Create", "Outpost", new { districtId = Model.District.Id },null)
+         }
+         else
+         { 
+            @Html.ActionLink("Add new Outpost", "Create", "Outpost")
+         }
+
     </div>
  
     <div>

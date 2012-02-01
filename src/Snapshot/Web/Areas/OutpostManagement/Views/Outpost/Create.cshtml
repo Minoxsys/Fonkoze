@@ -16,7 +16,7 @@ Outpost : Create
 }
 @section master_content{
 
-    @{Html.BeginForm<OutpostController>(r => r.Create(null));}
+    @{Html.BeginForm<OutpostController>(r => r.Create((OutpostInputModel)null));}
         <fieldset class="fieldsCollection ">
             @{
                 Html.RenderPartial("OutpostInput", Model);     

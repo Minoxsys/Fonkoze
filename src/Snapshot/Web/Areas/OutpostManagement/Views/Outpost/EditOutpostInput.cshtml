@@ -33,11 +33,8 @@
                         District:</label>
                     @Html.DropDownList("Districts", Model.Districts, new { onChange = "onDistrictChanged()" })
                 </th>
-                <th>
-                    <br />
                     <input type="text" id="outpostSearch" class="input" name="outpostSearch" maxlength="50"
                         placeholder="Outposts search" style="width: 200px; height: 30px; margin-left: 0px" />
-                </th>
         </thead>
         <div class="row ">
             <div class="column">
@@ -95,6 +92,7 @@
             </div>
         </div>
     </div>
+</div>
 </fieldset>
 @section scripts{
     <script type="text/javascript">

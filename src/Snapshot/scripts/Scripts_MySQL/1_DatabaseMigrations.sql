@@ -46,6 +46,16 @@
        ByUser_FK VARCHAR(40) null,
        primary key (Id)
     )
+    go create table if not exists EmailRequests (
+        Id VARCHAR(40) not null,
+       Date DATETIME null,
+       OutpostId VARCHAR(40) null,
+       ProductGroupId VARCHAR(40) null,
+       Created DATETIME null,
+       Updated DATETIME null,
+       ByUser_FK VARCHAR(40) null,
+       primary key (Id)
+    )   
     go alter table Clients 
         add constraint ByUser_FK 
         foreign key (ByUser_FK) 

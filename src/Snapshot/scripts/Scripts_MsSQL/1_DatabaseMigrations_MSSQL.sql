@@ -222,6 +222,20 @@ create table OutpostHistoricalStockLevels (
     )
 end
 
+if not exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'EmailRequests')
+begin
+	create table EmailRequests (
+        Id UNIQUEIDENTIFIER not null,
+       Date DATETIME null,
+       OutpostId UNIQUEIDENTIFIER null,
+       ProductGroupId UNIQUEIDENTIFIER null,
+       Created DATETIME null,
+       Updated DATETIME null,
+       ByUser_FK UNIQUEIDENTIFIER null,
+       primary key (Id)
+    )
+end
+
 if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='UniqueProductNameForProductGroup')
 begin
 	ALTER TABLE Products
