@@ -1,15 +1,8 @@
 ﻿using System;
-using System.Text;
-using System.Collections.Generic;
 using System.Linq;
 using FluentNHibernate.Testing;
 using NUnit.Framework;
-using Core.Domain;
 using Domain;
-using Persistence;
-using Persistence.Queries.Employees;
-using Persistence.Conventions;
-using NHibernate.Linq;
 
 namespace IntegrationTests
 {

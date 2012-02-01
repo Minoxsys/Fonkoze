@@ -156,6 +156,8 @@
     <Compile Include="Areas\OutpostManagement\Models\Contact\ContactModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Contact\ContactsOverviewModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Country\CountriesList.cs" />
+    <Compile Include="Areas\OutpostManagement\Models\Country\CountryIndexModel.cs" />
+    <Compile Include="Areas\OutpostManagement\Models\Country\CountryIndexOutputModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Country\CountryOutputModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Country\CountryInputModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Country\CountryModel.cs" />
@@ -261,6 +263,7 @@
     <Compile Include="Models\RoleManager\RoleManagerUnAssignModel.cs" />
     <Compile Include="Models\Shared\Event.cs" />
     <Compile Include="Models\Shared\EventsCalendarModel.cs" />
+    <Compile Include="Models\Shared\JsonActionResponse.cs" />
     <Compile Include="Models\Shared\FormattingExtensions.cs" />
     <Compile Include="Models\Shared\InputModel.cs" />
     <Compile Include="Models\Shared\ListQuery.cs" />
@@ -1552,9 +1555,6 @@
     <Content Include="Areas\OutpostManagement\Views\Country\Overview.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\Region\Overview.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\_ViewStart.cshtml" />
-    <Content Include="Areas\OutpostManagement\Views\Country\CountryInput.cshtml" />
-    <Content Include="Areas\OutpostManagement\Views\Country\Create.cshtml" />
-    <Content Include="Areas\OutpostManagement\Views\Country\Edit.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\Region\Create.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\Region\Input.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\Region\Edit.cshtml" />

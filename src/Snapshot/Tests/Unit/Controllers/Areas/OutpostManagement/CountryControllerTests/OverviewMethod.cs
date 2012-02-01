@@ -20,29 +20,53 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.CountryControllerTests
         }
 
         [Test]
-        public void Get_WithParam_Page_ReturnsTheViewModel_WithTheFirstPageLoaded()
+        public void GetsTheCurrentUserAndItsClient()
         {
-            const int PAGE_NUMBER = 1;
-            // Arrange		
+            objectMother.QueryCountriesToReturnsEmptyResult();
+            objectMother.QueryWorldCountryRecordsReturnsEmptyResult();
 
-            objectMother.queryCountry.Expect(call => call.Query()).Return(new Country[] { objectMother.fakeCountry }.AsQueryable());
-           
+            objectMother.controller.Overview();
 
+
+
+        }
+
+        [Test]
+        public void Get_ReturnsTheViewModel_WithTheWorldCountriesLoaded()
+        {
+            objectMother.QueryCountriesToReturnsEmptyResult();
+
+            objectMother.queryWorldCountryRecords.Expect(call => call.Query()).Return( objectMother.WorldCountryRecords());
             // Act
             var viewResult = (ViewResult)objectMother.controller.Overview();
 
            // Assert
+            objectMother.queryWorldCountryRecords.VerifyAllExpectations();
 
             Assert.IsNotNull(viewResult.Model);
 
-            var viewModel = (CountryOverviewModel)viewResult.Model;
-
-            Assert.IsNotNull(viewModel);
-
-            Assert.That(viewModel.Countries.Count, Is.EqualTo(1));
-
             Assert.AreEqual(ObjectMother.DEFAULT_VIEW_NAME, viewResult.ViewName);
         
+        }
+
+        [Test]
+        public void Get_Returns_OnlyTheCountries_ThatDoNetBelong_ToTheUser_Currently()
+        {
+            var currentUserCountries = objectMother.CurrentUserCountries();
+            var worldCountryRecord = objectMother.WorldCountryRecords();
+
+            objectMother.queryWorldCountryRecords.Expect(call => call.Query()).Return(worldCountryRecord);
+            objectMother.queryCountry.Expect(call => call.Query()).Return(currentUserCountries);
+
+            var viewResult = (ViewResult)objectMother.controller.Overview();
+
+            objectMother.queryCountry.VerifyAllExpectations();
+
+            var model = viewResult.Model as CountryOverviewModel;
+
+            Assert.IsNotNull(model);
+
+            Assert.That(model.WorldRecords, Is.EqualTo("[]"));
         }
     }
 }

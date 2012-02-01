@@ -222,6 +222,20 @@ create table OutpostHistoricalStockLevels (
     )
 end
 
+if not exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'WorldCountryRecords')
+begin
+ create table WorldCountryRecords (
+        Id UNIQUEIDENTIFIER not null,
+       Name NVARCHAR(255) null,
+       ISOCode NVARCHAR(255) null,
+       PhonePrefix NVARCHAR(255) null,
+       Created DATETIME null,
+       Updated DATETIME null,
+       ByUser_FK UNIQUEIDENTIFIER null,
+       primary key (Id)
+    )
+end
+
 if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='UniqueProductNameForProductGroup')
 begin
 	ALTER TABLE Products
@@ -324,7 +338,7 @@ begin
         references Users
 end
 
--- end ByUser Region
+
 
 
 if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='Region_Districts_FK')
@@ -456,3 +470,10 @@ begin
         references Districts
 end
 
+if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='WorldCountryRecord_User_FK ')
+begin
+ alter table WorldCountryRecords 
+        add constraint WorldCountryRecord_User_FK 
+        foreign key (ByUser_FK) 
+        references Users
+end

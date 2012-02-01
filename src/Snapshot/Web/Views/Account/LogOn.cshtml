@@ -1,4 +1,5 @@
-﻿@model Web.Models.Account.LogOnModel
+﻿@using Web.Bootstrap.Routes;
+@model Web.Models.Account.LogOnModel
 @{
     Layout = "~/Views/Shared/_LoginLayout.cshtml";
 }
@@ -20,7 +21,7 @@
                      width: 400,
                      padding: 0,
                      title: 'Login',
-                     url: window.location.pathname,
+                     url: '@Url.RouteUrl(DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "Account", action = "LogOn" })', //window.location.pathname,
                      standardSubmit: true,
                      buttons: [
                      {
@@ -46,14 +47,14 @@
                      {
                          xtype: 'textfield',
                          name: 'UserName',
-                         fieldLabel: 'Username',
+                         fieldLabel: '@Html.NameFor(m=>m.UserName)',
                          anchor: '100%'
                      },
                     {
                         xtype: 'textfield',
                         inputType: 'password',
                         name: 'Password',
-                        fieldLabel: 'Password',
+                        fieldLabel: '@Html.NameFor(m=>m.Password)',
                         anchor: '100%'
                     }]
                  });

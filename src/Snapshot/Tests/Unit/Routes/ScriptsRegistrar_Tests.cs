@@ -15,7 +15,7 @@ namespace UnitTests.Routes
 	[TestFixture]
 	public class ScriptsRegistrar_Tests
 	{
-		[Test]
+		[SetUp]
 		public void BeforeEach()
 		{
 			var routes = RouteTable.Routes;
