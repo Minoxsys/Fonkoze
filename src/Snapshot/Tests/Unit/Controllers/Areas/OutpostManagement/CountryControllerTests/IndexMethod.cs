@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Domain;
 using NUnit.Framework;
 using Web.Areas.OutpostManagement.Models.Country;
 using Rhino.Mocks;
@@ -18,6 +19,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.CountryControllerTests
             objectMother.Init();
 
         }
+
         [Test]
         public void Returns_The_Data_Paginated_BasedOnTheInputValues()
         {
@@ -27,12 +29,10 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.CountryControllerTests
                 limit = 50,
                 page= 1,
                 start = 0,
-                sort = "Name",
+                sort = "Name"
             };
 
-            var pageOfData = objectMother.PageOfCountryData(indexModel);
-
-            objectMother.queryCountry.Expect(call => call.Query()).Return(pageOfData);
+            var pageOfData = objectMother.ExpectQueryCountryToReturnPageOfCountryDataBasedOn(indexModel);
             //act
 
             var jsonResult = objectMother.controller.Index(indexModel);
@@ -44,6 +44,62 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.CountryControllerTests
             Assert.IsNotNull(jsonData);
 
             Assert.AreEqual( pageOfData.Count(), jsonData.TotalItems);           
+        }
+  
+       
+
+        [Test]
+        public void Orders_ByName_DESC()
+        {
+            var indexModel = new CountryIndexModel
+            {
+                dir = "DESC",
+                limit = 50,
+                page = 1,
+                start = 0,
+                sort = "Name"
+            };
+
+            objectMother.ExpectQueryCountryToReturnPageOfCountryDataBasedOn(indexModel);
+
+            //act
+
+            var jsonResult = objectMother.controller.Index(indexModel);
+
+
+            //assert
+            objectMother.queryCountry.VerifyAllExpectations();
+
+            var jsonData = jsonResult.Data as CountryIndexOutputModel;
+
+            Assert.That(jsonData.Countries[0].Name, Is.EqualTo("CountryAtIndex9"));
+           
+        }
+
+        [Test]
+        public void Orders_ByPhonePrefix_DESC()
+        {
+            var indexModel = new CountryIndexModel
+            {
+                dir = "DESC",
+                limit = 50,
+                page = 1,
+                start = 0,
+                sort = "PhonePrefix"
+            };
+
+            objectMother.ExpectQueryCountryToReturnPageOfCountryDataBasedOn(indexModel);
+            //act
+
+            var jsonResult = objectMother.controller.Index(indexModel);
+
+
+            //assert
+            objectMother.queryCountry.VerifyAllExpectations();
+
+            var jsonData = jsonResult.Data as CountryIndexOutputModel;
+
+            Assert.That(jsonData.Countries[0].PhonePrefix, Is.EqualTo("00049"));
 
         }
     }

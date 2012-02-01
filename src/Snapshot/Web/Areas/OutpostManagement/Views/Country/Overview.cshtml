@@ -1,7 +1,7 @@
 ﻿@using Web.Areas.OutpostManagement.Models.Country
 @model CountryOverviewModel
 @section page_title{
-Outpost Management Countries: Overview
+    Outpost Management Countries: Overview
 }
 @{
     Html.RenderPartial("_SubNavigation");
@@ -11,13 +11,25 @@ Outpost Management Countries: Overview
     window.feature = {};
     window.feature.modalStore = Ext.create('Ext.data.Store', {
         fields:[
-            "Name","Id"
+            "Name","Id", "ISOCode", "PhonePrefix"
         ],
 
+
         data:@Html.Raw(Model.WorldRecords),
+
         
         autoload:false
     });
+
+    window.feature.refreshModalStore = function(){
+        var url = '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Country", action = "WorldRecords" })';
+
+        var action = $.get(url);
+        action.success(function(serverResponse){
+            window.feature.modalStore.loadData(serverResponse);
+        });
+    }
+
     window.feature.comboboxId = 'countryComboBoxId';
     window.feature.isocodeId = 'isocodeid';
     window.feature.phoneprefixId = 'phoneprefix';
@@ -39,43 +51,41 @@ Outpost Management Countries: Overview
 
             Ext.applyIf(me, {
                 items: [
-                {
-                    xtype: 'combobox',
-                    itemId: window.feature.comboboxId,
-                    name: 'Country.Id',
-                    fieldLabel: 'Select a country',
-                    queryMode: 'local',
-                    displayField: 'Name',
-                    valueField: 'Name',
-                    store: window.feature.modalStore
-                },
-                {
-                    xtype: 'textfield',
-                    itemId: window.feature.isocodeId,
-                    name:'Country.Abbreviation',
-                    readOnly:true,
-                    fieldLabel: 'Abbreviation'
-                    
-                },
-                {
-                    xtype: 'textfield',
-                    itemId: window.feature.phoneprefixId,
-                    name:'Country.PhonePrefix',
-                    readOnly:true,
-                    fieldLabel: 'Phone Prefix'
-                }
-            ]
+                    {
+                        xtype: 'combobox',
+                        itemId: window.feature.comboboxId,
+                        name: 'Country.Id',
+                        fieldLabel: 'Select a country',
+                        queryMode: 'local',
+                        displayField: 'Name',
+                        valueField: 'Name',
+                        store: window.feature.modalStore
+                    },{
+                        xtype: 'textfield',
+                        itemId: window.feature.isocodeId,
+                        name:'Country.Abbreviation',
+                        readOnly:true,
+                        fieldLabel: 'Abbreviation'
+    
+                    },{
+                        xtype: 'textfield',
+                        itemId: window.feature.phoneprefixId,
+                        name:'Country.PhonePrefix',
+                        readOnly:true,
+                        fieldLabel: 'Phone Prefix'
+                    }
+                ]
             });
             me.listeners = {
                 afterrender:function(){
                     var combobox = me.down('combobox');
-                    combobox.on('select',function(cmb, records){
-
+                    combobox.on('select', function(cmb, records){
+    
                         var selectedRecord = _(records).first();
-                        if(selectedRecord){
-                            me.down('#'+window.feature.isocodeId).setValue(selectedRecord.raw.ISOCode);
-                            me.down('#'+window.feature.phoneprefixId).setValue(selectedRecord.raw.PhonePrefix);
-                            
+                        if (selectedRecord){
+                            me.down('#' + window.feature.isocodeId).setValue(selectedRecord.get('ISOCode'));
+                            me.down('#' + window.feature.phoneprefixId).setValue(selectedRecord.get('PhonePrefix'));
+    
                         }
 
                     });
@@ -85,25 +95,29 @@ Outpost Management Countries: Overview
             };
 
             me.buttons=[
-                 { text: 'Cancel', handler:function(){ me.close(); me.destroy();} },
-                 { text: 'Save', handler:function(){
-                   var values = {
-                        Name:  me.down('#'+window.feature.comboboxId).getValue(),
-                        ISOCode:  me.down('#'+window.feature.isocodeId).getValue(),
-                        PhonePrefix:  me.down('#'+window.feature.phoneprefixId).getValue(),
-                    
-                   };
-                   var postToUrl = '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Country", action = "Create" })';
-                   var action = $.post(postToUrl, values);
-                   action.success(function(){
-                   me.close();
-                   me.destroy();
-                    window.feature.store.loadPage(1);
-                   });
-                 }
-              }
-             ]
-
+                { text: 'Cancel', handler:function(){
+                    me.close();
+                    me.destroy();
+                } },{
+                    text: 'Save', handler:function(){
+                        var values = {
+                            Name:  me.down('#' + window.feature.comboboxId).getValue(),
+                            ISOCode:  me.down('#' + window.feature.isocodeId).getValue(),
+                            PhonePrefix:  me.down('#' + window.feature.phoneprefixId).getValue(),
+    
+                        };
+                        var postToUrl = '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Country", action = "Create" })';
+                        var action = $.post(postToUrl, values);
+                        action.success(function(){
+                            me.close();
+                            me.destroy();
+                            window.feature.store.loadPage(1);
+                            window.feature.refreshModalStore();
+                        });
+                    }
+                }
+            ]
+    
             me.callParent(arguments);
         }
     });
@@ -111,138 +125,145 @@ Outpost Management Countries: Overview
 </script>
 <script type="text/javascript">
     Ext.onReady(function () {
-
+    
         var administrationBtnId = window.res.header.navigation.administration;
         var administrationBtn = Ext.getCmp(administrationBtnId);
         administrationBtn.toggle(true);
     });
 </script>
 <script type="text/javascript">
-Ext.onReady(function(){
-    window.feature.store = Ext.create('Ext.data.Store', {
-        pageSize: 50,
-        remoteSort: true,
-        fields:[
-            'Name', 'ISOCode', 'PhonePrefix'
-        ],
-        proxy: {
-            type: 'ajax',
-            url: '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Country", action = "Index" })',
-            reader: {
-                type:'json',
-                root: 'Countries',
-                totalProperty: 'TotalItems'
+    Ext.onReady(function(){
+        window.feature.store = Ext.create('Ext.data.Store', {
+            pageSize: 50,
+            remoteSort: true,
+            fields:[
+                'Id','Name', 'ISOCode', 'PhonePrefix'
+            ],
+            proxy: {
+                type: 'ajax',
+                url: '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Country", action = "Index" })',
+                reader: {
+                    type:'json',
+                    root: 'Countries',
+                    totalProperty: 'TotalItems'
+                },
+                // sends single sort as multi parameter
+                simpleSortMode: true
             },
-            // sends single sort as multi parameter
-            simpleSortMode: true
-        },
-        sorters: [{
-            property: 'Name',
-            direction: 'DESC'
-        }]
-    });
-    window.feature.grid = Ext.create('Ext.grid.Panel', {
-        title: 'Countries',
-        store: window.feature.store,
-        disableSelection: true,
-        loadMask: true,
-        flex:3,
-        autoScroll:true,
-        // grid columns
-        columns:[{
-            text: "Name",
-            dataIndex: 'Name',
-            flex: 1,
-            sortable: true
-        },
-        {
-            text: "Country Abbreviation",
-            dataIndex: 'ISOCode',
-            sortable: true,
-            width:180
-        },
-
-        {
-            text: "Phone Prefix",
-            dataIndex: 'PhonePrefix',
-            sortable: true,
-            width:140
-        },
-        {
-            xtype: 'actioncolumn',
-            cls: 'cop-grid-column',
-            items: [
+            sorters: [
                 {
-                    icon:'@(Url.RouteUrl<Web.Controllers.AssetsController>( _ => _.Shared("img/delete.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED ))',
-                    tooltip: _t('Remove this area'),
-                    handler: function(grid, rowIndex, colIndex){
-                        var record = grid.store.getAt(rowIndex);
-                        console.log(record);
-                    }
+                    property: 'Name',
+                    direction: 'DESC'
                 }
             ]
-        }
+        });
+        window.feature.paging = Ext.create('Ext.PagingToolbar', {
+                store: window.feature.store,
+                displayInfo: true,
+                displayMsg: 'Displaying topics {0} - {1} of {2}',
+                emptyMsg: "No topics to display",
+            });
+        window.feature.grid = Ext.create('Ext.grid.Panel', {
+            title: 'Countries',
+            store: window.feature.store,
+            disableSelection: true,
+            loadMask: true,
+            flex:3,
+            autoScroll:true,
+            // grid columns
+            columns:[
+                {
+                    text: "Name",
+                    dataIndex: 'Name',
+                    flex: 1,
+                    sortable: true
+                },{
+                    text: "Country Abbreviation",
+                    dataIndex: 'ISOCode',
+                    sortable: true,
+                    width:180
+                },{
+                    text: "Phone Prefix",
+                    dataIndex: 'PhonePrefix',
+                    sortable: true,
+                    width:140
+                },{
+                    xtype: 'actioncolumn',
+                    cls: 'cop-grid-column',
+                    items: [
+                        {
+                            icon:'@(Url.RouteUrl<Web.Controllers.AssetsController>(_ => _.Shared("img/delete.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                            tooltip: _t('Remove this area'),
+                            handler: function(grid, rowIndex, colIndex){
+                                var record = grid.store.getAt(rowIndex);
+
+                                var postToUrl = '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Country", action = "Delete" })';
+
+                                var action = $.post(postToUrl, { countryId: record.data.Id});
+                                action.success(function(serverResponse){
+                                    
+                                    Ext.Msg.alert(serverResponse.Status, serverResponse.Message);
+                                    window.feature.paging.doRefresh();
+                                    window.feature.refreshModalStore();
+                                });
+                            }
+                        }
+                    ]
+                }
 
             
-        ],
-//         paging bar on the bottom
-        bbar: Ext.create('Ext.PagingToolbar', {
-            store: window.feature.store,
-            displayInfo: true,
-            displayMsg: 'Displaying topics {0} - {1} of {2}',
-            emptyMsg: "No topics to display",
-        })
-    });
+            ],
+            //         paging bar on the bottom
+            bbar: window.feature.paging
+        });
 
         var contentRes = window.res.content;
         var mainContent = Ext.getCmp(contentRes.maincontent.id);
 
-        mainContent.add( {
+        mainContent.add({
+            xtype: 'container',
+            id:'TopContainer',
+            autoScroll:true,
+            margin:'20 50 20 0',
+            layout: {
+                align: 'stretch',
+                type: 'vbox'
+            },
+            items: [
+                {
                     xtype: 'container',
-                    id:'TopContainer',
-                    autoScroll:true,
-                    margin:'20 50 20 0',
                     layout: {
-                        align: 'stretch',
-                        type: 'vbox'
+                        type: 'column'
                     },
+                    height: 50,
                     items: [
                         {
                             xtype: 'container',
-                            layout: {
-                                type: 'column'
-                            },
-                            height: 50,
-                            items: [
-                                {
-                                    xtype: 'container',
-                                    height: 30,
-                                    width: 30,
-                                    html:'&nbsp;'
-                                },
-                                {
-                                    xtype: 'label',
-                                    text: 'Country Administration'
-                                },
-                                {
-                                    xtype: 'button',
-                                    margin: '0 0 0 20',
-                                    text: 'Add New Country',
-                                    handler:function(){
-                                        var addCountryModal = new window.feature.modal();
-                                        addCountryModal.show();
-                                    }
-                                }
-                            ]
-                        },
-                       window.feature.grid,
-                        {
-                            xtype:'container',
-                            height:150
-                        },
+                            height: 30,
+                            width: 30,
+                            html:'&nbsp;'
+                        },{
+                            xtype: 'label',
+                            text: 'Country Administration'
+                        },{
+                            xtype: 'button',
+                            margin: '0 0 0 20',
+                            text: 'Add New Country',
+                            handler:function(){
+                                var addCountryModal = new window.feature.modal();
+                                addCountryModal.show();
+                            }
+                        }
                     ]
-                });
-        
-        window.feature.store.loadPage(1);
+                },
+                window.feature.grid,{
+                    xtype:'container',
+                    height:150
+                },
+            ]
         });
-</script>
+    
+        window.feature.store.loadPage(1);
+    });
+    </script>
+    
