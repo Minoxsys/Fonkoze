@@ -161,36 +161,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement
 
         }
 
-        [Test]
-        public void ShouldReturnData_FromOutpostServiceSpecificTo_CountryIdNotNull_AndFrom_RegionQueryServiceSpecificToThatCountryId_AndFrom_DistrictsQueryServiceSpecificToRegionIdNotNull_TO_Overview()
-        {
-            //arange
-            queryOutpost.Expect(it => it.Load(outpost.Id)).Return(outpost);
-            queryCountry.Expect(call => call.Query()).Return(new Country[] { country }.AsQueryable());
-            queryRegion.Expect(call => call.Query()).Return(new Region[] { region }.AsQueryable());
-            queryDistrict.Expect(call => call.Query()).Return(new District[] { district }.AsQueryable());
-            queryOutpost.Expect(call => call.Query()).Return(new Outpost[] { outpost }.AsQueryable());
-            queryWarehouse.Expect(call => call.Query()).Return(new Outpost[] { warehouses }.AsQueryable());
-
-            //act
-            var viewResult = (ViewResult)controller.Overview(country.Id, region.Id, district.Id);
-
-            //assert
-            Assert.IsNotNull(viewResult.Model);
-            var viewModel = (OutpostOverviewModel)viewResult.Model;
-
-            Assert.AreEqual(region.Country.Id, country.Id);
-            Assert.AreEqual(district.Region.Id, region.Id);
-
-            Assert.AreEqual(viewModel.Countries[0].Value, country.Id.ToString());
-            Assert.AreEqual(viewModel.Regions[0].Value, region.Id.ToString());
-            Assert.AreEqual(viewModel.Districts[0].Value, district.Id.ToString());
-            Assert.AreEqual(region.Country.Id, country.Id);
-            Assert.AreEqual(region.Id, region.Id);
-            Assert.AreEqual(district.Id, district.Id);
-            Assert.AreEqual(DEFAULT_VIEW_NAME, viewResult.ViewName);
- 
-        }
+       
         [Test]
         public void Should_Display_Empty_Model_When_GET_Create()
         {
