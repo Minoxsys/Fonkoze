@@ -12,7 +12,7 @@ using Web.Areas.OutpostManagement.Models.Client;
 using System.Collections;
 using Core.Domain;
 using Web.Models.Shared;
-
+using NHibernate.Linq;
 
 namespace Web.Areas.OutpostManagement.Controllers
 {
@@ -159,7 +159,7 @@ namespace Web.Areas.OutpostManagement.Controllers
 
             var pageSize = indexModel.limit.Value;
             var regionDataQuery = this.QueryService.Query();
-
+            var t = regionDataQuery.Count();
             var orderByColumnDirection = new Dictionary<string, Func<IQueryable<Region>>>()
             {
                 { "Name-ASC", () => regionDataQuery.OrderBy(c => c.Name) },
@@ -169,19 +169,16 @@ namespace Web.Areas.OutpostManagement.Controllers
             };
 
             regionDataQuery = orderByColumnDirection[String.Format("{0}-{1}", indexModel.sort, indexModel.dir)].Invoke();
-
+            
             if (!string.IsNullOrEmpty(countryId))
             {
                 Guid id = new Guid(countryId);
                 regionDataQuery = regionDataQuery
-                    .Where(it => it.Country.Id == id && it.Client.Id == this._client.Id);
+                    .Where(it => it.Country.Id == id);
             }
-            else
-            {
                 regionDataQuery = regionDataQuery
                     .Where(it => it.Client.Id == this._client.Id);
-                    
-            }
+
             var totalItems = regionDataQuery.Count();
 
             regionDataQuery = regionDataQuery

@@ -4,10 +4,10 @@
         sidebar: {
             id: 'SideBar',
             group: 'SideBarGroup',
-            country: 'Country',
-            region: 'Region',
-            district: 'District',
-            outpost: 'Outpost'
+            country: 'Sidebar-OutpostAdministration-Country-Button',
+            region: 'Sidebar-OutpostAdministration-Region-Button',
+            district: 'Sidebar-OutpostAdministration-District-Button',
+            outpost: 'Sidebar-OutpostAdministration-Outpost-Button'
         }
     };
     Ext.onReady(function () {
@@ -44,6 +44,7 @@
                         items: [
                             {
                                 xtype: 'button',
+                                id: contentRes.maincontent.sidebar.country,
                                 toggleGroup: contentRes.maincontent.sidebar.group,
                                 enableToggle: true,
                                 text: 'Country',
@@ -63,12 +64,17 @@
                             },
                             {
                                 xtype: 'button',
+                                id: window.res.content.maincontent.sidebar.district,
                                 toggleGroup: contentRes.maincontent.sidebar.group,
                                 enableToggle: true,
-                                text: 'District'
+                                text: 'District',
+                                handler: function () {
+                                    navigateTo(window.res.link.district);
+                                }
                             },
                             {
                                 xtype: 'button',
+                                id: contentRes.maincontent.sidebar.outpost,
                                 toggleGroup: contentRes.maincontent.sidebar.group,
                                 enableToggle: true,
                                 text: 'Outpost'

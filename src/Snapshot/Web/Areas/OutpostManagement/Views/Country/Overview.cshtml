@@ -125,16 +125,24 @@
 </script>
 <script type="text/javascript">
     Ext.onReady(function () {
-    
+
         var administrationBtnId = window.res.header.navigation.administration;
         var administrationBtn = Ext.getCmp(administrationBtnId);
         administrationBtn.toggle(true);
+
+        var outpostAdministrationBtnId = window.res.header.subnavigation.buttonTabs.outpost;
+        var outpostAdministrationBtn = Ext.getCmp(outpostAdministrationBtnId);
+        outpostAdministrationBtn.toggle(true);
+
+        var btnId = window.res.content.maincontent.sidebar.country;
+        var btn = Ext.getCmp(btnId);
+        btn.toggle(true);
     });
 </script>
 <script type="text/javascript">
     Ext.onReady(function(){
         window.feature.store = Ext.create('Ext.data.Store', {
-            pageSize: 1,
+            pageSize: 50,
             remoteSort: true,
             fields:[
                 'Id','Name', 'ISOCode', 'PhonePrefix'

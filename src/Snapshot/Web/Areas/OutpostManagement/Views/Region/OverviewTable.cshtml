@@ -1,0 +1,47 @@
+﻿@model List<Web.Areas.OutpostManagement.Models.Region.RegionModel>
+<div id="region-overview">
+<table>
+        <thead>
+         <tr>
+                <th>
+                    Region Name
+                </th>
+                <th>
+                    Coordinates
+                </th>
+                <th>
+                # of districts
+                </th>
+                <th colspan="2">
+                    Actions
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                var itemNo = 0;
+            }
+            @foreach (var region in Model)
+            {
+                var _class = (itemNo % 2 == 0) ? "odd" : "even";    
+                <tr class="@_class">
+                    <td> @region.Coordinates
+                    </td>
+                    <td>@region.DistrictNo</td>
+                    <td>@(Html.ActionLink<Web.Areas.OutpostManagement.Controllers.RegionController>(call => call.Edit(region.Id), "Edit", Web.Areas.OutpostManagement.OutpostManagementAreaRegistration.DEFAULT_ROUTE))
+                    </td>
+                    <td>
+                        @{
+                Html.BeginForm<RegionController>(m => m.Delete(region.Id), FormMethod.Post, new { @class = "delete-user-form" });
+                        }
+                        @Html.Button("delete-user", "Delete", HtmlButtonType.Submit)
+                        @{
+                Html.EndForm();
+                        }
+                    </td>
+                </tr> 
+            }
+           
+        </tbody>
+    </table>
+</div>

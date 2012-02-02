@@ -36,7 +36,7 @@ Outpost Management Regions: Overview
         window.feature.formregionnameid = 'formRegionNameTextFieldId';
         window.feature.formcoordonatesid = 'formRegionCoordonatesTextFieldId';
 
-        window.feature.store = Ext.create('Ext.data.Store', {
+        window.feature.regionStore = Ext.create('Ext.data.Store', {
             pageSize: 50,
             remoteSuport: true,
             fields: ['Id','Name', 'Coordinates', 'CountryId', 'NumberOfDistricts'],
@@ -106,7 +106,7 @@ Outpost Management Regions: Overview
                         listeners:{
 				            'select': function(combo, record){
 					            window.feature.container.down('#'+window.feature.overviewcomboboxid).setValue(combo.getValue());   
-                                window.feature.store.load({
+                                window.feature.regionStore.load({
 						            params:{
 							            countryId: combo.getValue()
 						            }
@@ -134,7 +134,8 @@ Outpost Management Regions: Overview
         });
 
         window.feature.container = Ext.create('Ext.container.Container', {
-            margin: 20,
+            margin:'20 50 20 0',
+            autoScroll:true,
             id:'TopContainer',
             layout: {
                 align: 'stretch',
@@ -151,6 +152,7 @@ Outpost Management Regions: Overview
                     items: [
                     {
                         xtype: 'container',
+                        flex: 1,
                         layout: {
                             type: 'column'
                         },
@@ -192,7 +194,7 @@ Outpost Management Regions: Overview
                                                     winAdd.destroy();
 
                                                     var combovalue = window.feature.container.down('#'+window.feature.overviewcomboboxid).getValue();   
-                                                    window.feature.store.load({
+                                                    window.feature.regionStore.load({
 						                                params:{
 							                                countryId: combovalue
 						                                }
@@ -205,138 +207,139 @@ Outpost Management Regions: Overview
                                 });
                                 winAdd.show();       
                             }
-                       }]
-					},{
-						xtype: 'container',
-						layout: {
-							type: 'column'
-						},
-						items: [
-						{
-							xtype: 'container',
-							height: 30,
-							width: 30,
-							html:'&nbsp;'
-						},{ 
-                            xtype: 'combobox',
-                            itemId: window.feature.overviewcomboboxid,
-			                store: window.feature.countryStore,
-			                displayField: 'Name',
-			                valueField:'Id',
-			                emptyText: 'Select Country', 
-			                typeAhead: true,
-			                listeners:{
-				                'select': function(combo, record){
-					                window.feature.store.load({
-						                params:{
-							                countryId: combo.getValue()
-
-						                }
-                                        
-					                });
-				                }
-			                } 
                         }]
-					}]
+                     },{
+						    xtype: 'container',
+                            flex: 1,
+						    layout: {
+							    type: 'column'
+						    },
+						    items: [
+						    {
+							    xtype: 'container',
+							    height: 30,
+							    width: 30,
+							    html:'&nbsp;'
+						    },{ 
+                                xtype: 'combobox',
+                                itemId: window.feature.overviewcomboboxid,
+			                    store: window.feature.countryStore,
+			                    displayField: 'Name',
+			                    valueField:'Id',
+			                    emptyText: 'Select Country', 
+			                    typeAhead: true,
+			                    listeners:{
+				                    'select': function(combo, record){
+					                    window.feature.regionStore.load({
+						                    params:{
+							                    countryId: combo.getValue()
+
+						                    }
+                                        
+
+					                    });
+				                    }
+			                    } 
+                            }]
+					    }]
 				},{
-                    xtype: 'container',
-                    items: [
-                        {
-                            xtype: 'gridpanel',
-                            store: window.feature.store,
-                            disableSelection: true,
-                            loadMask: true,
-                            columns: [{
-                                text: "Name",
-                                dataIndex: 'Name',
-                                flex: 1,
-                                sortable: true
-                            },{
-                                text: "Coordinates",
-                                dataIndex: 'Coordinates',
-                                flex: 1,
-                                sortable: true
-                            },{
-                                xtype: 'actioncolumn',
-			                    text: 'Actions',
-                                items: [{
-                                    icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/edit.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',  
-                                    text: 'Edit',
-                                    handler: function(grid, rowIndex, colIndex) {
-                                        var rec = grid.getStore().getAt(rowIndex);
+                    xtype: 'gridpanel',
+                    store: window.feature.regionStore,
+                    disableSelection: true,
+                    loadMask: true,
+                    flex:3,
+                    autoScroll:true,
+                    columns: [{
+                        text: "Name",
+                        dataIndex: 'Name',
+                        flex: 1,
+                        sortable: true
+                    },{
+                        text: "Coordinates",
+                        dataIndex: 'Coordinates',
+                        flex: 1,
+                        sortable: true
+                    },{
+                        xtype: 'actioncolumn',
+			            text: 'Actions',
+                        items: [{
+                            icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/edit.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',  
+                            text: 'Edit',
+                            handler: function(grid, rowIndex, colIndex) {
+                                var rec = grid.getStore().getAt(rowIndex);
 
-                                        var winEdit = new window.feature.modal({
-                                            buttons: [
-                                                { text: 'Cancel', handler:function(){ winEdit.close(); winEdit.destroy();} },
-                                                { text: 'Save', handler:function(){
+                                var winEdit = new window.feature.modal({
+                                    buttons: [
+                                        { text: 'Cancel', handler:function(){ winEdit.close(); winEdit.destroy();} },
+                                        { text: 'Save', handler:function(){
 
-                                                    var regionName = winEdit.down('#'+window.feature.formregionnameid);
-                                                    var country = winEdit.down('#'+window.feature.formcomboboxid);
-                                                    var regionCoordinates = winEdit.down('#'+window.feature.formcoordonatesid);
+                                            var regionName = winEdit.down('#'+window.feature.formregionnameid);
+                                            var country = winEdit.down('#'+window.feature.formcomboboxid);
+                                            var regionCoordinates = winEdit.down('#'+window.feature.formcoordonatesid);
 
-                                                    var ok = IsValid(country, regionName, regionCoordinates);
+                                            var ok = IsValid(country, regionName, regionCoordinates);
                                                    
-                                                    if (ok == true){
-                                                            var values = {
-                                                                Id: rec.get('Id'),
-                                                                CountryId:  country.getValue(),
-                                                                Name:  regionName.getValue(),
-                                                                Coordinates:  regionCoordinates.getValue(),
-                                                            };
-                                                            var postToUrl = '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Region", action = "Edit" })';
-                                                            var action = $.post(postToUrl, values);
-                                                            action.success(function(serverResponse){
-                                                                Ext.Msg.alert(serverResponse.Status, serverResponse.Message);
-                                                                winEdit.close();
-                                                                winEdit.destroy();
-                                                                window.feature.store.loadPage(1);
-                                                            });
-                                                    }
-                                                }
-                                                          
-                                            }]
-                                        });
-
-                                        winEdit.down('#'+window.feature.formcomboboxid).setValue(rec.get('CountryId'));
-                                        winEdit.down('#'+window.feature.formregionnameid).setValue(rec.get('Name'));
-                                        winEdit.down('#'+window.feature.formcoordonatesid).setValue(rec.get('Coordinates'));
-    
-                                        winEdit.show();
-                                    }
-					            },{    
-					                icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/delete.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',  
-					                action: 'Delete',
-					                handler: function(grid, rowIndex, colIndex) {
-                                        var rec = grid.getStore().getAt(rowIndex);
-   
-                                        Ext.MessageBox.confirm('Warning', Ext.String.format('Are you sure you want to delete {0} ?', rec.get('Name')), function(btn)
-                                        {
-                                            if (btn=='yes'){
-                                                var values = { regionId: rec.get('Id') };
-                                                var postToUrl = '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Region", action = "Delete" })';
-                                                var action = $.post(postToUrl, values);
-
-                                                action.success(function(serverResponse){
-                                                    Ext.Msg.alert(serverResponse.Status, serverResponse.Message);
-                                                    window.feature.store.loadPage(1);
-                                                });
+                                            if (ok == true){
+                                                    var values = {
+                                                        Id: rec.get('Id'),
+                                                        CountryId:  country.getValue(),
+                                                        Name:  regionName.getValue(),
+                                                        Coordinates:  regionCoordinates.getValue(),
+                                                    };
+                                                    var postToUrl = '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Region", action = "Edit" })';
+                                                    var action = $.post(postToUrl, values);
+                                                    action.success(function(serverResponse){
+                                                        Ext.Msg.alert(serverResponse.Status, serverResponse.Message);
+                                                        winEdit.close();
+                                                        winEdit.destroy();
+                                                        window.feature.regionStore.loadPage(1);
+                                                    });
                                             }
+                                        }
+                                                          
+                                    }]
+                                });
 
+                                winEdit.down('#'+window.feature.formcomboboxid).setValue(rec.get('CountryId'));
+                                winEdit.down('#'+window.feature.formregionnameid).setValue(rec.get('Name'));
+                                winEdit.down('#'+window.feature.formcoordonatesid).setValue(rec.get('Coordinates'));
+    
+                                winEdit.show();
+                            }
+					    },{    
+					        icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/delete.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',  
+					        action: 'Delete',
+					        handler: function(grid, rowIndex, colIndex) {
+                                var rec = grid.getStore().getAt(rowIndex);
+   
+                                Ext.MessageBox.confirm('Warning', Ext.String.format('Are you sure you want to delete {0} ?', rec.get('Name')), function(btn)
+                                {
+                                    if (btn=='yes'){
+                                        var values = { regionId: rec.get('Id') };
+                                        var postToUrl = '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Region", action = "Delete" })';
+                                        var action = $.post(postToUrl, values);
+
+                                        action.success(function(serverResponse){
+                                            Ext.Msg.alert(serverResponse.Status, serverResponse.Message);
+                                            window.feature.regionStore.loadPage(1);
                                         });
-					                }
-				                }]
-                            }],
-                            bbar: Ext.create('Ext.PagingToolbar', {
-                                store: window.feature.store,
-                                displayInfo: true,
-                                displayMsg: 'Displaying topics {0} - {1} of {2}',
-                                emptyMsg: "No topics to display",
-                            })
-                        }
-                    ]
-                }
-            ]
-        });
+                                    }
+
+                                });
+					        }
+				        }]
+                    }],
+                    bbar: Ext.create('Ext.PagingToolbar', {
+                        store: window.feature.regionStore,
+                        displayInfo: true,
+                        displayMsg: 'Displaying topics {0} - {1} of {2}',
+                        emptyMsg: "No topics to display",
+                    })
+            },{
+                xtype:'container',
+                height:150
+            }]
+    });
 
         function IsValid(country, regionName, regionCoordinates){
             var ok = true;
@@ -364,7 +367,7 @@ Outpost Management Regions: Overview
         var mainContent = Ext.getCmp(contentRes.maincontent.id);
 
         mainContent.add(window.feature.container);
-        window.feature.store.loadPage(1);
+        window.feature.regionStore.loadPage(1);
     });
 </script>
 

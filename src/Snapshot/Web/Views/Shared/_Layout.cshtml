@@ -30,6 +30,7 @@
         link:{
             administration:'@(Url.RouteUrl<CountryController>( x=>x.Overview() ,  OutpostManagementAreaRegistration.DEFAULT_ROUTE ))',
             regionOverview:'@(Url.RouteUrl<RegionController>( x => x.Overview(null) ,  OutpostManagementAreaRegistration.DEFAULT_ROUTE ))',
+            district: '@(Url.RouteUrl<DistrictController>( x=>x.Overview() ,  OutpostManagementAreaRegistration.DEFAULT_ROUTE ))'
         },
         header:{
             id:'Header',
@@ -51,7 +52,7 @@
             id:'Content'
         }
     }
-
+   
     Ext.onReady(function(){
         var viewport = Ext.create('Ext.container.Viewport', {
             id: res.viewport,

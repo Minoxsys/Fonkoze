@@ -10,6 +10,7 @@ using Domain;
 using FluentNHibernate.Conventions;
 using Web.Areas.OutpostManagement.Models.Country;
 using Web.Models.Shared;
+using NHibernate.Linq;
 
 namespace Web.Areas.OutpostManagement.Controllers
 {
@@ -79,17 +80,16 @@ namespace Web.Areas.OutpostManagement.Controllers
 
             countryDataQuery = orderByColumnDirection[String.Format("{0}-{1}", indexModel.sort, indexModel.dir)].Invoke();
 
+            var totalItems = countryDataQuery.Count();
             countryDataQuery = countryDataQuery.Take(pageSize)
                                                .Skip(indexModel.start.Value);
-
-            var totalItems = countryDataQuery.Count();
 
             var countryModelListProjection = (from countryData in countryDataQuery.ToList() select new CountryModel
             {
                 Id = countryData.Id,
                 ISOCode = countryData.ISOCode,
                 Name = countryData.Name,
-                PhonePrefix = countryData.PhonePrefix,
+                PhonePrefix = countryData.PhonePrefix
             }).ToArray();
 
             return Json(new CountryIndexOutputModel
