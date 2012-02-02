@@ -12,6 +12,6 @@ namespace Domain
         public virtual string ISOCode { get; set; }
         public virtual string PhonePrefix { get; set; }
         public virtual Client Client { get; set; }
-        //public Guid Id { get; set; }
+        public virtual IList<Region> Regions { get; set; }
     }
 }

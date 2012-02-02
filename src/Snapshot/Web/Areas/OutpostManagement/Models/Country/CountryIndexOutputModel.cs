@@ -9,5 +9,6 @@ namespace Web.Areas.OutpostManagement.Models.Country
     {
         public CountryModel[] Countries { get; set; }
         public int TotalItems { get; set; }
+
     }
 }

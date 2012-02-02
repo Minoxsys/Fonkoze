@@ -24,7 +24,7 @@ namespace IntegrationTests
             get
             {
                 if (_sessionFactory == null)
-                    _sessionFactory = new NHibernateSessionFactory(new DomainEntityMappingConvention(), ConnectWithSqlCe);
+                    _sessionFactory = new NHibernateSessionFactory(new DomainEntityMappingConvention(), ConnectWithSqlLite);
 
                 return _sessionFactory;
             }
@@ -65,7 +65,7 @@ namespace IntegrationTests
         {
             config.Database(
                 SQLiteConfiguration.Standard.UsingFile("database.db")
-                //.ShowSql()
+                .ShowSql()
                 );
             config.ExposeConfiguration(cfg => new SchemaExport(cfg).Create(true, true));
         }
