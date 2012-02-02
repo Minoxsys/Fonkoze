@@ -62,7 +62,7 @@ namespace Web.Areas.OutpostManagement.Controllers
         {
             LoadUserAndClient();
 
-            var pageSize = indexModel.limit.Value - indexModel.start.Value;
+            var pageSize = indexModel.limit.Value;
 
             var countryDataQuery = this.QueryCountry.Query()
             .Where(c => c.Client.Id == _client.Id);

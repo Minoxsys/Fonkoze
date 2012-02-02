@@ -9,138 +9,92 @@ using AutoMapper;
 using Web.Areas.OutpostManagement.Models.Country;
 using Persistence.Queries.Countries;
 using Web.Areas.OutpostManagement.Models.Client;
+using System.Collections;
+using Core.Domain;
+using Web.Models.Shared;
 
 
 namespace Web.Areas.OutpostManagement.Controllers
 {
     public class RegionController : Controller
     {
-        public RegionOutputModel RegionOutputModel { get; set; }
-
-        public RegionInputModel RegionInputModel { get; set; }
-
-        public ISaveOrUpdateCommand<Region> SaveOrUpdateCommand { get; set; }
-
         public IQueryService<Region> QueryService { get; set; }
-
-        public IDeleteCommand<Region> DeleteCommand { get; set; }
-
         public IQueryService<Country> QueryCountry { get; set; }
-
         public IQueryService<District> QueryDistrict { get; set; }
 
         public IQueryService<Client> QueryClients { get; set; }
+        public IQueryService<User> QueryUsers { get; set; }
 
-        public IQueryRegion QueryRegion { get; set; }
+        public ISaveOrUpdateCommand<Region> SaveOrUpdateCommand { get; set; }
+        public IDeleteCommand<Region> DeleteCommand { get; set; }
 
-        private const string TEMPDATA_ERROR_KEY = "error";
+        private Client _client;
+        private User _user;
 
         [HttpGet]
         public ActionResult Overview(Guid? countryId)
         {
             RegionOverviewModel overviewModel = new RegionOverviewModel(QueryCountry);
-            List<Region> regions = new List<Region>();
-
-            if (countryId != null)
-            {
-                if (countryId.Value != Guid.Empty)
-                {
-                    regions = QueryService.Query().Where<Region>(it => it.Country.Id == countryId.Value).ToList();
-                }
-            }
-
-            CreateMapping();
-
-            foreach (Region item in regions)
-            {
-                var regionModel = new RegionModel();
-                Mapper.Map(item, regionModel);
-                regionModel.DistrictNo = QueryDistrict.Query().Count<District>(it => it.Region.Id == item.Id);
-                regionModel.CountryId = item.Country.Id;
-                overviewModel.Regions.Add(regionModel);
-            }
-
-            if (countryId != null)
-            {
-                var selectedCountry = overviewModel.Countries.Where<SelectListItem>(it => it.Value == countryId.Value.ToString()).ToList();
-                if (selectedCountry.Count > 0)
-                    overviewModel.Countries.First<SelectListItem>(it => it.Value == countryId.Value.ToString()).Selected = true;
-            }
-            overviewModel.Error = (string)TempData[TEMPDATA_ERROR_KEY];
             return View(overviewModel);
         }
-        public PartialViewResult OverviewTable(Guid? countryId)
-        {
-            var regionList = new List<RegionModel>();
-            if (!countryId.HasValue)
-                return PartialView(regionList);
-
-            var regions = QueryService.Query().Where<Region>(it => it.Country.Id == countryId);
-
-            foreach (Region item in regions)
-            {
-                CreateMapping();
-                var regionModel = new RegionModel();
-                Mapper.Map(item, regionModel);
-                regionModel.DistrictNo = QueryDistrict.Query().Count<District>(it => it.Region.Id == item.Id);
-                regionList.Add(regionModel);
-
-            }
-            return PartialView(regionList);
-        }
-        public ActionResult Create(Guid? countryId)
-        {
-            if (countryId != null)
-            {
-                RegionOutputModel = new RegionOutputModel(QueryCountry);
-
-                if (RegionOutputModel.Countries.Where(it => it.Value == countryId.Value.ToString()).ToList().Count > 0)
-                    RegionOutputModel.Countries.First(it => it.Value == countryId.Value.ToString()).Selected = true;                
-            }
-
-            return View(RegionOutputModel);
-        }
 
         [HttpPost]
-        public ActionResult Create(RegionInputModel regionInputModel)
+        public JsonResult Create(RegionInputModel regionInputModel)
         {
-            if (!ModelState.IsValid)
+            LoadUserAndClient();
+
+            if (string.IsNullOrEmpty(regionInputModel.Name) || string.IsNullOrEmpty(regionInputModel.CountryId.ToString()))
             {
-                var regionOutputModel = MapDataFromInputModelToOutputModel(regionInputModel);
-                return View("Create", regionOutputModel);
+                return Json(
+                   new JsonActionResponse
+                   {
+                       Status = "Error",
+                       Message = "The region has not been saved!"
+                   });
             }
+
+
+            Region region = new Region();
+
             CreateMapping();
-            var region = new Region();
             Mapper.Map(regionInputModel, region);
 
-            region.Client = QueryClients.Load(Client.DEFAULT_ID);
+            region.Client = this._client;
             region.Country = QueryCountry.Load(regionInputModel.CountryId);
 
             SaveOrUpdateCommand.Execute(region);
-            return RedirectToAction("Overview", new { countryId = regionInputModel.CountryId });
-        }
 
-        [HttpGet]
-        public ViewResult Edit(Guid guid)
-        {
-            Region region = new Region();
-            region = QueryService.Load(guid);
-            CreateMapping();
-            RegionOutputModel viewModel = new RegionOutputModel(QueryCountry);
-            Mapper.Map(region, viewModel);
-
-            if ((viewModel.Countries.Count > 0) && (viewModel.Countries.Where<SelectListItem>(it => it.Value == region.Country.Id.ToString()).ToList().Count > 0))
-                viewModel.Countries.First<SelectListItem>(it => it.Value == region.Country.Id.ToString()).Selected = true;
-            return View(viewModel);
+            return Json(
+               new JsonActionResponse
+               {
+                   Status = "Success",
+                   Message = String.Format("Region {0} has been saved.", region.Name)
+               });
         }
 
         [HttpPost]
-        public ActionResult Edit(RegionInputModel regionInputModel)
+        public JsonResult Edit(RegionInputModel regionInputModel)
         {
-            if (!ModelState.IsValid)
+            LoadUserAndClient();
+
+            if (regionInputModel.Id == Guid.Empty)
             {
-                var regionOutputModel = MapDataFromInputModelToOutputModel(regionInputModel);
-                return View("Edit", regionOutputModel);
+                return Json(
+                   new JsonActionResponse
+                   {
+                       Status = "Error",
+                       Message = "You must supply a regionId in order to edit the region."
+                   });
+            }
+
+            if (string.IsNullOrEmpty(regionInputModel.Name) || string.IsNullOrEmpty(regionInputModel.CountryId.ToString()))
+            {
+                return Json(
+                   new JsonActionResponse
+                   {
+                       Status = "Error",
+                       Message = "The region has not been saved!"
+                   });
             }
 
             Region region = new Region();
@@ -149,51 +103,146 @@ namespace Web.Areas.OutpostManagement.Controllers
             Mapper.Map(regionInputModel, region);
 
             region.Country = QueryCountry.Load(regionInputModel.CountryId);
+            region.Client = this._client;
+
             SaveOrUpdateCommand.Execute(region);
 
-            return RedirectToAction("Overview", new { countryId = region.Country.Id });
-        }
-
-        private RegionOutputModel MapDataFromInputModelToOutputModel(RegionInputModel regionInputModel)
-        {
-
-            var regionOutputModel = new RegionOutputModel(QueryCountry);
-
-            regionOutputModel.Id = regionInputModel.Id;
-            regionOutputModel.Name = regionInputModel.Name;
-            regionOutputModel.Client = regionInputModel.Client;
-            regionOutputModel.CountryId = regionInputModel.CountryId;
-
-            if (regionOutputModel.Countries.Count > 0)
-            {
-                var selectedCountry = regionOutputModel.Countries.Where(it => it.Value == regionInputModel.CountryId.ToString()).ToList();
-
-                if (selectedCountry.Count > 0)
-                    regionOutputModel.Countries.First(it => it.Value == regionInputModel.CountryId.ToString()).Selected = true;
-            }
-            return regionOutputModel;
+            return Json(
+               new JsonActionResponse
+               {
+                   Status = "Success",
+                   Message = String.Format("Region {0} has been saved.", region.Name)
+               });
         }
 
         [HttpPost]
-        public RedirectToRouteResult Delete(Guid guid)
+        public JsonResult Delete(Guid? regionId)
         {
-            var region = QueryService.Load(guid);
+            LoadUserAndClient();
 
+            if (regionId.HasValue == false)
+            {
+                return Json(new JsonActionResponse
+                {
+                    Status = "Error",
+                    Message = "You must supply a regionId in order to remove the region"
+                });
+            }
+
+            var region = QueryService.Load(regionId.Value);
             if (region != null)
             {
                 var districtResults = QueryDistrict.Query().Where(it => it.Region.Id == region.Id);
-
                 if (districtResults.ToList().Count != 0)
                 {
-                    TempData.Add("error", string.Format("The region {0} has districts associated, so it can not be deleted", region.Name));
-                    return RedirectToAction("Overview", new { countryId = region.Country.Id });
+                    return Json(new JsonActionResponse
+                    {
+                        Status = "Error",
+                        Message = String.Format("Region {0} has {1} district(s) associated, and can not be removed.", region.Name, districtResults.ToList().Count)
+                    });
                 }
-
                 DeleteCommand.Execute(region);
             }
 
-            return RedirectToAction("Overview", new { countryId = region.Country.Id });
+            return Json(
+                new JsonActionResponse
+                {
+                    Status = "Success",
+                    Message = String.Format("Region {0} was removed.", region.Name)
+                });
         }
+
+        [HttpGet]
+        public JsonResult GetRegions(RegionIndexModel indexModel, string countryId)
+        {
+            LoadUserAndClient();
+
+            var pageSize = indexModel.limit.Value;
+            var regionDataQuery = this.QueryService.Query();
+
+            var orderByColumnDirection = new Dictionary<string, Func<IQueryable<Region>>>()
+            {
+                { "Name-ASC", () => regionDataQuery.OrderBy(c => c.Name) },
+                { "Name-DESC", () => regionDataQuery.OrderByDescending(c => c.Name) },
+                { "Coordinates-ASC", () => regionDataQuery.OrderBy(c => c.Coordinates) },
+                { "Coordinates-DESC", () => regionDataQuery.OrderByDescending(c => c.Coordinates) },
+            };
+
+            regionDataQuery = orderByColumnDirection[String.Format("{0}-{1}", indexModel.sort, indexModel.dir)].Invoke();
+
+            if (!string.IsNullOrEmpty(countryId))
+            {
+                Guid id = new Guid(countryId);
+                regionDataQuery = regionDataQuery
+                    .Where(it => it.Country.Id == id && it.Client.Id == this._client.Id);
+            }
+            else
+            {
+                regionDataQuery = regionDataQuery
+                    .Where(it => it.Client.Id == this._client.Id);
+                    
+            }
+            var totalItems = regionDataQuery.Count();
+
+            regionDataQuery = regionDataQuery
+                .Take(pageSize)
+                .Skip(indexModel.start.Value);
+            
+            var regionModelListProjection = (from region in regionDataQuery.ToList()
+                                             select new RegionModel
+                                             {
+                                                 Id = region.Id,
+                                                 Name = region.Name,
+                                                 Coordinates = region.Coordinates,
+                                                 CountryId = region.Country.Id,
+                                             }).ToArray();
+
+
+            return Json(new RegionIndexOuputModel
+            {
+                Regions = regionModelListProjection,
+                TotalItems = totalItems
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        private void LoadUserAndClient()
+        {
+            var loggedUser = User.Identity.Name;
+            this._user = QueryUsers.Query().FirstOrDefault(m => m.UserName == loggedUser);
+
+            if (_user == null)
+                throw new NullReferenceException("User is not logged in");
+
+            var clientId = Client.DEFAULT_ID;
+            if (_user.ClientId != Guid.Empty)
+                clientId = _user.ClientId;
+
+            this._client = QueryClients.Load(clientId);
+        }
+
+
+        [HttpGet]
+        public JsonResult GetCountries()
+        {
+            LoadUserAndClient();
+            var countries = QueryCountry.Query().Where(it => it.Client.Id == this._client.Id);
+            int totalItems = countries.Count();
+
+            var countryModelListProjection = (from country in countries.ToList()
+                                              select new CountryModel
+                                              {
+                                                  Id = country.Id,
+                                                  Name = country.Name,
+                                              }).ToArray();
+
+
+            return Json(new CountryIndexOutputModel
+            {
+                Countries = countryModelListProjection,
+                TotalItems = totalItems
+            }, JsonRequestBehavior.AllowGet);
+        }
+
         private void CreateMapping()
         {
             Mapper.CreateMap<RegionModel, Region>();
@@ -212,8 +261,6 @@ namespace Web.Areas.OutpostManagement.Controllers
             Mapper.CreateMap<Client, ClientModel>();
 
         }
-
-
     }
 
 }

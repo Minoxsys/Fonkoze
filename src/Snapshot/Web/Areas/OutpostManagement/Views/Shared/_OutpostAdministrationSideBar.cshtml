@@ -46,14 +46,20 @@
                                 xtype: 'button',
                                 toggleGroup: contentRes.maincontent.sidebar.group,
                                 enableToggle: true,
-                                pressed: true,
-                                text: 'Country'
+                                text: 'Country',
+                                handler: function () {
+                                    navigateTo(window.res.link.administration);
+                                }
                             },
                             {
                                 xtype: 'button',
+                                id: contentRes.maincontent.sidebar.region,
                                 toggleGroup: contentRes.maincontent.sidebar.group,
-                                enableToggle: true,
-                                text: 'Region'
+                                text: 'Region',
+                                handler: function () {
+                                    navigateTo(window.res.link.regionOverview);
+                                },
+                                enableToggle: true
                             },
                             {
                                 xtype: 'button',
