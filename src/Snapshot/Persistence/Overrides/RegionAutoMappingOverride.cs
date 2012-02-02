@@ -13,7 +13,7 @@ namespace Persistence.Overrides
         public void Override(FluentNHibernate.Automapping.AutoMapping<Region> mapping)
         {
             mapping.References(p => p.Country).Not.LazyLoad();
-            mapping.References(p => p.Client).Cascade.SaveUpdate();
+            mapping.HasOne(p => p.Client).Cascade.SaveUpdate();
                    
            
         }
