@@ -16,7 +16,11 @@ namespace Web.Areas.OutpostManagement.Models.District
         public RegionInputModel Region { get; set; }
         public ClientInputModel Client { get; set; }
 
-
+        public DistrictInputModel()
+        {
+            this.Region = new RegionInputModel();
+            this.Client = new ClientInputModel();
+        }
         public class RegionInputModel
         {
             [Required(ErrorMessage = "Region is required")]

@@ -188,7 +188,8 @@ Districts: Overview
                         };
                         var postToUrl = '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "District", action = "Create" })';
                         var action = $.post(postToUrl, values);
-                        action.success(function () {
+                        action.success(function (result) {
+                            Ext.Msg.alert(result.Status, result.Message);
 
                             var selectedCountryInModal = Ext.getCmp(window.feature.comboboxCountriesForModalId).getValue();
                             var selectedRegionInModal = Ext.getCmp(window.feature.comboboxRegionsForModalId).getValue();
@@ -383,6 +384,7 @@ Districts: Overview
                 select: function (combo, record, index) {
                     var selectedCountryId = record[0].data.Id;
                     window.feature.comboBoxRegions.setValue(null);
+                    window.feature.store.proxy.extraParams.countryId = selectedCountryId;
                     window.feature.regionsStore.load({
                         params: { countryId: selectedCountryId }
                     });
@@ -402,6 +404,7 @@ Districts: Overview
             listeners: {
                 select: function (combo, record, index) {
                     var selectedRegionId = record[0].data.Id;
+                    window.feature.store.proxy.extraParams.regionId = selectedRegionId;
                     window.feature.store.loadPage(1, { params: { regionId: selectedRegionId} });
                 }
             }
@@ -416,15 +419,10 @@ Districts: Overview
             pageSize: 15,
             remoteSort: true,
             fields: ['Name', 'OutpostNo', 'Id', 'ClientId', 'RegionId'],
-            listener: {
-                beforeload: function (store, operation, eOpts) {
-                    debugger;
-                    operation.params = { countryId: GetSelectedCountryId(), regionId: GetSelectedRegionId() };
-                }
-            },
             proxy: {
                 type: 'ajax',
                 url: '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "District", action = "Index" })',
+                extraParams:{  regionId:'', countryId: '', searchName:''},
                 reader: { type: 'json',
                     root: 'districts',
                     totalProperty: 'TotalItems'
@@ -470,9 +468,9 @@ Districts: Overview
                                 var postToUrl = '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "District", action = "Delete" })';
                                 var action = $.post(postToUrl, values);
                                 action.success(function (result) {
-                                    if (result.response.Status !== 'Done') {
+                                    if (result.Status !== 'Done') {
                                         var windowAlert = new Ext.window.MessageBox;
-                                        windowAlert.alert('Alert', result.response.Message);                                       
+                                        windowAlert.alert('Alert', result.Message);                                       
                                     }
                                     var selectedCountryId = Ext.getCmp(window.feature.comboboxCountriesId).getValue();
                                     var selectedRegionId = Ext.getCmp(window.feature.comboboxRegionsId).getValue();
@@ -585,6 +583,7 @@ Districts: Overview
                                           var selectedCountryId = Ext.getCmp(window.feature.comboboxCountriesId).getValue();
                                           var selectedRegionId = Ext.getCmp(window.feature.comboboxRegionsId).getValue();
                                           var searchByName = Ext.getCmp(window.feature.searchTextFieldId).getValue();
+                                          window.feature.store.proxy.extraParams.searchName = '';
 
                                           Ext.getCmp(window.feature.searchTextFieldId).setValue('');
                                           if (selectedRegionId) {
@@ -603,6 +602,8 @@ Districts: Overview
                                       var selectedCountryId = Ext.getCmp(window.feature.comboboxCountriesId).getValue();
                                       var selectedRegionId = Ext.getCmp(window.feature.comboboxRegionsId).getValue();
                                       var searchByName = Ext.getCmp(window.feature.searchTextFieldId).getValue();
+
+                                      window.feature.store.proxy.extraParams.searchName = searchByName;
 
                                       clearTimeout(timeout);
                                       timeout = setTimeout(function () {

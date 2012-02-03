@@ -9,6 +9,7 @@ using Core.Persistence;
 using Domain;
 using Web.Areas.OutpostManagement.Models.District;
 using Core.Domain;
+using MvcContrib.TestHelper.Fakes;
 
 namespace Tests.Unit.Controllers.Areas.OutpostManagement.DistrictControllerTests
 {
@@ -20,22 +21,22 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.DistrictControllerTests
         const string USER_NAME = "admin";
 
 
-        DistrictController controller;
-        ISaveOrUpdateCommand<District> saveCommand;
-        IQueryService<Country> queryCountry;
-        IDeleteCommand<District> deleteCommand;
-        IQueryService<Region> queryRegion;
-        IQueryService<Outpost> queryOutpost;
-        IQueryService<Client> queryClient;
-        IQueryService<District> queryService;
-        IQueryDistrict queryDistrict;
-        IQueryService<User> queryUsers;
+        public DistrictController controller;
+        public ISaveOrUpdateCommand<District> saveCommand;
+        public IQueryService<Country> queryCountry;
+        public IDeleteCommand<District> deleteCommand;
+        public IQueryService<Region> queryRegion;
+        public IQueryService<Outpost> queryOutpost;
+        public IQueryService<Client> queryClient;
+        public IQueryService<District> queryService;
+        public IQueryDistrict queryDistrict;
+        public IQueryService<User> queryUsers;
 
         public District district;
         public Country country;
         public Region region;
-        Client client;
-        Outpost outpost;
+        public Client client;
+        public Outpost outpost;
         User user;
 
         Guid districtId;
@@ -98,6 +99,9 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.DistrictControllerTests
         {
             controller = new DistrictController();
 
+            FakeControllerContext.Builder.HttpContext.User = new FakePrincipal(new FakeIdentity(USER_NAME), new string[] { });
+            FakeControllerContext.Initialize(controller);
+
             controller.SaveOrUpdateCommand = saveCommand;
             controller.DeleteCommand = deleteCommand;
             controller.QueryRegion = queryRegion;
@@ -145,16 +149,17 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.DistrictControllerTests
             controller.QueryUsers = queryUsers;
 
         }
-        internal IQueryable<DistrictModel> PageOfDistrictData(DistrictIndexModel indexModel)
+        internal IQueryable<District> PageOfDistrictData(DistrictIndexModel indexModel)
         {
-            List<DistrictModel> districtPageList = new List<DistrictModel>();
+            List<District> districtPageList = new List<District>();
 
             for (int i = indexModel.Start.Value; i < indexModel.Limit.Value; i++)
             {
-                districtPageList.Add(new DistrictModel
+                districtPageList.Add(new District
                 {
-                    Name = String.Format("DistrictAtIndex{0}", i),
-                    ClientId = clientId
+                    Name = String.Format("District{0}", i),
+                    Client = client,
+                    Region = region
                 });
             }
             return districtPageList.AsQueryable();
