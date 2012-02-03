@@ -9,5 +9,11 @@ namespace Web.Models.Shared
     {
         public string Status { get; set; }
         public string Message { get; set; }
+        public List<String> RequiredFields { get; set; }
+
+        public JsonActionResponse()
+        {
+            RequiredFields = new List<string>();
+        }
     }
 }

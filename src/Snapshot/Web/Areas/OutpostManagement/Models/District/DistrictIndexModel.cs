@@ -14,6 +14,9 @@ namespace Web.Areas.OutpostManagement.Models.District
         public int? Start { get; set; }
         public int? Limit { get; set; }
 
+        public string sort { get; set; }
+        public string dir { get; set; }
+
         public String SearchName { get; set; }
 
     }

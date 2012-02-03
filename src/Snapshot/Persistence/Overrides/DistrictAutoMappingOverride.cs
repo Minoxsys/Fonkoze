@@ -11,8 +11,8 @@ namespace Persistence.Overrides
         public void Override(FluentNHibernate.Automapping.AutoMapping<District> mapping)
         {
             mapping.References(p => p.Region).Not.LazyLoad();
-            mapping.References(p => p.Client).Cascade.SaveUpdate();
-            mapping.References(p => p.Region).Cascade.SaveUpdate();
+            mapping.References(p => p.Client).Not.LazyLoad().Cascade.SaveUpdate();
+                   
            
 
         }

@@ -119,6 +119,7 @@ Districts: Overview
                         listeners:
                                    { select: function (combo, record, index) {
                                        var selectedCountryId = record[0].data.Id;
+                                       Ext.getCmp(window.feature.comboboxRegionsForModalId).setValue(null);
                                        window.feature.regionsStoreforModal.load({
                                            params: { countryId: selectedCountryId }
                                        });
@@ -378,16 +379,21 @@ Districts: Overview
             return Ext.getCmp(window.feature.comboboxCountriesId).getValue();
         }
         function GetSelectedRegionId() {
-            Ext.getCmp(window.feature.comboboxRegionsId).getValue()
+            return Ext.getCmp(window.feature.comboboxRegionsId).getValue()
         }
         window.feature.store = Ext.create('Ext.data.Store', {
             pageSize: 15,
             remoteSort: true,
             fields: ['Name', 'OutpostNo', 'Id', 'ClientId', 'RegionId'],
+            listener: {
+                beforeload: function (store, operation, eOpts) {
+                    debugger;
+                    operation.params = { countryId: GetSelectedCountryId(), regionId: GetSelectedRegionId() };
+                }
+            },
             proxy: {
                 type: 'ajax',
                 url: '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "District", action = "Index" })',
-                params: { countryId: GetSelectedCountryId(), regionId: GetSelectedRegionId() },
                 reader: { type: 'json',
                     root: 'districts',
                     totalProperty: 'TotalItems'
@@ -410,7 +416,8 @@ Districts: Overview
                 text: "Name",
                 dataIndex: 'Name',
                 anchor: '90%',
-                sortable: true
+                sortable: true,
+                flex: 1
             }, {
                 text: "No of outposts",
                 dataIndex: 'OutpostNo',
@@ -432,10 +439,9 @@ Districts: Overview
                                 var postToUrl = '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "District", action = "Delete" })';
                                 var action = $.post(postToUrl, values);
                                 action.success(function (result) {
-                                    if (result.error !== 'done') {
+                                    if (result.response.Status !== 'Done') {
                                         var windowAlert = new Ext.window.MessageBox;
-                                       windowAlert.alert('Alert', result.error);
-                                       // windowAlert.show();
+                                        windowAlert.alert('Alert', result.response.Message);                                       
                                     }
                                     var selectedCountryId = Ext.getCmp(window.feature.comboboxCountriesId).getValue();
                                     var selectedRegionId = Ext.getCmp(window.feature.comboboxRegionsId).getValue();

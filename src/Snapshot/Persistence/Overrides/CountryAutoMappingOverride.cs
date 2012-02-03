@@ -12,6 +12,7 @@ namespace Persistence.Overrides
         public void Override(FluentNHibernate.Automapping.AutoMapping<Country> mapping)
         {
             mapping.References(p => p.Client).Nullable();
+           
         }
     }
 }

@@ -99,6 +99,8 @@
     <Compile Include="Unit\Controllers\Areas\OutpostManagement\CountryControllerTests\IndexMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\OutpostManagement\CountryControllerTests\ObjectMother.cs" />
     <Compile Include="Unit\Controllers\Areas\OutpostManagement\CountryControllerTests\OverviewMethod.cs" />
+    <Compile Include="Unit\Controllers\Areas\OutpostManagement\DistrictControllerTests\IndexMethod.cs" />
+    <Compile Include="Unit\Controllers\Areas\OutpostManagement\DistrictControllerTests\ObjectMother.cs" />
     <Compile Include="Unit\Controllers\Areas\OutpostManagement\DistrictController_Tests.cs" />
     <Compile Include="Unit\Controllers\Areas\OutpostManagement\OutpostController_Tests.cs">
       <SubType>Code</SubType>
