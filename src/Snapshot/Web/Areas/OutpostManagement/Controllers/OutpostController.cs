@@ -13,6 +13,7 @@ using AutoMapper;
 using Core.Persistence;
 using Domain;
 using Web.Areas.OutpostManagement.Models.Client;
+using Core.Domain;
 
 using NHibernate.Linq;
 
@@ -30,6 +31,7 @@ namespace Web.Areas.OutpostManagement.Controllers
         public IQueryService<Region> QueryRegion { get; set; }
         public IQueryService<District> QueryDistrict { get; set; }
         public IQueryService<Client> QueryClients { get; set; }
+        public IQueryService<User> QueryUser { get; set; }
         public IQueryService<Product> QueryProduct { get; set; }
         public IQueryService<Contact> QueryContact { get; set; }
 
@@ -49,104 +51,12 @@ namespace Web.Areas.OutpostManagement.Controllers
 
 
         [HttpGet]
-        public ActionResult Overview(Guid? countryId, Guid? regionId, Guid? districtId)
+        public ActionResult Overview()
         {
-            OutpostOverviewModel model;
-            IQueryable<Outpost> outposts;
-            IQueryable<District> districts;
-            IQueryable<Region> regions;
-            IQueryable<Country> countries;
-            IQueryable<Outpost> warehouses;
-
-            model = new OutpostOverviewModel();
-            outposts = QueryService.Query();
-            warehouses = QueryService.Query();
-
-            model.Outposts = new List<SelectListItem>();
-            model.Outpost = new List<OutpostModel>();
-            model.Warehouses = new List<SelectListItem>();
-
-            warehouses = outposts.Where<Outpost>(it => it.IsWarehouse);
-
-            if ((countryId == null) && (regionId == null) && (districtId == null))
-            {
-                outposts = QueryService.Query();
-                model = new OutpostOverviewModel(QueryCountry, QueryRegion, QueryDistrict, QueryService);
-                Guid districtSelectedId = new Guid();
-
-                if (model.Districts.Count > 0)
-                {
-                    districtSelectedId = Guid.Parse(model.Districts.First().Value);
-                }
-                if (outposts != null)
-                {
-                    outposts = outposts.Where(it => it.District.Id == districtSelectedId);
-                }
-            }
-            else
-            {
-                if ((countryId.Value != Guid.Empty) && (regionId.Value != Guid.Empty) && (districtId.Value != Guid.Empty))
-                {
-                    var countryS = countryId.Value;
-                    outposts = QueryService.Query();
-                    countries = QueryCountry.Query().Where(it => it.Id == countryS);
-                    regions = QueryRegion.Query().Where<Region>(it => it.Country.Id == countryS);
-                    districts = QueryDistrict.Query().Where<District>(it => it.Region.Id == regionId.Value);
-                    outposts = outposts.Where<Outpost>(it => it.District.Id == districtId.Value);
-
-                    model = new OutpostOverviewModel();
+            OutpostOverviewModel model = new OutpostOverviewModel();
                     model.Country = new CountryModel { Id = countryId.Value };
                     model.Region = new RegionModel { Id = regionId.Value };
                     model.District = new DistrictModel { Id = districtId.Value };
-
-                    foreach (Country item in countries)
-                    {
-                        model.Countries.Add(new SelectListItem { Text = item.Name, Value = item.Id.ToString() });
-                    }
-
-                    foreach (Region item in regions)
-                    {
-                        model.Regions.Add(new SelectListItem { Text = item.Name, Value = item.Id.ToString() });
-
-                     }
-
-                    foreach (District itemDistrict in districts)
-                    {
-                            model.Districts.Add(new SelectListItem { Text = itemDistrict.Name, Value = itemDistrict.Id.ToString() });
-                    }
-
-                    if (model.Countries.Count > 0)
-                    {
-                        var selectedCountry = model.Countries.First<SelectListItem>(it => it.Value == countryId.Value.ToString());
-                        if (selectedCountry != null)
-                            selectedCountry.Selected = true;
-                    }
-
-                    var regionsWithRegionId = model.Regions.Where(it => it.Value == regionId.Value.ToString()).ToList();
-                    if (regionsWithRegionId.Count > 0)
-                        regionsWithRegionId[0].Selected = true;
-
-                    var regionsWithDistrictsId = model.Districts.Where(it => it.Value == districtId.Value.ToString()).ToList();
-                    if (regionsWithDistrictsId.Count > 0)
-                        regionsWithDistrictsId[0].Selected = true;
-
-                    foreach (Outpost item in outposts)
-                    {
-                        var selectListItem = new SelectListItem();
-
-                        selectListItem.Value = item.Id.ToString();
-                        selectListItem.Text = item.Name;
-                        model.Outposts.Add(selectListItem);
-                    }
-
-                    foreach (Outpost item in warehouses)
-                    {
-                        var selectListItem = new SelectListItem();
-
-                        selectListItem.Value = item.Id.ToString();
-                        selectListItem.Text = item.Name;
-                        model.Warehouses.Add(selectListItem);
-                     }
                     model.Warehouses.Add(new SelectListItem
                     {
                         Selected=true,
@@ -154,29 +64,7 @@ namespace Web.Areas.OutpostManagement.Controllers
                         Value = Guid.Empty.ToString()
 
                     });
-                }
-            }
-
-            if (outposts != null)
-            {
-                if (outposts.ToList().Count != 0)
-                {
-                    
-                    foreach (Outpost item in outposts)
-                    {
-                        CreateMappings();
-                        var outpostModel = new OutpostModel();
-                        Mapper.Map(item, outpostModel);
-                        outpostModel.Contacts = new List<Contact>();
-                        foreach (Contact contact in item.Contacts)
-                        {
-                            outpostModel.Contacts.Add(contact);
-                        }
-
-                        model.Outpost.Add(outpostModel);
-                    }
-                }
-            }
+          
 
             return View(model);
 
@@ -274,7 +162,7 @@ namespace Web.Areas.OutpostManagement.Controllers
             return View(model);
         }
 
-        
+
         public ActionResult Create(Guid? districtId)
         {
 
@@ -298,7 +186,7 @@ namespace Web.Areas.OutpostManagement.Controllers
                 OutpostOutputModel = new OutpostOutputModel(QueryCountry, QueryRegion, QueryDistrict, QueryService, countryId, regionId, districtId);
             }
 
-           OutpostOutputModel.Warehouses = new List<SelectListItem>();
+            OutpostOutputModel.Warehouses = new List<SelectListItem>();
 
             var resultWarehouse = QueryService.Query().Where(m => m.IsWarehouse);
             if (resultWarehouse != null)
@@ -310,7 +198,7 @@ namespace Web.Areas.OutpostManagement.Controllers
                     selectListItem.Value = new Guid().ToString();
                     selectListItem.Text = "No warehouse selected";
                     OutpostOutputModel.Warehouses.Add(selectListItem);
- 
+
                     foreach (Domain.Outpost item3 in resultWarehouse)
                     {
                         selectListItem = new SelectListItem();
@@ -424,16 +312,16 @@ namespace Web.Areas.OutpostManagement.Controllers
             }
 
 
-             return View(outpostModelView);
+            return View(outpostModelView);
         }
 
- 
+
         [HttpPost]
         [ValidateInput(false)]
         public ActionResult Edit(OutpostInputModel outpostInputModel)
         {
             var model = new OutpostInputModel();
-            
+
             if (!ModelState.IsValid)
             {
                 var outpostOutputModel = MapDatFromInputModelToOutputModel(outpostInputModel);
@@ -474,13 +362,13 @@ namespace Web.Areas.OutpostManagement.Controllers
                     }
 
                     SaveOrUpdateCommandContact.Execute(contactUpdate);
-               }
+                }
             }
 
             if (outpost.Warehouse != null)
             {
                 var warehouse = QueryService.Load(outpost.Warehouse.Id);
-                if (warehouse.Warehouse != null) 
+                if (warehouse.Warehouse != null)
                 {
                     outpost.Warehouse.Name = warehouse.Warehouse.Name;
                 }
@@ -516,7 +404,7 @@ namespace Web.Areas.OutpostManagement.Controllers
 
             Mapper.CreateMap<OutpostInputModel, Outpost>();
             Mapper.CreateMap<OutpostInputModel, Outpost>();
- 
+
 
             Mapper.CreateMap<Country, CountryModel>();
             Mapper.CreateMap<CountryModel, Country>();
@@ -542,7 +430,7 @@ namespace Web.Areas.OutpostManagement.Controllers
 
             if (outpost != null)
             {
-                foreach(Contact contact in outpost.Contacts)
+                foreach (Contact contact in outpost.Contacts)
                 {
                     DeleteContact(outpostId, contact.Id);
                 }
@@ -570,7 +458,7 @@ namespace Web.Areas.OutpostManagement.Controllers
 
             return RedirectToAction("Edit", "Outpost", new
             {
-                outpostId = outpostID         
+                outpostId = outpostID
             });
 
         }
@@ -638,7 +526,7 @@ namespace Web.Areas.OutpostManagement.Controllers
 
         }
 
-        
+
         public ActionResult CreateContact(Guid outpostId)
         {
             var model = new ContactModel();

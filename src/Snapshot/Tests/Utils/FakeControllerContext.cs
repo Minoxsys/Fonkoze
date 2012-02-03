@@ -16,6 +16,7 @@ namespace Tests
 
         public static void Initialize(Controller controller)
         {
+            controller.ValueProvider = new FormCollection{}.ToValueProvider();
             _builder.InitializeController(controller);
         }
     }

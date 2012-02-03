@@ -10,6 +10,9 @@
             outpost: 'Sidebar-OutpostAdministration-Outpost-Button'
         }
     };
+
+    window.res.link.country = '@(Url.RouteUrl<CountryController>( x=>x.Overview() ,  OutpostManagementAreaRegistration.DEFAULT_ROUTE ))';
+    window.res.link.district = '@(Url.RouteUrl<DistrictController>( x=>x.Overview() ,  OutpostManagementAreaRegistration.DEFAULT_ROUTE ))';
     Ext.onReady(function () {
 
         var contentRes = window.res.content;
@@ -46,10 +49,10 @@
                                 xtype: 'button',
                                 id: contentRes.maincontent.sidebar.country,
                                 toggleGroup: contentRes.maincontent.sidebar.group,
-                                enableToggle: true,
+                                enableToggle: true,                               
                                 text: 'Country',
                                 handler: function () {
-                                    navigateTo(window.res.link.administration);
+                                    navigateTo(window.res.link.country);
                                 }
                             },
                             {

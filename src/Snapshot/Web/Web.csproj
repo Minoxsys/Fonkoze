@@ -1557,15 +1557,11 @@
     <Content Include="Areas\OutpostManagement\Views\Country\Overview.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\Region\Overview.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\_ViewStart.cshtml" />
-    <Content Include="Areas\OutpostManagement\Views\Outpost\Create.cshtml" />
-    <Content Include="Areas\OutpostManagement\Views\Outpost\Edit.cshtml" />
-    <Content Include="Areas\OutpostManagement\Views\Outpost\OutpostInput.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\Outpost\Overview.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\Contact\Create.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\Contact\Edit.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\Shared\OverviewContacts.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\District\Overview.cshtml" />
-    <Content Include="Areas\OutpostManagement\Views\Outpost\OverviewOutpost.cshtml" />
     <Content Include="Areas\StockAdministration\Views\Web.config" />
     <Content Include="Areas\StockAdministration\Views\Product\Overview.cshtml" />
     <Content Include="Areas\StockAdministration\Views\_ViewStart.cshtml" />
@@ -1588,7 +1584,6 @@
     <Content Include="Areas\StockAdministration\Views\Product\OverviewTable.cshtml" />
     <Content Include="Areas\StockAdministration\Views\OutpostStockLevel\EditCurrentProductLevel.cshtml" />
     <Content Include="Areas\StockAdministration\Views\OutpostStockLevel\EditCurrentProducLevelInput.cshtml" />
-    <Content Include="Areas\OutpostManagement\Views\Outpost\EditOutpostInput.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\StockLevel\OverviewStockLevel.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\StockLevel\OutpostStockLevelOverview.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\StockLevel\OverviewProducts.cshtml" />
