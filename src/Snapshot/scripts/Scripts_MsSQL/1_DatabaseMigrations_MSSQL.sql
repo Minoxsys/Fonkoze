@@ -222,6 +222,22 @@ create table OutpostHistoricalStockLevels (
     )
 end
 
+
+if not exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'EmailRequests')
+begin
+	create table EmailRequests (
+        Id UNIQUEIDENTIFIER not null,
+       [Date] DATETIME null,
+       OutpostId UNIQUEIDENTIFIER null,
+       ProductGroupId UNIQUEIDENTIFIER null,
+
+       Created DATETIME null,
+       Updated DATETIME null,
+       ByUser_FK UNIQUEIDENTIFIER null,
+       primary key (Id)
+    )
+end
+
 if not exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'WorldCountryRecords')
 begin
  create table WorldCountryRecords (
@@ -229,6 +245,7 @@ begin
        Name NVARCHAR(255) null,
        ISOCode NVARCHAR(255) null,
        PhonePrefix NVARCHAR(255) null,
+
        Created DATETIME null,
        Updated DATETIME null,
        ByUser_FK UNIQUEIDENTIFIER null,

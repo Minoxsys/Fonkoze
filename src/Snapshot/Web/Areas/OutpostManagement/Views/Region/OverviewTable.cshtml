@@ -25,8 +25,6 @@
             {
                 var _class = (itemNo % 2 == 0) ? "odd" : "even";    
                 <tr class="@_class">
-                    <td>@(Html.ActionLink<DistrictController>(it=>it.Overview(region.CountryId,region.Id),@region.Name,OutpostManagementAreaRegistration.DEFAULT_ROUTE))
-                    </td>
                     <td> @region.Coordinates
                     </td>
                     <td>@region.DistrictNo</td>

@@ -170,6 +170,8 @@
     <Compile Include="Areas\OutpostManagement\Models\District\DistrictOverviewModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Outpost\OutpostOverviewModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\PagingInfo.cs" />
+    <Compile Include="Areas\OutpostManagement\Models\Region\RegionIndexModel.cs" />
+    <Compile Include="Areas\OutpostManagement\Models\Region\RegionIndexOuputModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Region\RegionInputModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Region\RegionOutputModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Region\RegionOverviewModel.cs" />
@@ -1555,9 +1557,6 @@
     <Content Include="Areas\OutpostManagement\Views\Country\Overview.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\Region\Overview.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\_ViewStart.cshtml" />
-    <Content Include="Areas\OutpostManagement\Views\Region\Create.cshtml" />
-    <Content Include="Areas\OutpostManagement\Views\Region\Input.cshtml" />
-    <Content Include="Areas\OutpostManagement\Views\Region\Edit.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\Outpost\Create.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\Outpost\Edit.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\Outpost\OutpostInput.cshtml" />
@@ -1566,7 +1565,6 @@
     <Content Include="Areas\OutpostManagement\Views\Contact\Edit.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\Shared\OverviewContacts.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\District\Overview.cshtml" />
-    <Content Include="Areas\OutpostManagement\Views\Region\OverviewTable.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\Outpost\OverviewOutpost.cshtml" />
     <Content Include="Areas\StockAdministration\Views\Web.config" />
     <Content Include="Areas\StockAdministration\Views\Product\Overview.cshtml" />

@@ -134,10 +134,11 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.CountryControllerTests
             {
                 countryPageList.Add(new Country
                 {
-                    Name=String.Format("CountryAtIndex{0}",i),
-                    ISOCode=String.Format("C{0}",i),
+                    Name = String.Format("CountryAtIndex{0}", i),
+                    ISOCode = String.Format("C{0}", i),
                     PhonePrefix = String.Format("{0:00000}", i),
-                    Client = client
+                    Client = client,
+                    Regions = new Region[] { }.ToList()
                 });
             }
             return countryPageList.AsQueryable();
