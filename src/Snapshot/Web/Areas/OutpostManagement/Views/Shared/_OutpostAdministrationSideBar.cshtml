@@ -13,6 +13,7 @@
 
     window.res.link.country = '@(Url.RouteUrl<CountryController>( x=>x.Overview() ,  OutpostManagementAreaRegistration.DEFAULT_ROUTE ))';
     window.res.link.district = '@(Url.RouteUrl<DistrictController>( x=>x.Overview() ,  OutpostManagementAreaRegistration.DEFAULT_ROUTE ))';
+    window.res.link.outpost = '@(Url.RouteUrl<OutpostController>( x=>x.Overview() ,  OutpostManagementAreaRegistration.DEFAULT_ROUTE ))';
     Ext.onReady(function () {
 
         var contentRes = window.res.content;
@@ -80,7 +81,10 @@
                                 id: contentRes.maincontent.sidebar.outpost,
                                 toggleGroup: contentRes.maincontent.sidebar.group,
                                 enableToggle: true,
-                                text: 'Outpost'
+                                text: 'Outpost',
+                                handler: function () {
+                                    navigateTo(window.res.link.outpost);
+                                }
                             }
                         ]
                     }

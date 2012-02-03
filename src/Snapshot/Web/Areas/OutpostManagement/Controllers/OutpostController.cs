@@ -30,8 +30,8 @@ namespace Web.Areas.OutpostManagement.Controllers
         public IQueryService<Country> QueryCountry { get; set; }
         public IQueryService<Region> QueryRegion { get; set; }
         public IQueryService<District> QueryDistrict { get; set; }
-        public IQueryService<Client> QueryClients { get; set; }
-        public IQueryService<User> QueryUser { get; set; }
+        public IQueryService<Client> LoadClient { get; set; }
+        public IQueryService<User> QueryUsers { get; set; }
         public IQueryService<Product> QueryProduct { get; set; }
         public IQueryService<Contact> QueryContact { get; set; }
 
@@ -48,23 +48,14 @@ namespace Web.Areas.OutpostManagement.Controllers
         public OutpostOutputModel CreateOutpost { get; set; }
 
         private const string TEMPDATA_ERROR_KEY = "error";
+		private Core.Domain.User _user;
+		private Client _client;
 
 
         [HttpGet]
         public ActionResult Overview()
         {
             OutpostOverviewModel model = new OutpostOverviewModel();
-            //        model.Country = new CountryModel { Id = countryId.Value };
-            //        model.Region = new RegionModel { Id = regionId.Value };
-            //        model.District = new DistrictModel { Id = districtId.Value };
-            //        model.Warehouses.Add(new SelectListItem
-            //        {
-            //            Selected=true,
-            //            Text="No Warehouse",
-            //            Value = Guid.Empty.ToString()
-
-            //        });
-          
 
             return View(model);
 
@@ -236,7 +227,7 @@ namespace Web.Areas.OutpostManagement.Controllers
 
             CreateMappings();
             var outpost = new Outpost();
-            var client = QueryClients.Load(Client.DEFAULT_ID);
+            var client = LoadClient.Load(Client.DEFAULT_ID);
             Mapper.Map(outpostInputModel, outpost);
 
             outpost.Client = client;
@@ -554,7 +545,7 @@ namespace Web.Areas.OutpostManagement.Controllers
             Outpost outpost = QueryService.Load(contactModel.OutpostId);
             var contacts = QueryContact.Query().Where(m => m.Outpost.Id == outpost.Id);
 
-            contact.Client = QueryClients.Load(Client.DEFAULT_ID); ;
+            contact.Client = LoadClient.Load(Client.DEFAULT_ID); ;
 
             Mapper.Map(contactModel, contact);
             if (outpost != null)
@@ -630,5 +621,44 @@ namespace Web.Areas.OutpostManagement.Controllers
 
             return outpostOutputModel;
         }
-    }
+
+		public JsonResult GetOutposts(Guid? districtId)
+		{
+			return Json(null, JsonRequestBehavior.AllowGet);
+		}
+
+		public JsonResult GetDistricts(Guid? regionId)
+		{
+			LoadUserAndClient();
+			var model = new GetDistrictsOutputModel();
+
+			if (regionId.HasValue && regionId.Value != Guid.Empty)
+			{
+				model.Districts = this.QueryDistrict.Query().Where(m => m.Region.Id == regionId
+					&& m.Client == _client).
+					Select(district =>new GetDistrictsOutputModel.DistrictModel
+					{
+						Id = district.Id, 
+						Name = district.Name 
+					}).ToArray();
+			}
+
+			return Json(model, JsonRequestBehavior.AllowGet);
+		}
+
+		private void LoadUserAndClient()
+		{
+			var loggedUser = User.Identity.Name;
+			this._user = QueryUsers.Query().FirstOrDefault(m => m.UserName == loggedUser);
+
+			if (_user == null)
+				throw new NullReferenceException("User is not logged in");
+
+			var clientId = Client.DEFAULT_ID;
+			if (_user.ClientId != Guid.Empty)
+				clientId = _user.ClientId;
+
+			this._client = LoadClient.Load(clientId);
+		}
+	}
 }

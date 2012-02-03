@@ -1,20 +1,332 @@
 ﻿@using Web.Areas.OutpostManagement.Models.Outpost
 @model OutpostOverviewModel
 @section page_title{
-    Outpost Management: Overview
+	Outpost Management: Overview
 }
 @{
-    Html.RenderPartial("_SubNavigation");
-    Html.RenderPartial("_OutpostAdministrationSideBar");
+	Html.RenderPartial("_SubNavigation");
+	Html.RenderPartial("_OutpostAdministrationSideBar");
 }
 <script type="text/javascript">
-    window.feature = {};
-
+	window.feature = {};
+	window.feature.countryOverviewComboId = "outpost-country-overview-combobox-id";
+	window.feature.regionOverviewComboId = "outpost-region-overview-combobox-id";
+	window.feature.districtOverviewComboId = "outpost-region-district-combobox-id";
 </script>
 <script type="text/javascript">
-    Ext.onReady(function () {
-    
-      
-    });
+	Ext.onReady(function () {
+		var administrationBtnId = window.res.header.navigation.administration;
+		var administrationBtn = Ext.getCmp(administrationBtnId);
+		administrationBtn.toggle(true);
+
+		var outpostAdministrationBtnId = window.res.header.subnavigation.buttonTabs.outpost;
+		var outpostAdministrationBtn = Ext.getCmp(outpostAdministrationBtnId);
+		outpostAdministrationBtn.toggle(true);
+
+		var outpostBtnId = window.res.content.maincontent.sidebar.outpost;
+		var outpostBtn = Ext.getCmp(outpostBtnId);
+		outpostBtn.toggle(true);
+	});
+</script>
+<script type="text/javascript">
+	window.feature.modal = Ext.define('Ext.feature.outpost.Modal', {
+
+		extend: 'Ext.window.Window',
+		modal: true,
+		height: 170,
+		width: 390,
+		layout: {
+			align: 'stretch',
+			padding: 10,
+			type: 'vbox'
+		},
+
+		initComponent: function () {
+			var me = this;
+
+		}
+
+	});
+</script>
+<script type="text/javascript">
+	Ext.onReady(function () {
+		window.feature.countryStore = Ext.create('Ext.data.Store', {
+			remoteSuport: true,
+			fields: ['Id','Name'],
+			proxy: {
+				type: 'ajax',
+				url: '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Region", action = "GetCountries" })',
+				reader: {
+					type: 'json',
+					root: 'Countries',
+					totalProperty: 'TotalItems'
+				},
+				simpleSortMode: true
+			},
+			sorters: [
+				{
+					property: 'Name',
+					direction: 'ASC'
+				}
+			]
+		});
+		window.feature.regionsStore = Ext.create('Ext.data.Store', {
+			fields: ['Id', 'Name'],
+			proxy: {
+				type: 'ajax',
+				url: '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "District", action = "GetRegions" })',
+				reader: {
+					type: 'json',
+					root: 'regions',
+					disableCaching: true,
+					totalProperty: 'TotalItems'
+				}
+
+			}
+
+		});
+		window.feature.districtsStore = Ext.create('Ext.data.Store', {
+			fields: ['Id', 'Name'],
+			proxy: {
+				type: 'ajax',
+				url: '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Outpost", action = "GetDistricts" })',
+				reader: {
+					type: 'json',
+					root: 'Districts',
+				}
+
+			}
+
+		});
+		window.feature.outpostStore = Ext.create('Ext.data.Store', {
+			pageSize: 50,
+			remoteSuport: true,
+			fields: ['Id','Name', 'Coordinates', 'CountryId', 'NumberOfDistricts'],
+			proxy: {
+				type: 'ajax',
+				url: '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Outpost", action = "GetOutposts" })',
+				reader: {
+					type: 'json',
+					root: 'Outposts',
+				},
+				simpleSortMode: true
+			},
+			sorters: [
+				{
+					property: 'Name',
+					direction: 'ASC'
+				}
+			]
+		});
+		window.feature.comboBoxFilters= {};
+		window.feature.comboBoxFilters.country = {
+			xtype: 'combobox',
+			itemId: window.feature.countryOverviewComboId,
+			store: window.feature.countryStore,
+			displayField: 'Name',
+			valueField:'Id',
+			emptyText: 'Select Country', 
+			typeAhead: true,
+			listeners:{
+				'select': function(combo, record){
+					window.feature.regionsStore.load({
+						params:{
+							countryId: combo.getValue()
+						}
+					});
+				}
+			} 
+		};
+		window.feature.comboBoxFilters.region = Ext.create('Ext.form.ComboBox', {
+			xtype: 'combobox',
+			itemId: window.feature.regionOverviewComboId,
+			store: window.feature.regionsStore,
+			queryMode:'local',
+			displayField: 'Name',
+			valueField:'Id',
+			emptyText: 'Select Region', 
+			typeAhead: true,
+			listeners:{
+				'select': function(combo, record){
+					window.feature.districtsStore.load({
+						params:{
+							regionId: combo.getValue()
+						}
+					});
+				}
+			} 
+		});
+		window.feature.comboBoxFilters.district = Ext.create('Ext.form.ComboBox', {
+			xtype: 'combobox',
+			itemId: window.feature.districtOverviewComboId,
+			store: window.feature.districtsStore,
+			queryMode:'local',
+			displayField: 'Name',
+			valueField:'Id',
+			emptyText: 'Select District', 
+			typeAhead: true,
+			listeners:{
+				'select': function(combo, record){
+					window.feature.outpostsStore.load({
+						params:{
+							districtId: combo.getValue()
+						}
+					});
+				}
+			} 
+		});
+
+		window.feature.container = Ext.create('Ext.container.Container', {
+			margin:'20 50 20 0',
+			autoScroll:true,
+			id:'TopContainer',
+			layout: {
+				align: 'stretch',
+				type: 'vbox'
+			},
+			items: [
+				{
+					xtype: 'container',
+					layout: {
+						align: 'stretch',
+						type: 'vbox'
+					},
+					height:70,
+					items: [
+						{
+							xtype: 'container',
+							flex: 1,
+							layout: {
+								type: 'column'
+							},
+							items: [
+								{
+									xtype: 'container',
+									height: 30,
+									width: 30,
+									html:'&nbsp;'
+								},{
+									xtype: 'label',
+									text: 'Outpost Administration',
+								},{
+									xtype: 'button',
+									margin: '0 0 0 20',
+									text: 'Add New Outpost',
+									handler: function(){
+										var winAdd = new window.feature.modal({ /// TODO
+											buttons: [
+												{
+													text: 'Cancel', handler:function(){
+														winAdd.close();
+														winAdd.destroy();
+													}
+												},{
+													text: 'Save', handler:function(){
+	
+													}  
+												}
+											]
+										});
+										winAdd.show();       
+									}
+								}
+							]
+						},{
+							xtype: 'container',
+							flex: 1,
+							layout: {
+								type: 'column'
+							},
+							items: [
+								{
+									xtype: 'container',
+									height: 30,
+									width: 30,
+									html:'&nbsp;'
+								},
+								window.feature.comboBoxFilters.country,
+								window.feature.comboBoxFilters.region,
+								window.feature.comboBoxFilters.district							
+							]
+						}
+					]
+				},{
+					xtype: 'gridpanel',
+					store: window.feature.outpostStore, /// TODO
+					disableSelection: true,
+					loadMask: true,
+					flex:3,
+					autoScroll:true,
+					columns: [
+						{
+							text: "Outpost Name",
+							dataIndex: 'Name',
+							flex: 1,
+							sortable: true
+						},{
+							text: "Contact method",
+							dataIndex: 'ContactMethod',
+							flex: 1,
+							sortable: false
+						},{
+							text: "Coordinates",
+							dataIndex: 'Coordinates',
+							sortable: false
+						},{
+							text: "Is Warehouse",
+							dataIndex: 'IsWarehouse',
+							sortable: false
+						},{
+							text: "Warehouse name",
+							dataIndex: 'WarehouseName',
+							sortable: false
+						},{
+							xtype: 'actioncolumn',
+							text: 'Actions',
+							items: [
+								{
+									icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/edit.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',  
+									text: 'Edit',
+									handler: function(grid, rowIndex, colIndex) {
+										var rec = grid.getStore().getAt(rowIndex);
+										console.log('todo edit', rec);
+	
+									}
+								},{    
+									icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/delete.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',  
+									action: 'Delete',
+									handler: function(grid, rowIndex, colIndex) {
+										var rec = grid.getStore().getAt(rowIndex);
+										console.log('todo delete', rec);
+	
+									}
+								}
+							]
+						}
+					],
+					bbar: Ext.create('Ext.PagingToolbar', {
+						store: window.feature.outpostStore,
+						displayInfo: true,
+						displayMsg: 'Displaying outposts {0} - {1} of {2}',
+						emptyMsg: "No outposts to display",
+					})
+				},{
+					xtype:'container',
+					height:150
+				}
+			]
+		});
+	
+		function IsValid(){
+			var ok = true;
+			return ok;
+		}
+	
+		var contentRes = window.res.content;
+		var mainContent = Ext.getCmp(contentRes.maincontent.id);
+	
+		mainContent.add(window.feature.container);
+		window.feature.outpostStore.loadPage(1);
+	});
 </script>
     

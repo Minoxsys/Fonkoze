@@ -136,7 +136,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement
                         {
                             SaveOrUpdateCommand = saveCommand,
                             DeleteCommand = deleteCommand,
-                            QueryClients = queryClient,
+                            LoadClient = queryClient,
                             QueryCountry = queryCountry,
                             QueryRegion = queryRegion,
                             QueryDistrict = queryDistrict,

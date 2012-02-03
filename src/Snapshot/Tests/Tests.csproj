@@ -101,6 +101,8 @@
     <Compile Include="Unit\Controllers\Areas\OutpostManagement\CountryControllerTests\ObjectMother.cs" />
     <Compile Include="Unit\Controllers\Areas\OutpostManagement\CountryControllerTests\OverviewMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\OutpostManagement\DistrictController_Tests.cs" />
+    <Compile Include="Unit\Controllers\Areas\OutpostManagement\OutpostControllerTests\GetDistrictsMethod.cs" />
+    <Compile Include="Unit\Controllers\Areas\OutpostManagement\OutpostControllerTests\GetOutpostsMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\OutpostManagement\OutpostControllerTests\ObjectMother.cs" />
     <Compile Include="Unit\Controllers\Areas\OutpostManagement\OutpostControllerTests\OverviewMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\OutpostManagement\OutpostController_Tests.cs">
