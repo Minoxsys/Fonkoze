@@ -1603,7 +1603,6 @@
     <Content Include="Views\UserManager\Edit.cshtml" />
     <Content Include="Views\UserManager\List.cshtml" />
     <Content Include="Views\UnauthorizedAccess\Index.cshtml" />
-    <Content Include="Views\Shared\_OutpostManagementActions.cshtml" />
     <Content Include="Views\Shared\_StockAdministrationActions.cshtml" />
     <Content Include="Views\Shared\_StockAdministrationHeader.cshtml" />
     <Content Include="Views\EmailRequest\Create.cshtml" />

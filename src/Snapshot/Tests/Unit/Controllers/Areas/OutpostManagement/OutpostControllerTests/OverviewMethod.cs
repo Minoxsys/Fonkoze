@@ -17,7 +17,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.OutpostControllerTests
             _.Init();
         }
         [Test]
-        public void Returns_DefaultView()
+        public void Returns_The_DefaultView()
         {
 
             var viewResult = _.controller.Overview() as ViewResult;

@@ -54,16 +54,16 @@ namespace Web.Areas.OutpostManagement.Controllers
         public ActionResult Overview()
         {
             OutpostOverviewModel model = new OutpostOverviewModel();
-                    model.Country = new CountryModel { Id = countryId.Value };
-                    model.Region = new RegionModel { Id = regionId.Value };
-                    model.District = new DistrictModel { Id = districtId.Value };
-                    model.Warehouses.Add(new SelectListItem
-                    {
-                        Selected=true,
-                        Text="No Warehouse",
-                        Value = Guid.Empty.ToString()
+            //        model.Country = new CountryModel { Id = countryId.Value };
+            //        model.Region = new RegionModel { Id = regionId.Value };
+            //        model.District = new DistrictModel { Id = districtId.Value };
+            //        model.Warehouses.Add(new SelectListItem
+            //        {
+            //            Selected=true,
+            //            Text="No Warehouse",
+            //            Value = Guid.Empty.ToString()
 
-                    });
+            //        });
           
 
             return View(model);
