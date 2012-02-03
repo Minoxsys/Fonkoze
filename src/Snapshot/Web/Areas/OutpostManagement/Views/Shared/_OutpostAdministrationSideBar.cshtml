@@ -4,10 +4,10 @@
         sidebar: {
             id: 'SideBar',
             group: 'SideBarGroup',
-            country: 'Country',
-            region: 'Region',
-            district: 'District',
-            outpost: 'Outpost'
+            country: 'Sidebar-OutpostAdministration-Country-Button',
+            region: 'Sidebar-OutpostAdministration-Region-Button',
+            district: 'Sidebar-OutpostAdministration-District-Button',
+            outpost: 'Sidebar-OutpostAdministration-Outpost-Button'
         }
     };
     Ext.onReady(function () {
@@ -44,17 +44,23 @@
                         items: [
                             {
                                 xtype: 'button',
+                                id: contentRes.maincontent.sidebar.country,
                                 toggleGroup: contentRes.maincontent.sidebar.group,
                                 enableToggle: true,
-                                pressed: true,
-                                text: 'Country'
+                                text: 'Country',
+                                handler: function () {
+                                    navigateTo(window.res.link.administration);
+                                }
                             },
                             {
                                 xtype: 'button',
+                                id: contentRes.maincontent.sidebar.region,
                                 toggleGroup: contentRes.maincontent.sidebar.group,
-                                enableToggle: true,
-                                text: 'Region'
-
+                                text: 'Region',
+                                handler: function () {
+                                    navigateTo(window.res.link.regionOverview);
+                                },
+                                enableToggle: true
                             },
                             {
                                 xtype: 'button',
@@ -68,6 +74,7 @@
                             },
                             {
                                 xtype: 'button',
+                                id: contentRes.maincontent.sidebar.outpost,
                                 toggleGroup: contentRes.maincontent.sidebar.group,
                                 enableToggle: true,
                                 text: 'Outpost'

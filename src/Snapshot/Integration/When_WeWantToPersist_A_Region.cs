@@ -25,7 +25,7 @@ namespace IntegrationTests
         }
     }
     [TestFixture]
-    public class When_WeWantToPersist_A_Region :GivenAPersistenceSpecification<Region>
+    public class When_WeWantToPersist_A_Region : GivenAPersistenceSpecification<Region>
     {
         private const string REGION_NAME = "Cluj";
         private const string COORDINATES = "22 44'";
@@ -37,7 +37,7 @@ namespace IntegrationTests
             var region = Specs
                 .CheckProperty(e => e.Name, REGION_NAME)
                 .CheckProperty(c => c.Coordinates, COORDINATES)
-                .CheckReference(c=>c.Country, COUNTRY)
+                .CheckReference(c => c.Country, COUNTRY)
                 .VerifyTheMappings();
 
             Assert.IsNotNull(region);
@@ -49,6 +49,6 @@ namespace IntegrationTests
             session.Delete(region);
             session.Flush();
         }
-       
-        }
+
+    }
 }

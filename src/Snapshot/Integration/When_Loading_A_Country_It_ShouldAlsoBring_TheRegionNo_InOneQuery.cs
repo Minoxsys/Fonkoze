@@ -55,6 +55,17 @@ namespace IntegrationTests
 
         }
 
+        [Test]
+
+        public void foobar()
+        {
+            var countries = _session.Query<Country>().Where(c=>c.Name == "Romania").Where(c=>c.PhonePrefix== "RO").ToList();
+            
+
+            
+
+        }
+
         [TestFixtureSetUp]
         public void BeforeAll()
         {

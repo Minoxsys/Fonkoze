@@ -80,10 +80,9 @@ namespace Web.Areas.OutpostManagement.Controllers
 
             countryDataQuery = orderByColumnDirection[String.Format("{0}-{1}", indexModel.sort, indexModel.dir)].Invoke();
 
+            var totalItems = countryDataQuery.Count();
             countryDataQuery = countryDataQuery.Take(pageSize)
                                                .Skip(indexModel.start.Value);
-
-            var totalItems = countryDataQuery.Count();
 
             var countryModelListProjection = (from countryData in countryDataQuery.ToList() select new CountryModel
             {

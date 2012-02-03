@@ -104,7 +104,13 @@
     <Compile Include="Unit\Controllers\Areas\OutpostManagement\OutpostController_Tests.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Unit\Controllers\Areas\OutpostManagement\RegionController_Tests.cs" />
+    <Compile Include="Unit\Controllers\Areas\OutpostManagement\RegionControllerTests\CreateMethod.cs" />
+    <Compile Include="Unit\Controllers\Areas\OutpostManagement\RegionControllerTests\DeleteMethod.cs" />
+    <Compile Include="Unit\Controllers\Areas\OutpostManagement\RegionControllerTests\EditMethod.cs" />
+    <Compile Include="Unit\Controllers\Areas\OutpostManagement\RegionControllerTests\GetCountriesMethod.cs" />
+    <Compile Include="Unit\Controllers\Areas\OutpostManagement\RegionControllerTests\GetRegionsMethod.cs" />
+    <Compile Include="Unit\Controllers\Areas\OutpostManagement\RegionControllerTests\ObjectMother.cs" />
+    <Compile Include="Unit\Controllers\Areas\OutpostManagement\RegionControllerTests\OverviewMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\StockAdministration\OutpostStockLevelController_Tests.cs" />
     <Compile Include="Unit\Controllers\Areas\StockAdministration\ProductGroupController_Tests.cs" />
     <Compile Include="Unit\Controllers\Areas\StockAdministration\StockItemController_Tests.cs" />
