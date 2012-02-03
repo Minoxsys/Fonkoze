@@ -88,14 +88,9 @@ begin
     drop table Users
 end
 
-<<<<<<< HEAD
+
 if exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'EmailRequests')
 begin
 drop table EmailRequests
 
 end
-=======
-
-
->>>>>>> Added missing WorldCountryRecord, implemented country add scenario (happy flow only )
-

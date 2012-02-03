@@ -25,7 +25,7 @@ namespace UnitTests.Routes
 			ScriptsRoutesRegistrar.Register(routes);
 
 		}
-<<<<<<< HEAD
+
 		[Test]
 		public void MapsRoute_Css()
 		{
@@ -37,18 +37,5 @@ namespace UnitTests.Routes
 		{
 			"~/js/group/_ver1".ShouldMapTo<JavascriptController>(action => action.Index("group"));
 		}
-=======
-        //[Test]
-        //public void MapsRoute_Css()
-        //{
-        //    "~/css/group/version(0.0.0.1)".ShouldMapTo<CssController>(action => action.Index("group"));
-        //}
-
-        //[Test]
-        //public void MapRoute_Js()
-        //{
-        //    "~/js/group/version(0.0.0.1)".ShouldMapTo<JavascriptController>(action => action.Index("group"));
-        //}
->>>>>>> Feature District - almost done with new UI - need validations & tests
 	}
 }
