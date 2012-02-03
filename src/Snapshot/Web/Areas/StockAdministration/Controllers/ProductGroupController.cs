@@ -27,7 +27,7 @@ namespace Web.Areas.StockAdministration.Controllers
         public ActionResult Overview()
         {
             var overviewModel = new ProductGroupOverviewModel();
-
+            
             var productGroups = QueryService.Query();
 
             if (productGroups.ToList().Count > 0)

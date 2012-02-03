@@ -177,9 +177,14 @@ Districts: Overview
                 me.buttons = [{ text: 'Cancel', handler: function () { me.close(); me.destroy(); }
                 }, {
                     text: 'Save', handler: function () {
+                        var region =Ext.getCmp(window.feature.comboboxRegionsForModalId);
+                        var districtName = me.down('#' + window.feature.districtNameId);
+
+                        var ok = IsValid(region, districtName);
+                        if(ok==true){
                         var values = {
-                            'districtInputModel.Name': me.down('#' + window.feature.districtNameId).getValue(),
-                            'districtInputModel.Region.Id': Ext.getCmp(window.feature.comboboxRegionsForModalId).getValue()
+                            'districtInputModel.Name': districtName.getValue(),
+                            'districtInputModel.Region.Id': region.getValue()
                         };
                         var postToUrl = '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "District", action = "Create" })';
                         var action = $.post(postToUrl, values);
@@ -201,7 +206,7 @@ Districts: Overview
                                 params: { RegionId: selectedRegionInModal }
                             });
                         });
-                    }
+                    }}
                 }]
                 me.callParent(arguments);
             }
@@ -299,15 +304,22 @@ Districts: Overview
                 me.buttons = [{ text: 'Cancel', handler: function () { me.close(); me.destroy(); }
                 }, {
                     text: 'Save', handler: function () {
+                    var districtName = me.down('#' + window.feature.districtNameId);
+                    var region = Ext.getCmp(window.feature.comboboxRegionsForModalId);
+                    
+                    var ok = IsValid(region, districtName);
+                    if(ok ==true){
                         var values = {
-                            'districtInputModel.Name': me.down('#' + window.feature.districtNameId).getValue(),
-                            'districtInputModel.Region.Id': Ext.getCmp(window.feature.comboboxRegionsForModalId).getValue(),
+                            'districtInputModel.Name': districtName.getValue(),
+                            'districtInputModel.Region.Id': region.getValue(),
                             'districtInputModel.Client.Id': Ext.getCmp(window.feature.clientId).getValue(),
                             'districtInputModel.Id': Ext.getCmp(window.feature.DistrictId).getValue()
                         };
                         var postToUrl = '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "District", action = "Edit" })';
                         var action = $.post(postToUrl, values);
-                        action.success(function () {
+                        action.success(function (result) {
+
+                            Ext.Msg.alert(result.Status, result.Message);
 
                             var selectedCountryInModal = Ext.getCmp(window.feature.comboboxCountriesForModalId).getValue();
                             var selectedRegionInModal = Ext.getCmp(window.feature.comboboxRegionsForModalId).getValue();
@@ -325,13 +337,32 @@ Districts: Overview
                                 params: { RegionId: selectedRegionInModal }
                             });
                         });
+                      }
                     }
                 }]
                 me.callParent(arguments);
             },
             
         });
+
+            function IsValid(region, districtName){
+            var ok = true;
+            if (region.getValue() == ''){
+                region.markInvalid('Field Region is required!');  
+                region.setValue(null);
+                ok = false;
+            }
+
+           if (districtName.getValue() == ''){
+                districtName.markInvalid('Field Name is required!');  
+                districtName.setValue(null);
+                ok = false;
+            }
+            return ok;
+        }
+
     });
+
 </script>
 
 <script type="text/javascript">
@@ -545,7 +576,7 @@ Districts: Overview
                           }, {
                               xtype: 'textfield',
                               emptyText: 'Search District',
-                              margin: '0 0 0 850',
+                              margin: '0 0 0 750',
                               id: window.feature.searchTextFieldId,
                               enableKeyEvents: true,
                               listeners: {

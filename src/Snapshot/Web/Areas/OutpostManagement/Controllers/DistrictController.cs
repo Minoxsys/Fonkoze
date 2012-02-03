@@ -240,19 +240,18 @@ namespace Web.Areas.OutpostManagement.Controllers
         }
 
         [HttpPost]
-        public EmptyResult Create(DistrictInputModel districtInputModel)
+        public ActionResult Create(DistrictInputModel districtInputModel)
         {
             LoadUserAndClient();
 
             if (!ModelState.IsValid)
             {
-                //var valuesOnErrors = ModelState.Values.Where(it => it.Errors.Count > 0).ToList();
-
-                //foreach (var item in valuesOnErrors)
-                //{
-                    
-                //}
-                return new EmptyResult();
+                return Json(
+                    new JsonActionResponse
+                    {
+                        Status = "Error",
+                        Message = "The district has not been saved!"
+                    });
                
             }
 
@@ -267,7 +266,13 @@ namespace Web.Areas.OutpostManagement.Controllers
             district.Region = region;
 
             SaveOrUpdateCommand.Execute(district);
-            return new EmptyResult();
+           
+            return Json(
+               new JsonActionResponse
+               {
+                   Status = "Success",
+                   Message = String.Format("District {0} has been saved.", district.Name)
+               });
            
         }
 
@@ -275,8 +280,13 @@ namespace Web.Areas.OutpostManagement.Controllers
         public ActionResult Edit(DistrictInputModel districtInputModel)
         {
             if (!ModelState.IsValid)
-            {                
-                return new EmptyResult();
+            {
+                return Json(
+                   new JsonActionResponse
+                   {
+                       Status = "Error",
+                       Message = "The district has not been updated!"
+                   });
             }
 
             District district = QueryService.Load(districtInputModel.Id);
@@ -290,7 +300,12 @@ namespace Web.Areas.OutpostManagement.Controllers
             district.Client = client;
 
             SaveOrUpdateCommand.Execute(district);
-            return new EmptyResult();
+            return Json(
+                new JsonActionResponse
+                {
+                    Status = "Success",
+                    Message = String.Format("District {0} has been saved.", district.Name)
+                });
        }
 
         [HttpPost]
