@@ -24,7 +24,7 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration
 
         Guid regionId;
         Region region;
-        const String REGION_NAME = "region";
+        const String REGION_NAME = "regionMock";
 
         Guid districtId;
         District district;

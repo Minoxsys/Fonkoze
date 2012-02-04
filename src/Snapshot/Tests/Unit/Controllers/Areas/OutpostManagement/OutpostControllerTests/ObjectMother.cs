@@ -27,7 +27,9 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.OutpostControllerTests
 		private Guid clientId = Guid.NewGuid();
 		private Mock<User> userMock;
 		public Mock<Client> clientMock;
-		public Guid? regionId;
+		public Guid regionId;
+		private Mock<Region> regionMock;
+		private District[] districts;
 
 		internal void Init()
 		{
@@ -80,19 +82,38 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.OutpostControllerTests
 
 		internal District[] ExpectDistrictsToBeQueriedForRegionId()
 		{
+			StubDistrictsRegion();
 			var queryDistricts = Mock.Get(this.controller.QueryDistrict);
-
-			var districtStub = new Mock<District>();
-			districtStub.SetupGet(c => c.Id).Returns(Guid.NewGuid());
-			districtStub.SetupGet(c => c.Name).Returns("South District");
-			var districts = new District[]
-			{
-				districtStub.Object
-			};
+			
 			queryDistricts.Setup(c => c.Query()).Returns(
 				districts.AsQueryable());
 
 			return districts;
+		}
+
+		private void StubDistrictsRegion()
+		{
+			this.regionId = Guid.NewGuid();
+			this.regionMock = new Mock<Region>();
+			this.regionMock.SetupGet(r => r.Id).Returns(this.regionId);
+			this.regionMock.SetupGet(r => r.Name).Returns("Region");
+
+			this.regionMock.SetupGet(r => r.Client).Returns(this.clientMock.Object);
+
+			this.districts = new District[]{
+				new District{
+					Name = "District 1",
+					Client = this.clientMock.Object,
+					Region = this.regionMock.Object
+				},
+
+				new District{
+					Name = "District 2",
+					Client = this.clientMock.Object,
+					Region = this.regionMock.Object
+				}
+			};
+
 		}
 
 		internal void VerifyThatDistrictsHaveBeenQueried()
