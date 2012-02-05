@@ -618,9 +618,10 @@ namespace Web.Areas.OutpostManagement.Controllers
 
 			
 			model.TotalItems = outpostsQueryData.Count();
-			model.Outposts = outpostsQueryData.Skip(input.start.Value).
-					Take(input.limit.Value).Select(
-						o => new GetOutpostsOutputModel.OutpostModel
+			outpostsQueryData = outpostsQueryData.
+					Take(input.limit.Value).Skip(input.start.Value);
+			model.Outposts = ( from o in outpostsQueryData.ToList() select
+						 new GetOutpostsOutputModel.OutpostModel
 						{
 							Id= o.Id.ToString(),
 							Name = o.Name,
