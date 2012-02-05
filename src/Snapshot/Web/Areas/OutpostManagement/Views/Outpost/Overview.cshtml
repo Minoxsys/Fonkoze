@@ -29,26 +29,11 @@
 	});
 </script>
 <script type="text/javascript">
-	window.feature.modal = Ext.define('Ext.feature.outpost.Modal', {
-
-		extend: 'Ext.window.Window',
-		modal: true,
-		height: 170,
-		width: 390,
-		layout: {
-			align: 'stretch',
-			padding: 10,
-			type: 'vbox'
-		},
-
-		initComponent: function () {
-			var me = this;
-
-		}
-
-	});
-</script>
-<script type="text/javascript">
+	var allowUserToClearValue={
+				'load':function(){
+					//this.insert(0, {Id:'@Guid.Empty', Name:'All'});
+				}
+			};
 	Ext.onReady(function () {
 		window.feature.countryStore = Ext.create('Ext.data.Store', {
 			remoteSuport: true,
@@ -58,8 +43,7 @@
 				url: '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Region", action = "GetCountries" })',
 				reader: {
 					type: 'json',
-					root: 'Countries',
-					totalProperty: 'TotalItems'
+					root: 'Countries'
 				},
 				simpleSortMode: true
 			},
@@ -68,7 +52,8 @@
 					property: 'Name',
 					direction: 'ASC'
 				}
-			]
+			],
+			listeners:allowUserToClearValue
 		});
 		window.feature.regionsStore = Ext.create('Ext.data.Store', {
 			fields: ['Id', 'Name'],
@@ -77,12 +62,11 @@
 				url: '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "District", action = "GetRegions" })',
 				reader: {
 					type: 'json',
-					root: 'regions',
-					disableCaching: true,
-					totalProperty: 'TotalItems'
+					root: 'regions'
 				}
 
-			}
+			},
+			listeners: allowUserToClearValue
 
 		});
 		window.feature.districtsStore = Ext.create('Ext.data.Store', {
@@ -92,22 +76,24 @@
 				url: '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Outpost", action = "GetDistricts" })',
 				reader: {
 					type: 'json',
-					root: 'Districts',
+					root: 'Districts'
 				}
 
-			}
+			},
+			listeners: allowUserToClearValue
 
 		});
-		window.feature.outpostStore = Ext.create('Ext.data.Store', {
+		window.feature.outpostsStore = Ext.create('Ext.data.Store', {
 			pageSize: 50,
 			remoteSuport: true,
-			fields: ['Id','Name', 'Coordinates', 'CountryId', 'NumberOfDistricts'],
+			fields: ['Id','Name', 'Coordinates', 'ContactMethod', 'IsWarehouse', 'WarehouseName'],
 			proxy: {
 				type: 'ajax',
 				url: '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Outpost", action = "GetOutposts" })',
 				reader: {
 					type: 'json',
 					root: 'Outposts',
+					totalProperty: 'TotalItems'
 				},
 				simpleSortMode: true
 			},
@@ -119,7 +105,24 @@
 			]
 		});
 		window.feature.comboBoxFilters= {};
-		window.feature.comboBoxFilters.country = {
+		window.feature.comboBoxFilters.listeners={
+			specialkey: function(field, e){
+                    if (e.getKey() == e.BACKSPACE) {
+					  if(field.itemId === window.feature.comboBoxFilters.district.itemId){
+						  window.feature.resetDistrictDependencies();
+					  }
+
+					  if(field.itemId === window.feature.comboBoxFilters.region.itemId){
+						window.feature.resetRegionDependencies();
+					  }
+
+					  if(field.itemId === window.feature.comboBoxFilters.country.itemId){
+						window.feature.resetCountryDependencies();
+					  }
+                    }
+                }
+		};
+		window.feature.comboBoxFilters.country = Ext.create('Ext.form.ComboBox', {
 			xtype: 'combobox',
 			itemId: window.feature.countryOverviewComboId,
 			store: window.feature.countryStore,
@@ -128,7 +131,10 @@
 			emptyText: 'Select Country', 
 			typeAhead: true,
 			listeners:{
+				specialkey: window.feature.comboBoxFilters.listeners.specialkey,
 				'select': function(combo, record){
+					window.feature.resetRegionDependencies();
+		
 					window.feature.regionsStore.load({
 						params:{
 							countryId: combo.getValue()
@@ -136,7 +142,7 @@
 					});
 				}
 			} 
-		};
+		});
 		window.feature.comboBoxFilters.region = Ext.create('Ext.form.ComboBox', {
 			xtype: 'combobox',
 			itemId: window.feature.regionOverviewComboId,
@@ -147,7 +153,9 @@
 			emptyText: 'Select Region', 
 			typeAhead: true,
 			listeners:{
+				specialkey: window.feature.comboBoxFilters.listeners.specialkey,
 				'select': function(combo, record){
+					window.feature.resetDistrictDependencies();
 					window.feature.districtsStore.load({
 						params:{
 							regionId: combo.getValue()
@@ -166,15 +174,33 @@
 			emptyText: 'Select District', 
 			typeAhead: true,
 			listeners:{
+				specialkey: window.feature.comboBoxFilters.listeners.specialkey,
 				'select': function(combo, record){
-					window.feature.outpostsStore.load({
-						params:{
-							districtId: combo.getValue()
-						}
-					});
+					window.feature.outpostsStore.getProxy().extraParams = {
+						districtId: combo.getValue()
+					};
+					window.feature.outpostsStore.loadPage(1);
 				}
 			} 
 		});
+
+		window.feature.resetCountryDependencies = function () {
+			window.feature.comboBoxFilters.country.setValue(null);
+			window.feature.regionsStore.loadData([]);
+			window.feature.resetRegionDependencies();
+		};
+
+		window.feature.resetRegionDependencies = function () {
+			window.feature.comboBoxFilters.region.setValue(null);
+			window.feature.districtsStore.loadData([]);
+			window.feature.resetDistrictDependencies();
+		};
+
+		window.feature.resetDistrictDependencies = function () {
+			window.feature.comboBoxFilters.district.setValue(null);
+			window.feature.outpostsStore.getProxy().extraParams ={};
+			window.feature.outpostsStore.loadPage(1);
+		};
 
 		window.feature.container = Ext.create('Ext.container.Container', {
 			margin:'20 50 20 0',
@@ -252,7 +278,7 @@
 					]
 				},{
 					xtype: 'gridpanel',
-					store: window.feature.outpostStore, /// TODO
+					store: window.feature.outpostsStore,
 					disableSelection: true,
 					loadMask: true,
 					flex:3,
@@ -305,7 +331,7 @@
 						}
 					],
 					bbar: Ext.create('Ext.PagingToolbar', {
-						store: window.feature.outpostStore,
+						store: window.feature.outpostsStore,
 						displayInfo: true,
 						displayMsg: 'Displaying outposts {0} - {1} of {2}',
 						emptyMsg: "No outposts to display",
@@ -326,7 +352,29 @@
 		var mainContent = Ext.getCmp(contentRes.maincontent.id);
 	
 		mainContent.add(window.feature.container);
-		window.feature.outpostStore.loadPage(1);
+		window.feature.outpostsStore.loadPage(1, {
+			districtId:null
+		});
 	});
 </script>
     
+<script type="text/javascript">
+	window.feature.modal = Ext.define('Ext.feature.outpost.Modal', {
+
+		extend: 'Ext.window.Window',
+		modal: true,
+		height: 170,
+		width: 390,
+		layout: {
+			align: 'stretch',
+			padding: 10,
+			type: 'vbox'
+		},
+
+		initComponent: function () {
+			var me = this;
+
+		}
+
+	});
+</script>

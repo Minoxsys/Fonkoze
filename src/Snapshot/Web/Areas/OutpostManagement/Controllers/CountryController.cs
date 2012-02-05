@@ -78,7 +78,11 @@ namespace Web.Areas.OutpostManagement.Controllers
                 { "PhonePrefix-DESC", () => countryDataQuery.OrderByDescending(c => c.PhonePrefix) }
             };
 
-            countryDataQuery = orderByColumnDirection[String.Format("{0}-{1}", indexModel.sort, indexModel.dir)].Invoke();
+			Func<IQueryable<Country>> orderCountries;
+			if (orderByColumnDirection.TryGetValue(String.Format("{0}-{1}", indexModel.sort, indexModel.dir), out orderCountries))
+			{
+				countryDataQuery = orderCountries.Invoke();
+			}
 
             var totalItems = countryDataQuery.Count();
             countryDataQuery = countryDataQuery.Take(pageSize)

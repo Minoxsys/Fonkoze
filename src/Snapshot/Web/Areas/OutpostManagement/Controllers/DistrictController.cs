@@ -279,7 +279,7 @@ namespace Web.Areas.OutpostManagement.Controllers
 
                 if (districtResults.ToList().Count != 0)
                 {
-                    errorMessage = string.Format("The district {0} has outposts associated, so it can not be deleted!", district.Name);
+                    errorMessage = string.Format("The district {0} has outpostsQueryData associated, so it can not be deleted!", district.Name);
                     return Json(new { error = errorMessage }, JsonRequestBehavior.AllowGet);
                 }
 

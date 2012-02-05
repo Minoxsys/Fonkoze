@@ -121,5 +121,48 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.OutpostControllerTests
 			var queryDistricts = Mock.Get(this.controller.QueryDistrict);
 			queryDistricts.Verify(c => c.Query());
 		}
+
+		internal GetOutpostsInputModel ExpectOutpostsToBeQueriedWithInputModel()
+		{
+			var model = new GetOutpostsInputModel()
+			{
+				dir = "ASC",
+				districtId = null,
+				limit= 50,
+				page=1,
+				sort = "Name",
+				start= 0
+			};
+
+			var queryOutposts = Mock.Get(controller.QueryService);
+
+			queryOutposts.Setup(c => c.Query()).Returns(this.AllOutposts());
+
+			return model;
+		}
+
+		private  IQueryable<Outpost> AllOutposts()
+		{
+			var listOfOutposts = new List<Outpost>();
+
+			for (int i = 0; i < 500; i++)
+			{
+
+				var outpost = new Mock<Outpost>();
+				outpost.Setup(c => c.Id).Returns(Guid.NewGuid());
+				outpost.Setup(c => c.Name).Returns("Outpost " + i);
+				outpost.Setup(c => c.IsWarehouse).Returns(true);
+				outpost.Setup(c => c.Client).Returns(clientMock.Object);
+
+				listOfOutposts.Add(outpost.Object);
+			}
+			return listOfOutposts.AsQueryable();
+		}
+
+		internal void VerifyThatOutpostsHaveBeenQueried()
+		{
+			var queryService = Mock.Get(controller.QueryService);
+			queryService.Verify(c => c.Query());
+		}
 	}
 }

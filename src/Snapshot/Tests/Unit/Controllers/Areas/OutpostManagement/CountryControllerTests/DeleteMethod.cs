@@ -69,7 +69,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.CountryControllerTests
             var response = jsonResult.Data as JsonActionResponse;
 
             Assert.That(response.Status, Is.EqualTo("Error"));
-            Assert.That(response.Message, Is.EqualTo("Country Romania has 1 regionMock(s) associated, and can not be removed."));
+            Assert.That(response.Message, Is.EqualTo("Country Romania has 1 region(s) associated, and can not be removed."));
         }
     }
 }

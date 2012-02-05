@@ -32,7 +32,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.RegionControllerTests
             var response = jsonResult.Data as JsonActionResponse;
             Assert.IsNotNull(response);
             Assert.That(response.Status, Is.EqualTo("Error"));
-            Assert.That(response.Message, Is.EqualTo("You must supply a regionId in order to edit the regionMock."));
+            Assert.That(response.Message, Is.EqualTo("You must supply a regionId in order to edit the region."));
         }
 
         [Test]
@@ -47,7 +47,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.RegionControllerTests
             var response = jsonResult.Data as JsonActionResponse;
             Assert.IsNotNull(response);
             Assert.That(response.Status, Is.EqualTo("Error"));
-            Assert.That(response.Message, Is.EqualTo("The regionMock has not been saved!"));
+            Assert.That(response.Message, Is.EqualTo("The region has not been saved!"));
         }
 
         [Test]

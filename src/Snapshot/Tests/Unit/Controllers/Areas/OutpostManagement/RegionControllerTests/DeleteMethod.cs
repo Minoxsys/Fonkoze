@@ -39,7 +39,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.RegionControllerTests
 
             Assert.IsNotNull(response);
             Assert.That(response.Status, Is.EqualTo("Error"));
-            Assert.That(response.Message, Is.EqualTo("You must supply a regionId in order to remove the regionMock"));
+            Assert.That(response.Message, Is.EqualTo("You must supply a regionId in order to remove the region"));
         }
 
         [Test]
