@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace Web.Areas.OutpostManagement.Models.Region
+namespace Web.Areas.StockAdministration.Models.ProductGroup
 {
-    public class RegionIndexModel
+    public class ProductGroupIndexModel
     {
         public string _dc { get; set; }
 
@@ -17,6 +17,6 @@ namespace Web.Areas.OutpostManagement.Models.Region
         public string sort { get; set; }
         public string dir { get; set; }
 
-        public string countryId { get; set; }
+        public string searchValue { get; set; }
     }
 }

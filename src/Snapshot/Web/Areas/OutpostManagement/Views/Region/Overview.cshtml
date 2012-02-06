@@ -46,8 +46,9 @@ Outpost Management Regions: Overview
                 reader: {
                     type: 'json',
                     root: 'Regions',
-                    totalProperty: 'TotalItems'
+                    totalProperty: 'TotalItems',
                 },
+                extraParams: { countryId: '' },
                 simpleSortMode: true
             },
             sorters: [{
@@ -105,12 +106,9 @@ Outpost Management Regions: Overview
                         value: overviewComboboxValue,
                         listeners:{
 				            'select': function(combo, record){
-					            window.feature.container.down('#'+window.feature.overviewcomboboxid).setValue(combo.getValue());   
-                                window.feature.regionStore.load({
-						            params:{
-							            countryId: combo.getValue()
-						            }
-					            }); 
+					            window.feature.container.down('#'+window.feature.overviewcomboboxid).setValue(combo.getValue());
+                                window.feature.regionStore.proxy.extraParams.countryId = combo.getValue();
+                                window.feature.regionStore.loadPage(1);
 				            }
 			            } 
                     }, {
@@ -170,6 +168,7 @@ Outpost Management Regions: Overview
                             text: 'Add New Region',
                             handler: function(){
                                 var winAdd = new window.feature.modal({
+                                    title: 'Add New Region',
                                     buttons: [
                                         { text: 'Cancel', handler:function(){ winAdd.close(); winAdd.destroy();} },
                                         { text: 'Save', handler:function(){
@@ -193,13 +192,9 @@ Outpost Management Regions: Overview
                                                     winAdd.close();
                                                     winAdd.destroy();
 
-                                                    var combovalue = window.feature.container.down('#'+window.feature.overviewcomboboxid).getValue();   
-                                                    window.feature.regionStore.load({
-						                                params:{
-							                                countryId: combovalue
-						                                }
-					                                }); 
-
+                                                    var combovalue = window.feature.container.down('#'+window.feature.overviewcomboboxid).getValue();  
+                                                    window.feature.regionStore.proxy.extraParams.countryId = combovalue;
+                                                    window.feature.regionStore.loadPage(1); 
                                                 });
                                             }
                                         }  
@@ -230,14 +225,9 @@ Outpost Management Regions: Overview
 			                    typeAhead: true,
 			                    listeners:{
 				                    'select': function(combo, record){
-					                    window.feature.regionStore.load({
-						                    params:{
-							                    countryId: combo.getValue()
-
-						                    }
-                                        
-
-					                    });
+					                    window.feature.container.down('#'+window.feature.overviewcomboboxid).setValue(combo.getValue());
+                                        window.feature.regionStore.proxy.extraParams.countryId = combo.getValue();
+                                        window.feature.regionStore.loadPage(1);
 				                    }
 			                    } 
                             }]
@@ -269,6 +259,7 @@ Outpost Management Regions: Overview
                                 var rec = grid.getStore().getAt(rowIndex);
 
                                 var winEdit = new window.feature.modal({
+                                    title: Ext.String.format('Edit Region {0}', rec.get('Name')),
                                     buttons: [
                                         { text: 'Cancel', handler:function(){ winEdit.close(); winEdit.destroy();} },
                                         { text: 'Save', handler:function(){
@@ -370,4 +361,3 @@ Outpost Management Regions: Overview
         window.feature.regionStore.loadPage(1);
     });
 </script>
-

@@ -14,6 +14,7 @@ namespace Web.Areas.StockAdministration.Models.Product
         public Guid Id { get; set; }
         public String Name { get; set; }
         public String Description { get; set; }
+        public String ReferenceCode { get; set; }
         public int LowerLimit { get; set; }
         public int UpperLimit { get; set; }
         public String SMSReferenceCode { get; set; }

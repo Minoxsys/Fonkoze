@@ -112,7 +112,12 @@
     <Compile Include="Unit\Controllers\Areas\OutpostManagement\RegionControllerTests\ObjectMother.cs" />
     <Compile Include="Unit\Controllers\Areas\OutpostManagement\RegionControllerTests\OverviewMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\StockAdministration\OutpostStockLevelController_Tests.cs" />
-    <Compile Include="Unit\Controllers\Areas\StockAdministration\ProductGroupController_Tests.cs" />
+    <Compile Include="Unit\Controllers\Areas\StockAdministration\ProductGroupControllerTests\CreateMethod.cs" />
+    <Compile Include="Unit\Controllers\Areas\StockAdministration\ProductGroupControllerTests\DeleteMethod.cs" />
+    <Compile Include="Unit\Controllers\Areas\StockAdministration\ProductGroupControllerTests\EditMethod.cs" />
+    <Compile Include="Unit\Controllers\Areas\StockAdministration\ProductGroupControllerTests\GetProductGroupsMethod.cs" />
+    <Compile Include="Unit\Controllers\Areas\StockAdministration\ProductGroupControllerTests\ObjectMother.cs" />
+    <Compile Include="Unit\Controllers\Areas\StockAdministration\ProductGroupControllerTests\OverviewMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\StockAdministration\StockItemController_Tests.cs" />
     <Compile Include="Unit\Controllers\EmailRequestControllerTest\CreateMethod.cs" />
     <Compile Include="Unit\Controllers\EmailRequestControllerTest\ObjectMother.cs" />

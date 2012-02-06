@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Rhino.Mocks;
 using NUnit.Framework;
 using System.Web.Mvc;
-using Rhino.Mocks;
-using Domain;
 
-namespace Tests.Unit.Controllers.Areas.OutpostManagement.RegionControllerTests
+namespace Tests.Unit.Controllers.Areas.StockAdministration.ProductGroupControllerTests
 {
     [TestFixture]
     public class OverviewMethod

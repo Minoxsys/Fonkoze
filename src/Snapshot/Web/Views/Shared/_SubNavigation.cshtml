@@ -46,14 +46,20 @@
                                     toggleGroup: subNavRes.buttonTabs.group,
                                     enableToggle: true,
                                     pressed: true,
-                                    text: 'Outpost Administration'
+                                    text: 'Outpost Administration',
+                                    handler:function(){
+                                        navigateTo( res.link.administration ); 
+                                    },
                                 },
                                 {
                                     xtype: 'button',
                                     id: subNavRes.buttonTabs.product,
                                     toggleGroup: subNavRes.buttonTabs.group,
                                     enableToggle: true,
-                                    text: 'Product Administration'
+                                    text: 'Product Administration',
+                                    handler:function(){
+                                        navigateTo( res.link.productGroup ); 
+                                    },
                                 },
                                 {
                                     xtype: 'button',

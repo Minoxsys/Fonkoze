@@ -1,5 +1,6 @@
-﻿    @using Web.Areas.OutpostManagement;
+﻿@using Web.Areas.OutpostManagement;
 @using Web.Areas.OutpostManagement.Controllers;
+@using Web.Areas.StockAdministration.Controllers;
 @using Web.Bootstrap.Routes;
 <!DOCTYPE html>
     <html>
@@ -29,8 +30,9 @@
         viewport: 'SnapshotViewport',
         link:{
             administration:'@(Url.RouteUrl<CountryController>( x=>x.Overview() ,  OutpostManagementAreaRegistration.DEFAULT_ROUTE ))',
-            regionOverview:'@(Url.RouteUrl<RegionController>( x => x.Overview(null) ,  OutpostManagementAreaRegistration.DEFAULT_ROUTE ))',
-            district: '@(Url.RouteUrl<DistrictController>( x=>x.Overview() ,  OutpostManagementAreaRegistration.DEFAULT_ROUTE ))'
+            regionOverview:'@(Url.RouteUrl<RegionController>( x => x.Overview() ,  OutpostManagementAreaRegistration.DEFAULT_ROUTE ))',
+            district: '@(Url.RouteUrl<DistrictController>( x=>x.Overview() ,  OutpostManagementAreaRegistration.DEFAULT_ROUTE ))',
+            productGroup: '@(Url.RouteUrl<ProductGroupController>( x=>x.Overview() ,  Web.Areas.StockAdministration.StockAdministrationAreaRegistration.DEFAULT_ROUTE ))'
         },
         header:{
             id:'Header',

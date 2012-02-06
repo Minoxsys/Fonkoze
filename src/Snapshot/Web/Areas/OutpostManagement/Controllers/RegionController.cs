@@ -32,10 +32,9 @@ namespace Web.Areas.OutpostManagement.Controllers
         private User _user;
 
         [HttpGet]
-        public ActionResult Overview(Guid? countryId)
+        public ActionResult Overview()
         {
-            RegionOverviewModel overviewModel = new RegionOverviewModel(QueryCountry);
-            return View(overviewModel);
+            return View("");
         }
 
         [HttpPost]
@@ -153,13 +152,13 @@ namespace Web.Areas.OutpostManagement.Controllers
         }
 
         [HttpGet]
-        public JsonResult GetRegions(RegionIndexModel indexModel, string countryId)
+        public JsonResult GetRegions(RegionIndexModel indexModel)
         {
             LoadUserAndClient();
 
             var pageSize = indexModel.limit.Value;
             var regionDataQuery = this.QueryService.Query();
-            var t = regionDataQuery.Count();
+
             var orderByColumnDirection = new Dictionary<string, Func<IQueryable<Region>>>()
             {
                 { "Name-ASC", () => regionDataQuery.OrderBy(c => c.Name) },
@@ -169,10 +168,10 @@ namespace Web.Areas.OutpostManagement.Controllers
             };
 
             regionDataQuery = orderByColumnDirection[String.Format("{0}-{1}", indexModel.sort, indexModel.dir)].Invoke();
-            
-            if (!string.IsNullOrEmpty(countryId))
+
+            if (!string.IsNullOrEmpty(indexModel.countryId))
             {
-                Guid id = new Guid(countryId);
+                Guid id = new Guid(indexModel.countryId);
                 regionDataQuery = regionDataQuery
                     .Where(it => it.Country.Id == id);
             }
