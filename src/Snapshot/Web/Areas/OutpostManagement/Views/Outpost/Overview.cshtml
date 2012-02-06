@@ -27,13 +27,15 @@
 		var outpostBtn = Ext.getCmp(outpostBtnId);
 		outpostBtn.toggle(true);
 	});
+
 </script>
 <script type="text/javascript">
-	var allowUserToClearValue={
-				'load':function(){
-					//this.insert(0, {Id:'@Guid.Empty', Name:'All'});
-				}
-			};
+	var allowUserToClearValue = {
+		'load':function(){
+			//this.insert(0, {Id:'@Guid.Empty', Name:'All'});
+		}
+	};
+	
 	Ext.onReady(function () {
 		window.feature.countryStore = Ext.create('Ext.data.Store', {
 			remoteSuport: true,
@@ -64,10 +66,10 @@
 					type: 'json',
 					root: 'regions'
 				}
-
+	
 			},
 			listeners: allowUserToClearValue
-
+	
 		});
 		window.feature.districtsStore = Ext.create('Ext.data.Store', {
 			fields: ['Id', 'Name'],
@@ -78,10 +80,10 @@
 					type: 'json',
 					root: 'Districts'
 				}
-
+	
 			},
 			listeners: allowUserToClearValue
-
+	
 		});
 		window.feature.outpostsStore = Ext.create('Ext.data.Store', {
 			pageSize: 50,
@@ -104,24 +106,87 @@
 				}
 			]
 		});
+
+		window.feature.warehouseOutpostStore = Ext.create('Ext.data.Store', {
+			pageSize: 50,
+			remoteSuport: true,
+			fields: ['Id','Name'],
+			proxy: {
+				type: 'ajax',
+				url: '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Outpost", action = "GetWarehouses" })',
+				reader: {
+					type: 'json',
+					root: 'Warehouses'
+				},
+				simpleSortMode: true
+			},
+			sorters: [
+				{
+					property: 'Name',
+					direction: 'ASC'
+				}
+			]
+		});
+
+		window.feature.isWarehouseStore = Ext.create('Ext.data.Store', {
+			fields:['Value', 'Text'],
+			data:[
+				{Value:'false', Text:'No'},
+				{Value:'true', Text:'Yes'}
+			]
+		});
+
 		window.feature.comboBoxFilters= {};
 		window.feature.comboBoxFilters.listeners={
 			specialkey: function(field, e){
-                    if (e.getKey() == e.BACKSPACE) {
-					  if(field.itemId === window.feature.comboBoxFilters.district.itemId){
-						  window.feature.resetDistrictDependencies();
-					  }
-
-					  if(field.itemId === window.feature.comboBoxFilters.region.itemId){
+				if (e.getKey() == e.BACKSPACE) {
+					field.setValue(null);
+					if (field.itemId === window.feature.comboBoxFilters.district.itemId ||
+						field.itemId === window.feature.modalIds.districtId){
+						window.feature.resetDistrictDependencies();
+					}
+	
+					if (field.itemId === window.feature.comboBoxFilters.region.itemId ||
+						field.itemId === window.feature.modalIds.regionId){
 						window.feature.resetRegionDependencies();
-					  }
-
-					  if(field.itemId === window.feature.comboBoxFilters.country.itemId){
+					}
+	
+					if (field.itemId === window.feature.comboBoxFilters.country.itemId ||
+						field.itemId === window.feature.modalIds.countryId){
 						window.feature.resetCountryDependencies();
-					  }
-                    }
-                }
+					}
+				}
+			}
 		};
+
+		window.feature.on={
+			'select':{
+				country:function(combo, record){
+					window.feature.resetRegionDependencies();
+	
+					window.feature.regionsStore.load({
+						params:{
+							countryId: combo.getValue()
+						}
+					});
+				},
+				region:function(combo, record){
+					window.feature.resetDistrictDependencies();
+					window.feature.districtsStore.load({
+						params:{
+							regionId: combo.getValue()
+						}
+					});
+				},
+				district:function(combo, record){
+					window.feature.outpostsStore.getProxy().extraParams = {
+						districtId: combo.getValue()
+					};
+					window.feature.outpostsStore.loadPage(1);
+				}
+			}
+		};
+
 		window.feature.comboBoxFilters.country = Ext.create('Ext.form.ComboBox', {
 			xtype: 'combobox',
 			itemId: window.feature.countryOverviewComboId,
@@ -132,17 +197,10 @@
 			typeAhead: true,
 			listeners:{
 				specialkey: window.feature.comboBoxFilters.listeners.specialkey,
-				'select': function(combo, record){
-					window.feature.resetRegionDependencies();
-		
-					window.feature.regionsStore.load({
-						params:{
-							countryId: combo.getValue()
-						}
-					});
-				}
+				'select': window.feature.on.select.country
 			} 
 		});
+
 		window.feature.comboBoxFilters.region = Ext.create('Ext.form.ComboBox', {
 			xtype: 'combobox',
 			itemId: window.feature.regionOverviewComboId,
@@ -154,14 +212,7 @@
 			typeAhead: true,
 			listeners:{
 				specialkey: window.feature.comboBoxFilters.listeners.specialkey,
-				'select': function(combo, record){
-					window.feature.resetDistrictDependencies();
-					window.feature.districtsStore.load({
-						params:{
-							regionId: combo.getValue()
-						}
-					});
-				}
+				'select': window.feature.on.select.region
 			} 
 		});
 		window.feature.comboBoxFilters.district = Ext.create('Ext.form.ComboBox', {
@@ -175,33 +226,223 @@
 			typeAhead: true,
 			listeners:{
 				specialkey: window.feature.comboBoxFilters.listeners.specialkey,
-				'select': function(combo, record){
-					window.feature.outpostsStore.getProxy().extraParams = {
-						districtId: combo.getValue()
-					};
-					window.feature.outpostsStore.loadPage(1);
-				}
+				'select': window.feature.on.select.district
 			} 
 		});
-
+	
 		window.feature.resetCountryDependencies = function () {
 			window.feature.comboBoxFilters.country.setValue(null);
 			window.feature.regionsStore.loadData([]);
 			window.feature.resetRegionDependencies();
 		};
-
+	
 		window.feature.resetRegionDependencies = function () {
 			window.feature.comboBoxFilters.region.setValue(null);
 			window.feature.districtsStore.loadData([]);
 			window.feature.resetDistrictDependencies();
 		};
-
+	
 		window.feature.resetDistrictDependencies = function () {
 			window.feature.comboBoxFilters.district.setValue(null);
-			window.feature.outpostsStore.getProxy().extraParams ={};
-			window.feature.outpostsStore.loadPage(1);
+			if (window.feature.outpostsStore.getProxy().extraParams &&
+				window.feature.outpostsStore.getProxy().extraParams.districtId !== null){
+				window.feature.outpostsStore.getProxy().extraParams.districtId = null;
+				window.feature.outpostsStore.loadPage(1);
+			}
+		};
+	
+		window.feature.modalIds={
+			countryId:'window-feature-combobox-country-id',
+			regionId:'window-feature-combobox-region-id',
+			districtId:'window-feature-combobox-district-id',
+			isWarehouseId:'window-feature-combobox-is-warehouse-id',
+			warehouseId:'window-feature-combobox-warehouse',
+			nameId:'window-feature-textfield-name',
+			entityId: 'window-feature-hiddenfield-entityId',
+			coordinatesId:'window-feature-textfield-coordinates'
 		};
 
+		window.feature.modal = Ext.define('Ext.feature.region.Modal', {
+			extend: 'Ext.window.Window',
+			modal:true,
+			height: 270,
+			width: 390,
+			bodyPadding:0,
+			layout: {
+				align: 'stretch',
+				padding: 0,
+				type: 'vbox'
+			},
+			initComponent: function () {
+				var me = this;
+	
+				me.buttons= [
+					{
+						text: 'Cancel', handler:function(){
+							me.close();
+							me.destroy();
+						}
+					},{
+						text: 'Save', handler:function(){
+	
+							var errorsFound = false;
+							var form = me.down('form').getForm()
+							form.getFields().each(function(field){
+								if(field.getErrors().length > 0){
+									field.validate();
+									errorsFound = true;
+								}
+							});
+
+							if(!errorsFound){
+								form.submit({
+									url: me.url
+								});
+							}
+						}  
+					}
+				];
+
+				Ext.applyIf(me, {
+					items:[
+						{
+							xtype:'form',
+							bodyPadding: 10,
+							items:[
+								{
+									xtype:'hidden',
+									name:'Id',
+									value: me.entityId
+								},							
+								{
+									xtype: 'combobox',
+									itemId: window.feature.modalIds.countryId,
+									name: 'CountryId',
+									fieldLabel: 'Country',
+									emptyText: 'Select Country', 
+									displayField: 'Name',
+									valueField: 'Id',
+									allowBlank:false,
+									store: window.feature.countryStore,
+									typeAhead: true,
+									value: window.feature.comboBoxFilters.country.getValue(),
+									listeners:{
+										specialkey: function(field, e){
+											window.feature.comboBoxFilters.listeners.specialkey(field, e);
+											me.down('#' + window.feature.modalIds.regionId).setValue(null);
+											me.down('#' + window.feature.modalIds.districtId).setValue(null);
+										},
+										'select': function(combo, record){
+											window.feature.comboBoxFilters.country.setValue(combo.getValue());   
+											window.feature.on.select.country(combo, record);
+											me.down('#' + window.feature.modalIds.regionId).setValue(null);
+											me.down('#' + window.feature.modalIds.districtId).setValue(null);
+										}
+									} 
+								},{
+									xtype: 'combobox',
+									itemId: window.feature.modalIds.regionId,
+									name: 'RegionId',
+									fieldLabel: 'Region',
+									emptyText: 'Select Region', 
+									displayField: 'Name',
+									valueField: 'Id',
+									store: window.feature.regionsStore,
+									queryMode:'local',
+									typeAhead: true,
+									allowBlank:false,
+									value: window.feature.comboBoxFilters.region.getValue(),
+									listeners:{
+										specialkey: function(field, e){
+											window.feature.comboBoxFilters.listeners.specialkey(field, e);
+											me.down('#' + window.feature.modalIds.districtId).setValue(null);
+										},
+										'select': function(combo, record){
+											window.feature.comboBoxFilters.region.setValue(combo.getValue());   
+											window.feature.on.select.region(combo, record);
+											me.down('#' + window.feature.modalIds.districtId).setValue(null);
+										}
+									} 
+								},{
+									xtype: 'combobox',
+									itemId: window.feature.modalIds.districtId,
+									name: 'DistrictId',
+									fieldLabel: 'District',
+									emptyText: 'Select District', 
+									displayField: 'Name',
+									valueField: 'Id',
+									store: window.feature.districtsStore,
+									queryMode:'local',
+									typeAhead: true,
+									allowBlank:false,
+									value: window.feature.comboBoxFilters.district.getValue(),
+									listeners:{
+										specialkey: window.feature.comboBoxFilters.listeners.specialkey,
+										'select': function(combo, record){
+											window.feature.comboBoxFilters.district.setValue(combo.getValue());   
+											window.feature.on.select.district(combo, record);
+										}
+									} 
+								},{
+									xtype: 'textfield',
+									itemId: window.feature.modalIds.nameId,
+									name: 'Name',
+									allowBlank:false,
+									fieldLabel: 'Outpost Name'
+								},{
+									xtype: 'textfield',
+									itemId: window.feature.modalIds.coordinatesId,
+									name: 'Coordinates',
+									fieldLabel: 'Coordinates'
+								},{
+									xtype: 'combobox',
+									itemId: window.feature.modalIds.isWarehouseId,
+									name: 'IsWarehouse',
+									fieldLabel: 'Is warehouse',
+									emptyText: 'Select District', 
+									editable:false,
+									displayField: 'Text',
+									valueField: 'Value',
+									value: 'false',
+									store: window.feature.isWarehouseStore,
+									queryMode:'local',
+									listeners:{
+										'select': function(combo, record){
+											me.down('#' + window.feature.modalIds.warehouseId).setDisabled(false);
+											if (combo.getValue() === 'true'){
+												me.down('#' + window.feature.modalIds.warehouseId).setDisabled(true);
+											}
+										}
+									} 
+								},{
+									xtype: 'combobox',
+									itemId: window.feature.modalIds.warehouseId,
+									name: 'WarehouseId',
+									fieldLabel: 'Warehouse',
+									disabled:false,
+									emptyText: 'Select Warehouse', 
+									displayField: 'Name',
+									valueField: 'Id',
+									store: window.feature.warehouseOutpostStore,
+									typeAhead: true,
+									listeners:{
+										specialkey:function(field, e){
+											if (e.getKey() === e.BACKSPACE){
+												field.setValue(null);
+											}
+										}
+	
+									} 
+								}
+							]
+						}
+					]
+				});
+	
+				me.callParent(arguments);
+			}
+		});
+	
 		window.feature.container = Ext.create('Ext.container.Container', {
 			margin:'20 50 20 0',
 			autoScroll:true,
@@ -239,19 +480,8 @@
 									margin: '0 0 0 20',
 									text: 'Add New Outpost',
 									handler: function(){
-										var winAdd = new window.feature.modal({ /// TODO
-											buttons: [
-												{
-													text: 'Cancel', handler:function(){
-														winAdd.close();
-														winAdd.destroy();
-													}
-												},{
-													text: 'Save', handler:function(){
-	
-													}  
-												}
-											]
+										var winAdd = new window.feature.modal({
+											url: '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Outpost", action = "Create" })',
 										});
 										winAdd.show();       
 									}
@@ -343,10 +573,6 @@
 			]
 		});
 	
-		function IsValid(){
-			var ok = true;
-			return ok;
-		}
 	
 		var contentRes = window.res.content;
 		var mainContent = Ext.getCmp(contentRes.maincontent.id);
@@ -356,25 +582,6 @@
 			districtId:null
 		});
 	});
-</script>
-    
-<script type="text/javascript">
-	window.feature.modal = Ext.define('Ext.feature.outpost.Modal', {
-
-		extend: 'Ext.window.Window',
-		modal: true,
-		height: 170,
-		width: 390,
-		layout: {
-			align: 'stretch',
-			padding: 10,
-			type: 'vbox'
-		},
-
-		initComponent: function () {
-			var me = this;
-
-		}
-
-	});
-</script>
+	</script>
+	
+	

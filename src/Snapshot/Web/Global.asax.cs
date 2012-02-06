@@ -38,15 +38,14 @@ namespace Web
 
 		protected void Application_BeginRequest(object sender, EventArgs e)
 		{
-			container.Resolve<INHibernateUnitOfWork>().Initialize();
 		}
 
 		protected void Application_EndRequest(object sender, EventArgs e)
 		{
-			container.Resolve<INHibernateUnitOfWork>().Close();
 		}
 
 		private static IContainer container;
+		private INHibernateUnitOfWork _unitOfWork;
 
 		IContainer IContainerAccessor.Container
 		{

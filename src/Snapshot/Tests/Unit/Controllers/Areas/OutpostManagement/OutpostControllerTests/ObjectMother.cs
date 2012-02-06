@@ -164,5 +164,46 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.OutpostControllerTests
 			var queryService = Mock.Get(controller.QueryService);
 			queryService.Verify(c => c.Query());
 		}
+
+		internal void ExpectWarehousesToBeQueried()
+		{
+			var queryService = Mock.Get(controller.QueryService);
+			queryService.Setup(q => q.Query()).Returns(this.Warehouses());
+		}
+
+		private IQueryable<Outpost> Warehouses()
+		{
+			var listOfWarehouses = new List<Outpost>();
+
+			for (int i = 0; i < 10; i++)
+			{
+				var warehouse = new Mock<Outpost>();
+				warehouse.SetupGet(c=>c.Id).Returns(Guid.NewGuid());
+				warehouse.SetupGet(c => c.IsWarehouse).Returns(true);
+				warehouse.SetupGet(c => c.Name).Returns("Warehouse " + i);
+				listOfWarehouses.Add(warehouse.Object);
+			}
+
+			return listOfWarehouses.AsQueryable();
+		}
+
+		internal void VerifyThatWarehousesHaveBeenQueried()
+		{
+			var queryService = Mock.Get(controller.QueryService);
+			queryService.Verify(q => q.Query());
+		}
+
+		internal void ExpectSaveToBeCalledWithValuesFrom(CreateOutpostInputModel model)
+		{
+			var saveCommand = Mock.Get(controller.SaveOrUpdateCommand);
+			saveCommand.Setup(c => c.Execute(Moq.It.Is<Outpost>(
+				o => o.Name == model.Name && o.IsWarehouse == model.IsWarehouse)));
+		}
+
+		internal void VerifyThatSaveHasBeendCalled()
+		{
+			var saveCommand = Mock.Get(controller.SaveOrUpdateCommand);
+			saveCommand.Verify(c => c.Execute(Moq.It.IsAny<Outpost>()));
+		}
 	}
 }
