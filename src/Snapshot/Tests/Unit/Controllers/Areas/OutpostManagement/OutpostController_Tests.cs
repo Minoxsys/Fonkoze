@@ -189,21 +189,6 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement
         }
 
 
-        [Test]
-        public void Should_goto_Overview_when_DeleteAnOutpost_AndThereAre_NoProductsAsociated()
-        {
-            //arrange
-            //queryProduct.Expect(call => call.Query()).Repeat.Once().Return(new Product[] { }.AsQueryable());
-            queryOutpost.Expect(call => call.Load(outpost.Id)).Return(outpost);
-            deleteCommand.Expect(call => call.Execute(Arg<Outpost>.Matches(b => b.Id == outpost.Id)));
-
-            // Act
-            var redirectResult = (RedirectToRouteResult)controller.Delete(outpost.Id);
-
-            // Assert
-            deleteCommand.VerifyAllExpectations();
-            Assert.AreEqual("Overview", redirectResult.RouteValues["Action"]);
-        }
 
         [Test]
         public void Should_GoTo_Overview_WhenDeleteAnOutpost_AndDisplayTempDataError_If_ThereAreProductsAsociated()

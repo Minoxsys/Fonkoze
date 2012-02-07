@@ -145,6 +145,13 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.OutpostControllerTests
 		{
 			var listOfOutposts = new List<Outpost>();
 
+			var fakeCountry = new Mock<Country>();
+			fakeCountry.Setup(c => c.Id).Returns(Guid.NewGuid());
+			var fakeRegion = new Mock<Region>();
+			fakeRegion.Setup(c => c.Id).Returns(Guid.NewGuid());
+			var fakeDistrict = new Mock<District>();
+			fakeDistrict.Setup(c => c.Id).Returns(Guid.NewGuid());
+
 			for (int i = 0; i < 500; i++)
 			{
 
@@ -153,6 +160,10 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.OutpostControllerTests
 				outpost.Setup(c => c.Name).Returns("Outpost " + i);
 				outpost.Setup(c => c.IsWarehouse).Returns(true);
 				outpost.Setup(c => c.Client).Returns(clientMock.Object);
+
+				outpost.Setup(c => c.Country).Returns(fakeCountry.Object);
+				outpost.Setup(c => c.Region).Returns(fakeRegion.Object);
+				outpost.Setup(c => c.District).Returns(fakeDistrict.Object);
 
 				listOfOutposts.Add(outpost.Object);
 			}
@@ -205,5 +216,28 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.OutpostControllerTests
 			var saveCommand = Mock.Get(controller.SaveOrUpdateCommand);
 			saveCommand.Verify(c => c.Execute(Moq.It.IsAny<Outpost>()));
 		}
+
+		internal void VerifyThatDelectCommandWasExecutedWith(Guid outpostId)
+		{
+			var deleteCommand = Mock.Get(controller.DeleteCommand);
+			deleteCommand.Verify(c => c.Execute(It.Is<Outpost>(o=>o.Id == outpostId)));
+		}
+
+		internal void EnsureThatQueryLoadReturnsAValidDomainEntity(Guid outpostId)
+		{
+			var queryService = Mock.Get(controller.QueryService);
+			var outpost = new Mock<Outpost>();
+			outpost.Setup(c => c.Id).Returns(outpostId);
+			outpost.Setup(c => c.Name).Returns("I am an outpost");
+
+			queryService.Setup(c => c.Load(It.Is<Guid>(g=> g== outpostId))).Returns(outpost.Object);
+		}
+
+		internal void VerifyThatLoadWasInvokedWithTheGiven(Guid outpostId)
+		{
+			var queryService = Mock.Get(controller.QueryService);
+			queryService.Verify(c => c.Load(It.Is<Guid>(g=>g==outpostId)));
+		}
+
 	}
 }

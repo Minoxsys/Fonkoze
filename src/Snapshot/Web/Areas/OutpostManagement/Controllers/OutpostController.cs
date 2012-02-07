@@ -8,6 +8,7 @@ using AutoMapper;
 using Core.Persistence;
 using Domain;
 using Core.Domain;
+using Web.Models.Shared;
 
 namespace Web.Areas.OutpostManagement.Controllers
 {
@@ -42,36 +43,6 @@ namespace Web.Areas.OutpostManagement.Controllers
 		private Core.Domain.User _user;
 		private Client _client;
 
-		[HttpGet]
-		public ActionResult Overview()
-		{
-			OutpostOverviewModel model = new OutpostOverviewModel();
-
-			return View(model);
-		}
-
-
-		[HttpPost]
-		public RedirectToRouteResult Delete(Guid outpostId)
-		{
-			var outpost = QueryService.Load(outpostId);
-
-			if (outpost != null)
-			{
-				foreach (Contact contact in outpost.Contacts)
-				{
-					DeleteContact(outpostId, contact.Id);
-				}
-				DeleteCommand.Execute(outpost);
-			}
-
-			return RedirectToAction("Overview", "Outpost", new
-			{
-				countryId = outpost.District.Region.Country.Id,
-				regionId = outpost.District.Region.Id,
-				districtId = outpost.District.Id
-			});
-		}
 
 		[HttpPost]
 		public RedirectToRouteResult DeleteContact(Guid outpostID, Guid contactId)
@@ -89,8 +60,6 @@ namespace Web.Areas.OutpostManagement.Controllers
 				outpostId = outpostID
 			});
 		}
-
-	
 
 		[HttpGet]
 		public JsonResult GetProductsList(Guid? productId)
@@ -155,46 +124,70 @@ namespace Web.Areas.OutpostManagement.Controllers
 		}
 
 
+		[HttpGet]
+		public ActionResult Overview()
+		{
+			OutpostOverviewModel model = new OutpostOverviewModel();
+
+			return View(model);
+		}
+
+		[HttpPost]
+		public JsonResult Delete(Guid outpostId)
+		{
+			var outpost = QueryService.Load(outpostId);
+
+			if (outpost != null)
+			{
+				DeleteCommand.Execute(outpost);
+			}
+
+			return Json(new JsonActionResponse
+			{
+				Status = "Success",
+				Message = string.Format("Successfully removed outpost {0}", outpost.Name)
+			});
+		}
+
 		public JsonResult GetOutposts(GetOutpostsInputModel input)
 		{
 			var model = new GetOutpostsOutputModel();
 			LoadUserAndClient();
 
 			var outpostsQueryData = QueryService.Query().
-				Where(c => c.Client == this._client);
+			Where(c => c.Client == this._client);
 			if (input.districtId.HasValue)
 			{
 				outpostsQueryData = outpostsQueryData.Where(o => o.District.Id == input.districtId.Value);
 			}
 
 			var orderByColumnDirection = new Dictionary<string, Func<IQueryable<Outpost>>>()
-            {
-                { "Name-ASC", () => outpostsQueryData.OrderBy(c => c.Name) },
-                { "Name-DESC", () => outpostsQueryData.OrderByDescending(c => c.Name) }
-            };
-
+			{
+				{ "Name-ASC", () => outpostsQueryData.OrderBy(c => c.Name) },
+				{ "Name-DESC", () => outpostsQueryData.OrderByDescending(c => c.Name) }
+			};
 
 			Func<IQueryable<Outpost>> orderOutposts;
-			if (orderByColumnDirection.TryGetValue(String.Format("{0}-{1}", input.sort, input.dir),out orderOutposts))
+			if (orderByColumnDirection.TryGetValue(String.Format("{0}-{1}", input.sort, input.dir), out orderOutposts))
 			{
 				outpostsQueryData = orderOutposts.Invoke();
 			}
 
-			
 			model.TotalItems = outpostsQueryData.Count();
-			outpostsQueryData = outpostsQueryData.
-					Take(input.limit.Value).Skip(input.start.Value);
-			model.Outposts = ( from o in outpostsQueryData.ToList() select
-						 new GetOutpostsOutputModel.OutpostModel
-						{
-							Id= o.Id.ToString(),
-							Name = o.Name,
-							IsWarehouse = o.IsWarehouse,
-							WarehouseName =  o.Warehouse!=null ? o.Warehouse.Name : string.Empty,
-							Coordinates = o.Latitude + " " + o.Longitude,
-							ContactMethod = o.DetailMethod
-						}
-					).ToArray();
+			outpostsQueryData = outpostsQueryData.Take(input.limit.Value).Skip(input.start.Value);
+			model.Outposts = (from o in outpostsQueryData.ToList() select new GetOutpostsOutputModel.OutpostModel
+			{
+				Id = o.Id.ToString(),
+				Name = o.Name,
+				IsWarehouse = o.IsWarehouse,
+				WarehouseName = o.Warehouse != null ? o.Warehouse.Name : string.Empty,
+				Coordinates = o.Latitude + "" + o.Longitude, // TODO drop this and just add a simple Coordintates property, the client should have accepted it in the first place
+				ContactMethod = o.DetailMethod,
+				CountryId = o.Country.Id.ToString(),
+				RegionId = o.Region.Id.ToString(),
+				DistrictId = o.District.Id.ToString(),
+				WarehouseId = o.Warehouse != null ? o.Warehouse.Id.ToString() : string.Empty
+			}).ToArray();
 
 			return Json(model, JsonRequestBehavior.AllowGet);
 		}
@@ -223,14 +216,14 @@ namespace Web.Areas.OutpostManagement.Controllers
 			var model = new GetWarehousesOutputModel();
 			LoadUserAndClient();
 
-			var warehouseQueryData = QueryService.Query().
-				Where(c => c.Client == this._client && c.IsWarehouse == true)
-				.OrderBy(w=>w.Name);
-			model.Warehouses = (from w in warehouseQueryData.ToList()
-									select new GetWarehousesOutputModel.WarehouseModel{
-										Id = w.Id.ToString(),
-										Name = w.Name
-									}).ToArray();
+			var warehouseQueryData = QueryService.Query()
+												 .Where(c => c.Client == this._client && c.IsWarehouse == true)
+												 .OrderBy(w => w.Name);
+			model.Warehouses = (from w in warehouseQueryData.ToList() select new GetWarehousesOutputModel.WarehouseModel
+			{
+				Id = w.Id.ToString(),
+				Name = w.Name
+			}).ToArray();
 
 			return Json(model, JsonRequestBehavior.AllowGet);
 		}
@@ -250,28 +243,56 @@ namespace Web.Areas.OutpostManagement.Controllers
 			this._client = LoadClient.Load(clientId);
 		}
 
-		public void Create(CreateOutpostInputModel model)
+		[HttpPost]
+		public JsonResult Create(CreateOutpostInputModel model)
 		{
 			LoadUserAndClient();
-			var outpost = new Outpost
+			var outpost = new Outpost();
+			MapInputToOutpost(model, ref outpost);
+
+			SaveOrUpdateCommand.Execute(outpost);
+
+			return Json(new JsonActionResponse
 			{
-				Name = model.Name,
-				IsWarehouse = model.IsWarehouse.Value,
-				Latitude = model.Coordinates,
-				Client = _client,
-				ByUser = _user
-			};
+				Message = string.Format("Created successfully outpost {0}", outpost.Name),
+				Status = "Success"
+			});
+		}
+
+		[HttpPost]
+		public JsonResult Edit(EditOutpostInputModel model)
+		{
+			LoadUserAndClient();
+
+			var outpost = QueryService.Load(model.EntityId.Value);
+			MapInputToOutpost(model, ref outpost);
+
+			SaveOrUpdateCommand.Execute(outpost);
+
+			return Json(new JsonActionResponse
+			{
+				Message = string.Format("Saved successfully outpost {0}", outpost.Name),
+				Status = "Success"
+			});
+		}
+
+		private void MapInputToOutpost(CreateOutpostInputModel model, ref Outpost outpost)
+		{
+			outpost. Name = model.Name;
+			outpost. IsWarehouse = model.IsWarehouse.Value;
+			outpost. Latitude = model.Coordinates;
+			outpost. Client = _client;
+			outpost. ByUser = _user;
 
 			outpost.Country = QueryCountry.Load(model.CountryId.Value);
 			outpost.Region = QueryRegion.Load(model.RegionId.Value);
 			outpost.District = QueryDistrict.Load(model.DistrictId.Value);
 
+			outpost.Warehouse = null;
 			if (model.WarehouseId.HasValue)
 			{
 				outpost.Warehouse = QueryService.Load(model.WarehouseId.Value);
 			}
-
-			SaveOrUpdateCommand.Execute(outpost);
 		}
 	}
 }

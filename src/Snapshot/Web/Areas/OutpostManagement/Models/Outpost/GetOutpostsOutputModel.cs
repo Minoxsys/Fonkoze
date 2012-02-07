@@ -19,6 +19,10 @@ namespace Web.Areas.OutpostManagement.Models.Outpost
 			public bool IsWarehouse { get; set; }
 
 			public string WarehouseName { get; set; }
+			public string WarehouseId { get; set; }
+			public string CountryId { get; set; }
+			public string RegionId { get; set; }
+			public string DistrictId { get; set; }
 		}
 
 		public OutpostModel[] Outposts { get; set; }

@@ -88,7 +88,8 @@
 		window.feature.outpostsStore = Ext.create('Ext.data.Store', {
 			pageSize: 50,
 			remoteSuport: true,
-			fields: ['Id','Name', 'Coordinates', 'ContactMethod', 'IsWarehouse', 'WarehouseName'],
+			fields: ['Id','Name', 'Coordinates', 'ContactMethod', 'IsWarehouse', 'WarehouseName',
+						'CountryId', 'RegionId', 'DistrictId', 'WarehouseId'],
 			proxy: {
 				type: 'ajax',
 				url: '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Outpost", action = "GetOutposts" })',
@@ -222,7 +223,7 @@
 			queryMode:'local',
 			displayField: 'Name',
 			valueField:'Id',
-			emptyText: 'Select District', 
+			emptyText: 'Select Warehouse', 
 			typeAhead: true,
 			listeners:{
 				specialkey: window.feature.comboBoxFilters.listeners.specialkey,
@@ -295,9 +296,20 @@
 							});
 
 							if(!errorsFound){
-								form.submit({
-									url: me.url
+								
+								var createAction = $.post(me.url, form.getValues());
+								createAction.success(function(serverResponse){
+									Ext.Msg.show({
+										title: serverResponse.Status,
+										buttons: Ext.Msg.OK,
+										msg: serverResponse.Message
+									});
+									window.feature.outpostsStore.loadPage(1);
+
+									 me.close();
+									 me.destroy();
 								});
+
 							}
 						}  
 					}
@@ -311,7 +323,7 @@
 							items:[
 								{
 									xtype:'hidden',
-									name:'Id',
+									name:'EntityId',
 									value: me.entityId
 								},							
 								{
@@ -399,7 +411,6 @@
 									itemId: window.feature.modalIds.isWarehouseId,
 									name: 'IsWarehouse',
 									fieldLabel: 'Is warehouse',
-									emptyText: 'Select District', 
 									editable:false,
 									displayField: 'Text',
 									valueField: 'Value',
@@ -410,6 +421,7 @@
 										'select': function(combo, record){
 											me.down('#' + window.feature.modalIds.warehouseId).setDisabled(false);
 											if (combo.getValue() === 'true'){
+												me.down('#' + window.feature.modalIds.warehouseId).setValue(null);
 												me.down('#' + window.feature.modalIds.warehouseId).setDisabled(true);
 											}
 										}
@@ -545,7 +557,33 @@
 									text: 'Edit',
 									handler: function(grid, rowIndex, colIndex) {
 										var rec = grid.getStore().getAt(rowIndex);
-										console.log('todo edit', rec);
+										var winEdit = new window.feature.modal({
+											entityId: rec.get('Id'),
+											listeners:{
+												'beforeshow':function(win){
+													var modalIds = window.feature.modalIds;
+													var countryId = rec.get('CountryId');
+													var regionId = rec.get('RegionId');
+													var districtId = rec.get('DistrictId');
+													var warehouseId = rec.get('WarehouseId');
+													window.feature.countryStore.load();
+													window.feature.regionsStore.load({params:{countryId: countryId}});
+													window.feature.districtsStore.load({params:{regionId:regionId}});
+													window.feature.warehouseOutpostStore.load();
+
+													win.down('#'+modalIds.countryId).setValue(countryId);
+													win.down('#'+modalIds.regionId).setValue(regionId);
+													win.down('#'+modalIds.districtId).setValue(districtId);
+													win.down('#'+modalIds.warehouseId).setValue(warehouseId);
+													win.down('#'+modalIds.isWarehouseId).setValue(rec.get('IsWarehouse') ? 'true' : 'false' );
+													win.down('#'+modalIds.nameId).setValue(rec.get('Name'));
+													win.down('#'+modalIds.coordinatesId).setValue(rec.get('Coordinates'));
+												}
+											},
+											url: '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Outpost", action = "Edit" })',
+										});
+										
+										winEdit.show();       
 	
 									}
 								},{    
@@ -553,7 +591,31 @@
 									action: 'Delete',
 									handler: function(grid, rowIndex, colIndex) {
 										var rec = grid.getStore().getAt(rowIndex);
-										console.log('todo delete', rec);
+										Ext.Msg.show({
+										 title:_t('Confirm deletion'),
+										 msg: Ext.String.format(_t('Are you sure you want to delete outpost `{0}`'), rec.get('Name')),
+										 buttons: Ext.Msg.YESNO,
+										 icon: Ext.Msg.QUESTION,
+										 fn: function(answer){
+											if(answer === 'yes'){
+												var postToUrl = '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE,new {controller="Outpost", action="Delete"})';
+												var action = $.post(postToUrl, {
+													outpostId : rec.get('Id')
+												});
+
+												action.success(function(serverResponse){
+													Ext.Msg.show({
+														title: serverResponse.Status,
+														buttons: Ext.Msg.OK,
+														msg: serverResponse.Message
+													});
+
+													window.feature.outpostsStore.loadPage(1);
+												});
+
+											}
+										 }
+									});
 	
 									}
 								}

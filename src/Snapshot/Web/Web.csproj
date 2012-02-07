@@ -164,6 +164,7 @@
     <Compile Include="Areas\OutpostManagement\Models\Country\ClientModelCountry.cs" />
     <Compile Include="Areas\OutpostManagement\Models\District\DistrictIndexModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Outpost\CreateOutpostInputModel.cs" />
+    <Compile Include="Areas\OutpostManagement\Models\Outpost\EditOutpostInputModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Outpost\GetDistrictsOutputModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Outpost\GetOutpostsInputModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Outpost\GetOutpostsOutputModel.cs" />
