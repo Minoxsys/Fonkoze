@@ -60,8 +60,8 @@ namespace Web.Areas.OutpostManagement.Controllers
 
             int pageSize = 0;
 
-            if ((indexModel.Limit != null) && (indexModel.Start != null))
-                pageSize = indexModel.Limit.Value - indexModel.Start.Value;
+            if (indexModel.Limit != null)
+                pageSize = indexModel.Limit.Value;
 
             if ((indexModel.RegionId == null) && (indexModel.CountryId == null))
             {
@@ -111,10 +111,12 @@ namespace Web.Areas.OutpostManagement.Controllers
                 { "Name-ASC", () => districts.OrderBy(it=>it.Name) },
                 { "Name-DESC", () => districts.OrderByDescending(c => c.Name) },               
             };
+            int totalItems = 0;
+
             if (indexModel.sort != "OutpostNo")
             {
                 districts = orderByColumnDirection[String.Format("{0}-{1}", indexModel.sort, indexModel.dir)].Invoke();
-
+                totalItems = districts.Count();
                 districts = districts.Take(pageSize)
                                                    .Skip(indexModel.Start.Value);
             }
@@ -150,7 +152,7 @@ namespace Web.Areas.OutpostManagement.Controllers
             return Json(new DistrictIndexOutputModel
             {
                 districts = districtModelList,
-                TotalItems = districtModelList.Count
+                TotalItems = totalItems
             }, JsonRequestBehavior.AllowGet);
         }
 

@@ -202,6 +202,8 @@
     <Compile Include="Areas\StockAdministration\Models\ProductGroup\ProductGroupOverviewModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\Product\PartialViewModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\Product\ProductGroupModel.cs" />
+    <Compile Include="Areas\StockAdministration\Models\Product\ProductIndexModel.cs" />
+    <Compile Include="Areas\StockAdministration\Models\Product\ProductIndexOutputModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\Product\ProductInputModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\Product\ProductModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\Product\ProductOutputModel.cs" />
@@ -1529,7 +1531,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\OutpostManagement\Services\" />
-    <Folder Include="Areas\StockAdministration\Views\Shared\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -1570,9 +1571,6 @@
     <Content Include="Areas\StockAdministration\Views\Web.config" />
     <Content Include="Areas\StockAdministration\Views\Product\Overview.cshtml" />
     <Content Include="Areas\StockAdministration\Views\_ViewStart.cshtml" />
-    <Content Include="Areas\StockAdministration\Views\Product\Create.cshtml" />
-    <Content Include="Areas\StockAdministration\Views\Product\Input.cshtml" />
-    <Content Include="Areas\StockAdministration\Views\Product\Edit.cshtml" />
     <Content Include="Areas\StockAdministration\Views\ProductGroup\Create.cshtml" />
     <Content Include="Areas\StockAdministration\Views\ProductGroup\Overview.cshtml" />
     <Content Include="Areas\StockAdministration\Views\ProductGroup\Edit.cshtml" />
@@ -1585,8 +1583,6 @@
     <Content Include="Areas\OutpostManagement\Views\Shared\CreateContact.cshtml" />
     <Content Include="Areas\StockAdministration\Views\OutpostStockLevel\Overview.cshtml" />
     <Content Include="Areas\StockAdministration\Views\OutpostStockLevel\OverviewItemsStockLevel.cshtml" />
-    <Content Include="Areas\StockAdministration\Views\Product\EditInput.cshtml" />
-    <Content Include="Areas\StockAdministration\Views\Product\OverviewTable.cshtml" />
     <Content Include="Areas\StockAdministration\Views\OutpostStockLevel\EditCurrentProductLevel.cshtml" />
     <Content Include="Areas\StockAdministration\Views\OutpostStockLevel\EditCurrentProducLevelInput.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\Outpost\EditOutpostInput.cshtml" />
@@ -1620,6 +1616,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\OutpostManagement\Views\Shared\_OutpostAdministrationSideBar.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\StockAdministration\Views\Shared\_ProductAdministrationSideBar.cshtml" />
+    <Content Include="Areas\StockAdministration\Views\Shared\_SubNavigation.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

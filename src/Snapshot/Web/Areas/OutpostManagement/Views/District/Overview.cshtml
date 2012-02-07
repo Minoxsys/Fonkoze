@@ -416,7 +416,7 @@ Districts: Overview
             return Ext.getCmp(window.feature.comboboxRegionsId).getValue()
         }
         window.feature.store = Ext.create('Ext.data.Store', {
-            pageSize: 15,
+            pageSize: 50,
             remoteSort: true,
             fields: ['Name', 'OutpostNo', 'Id', 'ClientId', 'RegionId'],
             proxy: {

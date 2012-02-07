@@ -14,8 +14,7 @@ namespace Domain
         public virtual int UpperLimit { get; set; }
         public virtual String SMSReferenceCode { get; set; }
         public virtual ProductGroup ProductGroup { get; set; }
-        
-		
+        		
         public Product()
         {
             this.ProductGroup = new ProductGroup();
