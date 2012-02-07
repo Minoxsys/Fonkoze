@@ -138,8 +138,6 @@ namespace Web.Areas.StockAdministration.Controllers
             {
                 { "Name-ASC", () => productGroupDataQuery.OrderBy(c => c.Name) },
                 { "Name-DESC", () => productGroupDataQuery.OrderByDescending(c => c.Name) },
-                { "Coordinates-ASC", () => productGroupDataQuery.OrderBy(c => c.Description) },
-                { "Coordinates-DESC", () => productGroupDataQuery.OrderByDescending(c => c.Description) },
             };
 
             productGroupDataQuery = orderByColumnDirection[String.Format("{0}-{1}", indexModel.sort, indexModel.dir)].Invoke();
@@ -165,7 +163,7 @@ namespace Web.Areas.StockAdministration.Controllers
                                                        ProductsNo = GetProductsNumber(productGroup.Id)
                                                    }).ToArray();
 
-
+    
             return Json(new ProductGroupIndexOutputModel
             {
                 ProductGroups = productGroupModelListProjection,
@@ -173,13 +171,13 @@ namespace Web.Areas.StockAdministration.Controllers
             }, JsonRequestBehavior.AllowGet);
         }
 
-        private int GetProductsNumber(Guid guid)
+        private int GetProductsNumber(Guid? guid)
         {
-            if (guid != Guid.Empty)
+            if (guid.HasValue)
             {
                 var productQuery = this.QueryProduct.Query();
                 if (productQuery != null)
-                    return productQuery.Where(it => it.ProductGroup.Id == guid).Count();
+                    return productQuery.Where(it => it.ProductGroup.Id == guid.Value).Count();
             }
             return 0;
         }

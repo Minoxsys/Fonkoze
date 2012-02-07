@@ -55,6 +55,7 @@ Product Administration Product Groups: Overview
                 extraParams: { searchValue: '' },
                 simpleSortMode: true
             },
+            remoteSort: true,
             sorters: [{
                 property: 'Name',
                 direction: 'ASC'
@@ -222,7 +223,7 @@ Product Administration Product Groups: Overview
                     text: "Number of Products",
                     dataIndex: 'ProductsNo',
                     flex: 1,
-                    sortable: true
+                    sortable: false
                 },{
                     xtype: 'actioncolumn',
 			        text: 'Actions',
@@ -288,20 +289,16 @@ Product Administration Product Groups: Overview
                                             window.feature.productGroupStore.loadPage(1);
                                         });
                                     }
-
                                 });
 					        }
-
-                    }],
-                    bbar: Ext.create('Ext.PagingToolbar', {
-                        store: window.feature.regionStore,
-                        displayInfo: true,
-                        displayMsg: 'Displaying topics {0} - {1} of {2}',
-                        emptyMsg: "No topics to display",
-                    })
-
-                }]
-
+                    }]
+                }],
+                bbar: Ext.create('Ext.PagingToolbar', {
+                    store: window.feature.productGroupStore,
+                    displayInfo: true,
+                    displayMsg: 'Displaying topics {0} - {1} of {2}',
+                    emptyMsg: "No topics to display",
+                })
             },{
                 xtype:'container',
                 height:150
@@ -327,7 +324,7 @@ Product Administration Product Groups: Overview
                 referenceCode.setValue(null);
                 ok = false;
             }else{
-                if (referenceCode.getValue().length>3 || referenceCode.getValue()<3){
+                if (referenceCode.getValue().length>3 || referenceCode.getValue().length<3){
                     referenceCode.markInvalid('Imput length value must be 3!');  
                     ok = false;
                 }
@@ -345,16 +342,3 @@ Product Administration Product Groups: Overview
     });
 </script>
 
-<script type="text/javascript">
-    $("input").keyup(function () {
-        jQuery('#productGroupSearch').keyup(function (event) {
-            if (event.keyCode == 27) {
-                debugger;
-                resetSearch();
-            }
-        });
-
-        SearchProductGroupsOnFilterSelected();
-    });
-
-</script>

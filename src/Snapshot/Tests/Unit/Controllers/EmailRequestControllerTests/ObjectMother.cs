@@ -10,7 +10,7 @@ using Web.Services.EmailService;
 using Web.Controllers;
 using Web.Services.UrlService;
 
-namespace Tests.Unit.Controllers.EmailRequestControllerTest
+namespace Tests.Unit.Controllers.EmailRequestControllerTests
 {
     public class ObjectMother
     {

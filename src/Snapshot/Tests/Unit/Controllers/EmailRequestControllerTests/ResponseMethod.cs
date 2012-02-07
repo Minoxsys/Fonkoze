@@ -8,7 +8,7 @@ using Rhino.Mocks;
 using System.Web.Mvc;
 using Web.Models.EmailRequest;
 
-namespace Tests.Unit.Controllers.EmailRequestControllerTest
+namespace Tests.Unit.Controllers.EmailRequestControllerTests
 {
     [TestFixture]
     public class ResponseMethod

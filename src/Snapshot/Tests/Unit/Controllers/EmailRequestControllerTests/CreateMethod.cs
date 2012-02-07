@@ -9,7 +9,7 @@ using System.Web.Mvc;
 using Web.Models.EmailRequest;
 using Persistence.Queries.Contacts;
 
-namespace Tests.Unit.Controllers.EmailRequestControllerTest
+namespace Tests.Unit.Controllers.EmailRequestControllerTests
 {
     [TestFixture]
     public class CreateMethod

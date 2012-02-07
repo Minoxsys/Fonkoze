@@ -88,10 +88,5 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.RegionControllerTests
             Assert.That(response.Status, Is.EqualTo("Error"));
             Assert.That(response.Message, Is.EqualTo("Region Transilvania has 1 district(s) associated, and can not be removed."));
         }
-        
-
-
-
-
     }
 }

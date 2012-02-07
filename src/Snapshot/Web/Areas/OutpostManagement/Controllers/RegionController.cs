@@ -34,7 +34,7 @@ namespace Web.Areas.OutpostManagement.Controllers
         [HttpGet]
         public ActionResult Overview()
         {
-            return View("");
+            return View();
         }
 
         [HttpPost]
