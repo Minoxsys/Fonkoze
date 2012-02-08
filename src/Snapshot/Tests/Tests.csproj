@@ -119,6 +119,12 @@
     <Compile Include="Unit\Controllers\Areas\StockAdministration\ProductGroupControllerTests\ObjectMother.cs" />
     <Compile Include="Unit\Controllers\Areas\StockAdministration\ProductGroupControllerTests\OverviewMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\StockAdministration\StockItemController_Tests.cs" />
+    <Compile Include="Unit\Controllers\ClientManagerControllerTests\CreateMethod.cs" />
+    <Compile Include="Unit\Controllers\ClientManagerControllerTests\DeleteMethod.cs" />
+    <Compile Include="Unit\Controllers\ClientManagerControllerTests\EditMethod.cs" />
+    <Compile Include="Unit\Controllers\ClientManagerControllerTests\GetListOfClientsMethod.cs" />
+    <Compile Include="Unit\Controllers\ClientManagerControllerTests\ObjectMother.cs" />
+    <Compile Include="Unit\Controllers\ClientManagerControllerTests\Overview.cs" />
     <Compile Include="Unit\Controllers\EmailRequestControllerTests\CreateMethod.cs" />
     <Compile Include="Unit\Controllers\EmailRequestControllerTests\ObjectMother.cs" />
     <Compile Include="Unit\Controllers\EmailRequestControllerTests\ResponseMethod.cs" />

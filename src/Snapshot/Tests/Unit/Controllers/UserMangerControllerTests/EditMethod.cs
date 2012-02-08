@@ -37,10 +37,10 @@ namespace Tests.Unit.Controllers.UserMangerControllerTests
         }
 
         [Test]
-        public void Returns_JSON_With_SuccessMessage_When_Region_Has_Been_Saved()
+        public void Returns_JSON_With_SuccessMessage_When_User_Has_Been_Saved()
         {
             //Arrange
-            UserManagerInputModel regionInputModel = new UserManagerInputModel()
+            UserManagerInputModel userInputModel = new UserManagerInputModel()
             {
                 Id = objectMother.user.Id,
                 ClientId = objectMother.client.Id,
@@ -61,7 +61,7 @@ namespace Tests.Unit.Controllers.UserMangerControllerTests
                                                                                         p.Id == objectMother.user.Id
                                                                                    )));
             //Act
-            var jsonResult = objectMother.controller.Edit(regionInputModel);
+            var jsonResult = objectMother.controller.Edit(userInputModel);
 
             //Assert
             objectMother.saveCommand.VerifyAllExpectations();
