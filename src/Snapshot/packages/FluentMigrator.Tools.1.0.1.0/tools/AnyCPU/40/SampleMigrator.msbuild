@@ -15,6 +15,13 @@
              Target="../../../../../Migrations/bin/Debug/Migrations.dll">
     </Migrate>
     <!--
+    <Migrate Database="sqlserver"
+             Connection="Data Source=(local)\sqlexpress;Database=migration;Trusted_Connection=true"
+             Namespace="Migrations"
+             Task="rollback"
+             Steps="2"
+             Target="../../../../../Migrations/bin/Debug/Migrations.dll">
+    </Migrate>
     <Migrate
             Database="sqlite"
             Connection="Data Source=../../../../../Integration/bin/Debug/database.db;Version=3;New=True;"
