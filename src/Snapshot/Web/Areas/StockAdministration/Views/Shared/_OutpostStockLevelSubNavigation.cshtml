@@ -1,0 +1,126 @@
+﻿
+<script type="text/javascript">
+     window.res.header.subnavigation.buttonTabs = {
+        id: 'ButtonTabs',
+        group: 'OutpostStockLevelButtonsGroup',
+        outpostStockLevelCurrent: 'outpostStockLevelCurrent',
+        outpostStockLevelHistorical: 'outpostStockLevelHistorical',
+    };
+
+
+    Ext.onReady(function () {
+        var subNavRes = window.res.header.subnavigation;
+        var subnav = Ext.getCmp(subNavRes.id);
+
+        subnav.add([
+            {
+                xtype: 'container',
+                id: subNavRes.buttonTabs.id,
+                margin: 0,
+                padding: 0,
+                width: 500,
+                layout: {
+                    align: 'stretch',
+                    padding: 0,
+                    type: 'vbox'
+                },
+                items: [
+                        {
+                            xtype: 'container',
+                            flex: 1,
+                            items: [
+                                { xtype: 'label', html: '&nbsp;' }
+                            ]
+                        },
+                        {
+                            xtype: 'container',
+                            layout: {
+                                type: 'column'
+                            },
+                            flex: 1,
+                            items: [
+                                {
+                                    xtype: 'button',
+                                    id: subNavRes.buttonTabs.outpostStockLevelCurrent,
+                                    toggleGroup: subNavRes.buttonTabs.group,
+                                    enableToggle: true,
+                                    pressed: true,
+                                    text: 'Outpost Product Level',
+                                     handler: function () {
+                                        navigateTo(window.res.link.outpostStockLevelCurrent);
+                                    }
+                                },
+                                {
+                                    xtype: 'button',
+                                    id: subNavRes.buttonTabs.outpostStockLevelHistorical,
+                                    toggleGroup: subNavRes.buttonTabs.group,
+                                    enableToggle: true,
+                                    text: 'Historical Product Level'                                   
+                                }
+                            ]
+                        }
+                    ]
+            },
+                {
+                    xtype: 'container',
+                    id: 'userInfo',
+                    flex: 1,
+                    layout: {
+                        align: 'stretch',
+                        type: 'vbox'
+                    },
+                    items: [
+                           {
+                               xtype: 'container',
+                               flex: 1,
+                               layout: {
+                                   align: 'stretch',
+                                   pack: 'end',
+                                   type: 'hbox'
+                               },
+                               items: [
+                                    {
+                                        xtype: 'container',
+                                        flex: 4,
+                                        items: [
+                                            { xtype: 'label', html: '&nbsp;' }
+                                        ]
+                                    },
+                                    { xtype: 'label', flex: 1, text: 'Anothony Wolf (UNICEF)' }
+                                ]
+                           },
+                            {
+                                xtype: 'container',
+                                flex: 1,
+                                layout: {
+                                    align: 'stretch',
+                                    pack: 'end',
+                                    type: 'hbox'
+                                },
+
+                                items: [
+                                    {
+                                        xtype: 'container',
+                                        flex: 4,
+                                        items: [
+                                            { xtype: 'label', html: '&nbsp;' }
+                                        ]
+                                    },
+                                    { xtype: 'label', flex: 1, text: 'Help    -   Account Options   -   Log Out (L)' }
+                                ]
+                            }
+                           ]
+                },
+                {
+                    xtype: 'container',
+                    itemId: 'userPhoto',
+                    width: 80,
+                    items: [
+                        { xtype: 'label', text: 'photo' }
+                    ]
+                }
+        ]);
+        subnav.ownerCt.doLayout();
+
+    });
+</script>

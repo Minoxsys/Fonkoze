@@ -1,7 +1,255 @@
 ﻿@model Web.Areas.StockAdministration.Models.OutpostStockLevel.OutpostStockLevelOverviewModel
 @section page_title{
-Stock Item: Overview
+Outpost Stock Level Current
 }
+@{
+    Html.RenderPartial("_OutpostStockLevelSubNavigation");
+    Html.RenderPartial("_OutpostStockLevelMainContent");
+    
+}
+<script type="text/javascript">
+    Ext.onReady(function () {
+
+        var outpostStockLevelBtnId = window.res.header.navigation.outpostStockLevel;
+        var outpostStockLevelBtn = Ext.getCmp(outpostStockLevelBtnId);
+        outpostStockLevelBtn.toggle(true);
+
+    });
+</script>
+<script type="text/javascript">
+    Ext.onReady(function () {
+
+        window.feature = {};
+        window.feature.comboboxCountriesId = 'comboboxCountriesId';
+        window.feature.comboboxRegionsId = 'combobxRegionsId';
+        window.feature.comboboxDistrictsId = 'comboboxDistrictsId';
+        window.feature.comboboxOutpostsId = 'comboboxOutpostId';
+
+
+        window.feature.CountryStore = Ext.create('Ext.data.Store', {
+            fields: ['Name', 'Id'],
+            proxy: {
+                type: 'ajax',
+                url: '@Url.RouteUrl(StockAdministrationAreaRegistration.DEFAULT_ROUTE, new { controller = "OutpostStockLevel", action = "GetCountries" })',
+                reader: {
+                    type: 'json',
+                    root: 'countries',
+                    disableCaching: true,
+                    totalProperty: 'TotalItems'
+                }
+            }
+        });
+
+        window.feature.RegionStore = Ext.create('Ext.data.Store', {
+            fields: ['Name', 'Id'],
+            proxy: {
+                type: 'ajax',
+                url: '@Url.RouteUrl(StockAdministrationAreaRegistration.DEFAULT_ROUTE, new { controller = "OutpostStockLevel", action = "GetRegions" })',
+                reader: {
+                    type: 'json',
+                    root: 'regions',
+                    disableCaching: true,
+                    totalProperty: 'TotalItems'
+                }
+            }
+        });
+
+        window.feature.DistrictStore = Ext.create('Ext.data.Store', {
+            fields: ['Name', 'Id'],
+            proxy: {
+                type: 'ajax',
+                url: '@Url.RouteUrl(StockAdministrationAreaRegistration.DEFAULT_ROUTE, new { controller = "OutpostStockLevel", action = "GetDistricts" })',
+                reader: {
+                    type: 'json',
+                    root: 'districts',
+                    disableCaching: true,
+                    totalProperty: 'TotalItems'
+                }
+            }
+        });
+
+        window.feature.OutpostStore = Ext.create('Ext.data.Store', {
+            fields: ['Name', 'Id'],
+            proxy: {
+                type: 'ajax',
+                url: '@Url.RouteUrl(StockAdministrationAreaRegistration.DEFAULT_ROUTE, new { controller = "OutpostStockLevel", action = "GetOutposts" })',
+                reader: {
+                    type: 'json',
+                    root: 'outposts',
+                    disableCaching: true,
+                    totalProperty: 'TotalItems'
+                }
+            }
+        });
+
+        window.feature.comboBoxCountries = Ext.create('Ext.form.ComboBox', {
+            store: window.feature.CountryStore,
+            queryMode: 'local',
+            id: window.feature.comboboxCountriesId,
+            displayField: 'Name',
+            valueField: 'Id',
+            margin: '0 0 0 30',
+            emptyText: _t('Selected country'),
+            listeners: {
+                select: function (combo, record, index) {
+                    var selectedCountryId = record[0].data.Id;
+                    var comboboxRegions = Ext.getCmp(window.feature.comboboxRegionsId);
+                    comboboxRegions.setValue(null);
+                    comboboxRegions.setDisabled(false);
+
+                    window.feature.RegionStore.load({ params: { countryId: selectedCountryId} });
+
+                    var comboboxDistricts = Ext.getCmp(window.feature.comboboxDistrictsId);
+                    var comboboxOutposts = Ext.getCmp(window.feature.comboboxOutpostsId);
+
+
+                    comboboxDistricts.setValue(null);
+                    comboboxDistricts.setDisabled(true);
+
+                    comboboxOutposts.setValue(null);
+                    comboboxOutposts.setDisabled(true);
+
+                }
+            }
+        });
+
+        window.feature.comboBoxRegions = Ext.create('Ext.form.ComboBox', {
+            store: window.feature.RegionStore,
+            queryMode: 'local',
+            id: window.feature.comboboxRegionsId,
+            displayField: 'Name',
+            valueField: 'Id',
+            disabled: true,
+            margin: '0 0 0 30',
+            emptyText: _t('Selected region'),
+            listeners: {
+                select: function (combo, record, index) {
+                    var selectedRegionId = record[0].data.Id;
+                    Ext.getCmp(window.feature.comboboxDistrictsId).setDisabled(false);
+                    Ext.getCmp(window.feature.comboboxDistrictsId).setValue(null);
+                    window.feature.DistrictStore.load({ params: { regionId: selectedRegionId} });
+
+                    var comboboxOutpost = Ext.getCmp(window.feature.comboboxOutpostsId);
+                   
+                    comboboxOutpost.setValue(null);
+                    comboboxOutpost.setDisabled(true);
+
+                }
+            }
+        });
+
+        window.feature.comboBoxDistricts = Ext.create('Ext.form.ComboBox', {
+            store: window.feature.DistrictStore,
+            queryMode: 'local',
+            id: window.feature.comboboxDistrictsId,
+            displayField: 'Name',
+            valueField: 'Id',
+            disabled: true,
+            margin: '0 0 0 30',
+            emptyText: _t('Selected district'),
+            listeners: {
+                select: function (combo, record, index) {
+                    var selectedDistrictId = record[0].data.Id;
+                    window.feature.OutpostStore.load({ params: { districtId: selectedDistrictId} });
+
+                    Ext.getCmp(window.feature.comboboxOutpostsId).setDisabled(false);
+
+                }
+            }
+        });
+
+        window.feature.comboBoxOutposts = Ext.create('Ext.form.ComboBox', {
+            store: window.feature.OutpostStore,
+            queryMode: 'local',
+            id: window.feature.comboboxOutpostsId,
+            displayField: 'Name',
+            valueField: 'Id',
+            disabled: true,
+            margin: '0 0 0 30',
+            emptyText: _t('Selected outpost'),
+            listeners: {
+                select: function (combo, record, index) {
+                    //                    var selectedProductGroupId = record[0].data.Id;
+                    //                    window.feature.store.proxy.extraParams.productGroupId = selectedProductGroupId;
+                    //                    window.feature.store.loadPage(1);
+
+                }
+            }
+        });
+
+        var contentRes = window.res.content;
+        window.feature.CountryStore.load();
+
+        var mainContent = Ext.getCmp(contentRes.maincontent.id);
+        mainContent.add({
+            xtype: 'container',
+            margin: 20,
+            id: 'TopContainer',
+            border: '10 10 10 10',
+            layout: {
+                align: 'stretch',
+                type: 'vbox'
+            },
+            items: [
+                      {
+                          xtype: 'container',
+                          layout: {
+                              type: 'column'
+                          },
+                          height: 50,
+                          items: [{ xtype: 'container',
+                              height: 30,
+                              width: 30,
+                              html: '&nbsp;'
+                          }]
+                      }, {
+                          xtype: 'container',
+                          layout: {
+                              type: 'hbox'
+                          },
+                          height: 50,
+                          items: [{ xtype: 'label',
+                              text: 'Selected Country',
+                              margin: '0 0 0 40'
+                          }, { xtype: 'label',
+                              text: 'Selected Region',
+                              margin: '0 0 0 120'
+                          }, { xtype: 'label',
+                              text: 'Selected District',
+                              margin: '0 0 0 150'
+                          }, { xtype: 'label',
+                              text: 'Selected Outpost',
+                              margin: '0 0 0 140'
+                          }]
+                      }, {
+                          xtype: 'container',
+                          layout: {
+                              type: 'hbox'
+                          },
+                          height: 50,
+                          items: [window.feature.comboBoxCountries,
+                                   window.feature.comboBoxRegions,
+                                   window.feature.comboBoxDistricts,
+                                   window.feature.comboBoxOutposts,
+                                   {
+                                       xtype: 'button',
+                                       margin: '0 0 0 20',
+                                       text: 'View Product Stock Level',
+                                       width: 150,
+                                       handler: function () {
+                                           //                                  var productModal = new window.feature.modal();
+
+                                           //                                  productModal.show();
+                                       }
+                                   }
+                          ]
+                      }
+                    ]
+        });
+
+    });
+</script>
+@*
 @section master_actions{
     @{
         Html.RenderPartial("~/Views/Shared/_OutpostManagementActions.cshtml");
@@ -338,3 +586,4 @@ Stock Item: Overview
         });
     </script>
 }
+*@
