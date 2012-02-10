@@ -1564,8 +1564,6 @@
     <Content Include="Areas\OutpostManagement\Views\Region\Overview.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\_ViewStart.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\Outpost\Overview.cshtml" />
-    <Content Include="Areas\OutpostManagement\Views\Contact\Create.cshtml" />
-    <Content Include="Areas\OutpostManagement\Views\Contact\Edit.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\Shared\OverviewContacts.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\District\Overview.cshtml" />
     <Content Include="Areas\StockAdministration\Views\Web.config" />
@@ -1582,7 +1580,6 @@
     <Content Include="Areas\StockAdministration\Views\ProductGroup\Input.cshtml" />
     <Content Include="Areas\StockAdministration\Views\ProductGroup\InputProducts.cshtml" />
     <Content Include="Areas\StockAdministration\Views\ProductGroup\OverviewProductGroup.cshtml" />
-    <Content Include="Areas\OutpostManagement\Views\Contact\Overview.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\Shared\CreateContact.cshtml" />
     <Content Include="Areas\StockAdministration\Views\OutpostStockLevel\Overview.cshtml" />
     <Content Include="Areas\StockAdministration\Views\OutpostStockLevel\OverviewItemsStockLevel.cshtml" />
@@ -1619,6 +1616,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\OutpostManagement\Views\Shared\_OutpostAdministrationSideBar.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\OutpostManagement\Views\Shared\_OutpostContacts.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

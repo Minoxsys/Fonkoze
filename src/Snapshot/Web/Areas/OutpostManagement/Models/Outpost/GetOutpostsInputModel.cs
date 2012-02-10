@@ -19,5 +19,7 @@ namespace Web.Areas.OutpostManagement.Models.Outpost
 		public string dir { get; set; }
 
 		public Guid? districtId { get; set; }
-	}
+
+        public string search { get; set; }
+    }
 }

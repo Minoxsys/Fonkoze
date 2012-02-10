@@ -157,7 +157,20 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.OutpostControllerTests
 
 				var outpost = new Mock<Outpost>();
 				outpost.Setup(c => c.Id).Returns(Guid.NewGuid());
-				outpost.Setup(c => c.Name).Returns("Outpost " + i);
+
+                if (i % 9 != 0)
+                {
+                    outpost.Setup(c => c.Name).Returns("Denhaag Outpost " + i);
+                }
+                else
+                {
+                    if (i % 8 != 0)
+                    {
+                        outpost.Setup(c => c.Name).Returns("Gama Outpost Denim " + i);
+                    }else
+                        outpost.Setup(c => c.Name).Returns("Beta Outpost " + i);
+                }
+
 				outpost.Setup(c => c.IsWarehouse).Returns(true);
 				outpost.Setup(c => c.Client).Returns(clientMock.Object);
 
@@ -239,5 +252,25 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.OutpostControllerTests
 			queryService.Verify(c => c.Load(It.Is<Guid>(g=>g==outpostId)));
 		}
 
-	}
+
+        internal GetOutpostsInputModel ExepectOutpostsToBeQueriedByName(string outpostName)
+        {
+            var model = new GetOutpostsInputModel()
+            {
+                dir = "ASC",
+                districtId = null,
+                limit = 50,
+                page = 1,
+                sort = "Name",
+                start = 0,
+                search = outpostName
+            };
+
+            var queryOutposts = Mock.Get(controller.QueryService);
+
+            queryOutposts.Setup(c => c.Query()).Returns(this.AllOutposts());
+
+            return model;
+        }
+    }
 }

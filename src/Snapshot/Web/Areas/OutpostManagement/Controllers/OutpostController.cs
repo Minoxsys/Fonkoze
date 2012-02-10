@@ -44,85 +44,6 @@ namespace Web.Areas.OutpostManagement.Controllers
 		private Client _client;
 
 
-		[HttpPost]
-		public RedirectToRouteResult DeleteContact(Guid outpostID, Guid contactId)
-		{
-			var outpost = QueryService.Load(outpostID);
-			var contact = QueryContact.Load(contactId);
-
-			if (contact != null)
-			{
-				DeleteContactCommand.Execute(contact);
-			}
-
-			return RedirectToAction("Edit", "Outpost", new
-			{
-				outpostId = outpostID
-			});
-		}
-
-		[HttpGet]
-		public JsonResult GetProductsList(Guid? productId)
-		{
-			List<SelectListItem> Outposts = new List<SelectListItem>();
-
-			var outposts = QueryService.Query().Where(it => it.District.Id == productId.Value);
-
-			if (outposts.ToList().Count > 0)
-			{
-				foreach (var item in outposts)
-				{
-					Outposts.Add(new SelectListItem { Text = item.Name, Value = item.Id.ToString() });
-				}
-			}
-			var jsonResult = new JsonResult();
-			jsonResult.Data = Outposts;
-
-			return Json(Outposts, JsonRequestBehavior.AllowGet);
-		}
-
-		public ActionResult CreateContact(Guid outpostId)
-		{
-			var model = new ContactModel();
-			model.OutpostId = outpostId;
-			model.ContactType = "Mobile Number";
-			return View("CreateContact", model);
-		}
-
-		[HttpPost]
-		[ValidateInput(false)]
-		public ActionResult CreateContact(ContactModel contactModel)
-		{
-			var model = new ContactModel();
-
-			if (!ModelState.IsValid)
-			{
-				return View(model);
-			}
-
-			var contact = new Contact();
-
-			Outpost outpost = QueryService.Load(contactModel.OutpostId);
-			var contacts = QueryContact.Query().Where(m => m.Outpost.Id == outpost.Id);
-
-			contact.Client = LoadClient.Load(Client.DEFAULT_ID);
-			;
-
-			Mapper.Map(contactModel, contact);
-			if (outpost != null)
-			{
-				if (contacts.Count() == 0)
-				{
-					contact.IsMainContact = true;
-				}
-				outpost.Contacts.Add(contact);
-			}
-
-			SaveOrUpdateCommand.Execute(outpost);
-
-			return RedirectToAction("Edit", "Outpost", new { outpostId = contactModel.OutpostId });
-		}
-
 
 		[HttpGet]
 		public ActionResult Overview()
@@ -159,6 +80,11 @@ namespace Web.Areas.OutpostManagement.Controllers
 			if (input.districtId.HasValue)
 			{
 				outpostsQueryData = outpostsQueryData.Where(o => o.District.Id == input.districtId.Value);
+			}
+
+			if (!string.IsNullOrEmpty(input.search))
+			{
+				outpostsQueryData = outpostsQueryData.Where(o => o.Name.Contains(input.search));
 			}
 
 			var orderByColumnDirection = new Dictionary<string, Func<IQueryable<Outpost>>>()
@@ -243,6 +169,11 @@ namespace Web.Areas.OutpostManagement.Controllers
 			this._client = LoadClient.Load(clientId);
 		}
 
+        public class OutpostCreateResponse : JsonActionResponse
+        {
+            public Guid OutpostId { get; set; }
+        }
+
 		[HttpPost]
 		public JsonResult Create(CreateOutpostInputModel model)
 		{
@@ -252,9 +183,10 @@ namespace Web.Areas.OutpostManagement.Controllers
 
 			SaveOrUpdateCommand.Execute(outpost);
 
-			return Json(new JsonActionResponse
+			return Json(new OutpostCreateResponse
 			{
 				Message = string.Format("Created successfully outpost {0}", outpost.Name),
+                OutpostId= outpost.Id,
 				Status = "Success"
 			});
 		}

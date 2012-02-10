@@ -51,5 +51,22 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.OutpostControllerTests
 			Assert.That(data.Outposts.Length, Is.EqualTo(inputModel.limit));
 
 		}
+
+		[Test]
+		public void Query_Includes_Only_Outposts_ThatMatch_SearchName()
+		{
+			var inputModel = _.ExepectOutpostsToBeQueriedByName("Den");
+
+			inputModel.limit = 35;
+
+			var viewResult = _.controller.GetOutposts(inputModel);
+			var data = viewResult.Data as GetOutpostsOutputModel;
+
+			for (int i = 0; i < data.Outposts.Count(); i++)
+			{
+				string outpostName = data.Outposts[i].Name;
+				Assert.That(outpostName, Is.StringContaining("Den"));
+			}
+		}
 	}
 }
