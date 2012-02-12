@@ -10,7 +10,6 @@ namespace Web.Areas.StockAdministration.Models.Product
     public class ProductInputModel
     {
         public Guid Id { get; set; }
-        [Required(ErrorMessage="Name for Stock Item is required!")]
         public String Name { get; set; }
         public String Description { get; set; }
         public int LowerLimit { get; set; }

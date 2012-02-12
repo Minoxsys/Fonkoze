@@ -136,7 +136,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement
                         {
                             SaveOrUpdateCommand = saveCommand,
                             DeleteCommand = deleteCommand,
-                            QueryClients = queryClient,
+                            LoadClient = queryClient,
                             QueryCountry = queryCountry,
                             QueryRegion = queryRegion,
                             QueryDistrict = queryDistrict,
@@ -161,36 +161,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement
 
         }
 
-        [Test]
-        public void ShouldReturnData_FromOutpostServiceSpecificTo_CountryIdNotNull_AndFrom_RegionQueryServiceSpecificToThatCountryId_AndFrom_DistrictsQueryServiceSpecificToRegionIdNotNull_TO_Overview()
-        {
-            //arange
-            queryOutpost.Expect(it => it.Load(outpost.Id)).Return(outpost);
-            queryCountry.Expect(call => call.Query()).Return(new Country[] { country }.AsQueryable());
-            queryRegion.Expect(call => call.Query()).Return(new Region[] { region }.AsQueryable());
-            queryDistrict.Expect(call => call.Query()).Return(new District[] { district }.AsQueryable());
-            queryOutpost.Expect(call => call.Query()).Return(new Outpost[] { outpost }.AsQueryable());
-            queryWarehouse.Expect(call => call.Query()).Return(new Outpost[] { warehouses }.AsQueryable());
-
-            //act
-            var viewResult = (ViewResult)controller.Overview(country.Id, region.Id, district.Id);
-
-            //assert
-            Assert.IsNotNull(viewResult.Model);
-            var viewModel = (OutpostOverviewModel)viewResult.Model;
-
-            Assert.AreEqual(region.Country.Id, country.Id);
-            Assert.AreEqual(district.Region.Id, region.Id);
-
-            Assert.AreEqual(viewModel.Countries[0].Value, country.Id.ToString());
-            Assert.AreEqual(viewModel.Regions[0].Value, region.Id.ToString());
-            Assert.AreEqual(viewModel.Districts[0].Value, district.Id.ToString());
-            Assert.AreEqual(region.Country.Id, country.Id);
-            Assert.AreEqual(region.Id, region.Id);
-            Assert.AreEqual(district.Id, district.Id);
-            Assert.AreEqual(DEFAULT_VIEW_NAME, viewResult.ViewName);
- 
-        }
+       
         [Test]
         public void Should_Display_Empty_Model_When_GET_Create()
         {
@@ -217,68 +188,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement
             return outpostInputModel;
         }
 
-        [Test]
-        public void Should_Load_A_Completed_Edit_Page_When_GET_Edit()
-        {
-            //arrange			
-            queryOutpost.Expect(it => it.Load(outpost.Id)).Return(outpost);
-            queryCountry.Expect(it => it.Query()).Return(new Country[] { country }.AsQueryable());
-            queryRegion.Expect(call => call.Query()).Return(new Region[] { region }.AsQueryable());
-            queryDistrict.Expect(call => call.Query()).Return(new District[] { district }.AsQueryable());
-            queryContact.Expect(call => call.Query()).Return(new Contact[] { contact }.AsQueryable());
-            queryOutpost.Expect(call => call.Query()).Repeat.Once().Return(new Outpost[] { outpost }.AsQueryable());
-            queryWarehouse.Expect(call => call.Query()).Return(new Outpost[] { warehouses }.AsQueryable());
-            //act
-            var result = (ViewResult)controller.Edit(outpost.Id, country.Id, region.Id, district.Id);
 
-            //assert
-            Assert.IsInstanceOf<OutpostOutputModel>(result.Model);
-            var viewModel = result.Model as OutpostOutputModel;
-            Assert.AreEqual(OUTPOST_NAME, viewModel.Name);
-            Assert.AreEqual(outpost.Id, viewModel.Id);
-
-        }
-
- 
-
-        [Test]
-        public void Should_Redirect_To_Edit_When_POST_Edit_Fails_BecauseOfModelStateNotValid()
-        {
-            //arrange
-            controller.ModelState.AddModelError("Name", "Field required");
-            queryOutpost.Expect(it => it.Load(outpost.Id)).Return(outpost);
-            queryOutpost.Expect(call => call.Query()).Repeat.Once().Return(new Outpost[] { outpost }.AsQueryable());
-            queryCountry.Expect(it => it.Query()).Return(new Country[] { country }.AsQueryable());
-            queryRegion.Expect(call => call.Query()).Return(new Region[] { region }.AsQueryable());
-            queryDistrict.Expect(call => call.Query()).Return(new District[] { district }.AsQueryable());
-            queryContact.Expect(call => call.Query()).Return(new Contact[] { contact }.AsQueryable());
-
-            var outpostInputModel = SetOutpostInputModelWithData_ToBeTransmitedToCreateMethod();
-
-            //act
-            var viewResult = (ViewResult)controller.Edit(outpostInputModel);
-
-            //assert
-            queryCountry.VerifyAllExpectations();
-            queryRegion.VerifyAllExpectations();
-            Assert.AreEqual("Edit", viewResult.ViewName);
-        }
-
-        [Test]
-        public void Should_goto_Overview_when_DeleteAnOutpost_AndThereAre_NoProductsAsociated()
-        {
-            //arrange
-            //queryProduct.Expect(call => call.Query()).Repeat.Once().Return(new Product[] { }.AsQueryable());
-            queryOutpost.Expect(call => call.Load(outpost.Id)).Return(outpost);
-            deleteCommand.Expect(call => call.Execute(Arg<Outpost>.Matches(b => b.Id == outpost.Id)));
-
-            // Act
-            var redirectResult = (RedirectToRouteResult)controller.Delete(outpost.Id);
-
-            // Assert
-            deleteCommand.VerifyAllExpectations();
-            Assert.AreEqual("Overview", redirectResult.RouteValues["Action"]);
-        }
 
         [Test]
         public void Should_GoTo_Overview_WhenDeleteAnOutpost_AndDisplayTempDataError_If_ThereAreProductsAsociated()

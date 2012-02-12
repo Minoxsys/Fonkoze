@@ -44,7 +44,12 @@ begin
     create table Users (
        Id UNIQUEIDENTIFIER not null,
        UserName NVARCHAR(255) null unique,
+       FirstName NVARCHAR(255) null,
+       LastName NVARCHAR(255) null,
+       ClientName NVARCHAR(255) null,
        ClientId UNIQUEIDENTIFIER null,
+       RoleId UNIQUEIDENTIFIER null,
+       RoleName NVARCHAR(255) null,
        Password NVARCHAR(255) null,
        Email NVARCHAR(255) null,
        Created DATETIME null,
@@ -155,6 +160,7 @@ begin
        Id UNIQUEIDENTIFIER not null,
        Name NVARCHAR(255) null,
        Description NVARCHAR(255) null,
+       ReferenceCode NVARCHAR(255) null,
        Created DATETIME null,
        Updated DATETIME null,
        ByUser_FK UNIQUEIDENTIFIER null,
@@ -222,6 +228,22 @@ create table OutpostHistoricalStockLevels (
     )
 end
 
+
+if not exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'EmailRequests')
+begin
+	create table EmailRequests (
+        Id UNIQUEIDENTIFIER not null,
+       [Date] DATETIME null,
+       OutpostId UNIQUEIDENTIFIER null,
+       ProductGroupId UNIQUEIDENTIFIER null,
+
+       Created DATETIME null,
+       Updated DATETIME null,
+       ByUser_FK UNIQUEIDENTIFIER null,
+       primary key (Id)
+    )
+end
+
 if not exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'WorldCountryRecords')
 begin
  create table WorldCountryRecords (
@@ -229,6 +251,7 @@ begin
        Name NVARCHAR(255) null,
        ISOCode NVARCHAR(255) null,
        PhonePrefix NVARCHAR(255) null,
+
        Created DATETIME null,
        Updated DATETIME null,
        ByUser_FK UNIQUEIDENTIFIER null,

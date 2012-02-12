@@ -11,9 +11,9 @@ namespace Persistence.Queries
 {
 	public class NHibernateQueryService<ENTITY> : IQueryService<ENTITY> where ENTITY: DomainEntity
 	{
-		INHibernateUnitOfWork unitOfWork;
+		ISession unitOfWork;
 
-		public NHibernateQueryService(INHibernateUnitOfWork unitOfWork)
+		public NHibernateQueryService(ISession unitOfWork)
 		{
             
 			this.unitOfWork = unitOfWork;
@@ -21,14 +21,14 @@ namespace Persistence.Queries
 		}
 		public ENTITY Load(Guid id)
 		{
-			var entity = unitOfWork.CurrentSession.Get<ENTITY>(id);
+			var entity = unitOfWork.Get<ENTITY>(id);
 
 			return entity;
 		}
 
 		public IQueryable<ENTITY> Query()
 		{
-			IQueryable<ENTITY> query = unitOfWork.CurrentSession.Query<ENTITY>();
+			IQueryable<ENTITY> query = unitOfWork.Query<ENTITY>();
 			
 			return query;
 		}
