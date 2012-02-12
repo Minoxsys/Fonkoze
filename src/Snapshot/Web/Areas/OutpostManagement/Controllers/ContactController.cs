@@ -6,266 +6,283 @@ using Web.Areas.OutpostManagement.Models.Contact;
 using AutoMapper;
 using Core.Persistence;
 using Domain;
-
+using Core.Domain;
 
 namespace Web.Areas.OutpostManagement.Controllers
 {
     public class ContactController : Controller
     {
-        //
-        // GET: /OutpostManagement/MobilePhone/
+        private Core.Domain.User _user;
+        private Client _client;
+        public IQueryService<Contact> QueryService { get; set; }
+        public IQueryService<Contact> QueryContact { get; set; }
+        public IQueryService<Outpost> QueryOutposts { get; set; }
+        public IQueryService<Country> QueryCountries { get; set; }
+        public IQueryService<Region> QueryRegions { get; set; }
+        public IQueryService<Outpost> QueryDistricts { get; set; }
 
-           public IQueryService<Contact> QueryService { get; set; }
-           public IQueryService<Contact> QueryContact { get; set; }
-           public IQueryService<Outpost> QueryOutposts { get; set; }
-           public IQueryService<Country> QueryCountries { get; set; }
-           public IQueryService<Region> QueryRegions { get; set; }
-           public IQueryService<Outpost> QueryDistricts { get; set; }
-           public IQueryable<Country> countries;
-           public IQueryable<Region> regions;
-           public IQueryable<District> districts;
-           public IQueryService<Client> QueryClients { get; set; }
+        public IQueryService<Client> LoadClient { get; set; }
+        public IQueryService<User> QueryUsers { get; set; }
 
-           public ISaveOrUpdateCommand<Contact> SaveOrUpdateCommand { get; set; }
+        public ISaveOrUpdateCommand<Contact> SaveOrUpdateCommand { get; set; }
+        public ISaveOrUpdateCommand<Outpost> UpdateOutpost { get; set; }
 
-           public IDeleteCommand<Contact> DeleteCommand { get; set; }
-        //[Requires(Permissions = "Country.Overview")]
+        public IDeleteCommand<Contact> DeleteCommand { get; set; }
 
 
-
-
-        public ActionResult Overview(Guid outpostId)
+        public class GetContactIndex
         {
-            ContactsOverviewModel model = new ContactsOverviewModel();
-
-            model.Items = new List<ContactModel>();
-            model.OutpostId = outpostId;
-            //Outpost outpost;
-            
-            var queryResult = QueryOutposts.Query().Where(mm => mm.Id == outpostId);
-
-            if (queryResult.Count() > 0)
-            {
-                foreach (var outpost in queryResult)
-                {
-
-                    IList<Contact> contacts = outpost.Contacts;
-                    foreach (Contact contact in contacts)
-                    {
-                        ContactModel viewModelItem = new ContactModel();
-                        viewModelItem.IsMainContact = contact.IsMainContact;
-                        CreateMappings();
-                        Mapper.Map(contact, viewModelItem);
-                        model.Items.Add(viewModelItem);
-                    }
-
-                }
-            };
-            
-            countries =  QueryCountries.Query();
-            regions = QueryRegions.Query();
-            //districts = QueryDistricts.Query();
-
-            return View(model);
+            public Guid? OutpostId { get; set; }
         }
 
         [HttpGet]
-        //[Requires(Permissions = "Country.CRUD")]
-        public ActionResult Create(Guid outpostId)
+        public JsonResult Index(GetContactIndex input)
         {
-            var model = new ContactModel();
-            model.OutpostId = outpostId;
-            model.ContactType = "Mobile Number";
-            return View("Create", model);
+            LoadUserAndClient();
+            var outpost = LoadOutpost(input.OutpostId);
+
+            var contacts = QueryContact.Query().Where(contact => contact.Outpost == outpost).ToList();
+
+            var contactsModelArray = (from c in contacts
+                                      select new ContactModel
+                                      {
+                                          OutpostId = outpost.Id,
+                                          IsMainContact = c.IsMainContact,
+                                          ContactDetail = c.ContactDetail,
+                                          ContactType = c.ContactType,
+                                          Id = c.Id
+                                      });
+
+            return Json(contactsModelArray, JsonRequestBehavior.AllowGet);
         }
 
+        private Outpost LoadOutpost(Guid? outpostId)
+        {
+            var outpost = QueryOutposts.Load(outpostId.Value);
+            return outpost;
+        }
+
+        public class PostContactIndex : ContactModel
+        {
+        }
 
         [HttpPost]
-        [ValidateInput(false)]
-        //[Requires(Permissions = "OnBoarding.Candidate.CRUD")]
-        public ActionResult Create(ContactModel contactModel)
+        public JsonResult Index(PostContactIndex input)
         {
-            var model = new ContactModel();
+            LoadUserAndClient();
+            var outpost = LoadOutpost(input.OutpostId);
 
-            if (!ModelState.IsValid)
+            var contact = new Contact
             {
-                return View(model);
-            }
-
-            CreateMappings();
-            var contact = new Contact();
-
-            Outpost outpost = QueryOutposts.Load(contactModel.OutpostId);
-            var contacts = QueryContact.Query().Where(m => m.Outpost.Id == outpost.Id);
-            
-            contact.Client = QueryClients.Load(Client.DEFAULT_ID); ;
-
-            Mapper.Map(contactModel, contact);
-            if (outpost != null)
-            {
-                if (contacts.Count() == 0)
-                    contact.IsMainContact = true;
-                outpost.Contacts.Add(contact);
-            }
+                Client = _client,
+                ByUser = _user,
+                Outpost = outpost,
+                ContactType = input.ContactType,
+                ContactDetail = input.ContactDetail,
+                IsMainContact = input.IsMainContact
+            };
 
             SaveOrUpdateCommand.Execute(contact);
 
-            return RedirectToAction("Edit", "Outpost", new { outpostId = contactModel.OutpostId });
-         }
-        
- 
-        // GET: /OutpostManagement/MobilePhone/Details/5
-        //[HttpGet]
-        ////[Requires(Permissions = "Country.CRUD")]
-        //public ViewResult Edit(Guid mobilePhoneId)
-        //{
-        //    var mobilPhone = QueryService.Load(mobilePhoneId);
-        //    var MobilePhoneModel = new MobilePhoneModel();
+            ChangeDetailMethodOnOutpostWhenIsMainContact(outpost, contact);
 
-        //    CreateMappings();
-        //    Mapper.Map(mobilPhone, MobilePhoneModel);
+            return Json(new { success = true, message = "New contact has been created", data = ToContactModel(contact) });
+        }
 
-        //    return View(MobilePhoneModel);
-        //}
+        private void ChangeDetailMethodOnOutpostWhenIsMainContact(Outpost outpost, Contact contact)
+        {
+            if (!contact.IsMainContact) return;
+            outpost.DetailMethod = contact.ContactDetail;
+            UpdateOutpost.Execute(outpost);
+        }
 
+        private object ToContactModel(Contact c)
+        {
+            return new ContactModel
+            {
+                Id = c.Id,
+                OutpostId = c.Outpost.Id,
+                IsMainContact = c.IsMainContact,
+                ContactDetail = c.ContactDetail,
+                ContactType = c.ContactType
+            };
+        }
+
+        public class PutContactIndex : ContactModel
+        {
+        }
+
+        [HttpPut]
+        public JsonResult Index(PutContactIndex input)
+        {
+            LoadUserAndClient();
+            var outpost = LoadOutpost(input.OutpostId);
+
+            var contact = QueryContact.Load(input.Id.Value);
+
+            contact.Client = _client;
+            contact.ByUser = _user;
+            contact.Outpost = outpost;
+
+            contact.ContactType = input.ContactType;
+            contact.ContactDetail = input.ContactDetail;
+            contact.IsMainContact = input.IsMainContact;
+
+            SaveOrUpdateCommand.Execute(contact);
+            ChangeDetailMethodOnOutpostWhenIsMainContact(outpost, contact);
+
+            return Json(new { success = true, message = "Contact has been updated", data = ToContactModel(contact) } );
+        }
+
+        public class DeleteContactIndex : ContactModel
+        {
+        }
+
+        [HttpDelete]
+        public JsonResult Index(DeleteContactIndex input)
+        {
+            LoadUserAndClient();
+            var outpost = LoadOutpost(input.OutpostId);
+
+            var contact = QueryContact.Load(input.Id.Value);
+
+            DeleteCommand.Execute(contact);
+
+            return Json(new { success = true, message = "Contact has been removed" });
+        }
+
+        private void LoadUserAndClient()
+        {
+            var loggedUser = User.Identity.Name;
+            this._user = QueryUsers.Query().FirstOrDefault(m => m.UserName == loggedUser);
+
+            if (_user == null)
+                throw new NullReferenceException("User is not logged in");
+
+            var clientId = Client.DEFAULT_ID;
+            if (_user.ClientId != Guid.Empty)
+                clientId = _user.ClientId;
+
+            this._client = LoadClient.Load(clientId);
+        }
         //[HttpPost]
         //[ValidateInput(false)]
-        ////[Requires(Permissions = "OnBoarding.Candidate.CRUD")]
-        //public ActionResult Edit(MobilePhoneModel mobilePhoneModel)
+        //public ActionResult Create(ContactModel contactModel)
         //{
-        //    var model = new MobilePhoneModel();
-
+        //    var model = new ContactModel();
         //    if (!ModelState.IsValid)
         //    {
         //        return View(model);
         //    }
-            
         //    CreateMappings();
-        //    var mobilePhone = new MobilePhone();
-        //    Mapper.Map(mobilePhoneModel, mobilePhone);
-            
-        //     //mobilePhone.Outpost = QueryOutposts.Load(mobilePhoneModel.OutpostId);
-        //     mobilePhone.Client = QueryClients.Load(Client.DEFAULT_ID); ;
-
-        //    SaveOrUpdateCommand.Execute(mobilePhone);
-
-        //    return RedirectToAction("Overview", "MobilePhone", new { outpostId = mobilePhoneModel.OutpostId });
+        //    var contact = new Contact();
+        //    Outpost outpost = QueryOutposts.Load(contactModel.OutpostId);
+        //    var contacts = QueryContact.Query().Where(m => m.Outpost.Id == outpost.Id);
+        //    contact.Client = QueryClients.Load(Client.DEFAULT_ID);
+        //    ;
+        //    Mapper.Map(contactModel, contact);
+        //    if (outpost != null)
+        //    {
+        //        if (contacts.Count() == 0)
+        //            contact.IsMainContact = true;
+        //        outpost.Contacts.Add(contact);
+        //    }
+        //    SaveOrUpdateCommand.Execute(contact);
+        //    return RedirectToAction("Edit", "Outpost", new { outpostId = contactModel.OutpostId });
         //}
-
-        private static void CreateMappings(Contact entity = null)
-        {
-            Mapper.CreateMap<Contact, ContactModel>();          
-            var mapMobilePhone = Mapper.CreateMap<ContactModel, Contact>();
-         }
-
-
-        [HttpPost]
-        //[Requires(Permissions = "OnBoarding.Candidate.CRUD")]
-        public RedirectToRouteResult Delete(Guid contactId, Guid contactOutpostId)
-        {
-            var contact = QueryService.Load(contactId);
-
-            if (contact != null)
-                DeleteCommand.Execute(contact);
-
-                return RedirectToAction("Overview", "Contact", new { outpostId = contactOutpostId });
-        }
-
-        [HttpGet]
-        public JsonResult SetCheckContactMainMethod(Guid phoneId)        
-        {
-            var contact = QueryContact.Load(phoneId);
-            var ContactModel = new ContactModel();
-
-             CreateMappings();
-             Mapper.Map(contact, ContactModel);
-             Guid contactOutpost = contact.Outpost.Id;
-            //----------------------------------------------------------
-             ContactsOverviewModel model = new ContactsOverviewModel();
-
-             model.Items = new List<ContactModel>();
-             //Outpost outpost;
-
-             var queryResult = QueryOutposts.Query().Where(mm => mm.Id == contactOutpost);
-
-             if (queryResult.Count() > 0)
-             {
-                 foreach (var outpost in queryResult)
-                 {
-
-                     IList<Contact> contacts = outpost.Contacts;
-                     foreach (Contact contact2 in contacts)
-                     {
-                         ContactModel viewModelItem = new ContactModel();
-                         viewModelItem.IsMainContact = contact2.IsMainContact;
-                         CreateMappings();
-                         Mapper.Map(contact, viewModelItem);
-                         contact2.IsMainContact = false;
-                         contact2.Client = QueryClients.Load(Client.DEFAULT_ID);
-                         SaveOrUpdateCommand.Execute(contact2);
-                     }
-
-                 }
-             };
-
-             countries = QueryCountries.Query();
-             regions = QueryRegions.Query();
-
-             contact.IsMainContact = true;
-             contact.Client = QueryClients.Load(Client.DEFAULT_ID); ;
-             contact.Outpost.DetailMethod = contact.ContactDetail;
-             SaveOrUpdateCommand.Execute(contact);
-
-
-            return null;
-        }
-
-        [HttpGet]
-        public JsonResult SetUncheckContactMainMethod(Guid phoneId)
-        {
-            var contact = QueryContact.Load(phoneId);
-            var ContactModel = new ContactModel();
-
-            CreateMappings();
-            Mapper.Map(contact, ContactModel);
-            Guid contactOutpost = contact.Outpost.Id;
-            //----------------------------------------------------------
-            ContactsOverviewModel model = new ContactsOverviewModel();
-
-            model.Items = new List<ContactModel>();
-            //Outpost outpost;
-
-            var queryResult = QueryOutposts.Query().Where(mm => mm.Id == contactOutpost);
-
-            if (queryResult.Count() > 0)
-            {
-                foreach (var outpost in queryResult)
-                {
-
-                    IList<Contact> contacts = outpost.Contacts;
-                    foreach (Contact contact2 in contacts)
-                    {
-                        ContactModel viewModelItem = new ContactModel();
-                        viewModelItem.IsMainContact = contact2.IsMainContact;
-                        CreateMappings();
-                        Mapper.Map(contact, viewModelItem);
-                        contact2.IsMainContact = false;
-                        contact2.Client = QueryClients.Load(Client.DEFAULT_ID);
-                        SaveOrUpdateCommand.Execute(contact2);
-                    }
-
-                }
-            };
-
-            countries = QueryCountries.Query();
-            regions = QueryRegions.Query();
-
-            contact.IsMainContact = false;
-            contact.Client = QueryClients.Load(Client.DEFAULT_ID); ;
-            contact.Outpost.DetailMethod = null;
-            SaveOrUpdateCommand.Execute(contact);
-
-            return null;
-        }
+        //private static void CreateMappings(Contact entity = null)
+        //{
+        //    Mapper.CreateMap<Contact, ContactModel>();          
+        //    var mapMobilePhone = Mapper.CreateMap<ContactModel, Contact>();
+        //}
+        //[HttpPost]
+        ////[Requires(Permissions = "OnBoarding.Candidate.CRUD")]
+        //public RedirectToRouteResult Delete(Guid contactId, Guid contactOutpostId)
+        //{
+        //    var contact = QueryService.Load(contactId);
+        //    if (contact != null)
+        //        DeleteCommand.Execute(contact);
+        //    return RedirectToAction("Overview", "Contact", new { outpostId = contactOutpostId });
+        //}
+        //[HttpGet]
+        //public JsonResult SetCheckContactMainMethod(Guid phoneId)        
+        //{
+        //    var contact = QueryContact.Load(phoneId);
+        //    var ContactModel = new ContactModel();
+        //    CreateMappings();
+        //    Mapper.Map(contact, ContactModel);
+        //    Guid contactOutpost = contact.Outpost.Id;
+        //    //----------------------------------------------------------
+        //    ContactsOverviewModel model = new ContactsOverviewModel();
+        //    model.Items = new List<ContactModel>();
+        //    //Outpost outpost;
+        //    var queryResult = QueryOutposts.Query().Where(mm => mm.Id == contactOutpost);
+        //    if (queryResult.Count() > 0)
+        //    {
+        //        foreach (var outpost in queryResult)
+        //        {
+        //            IList<Contact> contacts = outpost.Contacts;
+        //            foreach (Contact contact2 in contacts)
+        //            {
+        //                ContactModel viewModelItem = new ContactModel();
+        //                viewModelItem.IsMainContact = contact2.IsMainContact;
+        //                CreateMappings();
+        //                Mapper.Map(contact, viewModelItem);
+        //                contact2.IsMainContact = false;
+        //                contact2.Client = QueryClients.Load(Client.DEFAULT_ID);
+        //                SaveOrUpdateCommand.Execute(contact2);
+        //            }
+        //        }
+        //    }
+        //    ;
+        //    countries = QueryCountries.Query();
+        //    regions = QueryRegions.Query();
+        //    contact.IsMainContact = true;
+        //    contact.Client = QueryClients.Load(Client.DEFAULT_ID);
+        //    ;
+        //    contact.Outpost.DetailMethod = contact.ContactDetail;
+        //    SaveOrUpdateCommand.Execute(contact);
+        //    return null;
+        //}
+        //[HttpGet]
+        //public JsonResult SetUncheckContactMainMethod(Guid phoneId)
+        //{
+        //    var contact = QueryContact.Load(phoneId);
+        //    var ContactModel = new ContactModel();
+        //    CreateMappings();
+        //    Mapper.Map(contact, ContactModel);
+        //    Guid contactOutpost = contact.Outpost.Id;
+        //    //----------------------------------------------------------
+        //    ContactsOverviewModel model = new ContactsOverviewModel();
+        //    model.Items = new List<ContactModel>();
+        //    //Outpost outpost;
+        //    var queryResult = QueryOutposts.Query().Where(mm => mm.Id == contactOutpost);
+        //    if (queryResult.Count() > 0)
+        //    {
+        //        foreach (var outpost in queryResult)
+        //        {
+        //            IList<Contact> contacts = outpost.Contacts;
+        //            foreach (Contact contact2 in contacts)
+        //            {
+        //                ContactModel viewModelItem = new ContactModel();
+        //                viewModelItem.IsMainContact = contact2.IsMainContact;
+        //                CreateMappings();
+        //                Mapper.Map(contact, viewModelItem);
+        //                contact2.IsMainContact = false;
+        //                contact2.Client = QueryClients.Load(Client.DEFAULT_ID);
+        //                SaveOrUpdateCommand.Execute(contact2);
+        //            }
+        //        }
+        //    }
+        //    ;
+        //    countries = QueryCountries.Query();
+        //    regions = QueryRegions.Query();
+        //    contact.IsMainContact = false;
+        //    contact.Client = QueryClients.Load(Client.DEFAULT_ID);
+        //    ;
+        //    contact.Outpost.DetailMethod = null;
+        //    SaveOrUpdateCommand.Execute(contact);
+        //    return null;
+        //}
     }
 }

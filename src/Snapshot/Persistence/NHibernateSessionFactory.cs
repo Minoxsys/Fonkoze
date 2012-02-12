@@ -42,6 +42,7 @@ namespace Persistence
 
                 MsSqlConfiguration.MsSql2008
                     .ConnectionString(c => c.FromConnectionStringWithKey("DbConnection"))
+					.AdoNetBatchSize(250)
                     .ShowSql()
                     )
                     .Cache(c =>

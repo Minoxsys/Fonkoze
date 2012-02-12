@@ -12,6 +12,7 @@ using Autofac;
 using Persistence.Queries.Countries;
 using Persistence.Queries.Districts;
 using Persistence.Queries.Products;
+using NHibernate;
 
 
 namespace Web.Bootstrap.Container
@@ -29,7 +30,8 @@ namespace Web.Bootstrap.Container
 
             container.RegisterType<NHibernateUnitOfWork>().As<INHibernateUnitOfWork>().SingleInstance();
 
-            container.Register(c => new NHibernateSessionFactory(c.Resolve<IAutomappingConfiguration>())).As<INHibernateSessionFactory>();
+            container.Register(c => new NHibernateSessionFactory(c.Resolve<IAutomappingConfiguration>())).As<INHibernateSessionFactory>().SingleInstance();
+			container.Register(c => c.Resolve<INHibernateSessionFactory>().CreateSession()).As<ISession>().InstancePerLifetimeScope();
             
             container.RegisterGeneric( typeof(NHibernateQueryService<>)).As(typeof(IQueryService<>));
 

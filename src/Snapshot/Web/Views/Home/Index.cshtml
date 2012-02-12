@@ -55,47 +55,14 @@ Snapshot Application
                             layout: {
                                 type: 'column'
                             },
-                            flex: 1,
-                            items: [
-                                {
-                                    xtype: 'button',
-                                    id: subNavRes.buttonTabs.outpost,
-                                    toggleGroup: subNavRes.buttonTabs.group,
-                                    enableToggle: true,
-                                    pressed: true,
-                                    text: 'Outpost Administration',
-                                    handler: function () {
-                                        navigateTo(window.res.link.administration);
-                                    }
-                                },
-                                {
-                                    xtype: 'button',
-                                    id: subNavRes.buttonTabs.product,
-                                    toggleGroup: subNavRes.buttonTabs.group,
-                                    enableToggle: true,
-                                    text: 'Product Administration',
-                                    handler:function(){
-                                        navigateTo(res.link.administration); 
-                                    }
-                                },
-                                {
-                                    xtype: 'button',
-                                    id: subNavRes.buttonTabs.user,
-                                    toggleGroup: subNavRes.buttonTabs.group,
-                                    enableToggle: true,
-                                    text: 'User Administration',
-                                    handler: function () {
-                                        navigateTo(window.res.link.administration);
-                                    }
-                                }
-                            ]
+                            flex: 1
                         }
                     ]
             },
                 {
                     xtype: 'container',
                     id: 'userInfo',
-                    flex: 1,
+                    flex: 2,
                     layout: {
                         align: 'stretch',
                         type: 'vbox'
@@ -109,35 +76,35 @@ Snapshot Application
                                    pack: 'end',
                                    type: 'hbox'
                                },
-                                items: [
+                               items: [
                                     {
                                         xtype: 'container',
-                                        flex: 4,
+                                        flex: 2,
                                         items: [
-                                            { xtype: 'label', html:'&nbsp;' }
+                                            { xtype: 'label', html: '&nbsp;' }
                                         ]
                                     },
-                                    { xtype: 'label', flex:1, text: 'Anothony Wolf (UNICEF)' }
+                                    { xtype: 'label', flex: 1, text: 'Anothony Wolf (UNICEF)' }
                                 ]
                            },
                             {
                                 xtype: 'container',
                                 flex: 1,
-                               layout: {
-                                   align: 'stretch',
-                                   pack: 'end',
-                                   type: 'hbox'
-                               },
+                                layout: {
+                                    align: 'stretch',
+                                    pack: 'end',
+                                    type: 'hbox'
+                                },
 
                                 items: [
                                     {
                                         xtype: 'container',
-                                        flex: 4,
+                                        flex: 1,
                                         items: [
-                                            { xtype: 'label', html:'&nbsp;' }
+                                            { xtype: 'label', html: '&nbsp;' }
                                         ]
                                     },
-                                    { xtype: 'label',flex:1, text: 'Help    -   Account Options   -   Log Out (L)' }
+                                    { xtype: 'label', flex: 2,style:'text-align:right;', text: 'Help    -   Account Options   -   Log Out (L)' }
                                 ]
                             }
                            ]
