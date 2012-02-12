@@ -1,5 +1,6 @@
-﻿    @using Web.Areas.OutpostManagement;
+﻿@using Web.Areas.OutpostManagement;
 @using Web.Areas.OutpostManagement.Controllers;
+@using Web.Areas.StockAdministration.Controllers;
 @using Web.Bootstrap.Routes;
 <!DOCTYPE html>
     <html>
@@ -29,9 +30,12 @@
         viewport: 'SnapshotViewport',
         link:{
             administration:'@(Url.RouteUrl<CountryController>( x=>x.Overview() ,  OutpostManagementAreaRegistration.DEFAULT_ROUTE ))',
-            regionOverview:'@(Url.RouteUrl<RegionController>( x => x.Overview(null) ,  OutpostManagementAreaRegistration.DEFAULT_ROUTE ))',
+            regionOverview:'@(Url.RouteUrl<RegionController>( x => x.Overview() ,  OutpostManagementAreaRegistration.DEFAULT_ROUTE ))',
             district: '@(Url.RouteUrl<DistrictController>( x=>x.Overview() ,  OutpostManagementAreaRegistration.DEFAULT_ROUTE ))',
-            product:'@(Url.RouteUrl<Web.Areas.StockAdministration.Controllers.ProductController>(x=>x.Overview(),Web.Areas.StockAdministration.StockAdministrationAreaRegistration.DEFAULT_ROUTE))'
+            product:'@(Url.RouteUrl<Web.Areas.StockAdministration.Controllers.ProductController>(x=>x.Overview(),Web.Areas.StockAdministration.StockAdministrationAreaRegistration.DEFAULT_ROUTE))',
+            productGroup: '@(Url.RouteUrl<ProductGroupController>( x=>x.Overview() ,  Web.Areas.StockAdministration.StockAdministrationAreaRegistration.DEFAULT_ROUTE ))',
+            usersOverview: '@(Url.RouteUrl<UserManagerController>( x=>x.Overview() ,  Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE ))',
+            clientsOverview: '@(Url.RouteUrl<ClientManagerController>( x=>x.Overview() ,  Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE ))'
         },
         header:{
             id:'Header',

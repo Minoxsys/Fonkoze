@@ -36,7 +36,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.RegionControllerTests
             objectMother.queryRegion.Expect(call => call.Query()).Return(pageOfData);
 
             //Act
-            var jsonResult = objectMother.controller.GetRegions(indexModel, string.Empty);
+            var jsonResult = objectMother.controller.GetRegions(indexModel);
 
             //Assert
             objectMother.queryRegion.VerifyAllExpectations();
@@ -58,7 +58,8 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.RegionControllerTests
                 limit = 50,
                 page = 1,
                 start = 0,
-                sort = "Name"
+                sort = "Name",
+                countryId = objectMother.countryId.ToString()
             };
 
             var pageOfData = objectMother.PageOfRegionData(indexModel);
@@ -66,7 +67,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.RegionControllerTests
 
             //Act
 
-            var jsonResult = objectMother.controller.GetRegions(indexModel, objectMother.countryId.ToString());
+            var jsonResult = objectMother.controller.GetRegions(indexModel);
 
             //Assert
             objectMother.queryCountry.VerifyAllExpectations();
@@ -88,7 +89,8 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.RegionControllerTests
                 limit = 50,
                 page = 1,
                 start = 0,
-                sort = "Coordinates"
+                sort = "Coordinates",
+                countryId = objectMother.countryId.ToString()
             };
 
             var pageOfData = objectMother.PageOfRegionData(indexModel);
@@ -96,7 +98,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.RegionControllerTests
 
             //Act
 
-            var jsonResult = objectMother.controller.GetRegions(indexModel, objectMother.countryId.ToString());
+            var jsonResult = objectMother.controller.GetRegions(indexModel);
 
             //Assert
             objectMother.queryCountry.VerifyAllExpectations();

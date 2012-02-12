@@ -196,6 +196,8 @@
     <Compile Include="Areas\StockAdministration\Models\OutpostStockLevel\OutpostWithStockGroups.cs" />
     <Compile Include="Areas\StockAdministration\Models\OutpostStockLevel\ProductGroupOverviewModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\OutpostStockLevel\ProductGroupWithProducts.cs" />
+    <Compile Include="Areas\StockAdministration\Models\ProductGroup\ProductGroupIndexModel.cs" />
+    <Compile Include="Areas\StockAdministration\Models\ProductGroup\ProductGroupIndexOutputModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\ProductGroup\ProductGroupOutputModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\ProductGroup\ProductGroupInputModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\ProductGroup\ProductGroupModel.cs" />
@@ -213,6 +215,7 @@
     <Compile Include="Bootstrap\Container\EmailRegistrar.cs" />
     <Compile Include="Bootstrap\Container\FileRegistrar.cs" />
     <Compile Include="Bootstrap\Container\URLRegistrar.cs" />
+    <Compile Include="Controllers\ClientManagerController.cs" />
     <Compile Include="Controllers\EmailRequestController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\UnauthorizedAccessController.cs" />
@@ -254,6 +257,10 @@
     <Compile Include="Models\Account\ChangePasswordModel.cs" />
     <Compile Include="Models\Account\LogOnModel.cs" />
     <Compile Include="Models\Account\RegisterModel.cs" />
+    <Compile Include="Models\ClientManager\ClientIndexOutputModel.cs" />
+    <Compile Include="Models\ClientManager\ClientManagerIndexModel.cs" />
+    <Compile Include="Models\ClientManager\ClientManagerModel.cs" />
+    <Compile Include="Models\ClientManager\ClientManagerOutputModel.cs" />
     <Compile Include="Models\EmailRequest\EmailCreateModel.cs" />
     <Compile Include="Models\EmailRequest\EmailRequestModel.cs" />
     <Compile Include="Models\EmailRequest\ReferenceModel.cs" />
@@ -274,13 +281,20 @@
     <Compile Include="Models\Shared\ListQuery.cs" />
     <Compile Include="Models\Shared\RazorExtensions.cs" />
     <Compile Include="Models\UnauthorizedAccess\Index.cs" />
+    <Compile Include="Models\UserManager\ClientsIndexOutputModel.cs" />
+    <Compile Include="Models\UserManager\ReferenceModel.cs" />
+    <Compile Include="Models\UserManager\RolesIndexOutputModel.cs" />
+    <Compile Include="Models\UserManager\UserIndexOutputModel.cs" />
     <Compile Include="Models\UserManager\UserManagerAssignModel.cs" />
     <Compile Include="Models\UserManager\UserManagerCreateInputModel.cs" />
     <Compile Include="Models\UserManager\UserManagerCreateModel.cs" />
     <Compile Include="Models\UserManager\UserManagerEditModel.cs" />
+    <Compile Include="Models\UserManager\UserManagerIndexModel.cs" />
+    <Compile Include="Models\UserManager\UserManagerInputModel.cs" />
     <Compile Include="Models\UserManager\UserManagerListModel.cs" />
     <Compile Include="Models\UserManager\UserManagerUnAssignModel.cs" />
     <Compile Include="Models\UserManager\UserModel.cs" />
+    <Compile Include="Models\UserManager\UserOutputModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Security\AuthenticateUser.cs" />
     <Compile Include="Security\RequiresAttribute.cs" />
@@ -1571,14 +1585,8 @@
     <Content Include="Areas\StockAdministration\Views\Web.config" />
     <Content Include="Areas\StockAdministration\Views\Product\Overview.cshtml" />
     <Content Include="Areas\StockAdministration\Views\_ViewStart.cshtml" />
-    <Content Include="Areas\StockAdministration\Views\ProductGroup\Create.cshtml" />
     <Content Include="Areas\StockAdministration\Views\ProductGroup\Overview.cshtml" />
-    <Content Include="Areas\StockAdministration\Views\ProductGroup\Edit.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\Shared\ContactInput.cshtml" />
-    <Content Include="Areas\StockAdministration\Views\ProductGroup\EditProducts.cshtml" />
-    <Content Include="Areas\StockAdministration\Views\ProductGroup\Input.cshtml" />
-    <Content Include="Areas\StockAdministration\Views\ProductGroup\InputProducts.cshtml" />
-    <Content Include="Areas\StockAdministration\Views\ProductGroup\OverviewProductGroup.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\Contact\Overview.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\Shared\CreateContact.cshtml" />
     <Content Include="Areas\StockAdministration\Views\OutpostStockLevel\Overview.cshtml" />
@@ -1599,27 +1607,26 @@
     <Content Include="Views\Shared\Calendar.cshtml" />
     <Content Include="Views\Shared\FormButtons.cshtml" />
     <Content Include="Views\Shared\InfoMessage.cshtml" />
-    <Content Include="Views\Shared\Menu.cshtml" />
     <Content Include="Views\Shared\_LoginLayout.cshtml" />
-    <Content Include="Views\UserManager\Create.cshtml" />
-    <Content Include="Views\UserManager\Edit.cshtml" />
-    <Content Include="Views\UserManager\List.cshtml" />
+    <Content Include="Views\UserManager\Overview.cshtml" />
     <Content Include="Views\UnauthorizedAccess\Index.cshtml" />
-    <Content Include="Views\Shared\_OutpostManagementActions.cshtml" />
-    <Content Include="Views\Shared\_StockAdministrationActions.cshtml" />
-    <Content Include="Views\Shared\_StockAdministrationHeader.cshtml" />
     <Content Include="Views\EmailRequest\Create.cshtml" />
     <Content Include="Views\EmailRequest\Overview.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Areas\OutpostManagement\Views\Shared\_SubNavigation.cshtml" />
+    <Content Include="Views\Shared\_SubNavigation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\OutpostManagement\Views\Shared\_OutpostAdministrationSideBar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\StockAdministration\Views\Shared\_ProductAdministrationSideBar.cshtml" />
-    <Content Include="Areas\StockAdministration\Views\Shared\_SubNavigation.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Shared\_UserAdministrationSideBar.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\ClientManager\Overview.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

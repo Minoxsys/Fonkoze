@@ -19,8 +19,6 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.RegionControllerTests
         public void BeforeAll()
         {
             objectMother.Init();
-
-            
         }
 
         [Test]
@@ -50,7 +48,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.RegionControllerTests
             objectMother.queryDistrict.Expect(call => call.Query()).Return(new District[] { }.AsQueryable());
             objectMother.deleteCommand.Expect(call => call.Execute(Arg<Region>.Matches(p => p.Id == objectMother.regionId)));
 
-            //aAct
+            //Act
             var jsonResult = objectMother.controller.Delete(objectMother.regionId);
 
             //Assert
@@ -71,16 +69,17 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.RegionControllerTests
         [Test]
         public void CannotRemoveRegion_With_Districts()
         {
+            //Arrange
             objectMother.queryRegion.Expect(call => call.Load(objectMother.regionId)).Return(objectMother.region);
             objectMother.queryDistrict.Expect(call => call.Query()).Return(new District[] { objectMother.district }.AsQueryable());
             objectMother.deleteCommand.Expect(call => call.Execute(Arg<Region>.Matches(p => p.Id == objectMother.regionId)));
             objectMother.queryUsers.VerifyAllExpectations();
             objectMother.loadClient.VerifyAllExpectations();
 
-            //act 
+            //Act 
             var jsonResult = objectMother.controller.Delete(objectMother.regionId);
 
-            //asert
+            //Assert
 
             Assert.IsNotNull(jsonResult);
 
@@ -89,10 +88,5 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.RegionControllerTests
             Assert.That(response.Status, Is.EqualTo("Error"));
             Assert.That(response.Message, Is.EqualTo("Region Transilvania has 1 district(s) associated, and can not be removed."));
         }
-        
-
-
-
-
     }
 }

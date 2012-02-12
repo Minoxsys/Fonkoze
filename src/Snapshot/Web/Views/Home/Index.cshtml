@@ -8,9 +8,9 @@ Snapshot Application
     window.res.header.subnavigation.buttonTabs = {
         id: 'ButtonTabs',
         group:'AdministrationButtonsGroup',
-        outpost: 'OutpostAdministration',
-        product: 'ProductAdministration',
-        user: 'UserAdministration'
+        outpost: 'ButtonTabs-OutpostAdministration-Button',
+        product: 'ButtonTabs-ProductAdministration-Button',
+        user: 'ButtonTabs-UserAdministration-Button'
     };
 
     Ext.onReady(function () {
@@ -63,21 +63,30 @@ Snapshot Application
                                     toggleGroup: subNavRes.buttonTabs.group,
                                     enableToggle: true,
                                     pressed: true,
-                                    text: 'Outpost Administration'
+                                    text: 'Outpost Administration',
+                                    handler: function () {
+                                        navigateTo(window.res.link.administration);
+                                    }
                                 },
                                 {
                                     xtype: 'button',
                                     id: subNavRes.buttonTabs.product,
                                     toggleGroup: subNavRes.buttonTabs.group,
                                     enableToggle: true,
-                                    text: 'Product Administration'
+                                    text: 'Product Administration',
+                                    handler:function(){
+                                        navigateTo(res.link.administration); 
+                                    }
                                 },
                                 {
                                     xtype: 'button',
                                     id: subNavRes.buttonTabs.user,
                                     toggleGroup: subNavRes.buttonTabs.group,
                                     enableToggle: true,
-                                    text: 'User Administration'
+                                    text: 'User Administration',
+                                    handler: function () {
+                                        navigateTo(window.res.link.administration);
+                                    }
                                 }
                             ]
                         }
