@@ -100,6 +100,11 @@
     <Compile Include="Unit\Controllers\Areas\OutpostManagement\CountryControllerTests\IndexMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\OutpostManagement\CountryControllerTests\ObjectMother.cs" />
     <Compile Include="Unit\Controllers\Areas\OutpostManagement\CountryControllerTests\OverviewMethod.cs" />
+    <Compile Include="Unit\Controllers\Areas\OutpostManagement\DistrictControllerTests\CreateMethod.cs" />
+    <Compile Include="Unit\Controllers\Areas\OutpostManagement\DistrictControllerTests\DeleteMethod.cs" />
+    <Compile Include="Unit\Controllers\Areas\OutpostManagement\DistrictControllerTests\EditMethod.cs" />
+    <Compile Include="Unit\Controllers\Areas\OutpostManagement\DistrictControllerTests\IndexMethod.cs" />
+    <Compile Include="Unit\Controllers\Areas\OutpostManagement\DistrictControllerTests\ObjectMother.cs" />
     <Compile Include="Unit\Controllers\Areas\OutpostManagement\DistrictController_Tests.cs" />
     <Compile Include="Unit\Controllers\Areas\OutpostManagement\OutpostController_Tests.cs">
       <SubType>Code</SubType>
@@ -112,8 +117,12 @@
     <Compile Include="Unit\Controllers\Areas\OutpostManagement\RegionControllerTests\ObjectMother.cs" />
     <Compile Include="Unit\Controllers\Areas\OutpostManagement\RegionControllerTests\OverviewMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\StockAdministration\OutpostStockLevelController_Tests.cs" />
+    <Compile Include="Unit\Controllers\Areas\StockAdministration\ProductControllerTests\CreateMethod.cs" />
+    <Compile Include="Unit\Controllers\Areas\StockAdministration\ProductControllerTests\DeleteMethod.cs" />
+    <Compile Include="Unit\Controllers\Areas\StockAdministration\ProductControllerTests\EditMethod.cs" />
+    <Compile Include="Unit\Controllers\Areas\StockAdministration\ProductControllerTests\GetProductsMethod.cs" />
+    <Compile Include="Unit\Controllers\Areas\StockAdministration\ProductControllerTests\ObjectMother.cs" />
     <Compile Include="Unit\Controllers\Areas\StockAdministration\ProductGroupController_Tests.cs" />
-    <Compile Include="Unit\Controllers\Areas\StockAdministration\StockItemController_Tests.cs" />
     <Compile Include="Unit\Controllers\EmailRequestControllerTest\CreateMethod.cs" />
     <Compile Include="Unit\Controllers\EmailRequestControllerTest\ObjectMother.cs" />
     <Compile Include="Unit\Controllers\EmailRequestControllerTest\ResponseMethod.cs" />

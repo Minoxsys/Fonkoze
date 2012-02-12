@@ -8,6 +8,7 @@ using Core.Persistence;
 using Persistence.Queries.Products;
 using Web.Areas.StockAdministration.Models.ProductGroup;
 using AutoMapper;
+using Web.Models.Shared;
 
 
 namespace Web.Areas.StockAdministration.Controllers
@@ -24,10 +25,38 @@ namespace Web.Areas.StockAdministration.Controllers
         public IDeleteCommand<ProductGroup> DeleteCommand { get; set; }
         public IQueryService<Product> QueryProduct { get; set; }
 
+        [HttpPost]
+        public JsonResult Create(ProductGroupInputModel model)
+        {
+            if (string.IsNullOrEmpty(model.Name) && string.IsNullOrEmpty(model.Description))
+            {
+                return Json(
+                   new JsonActionResponse
+                   {
+                       Status = "Error",
+                       Message = "The Product Group has not been saved!"
+                   });
+            }
+
+            CreateMappings();
+
+            var productGroup = new ProductGroup();
+            Mapper.Map(model, productGroup);
+
+            SaveOrUpdateProductGroup.Execute(productGroup);
+
+            return Json(
+               new JsonActionResponse
+               {
+                   Status = "Success",
+                   Message = String.Format("Product Group {0} has been saved.", productGroup.Name)
+               });
+        }
+
         public ActionResult Overview()
         {
             var overviewModel = new ProductGroupOverviewModel();
-
+            
             var productGroups = QueryService.Query();
 
             if (productGroups.ToList().Count > 0)
@@ -67,13 +96,7 @@ namespace Web.Areas.StockAdministration.Controllers
             //Mapper.CreateMap<ProductOutputModel.OutpostModel, Outpost>();
             //Mapper.CreateMap<Outpost, ProductsOutputModel.OutpostModel>();
         }
-
-        public ViewResult Create()
-        {
-            //var ProductGroupOutputModel = new ProductGroupOutputModel();
-            return View(ProductGroupOutputModel);
-        }
-
+          
         public ViewResult CreateProductGroupForProduct(bool CreateCommingFromProductCreate,bool CreateCommingFromProductEdit,Guid? productId)
         {
             var ProductGroupOutputModel = new ProductGroupOutputModel();
@@ -86,44 +109,7 @@ namespace Web.Areas.StockAdministration.Controllers
             return View("Create",ProductGroupOutputModel);
         }
 
-        [HttpPost]
-        public ActionResult Create(ProductGroupInputModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                var ProductsOutputModel = BuildProductsOutputModelFromInputModel(model);
-
-                return View("Create", ProductsOutputModel);
-            }
-
-            CreateMappings();
-
-            var ProductGroup = new ProductGroup();
-            Mapper.Map(model, ProductGroup);
-
-
-
-            SaveOrUpdateProductGroup.Execute(ProductGroup);
-
-            if (TempData["FromProduct"] == null && TempData["FromProductEdit"] == null)
-            {
-                return RedirectToAction("Overview");
-            }
-            else
-            {
-                if (TempData["FromProduct"].Equals(true))
-                {
-                    return RedirectToAction("CreateProduct", "Product", new { ProductGroupId = ProductGroup.Id });
-                }
-                else
-                {
-                    return RedirectToAction("EditProduct", "Product", new { guid = TempData["ProductId"] , productGroupId = ProductGroup.Id });
- 
-                }
- 
-            }
-        }
-
+       
         private ProductGroupOutputModel BuildProductsOutputModelFromInputModel(ProductGroupInputModel model)
         {
             var ProductsOutputModel = new ProductGroupOutputModel();

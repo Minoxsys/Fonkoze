@@ -20,6 +20,7 @@ using Web.Areas.OutpostManagement.Models.Region;
 using Web.Areas.OutpostManagement.Models.Country;
 using Web.Areas.OutpostManagement.Models.Client;
 using Core.Domain;
+using Web.Models.Shared;
 
 namespace Web.Areas.OutpostManagement.Controllers
 {
@@ -44,7 +45,6 @@ namespace Web.Areas.OutpostManagement.Controllers
 
         public IQueryService<User> QueryUsers { get; set; }
 
-        private const string MESSAGE_ERROR_ON_SUCCESS = "done";
         private Client _client;
         private User _user;
 
@@ -54,21 +54,25 @@ namespace Web.Areas.OutpostManagement.Controllers
         }
         public JsonResult Index(DistrictIndexModel indexModel)
         {
-            var districts = new List<District>();
             LoadUserAndClient();
-            int pageSize =0;
 
-            if ((indexModel.Limit != null) && (indexModel.Start != null))
-                pageSize = indexModel.Limit.Value - indexModel.Start.Value;
+            var districts = QueryService.Query().Take(0);
+
+            int pageSize = 0;
+
+            if (indexModel.Limit != null)
+                pageSize = indexModel.Limit.Value;
 
             if ((indexModel.RegionId == null) && (indexModel.CountryId == null))
             {
                 if (indexModel.SearchName != null)
                 {
-                    districts = QueryService.Query().Where(it => it.Client == _client && it.Name.Contains(indexModel.SearchName))
-                       .Take(pageSize)
-                       .Skip(indexModel.Start.Value)
-                       .ToList();
+                    districts = QueryService.Query().Where(it => it.Client == _client && it.Name.Contains(indexModel.SearchName));
+
+                }
+                else
+                {
+                    districts = QueryService.Query().Where(it => it.Client == _client);
                 }
             }
             else
@@ -77,17 +81,13 @@ namespace Web.Areas.OutpostManagement.Controllers
                 {
                     if (indexModel.SearchName != null)
                     {
-                        districts = QueryService.Query().Where(it => it.Region.Country.Id == indexModel.CountryId.Value && it.Client == _client && it.Name.Contains(indexModel.SearchName))
-                            .Take(pageSize)
-                            .Skip(indexModel.Start.Value)
-                            .ToList();
+                        districts = QueryService.Query().Where(it => it.Region.Country.Id == indexModel.CountryId.Value && it.Client == _client && it.Name.Contains(indexModel.SearchName));
+
                     }
                     else
                     {
-                        districts = QueryService.Query().Where(it => it.Region.Country.Id == indexModel.CountryId.Value && it.Client == _client)
-                            .Take(pageSize)
-                            .Skip(indexModel.Start.Value)
-                            .ToList();
+                        districts = QueryService.Query().Where(it => it.Region.Country.Id == indexModel.CountryId.Value && it.Client == _client);
+
 
                     }
                 }
@@ -95,23 +95,36 @@ namespace Web.Areas.OutpostManagement.Controllers
                 {
                     if (indexModel.SearchName == null)
                     {
-                        districts = QueryService.Query().Where(it => it.Region.Id == indexModel.RegionId.Value && it.Client == _client)
-                            .Take(pageSize)
-                            .Skip(indexModel.Start.Value)
-                            .ToList();
+                        districts = QueryService.Query().Where(it => it.Region.Id == indexModel.RegionId.Value && it.Client == _client);
+
                     }
                     else
                     {
-                        districts = QueryService.Query().Where(it => it.Region.Id == indexModel.RegionId.Value && it.Client == _client && it.Name.Contains(indexModel.SearchName))
-                            .Take(pageSize)
-                            .Skip(indexModel.Start.Value)
-                            .ToList();
+                        districts = QueryService.Query().Where(it => it.Region.Id == indexModel.RegionId.Value && it.Client == _client && it.Name.Contains(indexModel.SearchName));
+
                     }
                 }
             }
+
+            var orderByColumnDirection = new Dictionary<string, Func<IQueryable<District>>>()
+            {
+                { "Name-ASC", () => districts.OrderBy(it=>it.Name) },
+                { "Name-DESC", () => districts.OrderByDescending(c => c.Name) },               
+            };
+            int totalItems = 0;
+
+            if (indexModel.sort != "OutpostNo")
+            {
+                districts = orderByColumnDirection[String.Format("{0}-{1}", indexModel.sort, indexModel.dir)].Invoke();
+                totalItems = districts.Count();
+                districts = districts.Take(pageSize)
+                                                   .Skip(indexModel.Start.Value);
+            }
+
             var districtModelList = new List<DistrictModel>();
 
-            foreach (var district in districts)
+
+            foreach (var district in districts.ToList())
             {
                 var districtModel = new DistrictModel();
                 districtModel.Name = district.Name;
@@ -122,11 +135,24 @@ namespace Web.Areas.OutpostManagement.Controllers
                 districtModelList.Add(districtModel);
 
             }
+            if (indexModel.sort.Equals("OutpostNo"))
+            {
+                if (indexModel.dir.Equals("DESC"))
+                {
+                    districtModelList = districtModelList.OrderByDescending(it => it.OutpostNo).ToList();
+                }
+                else
+                {
+                    districtModelList = districtModelList.OrderBy(it => it.OutpostNo).ToList();
 
-            return Json(new
+                }
+                districtModelList = districtModelList.Take(pageSize).Skip(indexModel.Start.Value).ToList();
+            }
+
+            return Json(new DistrictIndexOutputModel
             {
                 districts = districtModelList,
-                TotalItems = districtModelList.Count
+                TotalItems = totalItems
             }, JsonRequestBehavior.AllowGet);
         }
 
@@ -221,14 +247,19 @@ namespace Web.Areas.OutpostManagement.Controllers
         }
 
         [HttpPost]
-        public EmptyResult Create(DistrictInputModel districtInputModel)
+        public JsonResult Create(DistrictInputModel districtInputModel)
         {
             LoadUserAndClient();
 
-            if (!ModelState.IsValid)
+            if (string.IsNullOrEmpty(districtInputModel.Name))
             {
-                return new EmptyResult();
-               
+                return Json(
+                    new JsonActionResponse
+                    {
+                        Status = "Error",
+                        Message = "The district has not been saved!"
+                    });
+
             }
 
             CreateMapping();
@@ -242,16 +273,27 @@ namespace Web.Areas.OutpostManagement.Controllers
             district.Region = region;
 
             SaveOrUpdateCommand.Execute(district);
-            return new EmptyResult();
-           
+
+            return Json(
+               new JsonActionResponse
+               {
+                   Status = "Success",
+                   Message = String.Format("District {0} has been saved.", district.Name)
+               });
+
         }
 
         [HttpPost]
-        public ActionResult Edit(DistrictInputModel districtInputModel)
+        public JsonResult Edit(DistrictInputModel districtInputModel)
         {
-            if (!ModelState.IsValid)
-            {                
-                return new EmptyResult();
+            if (string.IsNullOrEmpty(districtInputModel.Name))
+            {
+                return Json(
+                   new JsonActionResponse
+                   {
+                       Status = "Error",
+                       Message = "The district has not been updated!"
+                   });
             }
 
             District district = QueryService.Load(districtInputModel.Id);
@@ -265,28 +307,54 @@ namespace Web.Areas.OutpostManagement.Controllers
             district.Client = client;
 
             SaveOrUpdateCommand.Execute(district);
-            return new EmptyResult();
-       }
+            return Json(
+                new JsonActionResponse
+                {
+                    Status = "Success",
+                    Message = String.Format("District {0} has been saved.", district.Name)
+                });
+        }
 
         [HttpPost]
-        public ActionResult Delete(Guid guid)
+        public JsonResult Delete(Guid? guid)
         {
-            var district = QueryService.Load(guid);
-            string errorMessage = MESSAGE_ERROR_ON_SUCCESS;
+
+
+            if (guid.HasValue == false)
+            {
+
+                return Json(new JsonActionResponse
+                {
+                    Status = "Error",
+                    Message = "You must supply a district id in order to delete the district!"
+                }, JsonRequestBehavior.AllowGet);
+            }
+
+            var district = QueryService.Load(guid.Value);
+
             if (district != null)
             {
                 var districtResults = QueryOutpost.Query().Where(it => it.District.Id == district.Id);
 
                 if (districtResults.ToList().Count != 0)
                 {
-                    errorMessage = string.Format("The district {0} has outposts associated, so it can not be deleted!", district.Name);
-                    return Json(new { error = errorMessage }, JsonRequestBehavior.AllowGet);
+                    return Json(new JsonActionResponse 
+                    {   Status = "Error",
+                        Message = string.Format("The district {0} has outposts associated, so it can not be deleted!", district.Name) 
+                    }, JsonRequestBehavior.AllowGet);
                 }
 
                 DeleteCommand.Execute(district);
-            }
 
-            return Json(new { error = errorMessage }, JsonRequestBehavior.AllowGet);
+
+            }
+            return Json(new JsonActionResponse 
+            {   Status = "Success",
+                Message = string.Format("The district {0} has been deleted!", district.Name)
+            }, JsonRequestBehavior.AllowGet);
+
+
+
         }
     }
 }

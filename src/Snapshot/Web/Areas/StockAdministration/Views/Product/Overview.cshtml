@@ -2,222 +2,740 @@
 @using Microsoft.Web.Mvc;
 @using Web.Areas.OutpostManagement.HtmlHelpers;
 @section page_title{
-Stock Item: Overview
+Product Item: Overview
 }
-@section breadcrumbs{
-    @*@Url.HomeLink("Outpost Administration") > Regions*@
+@{
+    Html.RenderPartial("_SubNavigation");
+    Html.RenderPartial("_ProductAdministrationSideBar");
 }
-@section master_actions{
-    @{
-        Html.RenderPartial("~/Views/Shared/_OutpostManagementActions.cshtml");
-    }
-    @{ Html.RenderPartial("~/Views/Shared/_StockAdministrationActions.cshtml");}
-}
-@section master_content{
-    @{Html.RenderPartial("~/Views/Shared/_StockAdministrationHeader.cshtml");}
+<script type="text/javascript">
+    Ext.onReady(function () {
 
-     @if (Model.ErrorFromCurrentStockLevel != null)
-    {
-        <div class="error">
-            @Model.ErrorFromCurrentStockLevel
-        </div>
-    }
-    
-    @if (Model.ErrorFromHistoricalStockLevel != null)
-    {
-        <div class="error">
-            @Model.ErrorFromHistoricalStockLevel
-        </div>
-    }
-    
-    <div class="page_header_buttons">
-     @Html.ActionLink("Add new product", "Create", "Product", null, new { id = "create" })
-        
-    </div>
-    <br />
-    @*<div class="pager">*@
-        @*@html.pagelinks(model.paginginfo, x => url.action("overview", new { productgroupid = model.productgroups.where(it => it.selected == true), page = x }))*@
-    @*</div>*@
-    <table class="searchable">
-        <thead>
-            <tr>
-                <th>
-                    <label>
-                        Product Group:</label>
-                    <select name="@(Html.NameFor(m => m.ProductGroups))" id="ProductGroups">
-                        <option value="@Guid.Empty">- Select a product group -</option>
-                        @{
-                            foreach (var item in Model.ProductGroups)
-                            {
-                            <option value="@item.Value" @(item.Selected ? @"selected='selected'" : @"") >@item.Text</option>
-                            }
-                        }
-                    </select>
-                </th>
-                <th>
-                    <input type="text" id="productSearch" class="input" name="productSearch" maxlength="50"
-                        style="width: 200px; height: 30px; margin-left: 0px; top: 100px" />
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
-    @{
-        Html.RenderPartial("OverviewTable", Model.PartialViewModel);
-    }
-}
-@section scripts{
-    <script type="text/javascript">
+        var administrationBtnId = window.res.header.navigation.administration;
+        var administrationBtn = Ext.getCmp(administrationBtnId);
+        administrationBtn.toggle(true);
+
+        var productSideBarBtnId = window.res.content.maincontent.sidebar.product;
+        var productBtn = Ext.getCmp(productSideBarBtnId);
+
+        productBtn.toggle(true);
+
+
+        var productAdministrationBtnId = window.res.header.subnavigation.buttonTabs.product;
+        var productAdministrationBtn = Ext.getCmp(productAdministrationBtnId);
+        productAdministrationBtn.toggle(true);
+    });
+</script>
+<script type="text/javascript">
+    Ext.onReady(function () {
+        window.feature = {};
+        window.feature.searchTextFieldId = 'searchTextField';
+        window.feature.comboboxProductGroupsId = 'comboboxProductGroupId';
+        window.feature.comboboxProductGroupsForModalId = 'comboboxForModalId';
+        window.feature.ProductNameId = 'productNameId';
+        window.feature.ProductDescriptionId = 'productDescriptionId';
+        window.feature.ProductLowerLimitId = 'productLowerLimitId';
+        window.feature.ProductUpperLimitId = 'productUpperLimitId';
+        window.feature.ProductSMSReferecenceCodeId = 'productSMSCodeId';
+        window.feature.formProductGroupNameId = 'productGroupName';
+        window.feature.formProductGroupReferenceCodeId = 'productGroupRef';
+        window.feature.formProductGroupDescriptionId = 'productGroupDesc';
+        window.feature.productId = 'productId';
         var timeout;
-        $(function () {
 
-            var selectedProductGroupId = $("select[name='@Html.NameFor(m => m.ProductGroups)']").val();
-            document.getElementById('create').href = '@Url.Action("Create")?productGroupId=' + selectedProductGroupId;
+        window.feature.modalAddProductGroup = Ext.define('Ext.feature.productGroup.Modal', {
+            extend: 'Ext.window.Window',
+            modal: true,
+            height: 230,
+            width: 390,
+            layout: {
+                align: 'stretch',
+                padding: 10,
+                type: 'vbox'
+            },
 
-            $(".delete-user-form").submit(function () {
-                return confirm('Are you sure that you want to delete this product?')
-            });
+            initComponent: function () {
+                var me = this;
 
-            $("select[name='@Html.NameFor(m => m.ProductGroups)']").change(onProductGroupChanged);
+                Ext.applyIf(me, {
+                    items: [{
+                        xtype: 'textfield',
+                        name: 'Name',
+                        fieldLabel: 'Product Group Name',
+                        anchor: '100%',
+                        itemId: window.feature.formProductGroupNameId
+                    }, {
+                        xtype: 'textfield',
+                        name: 'ReferenceCode',
+                        fieldLabel: 'Product Group Reference Code',
+                        anchor: '100%',
+                        itemId: window.feature.formProductGroupReferenceCodeId
+                    }, {
+                        xtype: 'textareafield',
+                        name: 'Description',
+                        fieldLabel: 'Description',
+                        grow: true,
+                        anchor: '100%',
+                        itemId: window.feature.formProductGroupDescriptionId
+                    }]
+                });
 
-            
-            // document.getElementById('productSearch')
-            $("input").keyup(function () {
-
-                clearTimeout(timeout);
-                var selectedId = $("select[name='@Html.NameFor(m => m.ProductGroups)']").val()
-                if (selectedId == "@Guid.Empty") {
-                    jQuery('#productSearch').keyup(function (event) {
-                        if (event.keyCode == 27) {
-                            resetSearch();
-                        }
-                    });
-                    timeout = setTimeout("searchProductByName()", 1000);
-
-                }
-                else {
-                    SearchProductOnFilterSelected();
-                }
-            });
+                me.callParent(arguments);
+            }
         });
-        function GetAllButtonsForPaginationAndSetOnClickEvent() {
-            var myDiv = document.getElementById("pagerDiv");
-            var buttons = myDiv.getElementsByTagName("button");
-           
-           for (var i = 0; i < buttons.length; i++) {
-                
-                buttons[i].onclick = "GoToNextPage('" + i + "')";
 
-            }
-        }
-        function GoToNextPage(page)
-        {
-        var selectedProductGroudId = $("select[name='@Html.NameFor(m => m.ProductGroups)']").val()
-                    //var page = i;
-                    var NameToSearchFor = document.getElementById("productSearch").value;
-
-                    var urlOverview = '@Url.Action("GetItemsForPage")?page=' + page + '&productGroupId=' + page + '&NameToSearchFor=' + NameToSearchFor;
-                    $.get(urlOverview, function (data) {
-
-                        drop.html('')
-
-                        $('#products-overview').html(data);
-                    });
-        }
-        function searchProductByName() {
-
-       
-            var productName = document.getElementById("productSearch").value;
-            var drop = $("#products-overview")
-            
-            var urlOverview = '@Url.Action("SearchForProductWithName")?productName=' + productName;
-            clearTimeout(timeout);
-            $.get(urlOverview, function (data) {
-
-                drop.html('')
-
-                $('#products-overview').html(data);
-                clearTimeout(timeout);
-            });
-            GetAllButtonsForPaginationAndSetOnClickEvent();
-        }
-        function onProductGroupChanged() {
-
-            var e = $(this)[0];
-            var selectedProductGroudId = e.options[e.selectedIndex].value;
-
-            var drop = $("#products-overview")
-
-            var urlOverview = '@Url.Action("OverviewTable")?productGroupId=' + selectedProductGroudId;
-            $.get(urlOverview, function (data) {
-
-                drop.html('')
-
-                $('#products-overview').html(data);
-            });
-
-            $("select[name='@Html.NameFor(m => m.ProductGroups)'] option[value='@Guid.Empty.ToString()']").attr('text', 'No filter');
-
-            var selectedProductGroupId = $("select[name='@Html.NameFor(m => m.ProductGroups)']").val();
-            document.getElementById('create').href = '@Url.Action("Create")?productGroupId=' + selectedProductGroupId;
-
-            GetAllButtonsForPaginationAndSetOnClickEvent();
-        }
-
-        //search for products by Name
-
-        jQuery.expr[":"].containsNoCase = function (el, i, m) {
-            var search = m[3];
-            if (!search) return false;
-            return eval("/" + search + "/i").test($(el).text());
-        };
-
-        //jQuery(document).ready(function () { SearchProductOnFilterSelected(); });
-
-        function SearchProductOnFilterSelected() {
-            //cancel the search if the user presses the ESC key
-            jQuery('#productSearch').keyup(function (event) {
-                if (event.keyCode == 27) {
-                    resetSearch();
+        window.feature.ProductGroupStore = Ext.create('Ext.data.Store', {
+            fields: ['Name', 'Id'],
+            proxy: {
+                type: 'ajax',
+                url: '@Url.RouteUrl(StockAdministrationAreaRegistration.DEFAULT_ROUTE, new { controller = "Product", action = "GetProductGroups" })',
+                reader: {
+                    type: 'json',
+                    root: 'productGroups',
+                    disableCaching: true,
+                    totalProperty: 'TotalItems'
                 }
-            });
-            debugger;
-            // execute the search
-            //jQuery('#productSearch').keyup(function () {
-            // only search when there are 3 or more characters in the textbox
-            if (jQuery('#productSearch').val().length > 0) {
-                // hide all rows
-                jQuery('#products-overview tr').hide();
-                // show the header row
-                jQuery('#products-overview tr:first').show();
-                // show the matching rows (using the containsNoCase from Rick Strahl)
-                jQuery('#products-overview tr .search:containsNoCase(\'' + jQuery('#productSearch').val() + '\')').parent().show();
             }
-            else if (jQuery('#productSearch').val().length == 0) {
-                //if the user removed all of the text, reset the search
-                resetSearch();
+        });
+        window.feature.ProductGroupStoreForModal = Ext.create('Ext.data.Store', {
+            fields: ['Name', 'Id'],
+            pageSize:100,
+            proxy: {
+                type: 'ajax',
+                url: '@Url.RouteUrl(StockAdministrationAreaRegistration.DEFAULT_ROUTE, new { controller = "Product", action = "GetProductGroups" })',
+                reader: {
+                    type: 'json',
+                    root: 'productGroups',
+                    disableCaching: true,
+                    totalProperty: 'TotalItems'
+                }
+            }
+        });
+        window.feature.comboBoxProductGroups = Ext.create('Ext.form.ComboBox', {
+            store: window.feature.ProductGroupStore,
+            queryMode: 'local',
+            id: window.feature.comboboxProductGroupsId,
+            displayField: 'Name',
+            valueField: 'Id',
+            margin: '0 0 0 30',
+            emptyText: _t('Selected product group'),
+            listeners: {
+                select: function (combo, record, index) {
+                    var selectedProductGroupId = record[0].data.Id;
+                    window.feature.store.proxy.extraParams.productGroupId = selectedProductGroupId;
+                    window.feature.store.loadPage(1);
+
+                }
+            }
+        });
+        function IsValid(productGroup, productName, productSMSCode) {
+
+            var ok = true;
+            if (productGroup.getValue() == '') {
+                productGroup.markInvalid('Field Product Group is required!');
+                productGroup.setValue(null);
+                ok = false;
             }
 
-            //if there were no matching rows, tell the user
-            if (jQuery('#products-overview tr:visible').length == 1) {
-                // remove the norecords row if it already exists
-                jQuery('.norecords').remove();
-                // add the norecords row
-                jQuery('#products-overview').append('<tr class="norecords"><td colspan="5" class="Normal">No records were found</td></tr>');
+            if (productName.getValue() == '') {
+                productName.markInvalid('Field Product is required!');
+                productName.setValue(null);
+                ok = false;
             }
-            // });
+
+            if (productSMSCode.getValue() == '') {
+                productSMSCode.markInvalid('Field SMS Code is required!');
+                productSMSCode.setValue(null);
+                ok = false;
+            }
+            return ok;
+        }
+        window.feature.modal = Ext.define('Ext.feature.product.Modal', {
+            extend: 'Ext.window.Window',
+            title: 'Add new product',
+            height: 320,
+            width: 690,
+            modal: true,
+            layout: {
+                align: 'stretch',
+                padding: 10,
+                type: 'vbox'
+            },
+            initComponent: function () {
+                var me = this;
+
+                Ext.applyIf(me, {
+                    items: [{
+                        xtype: 'container',
+                        layout: {
+                            type: 'hbox'
+                        },
+                        height: 50,
+                        items: [{ xtype: 'combobox',
+                            fieldLabel: 'Product Group',
+                            store: window.feature.ProductGroupStoreForModal,
+                            queryMode: 'local',
+                            displayField: 'Name',
+                            valueField: 'Id',
+                            id: window.feature.comboboxProductGroupsForModalId,
+                            emptyText: 'Select a product group'
+                        },{
+                            xtype: 'button',
+                            text: 'Add a New Group',
+                            width: 160,
+                            height: 24,
+                            margin: '0 0 0 70',
+                            handler: function () {                            
+                            var winAdd = new window.feature.modalAddProductGroup({
+                                title: 'Add New Product Group',
+                                buttons: [
+                                    { text: 'Cancel', handler:function(){ winAdd.close(); winAdd.destroy();} },
+                                    { text: 'Save',  handler:function(){
+
+                                        var productGroupName = winAdd.down('#'+window.feature.formProductGroupNameId);
+                                        var productGroupDescription = winAdd.down('#'+window.feature.formProductGroupDescriptionId);
+                                        var productGroupReferenceCode = winAdd.down('#'+window.feature.formProductGroupReferenceCodeId);
+                                    
+                                        var ok = IsValid(productGroupName, productGroupDescription, productGroupReferenceCode);
+                                        if (ok == true){
+                                            var values = {
+                                                Name:  productGroupName.getValue(),
+                                                Description:  productGroupDescription.getValue(),
+                                                ReferenceCode: productGroupReferenceCode.getValue(),
+                                            };
+
+                                            var postToUrl = '@Url.RouteUrl(StockAdministrationAreaRegistration.DEFAULT_ROUTE, new { controller = "ProductGroup", action = "Create" })';
+                                            var action = $.post(postToUrl, values);
+                                            action.success(function(serverResponse){
+
+                                                Ext.Msg.alert(serverResponse.Status, serverResponse.Message);
+                                                                                           
+                                                
+                                                var productGroupNameSaved = productGroupName.getValue();
+
+                                                window.feature.ProductGroupStoreForModal.load();
+
+                                                clearTimeout(timeout);
+                                                    timeout = setTimeout(function () {
+                                                 var comboboxProductGroupsForModal = Ext.getCmp(window.feature.comboboxProductGroupsForModalId); 
+                                                 var indexOfProductGroupSaved = window.feature.ProductGroupStoreForModal.find('Name',productGroupNameSaved);
+                                                 var record = window.feature.ProductGroupStoreForModal.getAt(indexOfProductGroupSaved);
+                                                 var id = record.data.Id;
+                                                 comboboxProductGroupsForModal.setValue(id);  
+                                                }, 1000);
+                                                        
+                                                winAdd.close();
+                                                winAdd.destroy();                                                
+                                                window.feature.ProductGroupStore.load();
+                                                
+                                                
+                                            });
+                                            
+                                        }
+
+                                    }
+                                    }
+                                ]
+                            });
+                            winAdd.show();
+
+                            }
+                        }]
+                    }, {
+                        xtype: 'textfield',
+                        name: 'Name',
+                        fieldLabel: 'Product',
+                        allowBlank: false,
+                        id: window.feature.ProductNameId,
+                        width: 10,
+                        anchor: '-10'
+                    }, {
+                        xtype: 'textarea',
+                        name: 'Description',
+                        fieldLabel: 'Description',
+
+                        id: window.feature.ProductDescriptionId
+
+                    }, { xtype: 'numberfield',
+                        name: 'LowerLimit',
+                        fieldLabel: 'Lower Limit',
+                        id: window.feature.ProductLowerLimitId
+                    }, { xtype: 'numberfield',
+                        name: 'UpperLimit',
+                        fieldLabel: 'Upper Limit',
+                        id: window.feature.ProductUpperLimitId
+
+                    }, { xtype: 'textfield',
+                        name: 'SMSReferenceCode',
+                        fieldLabel: 'SMS Code',
+                        id: window.feature.ProductSMSReferecenceCodeId
+
+                    }]
+                });
+                me.listeners = {
+                    afterrender: function () {
+                        window.feature.ProductGroupStoreForModal.load();
+
+                        var selectedProductGroupId = window.feature.comboBoxProductGroups.getValue();
+                        var comboboxProductGroupsForModal = Ext.getCmp(window.feature.comboboxProductGroupsForModalId);
+
+                        if (selectedProductGroupId !== null) {
+                            comboboxProductGroupsForModal.value = selectedProductGroupId;
+                        }
+                    }
+                };
+
+                me.buttons = [{ text: 'Cancel', handler: function () { me.close(); me.destroy(); window.feature.ProductGroupStore.load(); }
+                }, {
+                    text: 'Save', handler: function () {
+                        var productGroup = Ext.getCmp(window.feature.comboboxProductGroupsForModalId);
+                        var productName = me.down('#' + window.feature.ProductNameId);
+                        var productDescription = me.down('#' + window.feature.ProductDescriptionId);
+                        var productLowerLimit = me.down('#' + window.feature.ProductLowerLimitId);
+                        var productUpperLimit = me.down('#' + window.feature.ProductUpperLimitId);
+                        var productSMSCode = me.down('#' + window.feature.ProductSMSReferecenceCodeId);
+
+                        var ok = IsValid(productGroup, productName, productSMSCode);
+                        if (ok == true) {
+                            var values = {
+                                'inputProductModel.Name': productName.getValue(),
+                                'inputProductModel.ProductGroup.Id': productGroup.getValue(),
+                                'inputProductModel.LowerLimit': productLowerLimit.getValue(),
+                                'inputProductModel.UpperLimit': productUpperLimit.getValue(),
+                                'inputProductModel.SMSReferenceCode': productSMSCode.getValue(),
+                                'inputProductModel.Description': productDescription.getValue()
+                            };
+                            var postToUrl = '@Url.RouteUrl(StockAdministrationAreaRegistration.DEFAULT_ROUTE, new { controller = "Product", action = "Create" })';
+                            var action = $.post(postToUrl, values);
+                            action.success(function (result) {
+
+                                if (result.CloseModal === false) {
+                                    Ext.Msg.alert(result.Status, result.Message);
+                                }
+                                else {
+                                    Ext.Msg.alert(result.Status, result.Message);
+                                    var selectedProductGroupInModal = Ext.getCmp(window.feature.comboboxProductGroupsForModalId).getValue();
+                                    me.close();
+                                    me.destroy();
+                                    window.feature.ProductGroupStore.load();
+
+                                    var comboboxProductGroups = Ext.getCmp(window.feature.comboboxProductGroupsId);
+                                    comboboxProductGroups.setValue(selectedProductGroupInModal);
+                                    Ext.getCmp(window.feature.comboboxProductGroupsId).value = selectedProductGroupInModal;
+
+                                    window.feature.store.proxy.extraParams.productGroupId = selectedProductGroupInModal;
+                                    window.feature.store.loadPage(1);
+                                }
+                            });
+                        }
+                    }
+                }]
+                me.callParent(arguments);
+            }
+        });
+
+         window.feature.modalEdit = Ext.define('Ext.feature.product.Modal', {
+            extend: 'Ext.window.Window',
+            title: 'Edit product',
+            height: 470,
+            width: 690,
+            modal: true,
+            layout: {
+                align: 'stretch',
+                padding: 10,
+                type: 'vbox'
+            },
+            initComponent: function () {
+                var me = this;
+
+                Ext.applyIf(me, {
+                    items: [{
+                        xtype: 'container',
+                        layout: {
+                            type: 'hbox'
+                        },
+                        height: 50,
+                        items: [{ xtype: 'combobox',
+                            fieldLabel: 'Product Group',
+                            store: window.feature.ProductGroupStoreForModal,
+                            queryMode: 'local',
+                            displayField: 'Name',
+                            valueField: 'Id',
+                            id: window.feature.comboboxProductGroupsForModalId,
+                            emptyText: 'Select a product group'
+                        }, {
+                            xtype: 'button',
+                            text: 'Add a New Group',
+                            width: 150,
+                            handler: function () {                            
+                            var winAdd = new window.feature.modalAddProductGroup({
+                                title: 'Add New Product Group',
+                                buttons: [
+                                    { text: 'Cancel', handler:function(){ winAdd.close(); winAdd.destroy();} },
+                                    { text: 'Save',  handler:function(){
+
+                                        var productGroupName = winAdd.down('#'+window.feature.formProductGroupNameId);
+                                        var productGroupDescription = winAdd.down('#'+window.feature.formProductGroupDescriptionId);
+                                        var productGroupReferenceCode = winAdd.down('#'+window.feature.formProductGroupReferenceCodeId);
+                                    
+                                        var ok = IsValid(productGroupName, productGroupDescription, productGroupReferenceCode);
+                                        if (ok == true){
+                                            var values = {
+                                                Name:  productGroupName.getValue(),
+                                                Description:  productGroupDescription.getValue(),
+                                                ReferenceCode: productGroupReferenceCode.getValue(),
+                                            };
+
+                                            var postToUrl = '@Url.RouteUrl(StockAdministrationAreaRegistration.DEFAULT_ROUTE, new { controller = "ProductGroup", action = "Create" })';
+                                            var action = $.post(postToUrl, values);
+                                            action.success(function(serverResponse){
+
+                                                Ext.Msg.alert(serverResponse.Status, serverResponse.Message);
+                                                 
+                                                window.feature.ProductGroupStoreForModal.load();
+
+                                                clearTimeout(timeout);
+                                                    timeout = setTimeout(function () {
+                                                 var comboboxProductGroupsForModal = Ext.getCmp(window.feature.comboboxProductGroupsForModalId); 
+                                                 var indexOfProductGroupSaved = window.feature.ProductGroupStoreForModal.find('Name',productGroupName.getValue());
+                                                 var record = window.feature.ProductGroupStoreForModal.getAt(indexOfProductGroupSaved);
+                                                 var id = record.data.Id;
+                                                 comboboxProductGroupsForModal.setValue(id);  
+                                                }, 1000);
+                                                  
+                                                winAdd.close();
+                                                winAdd.destroy();                                                
+                                                window.feature.ProductGroupStore.load();
+                                                
+                                            });
+                                            
+                                        }
+
+                                    }
+                                    }
+                                ]
+                            });
+                            winAdd.show();
+
+                            }
+                        }]
+                    }, {
+                        xtype: 'textfield',
+                        name: 'Name',
+                        fieldLabel: 'Product',
+                        allowBlank: false,
+                        id: window.feature.ProductNameId,
+                        width: 50
+
+                    }, {
+                        xtype: 'textarea',
+                        name: 'Description',
+                        fieldLabel: 'Description',
+
+                        id: window.feature.ProductDescriptionId
+
+                    }, { xtype: 'numberfield',
+                        name: 'LowerLimit',
+                        fieldLabel: 'Lower Limit',
+                        id: window.feature.ProductLowerLimitId
+                    }, { xtype: 'numberfield',
+                        name: 'UpperLimit',
+                        fieldLabel: 'Upper Limit',
+                        id: window.feature.ProductUpperLimitId
+
+                    }, { xtype: 'textfield',
+                        name: 'SMSReferenceCode',
+                        fieldLabel: 'SMS Code',
+                        id: window.feature.ProductSMSReferecenceCodeId
+
+                    },{ xtype: 'textfield',
+                        hidden: true,
+                        id: window.feature.productId
+                    }]
+                });
+                me.listeners = {
+                    afterrender: function () {
+                        window.feature.ProductGroupStoreForModal.load();
+
+                        var selectedProductGroupId = window.feature.comboBoxProductGroups.getValue();
+                        var comboboxProductGroupsForModal = Ext.getCmp(window.feature.comboboxProductGroupsForModalId);
+
+                        if (selectedProductGroupId !== null) {
+                            comboboxProductGroupsForModal.value = selectedProductGroupId;
+                        }
+                    }
+                };
+
+                me.buttons = [{ text: 'Cancel', handler: function () { me.close(); me.destroy(); window.feature.ProductGroupStore.load(); }
+                }, {
+                    text: 'Save', handler: function () {
+                        var productGroup = Ext.getCmp(window.feature.comboboxProductGroupsForModalId);
+                        var productName = me.down('#' + window.feature.ProductNameId);
+                        var productDescription = me.down('#' + window.feature.ProductDescriptionId);
+                        var productLowerLimit = me.down('#' + window.feature.ProductLowerLimitId);
+                        var productUpperLimit = me.down('#' + window.feature.ProductUpperLimitId);
+                        var productSMSCode = me.down('#' + window.feature.ProductSMSReferecenceCodeId);
+                        var productId = me.down('#' + window.feature.productId);
+
+                        var ok = IsValid(productGroup, productName, productSMSCode);
+                        if (ok == true) {
+                            var values = {
+                                'inputProductModel.Name': productName.getValue(),
+                                'inputProductModel.ProductGroup.Id': productGroup.getValue(),
+                                'inputProductModel.LowerLimit': productLowerLimit.getValue(),
+                                'inputProductModel.UpperLimit': productUpperLimit.getValue(),
+                                'inputProductModel.SMSReferenceCode': productSMSCode.getValue(),
+                                'inputProductModel.Description': productDescription.getValue(),
+                                'inputProductModel.Id': productId.getValue()
+                            };
+                            var postToUrl = '@Url.RouteUrl(StockAdministrationAreaRegistration.DEFAULT_ROUTE, new { controller = "Product", action = "Edit" })';
+                            var action = $.post(postToUrl, values);
+                            action.success(function (result) {
+
+                                if (result.CloseModal === false) {
+                                    Ext.Msg.alert(result.Status, result.Message);
+                                }
+                                else {
+                                    Ext.Msg.alert(result.Status, result.Message);
+                                    var selectedProductGroupInModal = Ext.getCmp(window.feature.comboboxProductGroupsForModalId).getValue();
+                                    me.close();
+                                    me.destroy();
+                                    window.feature.ProductGroupStore.load();
+
+                                    var comboboxProductGroups = Ext.getCmp(window.feature.comboboxProductGroupsId);
+                                    comboboxProductGroups.setValue(selectedProductGroupInModal);
+                                    Ext.getCmp(window.feature.comboboxProductGroupsId).value = selectedProductGroupInModal;
+
+                                    window.feature.store.proxy.extraParams.productGroupId = selectedProductGroupInModal;
+                                    window.feature.store.loadPage(1);
+                                }
+                            });
+                        }
+                    }
+                }]
+                me.callParent(arguments);
+            }
+        });
+
+        window.feature.store = Ext.create('Ext.data.Store', {
+            pageSize: 2,
+            remoteSort: true,
+            fields: ['Name', 'ProductGroupName', 'SMSReferenceCode', 'LowerLimit', 'UpperLimit', 'Id', 'Description'],
+            proxy: {
+                type: 'ajax',
+                url: '@Url.RouteUrl(StockAdministrationAreaRegistration.DEFAULT_ROUTE, new { controller = "Product", action = "GetProducts" })',
+                extraParams: { productGroupId: '', searchName: '' },
+                reader: { type: 'json',
+                    root: 'products',
+                    totalProperty: 'TotalItems'
+                },
+                simpleSortMode: true
+
+            },
+            sorters: [{
+                property: 'Name',
+                direction: 'DESC'
+            }]
+        });
+
+        window.feature.grid = Ext.create('Ext.grid.Panel', {
+            title: 'Products',
+            store: window.feature.store,
+            disableSelection: true,
+            loadMask: true,
+            columns: [{
+                text: "Products",
+                dataIndex: 'Name',
+                anchor: '90%',
+                sortable: true,
+                flex: 1,
+                renderer: function (value, metaData, record, colIndex, store, view) {
+                    var description = record.data.Description;
+                    metaData.tdAttr = 'data-qtip="' + value + '"';
+                    return value;
+                }
+            }, {
+                text: "Product Groups",
+                dataIndex: 'ProductGroupName',
+                sortable: true
+            }, {
+                text: "SMS Code",
+                dataIndex: 'SMSReferenceCode',
+                sortable: false
+            }, {
+                text: "Lower Limit",
+                dataIndex: 'LowerLimit',
+                sortable: false
+            }, {
+                text: "Upper Limit",
+                dataIndex: 'UpperLimit',
+                sortable: false
+            }, {
+                xtype: 'actioncolumn',
+                items: [{
+                    icon: '../../Assets/img/delete.png',
+                    tooltip: _t('Remove this product'),
+                    handler: function (grid, rowIndex, colIndex) {
+
+                    var record = grid.store.getAt(rowIndex);
+
+                    Ext.MessageBox.confirm('Confirm', 'Are you sure you want to delete the product?', function (button) {
+
+                            var values = { guid: record.data.Id
+                            };
+                            if (button === 'yes') {
+
+                                var postToUrl = '@Url.RouteUrl(StockAdministrationAreaRegistration.DEFAULT_ROUTE, new { controller = "Product", action = "Delete" })';
+                                var action = $.post(postToUrl, values);
+                                action.success(function (result) {
+                                    Ext.Msg.alert(result.Status, result.Message);                                       
+                                    var selectedProductGroupId = Ext.getCmp(window.feature.comboboxProductGroupsId).getValue();
+                                    
+                                    if (selectedProductGroupId) {
+                                        window.feature.store.proxy.extraParams.productGroupId = selectedProductGroupId;
+                                        window.feature.store.loadPage(1);
+                                    } else {
+                                            window.feature.store.proxy.extraParams.productGroupId ='';
+                                            window.feature.store.loadPage(1);
+                                        
+                                    }
+
+                                });
+
+                            }
+
+                        });
+                    }
+
+                }, {
+                    icon: '../../Assets/img/edit.png',
+                    tooltip: _t('Edit this product'),
+                    handler: function (grid, rowIndex, colIndex) {
+                        var record = grid.store.getAt(rowIndex);
+                        var selectedProductGroupId = Ext.getCmp(window.feature.comboboxProductGroupsId).getValue();
+                        
+                        var modalForEdit = new window.feature.modalEdit();
+                        Ext.getCmp(window.feature.ProductNameId).setValue(record.data.Name);
+                        Ext.getCmp(window.feature.ProductLowerLimitId).setValue(record.data.LowerLimit);
+                        Ext.getCmp(window.feature.ProductUpperLimitId).setValue(record.data.UpperLimit);
+                        Ext.getCmp(window.feature.ProductSMSReferecenceCodeId).setValue(record.data.SMSReferenceCode);
+                        Ext.getCmp(window.feature.ProductDescriptionId).setValue(record.data.Description);
+                        Ext.getCmp(window.feature.productId).setValue(record.data.Id);
+                        Ext.getCmp(window.feature.comboboxProductGroupsForModalId).setValue(record.data.ProductGroupId);
+                        modalForEdit.show();
+                    }
+                }
+
+            ]
+            }],
+            bbar: Ext.create('Ext.PagingToolbar', {
+                store: window.feature.store,
+                displayInfo: true,
+                displayMsg: 'Displaying topics {0} - {1} of {2}',
+                emptyMsg: "No topics to display"
+            })
+        });
+        function GetStoreWithProductsSpecificToProductGroupWith(selectedProductGroupId) {
+
+            window.feature.store.proxy.extraParams.productGroupId = selectedProductGroupId;
+            window.feature.store.loadPage(1);
         }
 
-        function resetSearch() {
-            // clear the textbox
-            jQuery('#productSearch').val('');
-            // show all table rows
-            jQuery('#products-overview tr').show();
-            // remove any no records rows
-            jQuery('.norecords').remove();
-            // make sure we re-focus on the textbox for usability
-            jQuery('#productSearch').focus();
-        }
-    </script>
-}
+        var contentRes = window.res.content;
+        window.feature.ProductGroupStore.load();
+
+        var mainContent = Ext.getCmp(contentRes.maincontent.id);
+        mainContent.add({
+            xtype: 'container',
+            margin: 20,
+            id: 'TopContainer',
+            border: '10 10 10 10',
+            layout: {
+                align: 'stretch',
+                type: 'vbox'
+            },
+            items: [
+                      {
+                          xtype: 'container',
+                          layout: {
+                              type: 'column'
+                          },
+                          height: 50,
+                          items: [{ xtype: 'container',
+                              height: 30,
+                              width: 30,
+                              html: '&nbsp;'
+                          }, {
+                              xtype: 'label',
+                              text: 'Products'
+                          }, {
+                              xtype: 'button',
+                              margin: '0 0 0 20',
+                              text: 'Add New Product',
+                              width: 150,
+                              handler: function () {
+                                  var productModal = new window.feature.modal();
+
+                                  productModal.show();
+                              }
+                          }, {
+                              xtype: 'textfield',
+                              emptyText: 'Product Search',
+                              margin: '0 0 0 750',
+                              id: window.feature.searchTextFieldId,
+                              enableKeyEvents: true,
+                              listeners: {
+                                  specialkey: function (field, e) {
+                                      if (e.getKey() == Ext.EventObject.ESC) {
+                                          var selectedProductGroupId = Ext.getCmp(window.feature.comboboxProductGroupsId).getValue();
+
+                                          window.feature.store.proxy.extraParams.searchName = '';
+
+                                          Ext.getCmp(window.feature.searchTextFieldId).setValue('');
+                                          if (selectedProductGroupId) {
+                                              GetStoreWithProductsSpecificToProductGroupWith(selectedProductGroupId)
+                                          } else {
+                                              window.feature.store.loadPage(1);
+                                          }
+                                      }
+                                  },
+                                  keyup: function () {
+
+                                      var selectedProductId = Ext.getCmp(window.feature.comboboxProductGroupsId).getValue();
+                                      var searchByName = Ext.getCmp(window.feature.searchTextFieldId).getValue();
+
+                                      window.feature.store.proxy.extraParams.searchName = searchByName;
+
+                                      clearTimeout(timeout);
+                                      timeout = setTimeout(function () {
+
+                                          if (selectedProductId) {
+                                              GetStoreWithProductsSpecificToProductGroupWith(selectedProductId)
+                                          } else {
+                                              window.feature.store.loadPage(1);
+                                          }
+                                      }, 1000);
+
+
+                                  }
+                              }
+                          }]
+                      }, {
+                          xtype: 'container',
+                          layout: {
+                              type: 'hbox'
+                          },
+                          height: 50,
+                          items: [{ xtype: 'label',
+                              text: 'Product Group'
+                          },
+                           window.feature.comboBoxProductGroups
+                            ]
+                      },
+                       window.feature.grid
+                    ]
+        });
+
+
+    });
+</script>

@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace Web.Areas.OutpostManagement.Models.District
+namespace Web.Areas.StockAdministration.Models.Product
 {
-    public class DistrictIndexModel
+    public class ProductIndexModel
     {
-        public Guid? RegionId { get; set; }
-        public Guid? CountryId { get; set; }
-
+        public Guid? ProductGroupId { get; set; }
+       
         public int? Page { get; set; }
         public int? Start { get; set; }
         public int? Limit { get; set; }

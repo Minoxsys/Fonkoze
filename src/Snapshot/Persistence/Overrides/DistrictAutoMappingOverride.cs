@@ -12,7 +12,7 @@ namespace Persistence.Overrides
         {
             mapping.References(p => p.Region).Not.LazyLoad();
             mapping.References(p => p.Client).Not.LazyLoad().Cascade.SaveUpdate();
-            mapping.References(p => p.Region).Cascade.SaveUpdate();
+                   
            
 
         }

@@ -278,8 +278,8 @@ namespace Web.Areas.StockAdministration.Controllers
 
                                     if (product.Updated != null)
                                         productModel.LastUpdateAt = product.Updated.Value.ToShortDateString();
-                                    productModel.PreviousStockLevel = product.PrevStockLevel;
-                                    productModel.StockLevel = product.StockLevel;
+                                    //productModel.PreviousStockLevel = product.PrevStockLevel;
+                                    //productModel.StockLevel = product.StockLevel;
                                     productModel.UpdateMethod = product.UpdatedMethod;
                                     productModel.OutpostStockLevelId = product.Id;
 
