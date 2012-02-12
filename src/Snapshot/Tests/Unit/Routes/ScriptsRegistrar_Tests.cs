@@ -35,7 +35,7 @@ namespace UnitTests.Routes
 		[Test]
 		public void MapRoute_Js()
 		{
-			"~/js/group/_ver1".ShouldMapTo<JavascriptController>(action => action.Index("group"));
+			"~/js/group/ver1".ShouldMapTo<JavascriptController>(action => action.Index("group"));
 		}
 	}
 }

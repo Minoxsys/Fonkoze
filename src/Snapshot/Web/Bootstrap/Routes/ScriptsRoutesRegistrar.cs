@@ -4,19 +4,22 @@ namespace Web.Bootstrap.Routes
 {
 	public class ScriptsRoutesRegistrar
 	{
+		public static string JAVASCRIPT = "Javascript";
+		public static string CSS = "Stylesheet";
+
 		public static void Register( RouteCollection routes )
 		{
 
 			var version = AppSettings.ScriptsVersion;
 
-			routes.MapRoute("Javascript",
-				"js/{group}/_" + version,
+			routes.MapRoute(JAVASCRIPT,
+				"js/{group}/" + version,
 				new
 				{
 					controller = "Javascript",
 					action = "Index"
 				});
-			routes.MapRoute("Css",
+			routes.MapRoute(CSS,
 				"css/{group}/" + version,
 				new
 				{

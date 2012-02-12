@@ -164,6 +164,12 @@
     <Compile Include="Areas\OutpostManagement\Models\Country\ClientModelCountry.cs" />
     <Compile Include="Areas\OutpostManagement\Models\District\DistrictIndexModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\District\DistrictIndexOutputModel.cs" />
+    <Compile Include="Areas\OutpostManagement\Models\Outpost\CreateOutpostInputModel.cs" />
+    <Compile Include="Areas\OutpostManagement\Models\Outpost\EditOutpostInputModel.cs" />
+    <Compile Include="Areas\OutpostManagement\Models\Outpost\GetDistrictsOutputModel.cs" />
+    <Compile Include="Areas\OutpostManagement\Models\Outpost\GetOutpostsInputModel.cs" />
+    <Compile Include="Areas\OutpostManagement\Models\Outpost\GetOutpostsOutputModel.cs" />
+    <Compile Include="Areas\OutpostManagement\Models\Outpost\GetWarehousesOutputModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Outpost\OutpostInputModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Outpost\OutpostOutputModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\District\DistrictInputModel.cs" />
@@ -315,8 +321,7 @@
     <Content Include="Assets\css\ext-ie.css" />
     <Content Include="Assets\img\delete.png" />
     <Content Include="Assets\img\edit.png" />
-    <Content Include="Assets\js\ext-all-dev-w-comments.js" />
-    <Content Include="Assets\js\ext-all.js" />
+    <Content Include="Assets\js\ext-all-debug-w-comments.js" />
     <Content Include="Assets\js\jquery-1.7.1.min.js" />
     <Content Include="Assets\js\underscore.js" />
     <Content Include="Assets\themes\images\access\boundlist\trigger-arrow.png" />
@@ -1573,27 +1578,16 @@
     <Content Include="Areas\OutpostManagement\Views\Country\Overview.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\Region\Overview.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\_ViewStart.cshtml" />
-    <Content Include="Areas\OutpostManagement\Views\Outpost\Create.cshtml" />
-    <Content Include="Areas\OutpostManagement\Views\Outpost\Edit.cshtml" />
-    <Content Include="Areas\OutpostManagement\Views\Outpost\OutpostInput.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\Outpost\Overview.cshtml" />
-    <Content Include="Areas\OutpostManagement\Views\Contact\Create.cshtml" />
-    <Content Include="Areas\OutpostManagement\Views\Contact\Edit.cshtml" />
-    <Content Include="Areas\OutpostManagement\Views\Shared\OverviewContacts.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\District\Overview.cshtml" />
-    <Content Include="Areas\OutpostManagement\Views\Outpost\OverviewOutpost.cshtml" />
     <Content Include="Areas\StockAdministration\Views\Web.config" />
     <Content Include="Areas\StockAdministration\Views\Product\Overview.cshtml" />
     <Content Include="Areas\StockAdministration\Views\_ViewStart.cshtml" />
     <Content Include="Areas\StockAdministration\Views\ProductGroup\Overview.cshtml" />
-    <Content Include="Areas\OutpostManagement\Views\Shared\ContactInput.cshtml" />
-    <Content Include="Areas\OutpostManagement\Views\Contact\Overview.cshtml" />
-    <Content Include="Areas\OutpostManagement\Views\Shared\CreateContact.cshtml" />
     <Content Include="Areas\StockAdministration\Views\OutpostStockLevel\Overview.cshtml" />
     <Content Include="Areas\StockAdministration\Views\OutpostStockLevel\OverviewItemsStockLevel.cshtml" />
     <Content Include="Areas\StockAdministration\Views\OutpostStockLevel\EditCurrentProductLevel.cshtml" />
     <Content Include="Areas\StockAdministration\Views\OutpostStockLevel\EditCurrentProducLevelInput.cshtml" />
-    <Content Include="Areas\OutpostManagement\Views\Outpost\EditOutpostInput.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\StockLevel\OverviewStockLevel.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\StockLevel\OutpostStockLevelOverview.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\StockLevel\OverviewProducts.cshtml" />
@@ -1621,6 +1615,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\StockAdministration\Views\Shared\_ProductAdministrationSideBar.cshtml" />
+    <Content Include="Areas\OutpostManagement\Views\Shared\_OutpostContacts.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Shared\_UserAdministrationSideBar.cshtml" />

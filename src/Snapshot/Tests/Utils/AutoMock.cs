@@ -24,12 +24,15 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 
 using System;
+using System.Linq;
 using System.Security;
 using Autofac;
 using Autofac.Builder;
 using Autofac.Core;
 using Autofac.Features.ResolveAnything;
 using Moq;
+using Web.Controllers;
+using System.Web.Mvc;
 
 namespace AutofacContrib.Moq
 {
@@ -58,11 +61,29 @@ namespace AutofacContrib.Moq
         {
             MockRepository = repository;
             var builder = new ContainerBuilder();
+            AutoWireControllerProperties(builder);
             builder.RegisterInstance(MockRepository);
             builder.RegisterSource(new AnyConcreteTypeNotAlreadyRegisteredSource());
             builder.RegisterSource(new MoqRegistrationHandler());
+
             Container = builder.Build();
             VerifyAll = false;
+        }
+
+        private static void AutoWireControllerProperties(ContainerBuilder container)
+        {
+            var types = typeof(HomeController).Assembly.GetTypes();
+
+            types.ToList().ForEach(it =>
+            {
+                if (it.BaseType == typeof(Controller))
+                {
+                    container.RegisterType(it).PropertiesAutowired(PropertyWiringFlags.PreserveSetValues);
+                }
+
+            }
+                );
+
         }
 
         /// <summary>

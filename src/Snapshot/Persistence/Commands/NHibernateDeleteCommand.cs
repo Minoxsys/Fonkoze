@@ -11,25 +11,27 @@ namespace Persistence.Commands
 {
 	public class NHibernateDeleteCommand<ENTITY> : IDeleteCommand<ENTITY> where ENTITY : DomainEntity
 	{
-		private readonly INHibernateUnitOfWork unitOfWork;
+		private ISession session;
 
-		public NHibernateDeleteCommand(INHibernateUnitOfWork unitOfWork)
+		public NHibernateDeleteCommand(ISession session)
 		{
-			this.unitOfWork = unitOfWork;
+			this.session = session;
 		}
 
 		public void Execute(ENTITY entity)
 		{
-			ITransaction transaction = unitOfWork.CurrentSession.BeginTransaction();
+			ITransaction transaction = session.BeginTransaction();
 
 			try
 			{
-				this.unitOfWork.CurrentSession.Delete(entity);
+				this.session.Delete(entity);
 				transaction.Commit();
 			}
-			catch (GenericADOException)
+			catch (GenericADOException ex)
 			{
 				transaction.Rollback();
+
+				throw ex;
 			}
 			finally
 			{

@@ -74,7 +74,7 @@ namespace IntegrationTests
 			unitOfWork.Initialize();
 
 
-			var s = new Persistence.Queries.NHibernateQueryService<User>(unitOfWork);
+			var s = new Persistence.Queries.NHibernateQueryService<User>(unitOfWork.CurrentSession);
 			;
 			var emplByName = new UserByUserName(USERNAME);
 
