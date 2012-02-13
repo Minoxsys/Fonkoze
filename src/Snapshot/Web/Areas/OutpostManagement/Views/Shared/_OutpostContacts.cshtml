@@ -1,0 +1,131 @@
+﻿
+<script type="text/javascript">
+    Ext.onReady(function(){
+        window.feature.ContactModel = Ext.define('ContactModel', {
+            extend: 'Ext.data.Model',
+            fields: [
+                {
+                    name: 'id', type: 'string',
+                    convert: function (value, record) {
+                        return record.get('Id');
+                    }
+                },
+    
+                { name: 'ContactType', type: 'string' },
+                { name: 'ContactDetail', type: 'string' },
+                { name: 'IsMainContact', type: 'bool' },
+                { name: 'Id', type: 'string' }
+            ]
+        });
+    
+        window.feature.contactsStore = Ext.define('snapshot-contactsStore', {
+            extend: 'Ext.data.Store',
+            model: window.feature.ContactModel,
+            autoSync: true,
+            
+        });
+        window.feature.detailTypeStore = Ext.create('Ext.data.Store',{
+            fields: ['name'],
+            data: [
+                { name: "Phone" },
+                { name: "Email" },
+            ]
+        });
+    
+        window.feature.editorRowCombo = {
+            xtype: 'combobox',
+            itemId: 'editor-row-combo',
+            store: window.feature.detailTypeStore,
+            displayField: 'name',
+            valueField: 'name',
+            emptyText: 'Select Name',
+            typeAhead: false,
+            editable: false
+        };
+
+       
+        window.feature.rowEditor = Ext.create('Ext.grid.plugin.RowEditing',{ 
+            clicksToEdit:1
+        });
+    
+        window.feature.contactsGrid = Ext.define( 'snapshot-contactsGrid',{
+            extend:  'Ext.grid.Panel', 
+            selType: 'rowmodel',
+            flex:1,
+    
+            plugins:[
+                window.feature.rowEditor
+            ],
+            listeners: {
+                afterrender: function(grid){
+                    grid.ownerCt.doLayout(); 
+                },
+                'edit': function(editor, e) {
+                    // commit the changes right after editing finished
+    
+                    if (e.record.get('IsMainContact')){
+                        e.store.each(function(record){
+                            if (e.record.id !== record.id){
+                                record.set('IsMainContact', false);
+                                record.commit();
+                            }  
+                        });
+                    }
+                    e.record.commit();
+                    e.store.sync();
+                }
+
+            },
+            columns: [
+                {
+                    header: _t('Contact Method'), dataIndex: 'ContactType',
+                    flex:1,
+    
+                    editor: window.feature.editorRowCombo   
+                },{
+                    header: _t('Mobile Number/Email'), dataIndex: 'ContactDetail',
+                    flex:2,
+                    editor: {
+                        xtype:'textfield',
+                        allowblank:'false'
+                    }
+                },{
+                    header: _t('Default'), dataIndex: 'IsMainContact',
+    
+                    editor: {
+                        xtype:'checkbox',
+                    }
+    
+                }, {
+                    xtype: 'actioncolumn',
+                    text: _t('Actions'),
+                    items: [
+                        {
+                            icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/delete.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                            action: 'Delete',
+                            handler: function (grid, rowIndex, colIndex) {
+                                console.log('do it');
+                                var rec = grid.getStore().getAt(rowIndex);
+                                Ext.Msg.show({
+                                    title: _t('Confirm deletion'),
+                                    msg: Ext.String.format(_t('Are you sure you want to delete contact `{0}`'), rec.get('ContactDetail')),
+                                    buttons: Ext.Msg.YESNO,
+                                    icon: Ext.Msg.QUESTION,
+                                    fn: function (answer) {
+                                        if (answer === 'yes') {
+
+                                            grid.getStore().remove(rec);
+                                            //                                        window.feature.contactsStore.sync();
+    
+                                        }
+                                    }
+                                });
+    
+                            }
+                        }
+                    ]
+                }
+            ]
+        });
+    });
+ </script>

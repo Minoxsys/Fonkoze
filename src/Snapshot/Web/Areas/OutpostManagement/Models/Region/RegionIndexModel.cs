@@ -16,5 +16,7 @@ namespace Web.Areas.OutpostManagement.Models.Region
 
         public string sort { get; set; }
         public string dir { get; set; }
+
+        public string countryId { get; set; }
     }
 }

@@ -1,0 +1,81 @@
+﻿<script type="text/javascript">
+    window.res.content.maincontent = {
+        id: 'MainContent',
+        sidebar: {
+            id: 'SideBar',
+            group: 'SideBarGroup',
+            clients: 'Sidebar-UserAdministration-Clients-Button',
+            users: 'Sidebar-UserAdministration-Users-Button',
+            roles: 'Sidebar-UserAdministration-Roles-Button'
+        }
+    };
+    Ext.onReady(function () {
+
+        var contentRes = window.res.content;
+
+        var content = Ext.getCmp(contentRes.id);
+
+        content.add(
+            {
+                xtype: 'container',
+                layout: {
+                    align: 'stretch',
+                    type: 'hbox'
+                },
+                items: [
+                     {
+                         xtype: 'container',
+                         id: contentRes.maincontent.id,
+                         layout: {
+                             align: 'stretch',
+                             type: 'fit'
+                         },
+                         flex: 1
+                     },
+                    {
+                        xtype: 'container',
+                        id: 'SideBar',
+                        width: 210,
+                        layout: {
+                            align: 'stretch',
+                            type: 'vbox'
+                        },
+                        items: [
+                            {
+                                xtype: 'button',
+                                id: contentRes.maincontent.sidebar.clients,
+                                toggleGroup: contentRes.maincontent.sidebar.group,
+                                enableToggle: true,
+                                text: 'Clients',
+                                handler: function () {
+                                    navigateTo(window.res.link.clientsOverview);
+                                }
+                            },
+                            {
+                                xtype: 'button',
+                                id: contentRes.maincontent.sidebar.users,
+                                toggleGroup: contentRes.maincontent.sidebar.group,
+                                enableToggle: true,
+                                text: 'Users',
+                                handler: function () {
+                                    navigateTo(window.res.link.usersOverview);
+                                }
+                            },
+                            {
+                                xtype: 'button',
+                                id: contentRes.maincontent.sidebar.roles,
+                                toggleGroup: contentRes.maincontent.sidebar.group,
+                                text: 'Roles',
+                                enableToggle: true
+
+                            }
+                        ]
+                    }
+
+                ]
+
+            }
+        );
+
+    });
+</script>

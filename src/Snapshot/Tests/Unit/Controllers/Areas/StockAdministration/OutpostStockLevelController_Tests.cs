@@ -24,7 +24,7 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration
 
         Guid regionId;
         Region region;
-        const String REGION_NAME = "region";
+        const String REGION_NAME = "regionMock";
 
         Guid districtId;
         District district;
@@ -150,13 +150,13 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration
                 var outpostStockLevelId = Guid.NewGuid();
                 outpostStockLevel = MockRepository.GeneratePartialMock<OutpostStockLevel>();
                 outpostStockLevel.Stub(it => it.Id).Return(outpostStockLevelId);
-                //from 0-9 assign 0-9 outposts
+                //from 0-9 assign 0-9 outpostsQueryData
                 if (i < 10)
                 {
                     outpostStockLevel.OutpostId = outposts[i].Id;
                     outpostStockLevelHistorical.OutpostId = outposts[i].Id;
 
-                } //from 10 -19 assign outposts with index from 0-9
+                } //from 10 -19 assign outpostsQueryData with index from 0-9
                 else
                 {
                     outpostStockLevel.OutpostId = outposts[i - 10].Id;
@@ -370,8 +370,8 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration
         //[Test]
         //public void Get_PartialView_OverviewItemsStockLevelHistorical_ShouldReturn_OneOutpost_WhenPasing_ASpecificOutpostGuid()
         //{
-        //    queryOutpost.Expect(it => it.Query()).Return(outposts.AsQueryable());
-        //    foreach (var item in outposts)
+        //    queryOutpost.Expect(it => it.Query()).Return(outpostsQueryData.AsQueryable());
+        //    foreach (var item in outpostsQueryData)
         //    {
         //        queryOutpost.Expect(it => it.Load(item.Id)).Return(item);
         //    }
@@ -385,7 +385,7 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration
         //    }
         //    queryOutpostStockLevelHistorical.Expect(it => it.Query()).Return(outpostStockLevelsHistorical.AsQueryable());
         //    //queryProduct.Expect(it => it.Query().Count(Arg<Product>.Matches())).Return(1);
-        //    var result = (PartialViewResult)controller.OverviewItemsStockLevelHistorical(outposts[0].Id, district.Id);
+        //    var result = (PartialViewResult)controller.OverviewItemsStockLevelHistorical(outpostsQueryData[0].Id, district.Id);
 
         //    //assert
         //    Assert.IsInstanceOf<OutpostList>(result.Model);
@@ -393,17 +393,17 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration
         //    var model = (OutpostList)result.Model;
 
         //    //test data passed to query for outpost id passed to controller method
-        //    Assert.AreEqual(2, outpostStockLevelsHistorical.Where(it => it.OutpostId == outposts[0].Id).ToList().Count);
-        //    Assert.AreNotEqual(outpostStockLevelsHistorical.Where(it => it.OutpostId == outposts[0].Id).ToList()[0].ProdGroupId, outpostStockLevelsHistorical.Where(it => it.OutpostId == outposts[0].Id).ToList()[1].ProdGroupId);
+        //    Assert.AreEqual(2, outpostStockLevelsHistorical.Where(it => it.OutpostId == outpostsQueryData[0].Id).ToList().Count);
+        //    Assert.AreNotEqual(outpostStockLevelsHistorical.Where(it => it.OutpostId == outpostsQueryData[0].Id).ToList()[0].ProdGroupId, outpostStockLevelsHistorical.Where(it => it.OutpostId == outpostsQueryData[0].Id).ToList()[1].ProdGroupId);
 
 
         //    //test data returned from query and builded in model
         //    Assert.AreEqual(1, model.Outposts.Count);
         //    Assert.AreEqual(2, model.Outposts[0].StockGroups.Count);
-        //    Assert.AreEqual(outpostStockLevelsHistorical.Where(it => it.OutpostId == outposts[0].Id).ToList()[0].ProdGroupId, model.Outposts[0].StockGroups[0].Id);
-        //    Assert.AreEqual(outpostStockLevelsHistorical.Where(it => it.OutpostId == outposts[0].Id).ToList()[1].ProdGroupId, model.Outposts[0].StockGroups[1].Id);
-        //    Assert.AreEqual(outpostStockLevelsHistorical.Where(it => it.OutpostId == outposts[0].Id).ToList()[0].ProductId, model.Outposts[0].StockGroups[0].StockItems[0].Id);
-        //    Assert.AreEqual(outpostStockLevelsHistorical.Where(it => it.OutpostId == outposts[0].Id).ToList()[1].ProductId, model.Outposts[0].StockGroups[1].StockItems[0].Id);
+        //    Assert.AreEqual(outpostStockLevelsHistorical.Where(it => it.OutpostId == outpostsQueryData[0].Id).ToList()[0].ProdGroupId, model.Outposts[0].StockGroups[0].Id);
+        //    Assert.AreEqual(outpostStockLevelsHistorical.Where(it => it.OutpostId == outpostsQueryData[0].Id).ToList()[1].ProdGroupId, model.Outposts[0].StockGroups[1].Id);
+        //    Assert.AreEqual(outpostStockLevelsHistorical.Where(it => it.OutpostId == outpostsQueryData[0].Id).ToList()[0].ProductId, model.Outposts[0].StockGroups[0].StockItems[0].Id);
+        //    Assert.AreEqual(outpostStockLevelsHistorical.Where(it => it.OutpostId == outpostsQueryData[0].Id).ToList()[1].ProductId, model.Outposts[0].StockGroups[1].StockItems[0].Id);
  
         //}
 

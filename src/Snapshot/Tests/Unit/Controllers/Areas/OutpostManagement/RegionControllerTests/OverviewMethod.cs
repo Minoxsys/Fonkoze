@@ -24,15 +24,12 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.RegionControllerTests
         public void Returns_The_ViewModel()
         {
             //Arrange
-            objectMother.queryCountry.Expect(call => call.Query()).Return(new Country[] { objectMother.country }.AsQueryable());
 
             // Act
-            var viewResult = (ViewResult)objectMother.controller.Overview(objectMother.countryId);
+            var viewResult = (ViewResult)objectMother.controller.Overview();
 
             // Assert
-            objectMother.queryCountry.VerifyAllExpectations();
-
-            Assert.IsNotNull(viewResult.Model);
+            Assert.IsNull(viewResult.Model);
             Assert.AreEqual("", viewResult.ViewName);
         }
     }

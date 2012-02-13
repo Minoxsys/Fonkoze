@@ -6,6 +6,7 @@ using Rhino.Mocks;
 using NUnit.Framework;
 using Web.Areas.OutpostManagement.Models.Region;
 using Web.Models.Shared;
+using Domain;
 
 namespace Tests.Unit.Controllers.Areas.OutpostManagement.RegionControllerTests
 {
@@ -56,18 +57,20 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.RegionControllerTests
             //Arrange
             RegionInputModel regionInputModel = new RegionInputModel()
             {
+                Id = objectMother.region.Id,
                 Name = objectMother.region.Name,
                 Coordinates = objectMother.region.Coordinates,
                 CountryId = objectMother.region.Country.Id
             };
             objectMother.queryCountry.Expect(call => call.Load(objectMother.countryId)).Return(objectMother.country);
+            objectMother.saveCommand.Expect(call => call.Execute(Arg<Region>.Matches(p => p.Name == objectMother.region.Name && p.Coordinates == objectMother.region.Coordinates)));
 
             //Act
-            var jsonResult = objectMother.controller.Create(regionInputModel);
+            var jsonResult = objectMother.controller.Edit(regionInputModel);
 
             //Assert
             objectMother.queryCountry.VerifyAllExpectations();
-
+            objectMother.saveCommand.VerifyAllExpectations();
             var response = jsonResult.Data as JsonActionResponse;
             Assert.IsNotNull(response);
             Assert.That(response.Status, Is.EqualTo("Success"));

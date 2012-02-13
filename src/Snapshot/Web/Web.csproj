@@ -164,6 +164,12 @@
     <Compile Include="Areas\OutpostManagement\Models\Country\ClientModelCountry.cs" />
     <Compile Include="Areas\OutpostManagement\Models\District\DistrictIndexModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\District\DistrictIndexOutputModel.cs" />
+    <Compile Include="Areas\OutpostManagement\Models\Outpost\CreateOutpostInputModel.cs" />
+    <Compile Include="Areas\OutpostManagement\Models\Outpost\EditOutpostInputModel.cs" />
+    <Compile Include="Areas\OutpostManagement\Models\Outpost\GetDistrictsOutputModel.cs" />
+    <Compile Include="Areas\OutpostManagement\Models\Outpost\GetOutpostsInputModel.cs" />
+    <Compile Include="Areas\OutpostManagement\Models\Outpost\GetOutpostsOutputModel.cs" />
+    <Compile Include="Areas\OutpostManagement\Models\Outpost\GetWarehousesOutputModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Outpost\OutpostInputModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Outpost\OutpostOutputModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\District\DistrictInputModel.cs" />
@@ -198,6 +204,8 @@
     <Compile Include="Areas\StockAdministration\Models\OutpostStockLevel\OutpostWithStockGroups.cs" />
     <Compile Include="Areas\StockAdministration\Models\OutpostStockLevel\ProductGroupOverviewModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\OutpostStockLevel\ProductGroupWithProducts.cs" />
+    <Compile Include="Areas\StockAdministration\Models\ProductGroup\ProductGroupIndexModel.cs" />
+    <Compile Include="Areas\StockAdministration\Models\ProductGroup\ProductGroupIndexOutputModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\OutpostStockLevel\tree.cs" />
     <Compile Include="Areas\StockAdministration\Models\OutpostStockLevel\TreeModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\ProductGroup\ProductGroupOutputModel.cs" />
@@ -217,6 +225,7 @@
     <Compile Include="Bootstrap\Container\EmailRegistrar.cs" />
     <Compile Include="Bootstrap\Container\FileRegistrar.cs" />
     <Compile Include="Bootstrap\Container\URLRegistrar.cs" />
+    <Compile Include="Controllers\ClientManagerController.cs" />
     <Compile Include="Controllers\EmailRequestController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\UnauthorizedAccessController.cs" />
@@ -258,6 +267,10 @@
     <Compile Include="Models\Account\ChangePasswordModel.cs" />
     <Compile Include="Models\Account\LogOnModel.cs" />
     <Compile Include="Models\Account\RegisterModel.cs" />
+    <Compile Include="Models\ClientManager\ClientIndexOutputModel.cs" />
+    <Compile Include="Models\ClientManager\ClientManagerIndexModel.cs" />
+    <Compile Include="Models\ClientManager\ClientManagerModel.cs" />
+    <Compile Include="Models\ClientManager\ClientManagerOutputModel.cs" />
     <Compile Include="Models\EmailRequest\EmailCreateModel.cs" />
     <Compile Include="Models\EmailRequest\EmailRequestModel.cs" />
     <Compile Include="Models\EmailRequest\ReferenceModel.cs" />
@@ -278,13 +291,20 @@
     <Compile Include="Models\Shared\ListQuery.cs" />
     <Compile Include="Models\Shared\RazorExtensions.cs" />
     <Compile Include="Models\UnauthorizedAccess\Index.cs" />
+    <Compile Include="Models\UserManager\ClientsIndexOutputModel.cs" />
+    <Compile Include="Models\UserManager\ReferenceModel.cs" />
+    <Compile Include="Models\UserManager\RolesIndexOutputModel.cs" />
+    <Compile Include="Models\UserManager\UserIndexOutputModel.cs" />
     <Compile Include="Models\UserManager\UserManagerAssignModel.cs" />
     <Compile Include="Models\UserManager\UserManagerCreateInputModel.cs" />
     <Compile Include="Models\UserManager\UserManagerCreateModel.cs" />
     <Compile Include="Models\UserManager\UserManagerEditModel.cs" />
+    <Compile Include="Models\UserManager\UserManagerIndexModel.cs" />
+    <Compile Include="Models\UserManager\UserManagerInputModel.cs" />
     <Compile Include="Models\UserManager\UserManagerListModel.cs" />
     <Compile Include="Models\UserManager\UserManagerUnAssignModel.cs" />
     <Compile Include="Models\UserManager\UserModel.cs" />
+    <Compile Include="Models\UserManager\UserOutputModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Security\AuthenticateUser.cs" />
     <Compile Include="Security\RequiresAttribute.cs" />
@@ -305,8 +325,7 @@
     <Content Include="Assets\css\ext-ie.css" />
     <Content Include="Assets\img\delete.png" />
     <Content Include="Assets\img\edit.png" />
-    <Content Include="Assets\js\ext-all-dev-w-comments.js" />
-    <Content Include="Assets\js\ext-all.js" />
+    <Content Include="Assets\js\ext-all-debug-w-comments.js" />
     <Content Include="Assets\js\jquery-1.7.1.min.js" />
     <Content Include="Assets\js\underscore.js" />
     <Content Include="Assets\themes\images\access\boundlist\trigger-arrow.png" />
@@ -1563,33 +1582,16 @@
     <Content Include="Areas\OutpostManagement\Views\Country\Overview.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\Region\Overview.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\_ViewStart.cshtml" />
-    <Content Include="Areas\OutpostManagement\Views\Outpost\Create.cshtml" />
-    <Content Include="Areas\OutpostManagement\Views\Outpost\Edit.cshtml" />
-    <Content Include="Areas\OutpostManagement\Views\Outpost\OutpostInput.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\Outpost\Overview.cshtml" />
-    <Content Include="Areas\OutpostManagement\Views\Contact\Create.cshtml" />
-    <Content Include="Areas\OutpostManagement\Views\Contact\Edit.cshtml" />
-    <Content Include="Areas\OutpostManagement\Views\Shared\OverviewContacts.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\District\Overview.cshtml" />
-    <Content Include="Areas\OutpostManagement\Views\Outpost\OverviewOutpost.cshtml" />
     <Content Include="Areas\StockAdministration\Views\Web.config" />
     <Content Include="Areas\StockAdministration\Views\Product\Overview.cshtml" />
     <Content Include="Areas\StockAdministration\Views\_ViewStart.cshtml" />
-    <Content Include="Areas\StockAdministration\Views\ProductGroup\Create.cshtml" />
     <Content Include="Areas\StockAdministration\Views\ProductGroup\Overview.cshtml" />
-    <Content Include="Areas\StockAdministration\Views\ProductGroup\Edit.cshtml" />
-    <Content Include="Areas\OutpostManagement\Views\Shared\ContactInput.cshtml" />
-    <Content Include="Areas\StockAdministration\Views\ProductGroup\EditProducts.cshtml" />
-    <Content Include="Areas\StockAdministration\Views\ProductGroup\Input.cshtml" />
-    <Content Include="Areas\StockAdministration\Views\ProductGroup\InputProducts.cshtml" />
-    <Content Include="Areas\StockAdministration\Views\ProductGroup\OverviewProductGroup.cshtml" />
-    <Content Include="Areas\OutpostManagement\Views\Contact\Overview.cshtml" />
-    <Content Include="Areas\OutpostManagement\Views\Shared\CreateContact.cshtml" />
     <Content Include="Areas\StockAdministration\Views\OutpostStockLevel\Overview.cshtml" />
     <Content Include="Areas\StockAdministration\Views\OutpostStockLevel\OverviewItemsStockLevel.cshtml" />
     <Content Include="Areas\StockAdministration\Views\OutpostStockLevel\EditCurrentProductLevel.cshtml" />
     <Content Include="Areas\StockAdministration\Views\OutpostStockLevel\EditCurrentProducLevelInput.cshtml" />
-    <Content Include="Areas\OutpostManagement\Views\Outpost\EditOutpostInput.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\StockLevel\OverviewStockLevel.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\StockLevel\OutpostStockLevelOverview.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\StockLevel\OverviewProducts.cshtml" />
@@ -1603,33 +1605,29 @@
     <Content Include="Views\Shared\Calendar.cshtml" />
     <Content Include="Views\Shared\FormButtons.cshtml" />
     <Content Include="Views\Shared\InfoMessage.cshtml" />
-    <Content Include="Views\Shared\Menu.cshtml" />
     <Content Include="Views\Shared\_LoginLayout.cshtml" />
-    <Content Include="Views\UserManager\Create.cshtml" />
-    <Content Include="Views\UserManager\Edit.cshtml" />
-    <Content Include="Views\UserManager\List.cshtml" />
+    <Content Include="Views\UserManager\Overview.cshtml" />
     <Content Include="Views\UnauthorizedAccess\Index.cshtml" />
-    <Content Include="Views\Shared\_OutpostManagementActions.cshtml" />
-    <Content Include="Views\Shared\_StockAdministrationActions.cshtml" />
-    <Content Include="Views\Shared\_StockAdministrationHeader.cshtml" />
     <Content Include="Views\EmailRequest\Create.cshtml" />
     <Content Include="Views\EmailRequest\Overview.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Areas\OutpostManagement\Views\Shared\_SubNavigation.cshtml" />
+    <Content Include="Views\Shared\_SubNavigation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\OutpostManagement\Views\Shared\_OutpostAdministrationSideBar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\StockAdministration\Views\Shared\_ProductAdministrationSideBar.cshtml" />
-    <Content Include="Areas\StockAdministration\Views\Shared\_SubNavigation.cshtml" />
+    <Content Include="Areas\OutpostManagement\Views\Shared\_OutpostContacts.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Views\Shared\_UserAdministrationSideBar.cshtml" />
     <Content Include="Areas\StockAdministration\Views\Shared\_OutpostStockLevelSubNavigation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\StockAdministration\Views\Shared\_OutpostStockLevelMainContent.cshtml" />
+    <Content Include="Views\ClientManager\Overview.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Areas\StockAdministration\Views\OutpostStockLevel\treegrid.json" />

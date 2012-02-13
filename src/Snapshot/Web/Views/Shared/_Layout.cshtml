@@ -1,18 +1,19 @@
-﻿    @using Web.Areas.OutpostManagement;
+﻿@using Web.Areas.OutpostManagement;
 @using Web.Areas.OutpostManagement.Controllers;
+@using Web.Areas.StockAdministration.Controllers;
 @using Web.Bootstrap.Routes;
 <!DOCTYPE html>
     <html>
 <head>
     <meta charset="utf-8" />
     <title>@RenderSection("page_title", required: true)</title>
-    <link href="@(Url.RouteUrl<CssController>(req => req.Index("site"), "Css"))"
+    <link href="@(Url.RouteUrl<CssController>(req => req.Index("site"), ScriptsRoutesRegistrar.CSS))"
         rel="stylesheet" type="text/css" media="screen,projection" />
     <!--[if IE]>
-    <link href="@(Url.RouteUrl<CssController>(req => req.Index("ie"), DefaultRouteRegistrar.DEFAULT_ROUTE))"
+    <link href="@(Url.RouteUrl<CssController>(req => req.Index("ie"), ScriptsRoutesRegistrar.CSS))"
         rel="stylesheet" type="text/css" media="screen, projection" />
     <![endif]-->
-    <script src="@(Url.RouteUrl<JavascriptController>(req => req.Index("frameworks"), DefaultRouteRegistrar.DEFAULT_ROUTE))"
+    <script src="@(Url.RouteUrl<JavascriptController>(req => req.Index("frameworks"), ScriptsRoutesRegistrar.JAVASCRIPT))"
         language="javascript" type="text/javascript"> </script>
 </head>
 <body>
@@ -29,11 +30,13 @@
         viewport: 'SnapshotViewport',
         link:{
             administration:'@(Url.RouteUrl<CountryController>( x=>x.Overview() ,  OutpostManagementAreaRegistration.DEFAULT_ROUTE ))',
-            regionOverview:'@(Url.RouteUrl<RegionController>( x => x.Overview(null) ,  OutpostManagementAreaRegistration.DEFAULT_ROUTE ))',
+            regionOverview:'@(Url.RouteUrl<RegionController>( x => x.Overview() ,  OutpostManagementAreaRegistration.DEFAULT_ROUTE ))',
             district: '@(Url.RouteUrl<DistrictController>( x=>x.Overview() ,  OutpostManagementAreaRegistration.DEFAULT_ROUTE ))',
             product:'@(Url.RouteUrl<Web.Areas.StockAdministration.Controllers.ProductController>(x=>x.Overview(),Web.Areas.StockAdministration.StockAdministrationAreaRegistration.DEFAULT_ROUTE))',
+            productGroup: '@(Url.RouteUrl<ProductGroupController>( x=>x.Overview() ,  Web.Areas.StockAdministration.StockAdministrationAreaRegistration.DEFAULT_ROUTE ))',
+            usersOverview: '@(Url.RouteUrl<UserManagerController>( x=>x.Overview() ,  Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE ))',
             outpostStockLevelCurrent:'@(Url.RouteUrl<Web.Areas.StockAdministration.Controllers.OutpostStockLevelController>(x=>x.Overview(),Web.Areas.StockAdministration.StockAdministrationAreaRegistration.DEFAULT_ROUTE))'
-
+            clientsOverview: '@(Url.RouteUrl<ClientManagerController>( x=>x.Overview() ,  Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE ))'
         },
         header:{
             id:'Header',
