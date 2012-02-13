@@ -123,13 +123,14 @@ Product Administration Product Groups: Overview
                 layout: {
                     type: 'hbox',
                 },
+                height: 50,
                 items:[{
                     xtype: 'container',
                     flex: 1,
                     layout: {
                         type: 'column'
                     },
-                    height:50,
+                    height:70,
                     items: [{
                         xtype: 'container',
                         height: 30,
@@ -164,7 +165,6 @@ Product Administration Product Groups: Overview
                                             var postToUrl = '@Url.RouteUrl(StockAdministrationAreaRegistration.DEFAULT_ROUTE, new { controller = "ProductGroup", action = "Create" })';
                                             var action = $.post(postToUrl, values);
                                             action.success(function(serverResponse){
-                                                Ext.Msg.alert(serverResponse.Status, serverResponse.Message);
                                                 winAdd.close();
                                                 winAdd.destroy();
                                                 window.feature.productGroupStore.loadPage(1);
@@ -254,7 +254,6 @@ Product Administration Product Groups: Overview
                                         var postToUrl = '@Url.RouteUrl(StockAdministrationAreaRegistration.DEFAULT_ROUTE, new { controller = "ProductGroup", action = "Edit" })';
                                         var action = $.post(postToUrl, values);
                                         action.success(function(serverResponse){
-                                            Ext.Msg.alert(serverResponse.Status, serverResponse.Message);
                                             winEdit.close();
                                             winEdit.destroy();
                                             window.feature.productGroupStore.loadPage(1);

@@ -214,6 +214,7 @@
 			xtype: 'combobox',
 			itemId: window.feature.regionOverviewComboId,
 			store: window.feature.regionsStore,
+            margin: '0 0 0 20',
 			queryMode:'local',
 			displayField: 'Name',
 			valueField:'Id',
@@ -228,6 +229,7 @@
 			xtype: 'combobox',
 			itemId: window.feature.districtOverviewComboId,
 			store: window.feature.districtsStore,
+            margin: '0 0 0 20',
 			queryMode:'local',
 			displayField: 'Name',
 			valueField:'Id',
@@ -684,14 +686,17 @@
 						},{
 							text: "Coordinates",
 							dataIndex: 'Coordinates',
+                            flex: 1,
 							sortable: false
 						},{
 							text: "Is Warehouse",
 							dataIndex: 'IsWarehouse',
+                            flex: 1,
 							sortable: false
 						},{
 							text: "Warehouse name",
 							dataIndex: 'WarehouseName',
+                            flex: 1,
 							sortable: false
 						},{
 							xtype: 'actioncolumn',

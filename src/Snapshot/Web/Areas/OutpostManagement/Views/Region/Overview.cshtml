@@ -90,7 +90,6 @@ Outpost Management Regions: Overview
 
             initComponent: function () {
                 var me = this;
-
                 var overviewComboboxValue = window.feature.container.down('#'+window.feature.overviewcomboboxid).getValue(); 
 
                 Ext.applyIf(me, {
@@ -189,7 +188,6 @@ Outpost Management Regions: Overview
                                                 var postToUrl = '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Region", action = "Create" })';
                                                 var action = $.post(postToUrl, values);
                                                 action.success(function(serverResponse){
-                                                    Ext.Msg.alert(serverResponse.Status, serverResponse.Message);
                                                     winAdd.close();
                                                     winAdd.destroy();
 
@@ -281,7 +279,6 @@ Outpost Management Regions: Overview
                                                     var postToUrl = '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Region", action = "Edit" })';
                                                     var action = $.post(postToUrl, values);
                                                     action.success(function(serverResponse){
-                                                        Ext.Msg.alert(serverResponse.Status, serverResponse.Message);
                                                         winEdit.close();
                                                         winEdit.destroy();
                                                         window.feature.regionStore.loadPage(1);
@@ -291,6 +288,7 @@ Outpost Management Regions: Overview
                                                           
                                     }]
                                 });
+                                window.feature.countryStore.load();
 
                                 winEdit.down('#'+window.feature.formcomboboxid).setValue(rec.get('CountryId'));
                                 winEdit.down('#'+window.feature.formregionnameid).setValue(rec.get('Name'));

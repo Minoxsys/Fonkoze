@@ -95,6 +95,7 @@ User Administration Clients: Overview
                 layout: {
                     type: 'hbox',
                 },
+                height: 50,
                 items:[{
                     xtype: 'container',
                     flex: 1,
@@ -131,7 +132,6 @@ User Administration Clients: Overview
                                             var postToUrl = '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "ClientManager", action = "Create" })';
                                             var action = $.post(postToUrl, values);
                                             action.success(function(serverResponse){
-                                                Ext.Msg.alert(serverResponse.Status, serverResponse.Message);
                                                 winAdd.close();
                                                 winAdd.destroy();
                                                 window.feature.ClientsStore.loadPage(1); 
@@ -211,7 +211,6 @@ User Administration Clients: Overview
                                         var postToUrl = '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "ClientManager", action = "Edit" })';
                                         var action = $.post(postToUrl, values);
                                         action.success(function(serverResponse){
-                                            Ext.Msg.alert(serverResponse.Status, serverResponse.Message);
                                             winEdit.close();
                                             winEdit.destroy();
                                             window.feature.ClientsStore.loadPage(1); 

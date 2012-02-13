@@ -172,7 +172,6 @@
                 emptyMsg: "No topics to display",
             });
         window.feature.grid = Ext.create('Ext.grid.Panel', {
-            title: 'Countries',
             store: window.feature.store,
             disableSelection: true,
             loadMask: true,
@@ -189,14 +188,15 @@
                     text: "Country Abbreviation",
                     dataIndex: 'ISOCode',
                     sortable: true,
-                    width:180
+                    flex: 1
                 },{
                     text: "Phone Prefix",
                     dataIndex: 'PhonePrefix',
                     sortable: true,
-                    width:140
+                    flex: 1
                 },{
                     xtype: 'actioncolumn',
+                    text: 'Actions',
                     cls: 'cop-grid-column',
                     items: [
                         {
@@ -264,7 +264,8 @@
                         }
                     ]
                 },
-                window.feature.grid,{
+                window.feature.grid,
+                {
                     xtype:'container',
                     height:150
                 },

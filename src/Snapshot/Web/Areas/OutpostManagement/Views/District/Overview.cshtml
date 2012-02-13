@@ -189,8 +189,6 @@ Districts: Overview
                         var postToUrl = '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "District", action = "Create" })';
                         var action = $.post(postToUrl, values);
                         action.success(function (result) {
-                            Ext.Msg.alert(result.Status, result.Message);
-
                             var selectedCountryInModal = Ext.getCmp(window.feature.comboboxCountriesForModalId).getValue();
                             var selectedRegionInModal = Ext.getCmp(window.feature.comboboxRegionsForModalId).getValue();
                             me.close();
@@ -319,9 +317,6 @@ Districts: Overview
                         var postToUrl = '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "District", action = "Edit" })';
                         var action = $.post(postToUrl, values);
                         action.success(function (result) {
-
-                            Ext.Msg.alert(result.Status, result.Message);
-
                             var selectedCountryInModal = Ext.getCmp(window.feature.comboboxCountriesForModalId).getValue();
                             var selectedRegionInModal = Ext.getCmp(window.feature.comboboxRegionsForModalId).getValue();
                             me.close();
@@ -399,7 +394,7 @@ Districts: Overview
             displayField: 'Name',
             valueField: 'Id',
             id: window.feature.comboboxRegionsId,
-            margin: '0 0 0 35',
+            margin: '0 0 0 20',
             emptyText: _t('Selected region'),
             listeners: {
                 select: function (combo, record, index) {
@@ -437,7 +432,7 @@ Districts: Overview
         });
 
         window.feature.grid = Ext.create('Ext.grid.Panel', {
-            title: 'Districts',
+            flex: 3,
             store: window.feature.store,
             disableSelection: true,
             loadMask: true,
@@ -450,10 +445,28 @@ Districts: Overview
             }, {
                 text: "No of outposts",
                 dataIndex: 'OutpostNo',
-                sortable: true
+                sortable: true,
+                flex: 1
             }, {
                 xtype: 'actioncolumn',
+                text: 'Actions',
                 items: [{
+                    icon: '../../Assets/img/edit.png',
+                    tooltip: _t('Edit this district'),
+                    handler: function (grid, rowIndex, colIndex) {
+                        var record = grid.store.getAt(rowIndex);
+                        var selectedCountryId = Ext.getCmp(window.feature.comboboxCountriesId).getValue();
+                        var selectedRegionId = Ext.getCmp(window.feature.comboboxRegionsId).getValue();
+
+
+                        var modalForEdit = new window.feature.modalEdit();
+                        Ext.getCmp(window.feature.districtNameId).setValue(record.data.Name);
+                        Ext.getCmp(window.feature.clientId).setValue(record.data.ClientId);
+                        Ext.getCmp(window.feature.DistrictId).setValue(record.data.Id);
+                        modalForEdit.show();
+
+                    }
+                },{
                     icon: '../../Assets/img/delete.png',
                     tooltip: _t('Remove this district'),
                     handler: function (grid, rowIndex, colIndex) {
@@ -493,23 +506,6 @@ Districts: Overview
 
 
                     }
-
-                }, {
-                    icon: '../../Assets/img/edit.png',
-                    tooltip: _t('Edit this district'),
-                    handler: function (grid, rowIndex, colIndex) {
-                        var record = grid.store.getAt(rowIndex);
-                        var selectedCountryId = Ext.getCmp(window.feature.comboboxCountriesId).getValue();
-                        var selectedRegionId = Ext.getCmp(window.feature.comboboxRegionsId).getValue();
-
-
-                        var modalForEdit = new window.feature.modalEdit();
-                        Ext.getCmp(window.feature.districtNameId).setValue(record.data.Name);
-                        Ext.getCmp(window.feature.clientId).setValue(record.data.ClientId);
-                        Ext.getCmp(window.feature.DistrictId).setValue(record.data.Id);
-                        modalForEdit.show();
-
-                    }
                 }
 
             ]
@@ -540,106 +536,135 @@ Districts: Overview
         var mainContent = Ext.getCmp(contentRes.maincontent.id);
         mainContent.add({
             xtype: 'container',
-            margin: 20,
-            id: 'TopContainer',
-            border: '10 10 10 10',
-            layout: {
-                align: 'stretch',
-                type: 'vbox'
-            },
-            items: [
-                      {
-                          xtype: 'container',
-                          layout: {
-                              type: 'column'
-                          },
-                          height: 50,
-                          items: [{ xtype: 'container',
-                              height: 30,
-                              width: 30,
-                              html: '&nbsp;'
-                          }, {
-                              xtype: 'label',
-                              text: 'District Administration'
-                          }, {
-                              xtype: 'button',
-                              margin: '0 0 0 20',
-                              text: 'Add New District',
-                              width: 150,
-                              handler: function () {
-                                  var districtModal = new window.feature.modal();
+            margin:'20 50 20 0',
+			autoScroll:true,
+			id:'TopContainer',
+			layout: {
+				align: 'stretch',
+				type: 'vbox'
+			},
+			items: [
+				{
+					xtype: 'container',
+					layout: {
+						align: 'stretch',
+						type: 'vbox'
+					},
+					height:70,
+					items: [{
+							xtype: 'container',
+							flex: 1,
+                            layout: {
+                                type: 'hbox',
+                            },
+                            items: [{
+                                xtype: 'container',
+                                flex: 1,
+							    layout: {
+								    type: 'column'
+							    },
+							    items: [{
+									xtype: 'container',
+									height: 30,
+									width: 30,
+									html:'&nbsp;'
+								},{
+									xtype: 'label',
+									text: 'District Administration'
+								},{
+									xtype: 'button',
+                                    margin: '0 0 0 20',
+                                    text: 'Add New District',
+                                    handler: function () {
+                                        var districtModal = new window.feature.modal();
+                                        districtModal.show();
+                                    }
+								}]
+                            },{
+                                xtype: 'container',
+                                flex: 1,
+							    layout: {
+								    type: 'hbox',
+                                    pack:'end'
+							    },
+                                items: [{
+                                    xtype: 'textfield',
+                                    id: window.feature.searchTextFieldId,
+                                    width: 200,
+                                    frame: true,
+                                    emptyText: 'Search District',
+                                    enableKeyEvents: true,
+                                    listeners: {
+                                        specialkey: function (field, e) {
+                                            if (e.getKey() == Ext.EventObject.ESC) {
+                                                var selectedCountryId = Ext.getCmp(window.feature.comboboxCountriesId).getValue();
+                                                var selectedRegionId = Ext.getCmp(window.feature.comboboxRegionsId).getValue();
+                                                var searchByName = Ext.getCmp(window.feature.searchTextFieldId).getValue();
+                                                window.feature.store.proxy.extraParams.searchName = '';
 
-                                  districtModal.show();
-                              }
-                          }, {
-                              xtype: 'textfield',
-                              emptyText: 'Search District',
-                              margin: '0 0 0 750',
-                              id: window.feature.searchTextFieldId,
-                              enableKeyEvents: true,
-                              listeners: {
-                                  specialkey: function (field, e) {
-                                      if (e.getKey() == Ext.EventObject.ESC) {
-                                          var selectedCountryId = Ext.getCmp(window.feature.comboboxCountriesId).getValue();
-                                          var selectedRegionId = Ext.getCmp(window.feature.comboboxRegionsId).getValue();
-                                          var searchByName = Ext.getCmp(window.feature.searchTextFieldId).getValue();
-                                          window.feature.store.proxy.extraParams.searchName = '';
+                                                Ext.getCmp(window.feature.searchTextFieldId).setValue('');
+                                                if (selectedRegionId) {
+                                                    GetStoreWithDistrictsSpecificToRegionWith(selectedRegionId)
+                                                } else {
+                                                    if (selectedCountryId) {
+                                                        GetStoreWithDistrictsSpecificToCountryWith(selectedCountryId)
+                                                    } else {
+                                                        window.feature.store.loadPage(1);
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        keyup: function () {
 
-                                          Ext.getCmp(window.feature.searchTextFieldId).setValue('');
-                                          if (selectedRegionId) {
-                                              GetStoreWithDistrictsSpecificToRegionWith(selectedRegionId)
-                                          } else {
-                                              if (selectedCountryId) {
-                                                  GetStoreWithDistrictsSpecificToCountryWith(selectedCountryId)
-                                              } else {
-                                                  window.feature.store.loadPage(1);
-                                              }
-                                          }
-                                      }
-                                  },
-                                  keyup: function () {
+                                            var selectedCountryId = Ext.getCmp(window.feature.comboboxCountriesId).getValue();
+                                            var selectedRegionId = Ext.getCmp(window.feature.comboboxRegionsId).getValue();
+                                            var searchByName = Ext.getCmp(window.feature.searchTextFieldId).getValue();
 
-                                      var selectedCountryId = Ext.getCmp(window.feature.comboboxCountriesId).getValue();
-                                      var selectedRegionId = Ext.getCmp(window.feature.comboboxRegionsId).getValue();
-                                      var searchByName = Ext.getCmp(window.feature.searchTextFieldId).getValue();
+                                            window.feature.store.proxy.extraParams.searchName = searchByName;
 
-                                      window.feature.store.proxy.extraParams.searchName = searchByName;
+                                            clearTimeout(timeout);
+                                            timeout = setTimeout(function () {
 
-                                      clearTimeout(timeout);
-                                      timeout = setTimeout(function () {
-
-                                          if (selectedRegionId) {
-                                              GetStoreWithDistrictsByNameSpecificToRegionWith(selectedRegionId, searchByName);
-                                          } else {
-                                              if (selectedCountryId) {
-                                                  GetStoreWithDistrictsByNameSpecificToCountryWith(selectedCountryId, searchByName);
-                                              }
-                                              else {
-                                                  GetStoreWithDistrictsByName(searchByName);
-                                              }
-                                          }
-                                      }, 1000);
+                                                if (selectedRegionId) {
+                                                    GetStoreWithDistrictsByNameSpecificToRegionWith(selectedRegionId, searchByName);
+                                                } else {
+                                                    if (selectedCountryId) {
+                                                        GetStoreWithDistrictsByNameSpecificToCountryWith(selectedCountryId, searchByName);
+                                                    }
+                                                    else {
+                                                        GetStoreWithDistrictsByName(searchByName);
+                                                    }
+                                                }
+                                            }, 1000);
 
 
-                                  }
-                              }
-                          }]
-                      }, {
-                          xtype: 'container',
-                          layout: {
-                              type: 'hbox'
-                          },
-                          height: 50,
-                          items: [
-                                window.feature.comboBoxCountries,
+                                        }
+                                    }            
+                                }]
+                            }]
+						},{
+							xtype: 'container',
+							flex: 1,
+							layout: {
+								type: 'column'
+							},
+							items: [
+								window.feature.comboBoxCountries,
                                 window.feature.comboBoxRegions
-                            ]
-                      },
-                       window.feature.grid
-                    ]
+							]
+						}
+					]
+				},
+					window.feature.grid
+				,{
+					xtype:'container',
+					height:150
+				}
+			]
         });
 
         window.feature.countriesStore.load();
+        window.feature.store.loadPage(1);
 
     });
 </script>
