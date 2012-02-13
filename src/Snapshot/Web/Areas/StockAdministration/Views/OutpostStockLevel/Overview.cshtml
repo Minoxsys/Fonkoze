@@ -10,7 +10,7 @@ Outpost Stock Level Current
 <script type="text/javascript">
     Ext.onReady(function () {
 
-        var outpostStockLevelBtnId = window.res.header.navigation.outpostStockLevel;
+        var outpostStockLevelBtnId = window.res.content.maincontent.sidebar.outpostStockLevelCurrent;
         var outpostStockLevelBtn = Ext.getCmp(outpostStockLevelBtnId);
         outpostStockLevelBtn.toggle(true);
 
@@ -89,7 +89,7 @@ Outpost Stock Level Current
             displayField: 'Name',
             valueField: 'Id',
             margin: '0 0 0 30',
-            emptyText: _t('Selected country'),
+            emptyText: _t('Country List'),
             listeners: {
                 select: function (combo, record, index) {
                     var selectedCountryId = record[0].data.Id;
@@ -121,7 +121,7 @@ Outpost Stock Level Current
             valueField: 'Id',
             disabled: true,
             margin: '0 0 0 30',
-            emptyText: _t('Selected region'),
+            emptyText: _t('Region List'),
             listeners: {
                 select: function (combo, record, index) {
                     var selectedRegionId = record[0].data.Id;
@@ -130,7 +130,7 @@ Outpost Stock Level Current
                     window.feature.DistrictStore.load({ params: { regionId: selectedRegionId} });
 
                     var comboboxOutpost = Ext.getCmp(window.feature.comboboxOutpostsId);
-                   
+
                     comboboxOutpost.setValue(null);
                     comboboxOutpost.setDisabled(true);
 
@@ -146,7 +146,7 @@ Outpost Stock Level Current
             valueField: 'Id',
             disabled: true,
             margin: '0 0 0 30',
-            emptyText: _t('Selected district'),
+            emptyText: _t('District List'),
             listeners: {
                 select: function (combo, record, index) {
                     var selectedDistrictId = record[0].data.Id;
@@ -166,17 +166,54 @@ Outpost Stock Level Current
             valueField: 'Id',
             disabled: true,
             margin: '0 0 0 30',
-            emptyText: _t('Selected outpost'),
-            listeners: {
-                select: function (combo, record, index) {
-                    //                    var selectedProductGroupId = record[0].data.Id;
-                    //                    window.feature.store.proxy.extraParams.productGroupId = selectedProductGroupId;
-                    //                    window.feature.store.loadPage(1);
+            emptyText: _t('Outpost List')
 
-                }
-            }
+        });
+        Ext.define('Outpost', {
+            extend: 'Ext.data.Model',
+            fields: ['text', 'duration']
         });
 
+        window.feature.treeStore = Ext.create('Ext.data.TreeStore', {
+            model: 'Outpost',
+            autoLoad: false,
+            root: {},
+            proxy: {
+                type: 'ajax',
+                url: '@Url.RouteUrl(StockAdministrationAreaRegistration.DEFAULT_ROUTE, new { controller = "OutpostStockLevel", action = "GetData" })'
+            }
+        });
+        window.feature.treeStore.load();
+        
+        window.feature.treegrid = Ext.create('Ext.tree.Panel', {
+            title: 'Outpost Stock Level',
+            width: 1300,
+            height: 600,
+            collapsible: true,
+            useArrows: true,
+            rootVisible: false,
+            root: {},
+            store: window.feature.treeStore,
+            multiSelect: true,
+            singleExpand: true,
+            columns: [{
+                xtype: 'treecolumn',
+                text: 'Product',
+                flex: 2,
+                sortable: true,
+                dataIndex: 'text'
+            }, {
+                xtype: 'templatecolumn',
+                text: 'ProductGroupName',
+                flex: 1,
+                sortable: true,
+                dataIndex: 'duration',
+                align: 'center',
+                //add in the custom tpl for the rows
+                tpl:'{duration}'
+            }]
+        });
+        window.feature.treegrid.getRootNode().expand();
         var contentRes = window.res.content;
         window.feature.CountryStore.load();
 
@@ -227,6 +264,7 @@ Outpost Stock Level Current
                               type: 'hbox'
                           },
                           height: 50,
+                          width: 950,
                           items: [window.feature.comboBoxCountries,
                                    window.feature.comboBoxRegions,
                                    window.feature.comboBoxDistricts,
@@ -243,12 +281,13 @@ Outpost Stock Level Current
                                        }
                                    }
                           ]
-                      }
+                      }, window.feature.treegrid
                     ]
         });
 
     });
 </script>
+
 @*
 @section master_actions{
     @{

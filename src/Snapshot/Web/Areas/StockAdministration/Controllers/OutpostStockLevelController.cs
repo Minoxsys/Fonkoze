@@ -8,6 +8,7 @@ using Core.Persistence;
 using Web.Areas.StockAdministration.Models.Product;
 using AutoMapper;
 using Core.Domain;
+using System.Web.Script.Serialization;
 
 namespace Web.Areas.StockAdministration.Controllers
 {
@@ -85,6 +86,23 @@ namespace Web.Areas.StockAdministration.Controllers
             }, JsonRequestBehavior.AllowGet); 
         }
 
+        public JsonResult GetData(ModelForTreeRequest modelTree)
+        {
+            var tree = new tree() { text = "task1", duration = "33", leaf = true };
+            var model1 = new tree(){ text="task", duration ="3",leaf = false, children = new tree[] {tree }};
+
+            var firstModel = new tree() { text = "root1", duration="duration", leaf=false, expanded=true, children = new tree[] { model1 } };
+            var jsser = new JavaScriptSerializer();
+
+            var second = new tree() { text="taskkkk", expanded=false, duration="", leaf=false, children = new tree[] { model1}};
+            var model = new tree() { text="root", expanded=true, children= new tree[] {firstModel,second}};
+            var result = jsser.Serialize(firstModel);
+
+            //return result;
+            return Json(model, JsonRequestBehavior.AllowGet);
+            
+            
+        }
 
         public JsonResult GetRegions(Guid? countryId)
         {

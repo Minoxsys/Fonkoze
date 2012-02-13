@@ -1,10 +1,7 @@
 ﻿
 <script type="text/javascript">
      window.res.header.subnavigation.buttonTabs = {
-        id: 'ButtonTabs',
-        group: 'OutpostStockLevelButtonsGroup',
-        outpostStockLevelCurrent: 'outpostStockLevelCurrent',
-        outpostStockLevelHistorical: 'outpostStockLevelHistorical',
+        id: 'ButtonTabs'
     };
 
 
@@ -38,26 +35,7 @@
                                 type: 'column'
                             },
                             flex: 1,
-                            items: [
-                                {
-                                    xtype: 'button',
-                                    id: subNavRes.buttonTabs.outpostStockLevelCurrent,
-                                    toggleGroup: subNavRes.buttonTabs.group,
-                                    enableToggle: true,
-                                    pressed: true,
-                                    text: 'Outpost Product Level',
-                                     handler: function () {
-                                        navigateTo(window.res.link.outpostStockLevelCurrent);
-                                    }
-                                },
-                                {
-                                    xtype: 'button',
-                                    id: subNavRes.buttonTabs.outpostStockLevelHistorical,
-                                    toggleGroup: subNavRes.buttonTabs.group,
-                                    enableToggle: true,
-                                    text: 'Historical Product Level'                                   
-                                }
-                            ]
+                            items: []
                         }
                     ]
             },
