@@ -24,10 +24,10 @@ namespace UnitTests.Routes
 
 
 
-		[Test]
-		public void MapsRoute_Roles()
-		{
-			"~/roles".ShouldMapTo<RoleManagerController>(action => action.List());
-		}
+        //[Test]
+        //public void MapsRoute_Roles()
+        //{
+        //    "~/roles".ShouldMapTo<RoleManagerController>(action => action.List());
+        //}
 	}
 }

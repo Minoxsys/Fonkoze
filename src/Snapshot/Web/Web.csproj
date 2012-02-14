@@ -277,8 +277,12 @@
     <Compile Include="Models\RoleManager\RoleManagerCreateOutputModel.cs" />
     <Compile Include="Models\RoleManager\RoleManagerEditInput.cs" />
     <Compile Include="Models\RoleManager\RoleManagerEditOutput.cs" />
+    <Compile Include="Models\RoleManager\RoleManagerIndexModel.cs" />
     <Compile Include="Models\RoleManager\RoleManagerIndexOutputModel.cs" />
+    <Compile Include="Models\RoleManager\RoleManagerInputModel.cs" />
+    <Compile Include="Models\RoleManager\RoleManagerListForJsonOutput.cs" />
     <Compile Include="Models\RoleManager\RoleManagerUnAssignModel.cs" />
+    <Compile Include="Models\RoleManager\RoleReferenceModel.cs" />
     <Compile Include="Models\Shared\Event.cs" />
     <Compile Include="Models\Shared\EventsCalendarModel.cs" />
     <Compile Include="Models\Shared\JsonActionResponse.cs" />
@@ -1622,6 +1626,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\ClientManager\Overview.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\RoleManager\Overview.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

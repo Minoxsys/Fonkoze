@@ -187,3 +187,155 @@ INSERT INTO WorldCountryRecords
            ,'NL'
 		   ,'0031')
 end
+
+GO
+
+INSERT INTO [StockManager].[dbo].[Permissions]
+           ([Id]
+           ,[Name]
+           ,[Created]
+           )
+     VALUES
+           (
+			'369d6648-4e0f-453e-a2d6-5a54cc3b8aea'
+			,'Country.View'
+			,GETDATE()
+           )
+GO
+INSERT INTO [StockManager].[dbo].[Permissions]
+           ([Id]
+           ,[Name]
+           ,[Created]
+           )
+     VALUES
+           (
+			'2842ad00-170e-493e-b7ea-6c5f10d61d45'
+			,'Country.Edit'
+			,GETDATE()
+           )
+GO
+INSERT INTO [StockManager].[dbo].[Permissions]
+           ([Id]
+           ,[Name]
+           ,[Created]
+           )
+     VALUES
+           (
+			'744ba2ac-0a76-4c6e-8aa7-5d5cf8844ff1'
+			,'Country.Delete'
+			,GETDATE()
+           )
+GO
+
+
+INSERT INTO [StockManager].[dbo].[Permissions]
+           ([Id]
+           ,[Name]
+           ,[Created]
+           )
+     VALUES
+           (
+			'5ce78ae3-32c8-4d93-8b93-6474ec13a1f2'
+			,'Region.View'
+			,GETDATE()
+           )
+GO
+INSERT INTO [StockManager].[dbo].[Permissions]
+           ([Id]
+           ,[Name]
+           ,[Created]
+           )
+     VALUES
+           (
+			'45637f15-3bd3-4262-9abc-05cca6dc2e29'
+			,'Region.Edit'
+			,GETDATE()
+           )
+GO
+INSERT INTO [StockManager].[dbo].[Permissions]
+           ([Id]
+           ,[Name]
+           ,[Created]
+           )
+     VALUES
+           (
+			'6c199451-5501-4a04-839e-231d9a63e41d'
+			,'Region.Delete'
+			,GETDATE()
+           )
+GO
+
+INSERT INTO [StockManager].[dbo].[Permissions]
+           ([Id]
+           ,[Name]
+           ,[Created]
+           )
+     VALUES
+           (
+			'810f37a9-424f-4362-9e06-7fbf41eff867'
+			,'District.View'
+			,GETDATE()
+           )
+GO
+INSERT INTO [StockManager].[dbo].[Permissions]
+           ([Id]
+           ,[Name]
+           ,[Created]
+           )
+     VALUES
+           (
+			'a9890a76-cdb3-40fb-a7f5-507da335b186'
+			,'District.Edit'
+			,GETDATE()
+           )
+GO
+INSERT INTO [StockManager].[dbo].[Permissions]
+           ([Id]
+           ,[Name]
+           ,[Created]
+           )
+     VALUES
+           (
+			'985a8cab-14be-4262-a406-5a140a00203e'
+			,'District.Delete'
+			,GETDATE()
+           )
+GO
+
+
+INSERT INTO [StockManager].[dbo].[Permissions]
+           ([Id]
+           ,[Name]
+           ,[Created]
+           )
+     VALUES
+           (
+			'e8501372-98cc-4fa8-8322-cc8629ed6dbc'
+			,'Outpost.View'
+			,GETDATE()
+           )
+GO
+INSERT INTO [StockManager].[dbo].[Permissions]
+           ([Id]
+           ,[Name]
+           ,[Created]
+           )
+     VALUES
+           (
+			'0cad4331-fcac-43a3-91d0-80e3e3e8fa4d'
+			,'Outpost.Edit'
+			,GETDATE()
+           )
+GO
+INSERT INTO [StockManager].[dbo].[Permissions]
+           ([Id]
+           ,[Name]
+           ,[Created]
+           )
+     VALUES
+           (
+			'0b1ca0af-7de5-4b3a-a937-6a9a21e4f2fd'
+			,'Outpost.Delete'
+			,GETDATE()
+           )
+GO

@@ -151,6 +151,13 @@
     <Compile Include="Unit\Controllers\EmailRequestControllerTests\CreateMethod.cs" />
     <Compile Include="Unit\Controllers\EmailRequestControllerTests\ObjectMother.cs" />
     <Compile Include="Unit\Controllers\EmailRequestControllerTests\ResponseMethod.cs" />
+    <Compile Include="Unit\Controllers\RoleManagerControllerTests\CreateMethod.cs" />
+    <Compile Include="Unit\Controllers\RoleManagerControllerTests\DeleteMethod.cs" />
+    <Compile Include="Unit\Controllers\RoleManagerControllerTests\EditMethod.cs" />
+    <Compile Include="Unit\Controllers\RoleManagerControllerTests\GetListOfRolesMethod.cs" />
+    <Compile Include="Unit\Controllers\RoleManagerControllerTests\GetPermissionsForRoleMethod.cs" />
+    <Compile Include="Unit\Controllers\RoleManagerControllerTests\ObjectMother.cs" />
+    <Compile Include="Unit\Controllers\RoleManagerControllerTests\OverviewMethod.cs" />
     <Compile Include="Unit\Controllers\UnautorizedAccessController_Tests.cs" />
     <Compile Include="Unit\Controllers\CssControllerTests.cs" />
     <Compile Include="Unit\Controllers\JavascriptControllerTests.cs" />

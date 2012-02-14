@@ -12,6 +12,7 @@ using Autofac;
 using Persistence.Queries.Countries;
 using Persistence.Queries.Districts;
 using Persistence.Queries.Products;
+using Persistence.Queries.Roles;
 using NHibernate;
 
 
@@ -40,6 +41,8 @@ namespace Web.Bootstrap.Container
             container.RegisterType<NHibernateQueryDistrict>().As<IQueryDistrict>();
 
             container.RegisterType<NHibernateQueryProduct>().As<IQueryProduct>();
+
+            container.RegisterType<NHibernateQueryRole>().As<IQueryRole>();
             
         }
     }

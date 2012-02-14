@@ -66,8 +66,10 @@
                                 id: contentRes.maincontent.sidebar.roles,
                                 toggleGroup: contentRes.maincontent.sidebar.group,
                                 text: 'Roles',
-                                enableToggle: true
-
+                                enableToggle: true,
+                                handler: function() {
+                                    navigateTo(window.res.link.rolesOverview);
+                                }
                             }
                         ]
                     }

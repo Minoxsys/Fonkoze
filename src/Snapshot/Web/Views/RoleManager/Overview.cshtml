@@ -1,0 +1,395 @@
+﻿@using Domain
+@using Microsoft.Web.Mvc;
+@section page_title{
+User Administration Roles: Overview
+}
+@{
+    Html.RenderPartial("_SubNavigation");
+    Html.RenderPartial("_UserAdministrationSideBar");
+}
+<style type="text/css">
+    .x-table-layout-cell 
+    {
+        text-align: left;
+        width: 90px;
+        height: 35px;
+    }
+    .x-table-layout-cell table
+    {
+        width: 90px;
+        height: 35px;
+        margin: 0;
+        border: 0;
+        padding: 0;
+        text-align: center;
+    }
+    label.permissions-header
+    {
+        margin-left: 30px;
+    }
+    .x-table-layout-cell table.role-name
+    {
+        width: 250px;
+        margin-left: 30px;
+    }
+</style>
+<script type="text/javascript">
+    Ext.onReady(function () {
+        var administrationBtnId = window.res.header.navigation.administration;
+        var administrationBtn = Ext.getCmp(administrationBtnId);
+        administrationBtn.toggle(true);
+
+        var userAdministrationBtnId = window.res.header.subnavigation.buttonTabs.user;
+        var userAdministrationBtn = Ext.getCmp(userAdministrationBtnId);
+        userAdministrationBtn.toggle(true);
+
+        var rolesGroupBtnId = window.res.content.maincontent.sidebar.roles;
+        var rolesGroupBtn = Ext.getCmp(rolesGroupBtnId);
+        rolesGroupBtn.toggle(true);
+    });
+</script>
+<script type="text/javascript">
+    Ext.onReady(function () {
+        window.feature = {};
+        window.feature.searchRoleId = 'Search-Role-Id';
+        window.feature.roleNameId = 'Role-Name-Id';
+        window.feature.saveButtonId = 'Save-Button-Id';
+
+        window.feature.countryViewId = 'Country.View';
+        window.feature.countryEditId = 'Country.Edit';
+        window.feature.countryDeleteId = 'Country.Delete';
+
+        window.feature.regionViewId = "Region.View";
+        window.feature.regionEditId = "Region.Edit";
+        window.feature.regionDeleteId = "Region.Delete";
+
+        window.feature.districtViewId = "District.View";
+        window.feature.districtEditId = "District.Edit";
+        window.feature.districtDeleteId = "District.Delete";
+
+        window.feature.outpostViewId = "Outpost.View";
+        window.feature.outpostEditId = "Outpost.Edit";
+        window.feature.outpostDeleteId = "Outpost.Delete";
+
+        window.feature.checkBoxControls = [];
+        window.feature.checkBoxControlIds = [
+            window.feature.countryViewId, window.feature.countryEditId, window.feature.countryDeleteId, 
+            window.feature.regionViewId, window.feature.regionEditId, window.feature.regionDeleteId,
+            window.feature.districtViewId, window.feature.districtEditId, window.feature.districtDeleteId,
+            window.feature.outpostViewId, window.feature.outpostEditId, window.feature.outpostDeleteId ];
+
+        window.feature.role = null;
+
+        Ext.define('Ext.feature.roleReferenceModel', {
+            extend: 'Ext.data.Model',
+            fields: [
+                { name: 'Id', type: 'string' },
+                { name: 'Name', type: 'string' },
+                { name: 'NumberOfUsers', type: 'int' }
+            ]
+        });
+
+        window.feature.store = Ext.create('Ext.data.Store', {
+            model: 'Ext.feature.roleReferenceModel',
+            pageSize: 25,
+            autoLoad: true,
+            proxy: {
+                type: 'ajax',
+                url: '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "RoleManager", action = "GetListOfRoles" })',
+                reader: {
+                    type: 'json',
+                    root: 'Roles',
+                    totalProperty: 'TotalItems'
+                },
+                extraParams: { searchValue: '' },
+                simpleSortMode: true
+            },
+            remoteSort: true,
+            sorters: [{
+                property: 'Name',
+                direction: 'ASC' 
+            }]
+        });
+
+        window.feature.modal = Ext.create('Ext.window.Window', {
+            title: '',
+            modal: true,
+            height: 300,
+            width: 390,
+            closeAction: 'hide',
+            resizable: false,
+            layout: {
+                type: 'fit',
+                align: 'strech'
+            },
+            items: [{
+                xtype: 'container',
+                layout: {
+                    type: 'table',
+                    columns: 4
+                },
+                items: [
+                            { xtype: 'label', text: 'Role'},
+                            { xtype: 'textfield', colspan: 3, id: window.feature.roleNameId, componentCls: 'role-name' },
+                            { xtype: 'label', text: 'Permissions'},
+                            { xtype: 'label', text: 'View', componentCls: 'permissions-header' },
+                            { xtype: 'label', text: 'Edit', componentCls: 'permissions-header' },
+                            { xtype: 'label', text: 'Delete', componentCls: 'permissions-header' },
+                            { xtype: 'label', text: 'Country'},
+                            { xtype: 'checkbox', id: window.feature.countryViewId},
+                            { xtype: 'checkbox', id: window.feature.countryEditId},
+                            { xtype: 'checkbox', id: window.feature.countryDeleteId},
+                            { xtype: 'label', text: 'Region'},
+                            { xtype: 'checkbox', id: window.feature.regionViewId},
+                            { xtype: 'checkbox', id: window.feature.regionEditId},
+                            { xtype: 'checkbox', id: window.feature.regionDeleteId},
+                            { xtype: 'label', text: 'District'},
+                            { xtype: 'checkbox', id: window.feature.districtViewId},
+                            { xtype: 'checkbox', id: window.feature.districtEditId},
+                            { xtype: 'checkbox', id: window.feature.districtDeleteId},
+                            { xtype: 'label', text: 'Outpost'},
+                            { xtype: 'checkbox', id: window.feature.outpostViewId},
+                            { xtype: 'checkbox', id: window.feature.outpostEditId },
+                            { xtype: 'checkbox', id: window.feature.outpostDeleteId }
+                        ]
+            }],
+            buttons: [
+                    { text: 'CANCEL', handler: function () { window.feature.modal.hide(); } },
+                    { text: 'ADD', id: window.feature.saveButtonId, handler: function() {
+                        var roleNameTextBox = Ext.getCmp(window.feature.roleNameId);
+                        var role = {
+                            Id: window.feature.role != null ? window.feature.role.get('Id') : "",
+                            Name: roleNameTextBox.getValue(),
+                            Description: '',
+                            PermissionNames: GetSelectedPermissionsFromUi()
+                        };
+                        SaveRoleData(role);
+                    } }
+                ]
+        });
+
+        window.feature.rolesAdministrationHeader = Ext.create('Ext.container.Container', {
+            layout: 'hbox',
+            items: [
+                    {
+                        xtype: 'container',
+                        flex: 1,
+                        layout: 'column',
+                        items: [
+                            Ext.create('Ext.Img',
+                            {
+                                src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/briefcase.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                                width: 35,
+                                height: 35
+                            }),
+                            {
+                                xtype: 'label',
+                                text: 'Roles Administration',
+                                margin: '0 0 0 10'
+                            },
+                            {
+                                xtype: 'button',
+                                text: 'Add New Role',
+                                margin: '0 0 0 20',
+                                handler: function () {
+                                    InitUiRoleData();
+                                    window.feature.modal.setTitle('Add a New Role');
+                                    Ext.getCmp(window.feature.saveButtonId).setText('ADD');
+                                    window.feature.modal.show();
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        xtype: 'container',
+                        layout: {
+                            type: 'hbox',
+                            pack: 'end'
+                        },
+                        flrex: 1,
+                        items: [{
+                            xtype: 'textfield',
+                            itemId: window.feature.searchRoleId,
+                            padding: '0 0 0 200',
+                            width: 200,
+                            frame: true,
+                            emptyText: 'Role Search',
+                            enableKeyEvents: true,
+                            listeners: {
+                                'keyup': {
+                                    fn: function (key) {
+                                        var searchValue = window.feature.container.down('#'+window.feature.searchRoleId).getValue();
+                                        window.feature.store.proxy.extraParams.searchValue = searchValue;
+                                        window.feature.store.loadPage(1);
+                                    }
+                                }
+                            }
+                        }]
+                    }
+                ]
+        });
+
+        window.feature.grid = Ext.create('Ext.grid.Panel', {
+            store: window.feature.store,
+            loadMask: true,
+            disableSelection: true,
+            autoScroll: true,
+            flex:3,
+            columns: [
+                    {
+                        header: 'Role',
+                        dataIndex: 'Name',
+                        flex: 3,
+                        sortable: true,
+                    },
+                    {
+                        header: 'Number of Users',
+                        dataIndex: 'NumberOfUsers',
+                        flex: 2,
+                        sortable: true,
+                    },
+                    {
+                        xtype: 'actioncolumn',
+                        text: 'Actions',
+                        flex: 1,
+                        items: [
+                            {
+                                icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/edit.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                                handler: function (grid, rowIndex, colIndex) {
+                                    window.feature.role = grid.getStore().getAt(rowIndex);
+                                    LoadUiRoleData(window.feature.role);
+                                }
+                            },
+                            {
+                                icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/delete.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                                handler: function (grid, rowIndex, colIndex) {
+                                    var rec = grid.getStore().getAt(rowIndex);
+
+                                    Ext.MessageBox.confirm('Warning', Ext.String.format('Are you sure you want to delete {0} ?', rec.get('Name')), function(btn)
+                                    {
+                                        if (btn=='yes'){
+                                            var values = { roleId: rec.get('Id') };
+                                            var postToUrl = '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "RoleManager", action = "Delete" })';
+                                            var action = $.post(postToUrl, values);
+
+                                            action.success(function(serverResponse){
+                                                Ext.Msg.alert(serverResponse.Status, serverResponse.Message);
+                                                window.feature.store.load();
+                                            });
+                                        }
+
+                                    });
+                                }
+                            }
+                        ]
+                    }
+                ],
+            bbar: Ext.create('Ext.PagingToolbar', {
+                store: window.feature.store,
+                displayInfo: true,
+                displayMsg: 'Displaying topics {0} - {1} of {2}',
+                emptyMsg: "No topics to display"
+            })
+        });
+
+        window.feature.container = Ext.create('Ext.container.Container', {
+            margin: '20 50 20 0',
+            id: 'TopContainer',
+            layout: {
+                align: 'stretch',
+                type: 'vbox'
+            },
+            items: [window.feature.rolesAdministrationHeader, window.feature.grid]
+        });
+
+        var contentRes = window.res.content;
+        var mainContent = Ext.getCmp(contentRes.maincontent.id);
+
+        mainContent.add(window.feature.container);
+
+        function InitUiRoleData() {
+            SetupUiForRole();
+        }
+
+        function LoadUiRoleData(role) {
+            SetupUiForRole();
+            Ext.getCmp(window.feature.roleNameId).setValue(role.get('Name'));
+            GetPermissionsForRoleFromServer(role, UpdateUiWithRoleData);
+            window.feature.modal.setTitle('Edit Role');
+            Ext.getCmp(window.feature.saveButtonId).setText('SAVE');
+            window.feature.modal.show();
+        }
+
+        function UpdateUiWithRoleData(permissions) {
+            _.each(permissions, function(permission) {
+                Ext.getCmp(permission).setValue(true);
+            });
+        }
+
+        function SetupUiForRole() {
+            Ext.getCmp(window.feature.roleNameId).setValue('');
+            _.each(GetCheckboxControlsFromUi(), function(item) {
+                item.setValue(false);
+            });
+        }
+
+        function GetSelectedPermissionsFromUi() {
+            var items = GetCheckboxControlsFromUi();
+            var permissions = [];
+            var i;
+            for (i = 0; i < items.length; i++) {
+                if (items[i].getValue()) {
+                    //permissions.push(items[i].getId().replace('.', '_'));
+                    permissions.push(items[i].getId());
+                }
+            }
+
+            return permissions.join(';');
+        }
+
+        function GetCheckboxControlsFromUi() {
+            if (window.feature.checkBoxControls.length == 0){
+                var i;
+                for(i = 0; i < window.feature.checkBoxControlIds.length; i++) {
+                    window.feature.checkBoxControls.push(Ext.getCmp(window.feature.checkBoxControlIds[i]));
+                }
+            }
+
+            return window.feature.checkBoxControls;
+        }
+
+        function SaveRoleData(role) {
+            if (role.Id == "") {
+                AddRole(role);
+            }
+            else {
+                UpdateRole(role);
+            }
+        }
+
+        function AddRole(role) {
+            SendRoleDataToServer(role, "Create");
+        }
+
+        function UpdateRole(role) {
+            SendRoleDataToServer(role, "Edit");
+        }
+
+        function SendRoleDataToServer(role, actionName) {
+            var postToUrl = '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "RoleManager", action = "actionName" })';
+            postToUrl = postToUrl.replace("actionName", actionName);
+            var action = $.post(postToUrl, role);
+            action.success(function(serverResponse) {
+                    Ext.Msg.alert(serverResponse.Status, serverResponse.Message);
+                    window.feature.store.load();
+                    window.feature.modal.hide();
+            });
+        }
+
+        function GetPermissionsForRoleFromServer(role, sucessHandler) {
+            var getFromUrl = '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "RoleManager", action = "GetPermissionsForRole" })';
+            $.get(getFromUrl, { roleId: role.get('Id') }, sucessHandler);
+        }
+    });
+
+</script>

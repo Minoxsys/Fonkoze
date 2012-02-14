@@ -97,6 +97,8 @@
     <Compile Include="Queries\ProductGroup\NHibernateQueryStockGroup.cs" />
     <Compile Include="Queries\Products\IQueryProduct.cs" />
     <Compile Include="Queries\Products\NHibernateQueryProduct.cs" />
+    <Compile Include="Queries\Roles\IQueryRole.cs" />
+    <Compile Include="Queries\Roles\NHibernateQueryRole.cs" />
     <Compile Include="Queries\User\UserByName.cs" />
     <Compile Include="Queries\Functions\FunctionByName.cs" />
     <Compile Include="Queries\NHibernateQueryService.cs" />

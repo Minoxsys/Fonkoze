@@ -10,24 +10,14 @@ using Persistence.Queries;
 using Persistence;
 using Core.Persistence;
 using Web.Security;
+using Web.Models.Shared;
+using NHibernate.Linq;
+using System.Text;
+using Persistence.Queries.Roles;
 
 namespace Web.Controllers
 {
 	public class RoleManagerController :Controller	{
-		
-		public RoleManagerListOutputModel ListOutputModel
-		{
-			get;
-			set;
-		}
-
-		
-		public RoleManagerCreateOutputModel CreateOutputModel
-		{
-			get;
-			set;
-		}
-
 		
 		public ISaveOrUpdateCommand<Role> SaveOrUpdate
 		{
@@ -35,119 +25,182 @@ namespace Web.Controllers
 			set;
 		}
 
+        public IQueryService<Role> QueryServiceRole
+        {
+            get;
+            set;
+        }
 
-		
-		public RoleManagerEditOutput EditOutputModel
-		{
-			get;
-			set;
-		}
+        public IQueryService<Permission> QueryServicePermission
+        {
+            get;
+            set;
+        }
 
-		
-		public RoleManagerAssignModel AssignModel
-		{
-			get;
-			set;
-		}
-	
-		
-		public RoleManagerUnAssignModel UnAssignModel
-		{
-			get;
-			set;
-		}
+        public IDeleteCommand<Role> DeleteCommand
+        {
+            get;
+            set;
+        }
 
-        //[Requires(Permissions = "RoleManager.Overview")]
-		public ActionResult List()
-		{
+        public IQueryRole QueryRole
+        {
+            get;
+            set;
+        }
 
-			ListOutputModel.InfoMessage = string.Empty + (string)TempData["info"];
-			return View(ListOutputModel);
-		}
+        [HttpGet]
+        public ViewResult Overview()
+        {
+            return View();
+        }
 
-        //[Requires(Permissions = "RoleManager.CRUD")]
-		public ActionResult Create()
-		{
+        [HttpGet]
+        public JsonResult GetListOfRoles(RoleManagerIndexModel indexModel)
+        {
+            var pageSize = indexModel.limit.Value;
+            var rolesDataQuery = QueryServiceRole.Query();
 
-			return View(CreateOutputModel);
-		}
-
-		[HttpPost]
-        //[Requires(Permissions = "RoleManager.CRUD")]
-		public ActionResult Create( RoleManagerCreateInputModel input )
-		{
-			if (!this.ModelState.IsValid)
-				return View(CreateOutputModel);
-
-			SaveOrUpdate.Execute(new Role
-			{
-				Name = input.Role.Name,
-				Description = input.Role.Description
-			});
-			TempData.Add("info", "Your Role has been saved");
-
-			return RedirectToAction("List");
-		}
-
-        //[Requires(Permissions = "RoleManager.CRUD")]
-		public ActionResult Edit( Guid id )
-		{
-			if (id == Guid.Empty)
-				return RedirectToAction("Index", "Home");
-
-			EditOutputModel.Load(id);
-
-			if (EditOutputModel.Role == null || EditOutputModel.Role.Id == Guid.Empty)
-			{
-
-				return RedirectToAction("Index", "Home");
-
-			}
-
-            EditOutputModel.Info = (string)TempData["info"] ?? "";
-
-			return View(EditOutputModel);
-		}
-        [HttpPost]
-        //[Requires(Permissions = "RoleManager.CRUD")]
-		public ActionResult Edit( RoleManagerEditInput model )
-		{
-
-            if (model.Role.Id != Guid.Empty && this.ModelState.IsValid == false)
-                return Edit(model.Role.Id);
-
-			EditOutputModel.Load(model.Role.Id);
-            if (EditOutputModel.Role == null)
+            var orderByColumnDirection = new Dictionary<string, Func<IQueryable<Role>>>()
             {
-				return RedirectToAction("List");
+                { "Name-ASC", () => rolesDataQuery.OrderBy(r => r.Name) },
+                { "Name-DESC", () => rolesDataQuery.OrderByDescending(r => r.Name) },
+                { "NumberOfUsers-ASC", () => rolesDataQuery.OrderBy(r => r.Employees.Count) },
+                { "NumberOfUsers-DESC", () => rolesDataQuery.OrderByDescending(c => c.Employees.Count) },
+            };
+
+            rolesDataQuery = orderByColumnDirection[String.Format("{0}-{1}", indexModel.sort, indexModel.dir)].Invoke();
+
+            if (!string.IsNullOrEmpty(indexModel.searchValue))
+            {
+                rolesDataQuery = rolesDataQuery.Where(it => it.Name.Contains(indexModel.searchValue));
             }
 
-            EditOutputModel.Role.Description = model.Role.Description;
-            EditOutputModel.Role.Name = model.Role.Name;
+            var totalItems = rolesDataQuery.Count();
 
-            SaveOrUpdate.Execute(EditOutputModel.Role);
+            rolesDataQuery = rolesDataQuery
+                .Take(pageSize)
+                .Skip(indexModel.start.Value);
 
-			TempData.Add("info", "Your Role has been saved");
+            var roleListOfReferenceModelsProjection = (from role in rolesDataQuery.ToList()
+                                                       select new RoleReferenceModel
+                                                       {
+                                                           Id = role.Id,
+                                                           Name = role.Name,
+                                                           NumberOfUsers = role.Employees.Count
+                                                       }).ToArray();
 
-            return RedirectToAction("Edit", new { id = EditOutputModel.Role.Id });
-		}
+            return Json(new RoleManagerListForJsonOutput
+            {
+                Roles = roleListOfReferenceModelsProjection,
+                TotalItems = totalItems
+            }, JsonRequestBehavior.AllowGet);
+        }
 
-		[HttpPost]
-        //[Requires(Permissions = "RoleManager.CRUD")]
-		public EmptyResult Assign( Guid functionId, Guid roleId )
-		{
+        [HttpPost]
+        public JsonResult Create(RoleManagerInputModel inputModel)
+        {
+            Role role = new Role(); 
 
-			AssignModel.LinkFunctionToRole(functionId, roleId);
-			return new EmptyResult();
-		}
+            UpdateRoleWithRoleManagerInputModel(role, inputModel);   
 
+            return Json(new JsonActionResponse() { Status = "Success", Message = string.Format("Role {0} has been saved.", role.Name) }, JsonRequestBehavior.AllowGet);
+        }
 
-        //[Requires(Permissions = "RoleManager.CRUD")]
-		public EmptyResult UnAssign( Guid functionId, Guid roleId )
-		{
-			UnAssignModel.RemoveFunctionFromRole(functionId, roleId);
+        [HttpPost]
+        public JsonResult Edit(RoleManagerInputModel inputModel)
+        {
+            if (inputModel.Id == Guid.Empty)
+            {
+                return Json(new JsonActionResponse() { Status = "Error", Message = "You must supply a roleId in order to edit the role." });
+            }
 
-			return new EmptyResult();
-		}
+            Role role = QueryServiceRole.Load(inputModel.Id);
+
+            if (role == null)
+            {
+                return Json(new JsonActionResponse() { Status = "Error", Message = "You must supply the roleId of a role that exists in the DB in order to edit it." });
+            }
+
+            UpdateRoleWithRoleManagerInputModel(role, inputModel);
+
+            return Json(new JsonActionResponse() { Status = "Success", Message = string.Format("Role {0} has been saved.", role.Name) }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public JsonResult Delete(Guid? roleId)
+        {
+            if (!roleId.HasValue)
+            {
+                return Json(new JsonActionResponse() { Status = "Error", Message = "You must supply a roleId in order to remove the role." });
+            }
+
+            Role role = QueryServiceRole.Load(roleId.Value);
+
+            if (role == null)
+            {
+                return Json(new JsonActionResponse() { Status = "Error", Message = "You must supply the roleId of a role that exists in the DB in order to remove it." });
+            }
+
+            DeleteCommand.Execute(role);
+
+            return Json(new JsonActionResponse() { Status = "Success", Message = "Role " + role.Name+ " was removed." }); ;
+        }
+
+        [HttpGet]
+        public JsonResult GetPermissionsForRole(Guid? roleId)
+        {
+            Role role = QueryRole.GetPermissions().Where(r => r.Id == roleId.Value).FirstOrDefault();
+
+            string[] permissions = new string[role.Functions.Count];
+
+            for (int i = 0; i < role.Functions.Count; i++)
+            {
+                permissions[i] = role.Functions[i].Name;
+            }
+
+            return Json(permissions, JsonRequestBehavior.AllowGet);
+        }
+
+        private void UpdateRoleWithRoleManagerInputModel(Role role, RoleManagerInputModel inputModel)
+        {
+            role.Name = inputModel.Name;
+            role.Description = inputModel.Description;
+
+            var inputPermissionNames = inputModel.PermissionNames != null ? inputModel.PermissionNames.Split(';').ToList() : new List<string>();
+            var permissions = QueryServicePermission.Query().Where(p => inputPermissionNames.Contains(p.Name)).ToList();
+
+            role = UpdatePermissionsForRole(role, permissions);
+
+            SaveOrUpdate.Execute(role);
+        }
+
+        private Role UpdatePermissionsForRole(Role role, List<Permission> permissions)
+        {
+            List<Permission> permissionsToRemove = new List<Permission>();
+
+            foreach (Permission p in role.Functions)
+            {
+                if (!permissions.Contains(p))
+                {
+                    permissionsToRemove.Add(p);
+                }
+            }
+
+            foreach (Permission p in permissionsToRemove)
+            {
+                role.RemoveFunction(p);
+            }
+
+            foreach (Permission p in permissions)
+            {
+                if (!role.Functions.Contains(p))
+                {
+                    role.AddFunction(p);
+                }
+            }
+
+            return role;
+        }
 	}
 }
