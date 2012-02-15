@@ -132,9 +132,9 @@ User Administration Roles: Overview
                 },
                 items: [
                             { xtype: 'label', text: 'Role'},
-                            { xtype: 'textfield', colspan: 3, id: window.feature.roleNameId, componentCls: 'role-name' },
+                            { xtype: 'textfield', colspan: 3, id: window.feature.roleNameId, componentCls: 'role-name', allowBlank: false},
                             { xtype: 'label', text: 'Role Description'},
-                            { xtype: 'textfield', colspan: 3, id: window.feature.roleDescriptionId, componentCls: 'role-name' },
+                            { xtype: 'textfield', colspan: 3, id: window.feature.roleDescriptionId, componentCls: 'role-name', allowBlank: false},
                             { xtype: 'label', text: 'Permissions'},
                             { xtype: 'label', text: 'View', componentCls: 'permissions-header' },
                             { xtype: 'label', text: 'Edit', componentCls: 'permissions-header' },
@@ -162,13 +162,18 @@ User Administration Roles: Overview
                     { text: 'ADD', id: window.feature.saveButtonId, handler: function() {
                         var roleNameTextBox = Ext.getCmp(window.feature.roleNameId);
                         var roleDescriptionTextBox = Ext.getCmp(window.feature.roleDescriptionId);
-                        var role = {
-                            Id: window.feature.role != null ? window.feature.role.get('Id') : "",
-                            Name: roleNameTextBox.getValue(),
-                            Description: roleDescriptionTextBox.getValue(),
-                            PermissionNames: GetSelectedPermissionsFromUi()
-                        };
-                        SaveRoleData(role);
+                        var permissions = GetSelectedPermissionsFromUi();
+                        var ok = isValid(roleNameTextBox, roleDescriptionTextBox, permissions);
+                        if (ok) 
+                        {
+                            var role = {
+                                Id: window.feature.role != null ? window.feature.role.get('Id') : "",
+                                Name: roleNameTextBox.getValue(),
+                                Description: roleDescriptionTextBox.getValue(),
+                                PermissionNames: permissions
+                            };
+                            SaveRoleData(role);
+                        }
                     } }
                 ]
         });
@@ -311,6 +316,33 @@ User Administration Roles: Overview
         var mainContent = Ext.getCmp(contentRes.maincontent.id);
 
         mainContent.add(window.feature.container);
+
+        function isValid(roleNameTextBox, roleDescriptionTextBox, permissions)
+        {
+            var ok = true;
+
+            if (roleNameTextBox.getValue() == null || $.trim(roleNameTextBox.getValue()) == '')
+            {
+                roleNameTextBox.markInvalid('Field Role is required!');
+                roleNameTextBox.setValue('');
+                ok = false;
+            }
+
+            if (roleDescriptionTextBox.getValue() == null || $.trim(roleDescriptionTextBox.getValue()) == '')
+            {
+                roleDescriptionTextBox.markInvalid('Field Role Description is required!');
+                roleDescriptionTextBox.setValue('');
+                ok = false;
+            }
+
+            if (ok && permissions.length == 0)
+            {
+                Ext.Msg.alert("Error", "You must select at least one permission!");
+                ok = false;
+            }
+
+            return ok;
+        }
 
         function InitUiRoleData() {
             SetupUiForRole();
