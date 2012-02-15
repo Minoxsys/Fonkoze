@@ -136,7 +136,8 @@
     function isValid(countryNameComboBox)
     {
         var ok = true;
-        if (countryNameComboBox.getValue() == null){
+        var countryNameValue = countryNameComboBox.getValue();
+        if ((countryNameValue == null) || ($.trim(countryNameValue) == "")){
                 countryNameComboBox.markInvalid('Field Country is required!');  
                 countryNameComboBox.setValue(null);
                 ok = false;
