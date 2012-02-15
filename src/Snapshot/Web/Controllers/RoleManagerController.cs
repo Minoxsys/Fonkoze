@@ -87,6 +87,7 @@ namespace Web.Controllers
                                                        {
                                                            Id = role.Id,
                                                            Name = role.Name,
+                                                           Description = role.Description,
                                                            NumberOfUsers = role.Employees.Count
                                                        }).ToArray();
 
