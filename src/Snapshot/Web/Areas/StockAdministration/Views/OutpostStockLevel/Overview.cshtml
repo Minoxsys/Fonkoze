@@ -10,6 +10,10 @@ Outpost Stock Level Current
 <script type="text/javascript">
     Ext.onReady(function () {
 
+        var outpostStockLevelBtnId = window.res.header.navigation.outpostStockLevel;
+        var outpostStockLevelBtn = Ext.getCmp(outpostStockLevelBtnId);
+        outpostStockLevelBtn.toggle(true);
+
         var outpostStockLevelBtnId = window.res.content.maincontent.sidebar.outpostStockLevelCurrent;
         var outpostStockLevelBtn = Ext.getCmp(outpostStockLevelBtnId);
         outpostStockLevelBtn.toggle(true);
