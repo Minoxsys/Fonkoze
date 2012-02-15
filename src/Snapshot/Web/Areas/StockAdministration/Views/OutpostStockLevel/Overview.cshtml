@@ -1,4 +1,4 @@
-﻿@model Web.Areas.StockAdministration.Models.OutpostStockLevel.OutpostStockLevelOverviewModel
+﻿
 @section page_title{
 Outpost Stock Level Current
 }
@@ -24,7 +24,8 @@ Outpost Stock Level Current
         window.feature.comboboxRegionsId = 'combobxRegionsId';
         window.feature.comboboxDistrictsId = 'comboboxDistrictsId';
         window.feature.comboboxOutpostsId = 'comboboxOutpostId';
-
+        window.feature.ProductLevelValueForEditRecord = '';
+        window.feature.OutpostStockLevelIdForEditRecord = '';
 
         window.feature.CountryStore = Ext.create('Ext.data.Store', {
             fields: ['Name', 'Id'],
@@ -169,51 +170,299 @@ Outpost Stock Level Current
             emptyText: _t('Outpost List')
 
         });
-        Ext.define('Outpost', {
+        window.feature.fieldOutpostNameId = 'fieldOutpostNAmeId';
+        window.feature.fieldProductNameId = 'fieldProductNameId';
+        window.feature.fieldSMSCodeId = 'fieldSMSCodeId';
+        window.feature.fieldUpdateMethodId = 'fieldUpdateMethodId';
+        window.feature.fieldProductLevelId = 'fieldProductLevelId';
+        window.feature.fieldPreviousLevelId = 'fieldPreviousLevelId';
+        window.feature.fieldProductGroupNameId = 'fieldProductGroupNameId';
+        window.feature.fieldDescriptionId = 'fielddescriptionId';
+        window.feature.labelLastUpdateId = 'labelLastUpdatedId';
+        window.feature.fieldOutpostStockLevelId = 'OutpostStockLevelId';
+
+        window.feature.ModalWindowForEdit = Ext.define('Ext.feature.OutpostStockLevelEdit.Modal', {
+            extend: 'Ext.window.Window',
+            title: 'Edit a current level for an outpost',
+            height: 370,
+            width: 750,
+            modal: true,
+           initComponent: function () {
+                var me = this;
+
+                Ext.applyIf(me, {
+                    items: [{
+                        xtype: 'container',
+                        layout: {
+                            type: 'hbox'
+                        },
+                       items: [{ xtype: 'container',
+                            layout: {
+                                type: 'vbox'
+                            },
+                            items: [{ xtype: 'textfield',
+                                fieldLabel: 'Outpost Name',
+                                name: 'OutpostName',
+                                padding:10,
+                                width:300,
+                                id: window.feature.fieldOutpostNameId,
+                                readOnly: true
+                            }, { xtype: 'textfield',
+                                fieldLabel: 'Product',
+                                padding: 10,
+                                width:300,
+                                name: 'ProductName',
+                                id: window.feature.fieldProductNameId,
+                                readOnly: true
+                            }, { xtype: 'textfield',
+                                fieldLabel: 'SMS Code',
+                                padding: 10,
+                                name: 'SMSCode',
+                                id: window.feature.fieldSMSCodeId,
+                                width: 150,
+                                readOnly: true
+                            }, { xtype: 'textfield',
+                                fieldLabel: 'Update Method',
+                                name: 'UpdateMethod',
+                                padding: 10,
+                                width: 190,
+                                id: window.feature.fieldUpdateMethodId,
+                                readOnly: true
+                            }, { xtype: 'textfield',
+                                fieldLabel: 'Product Stock Level',
+                                name: 'ProductLevel',
+                                padding: 10,
+                                width: 190,
+                                id: window.feature.fieldProductLevelId,
+                                allowBlank: false
+                            }, { xtype: 'textfield',
+                                fieldLabel: 'Previous Stock Level',
+                                name: 'PreviousLevel',
+                                padding: 10,
+                                width: 190,
+                                id: window.feature.fieldPreviousLevelId,
+                                readOnly: true
+                            }]
+                        }, { xtype: 'container',
+                            layout: {
+                                type: 'vbox'
+                            },
+                            items: [{ xtype: 'textfield',
+                                fieldLabel: 'Product Group',
+                                name: 'ProductGroupName',
+                                padding: '10 10 0 90',
+                                width:320,
+                                id: window.feature.fieldProductGroupNameId,
+                                readOnly: true
+                            }, { xtype: 'textarea',
+                                fieldLabel: 'Description',
+                                name: 'Description',
+                                padding: '10 10 0 90',
+                                id: window.feature.fieldDescriptionId,
+                                width:320,
+                                height:80,
+                                readOnly: true
+                            }, { xtype: 'container',
+                                layout: { type: 'hbox' },
+                                items: [{ xtype: 'label',
+                                    text: 'Last Update At',
+                                    padding:'10 10 0 90',
+                                }, { xtype: 'label',
+                                    id: window.feature.labelLastUpdateId,
+                                    padding:'10 10 0 10',
+                                    text: ''
+                                }, { xtype: 'textfield',
+                                    id: window.feature.fieldOutpostStockLevelId,
+                                    hidden: true
+                                }]
+                            }]
+                        }]
+                    }]
+                });
+
+                me.buttons = [{ text: 'Cancel', handler: function () { me.close(); me.destroy(); }
+                }, {
+                    text: 'Save', handler: function () {
+                        var outpostStockLevelId = Ext.getCmp(window.feature.fieldOutpostStockLevelId);
+                        var ProductLevel = me.down('#' + window.feature.fieldProductLevelId);
+
+                        var ok = IsValid(ProductLevel);
+                        if (ok == true) {
+                            var values = {
+                                'outpostStockLevelInput.StockLevel': ProductLevel.getValue(),
+                                'outpostStockLevelInput.Id': outpostStockLevelId.getValue()
+                            };
+                            var postToUrl = '@Url.RouteUrl(StockAdministrationAreaRegistration.DEFAULT_ROUTE, new { controller = "OutpostStockLevel", action = "Edit" })';
+                            var action = $.post(postToUrl, values);
+                            action.success(function (result) {
+
+                            var selectedOutpostId = window.feature.comboBoxOutposts.getValue();
+                             var selectedDistrictId = window.feature.comboBoxDistricts.getValue();
+                             var ProductGroupExpanded = Ext.getCmp(window.feature.fieldProductGroupNameId).getValue();
+                             window.feature.treegrid.getStore().proxy.extraParams.OutpostId = selectedOutpostId;
+                             window.feature.treegrid.getStore().proxy.extraParams.DistrictId = selectedDistrictId;
+                             window.feature.treegrid.getStore().proxy.extraParams.ProductGroupExpandedOnEdit = ProductGroupExpanded;
+                             window.feature.treegrid.setRootNode(null);
+                             window.feature.treegrid.getRootNode().expand();
+                             
+                             me.close();
+                             me.destroy();
+
+                            });
+                        }
+                    }
+                }]
+                me.callParent(arguments);
+            }
+        });
+
+        function IsValid(ProductLevel) {
+
+            var ok = true;
+            if (ProductLevel.getValue() == '') {
+                ProductLevel.markInvalid('Field Product Stock Level is required!');
+                ProductLevel.setValue(null);
+                ok = false;
+            }
+            return ok;
+        }
+
+        Ext.define('OutpostStockLevel', {
             extend: 'Ext.data.Model',
-            fields: ['text', 'duration']
+            fields: ['Name', 'Id', 'ProductLevel', 'SMSCode', 'LastUpdate', 'UpdateMethod', 'PreviousLevel', 'Description', 'ProductGroupName', 'OutpostName', 'leaf']
         });
 
         window.feature.treeStore = Ext.create('Ext.data.TreeStore', {
-            model: 'Outpost',
+            model: 'OutpostStockLevel',
             autoLoad: false,
             root: {},
             proxy: {
                 type: 'ajax',
-                url: '@Url.RouteUrl(StockAdministrationAreaRegistration.DEFAULT_ROUTE, new { controller = "OutpostStockLevel", action = "GetData" })'
+                url: '@Url.RouteUrl(StockAdministrationAreaRegistration.DEFAULT_ROUTE, new { controller = "OutpostStockLevel", action = "GetOutpostStockLevelData" })',
+                extraParams: { OutpostId: '', DistrictId: '', ProductGroupExpandedOnEdit: '' }
             }
         });
-        window.feature.treeStore.load();
-        
+
         window.feature.treegrid = Ext.create('Ext.tree.Panel', {
-            title: 'Outpost Stock Level',
             width: 1300,
             height: 600,
-            collapsible: true,
             useArrows: true,
             rootVisible: false,
             root: {},
             store: window.feature.treeStore,
             multiSelect: true,
-            singleExpand: true,
+            singleExpand: false,
             columns: [{
                 xtype: 'treecolumn',
-                text: 'Product',
+                text: 'Products',
                 flex: 2,
                 sortable: true,
-                dataIndex: 'text'
+                dataIndex: 'Name'
             }, {
                 xtype: 'templatecolumn',
-                text: 'ProductGroupName',
+                text: 'Product Level',
                 flex: 1,
                 sortable: true,
-                dataIndex: 'duration',
+                dataIndex: 'ProductLevel',
+                align: 'right',
+                tpl: Ext.create('Ext.XTemplate', '{ProductLevel:this.ProductLevel}', {
+                    ProductLevel: function (value) {
+                        if (value === 0) {
+                            return '';
+                        }
+                        else { return value; }
+
+                    }
+                })
+            }, {
+                xtype: 'templatecolumn',
+                text: 'SMS Code',
+                flex: 1,
+                sortable: false,
+                dataIndex: 'SMSCode',
+                align: 'right',
+                tpl: Ext.create('Ext.XTemplate', '{SMSCode:this.SMSCode}', {
+                    SMSCode: function (value) {
+                        if (value === null) {
+                            return '';
+                        }
+                        else { return value; }
+
+                    }
+                })
+            }, { xtype: 'templatecolumn',
+                text: 'Last Update',
+                flex: 1,
+                dataIndex: 'LastUpdate',
                 align: 'center',
-                //add in the custom tpl for the rows
-                tpl:'{duration}'
+                tpl: Ext.create('Ext.XTemplate', '{LastUpdate:this.LastUpdate}', {
+                    LastUpdate: function (value) {
+                        if (value === null) {
+                            return '';
+                        }
+                        else { return value; }
+
+                    }
+                })
+            }, { xtype: 'templatecolumn',
+                text: 'Update Method',
+                flex: 1,
+                dataIndex: 'UpdateMethod',
+                align: 'center',
+                tpl: Ext.create('Ext.XTemplate', '{UpdateMethod:this.UpdateMethod}', {
+                    UpdateMethod: function (value) {
+                        if (value === null) {
+                            return '';
+                        }
+                        else { return value; }
+
+                    }
+                })
+            }, { xtype: 'templatecolumn',
+                text: ' Previous Level',
+                flex: 1,
+                dataIndex: 'PreviousLevel',
+                align: 'right',
+                tpl: Ext.create('Ext.XTemplate', '{PreviousLevel:this.PreviousLevel}', {
+                    PreviousLevel: function (value) {
+                        if (value === 0) {
+                            return '';
+                        }
+                        else { return value; }
+
+                    }
+                })
+            }, { xtype: 'actioncolumn',
+                items: [{ icon: '../../Assets/img/edit.png',
+                    tooltip: _t('Edit product level'),
+                    handler: function (grid, rowIndex, colIndex) {
+                        var recordData = grid.store.getAt(rowIndex);
+
+                        var ModalWindowForEdit = new window.feature.ModalWindowForEdit();
+
+                        Ext.getCmp(window.feature.fieldOutpostNameId).setValue(recordData.data.OutpostName);
+                        Ext.getCmp(window.feature.fieldOutpostStockLevelId).setValue(recordData.data.Id);
+                        Ext.getCmp(window.feature.fieldProductNameId).setValue(recordData.data.Name);
+                        Ext.getCmp(window.feature.fieldSMSCodeId).setValue(recordData.data.SMSCode);
+                        Ext.getCmp(window.feature.fieldUpdateMethodId).setValue(recordData.data.UpdateMethod);
+                        Ext.getCmp(window.feature.fieldDescriptionId).setValue(recordData.data.Description);
+                        Ext.getCmp(window.feature.fieldPreviousLevelId).setValue(recordData.data.PreviousLevel);
+                        Ext.getCmp(window.feature.fieldProductGroupNameId).setValue(recordData.data.ProductGroupName);
+                        Ext.getCmp(window.feature.fieldProductLevelId).setValue(recordData.data.ProductLevel);
+                        Ext.getCmp(window.feature.labelLastUpdateId).text = recordData.data.LastUpdate;
+
+                        ModalWindowForEdit.show();
+                    },
+                     getClass:function(value,metadata,record){
+                        var leaf = record.data.leaf;
+                        if(leaf == false)
+                            return 'x-hide-display';
+                        }
+                }]
+               
             }]
         });
-        window.feature.treegrid.getRootNode().expand();
+        
         var contentRes = window.res.content;
         window.feature.CountryStore.load();
 
@@ -227,7 +476,9 @@ Outpost Stock Level Current
                 align: 'stretch',
                 type: 'vbox'
             },
-            items: [
+            items: [{ xtype:'label',
+                      text: 'Current Product Level',
+                      padding:'10 10 0 100'},
                       {
                           xtype: 'container',
                           layout: {
@@ -275,9 +526,17 @@ Outpost Stock Level Current
                                        text: 'View Product Stock Level',
                                        width: 150,
                                        handler: function () {
-                                           //                                  var productModal = new window.feature.modal();
-
-                                           //                                  productModal.show();
+                                           var selectedOutpostId = window.feature.comboBoxOutposts.getValue();
+                                           var selectedDistrictId = window.feature.comboBoxDistricts.getValue();
+                                           
+                                           if(selectedOutpostId !==null){
+                                           window.feature.treegrid.getStore().proxy.extraParams.OutpostId = selectedOutpostId;
+                                           window.feature.treegrid.getStore().proxy.extraParams.DistrictId = selectedDistrictId;
+                                            window.feature.treegrid.getStore().proxy.extraParams.ProductGroupExpandedOnEdit = '';
+                                           window.feature.treegrid.getRootNode().expand();
+                                           }else{
+                                            Ext.Msg.alert("Alert", "Please select all option in order to see outpost stock level data!");
+                                           }
                                        }
                                    }
                           ]
@@ -287,7 +546,6 @@ Outpost Stock Level Current
 
     });
 </script>
-
 @*
 @section master_actions{
     @{

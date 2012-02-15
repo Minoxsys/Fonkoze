@@ -7,7 +7,7 @@ namespace Web.Areas.StockAdministration.Models.OutpostStockLevel
 {
     public class EntityModel
     {
-        public String Name { get; set; }
         public Guid Id { get; set; }
+        public String Name { get; set; }
     }
 }

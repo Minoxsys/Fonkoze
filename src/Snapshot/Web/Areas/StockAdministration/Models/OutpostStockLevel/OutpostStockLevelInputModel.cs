@@ -7,18 +7,8 @@ namespace Web.Areas.StockAdministration.Models.OutpostStockLevel
 {
     public class OutpostStockLevelInputModel
     {
-        public Guid Id { get; set; }
-        public Guid OutpostId { get; set; }
-        public Guid ProdGroupId { get; set; }
-        public Guid ProductId { get; set; }
-        public string ProdSmsRef { get; set; }
-        public int StockLevel { get; set; }
-        public int PrevStockLevel { get; set; }
-        public string UpdateMethod { get; set; }
-        public String ProductName { get; set; }
-        public String OutpostName { get; set; }
-        public String ProductDescription { get; set; }
-        public String ProductGroupName { get; set; }
-        public bool EditAreCommingFromFilterByAllOutposts { get; set; }
+        public Guid? Id { get; set; }       
+        public int StockLevel { get; set; }      
+       
     }
 }

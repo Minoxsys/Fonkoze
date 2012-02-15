@@ -35,7 +35,7 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration
         List<ProductGroup> productGroups;
         List<Product> products;
 
-        OutpostStockLevelController controller;
+        Web.Areas.StockAdministration.Controllers.OutpostStockLevelController controller;
 
         IQueryService<Product> queryProduct;
         IQueryService<OutpostStockLevel> queryOutpostStockLevel;
@@ -78,7 +78,7 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration
             saveOrUpdateOutpostStockLevel = MockRepository.GenerateMock<ISaveOrUpdateCommand<OutpostStockLevel>>();
             saveOrUpdateOutpostStockLevelHistorical = MockRepository.GenerateMock<ISaveOrUpdateCommand<OutpostHistoricalStockLevel>>();
 
-            controller = new OutpostStockLevelController();
+            controller = new Web.Areas.StockAdministration.Controllers.OutpostStockLevelController();
 
             controller.QueryOutpost = queryOutpost;
             controller.QueryOutpostStockLevel = queryOutpostStockLevel;
@@ -458,17 +458,7 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration
  
         }
 
-        private void BuildModel(OutpostStockLevelInputModel outpostStockLevelInputModel)
-        {
-            outpostStockLevelInputModel.Id = outpostStockLevels[0].Id;
-            outpostStockLevelInputModel.StockLevel = 56;
-            outpostStockLevelInputModel.PrevStockLevel = 11;
-            outpostStockLevelInputModel.OutpostId = outpostStockLevels[0].OutpostId;
-            outpostStockLevelInputModel.ProdGroupId = outpostStockLevels[0].ProdGroupId;
-            outpostStockLevelInputModel.ProductId = outpostStockLevels[0].ProductId;
-
-        }
-
+       
 
     }
 }

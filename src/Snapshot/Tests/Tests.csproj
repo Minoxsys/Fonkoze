@@ -107,7 +107,6 @@
     <Compile Include="Unit\Controllers\Areas\OutpostManagement\DistrictControllerTests\EditMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\OutpostManagement\DistrictControllerTests\IndexMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\OutpostManagement\DistrictControllerTests\ObjectMother.cs" />
-    <Compile Include="Unit\Controllers\Areas\OutpostManagement\DistrictController_Tests.cs" />
     <Compile Include="Unit\Controllers\Areas\OutpostManagement\OutpostControllerTests\CreateMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\OutpostManagement\OutpostControllerTests\DeleteMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\OutpostManagement\OutpostControllerTests\EditMethod.cs" />
@@ -126,10 +125,10 @@
     <Compile Include="Unit\Controllers\Areas\OutpostManagement\RegionControllerTests\GetRegionsMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\OutpostManagement\RegionControllerTests\ObjectMother.cs" />
     <Compile Include="Unit\Controllers\Areas\OutpostManagement\RegionControllerTests\OverviewMethod.cs" />
-    <Compile Include="Unit\Controllers\Areas\StockAdministration\OutpostStockLevelController\Build_OutpostHistoricalStockLevel.cs" />
-    <Compile Include="Unit\Controllers\Areas\StockAdministration\OutpostStockLevelController\Build_OutpostStockLevel.cs" />
-    <Compile Include="Unit\Controllers\Areas\StockAdministration\OutpostStockLevelController\Build_ServicesAndController.cs" />
-    <Compile Include="Unit\Controllers\Areas\StockAdministration\OutpostStockLevelController\Method_Overview.cs" />
+    <Compile Include="Unit\Controllers\Areas\StockAdministration\OutpostStockLevelControllerTests\Build_OutpostHistoricalStockLevel.cs" />
+    <Compile Include="Unit\Controllers\Areas\StockAdministration\OutpostStockLevelControllerTests\Method_Edit.cs" />
+    <Compile Include="Unit\Controllers\Areas\StockAdministration\OutpostStockLevelControllerTests\Method_Overview.cs" />
+    <Compile Include="Unit\Controllers\Areas\StockAdministration\OutpostStockLevelControllerTests\ObjectMother.cs" />
     <Compile Include="Unit\Controllers\Areas\StockAdministration\OutpostStockLevelController_Tests.cs" />
     <Compile Include="Unit\Controllers\Areas\StockAdministration\ProductControllerTests\CreateMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\StockAdministration\ProductControllerTests\DeleteMethod.cs" />

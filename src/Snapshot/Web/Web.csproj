@@ -194,20 +194,11 @@
     <Compile Include="Areas\StockAdministration\Controllers\ProductController.cs" />
     <Compile Include="Areas\StockAdministration\Controllers\ProductGroupController.cs" />
     <Compile Include="Areas\StockAdministration\Models\OutpostStockLevel\EntityModel.cs" />
-    <Compile Include="Areas\StockAdministration\Models\OutpostStockLevel\ModelForTreeRequest.cs" />
-    <Compile Include="Areas\StockAdministration\Models\OutpostStockLevel\OutpostList.cs" />
-    <Compile Include="Areas\StockAdministration\Models\OutpostStockLevel\OutpostStockLevelHistoricalInputModel.cs" />
-    <Compile Include="Areas\StockAdministration\Models\OutpostStockLevel\OutpostStockLevelHistoricalOutputModel.cs" />
+    <Compile Include="Areas\StockAdministration\Models\OutpostStockLevel\OutpostStockLevelCurrentTreeModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\OutpostStockLevel\OutpostStockLevelInputModel.cs" />
-    <Compile Include="Areas\StockAdministration\Models\OutpostStockLevel\OutpostStockLevelOutputModel.cs" />
-    <Compile Include="Areas\StockAdministration\Models\OutpostStockLevel\OutpostStockLevelOverviewModel.cs" />
-    <Compile Include="Areas\StockAdministration\Models\OutpostStockLevel\OutpostWithStockGroups.cs" />
-    <Compile Include="Areas\StockAdministration\Models\OutpostStockLevel\ProductGroupOverviewModel.cs" />
-    <Compile Include="Areas\StockAdministration\Models\OutpostStockLevel\ProductGroupWithProducts.cs" />
+    <Compile Include="Areas\StockAdministration\Models\OutpostStockLevel\OverviewInputModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\ProductGroup\ProductGroupIndexModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\ProductGroup\ProductGroupIndexOutputModel.cs" />
-    <Compile Include="Areas\StockAdministration\Models\OutpostStockLevel\tree.cs" />
-    <Compile Include="Areas\StockAdministration\Models\OutpostStockLevel\TreeModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\ProductGroup\ProductGroupOutputModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\ProductGroup\ProductGroupInputModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\ProductGroup\ProductGroupModel.cs" />
@@ -1589,16 +1580,9 @@
     <Content Include="Areas\StockAdministration\Views\_ViewStart.cshtml" />
     <Content Include="Areas\StockAdministration\Views\ProductGroup\Overview.cshtml" />
     <Content Include="Areas\StockAdministration\Views\OutpostStockLevel\Overview.cshtml" />
-    <Content Include="Areas\StockAdministration\Views\OutpostStockLevel\OverviewItemsStockLevel.cshtml" />
-    <Content Include="Areas\StockAdministration\Views\OutpostStockLevel\EditCurrentProductLevel.cshtml" />
-    <Content Include="Areas\StockAdministration\Views\OutpostStockLevel\EditCurrentProducLevelInput.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\StockLevel\OverviewStockLevel.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\StockLevel\OutpostStockLevelOverview.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\StockLevel\OverviewProducts.cshtml" />
-    <Content Include="Areas\StockAdministration\Views\OutpostStockLevel\EditHistoricalProductLevel.cshtml" />
-    <Content Include="Areas\StockAdministration\Views\OutpostStockLevel\EditOutpostStockLevelHistoricalInput.cshtml" />
-    <Content Include="Areas\StockAdministration\Views\OutpostStockLevel\OverviewItemsStockLevelHistorical.cshtml" />
-    <Content Include="Areas\StockAdministration\Views\OutpostStockLevel\ViewProductsForProductGroupFromHistoricalOverview.cshtml" />
     <Content Include="Views\RoleManager\Create.cshtml" />
     <Content Include="Views\RoleManager\Edit.cshtml" />
     <Content Include="Views\RoleManager\List.cshtml" />
@@ -1628,9 +1612,6 @@
   <ItemGroup>
     <Content Include="Areas\StockAdministration\Views\Shared\_OutpostStockLevelMainContent.cshtml" />
     <Content Include="Views\ClientManager\Overview.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Areas\StockAdministration\Views\OutpostStockLevel\treegrid.json" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
