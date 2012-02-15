@@ -45,7 +45,9 @@
             type: 'vbox'
         },
         title: 'My Window',
-
+        fieldDefaults: {
+            msgTarget: 'under'
+        },
         initComponent: function () {
             var me = this;
 
@@ -100,20 +102,29 @@
                     me.destroy();
                 } },{
                     text: 'Save', handler:function(){
-                        var values = {
-                            Name:  me.down('#' + window.feature.comboboxId).getValue(),
-                            ISOCode:  me.down('#' + window.feature.isocodeId).getValue(),
-                            PhonePrefix:  me.down('#' + window.feature.phoneprefixId).getValue(),
-    
-                        };
-                        var postToUrl = '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Country", action = "Create" })';
-                        var action = $.post(postToUrl, values);
-                        action.success(function(){
-                            me.close();
-                            me.destroy();
-                            window.feature.store.loadPage(1);
-                            window.feature.refreshModalStore();
-                        });
+                        var countryNameComboBox = me.down('#' + window.feature.comboboxId);
+                        var countryIsoCodeTextField = me.down('#' + window.feature.isocodeId);
+                        var countryPhonePrefixTextField = me.down('#' + window.feature.phoneprefixId);
+                        
+                        var ok = isValid(countryNameComboBox);
+
+                        if (ok)
+                        {
+                            var values = {
+                                Name: countryNameComboBox.getValue(),
+                                ISOCode:  countryIsoCodeTextField.getValue(),
+                                PhonePrefix:  countryPhonePrefixTextField.getValue()
+                            };
+
+                            var postToUrl = '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Country", action = "Create" })';
+                            var action = $.post(postToUrl, values);
+                            action.success(function(){
+                                me.close();
+                                me.destroy();
+                                window.feature.store.loadPage(1);
+                                window.feature.refreshModalStore();
+                            });
+                        }
                     }
                 }
             ]
@@ -121,6 +132,18 @@
             me.callParent(arguments);
         }
     });
+
+    function isValid(countryNameComboBox)
+    {
+        var ok = true;
+        if (countryNameComboBox.getValue() == null){
+                countryNameComboBox.markInvalid('Field Country is required!');  
+                countryNameComboBox.setValue(null);
+                ok = false;
+            }
+
+        return ok;
+    }
 
 </script>
 <script type="text/javascript">
