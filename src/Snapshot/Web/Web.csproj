@@ -190,9 +190,12 @@
     <Compile Include="Areas\OutpostManagement\Models\District\DistrictModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Outpost\OutpostModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Region\RegionModel.cs" />
+    <Compile Include="Areas\StockAdministration\Controllers\HistoricalProductLevelController.cs" />
     <Compile Include="Areas\StockAdministration\Controllers\OutpostStockLevelController.cs" />
     <Compile Include="Areas\StockAdministration\Controllers\ProductController.cs" />
     <Compile Include="Areas\StockAdministration\Controllers\ProductGroupController.cs" />
+    <Compile Include="Areas\StockAdministration\Models\HistoricalProductLevel\OutpostGridModel.cs" />
+    <Compile Include="Areas\StockAdministration\Models\HistoricalProductLevel\OutpostIndexGridModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\OutpostStockLevel\EntityModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\OutpostStockLevel\OutpostStockLevelCurrentTreeModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\OutpostStockLevel\OutpostStockLevelInputModel.cs" />
@@ -1614,11 +1617,14 @@
     <Content Include="Areas\StockAdministration\Views\Shared\_OutpostStockLevelSubNavigation.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Areas\StockAdministration\Views\Shared\_OutpostStockLevelMainContent.cshtml" />
+    <Content Include="Areas\StockAdministration\Views\Shared\_OutpostStockLevelSideBar.cshtml" />
     <Content Include="Views\ClientManager\Overview.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\RoleManager\Overview.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\StockAdministration\Views\HistoricalProductLevel\Overview.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
