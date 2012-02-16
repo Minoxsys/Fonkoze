@@ -20,7 +20,7 @@ namespace Web.Bootstrap.Routes
 					action = "Index"
 				});
 			routes.MapRoute(CSS,
-				"css/{group}/" + version,
+				"css/{group}-" + version,
 				new
 				{
 					controller = "Css",
