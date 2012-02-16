@@ -164,6 +164,9 @@
     <Compile Include="Unit\Controllers\RoleManagerControllerTests\GetPermissionsForRoleMethod.cs" />
     <Compile Include="Unit\Controllers\RoleManagerControllerTests\ObjectMother.cs" />
     <Compile Include="Unit\Controllers\RoleManagerControllerTests\OverviewMethod.cs" />
+    <Compile Include="Unit\Controllers\SmsRequestControllerTest\CreateMethod.cs" />
+    <Compile Include="Unit\Controllers\SmsRequestControllerTest\ObjectMother.cs" />
+    <Compile Include="Unit\Controllers\SmsRequestControllerTest\ReceiveSmsMethod.cs" />
     <Compile Include="Unit\Controllers\UnautorizedAccessController_Tests.cs" />
     <Compile Include="Unit\Controllers\CssControllerTests.cs" />
     <Compile Include="Unit\Controllers\JavascriptControllerTests.cs" />
@@ -195,6 +198,13 @@
     <Compile Include="Unit\Security\RequiresAttributeTests.cs" />
     <Compile Include="Unit\ModelProviders\UserManagerAssignModelProvider.cs" />
     <Compile Include="Unit\Security\SecurePassword_Tests.cs" />
+    <Compile Include="Unit\Services\SmsGatewayServiceTest\AssignOutpostToRawSmsReceivedBySenderNumber.cs" />
+    <Compile Include="Unit\Services\SmsGatewayServiceTest\ObjectMother.cs" />
+    <Compile Include="Unit\Services\SmsGatewayServiceTest\ParseRawSmsReceivedMethod.cs" />
+    <Compile Include="Unit\Services\SmsGatewayServiceTest\SendSmsMethod.cs" />
+    <Compile Include="Unit\Services\SmsRequestServiceTest\CreateSmsRequestUsingOutpostIdAndProductGroupIdMethod.cs" />
+    <Compile Include="Unit\Services\SmsRequestServiceTest\ObjectMother.cs" />
+    <Compile Include="Unit\Services\SmsRequestServiceTest\UpdateOutpostStockLevelsWithValuesReceivedBySmsMethod.cs" />
     <Compile Include="Utils\AutoMock.cs" />
     <Compile Include="Utils\FakeControllerContext.cs" />
     <Compile Include="Utils\MoqFactory.cs" />

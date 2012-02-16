@@ -232,11 +232,19 @@
     <Compile Include="BackgroundJobs\EmptyJob.cs" />
     <Compile Include="Bootstrap\Container\EmailRegistrar.cs" />
     <Compile Include="Bootstrap\Container\FileRegistrar.cs" />
+    <Compile Include="Bootstrap\Container\HttpServiceRegistrar.cs" />
+    <Compile Include="Bootstrap\Container\IqueryRole.cs" />
+    <Compile Include="Bootstrap\Container\OutpostStockLevelServiceRegistrar.cs" />
+    <Compile Include="Bootstrap\Container\QueryOutpostsRegistrar.cs" />
+    <Compile Include="Bootstrap\Container\SmsGatewayRegistrar.cs" />
+    <Compile Include="Bootstrap\Container\SmsGatewaySettingsRegistrar.cs" />
+    <Compile Include="Bootstrap\Container\SmsRequestRegistrar.cs" />
     <Compile Include="Bootstrap\Container\URLRegistrar.cs" />
     <Compile Include="Controllers\AlertsController.cs" />
     <Compile Include="Controllers\ClientManagerController.cs" />
     <Compile Include="Controllers\EmailRequestController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\SmsRequestController.cs" />
     <Compile Include="Controllers\UnauthorizedAccessController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -303,6 +311,8 @@
     <Compile Include="Models\Shared\InputModel.cs" />
     <Compile Include="Models\Shared\ListQuery.cs" />
     <Compile Include="Models\Shared\RazorExtensions.cs" />
+    <Compile Include="Models\SmsRequest\ReferenceModel.cs" />
+    <Compile Include="Models\SmsRequest\SmsRequestCreateModel.cs" />
     <Compile Include="Models\UnauthorizedAccess\Index.cs" />
     <Compile Include="Models\UserManager\ClientsIndexOutputModel.cs" />
     <Compile Include="Models\UserManager\ReferenceModel.cs" />
@@ -325,7 +335,20 @@
     <Compile Include="Services\EmailService\EmailService.cs" />
     <Compile Include="Services\EmailService\IEmailService.cs" />
     <Compile Include="Services\FileService.cs" />
+    <Compile Include="Services\HttpService.cs" />
+    <Compile Include="Services\IHttpService.cs" />
     <Compile Include="Services\IImportService.cs" />
+    <Compile Include="Services\IOutpostStockLevelService.cs" />
+    <Compile Include="Services\ISmsGatewayService.cs" />
+    <Compile Include="Services\ISmsGatewaySettingsService.cs" />
+    <Compile Include="Services\ISmsRequestService.cs" />
+    <Compile Include="Services\OutpostStockLevelService.cs" />
+    <Compile Include="Services\RawSmsReceivedParseResult.cs" />
+    <Compile Include="Services\ReceivedStockLevel.cs" />
+    <Compile Include="Services\SmsGatewayService.cs" />
+    <Compile Include="Services\SmsGatewaySettingsService.cs" />
+    <Compile Include="Services\SmsReceived.cs" />
+    <Compile Include="Services\SmsRequestService.cs" />
     <Compile Include="Services\UrlService\IURLService.cs" />
     <Compile Include="Services\UrlService\URLService.cs" />
     <Compile Include="Validation\Account\MembershipStatusCodeConverter.cs" />
@@ -1665,6 +1688,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\CampaignManagement\Views\_ViewStart.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\SmsRequest\Create.cshtml" />
+    <Content Include="Views\SmsRequest\Overview.cshtml" />
     <Content Include="Areas\CampaignManagement\Views\Campaign\CampaignContainer.cshtml" />
     <None Include="Assets\resources\themes\stylesheets\ext4\default\mixins\_inner-border.scss" />
     <None Include="Assets\resources\themes\stylesheets\ext4\default\mixins\_reset-extras.scss" />

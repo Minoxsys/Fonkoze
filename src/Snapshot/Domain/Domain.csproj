@@ -50,10 +50,12 @@
     <Compile Include="OutpostStockLevel.cs" />
     <Compile Include="OutpostHistoricalStockLevel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RawSmsReceived.cs" />
     <Compile Include="Region.cs" />
     <Compile Include="ProductGroup.cs" />
     <Compile Include="Product.cs" />
     <Compile Include="WorkItem.cs" />
+    <Compile Include="SmsRequest.cs" />
     <Compile Include="WorldCountryRecord.cs" />
   </ItemGroup>
   <ItemGroup>

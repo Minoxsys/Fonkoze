@@ -26,5 +26,10 @@ namespace Persistence.Queries.Outposts
         {
             return _query.Query().Fetch(it => it.District);
         }
+
+        public IQueryable<Outpost> GetAllContacts()
+        {
+            return _query.Query().Fetch(it => it.Contacts);
+        }
     }
 }

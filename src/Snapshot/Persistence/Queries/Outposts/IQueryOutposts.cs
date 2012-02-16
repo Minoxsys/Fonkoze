@@ -11,5 +11,6 @@ namespace Persistence.Queries.Outposts
         //IQueryable<Outpost> GetAllCountries();
         IQueryable<Outpost> GetAllRegions();
         IQueryable<Outpost> GetAllDistricts();
+        IQueryable<Outpost> GetAllContacts();
     }
 }

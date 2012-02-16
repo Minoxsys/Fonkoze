@@ -32,6 +32,20 @@ namespace Web.Bootstrap.Container
 
             URLRegistrar.Register(container);
 
+            SmsGatewayRegistrar.Register(container);
+
+            SmsRequestRegistrar.Register(container);
+
+            SmsGatewaySettingsRegistrar.Register(container);
+
+            HttpServiceRegistrar.Register(container);
+
+            OutpostStockLevelServiceRegistrar.Register(container);
+
+            QueryOutpostsRegistrar.Register(container);
+
+
+
             container.RegisterSource(new AnyConcreteTypeNotAlreadyRegisteredSource(type =>
                     type.Assembly.FullName.StartsWith("Web")
                 )

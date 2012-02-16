@@ -289,7 +289,41 @@ begin
         foreign key (Client_FK) 
         references Clients
 end
- 
+
+if not exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'SmsRequests')
+begin
+create table SmsRequests (
+	Id UNIQUEIDENTIFIER not null,
+	Message NVARCHAR(255) not null,
+	Number NVARCHAR(255) not null,
+	ProductGroupReferenceCode NVARCHAR(255) not null,
+	OutpostId UNIQUEIDENTIFIER not null,
+	ProductGroupId UNIQUEIDENTIFIER not null,
+	Created DATETIME null,
+    Updated DATETIME null,
+    ByUser_FK UNIQUEIDENTIFIER null,
+	primary key (Id)
+	)
+end
+
+if not exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'RawSmsReceiveds')
+begin
+create table RawSmsReceiveds (
+	Id UNIQUEIDENTIFIER not null,
+	Sender NVARCHAR(255) not null,
+	Content NVARCHAR(255) not null,
+	Credits NVARCHAR(255) null,
+	OutpostId UNIQUEIDENTIFIER null,
+	ParseSucceeded bit null,
+	ParseErrorMessage NVARCHAR(255) null,
+	Created DATETIME null,
+    Updated DATETIME null,
+    ByUser_FK UNIQUEIDENTIFIER null,
+	primary key (Id)
+	)
+end
+
+
 if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='UniqueProductNameForProductGroup')
 begin
 	ALTER TABLE Products
@@ -537,6 +571,40 @@ if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CON
 begin
  alter table WorldCountryRecords 
         add constraint WorldCountryRecord_User_FK 
+        foreign key (ByUser_FK) 
+        references Users
+end
+
+if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME = 'Outpost_SmsRequest_FK')
+begin
+	alter table SmsRequests
+		add constraint Outpost_SmsRequest_FK
+		foreign key (OutpostId)
+		references Outposts
+end
+
+if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME = 'ProductGroup_SmsRequest_FK')
+begin
+	alter table SmsRequests
+		add constraint ProductGroup_SmsRequest_FK
+		foreign key (ProductGroupId)
+		references ProductGroups
+end
+
+if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='ByUser_SmsRequests_FK')
+begin
+
+    alter table SmsRequests 
+        add constraint ByUser_SmsRequests_FK 
+        foreign key (ByUser_FK) 
+        references Users
+end
+
+if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='ByUser_RawSmsReceiveds_FK')
+begin
+
+    alter table RawSmsReceiveds 
+        add constraint ByUser_RawSmsReceiveds_FK 
         foreign key (ByUser_FK) 
         references Users
 end

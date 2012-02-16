@@ -10,6 +10,9 @@ namespace Domain
     public class Contact : DomainEntity
     {
         //public Guid Id { get; set; }
+        /// <summary>
+        /// Possible values: "E-mail", "Mobile Number"
+        /// </summary>
         public virtual string ContactType { get; set; }
         public virtual string ContactDetail { get; set; }
         public virtual bool IsMainContact { get; set; }

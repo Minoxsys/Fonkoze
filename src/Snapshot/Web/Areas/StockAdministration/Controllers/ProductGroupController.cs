@@ -45,7 +45,8 @@ namespace Web.Areas.StockAdministration.Controllers
 
             var productGroup = new ProductGroup();
             Mapper.Map(model, productGroup);
-          
+
+            productGroup.ReferenceCode = productGroup.Name.Substring(0, 3).ToUpper(); // todo: remove this, is just for testing
             SaveOrUpdateProductGroup.Execute(productGroup);
 
             return Json(

@@ -1,0 +1,34 @@
+﻿@model Web.Models.SmsRequest.SmsRequestCreateModel
+
+@using Microsoft.Web.Mvc
+
+@section page_title{
+SMS Request : Create
+}
+@section breadcrumbs{
+    > Create request
+}
+@section master_content{
+    <form class="chosen-form"  method="post" id="SmsRequestForm">
+        <fieldset class="fieldsCollection ">
+            <div class="row of-2">
+                <div class="column">
+                    <label for="Outpost">Outposts</label>
+                    @Html.DropDownListFor(m => m.Outpost.Id, Model.Outposts)
+                </div>
+                <div class="column">
+                    <label for="Grup Products">Product Groups</label>
+                    @Html.DropDownListFor(m => m.ProductGroup.Id, Model.ProductGroups)
+                </div>
+            </div>
+        </fieldset>
+         @Html.SubmitButton("submit-form", "Save") <span>or </span><a href="@(Html.BuildUrlFromExpression<SmsRequestController>(it => it.Overview()))">Cancel</a>
+    </form>
+}
+@section scripts{
+    <script type="text/javascript">
+        $('#submit-form').click(function () {
+            return confirm("Are you sure you want to broadcast this SMS?");
+        });
+    </script>
+}

@@ -58,6 +58,9 @@
     <Reference Include="pnunit.framework">
       <HintPath>..\packages\NUnit.2.5.10.11092\lib\pnunit.framework.dll</HintPath>
     </Reference>
+    <Reference Include="Rhino.Mocks">
+      <HintPath>..\packages\RhinoMocks.3.6\lib\Rhino.Mocks.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.SQLite">
@@ -76,12 +79,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SmsGateway_Integration_Test\ObjectMother.cs" />
+    <Compile Include="SmsGateway_Integration_Test\SendSmsMethod.cs" />
     <Compile Include="When_Loading_A_Country_It_ShouldAlsoBring_TheRegionNo_InOneQuery.cs" />
     <Compile Include="When_Retrieving_TheAssigned_Products_For_ProductGroup_On_OutpostStockLevel.cs" />
     <Compile Include="When_WeWantToPersiste_An_OutpostStockLevel.cs" />
     <Compile Include="When_WeWantToPersist_An_EmailRequest.cs" />
     <Compile Include="When_WeWantToPersist_An_product.cs" />
     <Compile Include="When_WeWantToPersist_A_Campaign.cs" />
+    <Compile Include="When_WeWantToPersist_An_SmsRequest.cs" />
     <Compile Include="When_WeWantToPersist_A_OutpostStockLevelHistorical.cs" />
     <Compile Include="When_WeWantToPersist_A_StockGroup.cs" />
     <Compile Include="SessionFactory.cs" />
@@ -114,6 +120,10 @@
     <ProjectReference Include="..\Persistence\Persistence.csproj">
       <Project>{897B447F-A75B-4F77-9E0F-D3BF8FF4D274}</Project>
       <Name>Persistence</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Web\Web.csproj">
+      <Project>{EB88EB15-ABF0-4CBD-9D90-0B746DAAC34D}</Project>
+      <Name>Web</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
