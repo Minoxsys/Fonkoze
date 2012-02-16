@@ -189,7 +189,9 @@ Districts: Overview
                         var postToUrl = '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "District", action = "Create" })';
                         var action = $.post(postToUrl, values);
                         action.success(function (result) {
+                            if(result.Status == "Error"){
                             Ext.Msg.alert(result.Status, result.Message);
+                            }
 
                             var selectedCountryInModal = Ext.getCmp(window.feature.comboboxCountriesForModalId).getValue();
                             var selectedRegionInModal = Ext.getCmp(window.feature.comboboxRegionsForModalId).getValue();
@@ -320,7 +322,9 @@ Districts: Overview
                         var action = $.post(postToUrl, values);
                         action.success(function (result) {
 
+                            if(result.Status == "Error"){
                             Ext.Msg.alert(result.Status, result.Message);
+                            }
 
                             var selectedCountryInModal = Ext.getCmp(window.feature.comboboxCountriesForModalId).getValue();
                             var selectedRegionInModal = Ext.getCmp(window.feature.comboboxRegionsForModalId).getValue();
@@ -404,6 +408,7 @@ Districts: Overview
             listeners: {
                 select: function (combo, record, index) {
                     var selectedRegionId = record[0].data.Id;
+                    window.feature.store.proxy.extraParams.countryId = '';
                     window.feature.store.proxy.extraParams.regionId = selectedRegionId;
                     window.feature.store.loadPage(1, { params: { regionId: selectedRegionId} });
                 }
@@ -422,7 +427,7 @@ Districts: Overview
             proxy: {
                 type: 'ajax',
                 url: '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "District", action = "Index" })',
-                extraParams:{  regionId:'', countryId: '', searchName:''},
+                extraParams: { regionId: '', countryId: '', searchName: '' },
                 reader: { type: 'json',
                     root: 'districts',
                     totalProperty: 'TotalItems'
@@ -468,9 +473,9 @@ Districts: Overview
                                 var postToUrl = '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "District", action = "Delete" })';
                                 var action = $.post(postToUrl, values);
                                 action.success(function (result) {
-                                    if (result.Status !== 'Done') {
+                                    if (result.Status !== 'Success') {
                                         var windowAlert = new Ext.window.MessageBox;
-                                        windowAlert.alert('Alert', result.Message);                                       
+                                        windowAlert.alert(result.Status, result.Message);
                                     }
                                     var selectedCountryId = Ext.getCmp(window.feature.comboboxCountriesId).getValue();
                                     var selectedRegionId = Ext.getCmp(window.feature.comboboxRegionsId).getValue();

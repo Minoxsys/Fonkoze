@@ -52,7 +52,18 @@ namespace Web.Areas.OutpostManagement.Controllers
                    });
             }
 
-
+            if (QueryService.Query().Where(it => it.Name == regionInputModel.Name).ToList().Count > 0)
+            {
+                return Json(
+                    new JsonActionResponse
+                    {
+                   Status = "Error",
+                   CloseModal = false,
+                   Message = string.Format("There is already associated a region with the name {0} for this country! Please insert a different name!",regionInputModel.Name)
+                    });
+ 
+            }
+            
             Region region = new Region();
 
             CreateMapping();
@@ -67,6 +78,7 @@ namespace Web.Areas.OutpostManagement.Controllers
                new JsonActionResponse
                {
                    Status = "Success",
+                   CloseModal = true,
                    Message = String.Format("Region {0} has been saved.", region.Name)
                });
         }
@@ -82,6 +94,7 @@ namespace Web.Areas.OutpostManagement.Controllers
                    new JsonActionResponse
                    {
                        Status = "Error",
+                       CloseModal = true,
                        Message = "You must supply a regionId in order to edit the region."
                    });
             }
@@ -92,8 +105,21 @@ namespace Web.Areas.OutpostManagement.Controllers
                    new JsonActionResponse
                    {
                        Status = "Error",
+                       CloseModal = true,
                        Message = "The region has not been saved!"
                    });
+            }
+
+            if (QueryService.Query().Where(it => it.Name == regionInputModel.Name).ToList().Count > 0)
+            {
+                return Json(
+                    new JsonActionResponse
+                    {
+                        Status = "Error",
+                        CloseModal = false,
+                        Message = string.Format("There is already associated a region with the name {0} for this country! Please insert a different name!", regionInputModel.Name)
+                    });
+
             }
 
             Region region = new Region();
@@ -110,6 +136,7 @@ namespace Web.Areas.OutpostManagement.Controllers
                new JsonActionResponse
                {
                    Status = "Success",
+                   CloseModal =true,
                    Message = String.Format("Region {0} has been saved.", region.Name)
                });
         }

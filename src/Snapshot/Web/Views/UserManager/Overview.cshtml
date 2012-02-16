@@ -231,7 +231,7 @@ User Administration Users: Overview
                                             var postToUrl = '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "UserManager", action = "Create" })';
                                             var action = $.post(postToUrl, values);
                                             action.success(function(serverResponse){
-                                                Ext.Msg.alert(serverResponse.Status, serverResponse.Message);
+                                                
                                                 winAdd.close();
                                                 winAdd.destroy();
                                                 window.feature.UsersStore.loadPage(1); 
@@ -345,7 +345,8 @@ User Administration Users: Overview
                                         var postToUrl = '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "UserManager", action = "Edit" })';
                                         var action = $.post(postToUrl, values);
                                         action.success(function(serverResponse){
-                                            Ext.Msg.alert(serverResponse.Status, serverResponse.Message);
+                                            if(serverResponse.Status === "Error"){
+                                            Ext.Msg.alert(serverResponse.Status, serverResponse.Message);}
                                             winEdit.close();
                                             winEdit.destroy();
                                             window.feature.UsersStore.loadPage(1); 
@@ -377,7 +378,8 @@ User Administration Users: Overview
                                     var action = $.post(postToUrl, values);
 
                                     action.success(function(serverResponse){
-                                        Ext.Msg.alert(serverResponse.Status, serverResponse.Message);
+                                    if(serverResponse.Status === "Error"){
+                                        Ext.Msg.alert(serverResponse.Status, serverResponse.Message);}
                                         window.feature.UsersStore.loadPage(1);
                                     });
                                 }
