@@ -1,0 +1,71 @@
+﻿<script type="text/javascript">
+    window.res.content.maincontent = {
+        id: 'MainContent',
+        sidebar: {
+            id: 'SideBar',
+            group: 'SideBarGroup',
+            outpostStockLevelCurrent: 'Sidebar-current',
+            outpostStockLevelHistorical: 'Sidebar-historical'
+        }        
+    };
+    Ext.onReady(function () {
+
+        var contentRes = window.res.content;
+
+        var content = Ext.getCmp(contentRes.id);
+
+        content.add(
+            {
+                xtype: 'container',
+                layout: {
+                    align: 'stretch',
+                    type: 'hbox'
+                },
+                items: [
+                     {
+                         xtype: 'container',
+                         id: contentRes.maincontent.id,
+                         layout: {
+                             align: 'stretch',
+                             type: 'fit'
+                         },
+                         flex: 1
+                     },{
+                        xtype: 'container',
+                        id: 'SideBar',
+                        width: 210,
+                        layout: {
+                            align: 'stretch',
+                            type: 'vbox'
+                        },
+                        items: [
+                            {
+                                xtype: 'button',
+                                id: contentRes.maincontent.sidebar.outpostStockLevelCurrent,
+                                toggleGroup: contentRes.maincontent.sidebar.group,
+                                enableToggle: true,
+                                text: 'Current Product Stock Level',
+                                handler: function () {
+                                    navigateTo(window.res.link.outpostStockLevelCurrent);
+                                }
+                            },
+                            {
+                                xtype: 'button',
+                                id: contentRes.maincontent.sidebar.product,
+                                toggleGroup: contentRes.maincontent.sidebar.group,
+                                text: 'Historical Product Stock Level',
+                                enableToggle: true,
+                                handler: function () {
+                                   
+                                },
+                                
+                            }
+                        ]
+                    }
+                ]
+
+            }
+        );
+
+    });
+</script>

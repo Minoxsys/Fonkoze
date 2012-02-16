@@ -36,6 +36,7 @@
             productGroup: '@(Url.RouteUrl<ProductGroupController>( x=>x.Overview() ,  Web.Areas.StockAdministration.StockAdministrationAreaRegistration.DEFAULT_ROUTE ))',
             usersOverview: '@(Url.RouteUrl<UserManagerController>( x=>x.Overview() ,  Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE ))',
             clientsOverview: '@(Url.RouteUrl<ClientManagerController>( x=>x.Overview() ,  Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE ))',
+            outpostStockLevelCurrent:'@(Url.RouteUrl<Web.Areas.StockAdministration.Controllers.OutpostStockLevelController>(x=>x.Overview(),Web.Areas.StockAdministration.StockAdministrationAreaRegistration.DEFAULT_ROUTE))',
             rolesOverview: '@(Url.RouteUrl<RoleManagerController>( x=>x.Overview() ,  Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE ))'
         },
         header:{
@@ -46,6 +47,7 @@
                 logo: 'Logo',
                 dashboard:'Dashboard',
                 administration: 'Administration',
+                outpostStockLevel: 'OutpostStockLevel',
                 alerts:'Alerts',
                 analysisAndReports:'AnalysisAndReports'
 
@@ -115,8 +117,19 @@
                                 },
                                 enableToggle:true,
                                 text: 'Administration'
-                            },
-                            {
+                            },{
+                                xtype: 'button',
+                                id: res.header.navigation.outpostStockLevel,
+                                height: 70,
+                                padding: 0,
+                                width: 170,
+                                toggleGroup:res.header.navigation.toggleGroup,
+                                enableToggle:true,
+                                handler:function(){
+                                    navigateTo( res.link.outpostStockLevelCurrent ); 
+                                },
+                                text: 'Outpost Stock Level'
+                            },{
                                 xtype: 'button',
                                 id: res.header.navigation.alerts,
                                 height: 70,
@@ -144,7 +157,7 @@
                              layout: {
                                 align: 'stretch',
                                 type: 'hbox'
-                            },
+                            }
                         }
                     ]
                 },

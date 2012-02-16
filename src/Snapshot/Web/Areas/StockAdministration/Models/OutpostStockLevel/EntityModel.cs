@@ -5,10 +5,9 @@ using System.Web;
 
 namespace Web.Areas.StockAdministration.Models.OutpostStockLevel
 {
-    public class OutpostStockLevelInputModel
+    public class EntityModel
     {
-        public Guid? Id { get; set; }       
-        public int StockLevel { get; set; }      
-       
+        public Guid Id { get; set; }
+        public String Name { get; set; }
     }
 }
