@@ -29,7 +29,7 @@ namespace UnitTests.Routes
 		[Test]
 		public void MapsRoute_Css()
 		{
-			"~/css/group/ver1".ShouldMapTo<CssController>(action => action.Index("group"));
+			"~/css/group-ver1".ShouldMapTo<CssController>(action => action.Index("group"));
 		}
 
 		[Test]
