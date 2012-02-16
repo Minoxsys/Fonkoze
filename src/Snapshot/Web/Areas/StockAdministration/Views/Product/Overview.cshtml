@@ -208,6 +208,8 @@ Product Item: Overview
                                             var postToUrl = '@Url.RouteUrl(StockAdministrationAreaRegistration.DEFAULT_ROUTE, new { controller = "ProductGroup", action = "Create" })';
                                             var action = $.post(postToUrl, values);
                                             action.success(function(serverResponse){
+                                                if(serverResponse.Status === "Error"){
+                                                }
                                                 var productGroupNameSaved = productGroupName.getValue();
 
                                                 window.feature.ProductGroupStoreForModal.load();
@@ -310,7 +312,9 @@ Product Item: Overview
                                     Ext.Msg.alert(result.Status, result.Message);
                                 }
                                 else {
-                                    //Ext.Msg.alert(result.Status, result.Message);
+                                   if(result.Status === "Error"){
+                                                Ext.Msg.alert(result.Status, result.Message);
+                                                }
                                     var selectedProductGroupInModal = Ext.getCmp(window.feature.comboboxProductGroupsForModalId).getValue();
                                     me.close();
                                     me.destroy();
@@ -386,6 +390,8 @@ Product Item: Overview
                                             var postToUrl = '@Url.RouteUrl(StockAdministrationAreaRegistration.DEFAULT_ROUTE, new { controller = "ProductGroup", action = "Create" })';
                                             var action = $.post(postToUrl, values);
                                             action.success(function(serverResponse){
+                                                if(serverResponse.Status === "Error"){
+                                                }
                                                 window.feature.ProductGroupStoreForModal.load();
 
                                                 clearTimeout(timeout);
@@ -490,7 +496,9 @@ Product Item: Overview
                                     Ext.Msg.alert(result.Status, result.Message);
                                 }
                                 else {
-                                    //Ext.Msg.alert(result.Status, result.Message);
+                                   if(result.Status === "Error"){
+                                                Ext.Msg.alert(result.Status, result.Message);
+                                                }
                                     var selectedProductGroupInModal = Ext.getCmp(window.feature.comboboxProductGroupsForModalId).getValue();
                                     me.close();
                                     me.destroy();
@@ -604,7 +612,9 @@ Product Item: Overview
                                 var postToUrl = '@Url.RouteUrl(StockAdministrationAreaRegistration.DEFAULT_ROUTE, new { controller = "Product", action = "Delete" })';
                                 var action = $.post(postToUrl, values);
                                 action.success(function (result) {
-                                    Ext.Msg.alert(result.Status, result.Message);                                       
+                                    if(result.Status === "Error"){
+                                                Ext.Msg.alert(result.Status, result.Message);
+                                                }                                      
                                     var selectedProductGroupId = Ext.getCmp(window.feature.comboboxProductGroupsId).getValue();
                                     
                                     if (selectedProductGroupId) {
