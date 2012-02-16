@@ -116,6 +116,8 @@ Districts: Overview
                         valueField: 'Id',
                         id: window.feature.comboboxCountriesForModalId,
                         emptyText: 'Select a country',
+                        allowBlank: false,
+                        editable: false,
                         listeners:
                                    { select: function (combo, record, index) {
                                        var selectedCountryId = record[0].data.Id;
@@ -134,6 +136,8 @@ Districts: Overview
                                      valueField: 'Id',
                                      id: window.feature.comboboxRegionsForModalId,
                                      emptyText: _t('Select a region'),
+                                     allowBlank: false,
+                                     editable: false,
                                      store: window.feature.regionsStoreforModal
                                  },
                                             {
@@ -254,12 +258,15 @@ Districts: Overview
                         valueField: 'Id',
                         id: window.feature.comboboxRegionsForModalId,
                         emptyText: _t('Select a region'),
+                        allowBlank: false,
+                        editable: false,
                         store: window.feature.regionsStoreforModal
                     }, { xtype: 'textfield',
                         name: 'Name',
                         fieldLabel: _t('District Name'),
                         id: window.feature.districtNameId,
                         allowBlank: false,
+                        editable: false,
                         anchor: '100%'
                     }, { xtype: 'textfield',
                         hidden: true,
@@ -347,13 +354,13 @@ Districts: Overview
 
             function IsValid(region, districtName){
             var ok = true;
-            if (region.getValue() == ''){
+            if (region.getValue() == null){
                 region.markInvalid('Field Region is required!');  
                 region.setValue(null);
                 ok = false;
             }
 
-           if (districtName.getValue() == ''){
+           if (districtName.getValue() == null || $.trim(districtName.getValue()) == ''){
                 districtName.markInvalid('Field Name is required!');  
                 districtName.setValue(null);
                 ok = false;

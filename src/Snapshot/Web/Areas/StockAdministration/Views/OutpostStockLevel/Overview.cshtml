@@ -4,7 +4,7 @@ Outpost Stock Level Current
 }
 @{
     Html.RenderPartial("_OutpostStockLevelSubNavigation");
-    Html.RenderPartial("_OutpostStockLevelMainContent");
+    Html.RenderPartial("_OutpostStockLevelSideBar");
     
 }
 <script type="text/javascript">
@@ -91,6 +91,8 @@ Outpost Stock Level Current
             store: window.feature.CountryStore,
             queryMode: 'local',
             id: window.feature.comboboxCountriesId,
+            labelAlign: 'top',
+            fieldLabel: 'Selected Country',
             displayField: 'Name',
             valueField: 'Id',
             margin: '0 0 0 30',
@@ -122,6 +124,8 @@ Outpost Stock Level Current
             store: window.feature.RegionStore,
             queryMode: 'local',
             id: window.feature.comboboxRegionsId,
+            labelAlign: 'top',
+            fieldLabel: 'Selected Region',
             displayField: 'Name',
             valueField: 'Id',
             disabled: true,
@@ -147,6 +151,8 @@ Outpost Stock Level Current
             store: window.feature.DistrictStore,
             queryMode: 'local',
             id: window.feature.comboboxDistrictsId,
+            labelAlign: 'top',
+            fieldLabel: 'Selected District',
             displayField: 'Name',
             valueField: 'Id',
             disabled: true,
@@ -167,6 +173,8 @@ Outpost Stock Level Current
             store: window.feature.OutpostStore,
             queryMode: 'local',
             id: window.feature.comboboxOutpostsId,
+            labelAlign: 'top',
+            fieldLabel: 'Selected Outpost',
             displayField: 'Name',
             valueField: 'Id',
             disabled: true,
@@ -348,10 +356,9 @@ Outpost Stock Level Current
         });
 
         window.feature.treegrid = Ext.create('Ext.tree.Panel', {
-            width: 1300,
-            height: 600,
             useArrows: true,
             rootVisible: false,
+            flex: 3,
             root: {},
             store: window.feature.treeStore,
             multiSelect: true,
@@ -473,418 +480,80 @@ Outpost Stock Level Current
         var mainContent = Ext.getCmp(contentRes.maincontent.id);
         mainContent.add({
             xtype: 'container',
-            margin: 20,
-            id: 'TopContainer',
-            border: '10 10 10 10',
+            margin:'20 50 20 0',
+            autoScroll:true,
+            id:'TopContainer',
             layout: {
                 align: 'stretch',
                 type: 'vbox'
             },
-            items: [{ xtype:'label',
-                      text: 'Current Product Level',
-                      padding:'10 10 0 100'},
-                      {
-                          xtype: 'container',
-                          layout: {
-                              type: 'column'
-                          },
-                          height: 50,
-                          items: [{ xtype: 'container',
-                              height: 30,
-                              width: 30,
-                              html: '&nbsp;'
-                          }]
-                      }, {
-                          xtype: 'container',
-                          layout: {
-                              type: 'hbox'
-                          },
-                          height: 50,
-                          items: [{ xtype: 'label',
-                              text: 'Selected Country',
-                              margin: '0 0 0 40'
-                          }, { xtype: 'label',
-                              text: 'Selected Region',
-                              margin: '0 0 0 120'
-                          }, { xtype: 'label',
-                              text: 'Selected District',
-                              margin: '0 0 0 150'
-                          }, { xtype: 'label',
-                              text: 'Selected Outpost',
-                              margin: '0 0 0 140'
-                          }]
-                      }, {
-                          xtype: 'container',
-                          layout: {
-                              type: 'hbox'
-                          },
-                          height: 50,
-                          width: 950,
-                          items: [window.feature.comboBoxCountries,
-                                   window.feature.comboBoxRegions,
-                                   window.feature.comboBoxDistricts,
-                                   window.feature.comboBoxOutposts,
-                                   {
-                                       xtype: 'button',
-                                       margin: '0 0 0 20',
-                                       text: 'View Product Stock Level',
-                                       width: 150,
-                                       handler: function () {
-                                           var selectedOutpostId = window.feature.comboBoxOutposts.getValue();
-                                           var selectedDistrictId = window.feature.comboBoxDistricts.getValue();
+            items: [
+            {
+                xtype: 'container',
+                layout: {
+                    align: 'stretch',
+                    type: 'vbox'
+                },
+                height:120,
+                items: [
+                {
+                    xtype: 'container',
+                    flex: 1,
+                    layout: {
+                        type: 'column'
+                    },
+                    items: [{
+                        xtype: 'container',
+                        height: 30,
+                        width: 30,
+                        html:'&nbsp;'
+                    },{
+                        xtype: 'label',
+                        text: 'Current Product Level',
+                    }]
+                    },{
+						xtype: 'container',
+                        flex: 1,
+						layout: {
+							type: 'column'
+						},
+						items: [
+						{
+							xtype: 'container',
+							height: 30,
+							width: 30,
+							html:'&nbsp;'
+						}, 
+                            window.feature.comboBoxCountries, 
+							window.feature.comboBoxRegions,
+							window.feature.comboBoxDistricts,
+							window.feature.comboBoxOutposts 
+                        ,{ 
+                            xtype: 'button',
+                            margin: '20 0 0 20',
+                            text: 'View Product Stock Level',
+                            handler: function () {
+                                var selectedOutpostId = window.feature.comboBoxOutposts.getValue();
+                                var selectedDistrictId = window.feature.comboBoxDistricts.getValue();
                                            
-                                           if(selectedOutpostId !==null){
-                                           window.feature.treegrid.getStore().proxy.extraParams.OutpostId = selectedOutpostId;
-                                           window.feature.treegrid.getStore().proxy.extraParams.DistrictId = selectedDistrictId;
-                                            window.feature.treegrid.getStore().proxy.extraParams.ProductGroupExpandedOnEdit = '';
-                                           window.feature.treegrid.getRootNode().expand();
-                                           }else{
-                                            Ext.Msg.alert("Alert", "Please select all option in order to see outpost stock level data!");
-                                           }
-                                       }
-                                   }
-                          ]
-                      }, window.feature.treegrid
-                    ]
+                                if(selectedOutpostId !==null){
+                                    window.feature.treegrid.getStore().proxy.extraParams.OutpostId = selectedOutpostId;
+                                    window.feature.treegrid.getStore().proxy.extraParams.DistrictId = selectedDistrictId;
+                                    window.feature.treegrid.getStore().proxy.extraParams.ProductGroupExpandedOnEdit = '';
+                                    window.feature.treegrid.getRootNode().expand();
+                                }else{
+                                    Ext.Msg.alert("Alert", "Please select all option in order to see outpost stock level data!");
+                                }
+                            }
+                        }]
+				    }]
+			},
+				window.feature.treegrid
+            ,{
+                xtype:'container',
+                height:150
+            }]
         });
 
     });
 </script>
-@*
-@section master_actions{
-    @{
-        Html.RenderPartial("~/Views/Shared/_OutpostManagementActions.cshtml");
-    }
-    @{ Html.RenderPartial("~/Views/Shared/_StockAdministrationActions.cshtml");}
-}
-@section master_content{
-    <table>
-        <thead>
-            <tr>
-                <th>
-                    <label>
-                        Country:</label>
-                    <select name="@(Html.NameFor(m => m.Countries))" id="Countries">
-                        <option value="@Guid.Empty">- Select a country - </option>
-                        @{
-                            foreach (var item in Model.Countries)
-                            {
-                            <option value="@item.Value" @(item.Selected ? @"selected='selected'" : @"") >@item.Text</option>
-                            }
-                        }
-                    </select>
-                </th>
-                <th>
-                    <label>
-                        Region:</label>
-                    <select name="@(Html.NameFor(m => m.Regions))" id="Regions">
-                        @{
-                            foreach (var item in Model.Regions)
-                            {
-                            <option value="@item.Value" @(item.Selected ? @"selected='selected'" : @"") >@item.Text</option>
-                            }
-                        }
-                    </select>
-                </th>
-                <th>
-                    <label>
-                        District:</label>
-                    <select name="@(Html.NameFor(m => m.Districts))" id="Districts">
-                        @{
-                            foreach (var item in Model.Districts)
-                            {
-                            <option value="@item.Value" @(item.Selected ? @"selected='selected'" : @"") >@item.Text</option>
-                            }
-                        }
-                    </select>
-                </th>
-                <th>
-                    <label>
-                        Outpost:</label>
-                    <select name="@(Html.NameFor(m => m.OutpostId))" id="Outposts">
-                        @{
-                            foreach (var item in Model.Outposts)
-                            {
-                            <option value="@item.Value" @(item.Selected ? @"selected='selected'" : @"") >@item.Text</option>
-                            }
-                        }
-                    </select>
-                </th>
-                <th>
-                    <button onclick="ViewStockButtonClicked()">
-                        View product stock level</button>
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
-    <span>
-        <button onclick="CurrentButtonClicked()">
-            Current Product Stock Level</button>
-        <button onclick="HistoricalButtonClicked()">
-            Historical Product Stock Level</button></span>
-   
-
-       @{ Html.RenderPartial("OverviewItemsStockLevel", Model.OutpostList);   }        
-    
-
-        @{Html.RenderPartial("OverviewItemsStockLevelHistorical",Model.OutpostList);}
-       
-    
-     
-}
-@section  scripts{
-    <script type="text/javascript">
-        var dropHistorical = $("#stocklevel-overview-historical");
-        dropHistorical.html('');
-
-        function ViewHistoricalStockLevelButtonClicked(id) {
-
-            var selectedDistrictId = $("select[name='@Html.NameFor(m => m.Districts)']").val()
-            var drop = $("#stocklevel-overview-historical")
-            var dropCurrent = $("#stocklevel-overview")
-
-            var urlOverview = '@Url.Action("OverviewItemsStockLevelHistorical", "OutpostStockLevel")?OutpostId=' + id + '&DistrictId=' + selectedDistrictId;
-            $.get(urlOverview, function (data) {
-
-                drop.html('')
-                $('#stocklevel-overview-historical').html(data);
-                dropCurrent.html('');
-
-            });
-        }
-        function CurrentButtonClicked() {
-
-            var outpost = document.getElementById("Outposts");
-            var country = document.getElementById("Countries");
-            var region = document.getElementById("Regions");
-            var guidEmpty = "@Guid.Empty";
-
-            if (country.options[country.selectedIndex].value == guidEmpty)
-            { alert(" Please choose an option for each filter! "); }
-            else {
-                if (region.options[region.selectedIndex].value == guidEmpty) {
-                    alert("Please choose an option for region,district and outpost too!");
-                }
-                else {
-                    if ($("select[name='@Html.NameFor(m => m.Districts)']").val() == guidEmpty) {
-                        alert("Please choose an option for district and outpost too!");
-                    }
-                    else {
-                        var selectedOutpostId = outpost.options[outpost.selectedIndex].value;
-                        var selectedDistrictId = $("select[name='@Html.NameFor(m => m.Districts)']").val()
-                        var drop = $("#stocklevel-overview")
-
-                        
-                            var urlOverview = '@Url.Action("OverviewItemsStockLevel", "OutpostStockLevel")?OutpostId=' + selectedOutpostId + '&DistrictId=' + selectedDistrictId;
-                            $.get(urlOverview, function (data) {
-
-                                drop.html('');
-                                $('#stocklevel-overview').html(data);
-                                var dropHistorical = $("#stocklevel-overview-historical");
-                                dropHistorical.html('');
-
-                            });
-                       }
-                }
-            }
-
-        }
-
-        function ViewStockButtonClicked() {
-
-            var outpost = document.getElementById("Outposts");
-            var country = document.getElementById("Countries");
-            var region = document.getElementById("Regions");
-            var guidEmpty = "@Guid.Empty";
-
-            if (country.options[country.selectedIndex].value == guidEmpty)
-            { alert(" Please choose an option for each filter! "); }
-            else {
-                if (region.options[region.selectedIndex].value == guidEmpty) {
-                    alert("Please choose an option for region,district and outpost too!");
-                }
-                else {
-                    if ($("select[name='@Html.NameFor(m => m.Districts)']").val() == guidEmpty) {
-                        alert("Please choose an option for district and outpost too!");
-                    }
-                    else {
-                        var selectedOutpostId = outpost.options[outpost.selectedIndex].value;
-                        var selectedDistrictId = $("select[name='@Html.NameFor(m => m.Districts)']").val()
-                        var drop = $("#stocklevel-overview")
-
-                        if (drop.html().length > 0) {
-                            var urlOverview = '@Url.Action("OverviewItemsStockLevel", "OutpostStockLevel")?OutpostId=' + selectedOutpostId + '&DistrictId=' + selectedDistrictId;
-                            $.get(urlOverview, function (data) {
-
-                                drop.html('');
-                                $('#stocklevel-overview').html(data);
-                                var dropHistorical = $("#stocklevel-overview-historical");
-                                dropHistorical.html('');
-
-                            });
-                        }
-                        else {
-                            var dropHistorical = $("#stocklevel-overview-historical");
-                            var urlOverview = '@Url.Action("OverviewItemsStockLevelHistorical", "OutpostStockLevel")?OutpostId=' + selectedOutpostId + '&DistrictId=' + selectedDistrictId;
-                            $.get(urlOverview, function (data) {
-
-                                dropHistorical.html('')
-                                $('#stocklevel-overview-historical').html(data);
-                                drop.html('');
-
-                            });
-
-                        }
-
-
-                    }
-                }
-            }
-
-        }  
-        function HistoricalButtonClicked() {
-
-            var outpost = document.getElementById("Outposts");
-            var country = document.getElementById("Countries");
-            var region = document.getElementById("Regions");
-            var guidEmpty = "@Guid.Empty";
-            if (country.options[country.selectedIndex].value == guidEmpty)
-            { alert(" Please chose an option for each filter! "); }
-            else {
-                if (region.options[region.selectedIndex].value == guidEmpty) {
-                    alert("Please chose an option for region,district and outpost too!");
-                }
-                else {
-                    if ($("select[name='@Html.NameFor(m => m.Districts)']").val() == guidEmpty) {
-                        alert("Please chose an option for district and outpost too!");
-                    }
-                    else {
-                        var selectedOutpostId = outpost.options[outpost.selectedIndex].value;
-                        var selectedDistrictId = $("select[name='@Html.NameFor(m => m.Districts)']").val()
-                        var drop = $("#stocklevel-overview-historical")
-                        var dropCurrent = $("#stocklevel-overview")
-
-                        var urlOverview = '@Url.Action("OverviewItemsStockLevelHistorical", "OutpostStockLevel")?OutpostId=' + selectedOutpostId + '&DistrictId=' + selectedDistrictId;
-                        $.get(urlOverview, function (data) {
-
-                            drop.html('')
-                            dropCurrent.html('');
-                            $('#stocklevel-overview-historical').html(data);
-
-                        });
-
-                    }
-                }
-            }
-
-        }
-        $("select[name='@Html.NameFor(m => m.Countries)']").change(function () {
-            var e = $(this)[0];
-            var selectedCountryId = e.options[e.selectedIndex].value;
-
-
-            $.getJSON('@Url.Action("GetRegionsForCountry", "OutpostStockLevel")?countryId=' + selectedCountryId, function (data) {
-
-                var drop = $("#Regions")
-                drop.html('')
-
-
-                var drop = $("#Districts")
-                drop.html('')
-
-                var drop = $("#Outposts")
-                drop.html('')
-
-                var ddlRegions = document.getElementById("Regions");
-                var opt = document.createElement("option");
-                opt.text = 'Please select a region';
-                opt.value = '@Guid.Empty.ToString()';
-                ddlRegions.options.add(opt);
-
-                $.each(data, function () {
-
-                    var opt = document.createElement("option");
-                    opt.text = this['Text'];
-                    opt.value = this['Value'];
-                    ddlRegions.options.add(opt);
-                });
-
-            });
-
-            $("select[name='@Html.NameFor(m => m.Countries)'] option[value='@Guid.Empty.ToString()']").remove();
-
-        });
-
-        $("select[name='@Html.NameFor(m => m.Regions)']").change(function () {
-
-            var e = $(this)[0];
-            var selectedRegionId = e.options[e.selectedIndex].value;
-
-            $.getJSON('@Url.Action("GetDistrictsForRegion", "OutpostStockLevel")?regionId=' + selectedRegionId, function (data) {
-                var drop = $("#Districts")
-                drop.html('')
-
-                var drop = $("#Outposts")
-                drop.html('')
-
-                var ddlRegions = document.getElementById("Districts");
-                var opt = document.createElement("option");
-                opt.text = 'Please select a district';
-                opt.value = '@Guid.Empty.ToString()';
-                ddlRegions.options.add(opt);
-
-                $.each(data, function () {
-                    var opt = document.createElement("option");
-                    opt.text = this['Text'];
-                    opt.value = this['Value'];
-                    ddlRegions.options.add(opt);
-                });
-
-            });
-
-            $("select[name='@Html.NameFor(m => m.Regions)'] option[value='@Guid.Empty.ToString()']").remove();
-        });
-
-        $("select[name='@Html.NameFor(m => m.Districts)']").change(function () {
-
-            var e = $(this)[0];
-            var selectedDistrictId = e.options[e.selectedIndex].value;
-
-            $.getJSON('@Url.Action("GetOutpostsForDistrict", "OutpostStockLevel")?districtId=' + selectedDistrictId, function (data) {
-                var drop = $("#Outposts")
-                drop.html('')
-
-                var ddlOutposts = document.getElementById("Outposts");
-                var opt = document.createElement("option");
-                opt.text = 'Please chose a option';
-                opt.value = '@Guid.Empty.ToString()';
-
-                ddlOutposts.options.add(opt);
-
-                opt.text = 'All';
-                opt.value = '00000000-0000-0000-0000-000000000001';
-
-                ddlOutposts.options.add(opt);
-
-                $.each(data, function () {
-                    var opt = document.createElement("option");
-                    opt.text = this['Text'];
-                    opt.value = this['Value'];
-                    ddlOutposts.options.add(opt);
-                });
-
-            });
-
-            $("select[name='@Html.NameFor(m => m.Districts)'] option[value='@Guid.Empty.ToString()']").remove();
-
-        });
-
-        $("select[name='@Html.NameFor(m => m.OutpostId)']").change(function () {
-            $("select[name='@Html.NameFor(m => m.OutpostId)'] option[value='@Guid.Empty.ToString()']").remove();
-
-        });
-    </script>
-}
-*@

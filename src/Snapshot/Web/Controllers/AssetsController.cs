@@ -23,7 +23,7 @@ namespace Web.Controllers
 		#region Constants
 		private const string IF_NONE_MATCH_HEADER = "If-None-Match";
 		private const string LAST_MODIFIED_SINCE_HEADER = "If-Modified-Since";
-		private const string SHARED_FOLDER = "~/Assets/";
+		private const string SHARED_FOLDER = "~/Assets/resources/";
 		#endregion
 
 		

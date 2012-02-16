@@ -37,7 +37,8 @@
             usersOverview: '@(Url.RouteUrl<UserManagerController>( x=>x.Overview() ,  Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE ))',
             clientsOverview: '@(Url.RouteUrl<ClientManagerController>( x=>x.Overview() ,  Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE ))',
             outpostStockLevelCurrent:'@(Url.RouteUrl<Web.Areas.StockAdministration.Controllers.OutpostStockLevelController>(x=>x.Overview(),Web.Areas.StockAdministration.StockAdministrationAreaRegistration.DEFAULT_ROUTE))',
-            rolesOverview: '@(Url.RouteUrl<RoleManagerController>( x=>x.Overview() ,  Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE ))'
+            rolesOverview: '@(Url.RouteUrl<RoleManagerController>( x=>x.Overview() ,  Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE ))',
+            historicalLevel: '@(Url.RouteUrl<HistoricalProductLevelController>( x=>x.Overview() ,  Web.Areas.StockAdministration.StockAdministrationAreaRegistration.DEFAULT_ROUTE ))',
         },
         header:{
             id:'Header',

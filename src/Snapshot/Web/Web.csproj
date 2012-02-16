@@ -190,9 +190,12 @@
     <Compile Include="Areas\OutpostManagement\Models\District\DistrictModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Outpost\OutpostModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Region\RegionModel.cs" />
+    <Compile Include="Areas\StockAdministration\Controllers\HistoricalProductLevelController.cs" />
     <Compile Include="Areas\StockAdministration\Controllers\OutpostStockLevelController.cs" />
     <Compile Include="Areas\StockAdministration\Controllers\ProductController.cs" />
     <Compile Include="Areas\StockAdministration\Controllers\ProductGroupController.cs" />
+    <Compile Include="Areas\StockAdministration\Models\HistoricalProductLevel\OutpostGridModel.cs" />
+    <Compile Include="Areas\StockAdministration\Models\HistoricalProductLevel\OutpostIndexGridModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\OutpostStockLevel\EntityModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\OutpostStockLevel\OutpostStockLevelCurrentTreeModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\OutpostStockLevel\OutpostStockLevelInputModel.cs" />
@@ -318,8 +321,10 @@
   <ItemGroup>
     <Content Include="Assets\css\ext-all.css" />
     <Content Include="Assets\css\ext-ie.css" />
-    <Content Include="Assets\img\delete.png" />
-    <Content Include="Assets\img\edit.png" />
+    <Content Include="Assets\css\snapshot-theme.css" />
+    <Content Include="Assets\resources\img\briefcase.png" />
+    <Content Include="Assets\resources\img\delete.png" />
+    <Content Include="Assets\resources\img\edit.png" />
     <Content Include="Assets\js\ext-all-debug-w-comments.js" />
     <Content Include="Assets\js\jquery-1.7.1.min.js" />
     <Content Include="Assets\js\underscore.js" />
@@ -1593,9 +1598,6 @@
     <Content Include="Areas\OutpostManagement\Views\StockLevel\OverviewStockLevel.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\StockLevel\OutpostStockLevelOverview.cshtml" />
     <Content Include="Areas\OutpostManagement\Views\StockLevel\OverviewProducts.cshtml" />
-    <Content Include="Views\RoleManager\Create.cshtml" />
-    <Content Include="Views\RoleManager\Edit.cshtml" />
-    <Content Include="Views\RoleManager\List.cshtml" />
     <Content Include="Views\Shared\Calendar.cshtml" />
     <Content Include="Views\Shared\FormButtons.cshtml" />
     <Content Include="Views\Shared\InfoMessage.cshtml" />
@@ -1620,13 +1622,14 @@
     <Content Include="Areas\StockAdministration\Views\Shared\_OutpostStockLevelSubNavigation.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Areas\StockAdministration\Views\Shared\_OutpostStockLevelMainContent.cshtml" />
+    <Content Include="Areas\StockAdministration\Views\Shared\_OutpostStockLevelSideBar.cshtml" />
     <Content Include="Views\ClientManager\Overview.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\RoleManager\Overview.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Areas\StockAdministration\Views\HistoricalProductLevel\Overview.cshtml" />
     <None Include="Assets\resources\themes\stylesheets\ext4\default\core\_core.scss" />
     <None Include="Assets\resources\themes\stylesheets\ext4\default\core\_reset.scss" />
     <None Include="Assets\resources\themes\stylesheets\ext4\default\layout\_layout.scss" />
