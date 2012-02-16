@@ -78,9 +78,8 @@ namespace Migrations
 				.WithColumn("Country_FK").AsGuid();
 			Create.AddForeignKey("Regions");
 			Create.AddForeignKey("Regions", "Country_FK", "Countries");
-			Create.AddClientForeignKey("Regions");
-
-
+			Create.AddClientForeignKey("Regions");            
+            
 			Create.Table("Districts")
 				.WithCommonColumns()
 				.WithClientColumn()

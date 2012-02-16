@@ -165,6 +165,8 @@ Product Administration Product Groups: Overview
                                             var postToUrl = '@Url.RouteUrl(StockAdministrationAreaRegistration.DEFAULT_ROUTE, new { controller = "ProductGroup", action = "Create" })';
                                             var action = $.post(postToUrl, values);
                                             action.success(function(serverResponse){
+                                                if(serverResponse.Status === "Error"){
+                                                }
                                                 winAdd.close();
                                                 winAdd.destroy();
                                                 window.feature.productGroupStore.loadPage(1);
@@ -254,6 +256,9 @@ Product Administration Product Groups: Overview
                                         var postToUrl = '@Url.RouteUrl(StockAdministrationAreaRegistration.DEFAULT_ROUTE, new { controller = "ProductGroup", action = "Edit" })';
                                         var action = $.post(postToUrl, values);
                                         action.success(function(serverResponse){
+                                            if(serverResponse.Status === "Error"){
+                                                Ext.Msg.alert(serverResponse.Status, serverResponse.Message);
+                                                }
                                             winEdit.close();
                                             winEdit.destroy();
                                             window.feature.productGroupStore.loadPage(1);
@@ -284,7 +289,9 @@ Product Administration Product Groups: Overview
                                         var action = $.post(postToUrl, values);
 
                                         action.success(function(serverResponse){
-                                            Ext.Msg.alert(serverResponse.Status, serverResponse.Message);
+                                            if(serverResponse.Status === "Error"){
+                                                Ext.Msg.alert(serverResponse.Status, serverResponse.Message);
+                                                }
                                             window.feature.productGroupStore.loadPage(1);
                                         });
                                     }

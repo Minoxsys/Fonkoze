@@ -264,7 +264,16 @@ begin
 	ALTER TABLE Products
 	ADD CONSTRAINT UniqueProductNameForProductGroup UNIQUE (Name,ProductGroup_FK)
 end
-
+if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='UniqueRegionNameForCountry')
+begin
+	ALTER TABLE Regions
+	ADD CONSTRAINT UniqueRegionNameForCountry UNIQUE (Name,Country_FK)
+end
+if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='UniqueRegionCoordinatesForCountry')
+begin
+	ALTER TABLE Regions
+	ADD CONSTRAINT UniqueRegionCoordinatesForCountry UNIQUE (Coordinates,Country_FK)
+end
 if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='ByUser_OutpostHistoricalStockLevels_FK')
 begin
 	alter table OutpostHistoricalStockLevels 
