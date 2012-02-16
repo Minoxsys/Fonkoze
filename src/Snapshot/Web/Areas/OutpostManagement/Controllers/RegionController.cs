@@ -63,7 +63,17 @@ namespace Web.Areas.OutpostManagement.Controllers
                     });
  
             }
-            
+
+            if (QueryService.Query().Where(it => it.Coordinates == regionInputModel.Coordinates).ToList().Count > 0)
+            {
+                return Json(
+                    new JsonActionResponse
+                    {
+                        Status = "Error",
+                        CloseModal = false,
+                        Message = string.Format("There is already associated a region with coordinates {0} for this country! Please insert different coordinates!", regionInputModel.Coordinates)
+                    });
+            }
             Region region = new Region();
 
             CreateMapping();
@@ -120,6 +130,17 @@ namespace Web.Areas.OutpostManagement.Controllers
                         Message = string.Format("There is already associated a region with the name {0} for this country! Please insert a different name!", regionInputModel.Name)
                     });
 
+            }
+
+            if (QueryService.Query().Where(it => it.Coordinates == regionInputModel.Coordinates).ToList().Count > 0)
+            {
+                return Json(
+                    new JsonActionResponse
+                    {
+                        Status = "Error",
+                        CloseModal = false,
+                        Message = string.Format("There is already associated a region with coordinates {0} for this country! Please insert different coordinates!", regionInputModel.Coordinates)
+                    });
             }
 
             Region region = new Region();

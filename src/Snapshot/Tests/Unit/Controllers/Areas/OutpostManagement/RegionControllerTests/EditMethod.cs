@@ -52,6 +52,27 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.RegionControllerTests
         }
 
         [Test]
+        public void Returns_JSON_With_ErrorMessage_When_ThereIsAllreadyARegionWithTheSameName_IsNOT_Valid()
+        {
+            //Arrange
+            RegionInputModel regionInputModel = new RegionInputModel()
+            {
+                Id = objectMother.region.Id,
+                Name = objectMother.region.Name,
+                Coordinates = objectMother.region.Coordinates,
+                CountryId = objectMother.region.Country.Id
+            };
+            objectMother.queryRegion.Expect(call => call.Query()).Return(new Region[] { objectMother.region }.AsQueryable());
+            //Act
+            var jsonResult = objectMother.controller.Edit(regionInputModel);
+
+            //Assert
+            var response = jsonResult.Data as JsonActionResponse;
+            Assert.IsNotNull(response);
+            Assert.That(response.Status, Is.EqualTo("Error"));
+        }
+
+        [Test]
         public void Returns_JSON_With_SuccessMessage_When_Region_Has_Been_Saved()
         {
             //Arrange
@@ -64,7 +85,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.RegionControllerTests
             };
             objectMother.queryCountry.Expect(call => call.Load(objectMother.countryId)).Return(objectMother.country);
             objectMother.saveCommand.Expect(call => call.Execute(Arg<Region>.Matches(p => p.Name == objectMother.region.Name && p.Coordinates == objectMother.region.Coordinates)));
-
+            objectMother.queryRegion.Expect(call => call.Query()).Return(new Region[]{}.AsQueryable());
             //Act
             var jsonResult = objectMother.controller.Edit(regionInputModel);
 
