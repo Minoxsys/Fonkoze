@@ -121,7 +121,7 @@ namespace Web.Areas.StockAdministration.Controllers
                                 productTreeModel.PreviousLevel = product.PrevStockLevel;
                                 productTreeModel.ProductLevel = product.StockLevel;
                                 productTreeModel.SMSCode = product.ProdSmsRef;
-                                productTreeModel.UpdateMethod = product.UpdatedMethod;
+                                productTreeModel.UpdateMethod = product.UpdateMethod;
                                 productTreeModel.Description = productEntity.Description;
                                 productTreeModel.ProductGroupName = productGroupTreeModel.Name;
                                 productTreeModel.OutpostName = treeModel.Name;
@@ -164,7 +164,7 @@ namespace Web.Areas.StockAdministration.Controllers
                         productTreeModel.PreviousLevel = product.PrevStockLevel;
                         productTreeModel.ProductLevel = product.StockLevel;
                         productTreeModel.SMSCode = product.ProdSmsRef;
-                        productTreeModel.UpdateMethod = product.UpdatedMethod;
+                        productTreeModel.UpdateMethod = product.UpdateMethod;
                         productTreeModel.Description = productEntity.Description;
                         productTreeModel.ProductGroupName = productGroupTreeModel.Name;
                         productTreeModel.OutpostName = treeModel.Name;
@@ -194,7 +194,7 @@ namespace Web.Areas.StockAdministration.Controllers
 
             outpostStockLevel.PrevStockLevel = outpostStockLevel.StockLevel;
             outpostStockLevel.StockLevel = outpostStockLevelInput.StockLevel;
-            outpostStockLevel.UpdatedMethod = UPDATE_METHOD_SYSTEM;
+            outpostStockLevel.UpdateMethod = UPDATE_METHOD_SYSTEM;
 
             SaveOrUpdateOutpostStockLevelHistorical.Execute(outpostHistoricalStockLevel);
             SaveOrUpdateOutpostStockLevel.Execute(outpostStockLevel);
@@ -212,7 +212,7 @@ namespace Web.Areas.StockAdministration.Controllers
             outpostHistoricalStockLevel.ProductId = outpostStockLevel.ProductId;
             outpostHistoricalStockLevel.StockLevel = outpostStockLevel.StockLevel;
             outpostHistoricalStockLevel.UpdateDate = outpostStockLevel.Updated;
-            outpostHistoricalStockLevel.UpdateMethod = outpostStockLevel.UpdatedMethod;
+            outpostHistoricalStockLevel.UpdateMethod = outpostStockLevel.UpdateMethod;
 
             return outpostHistoricalStockLevel;
         }

@@ -203,7 +203,7 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration.OutpostStockLevelCont
                 outpostStockLevels[i].PrevStockLevel = 2;
 
 
-                outpostStockLevels[i].UpdatedMethod = "sms";
+                outpostStockLevels[i].UpdateMethod = "sms";
 
 
                 if (i < 5)

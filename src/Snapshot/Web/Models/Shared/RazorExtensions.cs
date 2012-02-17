@@ -171,8 +171,11 @@ namespace Web.Models.Shared
             return new HelperResult(writer => writer.WriteLine(a.ToString()));
         }
 
-               
-            
+
+        public static string AssetUrl(this UrlHelper url, string uri)
+        {
+            return url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared(uri), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED);
+        }  
  
         
     }

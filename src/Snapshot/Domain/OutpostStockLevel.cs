@@ -9,14 +9,23 @@ namespace Domain
     public class OutpostStockLevel : DomainEntity
     {
         public virtual Guid OutpostId { get; set; }
+
         public virtual Guid ProdGroupId { get; set; }
         public virtual String ProductGroupName { get; set; }
         public virtual Guid ProductId { get; set; }
         public virtual String ProductName { get; set; }
         public virtual string ProdSmsRef { get; set; }
+
         public virtual int StockLevel { get; set; }
+
         public virtual int PrevStockLevel { get; set; }
-        public virtual string UpdatedMethod { get; set; }
+
+        public virtual string UpdateMethod { get; set; }
+
         public virtual Client Client { get; set; }
+
+        public virtual Product Product { get; set; }
+        public virtual ProductGroup ProductGroup { get; set; }
+        public virtual Outpost Outpost { get; set; }
     }
 }

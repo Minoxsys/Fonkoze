@@ -1,0 +1,279 @@
+﻿@using Web.Areas.StockAdministration;
+<style>
+    .x-grid-checkheader
+    {
+        height: 14px;
+        background-image: url('@Url.AssetUrl("img/unchecked.gif")');
+        background-position: 50% -2px;
+        background-repeat: no-repeat;
+        background-color: transparent;
+    }
+    
+    .x-grid-checkheader-checked
+    {
+        background-image: url('@Url.AssetUrl("img/checked.gif")');
+    }
+    
+    .x-grid-checkheader-editor .x-form-cb-wrap
+    {
+        text-align: center;
+    }
+</style>
+<script type="text/javascript">
+    window.feature.assignStores = {};
+        
+    window.feature.assignStores.productGroups = Ext.define('snapshot-Outpost-ProductGroupsStore', {
+        
+        extend: 'Ext.data.Store',
+        fields: ['Id', 'Name'],
+        proxy: {
+            type: 'ajax',
+            url: '@Url.RouteUrl(StockAdministrationAreaRegistration.DEFAULT_ROUTE, new { controller = "Product", action = "GetProductGroups" })',
+            reader: {
+                type: 'json',
+                root: 'productGroups',
+                disableCaching: true,
+                totalProperty: 'TotalItems'
+            }
+        }
+    });
+
+    window.feature.assignStores.productRecord = Ext.define('snapshot-Outpost-StockLevelRecord', {
+        extend: 'Ext.data.Model',
+            
+        fields: [
+                
+            {
+                name: 'id', type: 'string',
+                convert: function (value, record) {
+                    return record.get('Id');
+                }
+            },
+            { name: 'Name', type: 'string' },
+            { name: 'SmsCode', type: 'string' },
+            { name: 'Selected', type: 'bool' },
+            { name: 'Id', type: 'string' }
+        ]
+    });
+        
+    window.feature.assignStores.products = Ext.define('snapshot-Outpost-ProductsStore', {
+    
+        extend: 'Ext.data.Store',
+        model: window.feature.assignStores.productRecord
+    });
+        
+    window.feature.assignStores.outpostStockLevel = Ext.define('snapshot-Outpost-OutpostStockLevelStore', {
+    
+        extend: 'Ext.data.Store',
+        fields: ['Id','Name', 'Group', 'ProductItem', 'SmsCode', 'ProductLevel', 'Update']
+    });
+        
+    Ext.define('Ext.ux.CheckColumn', {
+        extend: 'Ext.grid.column.Column',
+        alias: 'widget.checkcolumn',
+        
+        tdCls: Ext.baseCSSPrefix + 'grid-cell-checkcolumn',
+                
+        constructor: function () {
+            this.addEvents(
+                'checkchange'
+                );
+            this.callParent(arguments);
+        },
+                
+        processEvent: function (type, view, cell, recordIndex, cellIndex, e) {
+            if (type == 'mousedown' || (type == 'keydown' && (e.getKey() == e.ENTER || e.getKey() == e.SPACE))) {
+                var record = view.panel.store.getAt(recordIndex),
+                dataIndex = this.dataIndex,
+                checked = !record.get(dataIndex);
+                
+                record.set(dataIndex, checked);
+                this.fireEvent('checkchange', this, recordIndex, checked);
+                // cancel selection.
+                return false;
+            }
+            else {
+                return this.callParent(arguments);
+            }
+        },
+        
+        // Note: class names are not placed on the prototype bc renderer scope
+        // is not in the header.
+        renderer: function (value) {
+            var cssPrefix = Ext.baseCSSPrefix,
+            cls = [cssPrefix + 'grid-checkheader'];
+            
+            if (value) {
+                cls.push(cssPrefix + 'grid-checkheader-checked');
+            }
+            return '<div class="' + cls.join(' ') + '">&#160;</div>';
+        }
+    });
+
+    window.feature.assignProductsModal = Ext.define('snapshot-Outpost-AssignProductsModalWindow', {
+        extend: 'Ext.window.Window',
+        modal: true,
+        height: 600,
+        width: 1200,
+        bodyPadding: 0,
+        bodyStyle: 'background-color:#fff',
+        layout: 'fit',
+
+        initComponent: function () {
+            var me = this;
+                
+            me.title=Ext.String.format('{0} - Assign a product group', me.outpostName);
+
+            me.productGroupsStore = new window.feature.assignStores.productGroups();
+            me.productsStore = new window.feature.assignStores.products({
+                proxy: {
+                    type: 'ajax',
+                    url: '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "AssignProductGroup", action = "GetProducts" })',
+                    appendId: false,
+                    id: 'ProductRecordProxy',
+                    reader: {
+                        type: 'json',
+                    },
+                    writer: {
+                        type: 'json',
+                        writeAllFields: true,
+                        encode: false
+                    }
+                },
+            });
+
+            me.outpostStockLevelStore = new window.feature.assignStores.outpostStockLevel({
+                 proxy: {
+                    type: 'ajax',
+                    url: '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "AssignProductGroup", action = "GetOutpostStockLevels" })',
+                    appendId: false,
+                    extraParams: {
+                        OutpostId: me.outpostId
+                    },
+                    id: 'OutpostStockLevelProxy',
+                    reader: {
+                        type: 'json'
+                    },
+                }
+            });
+
+            me.outpostStockLevelStore.load();
+
+                    
+                    
+            me.items = [
+                {
+                    xtype: 'panel',
+                    layout: {
+                        type: 'border'
+                    },
+                    items: [
+                        {
+                            xtype: 'gridpanel',
+                            flex:1,
+                            autoscroll:true,
+
+                            columns: [
+                                {
+                                    xtype: 'gridcolumn',
+                                    dataIndex: 'Group',
+                                    flex: 1,
+                                    text: 'Group',
+
+                                }, {
+                                    xtype: 'gridcolumn',
+                                    dataIndex: 'Product',
+                                    text: 'Product Item',
+                                    flex:1
+                                },{
+                                    xtype: 'gridcolumn',
+                                    sortable: false,
+                                    dataIndex: 'SmsCode',
+                                    text: 'SMS Code'
+                                },{
+                                    xtype: 'gridcolumn',
+                                    sortable: true,
+                                    dataIndex: 'ProductLevel',
+                                    text: 'Product Level'
+                                },{
+                                    xtype: 'gridcolumn',
+                                    sortable: true,
+                                    dataIndex: 'Update',
+                                    text: 'Update'
+                                }
+                            ],
+                            region: 'center'
+                        }, {
+                            xtype: 'panel',
+                            preventHeader:true,
+                            width: 380,
+                            split: true, // 
+                            collapsible: true,   // make collapsible
+                            region: 'west',
+                            layout:{
+                                type:'vbox',
+                                align:'stretch'
+                            }
+                            ,
+                            items: [
+                                {
+                                    xtype: 'label',
+                                    text: 'Outpost Name: ' + me.outpostName
+                                }, {
+                                    xtype: 'combobox',
+                                    fieldLabel: 'Product Group',
+                                    store: me.productGroupsStore,
+                                    valueField:'Id',
+                                    displayField:'Name',
+                                    editable:false,
+                                    listeners:{
+                                        'select':function(combo, record){
+                                            console.log('>>>', combo.getValue());
+                                            if(combo.getValue()){
+                                                me.productsStore.getProxy().extraParams={
+                                                    productGroupId: combo.getValue()
+                                                };
+
+                                                me.productsStore.load();
+                                            }
+                                       }
+                                    }
+                                }, {
+                                    xtype: 'gridpanel',
+                                    flex: 1,
+                                    store: me.productsStore,
+                                    columns: [
+                                        {
+                                            xtype: 'gridcolumn',
+                                            dataIndex: 'Name',
+                                            flex: 1,
+                                            text: 'Products'
+                                        }, {
+                                            xtype: 'gridcolumn',
+                                            sortable: false,
+                                            dataIndex: 'SmsCode',
+                                            text: 'SMS Code'
+                                        }, {
+                                            xtype: 'checkcolumn',
+                                            sortable: false,
+                                            dataIndex: 'Selected',
+                                            text: 'Selected'
+                                        }
+                                    ],
+                                    viewConfig: {
+    
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ];
+    
+            me.callParent(arguments);
+    
+        }
+    
+
+    });
+</script>

@@ -77,6 +77,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="When_Loading_A_Country_It_ShouldAlsoBring_TheRegionNo_InOneQuery.cs" />
+    <Compile Include="When_WeWantToPersiste_An_OutpostStockLevel.cs" />
     <Compile Include="When_WeWantToPersist_An_EmailRequest.cs" />
     <Compile Include="When_WeWantToPersist_An_product.cs" />
     <Compile Include="When_WeWantToPersist_A_OutpostStockLevelHistorical.cs" />

@@ -246,7 +246,7 @@ namespace Web.Areas.OutpostManagement.Controllers
                     stockLevel.ProdSmsRef = product.SMSReferenceCode;
                     stockLevel.StockLevel = 0;
                     stockLevel.PrevStockLevel = 0;
-                    stockLevel.UpdatedMethod = "SMS";
+                    stockLevel.UpdateMethod = "SMS";
                     stockLevel.Client = client;
  
                     var stockLevelCheck = stockLevels.Where(m => m.ProductId == item.ProductId).FirstOrDefault();

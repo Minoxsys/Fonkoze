@@ -30,7 +30,8 @@
 
 </script>
 @{
-	Html.RenderPartial("_OutpostContacts"); 
+	Html.RenderPartial("_OutpostContacts");
+    Html.RenderPartial("_OutpostAssignProducts");	
 }
 <script type="text/javascript">
 	var allowUserToClearValue = {
@@ -672,6 +673,16 @@
 					loadMask: true,
 					flex:3,
 					autoScroll:true,
+					  listeners: {
+                        itemclick:function(view, rec, item, index, eventObj) {
+                        console.log('outpostId', rec.get('Id'));
+                            var assignProducts = new window.feature.assignProductsModal({
+                                outpostId: rec.get('Id'),
+                                outpostName: rec.get('Name')
+                            });
+                            assignProducts.show();
+                        }
+                    },
 					columns: [
 						{
 							text: "Outpost Name",

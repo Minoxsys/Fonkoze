@@ -175,7 +175,7 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration
                 outpostStockLevels[i].PrevStockLevel = 2;
                 outpostStockLevelsHistorical[i].PrevStockLevel = 2;
 
-                outpostStockLevels[i].UpdatedMethod = "sms";
+                outpostStockLevels[i].UpdateMethod = "sms";
                 outpostStockLevelsHistorical[i].UpdateMethod = "sms";
 
                 if (i < 5)
