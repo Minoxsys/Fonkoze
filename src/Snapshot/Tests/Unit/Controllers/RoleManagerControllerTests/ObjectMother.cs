@@ -8,6 +8,7 @@ using Core.Domain;
 using Rhino.Mocks;
 using Web.Models.RoleManager;
 using Persistence.Queries.Roles;
+using Web.Models.Shared;
 
 namespace Tests.Unit.Controllers.RoleManagerControllerTests
 {
@@ -27,7 +28,7 @@ namespace Tests.Unit.Controllers.RoleManagerControllerTests
         public Guid roleId;
         public Role role;
 
-        public RoleManagerIndexModel indexModel;
+        public IndexModel indexModel;
         public RoleManagerInputModel inputModel;
         public Permission[] permissions;
 
@@ -64,7 +65,7 @@ namespace Tests.Unit.Controllers.RoleManagerControllerTests
             role.Employees = new List<User>();
             role.Functions = permissions.ToList();
 
-            indexModel = new RoleManagerIndexModel()
+            indexModel = new IndexModel()
             {
                 dir = "ASC",
                 limit = 50,

@@ -324,6 +324,49 @@ create table RawSmsReceiveds (
 end
 
 
+if not exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'ScheduleFrequency')
+begin
+create table ScheduleFrequency (
+	Id UNIQUEIDENTIFIER not null,
+	FrequencyType NVARCHAR(255) not null,
+	FrequencyValue INT not null,
+	StartOn INT not null,
+	Created DATETIME null,
+    Updated DATETIME null,
+    ByUser_FK UNIQUEIDENTIFIER null,
+	primary key (Id)
+	)
+end
+
+if not exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'RequestSchedule')
+begin
+create table ScheduleFrequency (
+	Id UNIQUEIDENTIFIER not null,
+	ScheduleName NVARCHAR(255) not null,
+	FrequencyId INT not null,
+	ScheduleBasis NVARCHAR(255) not null,
+	CampaignId INT null,
+	Created DATETIME null,
+    Updated DATETIME null,
+    ByUser_FK UNIQUEIDENTIFIER null,
+	primary key (Id)
+	)
+end
+
+if not exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'RequestReminder')
+begin
+create table RequestReminder (
+	Id UNIQUEIDENTIFIER not null,
+	PeriodType NVARCHAR(255) not null,
+	PeriodValue INT not null,
+	RequestScheduleId INT not null,
+	Created DATETIME null,
+    Updated DATETIME null,
+    ByUser_FK UNIQUEIDENTIFIER null,
+	primary key (Id)
+	)
+end
+
 if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='UniqueProductNameForProductGroup')
 begin
 	ALTER TABLE Products
@@ -607,4 +650,49 @@ begin
         add constraint ByUser_RawSmsReceiveds_FK 
         foreign key (ByUser_FK) 
         references Users
+end
+
+if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='ByUser_RequestReminders_FK')
+begin
+
+    alter table RequestReminder 
+        add constraint ByUser_RequestReminders_FK 
+        foreign key (ByUser_FK) 
+        references Users
+end
+
+if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='ByUser_ScheduleFrequencys_FK')
+begin
+
+    alter table ScheduleFrequency 
+        add constraint ByUser_ScheduleFrequencys_FK 
+        foreign key (ByUser_FK) 
+        references Users
+end
+
+if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='ByUser_RequestSchedules_FK')
+begin
+
+    alter table RequestSchedule 
+        add constraint ByUser_RequestSchedules_FK 
+        foreign key (ByUser_FK) 
+        references Users
+end
+
+if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='FrequencyId_RequestSchedules_FK')
+begin
+
+    alter table RequestSchedule 
+        add constraint FrequencyId_RequestSchedules_FK 
+        foreign key (FrequencyId) 
+        references ScheduleFrequency
+end
+
+if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='RequestScheduleId_RequestReminders_FK')
+begin
+
+    alter table RequestReminder 
+        add constraint RequestScheduleId_RequestReminders_FK 
+        foreign key (RequestScheduleId) 
+        references RequestSchedule
 end

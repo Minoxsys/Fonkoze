@@ -55,6 +55,9 @@
     <Compile Include="ProductGroup.cs" />
     <Compile Include="Product.cs" />
     <Compile Include="WorkItem.cs" />
+    <Compile Include="Reminder.cs" />
+    <Compile Include="RequestSchedule.cs" />
+    <Compile Include="ScheduleFrequency.cs" />
     <Compile Include="SmsRequest.cs" />
     <Compile Include="WorldCountryRecord.cs" />
   </ItemGroup>

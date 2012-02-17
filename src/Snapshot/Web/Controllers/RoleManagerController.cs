@@ -56,7 +56,7 @@ namespace Web.Controllers
         }
 
         [HttpGet]
-        public JsonResult GetListOfRoles(RoleManagerIndexModel indexModel)
+        public JsonResult GetListOfRoles(IndexModel indexModel)
         {
             var pageSize = indexModel.limit.Value;
             var rolesDataQuery = QueryServiceRole.Query();

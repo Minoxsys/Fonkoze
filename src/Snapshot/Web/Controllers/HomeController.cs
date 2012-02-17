@@ -22,7 +22,7 @@ namespace Web.Controllers
             {
                 return new EmptyResult();
             }
-            IndexModel listModel = new IndexModel();
+            Web.Models.Home.IndexModel listModel = new Web.Models.Home.IndexModel();
 
 
             return View(listModel);

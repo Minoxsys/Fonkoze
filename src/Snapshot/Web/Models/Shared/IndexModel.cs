@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace Web.Models.RoleManager
+namespace Web.Models.Shared
 {
-    public class RoleManagerIndexModel
+    public class IndexModel
     {
         public string _dc { get; set; }
 

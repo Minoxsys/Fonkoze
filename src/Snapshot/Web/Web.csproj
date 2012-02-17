@@ -244,6 +244,7 @@
     <Compile Include="Controllers\ClientManagerController.cs" />
     <Compile Include="Controllers\EmailRequestController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\RequestScheduleManagerController.cs" />
     <Compile Include="Controllers\SmsRequestController.cs" />
     <Compile Include="Controllers\UnauthorizedAccessController.cs" />
     <Compile Include="Global.asax.cs">
@@ -293,12 +294,13 @@
     <Compile Include="Models\EmailRequest\ReferenceModel.cs" />
     <Compile Include="Models\Home\AboutModel.cs" />
     <Compile Include="Models\Home\IndexModel.cs" />
+    <Compile Include="Models\RequestScheduleManager\RequestScheduleListForJsonOutput.cs" />
+    <Compile Include="Models\RequestScheduleManager\RequestScheduleReferenceModel.cs" />
     <Compile Include="Models\RoleManager\RoleManagerAssignModel.cs" />
     <Compile Include="Models\RoleManager\RoleManagerCreateInput.cs" />
     <Compile Include="Models\RoleManager\RoleManagerCreateOutputModel.cs" />
     <Compile Include="Models\RoleManager\RoleManagerEditInput.cs" />
     <Compile Include="Models\RoleManager\RoleManagerEditOutput.cs" />
-    <Compile Include="Models\RoleManager\RoleManagerIndexModel.cs" />
     <Compile Include="Models\RoleManager\RoleManagerIndexOutputModel.cs" />
     <Compile Include="Models\RoleManager\RoleManagerInputModel.cs" />
     <Compile Include="Models\RoleManager\RoleManagerListForJsonOutput.cs" />
@@ -306,6 +308,7 @@
     <Compile Include="Models\RoleManager\RoleReferenceModel.cs" />
     <Compile Include="Models\Shared\Event.cs" />
     <Compile Include="Models\Shared\EventsCalendarModel.cs" />
+    <Compile Include="Models\Shared\IndexModel.cs" />
     <Compile Include="Models\Shared\JsonActionResponse.cs" />
     <Compile Include="Models\Shared\FormattingExtensions.cs" />
     <Compile Include="Models\Shared\InputModel.cs" />
@@ -1838,6 +1841,9 @@
     <None Include="Assets\sass\snapshot-theme.scss" />
     <Content Include="Views\Alerts\Overview.cshtml" />
     <Content Include="Views\Shared\_AlertsSubNavigation.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\RequestScheduleManager\Overview.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
