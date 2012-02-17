@@ -1,0 +1,217 @@
+﻿@using Domain
+@using Microsoft.Web.Mvc;
+@section page_title{
+User Administration Roles: Overview
+}
+@{
+    Html.RenderPartial("_SubNavigation");
+    Html.RenderPartial("_UserAdministrationSideBar");
+}
+<script type="text/javascript">
+    Ext.onReady(function () {
+        var administrationBtnId = window.res.header.navigation.administration;
+        var administrationBtn = Ext.getCmp(administrationBtnId);
+        administrationBtn.toggle(true);
+
+        var userAdministrationBtnId = window.res.header.subnavigation.buttonTabs.user;
+        var userAdministrationBtn = Ext.getCmp(userAdministrationBtnId);
+        userAdministrationBtn.toggle(true);
+
+        var rolesGroupBtnId = window.res.content.maincontent.sidebar.roles;
+        var rolesGroupBtn = Ext.getCmp(rolesGroupBtnId);
+        rolesGroupBtn.toggle(true);
+    });
+</script>
+<script type="text/javascript">
+    Ext.onReady(function () {
+        window.feature = {};
+        window.feature.searchScheduleId = 'Search-Schedule-Id';
+
+        Ext.define('Ext.feature.Schedule', {
+            extend: 'Ext.data.Model',
+            fields: [
+                { name: 'Id', type: 'string' },
+                { name: 'ScheduleName', type: 'string' },
+                { name: 'Basis', type: 'string' },
+                { name: 'Frequency', type: 'string' },
+                { name: 'Reminders' },
+                {
+                    name: 'RemindersForDisplay',
+                    type: 'string',
+                    convert: function (value, record) {
+                        var result = [];
+                        var i;
+                        var reminders = value.Reminders;
+                        for (i = 0; i < reminders.length; i++) {
+                            result[i] = Ext.String.format('{0} {1} later', reminders[i].PeriodValue, reminders[i].PeriodType);
+                        }
+
+                        return result.join(' ');
+                    }
+                },
+                { name: 'CreationDate', type: 'string' },
+            ]
+        });
+
+        window.feature.store = Ext.create('Ext.data.Store', {
+            model: 'Ext.feature.Schedule',
+            pageSize: 25,
+            autoLoad: true,
+            proxy: {
+                type: 'ajax',
+                url: '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "RequestScheduleManager", action = "GetListOfRequestSchedules" })',
+                reader: {
+                    type: 'json',
+                    root: 'RequestSchedules',
+                    totalProperty: 'TotalItems'
+                },
+                extraParams: { searchValue: '' },
+                simpleSortMode: true
+            },
+            remoteSort: true,
+            sorters: [{
+                property: 'ScheduleName',
+                direction: 'ASC'
+            }]
+        });
+
+        window.feature.automaticScheduleHeader = Ext.create('Ext.container.Container', {
+            layout: 'hbox',
+            anchor: '100% 5%',
+            items: [
+                {
+                    xtype: 'container',
+                    flex: 1,
+                    layout: 'column',
+                    items: [
+                        Ext.create('Ext.Img',
+                        {
+                            src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/briefcase.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                            width: 35,
+                            height: 35
+                        }),
+                        {
+                            xtype: 'label',
+                            text: 'Automatic Schedule',
+                            margin: '0 0 0 10'
+                        },
+                        {
+                            xtype: 'button',
+                            text: 'Add a New Schedule',
+                            margin: '0 0 0 20',
+                            handler: function () {
+
+                            }
+                        }
+                    ]
+                },
+                {
+                    xtype: 'container',
+                    layout: {
+                        type: 'hbox',
+                        pack: 'end'
+                    },
+                    flrex: 1,
+                    items: [{
+                        xtype: 'textfield',
+                        itemId: window.feature.searchRoleId,
+                        padding: '0 0 0 200',
+                        width: 200,
+                        frame: true,
+                        emptyText: 'Role Search',
+                        enableKeyEvents: true,
+                        listeners: {
+                            'keyup': {
+                                fn: function (key) {
+                                    var searchValue = window.feature.container.down('#' + window.feature.searchScheduleId).getValue();
+                                    window.feature.store.proxy.extraParams.searchValue = searchValue;
+                                    window.feature.store.loadPage(1);
+                                }
+                            }
+                        }
+                    }]
+                }
+            ]
+        });
+
+        window.feature.grid = Ext.create('Ext.grid.Panel', {
+            store: window.feature.store,
+            loadMask: true,
+            disableSelection: true,
+            anchor: '100% 95%',
+            autoScroll: true,
+            columns: [
+                    {
+                        header: 'Schedule Name',
+                        dataIndex: 'ScheduleName',
+                        flex: 3,
+                        sortable: true
+                    },
+                    {
+                        header: 'Basis',
+                        dataIndex: 'Basis',
+                        flex: 2,
+                        sortable: true
+                    },
+                    {
+                        header: 'Frequency',
+                        dataIndex: 'Frequency',
+                        flex: 2,
+                        sortable: true
+                    },
+                    {
+                        header: 'Reminders',
+                        dataIndex: 'RemindersForDisplay',
+                        flex: 2,
+                        sortable: false
+                    },
+                    {
+                        header: 'Creation Date',
+                        xtype: 'datecolumn',
+                        dataIndex: 'CreationDate',
+                        flex: 2,
+                        sortable: true
+                    },
+                    {
+                        xtype: 'actioncolumn',
+                        text: 'Actions',
+                        flex: 1,
+                        items: [
+                            {
+                                icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/edit.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                                handler: function (grid, rowIndex, colIndex) {
+
+                                }
+                            },
+                            {
+                                icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/delete.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                                handler: function (grid, rowIndex, colIndex) {
+
+                                }
+                            }
+                        ]
+                    }
+                ],
+            bbar: Ext.create('Ext.PagingToolbar', {
+                store: window.feature.store,
+                displayInfo: true,
+                displayMsg: 'Displaying topics {0} - {1} of {2}',
+                emptyMsg: "No topics to display"
+            })
+        });
+
+        window.feature.container = Ext.create('Ext.container.Container', {
+            margin: '20 50 20 0',
+            height: 760,
+            autoScroll: true,
+            id: 'TopContainer',
+            layout: 'anchor',
+            items: [window.feature.rolesAdministrationHeader, window.feature.grid]
+        });
+
+        var contentRes = window.res.content;
+        var mainContent = Ext.getCmp(contentRes.maincontent.id);
+
+        mainContent.add(window.feature.container);
+    });
+</script>

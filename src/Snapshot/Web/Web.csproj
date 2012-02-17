@@ -152,6 +152,7 @@
     <Compile Include="Areas\CampaignManagement\CampaignManagementAreaRegistration.cs" />
     <Compile Include="Areas\CampaignManagement\Controllers\CampaignController.cs" />
     <Compile Include="Areas\CampaignManagement\Models\Campaign\CampaignOutputModel.cs" />
+    <Compile Include="Areas\CampaignManagement\Models\RequestSchedule\RequestScheduleInputModel.cs" />
     <Compile Include="Areas\CampaignManagement\Models\Campaign\CampaignOverviewInputModel.cs" />
     <Compile Include="Areas\CampaignManagement\Models\Campaign\CampaignOverviewOutputModel.cs" />
     <Compile Include="Areas\CampaignManagement\Models\Campaign\LocationEntitiesInput.cs" />
@@ -244,7 +245,7 @@
     <Compile Include="Controllers\ClientManagerController.cs" />
     <Compile Include="Controllers\EmailRequestController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\RequestScheduleManagerController.cs" />
+    <Compile Include="Areas\CampaignManagement\Controllers\RequestScheduleController.cs" />
     <Compile Include="Controllers\SmsRequestController.cs" />
     <Compile Include="Controllers\UnauthorizedAccessController.cs" />
     <Compile Include="Global.asax.cs">
@@ -294,8 +295,8 @@
     <Compile Include="Models\EmailRequest\ReferenceModel.cs" />
     <Compile Include="Models\Home\AboutModel.cs" />
     <Compile Include="Models\Home\IndexModel.cs" />
-    <Compile Include="Models\RequestScheduleManager\RequestScheduleListForJsonOutput.cs" />
-    <Compile Include="Models\RequestScheduleManager\RequestScheduleReferenceModel.cs" />
+    <Compile Include="Areas\CampaignManagement\Models\RequestSchedule\RequestScheduleListForJsonOutput.cs" />
+    <Compile Include="Areas\CampaignManagement\Models\RequestSchedule\RequestScheduleReferenceModel.cs" />
     <Compile Include="Models\RoleManager\RoleManagerAssignModel.cs" />
     <Compile Include="Models\RoleManager\RoleManagerCreateInput.cs" />
     <Compile Include="Models\RoleManager\RoleManagerCreateOutputModel.cs" />
@@ -1843,7 +1844,7 @@
     <Content Include="Views\Shared\_AlertsSubNavigation.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\RequestScheduleManager\Overview.cshtml" />
+    <Content Include="Areas\CampaignManagement\Views\RequestScheduleManager\Overview.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

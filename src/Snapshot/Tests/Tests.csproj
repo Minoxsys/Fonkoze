@@ -157,8 +157,11 @@
     <Compile Include="Unit\Controllers\EmailRequestControllerTests\CreateMethod.cs" />
     <Compile Include="Unit\Controllers\EmailRequestControllerTests\ObjectMother.cs" />
     <Compile Include="Unit\Controllers\EmailRequestControllerTests\ResponseMethod.cs" />
-    <Compile Include="Unit\Controllers\RequestScheduleManagerControllerTests\GetListOfRequestSchedulesMethod.cs" />
-    <Compile Include="Unit\Controllers\RequestScheduleManagerControllerTests\ObjectMother.cs" />
+    <Compile Include="Unit\Controllers\RequestScheduleControllerTests\CreateMethod.cs" />
+    <Compile Include="Unit\Controllers\RequestScheduleControllerTests\DeleteMethod.cs" />
+    <Compile Include="Unit\Controllers\RequestScheduleControllerTests\EditMethod.cs" />
+    <Compile Include="Unit\Controllers\RequestScheduleControllerTests\GetListOfRequestSchedulesMethod.cs" />
+    <Compile Include="Unit\Controllers\RequestScheduleControllerTests\ObjectMother.cs" />
     <Compile Include="Unit\Controllers\RoleManagerControllerTests\CreateMethod.cs" />
     <Compile Include="Unit\Controllers\RoleManagerControllerTests\DeleteMethod.cs" />
     <Compile Include="Unit\Controllers\RoleManagerControllerTests\EditMethod.cs" />
