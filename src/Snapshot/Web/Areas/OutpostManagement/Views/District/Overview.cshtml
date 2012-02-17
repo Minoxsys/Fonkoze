@@ -463,7 +463,7 @@ Districts: Overview
                 xtype: 'actioncolumn',
                 text: 'Actions',
                 items: [{
-                    icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/edit.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',     
+                    icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/edit.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
                     tooltip: _t('Edit this district'),
                     handler: function (grid, rowIndex, colIndex) {
                         var record = grid.store.getAt(rowIndex);
@@ -479,7 +479,7 @@ Districts: Overview
 
                     }
                 },{
-                    icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/delete.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',     
+                    icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/delete.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
                     tooltip: _t('Remove this district'),
                     handler: function (grid, rowIndex, colIndex) {
                         var record = grid.store.getAt(rowIndex);

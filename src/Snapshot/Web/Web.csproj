@@ -149,6 +149,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Areas\OutpostManagement\Controllers\AssignProductGroupController.cs" />
+    <Compile Include="Areas\CampaignManagement\CampaignManagementAreaRegistration.cs" />
+    <Compile Include="Areas\CampaignManagement\Controllers\CampaignController.cs" />
     <Compile Include="Areas\OutpostManagement\Controllers\ContactController.cs" />
     <Compile Include="Areas\OutpostManagement\Controllers\CountryController.cs" />
     <Compile Include="Areas\OutpostManagement\Controllers\DistrictController.cs" />
@@ -330,6 +332,7 @@
     <Content Include="Assets\css\ext-all.css" />
     <Content Include="Assets\css\ext-ie.css" />
     <Content Include="Assets\css\snapshot-theme.css" />
+    <Content Include="Assets\img\arrow.gif" />
     <Content Include="Assets\resources\img\briefcase.png" />
     <Content Include="Assets\resources\img\delete.png" />
     <Content Include="Assets\resources\img\edit.png" />
@@ -1567,6 +1570,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Areas\CampaignManagement\Models\" />
     <Folder Include="Areas\OutpostManagement\Services\" />
     <Folder Include="Models\Alerts\" />
   </ItemGroup>
@@ -1645,6 +1649,16 @@
     <None Include="Assets\resources\themes\stylesheets\ext4\default\mixins\_background-gradient.scss" />
     <None Include="Assets\resources\themes\stylesheets\ext4\default\mixins\_color-by-background.scss" />
     <None Include="Assets\resources\themes\stylesheets\ext4\default\mixins\_frame.scss" />
+    <Content Include="Areas\CampaignManagement\Views\Web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CampaignManagement\Views\Campaign\Overview.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CampaignManagement\Views\Shared\_CampaignManagementSideBar.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CampaignManagement\Views\_ViewStart.cshtml" />
     <None Include="Assets\resources\themes\stylesheets\ext4\default\mixins\_inner-border.scss" />
     <None Include="Assets\resources\themes\stylesheets\ext4\default\mixins\_reset-extras.scss" />
     <None Include="Assets\resources\themes\stylesheets\ext4\default\mixins\_theme-background-image.scss" />

@@ -1,7 +1,10 @@
 ﻿@using Web.Areas.OutpostManagement;
 @using Web.Areas.OutpostManagement.Controllers;
 @using Web.Areas.StockAdministration.Controllers;
+@using Web.Areas.CampaignManagement.Controllers;
+@using Web.Areas.CampaignManagement;
 @using Web.Bootstrap.Routes;
+
 <!DOCTYPE html>
     <html>
 <head>
@@ -39,7 +42,8 @@
             outpostStockLevelCurrent:'@(Url.RouteUrl<Web.Areas.StockAdministration.Controllers.OutpostStockLevelController>(x=>x.Overview(),Web.Areas.StockAdministration.StockAdministrationAreaRegistration.DEFAULT_ROUTE))',
             rolesOverview: '@(Url.RouteUrl<RoleManagerController>( x=>x.Overview() ,  Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE ))',
             historicalLevel: '@(Url.RouteUrl<HistoricalProductLevelController>( x=>x.Overview() ,  Web.Areas.StockAdministration.StockAdministrationAreaRegistration.DEFAULT_ROUTE ))',
-            alerts: '@(Url.RouteUrl<AlertsController>(x => x.Overview(), Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE))',
+            campaignOverview: '@(Url.RouteUrl<CampaignController>(x=>x.Overview(),CampaignManagementAreaRegistration.DEFAULT_ROUTE))',
+            alerts: '@(Url.RouteUrl<AlertsController>(x => x.Overview(), Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE))'
 
         },
         header:{
