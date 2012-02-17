@@ -7,6 +7,7 @@ using Rhino.Mocks;
 using Domain;
 using System.Web.Mvc;
 using Web.Areas.StockAdministration.Models.HistoricalProductLevel;
+using Web.Models.Shared;
 
 namespace Tests.Unit.Controllers.Areas.StockAdministration.HistoricalProductLevelControllerTests
 {
@@ -38,8 +39,7 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration.HistoricalProductLeve
             objectMother.queryProductGroups.VerifyAllExpectations();
 
             Assert.IsNotNull(jsonResult);
-            Assert.That(jsonResult, Is.InstanceOfType<JsonResult>());
-            Assert.That(jsonResult.Data, Is.InstanceOfType<OutpostIndexGridModel>());
+            Assert.IsInstanceOf<OutpostIndexGridModel>(jsonResult.Data);
             var jsonData = jsonResult.Data as OutpostIndexGridModel;
             Assert.IsNotNull(jsonData);
 
@@ -65,8 +65,7 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration.HistoricalProductLeve
             objectMother.queryProductGroups.VerifyAllExpectations();
 
             Assert.IsNotNull(jsonResult);
-            Assert.That(jsonResult, Is.InstanceOfType<JsonResult>());
-            Assert.That(jsonResult.Data, Is.InstanceOfType<OutpostIndexGridModel>());
+            Assert.IsInstanceOf<OutpostIndexGridModel>(jsonResult.Data);
             var jsonData = jsonResult.Data as OutpostIndexGridModel;
             Assert.IsNotNull(jsonData);
 
@@ -89,8 +88,7 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration.HistoricalProductLeve
             objectMother.queryHistorical.VerifyAllExpectations();
 
             Assert.IsNotNull(jsonResult);
-            Assert.That(jsonResult, Is.InstanceOfType<JsonResult>());
-            Assert.That(jsonResult.Data, Is.InstanceOfType<OutpostIndexGridModel>());
+            Assert.IsInstanceOf<OutpostIndexGridModel>(jsonResult.Data);
             var jsonData = jsonResult.Data as OutpostIndexGridModel;
             Assert.IsNotNull(jsonData);
 

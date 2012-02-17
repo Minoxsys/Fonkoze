@@ -28,7 +28,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement
         IQueryService<Country> queryCountry;
         IQueryService<Region> queryRegion;
         IQueryService<District> queryDistrict;
-        IQueryService<Product> queryProduct;
+
         IQueryService<Client> queryClient;
         IQueryService<Contact> queryContact;
 

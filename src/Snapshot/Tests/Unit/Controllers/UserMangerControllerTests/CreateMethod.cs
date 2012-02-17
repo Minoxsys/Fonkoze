@@ -31,20 +31,16 @@ namespace Tests.Unit.Controllers.UserMangerControllerTests
             UserManagerInputModel userInputModel = new UserManagerInputModel()
             {
                ClientId = objectMother.client.Id,
-               ClientName = objectMother.client.Name,
+               UserName = objectMother.user.UserName,
                Email = objectMother.user.Email,
                FirstName = objectMother.user.FirstName,
                LastName = objectMother.user.LastName,
                Password = objectMother.user.Password,
-               RoleId = objectMother.user.RoleId,
-               RoleName = objectMother.user.RoleName,
-               UserName = objectMother.user.UserName
+               RoleId = objectMother.user.RoleId
             };
             objectMother.saveCommand.Expect(call => call.Execute(Arg<User>.Matches(p => p.UserName == objectMother.user.UserName && 
                                                                                         p.FirstName == objectMother.user.FirstName &&
-                                                                                        p.LastName == objectMother.user.LastName &&
-                                                                                        p.RoleName == objectMother.user.RoleName &&
-                                                                                        p.ClientName == objectMother.user.ClientName
+                                                                                        p.LastName == objectMother.user.LastName 
                                                                                    )));
 
             //Act

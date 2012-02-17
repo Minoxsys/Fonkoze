@@ -44,7 +44,6 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.DistrictControllerTests
         Guid regionId;
         Guid outpostId;
         Guid clientId;
-        Guid userId;
 
        
         public void Init()

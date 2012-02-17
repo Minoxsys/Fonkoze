@@ -44,26 +44,24 @@ namespace Tests.Unit.Controllers.UserMangerControllerTests
             {
                 Id = objectMother.user.Id,
                 ClientId = objectMother.client.Id,
-                ClientName = objectMother.client.Name,
                 Email = objectMother.user.Email,
                 FirstName = objectMother.user.FirstName,
                 LastName = objectMother.user.LastName,
                 Password = objectMother.user.Password,
-                RoleId = objectMother.user.RoleId,
-                RoleName = objectMother.user.RoleName,
-                UserName = objectMother.user.UserName
+                UserName = objectMother.user.UserName,
+                RoleId = objectMother.user.RoleId
             };
             objectMother.saveCommand.Expect(call => call.Execute(Arg<User>.Matches(p => p.UserName == objectMother.user.UserName &&
                                                                                         p.FirstName == objectMother.user.FirstName &&
                                                                                         p.LastName == objectMother.user.LastName &&
-                                                                                        p.RoleName == objectMother.user.RoleName &&
-                                                                                        p.ClientName == objectMother.user.ClientName &&
                                                                                         p.Id == objectMother.user.Id
                                                                                    )));
+            objectMother.queryUsers.Expect(call => call.Load(objectMother.userId)).Return(objectMother.user);
             //Act
             var jsonResult = objectMother.controller.Edit(userInputModel);
 
             //Assert
+            objectMother.queryUsers.VerifyAllExpectations();
             objectMother.saveCommand.VerifyAllExpectations();
             var response = jsonResult.Data as JsonActionResponse;
             Assert.IsNotNull(response);

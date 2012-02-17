@@ -41,8 +41,7 @@ namespace Tests.Unit.Controllers.UserMangerControllerTests
             //Assert
             objectMother.queryUsers.VerifyAllExpectations();
 
-            Assert.That(jsonResult, Is.InstanceOfType<JsonResult>());
-            Assert.That(jsonResult.Data, Is.InstanceOfType<UserIndexOutputModel>());
+            Assert.IsInstanceOf<UserIndexOutputModel>(jsonResult.Data);
             var jsonData = jsonResult.Data as UserIndexOutputModel;
             Assert.IsNotNull(jsonData);
 

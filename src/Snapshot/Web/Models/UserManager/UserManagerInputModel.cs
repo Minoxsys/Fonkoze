@@ -15,8 +15,7 @@ namespace Web.Models.UserManager
         public string Email { get; set; }
         public Guid RoleId { get; set; }
         public Guid ClientId { get; set; }
-        public string RoleName { get; set; }
-        public string ClientName { get; set; }
+
 
     }
 }

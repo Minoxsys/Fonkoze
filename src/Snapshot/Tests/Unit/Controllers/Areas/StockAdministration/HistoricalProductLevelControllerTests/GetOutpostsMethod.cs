@@ -33,8 +33,7 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration.HistoricalProductLeve
             objectMother.queryOutposts.VerifyAllExpectations();
 
             Assert.IsNotNull(jsonResult);
-            Assert.That(jsonResult, Is.InstanceOfType<JsonResult>());
-            Assert.That(jsonResult.Data, Is.InstanceOfType<GetOutpostsOutputModel>());
+            Assert.IsInstanceOf<GetOutpostsOutputModel>(jsonResult.Data);
             var jsonData = jsonResult.Data as GetOutpostsOutputModel;
             Assert.IsNotNull(jsonData);
 
@@ -51,8 +50,7 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration.HistoricalProductLeve
 
             //Assert
             Assert.IsNotNull(jsonResult);
-            Assert.That(jsonResult, Is.InstanceOfType<JsonResult>());
-            Assert.That(jsonResult.Data, Is.InstanceOfType<GetOutpostsOutputModel>());
+            Assert.IsInstanceOf<GetOutpostsOutputModel>(jsonResult.Data);
             var jsonData = jsonResult.Data as GetOutpostsOutputModel;
             Assert.IsNotNull(jsonData);
 

@@ -12,8 +12,6 @@ namespace Core.Domain
         public virtual string UserName {get; set; }
         public virtual string Password { get; set; }
         public virtual string Email { get; set; }
-        public virtual string RoleName { get; set; }
-        public virtual string ClientName { get; set; }
 
         public virtual Guid ClientId { get; set; }
         public virtual Guid RoleId { get; set; }

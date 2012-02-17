@@ -83,9 +83,7 @@ namespace Tests.Unit.Controllers.UserMangerControllerTests
             user.Password = "123asd";
             user.UserName = "Ion.Pop";
             user.ClientId = client.Id;
-            user.ClientName = client.Name;
             user.RoleId = role.Id;
-            user.RoleName = role.Name;
         }
 
         public IQueryable<User> PageOfUsersData(UserManagerIndexModel indexModel)
@@ -100,9 +98,7 @@ namespace Tests.Unit.Controllers.UserMangerControllerTests
                     LastName = user.LastName,
                     UserName = i + user.UserName,
                     Email = i + user.Email,
-                    Password = user.Password,
-                    RoleName = user.RoleName,
-                    ClientName = user.ClientName,
+                    Password = user.Password
                 });
             }
             return userPageList.AsQueryable();

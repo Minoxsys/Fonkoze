@@ -66,9 +66,12 @@ namespace Web.Controllers
             }
 
             var user = new User();
+            user = QueryUsers.Load(inputModel.Id);
+
             CreateMapping();
 
-            inputModel.Password = SecurePassword.EncryptPassword(inputModel.Password);
+            if (string.IsNullOrEmpty(inputModel.Password))
+                inputModel.Password = user.Password;
 
             Mapper.Map(inputModel, user);
 
@@ -123,11 +126,7 @@ namespace Web.Controllers
                 { "FirstName-ASC", () => usersDataQuery.OrderBy(c => c.FirstName) },
                 { "FirstName-DESC", () => usersDataQuery.OrderByDescending(c => c.FirstName) },
                 { "LastName-ASC", () => usersDataQuery.OrderBy(c => c.LastName) },
-                { "LastName-DESC", () => usersDataQuery.OrderByDescending(c => c.LastName) },
-                { "ClientName-ASC", () => usersDataQuery.OrderBy(c => c.ClientName) },
-                { "ClientName-DESC", () => usersDataQuery.OrderByDescending(c => c.ClientName) },
-                { "RoleName-ASC", () => usersDataQuery.OrderBy(c => c.RoleName) },
-                { "RoleName-DESC", () => usersDataQuery.OrderByDescending(c => c.RoleName) },
+                { "LastName-DESC", () => usersDataQuery.OrderByDescending(c => c.LastName) }
             };
 
             usersDataQuery = orderByColumnDirection[String.Format("{0}-{1}", indexModel.sort, indexModel.dir)].Invoke();
@@ -152,8 +151,8 @@ namespace Web.Controllers
                                                 UserName = user.UserName,
                                                 Email = user.Email,
                                                 Password = user.Password,
-                                                ClientName = user.ClientName,
-                                                RoleName = user.RoleName,
+                                                ClientName = GetClientName(user.ClientId),
+                                                RoleName = GetRoleName(user.RoleId),
                                                 ClientId = user.ClientId,
                                                 RoleId = user.RoleId
                                             }).ToArray();
@@ -164,6 +163,20 @@ namespace Web.Controllers
                 Users = usersModelListProjection,
                 TotalItems = totalItems
             }, JsonRequestBehavior.AllowGet);
+        }
+
+        private string GetRoleName(Guid guid)
+        {
+            if (guid != Guid.Empty)
+                return QueryRoles.Load(guid).Name;
+            return string.Empty;
+        }
+
+        private string GetClientName(Guid guid)
+        {
+            if (guid != Guid.Empty)
+                return QueryClients.Load(guid).Name;
+            return string.Empty;
         }
 
         [HttpGet]
@@ -213,68 +226,6 @@ namespace Web.Controllers
             Mapper.CreateMap<UserManagerInputModel, User>();
             Mapper.CreateMap<User, UserManagerInputModel>();
         }
-
-
-
-
-
-        //public UserManagerListModel ListModel
-        //{
-        //    get;
-        //    set;
-        //}
-
-
-
-        //public UserManagerCreateModel CreateModel
-        //{
-        //    get;
-        //    set;
-        //}
-
-
-        //public UserManagerEditModel EditModel
-        //{
-        //    get;
-        //    set;
-        //}
-
-
-        //public UserManagerAssignModel AssignModel
-        //{
-        //    get;
-        //    set;
-        //}
-
-        //public UserManagerUnAssignModel UnAssignModel
-        //{
-        //    get;
-        //    set;
-        //}
-
-
-        //public ISaveOrUpdateCommand<User> SaveOrUpdate { get; set; }
-
-        //public IDeleteCommand<User> DeleteUser { get; set; }
-
-
-        ////[Requires(Permissions = "UserManager.CRUD")]
-        //public EmptyResult Assign( Guid employeeId, Guid roleId )
-        //{
-        //    AssignModel.LinkUserToRole(employeeId, roleId);
-
-        //    return new EmptyResult();
-        //}
-
-
-        ////[Requires(Permissions = "UserManager.CRUD")]
-        //public EmptyResult UnAssign( Guid employeeId, Guid roleId )
-        //{
-        //    UnAssignModel.RemoveRole(employeeId, roleId);
-
-        //    return new EmptyResult();
-        //}
-
 
     }
 }

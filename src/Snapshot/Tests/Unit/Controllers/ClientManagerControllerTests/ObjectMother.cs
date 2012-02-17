@@ -67,7 +67,6 @@ namespace Tests.Unit.Controllers.ClientManagerControllerTests
             user.Password = "123asd";
             user.UserName = "Ion.Pop";
             user.ClientId = client.Id;
-            user.ClientName = client.Name;
         }
 
         public IQueryable<Client> PageOfClientsData(ClientManagerIndexModel indexModel)

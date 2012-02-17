@@ -226,7 +226,6 @@ Product Administration Product Groups: Overview
                             xtype: 'combobox',
                             itemId: window.feature.countryComboboxId,
 			                store: window.feature.countryStore,
-                            margin: '0 0 0 20',
                             labelAlign: 'top',
                             fieldLabel: 'Selected Country',
 			                displayField: 'Name',
@@ -360,7 +359,8 @@ Product Administration Product Groups: Overview
                     ftype: 'groupingsummary',
                     groupHeaderTpl: '{name}',
                     hideGroupedHeader: true,
-                    remoteRoot: 'summaryData'
+                    remoteRoot: 'summaryData',
+                    startCollapsed: true
                 }],
                 columns: [{
                     header: "Product Group",
@@ -378,6 +378,7 @@ Product Administration Product Groups: Overview
                     flex: 1,
                     sortable: true
                 }]
+
             },{
                 xtype:'container',
                 height:150

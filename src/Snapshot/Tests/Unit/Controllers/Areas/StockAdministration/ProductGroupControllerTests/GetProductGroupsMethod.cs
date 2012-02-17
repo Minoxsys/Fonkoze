@@ -44,8 +44,7 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration.ProductGroupControlle
             objectMother.queryProductGroup.VerifyAllExpectations();
             objectMother.queryProduct.VerifyAllExpectations();
 
-            Assert.That(jsonResult, Is.InstanceOfType<JsonResult>());
-            Assert.That(jsonResult.Data, Is.InstanceOfType<ProductGroupIndexOutputModel>());
+            Assert.IsInstanceOf<ProductGroupIndexOutputModel>(jsonResult.Data);
             var jsonData = jsonResult.Data as ProductGroupIndexOutputModel;
             Assert.IsNotNull(jsonData);
 

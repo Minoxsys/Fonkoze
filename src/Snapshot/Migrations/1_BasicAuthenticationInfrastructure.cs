@@ -35,12 +35,10 @@ namespace Migrations
 				.WithColumn("FirstName").AsString(ConstraintUtility.NAME_LENGTH).Nullable()
 				.WithColumn("LastName").AsString(ConstraintUtility.NAME_LENGTH).Nullable()
 
-				.WithColumn("RoleName").AsString(ConstraintUtility.NAME_LENGTH).Nullable()
-				.WithColumn("ClientName").AsString(ConstraintUtility.NAME_LENGTH).Nullable()
 				.WithColumn("Email").AsString(ConstraintUtility.NAME_LENGTH).Nullable().Unique()
-
-				.WithColumn("RoleId").AsGuid().Nullable()
-				.WithColumn("ClientId").AsGuid();
+				.WithColumn("ClientId").AsGuid()
+                                .WithColumn("RoleId").AsGuid();
+            
 
 
 			Create.AddForeignKey("Permissions");

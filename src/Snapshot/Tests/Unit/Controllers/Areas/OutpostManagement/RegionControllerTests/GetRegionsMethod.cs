@@ -40,8 +40,8 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.RegionControllerTests
 
             //Assert
             objectMother.queryRegion.VerifyAllExpectations();
-            Assert.That(jsonResult, Is.InstanceOfType<JsonResult>());
-            Assert.That(jsonResult.Data, Is.InstanceOfType<RegionIndexOuputModel>());
+
+            Assert.IsInstanceOf<RegionIndexOuputModel>(jsonResult.Data);
             var jsonData = jsonResult.Data as RegionIndexOuputModel;
             Assert.IsNotNull(jsonData);
 

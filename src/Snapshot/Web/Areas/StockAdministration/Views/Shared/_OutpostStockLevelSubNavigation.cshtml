@@ -9,95 +9,90 @@
         var subNavRes = window.res.header.subnavigation;
         var subnav = Ext.getCmp(subNavRes.id);
 
-        subnav.add([
-            {
-                xtype: 'container',
-                id: subNavRes.buttonTabs.id,
-                margin: 0,
+        subnav.add([{
+            xtype: 'container',
+            id: subNavRes.buttonTabs.id,
+            margin: 0,
+            padding: 0,
+            width: 500,
+            layout: {
+                align: 'stretch',
                 padding: 0,
-                width: 500,
+                type: 'vbox'
+            },
+            items: [{
+                xtype: 'container',
+                flex: 1,
+                items: [{
+                    xtype: 'label',
+                    html: '&nbsp;' 
+                }]
+            },{
+                xtype: 'container',
+                layout: {
+                    type: 'column'
+                },
+                flex: 1,
+                items: []
+            }]
+        }, {
+           xtype: 'container',
+                id: 'userInfo',
+                flex: 2,
                 layout: {
                     align: 'stretch',
-                    padding: 0,
                     type: 'vbox'
                 },
-                items: [
-                        {
-                            xtype: 'container',
-                            flex: 1,
-                            items: [
-                                { xtype: 'label', html: '&nbsp;' }
-                            ]
-                        },
-                        {
-                            xtype: 'container',
-                            layout: {
-                                type: 'column'
-                            },
-                            flex: 1,
-                            items: []
-                        }
-                    ]
-            },
-                {
+                items: [{
                     xtype: 'container',
-                    id: 'userInfo',
                     flex: 1,
                     layout: {
                         align: 'stretch',
-                        type: 'vbox'
+                        pack: 'end',
+                        type: 'hbox'
                     },
-                    items: [
-                           {
-                               xtype: 'container',
-                               flex: 1,
-                               layout: {
-                                   align: 'stretch',
-                                   pack: 'end',
-                                   type: 'hbox'
-                               },
-                               items: [
-                                    {
-                                        xtype: 'container',
-                                        flex: 4,
-                                        items: [
-                                            { xtype: 'label', html: '&nbsp;' }
-                                        ]
-                                    },
-                                    { xtype: 'label', flex: 1, text: 'Anothony Wolf (UNICEF)' }
-                                ]
-                           },
-                            {
-                                xtype: 'container',
-                                flex: 1,
-                                layout: {
-                                    align: 'stretch',
-                                    pack: 'end',
-                                    type: 'hbox'
-                                },
-
-                                items: [
-                                    {
-                                        xtype: 'container',
-                                        flex: 4,
-                                        items: [
-                                            { xtype: 'label', html: '&nbsp;' }
-                                        ]
-                                    },
-                                    { xtype: 'label', flex: 1, text: 'Help    -   Account Options   -   Log Out (L)' }
-                                ]
-                            }
-                           ]
-                },
-                {
-                    xtype: 'container',
-                    itemId: 'userPhoto',
-                    width: 80,
-                    items: [
-                        { xtype: 'label', text: 'photo' }
-                    ]
-                }
-        ]);
+                    items: [{
+                        xtype: 'container',
+                        width: 380,
+                        layout: {
+                            align: 'stretch',
+                            type: 'vbox'
+                        },
+                        items: [{
+                            xtype: 'label',
+                            style:'text-align:right;',  
+                            margin: '10, 20, 10, 0',
+                            text: 'Anothony Wolf (UNICEF)' 
+                        },{
+                            xtype: 'container',
+                            style:'text-align:right;', 
+                            items: [{
+                                xtype: 'label', 
+                                margin: '0, 20, 0, 0',
+                                text: 'Help'
+                            },{
+                                xtype: 'label', 
+                                margin: '0, 20, 0, 0',
+                                text: 'Account Options' 
+                            },{
+                                xtype: 'label', 
+                                text: 'Log Out (L)',
+                                margin: '0, 20, 0, 0',
+                                autoEl: {tag: 'a', href: '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "Account", action = "LogOff" })'}
+                            }]
+                        }]
+                    },{
+                        xtype: 'container',
+                        itemId: 'userPhoto',
+                        width: 80,
+                        items: [{ 
+                            xtype: 'image',
+                            src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(_ => _.Shared("img/Users/user.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                        }]
+                    }]
+                }]
+            }]);
+                        
         subnav.ownerCt.doLayout();
 
     });

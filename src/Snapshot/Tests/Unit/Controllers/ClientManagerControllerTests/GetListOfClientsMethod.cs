@@ -44,8 +44,7 @@ namespace Tests.Unit.Controllers.ClientManagerControllerTests
             objectMother.queryClient.VerifyAllExpectations();
             objectMother.queryUsers.VerifyAllExpectations();
 
-            Assert.That(jsonResult, Is.InstanceOfType<JsonResult>());
-            Assert.That(jsonResult.Data, Is.InstanceOfType<ClientIndexOutputModel>());
+            Assert.IsInstanceOf<ClientIndexOutputModel>(jsonResult.Data);
             var jsonData = jsonResult.Data as ClientIndexOutputModel;
             Assert.IsNotNull(jsonData);
 

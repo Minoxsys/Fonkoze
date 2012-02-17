@@ -213,7 +213,7 @@ User Administration Users: Overview
                                         var userPassword = winAdd.down('#'+window.feature.formUserPasswordId);
                                         var userRole = winAdd.down('#'+window.feature.formUserRoleId);
                                         var userClient = winAdd.down('#'+window.feature.formUserClientId);
-                                        var ok = IsValid(userUserName, userEmail, userPassword, userRole, userClient);
+                                        var ok = IsValid(userUserName, userEmail, userRole, userClient);
 
                                         if (ok == true){
                                             var values = {
@@ -326,7 +326,7 @@ User Administration Users: Overview
                                     var userPassword = winEdit.down('#'+window.feature.formUserPasswordId);
                                     var userRole = winEdit.down('#'+window.feature.formUserRoleId);
                                     var userClient = winEdit.down('#'+window.feature.formUserClientId);
-                                    var ok = IsValid(userUserName, userEmail, userPassword, userRole, userClient);
+                                    var ok = IsValid(userUserName, userEmail, userRole, userClient);
 
                                     if (ok == true){
                                         var values = {
@@ -362,7 +362,6 @@ User Administration Users: Overview
                             winEdit.down('#'+window.feature.formUserLastNameId).setValue(rec.get('LastName'));
                             winEdit.down('#'+window.feature.formUserUsernameId).setValue(rec.get('UserName'));
                             winEdit.down('#'+window.feature.formUserEmailId).setValue(rec.get('Email'));
-                            winEdit.down('#'+window.feature.formUserPasswordId).setValue(rec.get('Password'));
                             winEdit.down('#'+window.feature.formUserRoleId).setValue(rec.get('RoleId'));
                             winEdit.down('#'+window.feature.formUserClientId).setValue(rec.get('ClientId'));
 
@@ -403,7 +402,7 @@ User Administration Users: Overview
             }]
         });
 
-        function IsValid(username, email, password, role, client){
+        function IsValid(username, email, role, client){
             var ok = true;
             if (username.getValue() == ''){
                 username.markInvalid('Field Username is required!');  
@@ -414,12 +413,6 @@ User Administration Users: Overview
             if (email.getValue() == ''){
                 email.markInvalid('Field Email is required!');  
                 email.setValue(null);
-                ok = false;
-            }
-
-            if (password.getValue() == ''){
-                password.markInvalid('Field Password is required!');  
-                password.setValue(null);
                 ok = false;
             }
 
