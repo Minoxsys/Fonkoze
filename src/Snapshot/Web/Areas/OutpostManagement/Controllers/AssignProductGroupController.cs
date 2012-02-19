@@ -18,6 +18,8 @@ namespace Web.Areas.OutpostManagement.Controllers
         public IQueryService<OutpostStockLevel> QueryOutpostStockLevel { get; set; }
         public IQueryService<Product> QueryProducts { get; set; }
 
+		public IQueryService<Outpost> LoadOutpost { get; set; }
+		public IQueryService<ProductGroup> LoadProductGroup { get; set; }
 
         public IQueryService<Client> LoadClient { get; set; }
         public IQueryService<User> QueryUsers { get; set; }
@@ -25,12 +27,41 @@ namespace Web.Areas.OutpostManagement.Controllers
 
         public class GetProductsInput
         {
-            public Guid? ProductId { get; set; }
+			public Guid? OutpostId{get;set;}
+            public Guid? ProductGroupId { get; set; }
         }
 
+		public class GetProductsOutputModel{
+			public string Id { get; set; }
+			public string Name { get; set; }
+			public string SmsCode { get; set; }
+			public bool Selected { get; set; }
+		}
         public JsonResult GetProducts(GetProductsInput input)
         {
-            return null;
+			LoadUserAndClient();
+
+			var outpost = LoadOutpost.Load(input.OutpostId.Value);
+			var productGroup = LoadProductGroup.Load(input.ProductGroupId.Value);
+
+			var outpostStockLevels = QueryOutpostStockLevel.Query()
+				.Where(o=>o.Client == _client)
+				.Where(o=>o.ProductGroup == productGroup)
+				.Where(o=>o.Outpost == outpost);
+
+			var products = QueryProducts.Query();
+			// todo add product.Client in the where clause, after Elena fixes the issues
+			var selectedProducts = (from p in products
+									select new GetProductsOutputModel
+									{
+										Id = p.Id.ToString(),
+										Name = p.Name,
+										SmsCode =p.SMSReferenceCode,
+										Selected = outpostStockLevels.Any(s => s.Product == p)
+									}).ToArray();
+
+
+            return Json(selectedProducts, JsonRequestBehavior.AllowGet);
         }
 
         public class GetOutpostStockLevelInput

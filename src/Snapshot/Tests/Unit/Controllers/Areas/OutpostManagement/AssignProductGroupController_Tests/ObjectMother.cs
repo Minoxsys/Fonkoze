@@ -26,6 +26,12 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.AssignProductGroupContr
         const string FAKE_USERNAME = "fake.username";
 
         private readonly Guid outpostId = Guid.NewGuid();
+        private readonly Guid productGroupId = Guid.NewGuid();
+
+		private readonly List<OutpostStockLevel> stockLevels = new List<OutpostStockLevel>();
+		private readonly List<Product> products = new List<Product>();
+		private Mock<ProductGroup> group;
+		private Mock<Outpost> outpost;
 
         public void Init()
         {
@@ -96,34 +102,15 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.AssignProductGroupContr
         private IQueryable<OutpostStockLevel> ListOfFakeOutpostStockLevels()
         {
             var stockLevels = new List<OutpostStockLevel>();
-
-            var outpost = new Mock<Outpost>();
-            outpost.Setup(c=>c.Id).Returns(outpostId);
-            outpost.Setup(c=>c.Name).Returns("My Outpost");
-
-            var group = new Mock<ProductGroup>();
-            group.Setup(c => c.Id).Returns(Guid.NewGuid());
-            group.Setup(c => c.Name).Returns("My Group");
+			StubUserAndItsClient();
+			FakeOutpost();
+			FakeGroup();
 
             for (int i = 0; i < 50; i++)
             {
-                var product = new Mock<Product>();
-                product.Setup(c => c.Id).Returns(Guid.NewGuid());
-                product.Setup(c => c.Name).Returns("Product " + i);
+				var product = FakeProduct(i);
 
-                var osl = new Mock<OutpostStockLevel>();
-
-                osl.Setup(c => c.Id).Returns(Guid.NewGuid());
-
-                osl.Setup(c => c.Outpost).Returns(outpost.Object);
-                osl.Setup(c => c.ProductGroup).Returns(group.Object);
-                osl.Setup(c => c.Product).Returns(product.Object);
-
-                osl.Setup(c => c.Client).Returns(clientMock.Object);
-
-                osl.Setup(c => c.Updated).Returns(DateTime.Now);
-                osl.Setup(c=>c.UpdateMethod).Returns(  ((i%2 ==0) ? "sms": "email") );
-
+				var osl = FakeOutpostStockLevel(i, product);
 
                 stockLevels.Add(osl.Object);
             }
@@ -131,11 +118,128 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.AssignProductGroupContr
                 return stockLevels.AsQueryable();
         }
 
+		private Mock<OutpostStockLevel> FakeOutpostStockLevel(int i, Mock<Product> product)
+		{
+			var osl = new Mock<OutpostStockLevel>();
+
+			osl.Setup(c => c.Id).Returns(Guid.NewGuid());
+
+			osl.Setup(c => c.Outpost).Returns(outpost.Object);
+			osl.Setup(c => c.ProductGroup).Returns(group.Object);
+			osl.Setup(c => c.Product).Returns(product.Object);
+
+			osl.Setup(c => c.Client).Returns(clientMock.Object);
+			osl.Setup(c => c.ByUser).Returns(userMock.Object);
+
+			osl.Setup(c => c.Updated).Returns(DateTime.Now);
+			osl.Setup(c => c.UpdateMethod).Returns(((i % 2 == 0) ? "sms" : "email"));
+
+			return osl;
+		}
+
+		private Mock<Product> FakeProduct(int i)
+		{
+			var product = new Mock<Product>();
+			product.Setup(c => c.Id).Returns(Guid.NewGuid());
+			product.Setup(c => c.Name).Returns("Product " + i);
+			product.Setup(c => c.ProductGroup).Returns(group.Object);
+			product.Setup(c => c.ByUser).Returns(userMock.Object);
+
+			return product;
+		}
+
+		private void FakeGroup()
+		{
+			group = new Mock<ProductGroup>();
+			group.Setup(c => c.Id).Returns(productGroupId);
+			group.Setup(c => c.Name).Returns("My Group");
+			group.Setup(c => c.ByUser).Returns(userMock.Object);
+
+			var loadProductGroup = Mock.Get(controller.LoadProductGroup);
+			loadProductGroup.Setup(l => l.Load(productGroupId)).Returns(group.Object);
+		}
+
+		private void FakeOutpost()
+		{
+			outpost = new Mock<Outpost>();
+			outpost.Setup(c => c.Id).Returns(outpostId);
+			outpost.Setup(c => c.Name).Returns("My Outpost");
+			outpost.Setup(c => c.ByUser).Returns(userMock.Object);
+			outpost.Setup(c => c.Client).Returns(clientMock.Object);
+
+			var loadOutpost = Mock.Get(controller.LoadOutpost);
+			loadOutpost.Setup(l => l.Load(outpostId)).Returns(outpost.Object);
+
+		}
+
         internal void VerifyQueryOnOutpostStockLevelService()
         {
             var queryOutpostStockLevel = Mock.Get(controller.QueryOutpostStockLevel);
 
             queryOutpostStockLevel.Verify(call => call.Query());
         }
-    }
+
+		internal AssignProductGroupController.GetProductsInput FakeGetProductsInput()
+		{
+			var model = new AssignProductGroupController.GetProductsInput
+			{
+				ProductGroupId = productGroupId,
+				OutpostId = outpostId
+			};
+
+			return model;
+		}
+
+		internal void VerifyOutpostLoaded()
+		{
+			var loadOutpost = Mock.Get(controller.LoadOutpost);
+
+			loadOutpost.Verify(v => v.Load(outpostId));
+		}
+
+		internal void VerifyProductGroupLoaded()
+		{
+			var loadProductGroup = Mock.Get(controller.LoadProductGroup);
+
+			loadProductGroup.Verify(v => v.Load(productGroupId));
+		}
+
+		internal void VerifyOutpostStockLevelsQueried()
+		{
+			var queryOutpostStockLevels = Mock.Get(controller.QueryOutpostStockLevel);
+
+			queryOutpostStockLevels.Verify(v => v.Query());
+		}
+
+		internal void VerifyProductsQueried()
+		{
+			var queryProducts = Mock.Get(controller.QueryProducts);
+
+			queryProducts.Verify(v => v.Query());
+		}
+
+		internal void FakeProductsAndOutpostStockLevels()
+		{
+			StubUserAndItsClient();
+			FakeOutpost();
+			FakeGroup();
+
+			for (int i = 0; i < 2; i++)
+			{
+				var product = FakeProduct(i);
+				products.Add(product.Object);
+			}
+
+			var outpostStockLevel = FakeOutpostStockLevel(0, Mock.Get(products[0]));
+			stockLevels.Add(outpostStockLevel.Object);
+
+
+			var queryOutpostStockLevels = Mock.Get(controller.QueryOutpostStockLevel);
+			queryOutpostStockLevels.Setup(v => v.Query()).Returns(stockLevels.AsQueryable());
+
+			var queryProducts = Mock.Get(controller.QueryProducts);
+			queryProducts.Setup(v => v.Query()).Returns(products.AsQueryable());
+
+		}
+	}
 }
