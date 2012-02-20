@@ -71,7 +71,7 @@ namespace Tests.Unit.Controllers.RequestScheduleControllerTests
                 FrequencyType = FREQUENCY_TYPE, 
                 FrequencyValue = FREQUENCY_VALUE,
                 StartOn = START_ON,
-                Reminders = new RequestReminder[] { new RequestReminder { PeriodType = PERIOD_TYPE, PeriodValue = PERIOD_VALUE } }.ToList()
+                Reminders = new RequestReminderInput[] { new RequestReminderInput { PeriodType = PERIOD_TYPE, PeriodValue = PERIOD_VALUE } }
             };
         }
     }

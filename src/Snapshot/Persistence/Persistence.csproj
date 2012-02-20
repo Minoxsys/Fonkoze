@@ -85,6 +85,7 @@
     <Compile Include="Overrides\RegionAutoMappingOverride.cs" />
     <Compile Include="Overrides\OutpostAutoMappingOverride.cs" />
     <Compile Include="Overrides\PermissionAutoMappingOverride.cs" />
+    <Compile Include="Overrides\RequestScheduleAutoMappingOverride.cs" />
     <Compile Include="Overrides\RoleAutoMappingOverride.cs">
       <SubType>Code</SubType>
     </Compile>

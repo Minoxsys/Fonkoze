@@ -6,6 +6,7 @@ using NUnit.Framework;
 using Web.Models.Shared;
 using Core.Domain;
 using Rhino.Mocks;
+using Domain;
 
 namespace Tests.Unit.Controllers.RequestScheduleControllerTests
 {
@@ -57,7 +58,7 @@ namespace Tests.Unit.Controllers.RequestScheduleControllerTests
         {
             //Arrange
             objectMother.queryServiceRequestSchedule.Expect(call => call.Load(objectMother.requestScheduleId)).Return(objectMother.requestSchedule);
-            objectMother.deleteCommandRequestSchedule.Expect(call => call.Execute(Arg<Role>.Matches(r => r.Id == objectMother.requestScheduleId)));
+            objectMother.deleteCommandRequestSchedule.Expect(call => call.Execute(Arg<RequestSchedule>.Matches(r => r.Id == objectMother.requestScheduleId)));
 
             //Act
             var jsonResult = objectMother.controller.Delete(objectMother.requestScheduleId);
@@ -71,7 +72,7 @@ namespace Tests.Unit.Controllers.RequestScheduleControllerTests
             var response = jsonResult.Data as JsonActionResponse;
 
             Assert.That(response.Status, Is.EqualTo("Success"));
-            Assert.That(response.Message, Is.EqualTo("Role " + ObjectMother.SCHEDULE_NAME + " was removed."));
+            Assert.That(response.Message, Is.EqualTo("Schedule " + ObjectMother.SCHEDULE_NAME + " was removed."));
         }
     }
 }

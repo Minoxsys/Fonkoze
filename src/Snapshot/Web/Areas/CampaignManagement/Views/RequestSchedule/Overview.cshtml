@@ -1,0 +1,389 @@
+﻿@using Domain
+@using Microsoft.Web.Mvc;
+@section page_title{
+User Administration Roles: Overview
+}
+@{
+    Html.RenderPartial("_SubNavigation");
+    Html.RenderPartial("_UserAdministrationSideBar");
+}
+<script type="text/javascript">
+    Ext.onReady(function () {
+        var administrationBtnId = window.res.header.navigation.administration;
+        var administrationBtn = Ext.getCmp(administrationBtnId);
+        administrationBtn.toggle(true);
+
+        var userAdministrationBtnId = window.res.header.subnavigation.buttonTabs.user;
+        var userAdministrationBtn = Ext.getCmp(userAdministrationBtnId);
+        userAdministrationBtn.toggle(true);
+
+        var rolesGroupBtnId = window.res.content.maincontent.sidebar.roles;
+        var rolesGroupBtn = Ext.getCmp(rolesGroupBtnId);
+        rolesGroupBtn.toggle(true);
+    });
+</script>
+<script type="text/javascript">
+    Ext.onReady(function () {
+        window.feature = {};
+        window.feature.searchScheduleId = 'Search-Schedule-Id';
+        window.feature.scheduleNameId = 'Schedule-Name-Id';
+        window.feature.scheduleBasisId = 'Schedule-Basis-Id';
+        window.feature.recurEveryId = 'Recur-every-id';
+        window.feature.firstReminderId = 'First-reminder-id';
+
+        window.feature.scheduleToEditId = null;
+
+        Ext.define('Ext.feature.Schedule', {
+            extend: 'Ext.data.Model',
+            fields: [
+                { name: 'Id', type: 'string' },
+                { name: 'ScheduleName', type: 'string' },
+                { name: 'Basis', type: 'string' },
+                { name: 'Frequency', type: 'string' },
+                { name: 'Reminders' },
+                {
+                    name: 'RemindersForDisplay',
+                    type: 'string',
+                    convert: function (value, record) {
+                        var result = [];
+                        var i;
+                        var reminders = record.get('Reminders');
+                        if (reminders.length > 0) {
+                            for (i = 0; i < reminders.length; i++) {
+                                var periodType = reminders[i].PeriodType == 'Hourly' ? 'Hour' : 'Day';
+                                var periodValue = reminders[i].PeriodValue;
+
+                                if (periodValue > 1) {
+                                    periodType += 's';
+                                }
+
+                                var postfixes = ['', 'st', 'nd', 'rd'];
+                                var index = i + 1;
+                                var indexStr = index + (index < 4 ? postfixes[index] : 'th');
+
+                                result[i] = Ext.String.format('{0} {1} {2} later', indexStr, periodValue, periodType);
+                            }
+                            return result.join(' ');
+                        }
+                        else {
+                            return '-';
+                        }
+                    }
+                },
+                { name: 'CreationDate', type: 'string' }
+            ]
+        });
+
+        window.feature.store = Ext.create('Ext.data.Store', {
+            model: 'Ext.feature.Schedule',
+            pageSize: 25,
+            autoLoad: true,
+            proxy: {
+                type: 'ajax',
+                url: '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "RequestSchedule", action = "GetListOfRequestSchedules" })',
+                reader: {
+                    type: 'json',
+                    root: 'RequestSchedules',
+                    totalProperty: 'TotalItems'
+                },
+                extraParams: { searchValue: '' },
+                simpleSortMode: true
+            },
+            remoteSort: true,
+            sorters: [{
+                property: 'ScheduleName',
+                direction: 'ASC'
+            }]
+        });
+
+
+        window.feature.modal = Ext.create('Ext.window.Window', {
+            title: 'Add New Schedule',
+            modal: true,
+            height: 250,
+            width: 700,
+            closeAction: 'hide',
+            resizable: false,
+            renderTo: Ext.getBody(),
+            autoRender: false,
+            autoShow: false,
+            layout: {
+                type: 'vbox',
+                align: 'strech'
+            },
+            items: [
+                {
+                    xtype: 'container',
+                    padding: '20',
+                    flex: 1,
+                    layout: {
+                        type: 'hbox',
+                        align: 'strech'
+                    },
+                    items: [
+                        { xtype: 'textfield', id: window.feature.scheduleNameId, fieldLabel: 'Schedule Name', allowBlank: false, padding: '0 30 0 0' },
+                        {
+                            xtype: 'combobox',
+                            id: window.feature.scheduleBasisId,
+                            fieldLabel: 'Schedule Basis',
+                            allowBlank: false,
+                            emptyText: 'Select Schedule Basis',
+                            store: ['On a schedule', 'Now'],
+                            value: 'On a schedule',
+                            editable: false
+                        }
+                    ]
+                },
+                    {
+                        xtype: 'container',
+                        padding: '20',
+                        layout: {
+                            type: 'hbox',
+                            align: 'strech'
+                        },
+                        flex: 1,
+                        items: [
+                            { xtype: 'label', text: 'Please select a frequency:' },
+                            { xtype: 'label', text: 'Recur every', padding: '0 0 0 20' },
+                            { xtype: 'textfield', id: window.feature.recurEveryId, padding: '0 0 0 10', width: 30 },
+                            { xtype: 'label', text: 'days', padding: '0 0 0 10' }
+                        ]
+                    },
+                    {
+                        xtype: 'container',
+                        padding: '20',
+                        flex: 1,
+                        layout: {
+                            type: 'hbox',
+                            align: 'strech'
+                        },
+                        items: [
+                            { xtype: 'label', text: 'Please select a frequency:' },
+                            { xtype: 'label', text: '1st reminder ', padding: '0 0 0 20' },
+                            { xtype: 'textfield', id: window.feature.firstReminderId, padding: '0 0 0 10', width: 30 },
+                            { xtype: 'label', text: 'days later', padding: '0 0 0 10' }
+                        ]
+                    }
+            ],
+            buttons: [
+                { text: 'CANCEL', handler: function () { window.feature.modal.hide(); } },
+                { text: 'SAVE', handler: SaveSchedule }
+            ]
+        });
+
+        window.feature.automaticScheduleHeader = Ext.create('Ext.container.Container', {
+            layout: 'hbox',
+            anchor: '100% 5%',
+            items: [
+                {
+                    xtype: 'container',
+                    flex: 1,
+                    layout: 'column',
+                    items: [
+                        Ext.create('Ext.Img',
+                        {
+                            src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/briefcase.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                            width: 35,
+                            height: 35
+                        }),
+                        {
+                            xtype: 'label',
+                            text: 'Automatic Schedule',
+                            margin: '0 0 0 10'
+                        },
+                        {
+                            xtype: 'button',
+                            text: 'Add a New Schedule',
+                            margin: '0 0 0 20',
+                            handler: function () {
+                                InitModal();
+                                window.feature.modal.show();
+                            }
+                        }
+                    ]
+                },
+                {
+                    xtype: 'container',
+                    layout: {
+                        type: 'hbox',
+                        pack: 'end'
+                    },
+                    flex: 1,
+                    items: [{
+                        xtype: 'textfield',
+                        itemId: window.feature.searchScheduleId,
+                        padding: '0 0 0 200',
+                        width: 200,
+                        frame: true,
+                        emptyText: 'Schedule Search',
+                        enableKeyEvents: true,
+                        listeners: {
+                            'keyup': {
+                                fn: function (key) {
+                                    var searchValue = window.feature.container.down('#' + window.feature.searchScheduleId).getValue();
+                                    window.feature.store.proxy.extraParams.searchValue = searchValue;
+                                    window.feature.store.loadPage(1);
+                                }
+                            }
+                        }
+                    }]
+                }
+            ]
+        });
+
+        window.feature.grid = Ext.create('Ext.grid.Panel', {
+            store: window.feature.store,
+            loadMask: true,
+            disableSelection: true,
+            anchor: '100% 95%',
+            autoScroll: true,
+            columns: [
+                    {
+                        header: 'Schedule Name',
+                        dataIndex: 'ScheduleName',
+                        flex: 3,
+                        sortable: true
+                    },
+                    {
+                        header: 'Basis',
+                        dataIndex: 'Basis',
+                        flex: 2,
+                        sortable: true
+                    },
+                    {
+                        header: 'Frequency',
+                        dataIndex: 'Frequency',
+                        flex: 2,
+                        sortable: true
+                    },
+                    {
+                        header: 'Reminders',
+                        dataIndex: 'RemindersForDisplay',
+                        flex: 2,
+                        sortable: false
+                    },
+                    {
+                        header: 'Creation Date',
+                        dataIndex: 'CreationDate',
+                        flex: 2,
+                        sortable: true
+                    },
+                    {
+                        xtype: 'actioncolumn',
+                        text: 'Actions',
+                        flex: 1,
+                        items: [
+                            {
+                                icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/edit.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                                handler: function (grid, rowIndex, colIndex) {
+
+                                }
+                            },
+                            {
+                                icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/delete.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                                handler: function (grid, rowIndex, colIndex) {
+
+                                }
+                            }
+                        ]
+                    }
+                ],
+            bbar: Ext.create('Ext.PagingToolbar', {
+                store: window.feature.store,
+                displayInfo: true,
+                displayMsg: 'Displaying topics {0} - {1} of {2}',
+                emptyMsg: "No topics to display"
+            })
+        });
+
+        window.feature.container = Ext.create('Ext.container.Container', {
+            margin: '20 50 20 0',
+            height: 760,
+            autoScroll: true,
+            id: 'TopContainer',
+            layout: 'anchor',
+            items: [window.feature.automaticScheduleHeader, window.feature.grid]
+        });
+
+        var contentRes = window.res.content;
+        var mainContent = Ext.getCmp(contentRes.maincontent.id);
+
+        mainContent.add(window.feature.container);
+
+        function InitModal() {
+            Ext.getCmp(window.feature.scheduleNameId).setValue('');
+            Ext.getCmp(window.feature.scheduleBasisId).setValue('On a schedule');
+            Ext.getCmp(window.feature.recurEveryId).setValue('');
+            Ext.getCmp(window.feature.firstReminderId).setValue('');
+        }
+
+        function SaveSchedule() {
+            var scheduleName = Ext.getCmp(window.feature.scheduleNameId);
+            var scheduleBasis = Ext.getCmp(window.feature.scheduleBasisId);
+            var recurEvery = Ext.getCmp(window.feature.recurEveryId);
+            var firstReminder = Ext.getCmp(window.feature.firstReminderId);
+
+            var ok = isValid(scheduleName, scheduleBasis, recurEvery, firstReminder);
+
+            if (ok) {
+                if (window.feature.scheduleToEditId == null) {
+                    window.feature.modal.hide();
+
+                    var requestSchedule = {};
+                    requestSchedule.ScheduleName = scheduleName.getValue();
+                    requestSchedule.Basis = scheduleBasis.getValue();
+                    requestSchedule.FrequencyType = 'Daily';
+                    requestSchedule.FrequencyValue = recurEvery.getValue();
+                    requestSchedule.Reminders = [];
+                    var reminder = {};
+                    requestSchedule.Reminders.push({ PeriodType: 'Daily', PeriodValue: firstReminder.getValue() });
+
+                    var postToUrl = '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "RequestSchedule", action = "Create" })';
+
+                    var action = $.ajax({
+                        type: 'POST',
+                        url: postToUrl,
+                        contentType: 'application/json; charset=UTF-8',
+                        data: Ext.encode(requestSchedule),
+                        dataType: "json"
+                    });
+
+                    action.success(function (serverResponse) {
+                        Ext.Msg.alert(serverResponse.Status, serverResponse.Message);
+                        window.feature.store.load();
+                    });
+                }
+            }
+        }
+
+        function isValid(scheduleName, scheduleBasis, recurEvery, firstReminder) {
+            var ok = true;
+
+            if (scheduleName.getValue() == null || $.trim(scheduleName.getValue()) == '') {
+                scheduleName.markInvalid('Field Schedule Name is required!');
+                scheduleName.setValue('');
+                ok = false;
+            }
+
+            if (scheduleBasis.getValue() == null || $.trim(scheduleBasis.getValue()) == '') {
+                scheduleBasis.markInvalid('Field Schedule Basis is required!');
+                scheduleBasis.setValue('');
+                ok = false;
+            }
+
+            if (recurEvery.getValue() == null || $.trim(recurEvery.getValue()) == '') {
+                recurEvery.markInvalid('Field \"Recur every # days\" is required!');
+                recurEvery.setValue('');
+                ok = false;
+            }
+
+            if (firstReminder.getValue() == null || $.trim(firstReminder.getValue()) == '') {
+                firstReminder.markInvalid('Field \"First reminder # days later\" is required!');
+                firstReminder.setValue('');
+                ok = false;
+            }
+
+            return ok;
+        }
+    });
+</script>

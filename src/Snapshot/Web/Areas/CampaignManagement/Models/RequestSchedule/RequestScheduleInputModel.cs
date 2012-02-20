@@ -6,14 +6,19 @@ using Domain;
 
 namespace Web.Areas.CampaignManagement.Models.RequestSchedule
 {
+    public class RequestReminderInput
+    {
+        public string PeriodType { get; set; }
+        public int PeriodValue { get; set; }
+    }
     public class RequestScheduleInputModel
     {
         public Guid Id { get; set; }
         public string ScheduleName { get; set; }
         public string Basis { get; set; }
-        public virtual string FrequencyType { get; set; }
-        public virtual int FrequencyValue { get; set; }
-        public virtual int StartOn { get; set; }
-        public List<RequestReminder> Reminders { get; set; }
+        public string FrequencyType { get; set; }
+        public int FrequencyValue { get; set; }
+        public int StartOn { get; set; }
+        public RequestReminderInput[] Reminders { get; set; }
     }
 }

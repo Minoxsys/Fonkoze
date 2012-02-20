@@ -60,8 +60,14 @@ namespace Web.Areas.CampaignManagement.Controllers
                                                        {
                                                            Id = schedule.Id,
                                                            ScheduleName = schedule.ScheduleName,
-                                                           Frequency = schedule.FrequencyType,
-                                                           Reminders = schedule.Reminders
+                                                           Frequency = schedule.FrequencyType ?? "-",
+                                                           Basis = schedule.ScheduleBasis,
+                                                           CreationDate = schedule.Created.Value.ToString("dd-MMM-yyyy"),
+                                                           Reminders = (from reminder in schedule.Reminders.ToList()
+                                                                        select new RequestReminderOutputModel {
+                                                                            PeriodType = reminder.PeriodType,
+                                                                            PeriodValue = reminder.PeriodValue
+                                                                        }).ToList()
                                                        }).ToArray();
 
             return Json(new RequestScheduleListForJsonOutput
@@ -102,23 +108,23 @@ namespace Web.Areas.CampaignManagement.Controllers
 
             List<RequestReminder> remindersToRemove = new List<RequestReminder>();
 
-            foreach (RequestReminder reminder in request.Reminders)
-            {
-                if (!inputModel.Reminders.Contains(reminder))
-                {
-                    remindersToRemove.Add(reminder);
-                }
-            }
+            //foreach (RequestReminder reminder in request.Reminders)
+            //{
+            //    if (!inputModel.Reminders.Contains(reminder))
+            //    {
+            //        remindersToRemove.Add(reminder);
+            //    }
+            //}
 
-            foreach (RequestReminder reminder in remindersToRemove)
-            {
-                request.Reminders.Remove(reminder);
-            }
+            //foreach (RequestReminder reminder in remindersToRemove)
+            //{
+            //    request.Reminders.Remove(reminder);
+            //}
 
-            foreach (RequestReminder reminder in inputModel.Reminders)
-            {
-                request.Reminders.Add(reminder);
-            }
+            //foreach (RequestReminder reminder in inputModel.Reminders)
+            //{
+            //    request.Reminders.Add(reminder);
+            //}
 
             SaveCommandRequestSchedule.Execute(request);
 
@@ -128,7 +134,21 @@ namespace Web.Areas.CampaignManagement.Controllers
         [HttpPost]
         public JsonResult Delete(Guid? scheduleId)
         {
+            if (!scheduleId.HasValue)
+            {
+                return Json(new JsonActionResponse() { Status = "Error", Message = "You must supply a scheduleId in order to remove the schedule." });
+            }
 
+            RequestSchedule schedule = QueryServiceRequestSchedule.Load(scheduleId.Value);
+
+            if (schedule == null)
+            {
+                return Json(new JsonActionResponse() { Status = "Error", Message = "You must supply the scheduleId of a role that exists in the DB in order to remove it." });
+            }
+
+            DeleteCommandRequestSchedule.Execute(schedule);
+
+            return Json(new JsonActionResponse() { Status = "Success", Message = "Schedule " + schedule.ScheduleName + " was removed." }); ;
         }
 
         private RequestSchedule CreateRequestScheduleFromRequestScheduleInputModel(RequestScheduleInputModel inputModel)
@@ -144,9 +164,9 @@ namespace Web.Areas.CampaignManagement.Controllers
 
             request.Reminders = new List<RequestReminder>();
 
-            foreach (RequestReminder reminder in inputModel.Reminders)
+            foreach (RequestReminderInput reminder in inputModel.Reminders)
             {
-                request.Reminders.Add(reminder);
+                request.AddReminder(new RequestReminder { PeriodType = reminder.PeriodType, PeriodValue = reminder.PeriodValue });
             }
 
             SaveCommandRequestSchedule.Execute(request);

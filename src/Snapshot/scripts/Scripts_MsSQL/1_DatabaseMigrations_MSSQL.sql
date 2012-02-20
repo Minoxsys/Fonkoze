@@ -324,26 +324,14 @@ create table RawSmsReceiveds (
 end
 
 
-if not exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'ScheduleFrequency')
+if not exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'RequestSchedules')
 begin
-create table ScheduleFrequency (
-	Id UNIQUEIDENTIFIER not null,
-	FrequencyType NVARCHAR(255) not null,
-	FrequencyValue INT not null,
-	StartOn INT not null,
-	Created DATETIME null,
-    Updated DATETIME null,
-    ByUser_FK UNIQUEIDENTIFIER null,
-	primary key (Id)
-	)
-end
-
-if not exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'RequestSchedule')
-begin
-create table ScheduleFrequency (
+create table RequestSchedules (
 	Id UNIQUEIDENTIFIER not null,
 	ScheduleName NVARCHAR(255) not null,
-	FrequencyId INT not null,
+	FrequencyType NVARCHAR(255) not null,
+	FrequencyValue INT not null,
+	StartOn INT null,
 	ScheduleBasis NVARCHAR(255) not null,
 	CampaignId INT null,
 	Created DATETIME null,
@@ -353,13 +341,13 @@ create table ScheduleFrequency (
 	)
 end
 
-if not exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'RequestReminder')
+if not exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'RequestReminders')
 begin
-create table RequestReminder (
+create table RequestReminders (
 	Id UNIQUEIDENTIFIER not null,
 	PeriodType NVARCHAR(255) not null,
 	PeriodValue INT not null,
-	RequestScheduleId INT not null,
+	RequestScheduleId UNIQUEIDENTIFIER not null,
 	Created DATETIME null,
     Updated DATETIME null,
     ByUser_FK UNIQUEIDENTIFIER null,
@@ -679,20 +667,11 @@ begin
         references Users
 end
 
-if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='FrequencyId_RequestSchedules_FK')
-begin
-
-    alter table RequestSchedule 
-        add constraint FrequencyId_RequestSchedules_FK 
-        foreign key (FrequencyId) 
-        references ScheduleFrequency
-end
-
 if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='RequestScheduleId_RequestReminders_FK')
 begin
 
-    alter table RequestReminder 
+    alter table RequestReminders 
         add constraint RequestScheduleId_RequestReminders_FK 
         foreign key (RequestScheduleId) 
-        references RequestSchedule
+        references RequestSchedules
 end

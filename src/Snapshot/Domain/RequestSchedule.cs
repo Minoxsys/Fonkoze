@@ -12,7 +12,12 @@ namespace Domain
         public virtual string FrequencyType { get; set; }
         public virtual int FrequencyValue { get; set; }
         public virtual int StartOn { get; set; }
-        public virtual List<RequestReminder> Reminders { get; set; }
+        public virtual IList<RequestReminder> Reminders { get; set; }
         public virtual string ScheduleBasis { get; set; }
+
+        public virtual void AddReminder(RequestReminder reminder)
+        {
+            Reminders.Add(reminder);
+        }
     }
 }

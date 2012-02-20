@@ -88,12 +88,20 @@ begin
     drop table Users
 end
 
-
-
-
-
 if exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'EmailRequests')
 begin
 drop table EmailRequests
+
+end
+
+if exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'RequestReminders')
+begin
+drop table RequestReminders
+
+end
+
+if exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'RequestSchedules')
+begin
+drop table RequestSchedules
 
 end
