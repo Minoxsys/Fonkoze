@@ -39,7 +39,6 @@ namespace IntegrationTests
 
            var outpost = Specs
                     .CheckProperty(e => e.Name, OUTPOST_NAME)
-                    .CheckProperty(e => e.OutpostType, OUTPOST_TYPE)
                     .CheckProperty(e => e.DetailMethod, OUTPOST_DETAIL)
                    
                     //.CheckProperty(e => e.Client, OUTPOST_METHOD)
@@ -49,8 +48,6 @@ namespace IntegrationTests
             Assert.IsNotNull(outpost);
             Assert.IsInstanceOf<Guid>(outpost.Id);
             Assert.AreEqual(outpost.Name, OUTPOST_NAME);
-            Assert.AreEqual(outpost.OutpostType, OUTPOST_TYPE);
-            Assert.AreEqual(outpost.DetailMethod, OUTPOST_DETAIL);
             //Assert.AreEqual(outpost.Client.Id, CLIENT_ID);
            
 

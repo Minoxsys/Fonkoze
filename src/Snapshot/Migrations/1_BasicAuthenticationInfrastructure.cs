@@ -31,7 +31,15 @@ namespace Migrations
 			Create.Table("Users").WithCommonColumns()
 				.WithColumn("UserName").AsString(ConstraintUtility.NAME_LENGTH).NotNullable().Unique()
 				.WithColumn("Password").AsString(ConstraintUtility.NAME_LENGTH).NotNullable()
+
+				.WithColumn("FirstName").AsString(ConstraintUtility.NAME_LENGTH).Nullable()
+				.WithColumn("LastName").AsString(ConstraintUtility.NAME_LENGTH).Nullable()
+
+				.WithColumn("RoleName").AsString(ConstraintUtility.NAME_LENGTH).Nullable()
+				.WithColumn("ClientName").AsString(ConstraintUtility.NAME_LENGTH).Nullable()
 				.WithColumn("Email").AsString(ConstraintUtility.NAME_LENGTH).Nullable().Unique()
+
+				.WithColumn("RoleId").AsGuid().Nullable()
 				.WithColumn("ClientId").AsGuid();
 
 

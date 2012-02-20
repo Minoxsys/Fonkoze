@@ -22,7 +22,6 @@ namespace Migrations
 
 			Delete.RemoveForeignKey("Districts");
 			Delete.RemoveClientForeignKey("Districts");
-			Delete.RemoveForeignKey("Districts", "Country_FK", "Countries");
 			Delete.RemoveForeignKey("Districts", "Region_FK", "Regions");
 
 			Delete.RemoveForeignKey("Outposts");
@@ -84,11 +83,9 @@ namespace Migrations
 				.WithCommonColumns()
 				.WithClientColumn()
 				.WithColumn("Name").AsString(ConstraintUtility.NAME_LENGTH)
-				.WithColumn("Country_FK").AsGuid()
 				.WithColumn("Region_FK").AsGuid()
 				;
 			Create.AddForeignKey("Districts");
-			Create.AddForeignKey("Districts", "Country_FK", "Countries");
 			Create.AddForeignKey("Districts", "Region_FK", "Regions");
 			Create.AddClientForeignKey("Districts");
 				
@@ -97,16 +94,15 @@ namespace Migrations
 				.WithCommonColumns()
 				.WithClientColumn()
 				.WithColumn("Name").AsString(ConstraintUtility.NAME_LENGTH)
-				.WithColumn("Coordinates").AsString(ConstraintUtility.COORDINATES_LENGTH)
-				.WithColumn("Longitude").AsString(ConstraintUtility.COORDINATES_LENGTH)
-				.WithColumn("Latitude").AsString(ConstraintUtility.COORDINATES_LENGTH)
+				.WithColumn("Coordinates").AsString(ConstraintUtility.COORDINATES_LENGTH).Nullable()
+				.WithColumn("Longitude").AsString(ConstraintUtility.COORDINATES_LENGTH).Nullable()
+				.WithColumn("Latitude").AsString(ConstraintUtility.COORDINATES_LENGTH).Nullable()
 				.WithColumn("IsWarehouse").AsBoolean()
-				.WithColumn("DetailMethod").AsString(255)
+				.WithColumn("DetailMethod").AsString(255).Nullable()
 				.WithColumn("Country_FK").AsGuid()
-				.WithColumn("Warehouse_FK").AsGuid()
+				.WithColumn("Warehouse_FK").AsGuid().Nullable()
 				.WithColumn("Region_FK").AsGuid()
 				.WithColumn("District_FK").AsGuid()
-				.WithColumn("Outpost_FK").AsGuid()
 				;
 			Create.AddForeignKey("Outposts");
 			Create.AddForeignKey("Outposts", "Country_FK", "Countries");
@@ -118,8 +114,9 @@ namespace Migrations
 			Create.Table("Contacts")
 				.WithCommonColumns()
 				.WithClientColumn()
-				.WithColumn("ContactType").AsFixedLengthString(15)
-				.WithColumn("ContactDetail").AsFixedLengthString(100)
+				.WithColumn("ContactType").AsFixedLengthString(15).Nullable()
+				.WithColumn("ContactDetail").AsFixedLengthString(100).Nullable()
+                .WithColumn("IsMainContact").AsBoolean()
 				.WithColumn("Outpost_FK").AsGuid();
 
 			Create.AddClientForeignKey("Contacts");

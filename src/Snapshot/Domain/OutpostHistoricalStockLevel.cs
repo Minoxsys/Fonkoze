@@ -9,7 +9,7 @@ namespace Domain
     public class OutpostHistoricalStockLevel : DomainEntity
     {
         public virtual Guid OutpostId { get; set; }
-        public virtual Guid ProdGroupId { get; set; }
+        public virtual Guid ProductGroupId { get; set; }
         public virtual Guid ProductId { get; set; }
         public virtual string ProdSmsRef { get; set; }
         public virtual int StockLevel { get; set; }

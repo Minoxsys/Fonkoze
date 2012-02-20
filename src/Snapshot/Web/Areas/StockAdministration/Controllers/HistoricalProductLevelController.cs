@@ -78,7 +78,7 @@ namespace Web.Areas.StockAdministration.Controllers
                         OutpostGridModel model = new OutpostGridModel();
                         model.Id = outpost.Id;
                         model.Name = outpost.Name;
-                        var productGroup = QueryProductGroup.Load(historical.ProdGroupId);
+                        var productGroup = QueryProductGroup.Load(historical.ProductGroupId);
                         model.ProductGroup = productGroup.Name;
                         model.SMSResponseDate = historical.UpdateDate.Value.ToShortDateString();
                         model.NumberOfProducts = GetNumberOfProductsFor(outpost.Id, productGroup.Id, historical.UpdateDate.Value);
@@ -101,7 +101,7 @@ namespace Web.Areas.StockAdministration.Controllers
 
         private int GetNumberOfProductsFor(Guid outpostId, Guid productGroupId, DateTime dateTime)
         {
-            return QueryHistorical.Query().Where(it => it.OutpostId == outpostId && it.ProdGroupId == productGroupId && it.UpdateDate == dateTime).Count();
+            return QueryHistorical.Query().Where(it => it.OutpostId == outpostId && it.ProductGroupId == productGroupId && it.UpdateDate == dateTime).Count();
         }
 
         [HttpGet]

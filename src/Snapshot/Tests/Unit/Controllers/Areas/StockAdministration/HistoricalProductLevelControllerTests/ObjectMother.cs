@@ -137,7 +137,7 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration.HistoricalProductLeve
             historical = MockRepository.GeneratePartialMock<OutpostHistoricalStockLevel>();
             historical.Stub(c => c.Id).Return(historicalId);
             historical.OutpostId = outpostId1;
-            historical.ProdGroupId = productGroupId;
+            historical.ProductGroupId = productGroupId;
             historical.UpdateDate = DateTime.UtcNow;
 
         }
@@ -188,19 +188,19 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration.HistoricalProductLeve
 
             listOfHistoricals.Add(new OutpostHistoricalStockLevel());
             listOfHistoricals[0].OutpostId = outpostId1;
-            listOfHistoricals[0].ProdGroupId = productGroupId;
+            listOfHistoricals[0].ProductGroupId = productGroupId;
             listOfHistoricals[0].ProductId = Guid.NewGuid();
             listOfHistoricals[0].UpdateDate = DateTime.UtcNow;
 
             listOfHistoricals.Add(new OutpostHistoricalStockLevel());
             listOfHistoricals[1].OutpostId = outpostId1;
-            listOfHistoricals[1].ProdGroupId = productGroupId;
+            listOfHistoricals[1].ProductGroupId = productGroupId;
             listOfHistoricals[1].ProductId = Guid.NewGuid();
             listOfHistoricals[1].UpdateDate = DateTime.UtcNow;
 
             listOfHistoricals.Add(new OutpostHistoricalStockLevel());
             listOfHistoricals[2].OutpostId = outpostId2;
-            listOfHistoricals[2].ProdGroupId = productGroupId;
+            listOfHistoricals[2].ProductGroupId = productGroupId;
             listOfHistoricals[2].ProductId = Guid.NewGuid();
             listOfHistoricals[2].UpdateDate = DateTime.UtcNow;
 

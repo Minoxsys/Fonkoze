@@ -52,6 +52,7 @@
             { name: 'Name', type: 'string' },
             { name: 'SmsCode', type: 'string' },
             { name: 'Selected', type: 'bool' },
+            { name: 'HasStockLevels', type: 'bool'},
             { name: 'Id', type: 'string' }
         ]
     });
@@ -86,7 +87,11 @@
                 var record = view.panel.store.getAt(recordIndex),
                 dataIndex = this.dataIndex,
                 checked = !record.get(dataIndex);
-                
+
+                hasStockLevels = record.get('HasStockLevels');
+                if (hasStockLevels)
+                    return false;
+    
                 record.set(dataIndex, checked);
                 this.fireEvent('checkchange', this, recordIndex, checked);
                 // cancel selection.
@@ -96,20 +101,18 @@
                 return this.callParent(arguments);
             }
         },
-        
-        // Note: class names are not placed on the prototype bc renderer scope
-        // is not in the header.
-        renderer: function (value) {
+    
+        renderer: function (value, styles, record, recordIndex, columnIndex, store, gridView) {
             var cssPrefix = Ext.baseCSSPrefix,
             cls = [cssPrefix + 'grid-checkheader'];
-            
+    
             if (value) {
                 cls.push(cssPrefix + 'grid-checkheader-checked');
             }
             return '<div class="' + cls.join(' ') + '">&#160;</div>';
         }
     });
-
+    
     window.feature.assignProductsModal = Ext.define('snapshot-Outpost-AssignProductsModalWindow', {
         extend: 'Ext.window.Window',
         modal: true,
@@ -118,12 +121,12 @@
         bodyPadding: 0,
         bodyStyle: 'background-color:#fff',
         layout: 'fit',
-
+    
         initComponent: function () {
             var me = this;
-                
+    
             me.title=Ext.String.format('{0} - Assign a product group', me.outpostName);
-
+    
             me.productGroupsStore = new window.feature.assignStores.productGroups();
             me.productsStore = new window.feature.assignStores.products({
                 proxy: {
@@ -133,34 +136,28 @@
                     id: 'ProductRecordProxy',
                     reader: {
                         type: 'json',
-                    },
-                    writer: {
-                        type: 'json',
-                        writeAllFields: true,
-                        encode: false
                     }
                 },
             });
-
+    
             me.outpostStockLevelStore = new window.feature.assignStores.outpostStockLevel({
-                 proxy: {
+                proxy: {
                     type: 'ajax',
                     url: '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "AssignProductGroup", action = "GetOutpostStockLevels" })',
                     appendId: false,
                     extraParams: {
                         OutpostId: me.outpostId
                     },
+                    fields:['Group','ProductItem', 'ProductLevel', 'SmsCode', 'Update', 'Id'],
                     id: 'OutpostStockLevelProxy',
                     reader: {
                         type: 'json'
                     },
                 }
             });
-
+    
             me.outpostStockLevelStore.load();
-
-                    
-                    
+    
             me.items = [
                 {
                     xtype: 'panel',
@@ -172,17 +169,18 @@
                             xtype: 'gridpanel',
                             flex:1,
                             autoscroll:true,
-
+                            store: me.outpostStockLevelStore,
+    
                             columns: [
                                 {
                                     xtype: 'gridcolumn',
                                     dataIndex: 'Group',
                                     flex: 1,
                                     text: 'Group',
-
+    
                                 }, {
                                     xtype: 'gridcolumn',
-                                    dataIndex: 'Product',
+                                    dataIndex: 'ProductItem',
                                     text: 'Product Item',
                                     flex:1
                                 },{
@@ -228,15 +226,15 @@
                                     editable:false,
                                     listeners:{
                                         'select':function(combo, record){
-                                            console.log('>>>', combo.getValue());
-                                            if(combo.getValue()){
+                                            if (combo.getValue()){
                                                 me.productsStore.getProxy().extraParams={
-                                                    productGroupId: combo.getValue()
+                                                    ProductGroupId: combo.getValue(),
+                                                    OutpostId: me.outpostId
                                                 };
-
+    
                                                 me.productsStore.load();
                                             }
-                                       }
+                                        }
                                     }
                                 }, {
                                     xtype: 'gridpanel',
@@ -263,6 +261,49 @@
                                     viewConfig: {
     
                                     }
+                                },{
+                                    xtype:'container',
+                                    layout:'hbox',
+                                    height: 60,
+                                    items:[
+                                        {xtype:'container',height: 30, html:'&nbsp;',flex:1 },{
+                                            xtype:'button',
+                                            margin:20,
+                                            text:'Save',
+                                            handler:function(){
+                                                var userSelection = [];
+                                                me.productsStore.each(function(record){
+                                                    if (record.dirty)
+                                                        userSelection.push({
+                                                            Id: record.get('Id'),
+                                                            Selected: record.get('Selected')
+                                                        });                                                    
+                                                        record.commit();
+                                                });
+                                                var extraParams = me.productsStore.getProxy().extraParams;
+                                                var params = {
+                                                    OutpostId:extraParams.OutpostId,
+                                                    ProductGroupId: extraParams.ProductGroupId,
+                                                    Assignments:userSelection
+                                                };
+    
+                                                var url = '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "AssignProductGroup", action = "ModifyProductAssignments" })';
+    
+                                                var action = $.ajax({
+                                                    url: url,
+                                                    type: 'POST',
+                                                    contentType: 'application/json; charset=UTF-8',
+                                                    data: Ext.encode(params),
+                                                    dataType: "json"
+                                                });
+
+                                                action.success(function(){ 
+                                                    me.outpostStockLevelStore.load();
+                                                });
+
+                                            }
+                                        }
+                                    ]
                                 }
                             ]
                         }

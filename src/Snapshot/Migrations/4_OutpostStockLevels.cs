@@ -27,15 +27,12 @@ namespace Migrations
 			Create.Table("OutpostStockLevels")
 				.WithCommonColumns()
 				.WithClientColumn()
-				.WithColumn("OutpostId").AsGuid()
-				.WithColumn("ProductId").AsGuid()
-				.WithColumn("ProductGroupId").AsGuid()
-				.WithColumn("ProductGroupName").AsString(ConstraintUtility.NAME_LENGTH)
-				.WithColumn("ProductName").AsString(ConstraintUtility.NAME_LENGTH)
-				.WithColumn("ProdSMSRef").AsString(20)
+				.WithColumn("Outpost_FK").AsGuid()
+				.WithColumn("Product_FK").AsGuid()
+				.WithColumn("ProductGroup_FK").AsGuid()
 				.WithColumn("StockLevel").AsInt32()
 				.WithColumn("PrevStockLevel").AsInt32()
-				.WithColumn("UdateMethod").AsString(ConstraintUtility.NAME_LENGTH);
+				.WithColumn("UpdateMethod").AsString(ConstraintUtility.NAME_LENGTH);
 
 
 			Create.AddClientForeignKey("OutpostStockLevels");
@@ -52,10 +49,23 @@ namespace Migrations
 				.WithColumn("ProdSMSRef").AsString(20)
 				.WithColumn("StockLevel").AsInt32()
 				.WithColumn("PrevStockLevel").AsInt32()
-				.WithColumn("UdateMethod").AsString(ConstraintUtility.NAME_LENGTH);
+				.WithColumn("UdateMethod").AsString(ConstraintUtility.NAME_LENGTH).WithDefaultValue("SMS");
 
 			Create.AddClientForeignKey("OutpostHistoricalStockLevels");
 			Create.AddForeignKey("OutpostHistoricalStockLevels");
+
+
+            // TODO: Deprecate in version 5
+            Alter.Table("OutpostStockLevels")
+                .AddColumn("OutpostId").AsGuid().Nullable()
+                .AddColumn("ProdGroupId").AsGuid().Nullable()
+                .AddColumn("ProductId").AsGuid().Nullable()
+                .AddColumn("ProductGroupName").AsString().Nullable()
+                .AddColumn("ProductName").AsString().Nullable()
+                .AddColumn("ProdSMSRef").AsString().Nullable();
+
+
+            this.IfDatabase("sqlserver").Execute.EmbeddedScript(@"Migrations.Scripts.sqlserver_InsertIntoTables.sql");
 
 		}
 	}

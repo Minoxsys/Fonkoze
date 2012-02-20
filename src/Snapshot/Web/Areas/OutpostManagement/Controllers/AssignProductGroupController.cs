@@ -16,6 +16,8 @@ namespace Web.Areas.OutpostManagement.Controllers
 
 
         public IQueryService<OutpostStockLevel> QueryOutpostStockLevel { get; set; }
+        public IQueryService<OutpostHistoricalStockLevel> QueryOutpostHistoricalStockLevel { get; set; }
+
         public IQueryService<Product> QueryProducts { get; set; }
 
 		public IQueryService<Outpost> LoadOutpost { get; set; }
@@ -23,6 +25,9 @@ namespace Web.Areas.OutpostManagement.Controllers
 
         public IQueryService<Client> LoadClient { get; set; }
         public IQueryService<User> QueryUsers { get; set; }
+
+        public IDeleteCommand<OutpostStockLevel> DeleteOutpostStockLevelCommand { get; set; }
+        public ISaveOrUpdateCommand<OutpostStockLevel> SaveOutpostStockLevelCommand { get; set; }
 
 
         public class GetProductsInput
@@ -36,7 +41,9 @@ namespace Web.Areas.OutpostManagement.Controllers
 			public string Name { get; set; }
 			public string SmsCode { get; set; }
 			public bool Selected { get; set; }
-		}
+
+            public bool HasStockLevels { get; set; }
+        }
         public JsonResult GetProducts(GetProductsInput input)
         {
 			LoadUserAndClient();
@@ -49,6 +56,10 @@ namespace Web.Areas.OutpostManagement.Controllers
 				.Where(o=>o.ProductGroup == productGroup)
 				.Where(o=>o.Outpost == outpost);
 
+            var historicalStockLevels = QueryOutpostHistoricalStockLevel.Query()
+                .Where(o=>o.ProductGroupId == productGroup.Id)
+                .Where(o=>o.OutpostId == outpost.Id);
+
 			var products = QueryProducts.Query();
 			// todo add product.Client in the where clause, after Elena fixes the issues
 			var selectedProducts = (from p in products
@@ -57,7 +68,8 @@ namespace Web.Areas.OutpostManagement.Controllers
 										Id = p.Id.ToString(),
 										Name = p.Name,
 										SmsCode =p.SMSReferenceCode,
-										Selected = outpostStockLevels.Any(s => s.Product == p)
+										Selected = outpostStockLevels.Any(s => s.Product == p),
+                                        HasStockLevels = outpostStockLevels.Any(s=>s.Product == p && (s.PrevStockLevel > 0 || s.StockLevel > 0 )) || historicalStockLevels.Any(hs=> hs.ProductId == p.Id)
 									}).ToArray();
 
 
@@ -125,6 +137,61 @@ namespace Web.Areas.OutpostManagement.Controllers
             this._client = LoadClient.Load(clientId);
         }
 
+        public class ProductAssignmentDetail
+        {
+            public Guid Id { get; set; }
+            public bool Selected { get; set; }
+        }
+        public class ModifyProductAssignmentsInput
+        {
+            public Guid OutpostId { get; set; }
+            public Guid ProductGroupId { get; set; }
+            public ProductAssignmentDetail[] Assignments { get; set; }
 
+        }
+
+        public EmptyResult ModifyProductAssignments(ModifyProductAssignmentsInput input )
+        {
+            LoadUserAndClient();
+
+            var stockLevels = QueryOutpostStockLevel.Query()
+                .Where(c=>c.Outpost.Id == input.OutpostId)
+                .Where(c=>c.ProductGroup.Id == input.ProductGroupId)
+                .ToList();
+
+            var assignments = input.Assignments.ToList();
+
+            stockLevels.ForEach(stockItem =>
+                {
+                    if (assignments.Any(asgn => asgn.Id== stockItem.Product.Id && !asgn.Selected))
+                    {
+                        DeleteOutpostStockLevelCommand.Execute(stockItem);
+                    }
+
+                });
+
+            assignments.Where(it => it.Selected).ToList().ForEach(product =>
+            {
+                var outpostStockItem = new OutpostStockLevel
+                {
+                    Product= QueryProducts.Load(product.Id),
+                    Outpost = LoadOutpost.Load(input.OutpostId),
+                    ProductGroup = LoadProductGroup.Load(input.ProductGroupId),
+                    UpdateMethod= OutpostStockLevel.MANUAL_UPDATE,
+                    Client = _client,
+                    ByUser = _user
+                };
+
+                SaveOutpostStockLevelCommand.Execute(outpostStockItem);
+
+            });
+
+            
+
+
+
+
+            return new EmptyResult();
+        }
     }
 }

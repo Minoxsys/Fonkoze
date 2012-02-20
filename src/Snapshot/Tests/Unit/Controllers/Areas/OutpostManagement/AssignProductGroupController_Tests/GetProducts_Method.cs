@@ -72,5 +72,20 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.AssignProductGroupContr
 			Assert.IsTrue(data[0].Selected);
 			Assert.IsFalse(data[1].Selected);
 		}
+
+        [Test]
+        public void Marks_Products_that_HaveHistoricalStockLevels_as_NonRemovable()
+        {
+			_.FakeProductsAndOutpostStockLevels();
+            _.FakeHistoricalStockLevel();
+
+			var result = _.controller.GetProducts(_.FakeGetProductsInput());
+
+			var data = result.Data as  AssignProductGroupController.GetProductsOutputModel[];
+            
+			Assert.IsTrue(data[0].HasStockLevels);
+			Assert.IsFalse(data[1].HasStockLevels);
+
+        }
 	}
 }

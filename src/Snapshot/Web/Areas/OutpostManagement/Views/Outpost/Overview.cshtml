@@ -31,7 +31,7 @@
 </script>
 @{
 	Html.RenderPartial("_OutpostContacts");
-    Html.RenderPartial("_OutpostAssignProducts");	
+	Html.RenderPartial("_OutpostAssignProducts");	
 }
 <script type="text/javascript">
 	var allowUserToClearValue = {
@@ -215,7 +215,7 @@
 			xtype: 'combobox',
 			itemId: window.feature.regionOverviewComboId,
 			store: window.feature.regionsStore,
-            margin: '0 0 0 20',
+			margin: '0 0 0 20',
 			queryMode:'local',
 			displayField: 'Name',
 			valueField:'Id',
@@ -230,7 +230,7 @@
 			xtype: 'combobox',
 			itemId: window.feature.districtOverviewComboId,
 			store: window.feature.districtsStore,
-            margin: '0 0 0 20',
+			margin: '0 0 0 20',
 			queryMode:'local',
 			displayField: 'Name',
 			valueField:'Id',
@@ -674,21 +674,31 @@
 					flex:3,
 					autoScroll:true,
 					  listeners: {
-                        itemclick:function(view, rec, item, index, eventObj) {
-                        console.log('outpostId', rec.get('Id'));
-                            var assignProducts = new window.feature.assignProductsModal({
-                                outpostId: rec.get('Id'),
-                                outpostName: rec.get('Name')
-                            });
-                            assignProducts.show();
-                        }
-                    },
+						itemclick:function(view, rec, item, index, eventObj) {
+						}
+					},
 					columns: [
 						{
 							text: "Outpost Name",
 							dataIndex: 'Name',
 							flex: 1,
-							sortable: true
+							sortable: true,
+
+							processEvent: function (type, view, cell, recordIndex, cellIndex, e) {
+								if(type == 'click'){
+									
+									var rec = view.panel.store.getAt(recordIndex);
+
+									var assignProducts = new window.feature.assignProductsModal({
+										outpostId: rec.get('Id'),
+										outpostName: rec.get('Name')
+									});
+									assignProducts.show();
+
+									return false;
+								}
+								return true;
+							}
 						},{
 							text: "Contact method",
 							dataIndex: 'ContactMethod',
@@ -697,17 +707,17 @@
 						},{
 							text: "Coordinates",
 							dataIndex: 'Coordinates',
-                            flex: 1,
+							flex: 1,
 							sortable: false
 						},{
 							text: "Is Warehouse",
 							dataIndex: 'IsWarehouse',
-                            flex: 1,
+							flex: 1,
 							sortable: false
 						},{
 							text: "Warehouse name",
 							dataIndex: 'WarehouseName',
-                            flex: 1,
+							flex: 1,
 							sortable: false
 						},{
 							xtype: 'actioncolumn',
@@ -765,11 +775,6 @@
 													});
 	
 													action.success(function(serverResponse){
-														Ext.Msg.show({
-															title: serverResponse.Status,
-															buttons: Ext.Msg.OK,
-															msg: serverResponse.Message
-														});
 	
 														window.feature.outpostsStore.loadPage(1);
 													});

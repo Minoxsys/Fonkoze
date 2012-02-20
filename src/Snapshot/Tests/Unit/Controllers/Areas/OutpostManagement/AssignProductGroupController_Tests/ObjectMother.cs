@@ -28,6 +28,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.AssignProductGroupContr
         private readonly Guid outpostId = Guid.NewGuid();
         private readonly Guid productGroupId = Guid.NewGuid();
 
+        private readonly List<OutpostHistoricalStockLevel> historicalStockLevels = new List<OutpostHistoricalStockLevel>();
 		private readonly List<OutpostStockLevel> stockLevels = new List<OutpostStockLevel>();
 		private readonly List<Product> products = new List<Product>();
 		private Mock<ProductGroup> group;
@@ -241,5 +242,85 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.AssignProductGroupContr
 			queryProducts.Setup(v => v.Query()).Returns(products.AsQueryable());
 
 		}
-	}
+
+        internal void FakeHistoricalStockLevel()
+        {
+
+            var fakeHistorical = new Mock<OutpostHistoricalStockLevel>();
+
+            fakeHistorical.Setup(p => p.Id).Returns(Guid.NewGuid());
+            fakeHistorical.Setup(p => p.OutpostId).Returns(outpostId);
+            fakeHistorical.Setup(p => p.ProductGroupId).Returns(productGroupId);
+            fakeHistorical.Setup(p => p.ProductId).Returns(products[0].Id);
+
+            historicalStockLevels.Add(fakeHistorical.Object);
+
+            var queryHistorical = Mock.Get(controller.QueryOutpostHistoricalStockLevel);
+            queryHistorical.Setup(v => v.Query()).Returns(historicalStockLevels.AsQueryable());
+        }
+
+        internal AssignProductGroupController.ModifyProductAssignmentsInput FakeModifyProductAssignmentsInput()
+        {
+            StubUserAndItsClient();
+            FakeOutpost();
+            FakeGroup();
+
+            for (int i = 0; i < 2; i++)
+            {
+                var product = FakeProduct(i);
+                products.Add(product.Object);
+
+                var outpostStockLevel = FakeOutpostStockLevel(i, product);
+                stockLevels.Add(outpostStockLevel.Object);
+            }
+
+            var input = new AssignProductGroupController.ModifyProductAssignmentsInput
+            {
+                OutpostId = outpostId,
+                ProductGroupId = productGroupId,
+                Assignments = new AssignProductGroupController.ProductAssignmentDetail[] { 
+                   new AssignProductGroupController.ProductAssignmentDetail{
+                       Id = products[0].Id,
+                       Selected=true
+                    },
+                   new AssignProductGroupController.ProductAssignmentDetail{
+                       Id = products[1].Id,
+                       Selected=false
+                    }
+                }
+
+            };
+
+			var queryOutpostStockLevels = Mock.Get(controller.QueryOutpostStockLevel);
+			queryOutpostStockLevels.Setup(v => v.Query()).Returns(stockLevels.AsQueryable());
+
+            var queryProducts = Mock.Get(controller.QueryProducts);
+            queryProducts.Setup(c => c.Load(products[0].Id)).Returns(products[0]);
+
+            var loadOutpost = Mock.Get(controller.LoadOutpost);
+            var loadProductGroup = Mock.Get(controller.LoadProductGroup);
+
+            loadOutpost.Setup(c => c.Load(outpostId)).Returns(outpost.Object);
+            loadProductGroup.Setup(c => c.Load(productGroupId)).Returns(group.Object);
+
+
+            return input;
+        }
+
+        internal void VerifyThatNotSelectedProductsAreBeingRemoved()
+        {
+            var deleteCommand = Mock.Get(controller.DeleteOutpostStockLevelCommand);
+
+            deleteCommand.Verify(call => call.Execute(It.Is<OutpostStockLevel>(lvl => lvl.Product == products[1])));
+            
+        }
+
+        internal void VerifyThatSelectedProductsAreBeingAdded()
+        {
+            var saveCommand = Mock.Get(controller.SaveOutpostStockLevelCommand);
+
+            saveCommand.Verify(call => call.Execute(It.Is<OutpostStockLevel>(lvl => lvl.Product == products[0])));
+            
+        }
+    }
 }

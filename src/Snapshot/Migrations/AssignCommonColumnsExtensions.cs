@@ -20,7 +20,8 @@ namespace Migrations
 						 .AsDate()
 						 .Nullable()
 						 .WithColumn("ByUser_FK")
-						 .AsGuid();
+						 .AsGuid()
+                         .Nullable();
 		}
 		public static ICreateTableWithColumnSyntax WithClientColumn(
 			this ICreateTableWithColumnSyntax syntax)

@@ -8,6 +8,8 @@ namespace Domain
 {
     public class OutpostStockLevel : DomainEntity
     {
+        public static string MANUAL_UPDATE = "Manual";
+
         public virtual Guid OutpostId { get; set; }
 
         public virtual Guid ProdGroupId { get; set; }

@@ -207,7 +207,7 @@ namespace Web.Areas.StockAdministration.Controllers
             var outpostHistoricalStockLevel = new OutpostHistoricalStockLevel();
             outpostHistoricalStockLevel.OutpostId = outpostStockLevel.OutpostId;
             outpostHistoricalStockLevel.PrevStockLevel = outpostStockLevel.PrevStockLevel;
-            outpostHistoricalStockLevel.ProdGroupId = outpostStockLevel.ProdGroupId;
+            outpostHistoricalStockLevel.ProductGroupId = outpostStockLevel.ProdGroupId;
             outpostHistoricalStockLevel.ProdSmsRef = outpostStockLevel.ProdSmsRef;
             outpostHistoricalStockLevel.ProductId = outpostStockLevel.ProductId;
             outpostHistoricalStockLevel.StockLevel = outpostStockLevel.StockLevel;

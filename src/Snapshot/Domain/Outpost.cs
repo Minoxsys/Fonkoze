@@ -9,7 +9,6 @@ namespace Domain
     public class Outpost : DomainEntity
     {
         public virtual string Name { get; set; }
-        public virtual string OutpostType { get; set; }
         public virtual string DetailMethod { get; set; }
         public virtual string Longitude { get; set; }
         public virtual string Latitude { get; set; }

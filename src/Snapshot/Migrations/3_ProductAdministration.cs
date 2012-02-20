@@ -29,27 +29,22 @@ namespace Migrations
 		{
 			Create.Table("ProductGroups")
 				.WithCommonColumns()
-				.WithClientColumn()
 				.WithColumn("Name").AsString(ConstraintUtility.NAME_LENGTH)
-				.WithColumn("Description").AsString(ConstraintUtility.DESCRIPTION_LENGTH)
+				.WithColumn("ReferenceCode").AsString(ConstraintUtility.NAME_LENGTH)
+				.WithColumn("Description").AsString(ConstraintUtility.DESCRIPTION_LENGTH).Nullable()
 				;
 			Create.AddForeignKey("ProductGroups");
-			Create.AddClientForeignKey("ProductGroups");
 
 			Create.Table("Products")
 				.WithCommonColumns()
-				.WithClientColumn()
 				.WithColumn("Name").AsString(ConstraintUtility.NAME_LENGTH)
-				.WithColumn("Description").AsString(ConstraintUtility.DESCRIPTION_LENGTH)
+				.WithColumn("Description").AsString(ConstraintUtility.DESCRIPTION_LENGTH).Nullable()
 				.WithColumn("LowerLimit").AsInt32()
 				.WithColumn("UpperLimit").AsInt32()
 				.WithColumn("SMSReferenceCode").AsFixedLengthString(1)
 				.WithColumn("ProductGroup_FK").AsGuid()
-				.WithColumn("Outpost_FK").AsGuid()
 				;
 			Create.AddForeignKey("Products");
-			Create.AddClientForeignKey("Products");
-			Create.AddForeignKey("Products", "Outpost_FK", "Outposts");
 			Create.AddForeignKey("Products", "ProductGroup_FK", "ProductGroups");
 		}
 	}

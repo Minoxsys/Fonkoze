@@ -115,22 +115,22 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration.OutpostStockLevelCont
 
                 if (i < 5)
                 {
-                    outpostHistoricalStockLevels[i].ProdGroupId = productGroups[0].Id;
+                    outpostHistoricalStockLevels[i].ProductGroupId = productGroups[0].Id;
 
                 }
                 if ((i >= 5) && (i < 10))
                 {
-                    outpostHistoricalStockLevels[i].ProdGroupId = productGroups[1].Id;
+                    outpostHistoricalStockLevels[i].ProductGroupId = productGroups[1].Id;
 
                 }
                 if ((i >= 10) && (i < 15))
                 {
-                    outpostHistoricalStockLevels[i].ProdGroupId = productGroups[2].Id;
+                    outpostHistoricalStockLevels[i].ProductGroupId = productGroups[2].Id;
 
                 }
                 if ((i >= 15) && (i < 20))
                 {
-                    outpostHistoricalStockLevels[i].ProdGroupId = productGroups[3].Id;
+                    outpostHistoricalStockLevels[i].ProductGroupId = productGroups[3].Id;
 
                 }
             }

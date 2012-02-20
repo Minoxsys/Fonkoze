@@ -30,9 +30,10 @@ namespace Persistence.Commands
 				session.SaveOrUpdate(entity);
 				transaction.Commit();
 			}
-			catch (NHibernate.Exceptions.GenericADOException)
+			catch (NHibernate.Exceptions.GenericADOException ex)
 			{
 				transaction.Rollback();
+                throw ex;
 			}
 			finally
 			{

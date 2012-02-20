@@ -34,11 +34,16 @@ namespace IntegrationTests
 				.Where(o=>o.ProductGroup == pg)
 				.Where(o=>o.Outpost == outp);
 
+            var historicalStockLevels = session.Query<OutpostHistoricalStockLevel>()
+                .Where(o => o.ProductGroupId == pg.Id)
+                .Where(o => o.OutpostId == outp.Id);
+
 			var selectedProducts = (from p in products
 									select new
 									{
 										product = p,
-										selected = stockLevels.Any(s=>s.Product == p)
+										selected = stockLevels.Any(s=>s.Product == p),
+                                        hasStockLevels = stockLevels.Any(s=>s.Product == p && (s.PrevStockLevel > 0 || s.StockLevel > 0 )) || historicalStockLevels.Any(hs=> hs.ProductId == p.Id)
 									}).ToList();
 
 			var x = selectedProducts;

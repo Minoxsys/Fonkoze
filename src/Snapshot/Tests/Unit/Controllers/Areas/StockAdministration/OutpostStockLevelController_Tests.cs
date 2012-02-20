@@ -181,22 +181,22 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration
                 if (i < 5)
                 {
                     outpostStockLevels[i].ProdGroupId = productGroups[0].Id;
-                    outpostStockLevelsHistorical[i].ProdGroupId = productGroups[0].Id;
+                    outpostStockLevelsHistorical[i].ProductGroupId = productGroups[0].Id;
                 }
                 if ((i >= 5) && (i < 10))
                 {
                     outpostStockLevels[i].ProdGroupId = productGroups[1].Id;
-                    outpostStockLevelsHistorical[i].ProdGroupId = productGroups[1].Id;
+                    outpostStockLevelsHistorical[i].ProductGroupId = productGroups[1].Id;
                 }
                 if ((i >= 10) && (i < 15))
                 {
                     outpostStockLevels[i].ProdGroupId = productGroups[2].Id;
-                    outpostStockLevelsHistorical[i].ProdGroupId = productGroups[2].Id;
+                    outpostStockLevelsHistorical[i].ProductGroupId = productGroups[2].Id;
                 }
                 if ((i >= 15) && (i < 20))
                 {
                     outpostStockLevels[i].ProdGroupId = productGroups[3].Id;
-                    outpostStockLevelsHistorical[i].ProdGroupId = productGroups[3].Id;
+                    outpostStockLevelsHistorical[i].ProductGroupId = productGroups[3].Id;
                 }
             }
 
