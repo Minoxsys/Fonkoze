@@ -5,7 +5,7 @@ namespace Web.Helpers
 {
     public class DateFormatter
     {
-        public static string DateFormat = "dd/MM/yyyy";
+        public static string DateFormat = "dd-MMM-yyyy";
 
         public static IFormatProvider FormatProvider = CultureInfo.InvariantCulture;
 

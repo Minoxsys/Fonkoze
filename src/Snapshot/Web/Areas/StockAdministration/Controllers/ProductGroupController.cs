@@ -71,7 +71,7 @@ namespace Web.Areas.StockAdministration.Controllers
 
             CreateMappings();
 
-            var productGroup = new ProductGroup();
+            var productGroup = QueryService.Load(model.Id);
 
             Mapper.Map(model, productGroup);
 

@@ -58,7 +58,7 @@ namespace Web.Controllers
                    });
             }
 
-            var client = new Client();
+            var client = QueryClients.Load(inputModel.Id);
             CreateMapping();
 
             Mapper.Map(inputModel, client);

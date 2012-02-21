@@ -1,0 +1,140 @@
+﻿@using Domain
+@using Microsoft.Web.Mvc;
+
+@section page_title{
+User Administration Clients: Overview
+}
+
+@{
+    Html.RenderPartial("_AlertsSubNavigation");
+    Html.RenderPartial("_UserAdministrationSideBar");
+}
+
+<script type="text/javascript">
+    Ext.onReady(function () {
+        var administrationBtnId = window.res.header.navigation.alerts;
+        var administrationBtn = Ext.getCmp(administrationBtnId);
+        administrationBtn.toggle(true);
+
+    });
+</script>
+
+<script type="text/javascript">
+    Ext.onReady(function () {
+        window.feature = {};
+        window.feature.searchAlerts = 'Search-Client-Name-Id';
+
+        window.feature.container = Ext.create('Ext.container.Container', {
+            margin: '20 50 20 0',
+            autoScroll: true,
+            id: 'TopContainer',
+            layout: {
+                align: 'stretch',
+                type: 'vbox'
+            },
+            items: [{
+                xtype: 'container',
+                layout: {
+                    type: 'hbox',
+                },
+                height: 50,
+                items:[{
+                    xtype: 'container',
+                    flex: 1,
+                    layout: {
+                        type: 'column'
+                    },
+                    height:50,
+                    items: [{
+                        xtype: 'container',
+                        height: 30,
+                        width: 30,
+                        html:'&nbsp;'
+                    },{
+                        xtype: 'label',
+                        text: 'Alerts Administration',
+                    }]
+                },{
+                    xtype: 'container',
+                    flex: 1,
+                    layout: {
+                        type: 'hbox',
+                        pack:'end'
+                    },
+                    height:50,
+                    items: [{
+                        xtype: 'textfield',
+                        itemId: window.feature.searchAlerts,
+                        width: 200,
+                        frame: true,
+                        emptyText: 'Alerts Search',
+                        enableKeyEvents: true,
+                        listeners: {
+                            'keyup': {
+                                fn: function(key) {
+//                                    var searchValue = window.feature.container.down('#'+window.feature.searchClientName).getValue();
+//                                    window.feature.ClientsStore.proxy.extraParams.searchValue = searchValue;
+//                                    window.feature.ClientsStore.loadPage(1);
+                                }
+                            }
+                        }
+                    }]
+                }]
+            },{
+                xtype: 'gridpanel',
+                loadMask: true,
+                disableSelection: true,
+                flex:3,
+                autoScroll:true,
+                columns: [{
+                    header: 'Outpost Name',
+                    dataIndex: 'Name',
+                    flex: 1,
+                    sortable: true
+                },{
+                    header: 'Contact',
+                    dataIndex: 'NoOfUsers',
+                    flex: 1
+                },{
+                    header: 'Stock Group',
+                    dataIndex: 'name',
+                    flex: 1
+                },{
+                    header: 'Low Level Stocks',
+                    dataIndex: 'Stock Group',
+                    flex: 1
+                },{
+                    header: 'Last Update',
+                    dataIndex: 'Stock Group',
+                    flex: 1
+                },{
+                    header: 'Nearby outpost',
+                    dataIndex: 'Stock Group',
+                    flex: 1
+                },{
+                    header: 'Acted through following method',
+                    dataIndex: 'Stock Group',
+                    flex: 1
+                }],
+                bbar: Ext.create('Ext.PagingToolbar', {
+                    store: window.feature.ClientsStore,
+                    displayInfo: true,
+                    displayMsg: 'Displaying topics {0} - {1} of {2}',
+                    emptyMsg: "No topics to display",
+                })
+            },{
+                xtype:'container',
+                height:150
+            }]
+        });
+
+
+        var contentRes = window.res.content;
+        var mainContent = Ext.getCmp(contentRes.maincontent.id);
+
+        mainContent.add(window.feature.container);
+        window.feature.ClientsStore.loadPage(1);
+
+    });
+
+</script>

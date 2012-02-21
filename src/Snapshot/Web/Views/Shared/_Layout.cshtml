@@ -39,6 +39,8 @@
             outpostStockLevelCurrent:'@(Url.RouteUrl<Web.Areas.StockAdministration.Controllers.OutpostStockLevelController>(x=>x.Overview(),Web.Areas.StockAdministration.StockAdministrationAreaRegistration.DEFAULT_ROUTE))',
             rolesOverview: '@(Url.RouteUrl<RoleManagerController>( x=>x.Overview() ,  Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE ))',
             historicalLevel: '@(Url.RouteUrl<HistoricalProductLevelController>( x=>x.Overview() ,  Web.Areas.StockAdministration.StockAdministrationAreaRegistration.DEFAULT_ROUTE ))',
+            alerts: '@(Url.RouteUrl<AlertsController>(x => x.Overview(), Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE))',
+
         },
         header:{
             id:'Header',
@@ -49,7 +51,7 @@
                 dashboard:'Dashboard',
                 administration: 'Administration',
                 outpostStockLevel: 'OutpostStockLevel',
-                alerts:'Alerts',
+                alerts: 'Alerts',
                 analysisAndReports:'AnalysisAndReports'
 
             },
@@ -138,6 +140,9 @@
                                 width: 170,
                                 toggleGroup:res.header.navigation.toggleGroup,
                                 enableToggle:true,
+                                handler:function(){
+                                    navigateTo( res.link.alerts ); 
+                                },
                                 text: 'Alerts'
                             },
                             {

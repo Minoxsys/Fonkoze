@@ -48,11 +48,14 @@ namespace Tests.Unit.Controllers.ClientManagerControllerTests
             objectMother.saveCommand.Expect(call => call.Execute(Arg<Client>.Matches(p => p.Name == objectMother.client.Name &&
                                                                                           p.Id == objectMother.client.Id
                                                                                    )));
+            objectMother.queryClient.Expect(call => call.Load(objectMother.clientId)).Return(objectMother.client);
+
             //Act
             var jsonResult = objectMother.controller.Edit(clientInputModel);
 
             //Assert
             objectMother.saveCommand.VerifyAllExpectations();
+            objectMother.queryClient.VerifyAllExpectations();
             var response = jsonResult.Data as JsonActionResponse;
             Assert.IsNotNull(response);
             Assert.That(response.Status, Is.EqualTo("Success"));

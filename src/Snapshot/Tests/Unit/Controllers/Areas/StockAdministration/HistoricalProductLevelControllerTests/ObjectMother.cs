@@ -21,6 +21,7 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration.HistoricalProductLeve
         public IQueryService<Client> loadClient;
         public IQueryService<User> queryUsers;
         public IQueryService<OutpostHistoricalStockLevel> queryHistorical;
+        public ISaveOrUpdateCommand<OutpostHistoricalStockLevel> saveCommand;
 
 
         public Country country;
@@ -64,6 +65,7 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration.HistoricalProductLeve
             loadClient = MockRepository.GenerateStub<IQueryService<Client>>();
             queryUsers = MockRepository.GenerateStub<IQueryService<User>>();
             queryHistorical = MockRepository.GenerateMock<IQueryService<OutpostHistoricalStockLevel>>();
+            saveCommand = MockRepository.GenerateMock<ISaveOrUpdateCommand<OutpostHistoricalStockLevel>>();
 
         }
         private void Setup_Controller()
@@ -79,6 +81,7 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration.HistoricalProductLeve
             controller.QueryClients = loadClient;
             controller.QueryUsers = queryUsers;
             controller.QueryHistorical = queryHistorical;
+            controller.SaveOrUpdateMethod = saveCommand;
         }
 
         private void SetUp_StubData()

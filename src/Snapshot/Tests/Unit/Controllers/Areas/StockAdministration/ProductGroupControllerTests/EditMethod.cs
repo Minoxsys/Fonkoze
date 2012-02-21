@@ -48,6 +48,7 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration.ProductGroupControlle
                 ReferenceCode = objectMother.productGroup.ReferenceCode
             };
             objectMother.saveCommand.Expect(call => call.Execute(Arg<ProductGroup>.Matches(p => p.Name == objectMother.productGroup.Name && p.Description == objectMother.productGroup.Description)));
+            objectMother.queryProductGroup.Expect(call => call.Load(objectMother.productGroupId)).Return(objectMother.productGroup);
 
             //Act
             var jsonResult = objectMother.controller.Edit(productGroupInputModel);

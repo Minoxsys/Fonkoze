@@ -10,6 +10,8 @@ using Web.Areas.OutpostManagement.Models.Country;
 using Web.Areas.OutpostManagement.Models.Region;
 using Web.Areas.StockAdministration.Models.HistoricalProductLevel;
 using Web.Areas.OutpostManagement.Models.Outpost;
+using Web.Models.Shared;
+using Web.Helpers;
 
 namespace Web.Areas.StockAdministration.Controllers
 {
@@ -20,6 +22,8 @@ namespace Web.Areas.StockAdministration.Controllers
         public IQueryService<ProductGroup> QueryProductGroup { get; set; }
         public IQueryService<Product> QueryProduct { get; set; }
         public IQueryService<OutpostHistoricalStockLevel> QueryHistorical { get; set; }
+
+        public ISaveOrUpdateCommand<OutpostHistoricalStockLevel> SaveOrUpdateMethod { get; set; }
 
         public IQueryService<Client> QueryClients { get; set; }
         public IQueryService<User> QueryUsers { get; set; }
@@ -79,8 +83,9 @@ namespace Web.Areas.StockAdministration.Controllers
                         model.Id = outpost.Id;
                         model.Name = outpost.Name;
                         var productGroup = QueryProductGroup.Load(historical.ProductGroupId);
-                        model.ProductGroup = productGroup.Name;
-                        model.SMSResponseDate = historical.UpdateDate.Value.ToShortDateString();
+                        model.ProductGroupId = historical.ProdGroupId;
+                        model.ProductGroupName = productGroup.Name;
+                        model.SMSResponseDate = DateFormatter.DateToShortString(historical.UpdateDate.Value);
                         model.NumberOfProducts = GetNumberOfProductsFor(outpost.Id, productGroup.Id, historical.UpdateDate.Value);
 
                         if (ExistsIn(historicalGridList, model) == false)
@@ -94,14 +99,96 @@ namespace Web.Areas.StockAdministration.Controllers
         private bool ExistsIn(List<OutpostGridModel> historicalGridList, OutpostGridModel model)
         {
             return historicalGridList.Exists(it => it.Name == model.Name &&
-                                                   it.ProductGroup == model.ProductGroup &&
+                                                   it.ProductGroupId == model.ProductGroupId &&
+                                                   it.ProductGroupName == model.ProductGroupName &&
                                                    it.SMSResponseDate == model.SMSResponseDate &&
                                                    it.NumberOfProducts == model.NumberOfProducts);
         }
 
         private int GetNumberOfProductsFor(Guid outpostId, Guid productGroupId, DateTime dateTime)
         {
-            return QueryHistorical.Query().Where(it => it.OutpostId == outpostId && it.ProductGroupId == productGroupId && it.UpdateDate == dateTime).Count();
+            return QueryHistorical.Query()
+                .Where(it => it.OutpostId == outpostId)
+                .Where(it => it.ProdGroupId == productGroupId)
+                .Where(it => it.UpdateDate.Value.Year == dateTime.Year)
+                .Where(it => it.UpdateDate.Value.Month == dateTime.Month)
+                .Where(it => it.UpdateDate.Value.Day == dateTime.Day).Count();
+        }
+
+        [HttpGet]
+        public JsonResult GetProductGroupLevels(Guid? outpostId, Guid? productGroupId, DateTime? smsResponseDate)
+        {
+            if (outpostId.HasValue && productGroupId.HasValue && smsResponseDate.HasValue)
+            {
+
+                var queryHistorical = QueryHistorical.Query()
+                    .Where(it => it.OutpostId == outpostId)
+                    .Where(it => it.ProdGroupId == productGroupId)
+                    .Where(it => it.UpdateDate.Value.Year == smsResponseDate.Value.Year)
+                    .Where(it => it.UpdateDate.Value.Month == smsResponseDate.Value.Month)
+                    .Where(it => it.UpdateDate.Value.Day == smsResponseDate.Value.Day);
+
+                var productGroupLevels = new List<ProductGroupLevelModel>();
+                foreach (var productGroupLevel in queryHistorical.ToList())
+                {
+                    var level = new ProductGroupLevelModel();
+                    level.Id = productGroupLevel.Id;
+                    level.OutpostId = outpostId.Value;
+                    level.OutpostName = QueryOutpost.Load(outpostId.Value).Name;
+                    level.ProductGroupId = productGroupId.Value;
+                    level.ProductGroupName = QueryProductGroup.Load(productGroupId.Value).Name;
+                    level.ProductId = productGroupLevel.ProductId;
+                    level.ProductName = QueryProduct.Load(productGroupLevel.ProductId).Name;
+                    level.ProductStockLevel = productGroupLevel.StockLevel;
+                    level.SMSReferenceCode = productGroupLevel.ProdSmsRef;
+                    level.LastUpdated = DateFormatter.DateToShortString(productGroupLevel.UpdateDate.Value);
+                    level.Description = QueryProductGroup.Load(productGroupId.Value).Description;
+
+                    productGroupLevels.Add(level);
+                }
+
+                return Json(new ProductsIndexOutputModel
+                {
+                    Products = productGroupLevels.ToArray(),
+                    TotalItems = productGroupLevels.Count()
+                }, JsonRequestBehavior.AllowGet);
+            }
+
+            return Json(new ProductsIndexOutputModel
+            {
+                Products = null,
+                TotalItems = 0
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public JsonResult Edit(HistoricalInputModel model)
+        {
+            if (model.Id == Guid.Empty)
+            {
+                return Json(
+                   new JsonActionResponse
+                   {
+                       Status = "Error",
+                       Message = "You must supply a historicalId in order to edit the historical stock level."
+                   });
+            }
+
+            var historical = QueryHistorical.Load(model.Id);
+            if (historical.StockLevel != model.StockLevel)
+            {
+                historical.PrevStockLevel = historical.StockLevel;
+                historical.StockLevel = model.StockLevel;
+
+                SaveOrUpdateMethod.Execute(historical);
+            }
+
+            return Json(
+               new JsonActionResponse
+               {
+                   Status = "Success",
+                   Message = "The Historical stock level has been saved."
+               });
         }
 
         [HttpGet]

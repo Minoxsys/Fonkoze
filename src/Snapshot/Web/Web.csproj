@@ -195,8 +195,11 @@
     <Compile Include="Areas\StockAdministration\Controllers\OutpostStockLevelController.cs" />
     <Compile Include="Areas\StockAdministration\Controllers\ProductController.cs" />
     <Compile Include="Areas\StockAdministration\Controllers\ProductGroupController.cs" />
+    <Compile Include="Areas\StockAdministration\Models\HistoricalProductLevel\HistoricalInputModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\HistoricalProductLevel\OutpostGridModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\HistoricalProductLevel\OutpostIndexGridModel.cs" />
+    <Compile Include="Areas\StockAdministration\Models\HistoricalProductLevel\ProductGroupLevelModel.cs" />
+    <Compile Include="Areas\StockAdministration\Models\HistoricalProductLevel\ProductsIndexOutputModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\OutpostStockLevel\EntityModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\OutpostStockLevel\OutpostStockLevelCurrentTreeModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\OutpostStockLevel\OutpostStockLevelInputModel.cs" />
@@ -220,6 +223,7 @@
     <Compile Include="Bootstrap\Container\EmailRegistrar.cs" />
     <Compile Include="Bootstrap\Container\FileRegistrar.cs" />
     <Compile Include="Bootstrap\Container\URLRegistrar.cs" />
+    <Compile Include="Controllers\AlertsController.cs" />
     <Compile Include="Controllers\ClientManagerController.cs" />
     <Compile Include="Controllers\EmailRequestController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -1561,6 +1565,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\OutpostManagement\Services\" />
+    <Folder Include="Models\Alerts\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -1783,6 +1788,8 @@
     <None Include="Assets\resources\themes\stylesheets\neptune\default\_widgets.scss" />
     <None Include="Assets\resources\themes\templates\resources\sass\my-ext-theme.scss" />
     <None Include="Assets\sass\snapshot-theme.scss" />
+    <Content Include="Views\Alerts\Overview.cshtml" />
+    <Content Include="Views\Shared\_AlertsSubNavigation.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

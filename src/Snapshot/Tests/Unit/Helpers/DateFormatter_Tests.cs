@@ -8,7 +8,7 @@ namespace Tests.Unit.Helpers
     public class DateFormatter_Tests
     {
         private static DateTime _date = new DateTime(2011,1,1);
-        private const string _dateString = "01/01/2011";
+        private const string _dateString = "01-Jan-2011";
         private static DateTime? _nullDate = null;
 
         [Test]

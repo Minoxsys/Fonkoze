@@ -65,8 +65,7 @@ namespace Web.Controllers
                    });
             }
 
-            var user = new User();
-            user = QueryUsers.Load(inputModel.Id);
+            var user = QueryUsers.Load(inputModel.Id);
 
             CreateMapping();
 
