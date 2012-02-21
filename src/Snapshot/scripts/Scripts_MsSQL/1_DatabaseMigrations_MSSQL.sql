@@ -257,6 +257,39 @@ begin
     )
 end
 
+if not exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'Campaigns')
+begin
+ create table Campaigns (
+        Id UNIQUEIDENTIFIER not null,
+       Name varchar(30),
+       StartDate DATETIME,
+       EndDate DATETIME,
+       CreationDate DATETIME,
+       Opened INTEGER,
+       Options binary,
+       Created DATETIME,
+       Updated DATETIME,
+       Client_FK UNIQUEIDENTIFIER,
+       ByUser_FK UNIQUEIDENTIFIER,
+       primary key (Id)
+    )
+end
+if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='ByUser_Campaigns_FK')
+begin
+	alter table Campaigns 
+        add constraint ByUser_Campaigns_FK 
+        foreign key (ByUser_FK) 
+        references Users
+end
+
+if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='Client_Campaigns_FK')
+begin
+	alter table Campaigns 
+        add constraint Client_Campaigns_FK 
+        foreign key (Client_FK) 
+        references Clients
+end
+ 
 if not exists(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME ='UniqueProductNameForProductGroup')
 begin
 	ALTER TABLE Products

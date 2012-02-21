@@ -12,7 +12,7 @@ namespace Persistence.Overrides
         public void Override(FluentNHibernate.Automapping.AutoMapping<Campaign> mapping)
         {
             mapping.References(p => p.Client).Not.LazyLoad().Cascade.SaveUpdate();
-           
+            mapping.Map(p => p.Options).CustomType("StringClob").CustomSqlType("LONGTEXT");
 
         }
     }

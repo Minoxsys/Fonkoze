@@ -22,7 +22,7 @@ namespace IntegrationTests
         {
             var campaign = Specs.CheckProperty(e => e.Name, CAMPAIGN_NAME)
                 .CheckReference(c => c.Client, CLIENT)
-                .CheckProperty(c=>c.Open,OPEN)
+                .CheckProperty(c=>c.Opened,OPEN)
                 .VerifyTheMappings();
 
             Assert.IsNotNull(campaign);
