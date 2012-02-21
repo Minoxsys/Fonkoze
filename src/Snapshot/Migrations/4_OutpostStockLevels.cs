@@ -38,18 +38,21 @@ namespace Migrations
 			Create.AddClientForeignKey("OutpostStockLevels");
 			Create.AddForeignKey("OutpostStockLevels");
 
-			Create.Table("OutpostHistoricalStockLevels")
-				.WithCommonColumns()
-				.WithClientColumn()
-				.WithColumn("OutpostId").AsGuid()
-				.WithColumn("ProductId").AsGuid()
-				.WithColumn("ProductGroupId").AsGuid()
-				.WithColumn("ProductGroupName").AsString(ConstraintUtility.NAME_LENGTH)
-				.WithColumn("ProductName").AsString(ConstraintUtility.NAME_LENGTH)
-				.WithColumn("ProdSMSRef").AsString(20)
-				.WithColumn("StockLevel").AsInt32()
-				.WithColumn("PrevStockLevel").AsInt32()
-				.WithColumn("UdateMethod").AsString(ConstraintUtility.NAME_LENGTH).WithDefaultValue("SMS");
+            Create.Table("OutpostHistoricalStockLevels")
+                .WithCommonColumns()
+                .WithClientColumn()
+                .WithColumn("OutpostId").AsGuid()
+                .WithColumn("ProductId").AsGuid()
+                .WithColumn("ProductGroupId").AsGuid()
+                .WithColumn("OutpostName").AsString(ConstraintUtility.NAME_LENGTH)
+                .WithColumn("ProductGroupName").AsString(ConstraintUtility.NAME_LENGTH)
+                .WithColumn("ProductName").AsString(ConstraintUtility.NAME_LENGTH)
+                .WithColumn("ProdSMSRef").AsString(20)
+                .WithColumn("StockLevel").AsInt32()
+                .WithColumn("PrevStockLevel").AsInt32()
+                .WithColumn("UpdateMethod").AsString(ConstraintUtility.NAME_LENGTH).WithDefaultValue("SMS")
+                .WithColumn("UpdateDate").AsDateTime();
+            
 
 			Create.AddClientForeignKey("OutpostHistoricalStockLevels");
 			Create.AddForeignKey("OutpostHistoricalStockLevels");
