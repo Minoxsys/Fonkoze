@@ -83,7 +83,7 @@ namespace Web.Areas.StockAdministration.Controllers
                         model.Id = outpost.Id;
                         model.Name = outpost.Name;
                         var productGroup = QueryProductGroup.Load(historical.ProductGroupId);
-                        model.ProductGroupId = historical.ProdGroupId;
+                        model.ProductGroupId = historical.ProductGroupId;
                         model.ProductGroupName = productGroup.Name;
                         model.SMSResponseDate = DateFormatter.DateToShortString(historical.UpdateDate.Value);
                         model.NumberOfProducts = GetNumberOfProductsFor(outpost.Id, productGroup.Id, historical.UpdateDate.Value);
@@ -109,7 +109,7 @@ namespace Web.Areas.StockAdministration.Controllers
         {
             return QueryHistorical.Query()
                 .Where(it => it.OutpostId == outpostId)
-                .Where(it => it.ProdGroupId == productGroupId)
+                .Where(it => it.ProductGroupId == productGroupId)
                 .Where(it => it.UpdateDate.Value.Year == dateTime.Year)
                 .Where(it => it.UpdateDate.Value.Month == dateTime.Month)
                 .Where(it => it.UpdateDate.Value.Day == dateTime.Day).Count();
@@ -123,7 +123,7 @@ namespace Web.Areas.StockAdministration.Controllers
 
                 var queryHistorical = QueryHistorical.Query()
                     .Where(it => it.OutpostId == outpostId)
-                    .Where(it => it.ProdGroupId == productGroupId)
+                    .Where(it => it.ProductGroupId == productGroupId)
                     .Where(it => it.UpdateDate.Value.Year == smsResponseDate.Value.Year)
                     .Where(it => it.UpdateDate.Value.Month == smsResponseDate.Value.Month)
                     .Where(it => it.UpdateDate.Value.Day == smsResponseDate.Value.Day);

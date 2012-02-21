@@ -99,7 +99,7 @@ Product Item: Overview
         });
         window.feature.ProductGroupStoreForModal = Ext.create('Ext.data.Store', {
             fields: ['Name', 'Id'],
-            pageSize:100,
+            pageSize: 50,
             proxy: {
                 type: 'ajax',
                 url: '@Url.RouteUrl(StockAdministrationAreaRegistration.DEFAULT_ROUTE, new { controller = "Product", action = "GetProductGroups" })',
@@ -520,7 +520,7 @@ Product Item: Overview
         });
 
         window.feature.store = Ext.create('Ext.data.Store', {
-            pageSize: 2,
+            pageSize: 50,
             remoteSort: true,
             fields: ['Name', 'ProductGroupName', 'SMSReferenceCode', 'LowerLimit', 'UpperLimit', 'Id', 'Description'],
             proxy: {
@@ -580,7 +580,7 @@ Product Item: Overview
                 xtype: 'actioncolumn',
                 text: 'Actions',
                 items: [{
-                    icon: '../../Assets/img/edit.png',
+                    icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/edit.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',     
                     tooltip: _t('Edit this product'),
                     handler: function (grid, rowIndex, colIndex) {
                         var record = grid.store.getAt(rowIndex);
@@ -597,7 +597,7 @@ Product Item: Overview
                         modalForEdit.show();
                     }
                 },{
-                    icon: '../../Assets/img/delete.png',
+                    icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/delete.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',     
                     tooltip: _t('Remove this product'),
                     handler: function (grid, rowIndex, colIndex) {
 
