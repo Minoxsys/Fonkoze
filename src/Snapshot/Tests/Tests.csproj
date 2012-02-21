@@ -159,6 +159,7 @@
     <Compile Include="Unit\Controllers\EmailRequestControllerTests\ResponseMethod.cs" />
     <Compile Include="Unit\Controllers\RequestScheduleControllerTests\CreateMethod.cs" />
     <Compile Include="Unit\Controllers\RequestScheduleControllerTests\DeleteMethod.cs" />
+    <Compile Include="Unit\Controllers\RequestScheduleControllerTests\DoesScheduleExistMethod.cs" />
     <Compile Include="Unit\Controllers\RequestScheduleControllerTests\EditMethod.cs" />
     <Compile Include="Unit\Controllers\RequestScheduleControllerTests\GetListOfRequestSchedulesMethod.cs" />
     <Compile Include="Unit\Controllers\RequestScheduleControllerTests\ObjectMother.cs" />

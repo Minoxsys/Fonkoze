@@ -278,6 +278,7 @@
     <Compile Include="Controllers\RoleManagerController.cs" />
     <Compile Include="Controllers\UserManagerController.cs" />
     <Compile Include="Helpers\DateFormatter.cs" />
+    <Compile Include="Helpers\DomainEntityHelper.cs" />
     <Compile Include="Helpers\EmptyStringToDotsFormatter.cs" />
     <Compile Include="Helpers\NullableDoubleFormatter.cs" />
     <Compile Include="Helpers\NullableIntFormatter.cs" />

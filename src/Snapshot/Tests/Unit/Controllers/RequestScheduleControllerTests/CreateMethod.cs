@@ -26,8 +26,8 @@ namespace Tests.Unit.Controllers.RequestScheduleControllerTests
         {
             //Arrange
 
-            objectMother.saveCommandRequestSchedule.Expect(call => call.Execute(Arg<RequestSchedule>.Matches(
-                    s => s.ScheduleName == ObjectMother.SCHEDULE_NAME &&
+            objectMother.saveCommandSchedule.Expect(call => call.Execute(Arg<Schedule>.Matches(
+                    s => s.Name == ObjectMother.SCHEDULE_NAME &&
                         s.ScheduleBasis == ObjectMother.SCHEDULE_BASIS &&
                         s.FrequencyType == ObjectMother.FREQUENCY_TYPE &&
                         s.FrequencyValue == ObjectMother.FREQUENCY_VALUE &&
@@ -39,7 +39,7 @@ namespace Tests.Unit.Controllers.RequestScheduleControllerTests
             var jsonResult = objectMother.controller.Create(objectMother.inputModel);
 
             //Assert
-            objectMother.saveCommandRequestSchedule.VerifyAllExpectations();
+            objectMother.saveCommandSchedule.VerifyAllExpectations();
 
             Assert.IsNotNull(jsonResult);
             var response = jsonResult.Data as JsonActionResponse;

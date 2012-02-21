@@ -22,37 +22,44 @@ namespace Tests.Unit.Controllers.RequestScheduleControllerTests
         public const int PERIOD_VALUE = 24;
 
 
-        public IQueryService<RequestSchedule> queryServiceRequestSchedule;
-        public ISaveOrUpdateCommand<RequestSchedule> saveCommandRequestSchedule;
-        public IDeleteCommand<RequestSchedule> deleteCommandRequestSchedule;
+        public IQueryService<Schedule> queryServicetSchedule;
+        public ISaveOrUpdateCommand<Schedule> saveCommandSchedule;
+        public IDeleteCommand<Schedule> deleteCommandRequestSchedule;
+        public IDeleteCommand<RequestReminder> deleteCommandRequestReminder;
 
         public RequestScheduleController controller;
 
-        public Guid requestScheduleId;
-        public RequestSchedule requestSchedule;
+        public Guid scheduleId;
+        public Schedule schedule;
+        public RequestReminder reminder;
         public RequestScheduleInputModel inputModel;
         public IndexModel indexModel;
 
         public void Init_Controller_And_Mock_Services()
         {
-            queryServiceRequestSchedule = MockRepository.GenerateMock<IQueryService<RequestSchedule>>();
-            saveCommandRequestSchedule = MockRepository.GenerateMock<ISaveOrUpdateCommand<RequestSchedule>>();
-            deleteCommandRequestSchedule = MockRepository.GenerateMock<IDeleteCommand<RequestSchedule>>();
+            queryServicetSchedule = MockRepository.GenerateMock<IQueryService<Schedule>>();
+            saveCommandSchedule = MockRepository.GenerateMock<ISaveOrUpdateCommand<Schedule>>();
+            deleteCommandRequestSchedule = MockRepository.GenerateMock<IDeleteCommand<Schedule>>();
+            deleteCommandRequestReminder = MockRepository.GenerateMock<IDeleteCommand<RequestReminder>>();
 
             controller = new RequestScheduleController();
-            controller.QueryServiceRequestSchedule = queryServiceRequestSchedule;
-            controller.SaveCommandRequestSchedule = saveCommandRequestSchedule;
+            controller.QueryServiceSchedule = queryServicetSchedule;
+            controller.SaveCommandRequestSchedule = saveCommandSchedule;
             controller.DeleteCommandRequestSchedule = deleteCommandRequestSchedule;
+            controller.DeleteCommandRequestReminder = deleteCommandRequestReminder;
         }
 
         public void Init_Stub_Data()
         {
-            requestScheduleId = Guid.NewGuid();
-            requestSchedule = MockRepository.GeneratePartialMock<RequestSchedule>();
-            requestSchedule.Stub(r => r.Id).Return(requestScheduleId);
-            requestSchedule.FrequencyType = FREQUENCY_TYPE;
-            requestSchedule.FrequencyValue = FREQUENCY_VALUE;
-            requestSchedule.Reminders = new RequestReminder[] { new RequestReminder { PeriodType = PERIOD_TYPE, PeriodValue = PERIOD_VALUE } }.ToList();
+            reminder = new RequestReminder { PeriodType = PERIOD_TYPE, PeriodValue = PERIOD_VALUE };
+
+            scheduleId = Guid.NewGuid();
+            schedule = MockRepository.GeneratePartialMock<Schedule>();
+            schedule.Stub(r => r.Id).Return(scheduleId);
+            schedule.FrequencyType = FREQUENCY_TYPE;
+            schedule.FrequencyValue = FREQUENCY_VALUE;
+            schedule.Name = SCHEDULE_NAME;
+            schedule.Reminders = new RequestReminder[] { reminder }.ToList();
 
             indexModel = new IndexModel
             {
@@ -60,13 +67,13 @@ namespace Tests.Unit.Controllers.RequestScheduleControllerTests
                 limit = 50,
                 page = 1,
                 start = 0,
-                sort = "ScheduleName"
+                sort = "Name"
             };
 
             inputModel = new RequestScheduleInputModel
             {
-                Id = requestScheduleId,
-                ScheduleName = SCHEDULE_NAME,
+                Id = scheduleId,
+                Name = SCHEDULE_NAME,
                 Basis = SCHEDULE_BASIS,
                 FrequencyType = FREQUENCY_TYPE, 
                 FrequencyValue = FREQUENCY_VALUE,

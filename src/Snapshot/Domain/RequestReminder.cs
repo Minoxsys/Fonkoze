@@ -10,5 +10,6 @@ namespace Domain
     {
         public virtual string PeriodType { get; set; }
         public virtual int PeriodValue { get; set; }
+        public virtual Schedule Schedule { get; set; }
     }
 }

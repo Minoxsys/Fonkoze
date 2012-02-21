@@ -27,11 +27,12 @@ namespace Tests.Unit.Controllers.RequestScheduleControllerTests
         {
             //Arrange
 
-            objectMother.queryServiceRequestSchedule.Expect(call => call.Load(objectMother.requestScheduleId)).Return(objectMother.requestSchedule);
+            objectMother.queryServicetSchedule.Expect(call => call.Load(objectMother.scheduleId)).Return(objectMother.schedule);
+            objectMother.deleteCommandRequestReminder.Expect(call => call.Execute(objectMother.reminder));
 
-            objectMother.saveCommandRequestSchedule.Expect(call => call.Execute(Arg<RequestSchedule>.Matches(
-                    s => s.Id == objectMother.requestScheduleId &&
-                        s.ScheduleName == ObjectMother.SCHEDULE_NAME &&
+            objectMother.saveCommandSchedule.Expect(call => call.Execute(Arg<Schedule>.Matches(
+                    s => s.Id == objectMother.scheduleId &&
+                        s.Name == ObjectMother.SCHEDULE_NAME &&
                         s.ScheduleBasis == ObjectMother.SCHEDULE_BASIS &&
                         s.FrequencyType == ObjectMother.FREQUENCY_TYPE &&
                         s.FrequencyValue == ObjectMother.FREQUENCY_VALUE &&
@@ -43,8 +44,9 @@ namespace Tests.Unit.Controllers.RequestScheduleControllerTests
             var jsonResult = objectMother.controller.Edit(objectMother.inputModel);
 
             //Assert
-            objectMother.queryServiceRequestSchedule.VerifyAllExpectations();
-            objectMother.saveCommandRequestSchedule.VerifyAllExpectations();
+            objectMother.queryServicetSchedule.VerifyAllExpectations();
+            objectMother.deleteCommandRequestReminder.VerifyAllExpectations();
+            objectMother.saveCommandSchedule.VerifyAllExpectations();
 
             Assert.IsNotNull(jsonResult);
             var response = jsonResult.Data as JsonActionResponse;

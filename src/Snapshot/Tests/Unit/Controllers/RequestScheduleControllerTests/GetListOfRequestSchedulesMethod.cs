@@ -26,13 +26,13 @@ namespace Tests.Unit.Controllers.RequestScheduleControllerTests
         public void Return_JSON_With_List_Of_RequestSchedules()
         {
             // Arrange
-            objectMother.queryServiceRequestSchedule.Expect(call => call.Query()).Return(new RequestSchedule[] { objectMother.requestSchedule }.AsQueryable());
+            objectMother.queryServicetSchedule.Expect(call => call.Query()).Return(new Schedule[] { objectMother.schedule }.AsQueryable());
 
             // Act
             var jsonResult = objectMother.controller.GetListOfRequestSchedules(objectMother.indexModel);
 
             // Assert
-            objectMother.queryServiceRequestSchedule.VerifyAllExpectations();
+            objectMother.queryServicetSchedule.VerifyAllExpectations();
 
             Assert.IsNotNull(jsonResult);
             Assert.IsInstanceOf(typeof(JsonResult), jsonResult);

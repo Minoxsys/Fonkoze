@@ -100,8 +100,8 @@ drop table RequestReminders
 
 end
 
-if exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'RequestSchedules')
+if exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'Schedules')
 begin
-drop table RequestSchedules
+drop table Schedules
 
 end
