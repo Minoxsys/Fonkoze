@@ -32,6 +32,7 @@ namespace Migrations
 				.WithColumn("ProductGroup_FK").AsGuid()
 				.WithColumn("StockLevel").AsInt32()
 				.WithColumn("PrevStockLevel").AsInt32()
+                .WithColumn("UpdateDate").AsDateTime().Nullable()
 				.WithColumn("UpdateMethod").AsString(ConstraintUtility.NAME_LENGTH);
 
 
@@ -40,7 +41,7 @@ namespace Migrations
 
             Create.Table("OutpostHistoricalStockLevels")
                 .WithCommonColumns()
-                .WithClientColumn()
+                .WithColumn("ClientId").AsGuid()
                 .WithColumn("OutpostId").AsGuid()
                 .WithColumn("ProductId").AsGuid()
                 .WithColumn("ProductGroupId").AsGuid()
@@ -52,20 +53,8 @@ namespace Migrations
                 .WithColumn("PrevStockLevel").AsInt32()
                 .WithColumn("UpdateMethod").AsString(ConstraintUtility.NAME_LENGTH).WithDefaultValue("SMS")
                 .WithColumn("UpdateDate").AsDateTime();
-            
 
-			Create.AddClientForeignKey("OutpostHistoricalStockLevels");
 			Create.AddForeignKey("OutpostHistoricalStockLevels");
-
-
-            // TODO: Deprecate in version 5
-            Alter.Table("OutpostStockLevels")
-                .AddColumn("OutpostId").AsGuid().Nullable()
-                .AddColumn("ProdGroupId").AsGuid().Nullable()
-                .AddColumn("ProductId").AsGuid().Nullable()
-                .AddColumn("ProductGroupName").AsString().Nullable()
-                .AddColumn("ProductName").AsString().Nullable()
-                .AddColumn("ProdSMSRef").AsString().Nullable();
 
 
             this.IfDatabase("sqlserver").Execute.EmbeddedScript(@"Migrations.Scripts.sqlserver_InsertIntoTables.sql");

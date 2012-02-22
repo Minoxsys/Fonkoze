@@ -10,14 +10,6 @@ namespace Domain
     {
         public static string MANUAL_UPDATE = "Manual";
 
-        public virtual Guid OutpostId { get; set; }
-
-        public virtual Guid ProdGroupId { get; set; }
-        public virtual String ProductGroupName { get; set; }
-        public virtual Guid ProductId { get; set; }
-        public virtual String ProductName { get; set; }
-        public virtual string ProdSmsRef { get; set; }
-
         public virtual int StockLevel { get; set; }
 
         public virtual int PrevStockLevel { get; set; }

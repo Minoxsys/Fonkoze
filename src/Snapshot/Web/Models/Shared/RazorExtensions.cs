@@ -1,18 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using System.Web.WebPages;
-using System.Web.Mvc;
-using System.Web.Mvc.Html;
-using Web.Bootstrap.Routes;
-using Microsoft.Web.Mvc;
 using System.Linq.Expressions;
+using System.Web.Mvc;
 using System.Web.Routing;
-using Web.Areas.OutpostManagement.Models.Country;
-using Web.Areas.OutpostManagement.Models.Region;
-using Web.Areas.OutpostManagement.Models.District;
-using Web.Areas.OutpostManagement.Models.Outpost;
+using System.Web.WebPages;
+using Microsoft.Web.Mvc;
+using Web.Bootstrap.Routes;
 
 namespace Web.Models.Shared
 {

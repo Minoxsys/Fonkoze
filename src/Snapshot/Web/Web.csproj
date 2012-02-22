@@ -154,7 +154,6 @@
     <Compile Include="Areas\OutpostManagement\Controllers\DistrictController.cs" />
     <Compile Include="Areas\OutpostManagement\Controllers\OutpostController.cs" />
     <Compile Include="Areas\OutpostManagement\Controllers\RegionController.cs" />
-    <Compile Include="Areas\OutpostManagement\Controllers\StockLevelController.cs" />
     <Compile Include="Areas\OutpostManagement\HtmlHelpers\PagingHelpers.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Client\ClientModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Contact\ContactModel.cs" />
@@ -1605,9 +1604,6 @@
     <Content Include="Areas\StockAdministration\Views\_ViewStart.cshtml" />
     <Content Include="Areas\StockAdministration\Views\ProductGroup\Overview.cshtml" />
     <Content Include="Areas\StockAdministration\Views\OutpostStockLevel\Overview.cshtml" />
-    <Content Include="Areas\OutpostManagement\Views\StockLevel\OverviewStockLevel.cshtml" />
-    <Content Include="Areas\OutpostManagement\Views\StockLevel\OutpostStockLevelOverview.cshtml" />
-    <Content Include="Areas\OutpostManagement\Views\StockLevel\OverviewProducts.cshtml" />
     <Content Include="Views\Shared\Calendar.cshtml" />
     <Content Include="Views\Shared\FormButtons.cshtml" />
     <Content Include="Views\Shared\InfoMessage.cshtml" />

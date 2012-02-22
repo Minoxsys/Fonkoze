@@ -277,7 +277,7 @@ namespace Web.Areas.StockAdministration.Controllers
 
             if (product != null)
             {
-                var outpostStockLevel = QueryOutpostStockLevel.Query().Where(it => it.ProductId == guid).ToList();
+                var outpostStockLevel = QueryOutpostStockLevel.Query().Where(it => it.Product.Id == guid).ToList();
                 var outpostStockLevelHystorical = QueryOutpostStockLevelHystorical.Query().Where(it => it.ProductId == guid).ToList();
 
                 if (outpostStockLevel.Count > 0)

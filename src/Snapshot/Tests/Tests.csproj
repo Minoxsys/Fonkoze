@@ -137,7 +137,6 @@
     <Compile Include="Unit\Controllers\Areas\StockAdministration\OutpostStockLevelControllerTests\Method_Edit.cs" />
     <Compile Include="Unit\Controllers\Areas\StockAdministration\OutpostStockLevelControllerTests\Method_Overview.cs" />
     <Compile Include="Unit\Controllers\Areas\StockAdministration\OutpostStockLevelControllerTests\ObjectMother.cs" />
-    <Compile Include="Unit\Controllers\Areas\StockAdministration\OutpostStockLevelController_Tests.cs" />
     <Compile Include="Unit\Controllers\Areas\StockAdministration\ProductControllerTests\CreateMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\StockAdministration\ProductControllerTests\DeleteMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\StockAdministration\ProductControllerTests\EditMethod.cs" />

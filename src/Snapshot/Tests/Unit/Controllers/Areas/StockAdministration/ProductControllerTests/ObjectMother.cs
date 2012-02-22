@@ -83,7 +83,7 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration.ProductControllerTest
             outpostStockLevelId = Guid.NewGuid();
             outpostStockLevel = MockRepository.GeneratePartialMock<OutpostStockLevel>();
             outpostStockLevel.Stub(b => b.Id).Return(outpostStockLevelId);
-            outpostStockLevel.ProductId = product.Id;
+            outpostStockLevel.Product = product;
  
         }
         internal void StubOutpostHystoricalStockLevel()

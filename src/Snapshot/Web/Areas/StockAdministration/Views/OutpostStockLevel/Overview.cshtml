@@ -443,7 +443,7 @@ Outpost Stock Level Current
                     }
                 })
             }, { xtype: 'actioncolumn',
-                items: [{ icon: '../../Assets/img/edit.png',
+                items: [{ icon: '@Url.AssetUrl("img/edit.png")',
                     tooltip: _t('Edit product level'),
                     handler: function (grid, rowIndex, colIndex) {
                         var recordData = grid.store.getAt(rowIndex);

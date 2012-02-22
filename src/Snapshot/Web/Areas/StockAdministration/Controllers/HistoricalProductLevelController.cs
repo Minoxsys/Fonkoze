@@ -1,17 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
+using Core.Domain;
 using Core.Persistence;
 using Domain;
-using Core.Domain;
-using Web.Areas.OutpostManagement.Models.Country;
-using Web.Areas.OutpostManagement.Models.Region;
-using Web.Areas.StockAdministration.Models.HistoricalProductLevel;
 using Web.Areas.OutpostManagement.Models.Outpost;
-using Web.Models.Shared;
+using Web.Areas.StockAdministration.Models.HistoricalProductLevel;
 using Web.Helpers;
+using Web.Models.Shared;
 
 namespace Web.Areas.StockAdministration.Controllers
 {
@@ -84,7 +81,7 @@ namespace Web.Areas.StockAdministration.Controllers
                         model.Name = outpost.Name;
                         var productGroup = QueryProductGroup.Load(historical.ProductGroupId);
                         model.ProductGroupId = historical.ProductGroupId;
-                        model.ProductGroupName = productGroup.Name;
+                        model.ProductGroupName = historical.ProductGroupName;
                         model.SMSResponseDate = DateFormatter.DateToShortString(historical.UpdateDate.Value);
                         model.NumberOfProducts = GetNumberOfProductsFor(outpost.Id, productGroup.Id, historical.UpdateDate.Value);
 
@@ -133,12 +130,12 @@ namespace Web.Areas.StockAdministration.Controllers
                 {
                     var level = new ProductGroupLevelModel();
                     level.Id = productGroupLevel.Id;
-                    level.OutpostId = outpostId.Value;
-                    level.OutpostName = QueryOutpost.Load(outpostId.Value).Name;
-                    level.ProductGroupId = productGroupId.Value;
-                    level.ProductGroupName = QueryProductGroup.Load(productGroupId.Value).Name;
+                    level.OutpostId = productGroupLevel.OutpostId;
+                    level.OutpostName = productGroupLevel.OutpostName;
+                    level.ProductGroupId = productGroupLevel.ProductGroupId;
+                    level.ProductGroupName = productGroupLevel.ProductGroupName;
                     level.ProductId = productGroupLevel.ProductId;
-                    level.ProductName = QueryProduct.Load(productGroupLevel.ProductId).Name;
+                    level.ProductName = productGroupLevel.ProductName;
                     level.ProductStockLevel = productGroupLevel.StockLevel;
                     level.SMSReferenceCode = productGroupLevel.ProdSmsRef;
                     level.LastUpdated = DateFormatter.DateToShortString(productGroupLevel.UpdateDate.Value);

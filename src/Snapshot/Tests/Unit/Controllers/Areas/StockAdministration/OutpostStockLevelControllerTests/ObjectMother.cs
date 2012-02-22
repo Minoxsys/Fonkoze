@@ -182,13 +182,13 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration.OutpostStockLevelCont
                 //from 0-9 assign 0-9 outposts
                 if (i < 10)
                 {
-                    outpostStockLevel.OutpostId = outposts[i].Id;
+                    outpostStockLevel.Outpost = outposts[i];
                     outpostStockLevel.Client = client;
 
                 } //from 10 -19 assign outposts with index from 0-9
                 else
                 {
-                    outpostStockLevel.OutpostId = outposts[i - 10].Id;
+                    outpostStockLevel.Outpost= outposts[i - 10];
                     outpostStockLevel.Client = client;
                 }
                 outpostStockLevels.Add(outpostStockLevel);
@@ -208,52 +208,52 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration.OutpostStockLevelCont
 
                 if (i < 5)
                 {
-                    outpostStockLevels[i].ProdGroupId = productGroups[0].Id;
+                    outpostStockLevels[i].ProductGroup = productGroups[0];
 
                 }
                 if ((i >= 5) && (i < 10))
                 {
-                    outpostStockLevels[i].ProdGroupId = productGroups[1].Id;
+                    outpostStockLevels[i].ProductGroup = productGroups[1];
 
                 }
                 if ((i >= 10) && (i < 15))
                 {
-                    outpostStockLevels[i].ProdGroupId = productGroups[2].Id;
+                    outpostStockLevels[i].ProductGroup = productGroups[2];
 
                 }
                 if ((i >= 15) && (i < 20))
                 {
-                    outpostStockLevels[i].ProdGroupId = productGroups[3].Id;
+                    outpostStockLevels[i].ProductGroup = productGroups[3];
 
                 }
             }
 
-            outpostStockLevels[0].ProductId = products[1].Id;
-            outpostStockLevels[1].ProductId = products[0].Id;
-            outpostStockLevels[2].ProductId = products[1].Id;
-            outpostStockLevels[3].ProductId = products[0].Id;
-            outpostStockLevels[4].ProductId = products[1].Id;
+            outpostStockLevels[0].Product = products[1];
+            outpostStockLevels[1].Product = products[0];
+            outpostStockLevels[2].Product = products[1];
+            outpostStockLevels[3].Product = products[0];
+            outpostStockLevels[4].Product = products[1];
 
 
-            outpostStockLevels[5].ProductId = products[2].Id;
-            outpostStockLevels[6].ProductId = products[3].Id;
-            outpostStockLevels[7].ProductId = products[2].Id;
-            outpostStockLevels[8].ProductId = products[3].Id;
-            outpostStockLevels[9].ProductId = products[2].Id;
+            outpostStockLevels[5].Product = products[2];
+            outpostStockLevels[6].Product = products[3];
+            outpostStockLevels[7].Product = products[2];
+            outpostStockLevels[8].Product = products[3];
+            outpostStockLevels[9].Product = products[2];
 
 
-            outpostStockLevels[10].ProductId = products[4].Id;
-            outpostStockLevels[11].ProductId = products[5].Id;
-            outpostStockLevels[12].ProductId = products[4].Id;
-            outpostStockLevels[13].ProductId = products[5].Id;
-            outpostStockLevels[14].ProductId = products[4].Id;
+            outpostStockLevels[10].Product = products[4];
+            outpostStockLevels[11].Product = products[5];
+            outpostStockLevels[12].Product = products[4];
+            outpostStockLevels[13].Product = products[5];
+            outpostStockLevels[14].Product = products[4];
 
 
-            outpostStockLevels[15].ProductId = products[6].Id;
-            outpostStockLevels[16].ProductId = products[7].Id;
-            outpostStockLevels[17].ProductId = products[6].Id;
-            outpostStockLevels[18].ProductId = products[6].Id;
-            outpostStockLevels[19].ProductId = products[7].Id;
+            outpostStockLevels[15].Product = products[6];
+            outpostStockLevels[16].Product = products[7];
+            outpostStockLevels[17].Product = products[6];
+            outpostStockLevels[18].Product = products[6];
+            outpostStockLevels[19].Product = products[7];
 
         }
         internal void StubProductGroupList()
