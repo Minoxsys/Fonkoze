@@ -33,7 +33,7 @@ namespace Persistence.Commands
 			catch (NHibernate.Exceptions.GenericADOException ex)
 			{
 				transaction.Rollback();
-                throw;
+                throw ex;
 			}
 			finally
 			{

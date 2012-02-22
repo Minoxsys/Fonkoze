@@ -42,7 +42,7 @@ namespace IntegrationTests.SmsGateway_Integration_Test
 
         public Outpost outpost;
         public ProductGroup productGroup;
-        //public Product product;
+        public Product product;
         public OutpostStockLevel stockLevel;
         public List<OutpostStockLevel> stockLevels;
 
@@ -86,7 +86,10 @@ namespace IntegrationTests.SmsGateway_Integration_Test
             productGroup.ReferenceCode = PRODUCT_GROUP_REFERENCE_CODE;
             session.Save(productGroup);
 
-            stockLevel = new OutpostStockLevel() { ProdSmsRef = SMS_REFERENCE_CODE, StockLevel = 0, ProductGroupName = PRODUCT_GROUP_NAME, OutpostId = outpost.Id, ProdGroupId = productGroup.Id };
+            product = new Product { SMSReferenceCode = SMS_REFERENCE_CODE };
+            session.Save(product);
+
+            stockLevel = new OutpostStockLevel { Product = product, StockLevel = 0, ProductGroup = productGroup, Outpost = outpost };
 
             session.Save(stockLevel);
 

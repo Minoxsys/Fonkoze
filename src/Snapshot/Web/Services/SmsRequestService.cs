@@ -99,14 +99,14 @@ namespace Web.Services
         {
             StringBuilder result = new StringBuilder();
             var stockLevels = GetOutpostStockLevelsByOutpostAndProductGroup(outpostId, productGroupId);
-            stockLevels.ForEach(stockLevelItem => result.Append(stockLevelItem.ProdSmsRef + "0"));
+            stockLevels.ForEach(stockLevelItem => result.Append(stockLevelItem.Product.SMSReferenceCode + "0"));
 
             return result.ToString();
         }
 
         private List<OutpostStockLevel> GetOutpostStockLevelsByOutpostAndProductGroup(Guid outpostId, Guid productGroupId)
         {
-            return queryServiceStockLevel.Query().Where(s => s.OutpostId == outpostId && s.ProdGroupId == productGroupId).ToList();
+            return queryServiceStockLevel.Query().Where(s => s.Outpost.Id == outpostId && s.ProductGroup.Id == productGroupId).ToList();
         }
 
         private void UpdateSingleOutpostStockLevelWithValuesReceivedBySms(OutpostStockLevel outpostStockLevel, SmsReceived smsReceived)
@@ -115,11 +115,11 @@ namespace Web.Services
 
             foreach (ReceivedStockLevel receivedStockLevel in smsReceived.ReceivedStockLevels)
             {
-                if (outpostStockLevel.ProdSmsRef.Equals(receivedStockLevel.ProductSmsReference))
+                if (outpostStockLevel.Product.SMSReferenceCode.Equals(receivedStockLevel.ProductSmsReference))
                 {
                     outpostStockLevel.PrevStockLevel = outpostStockLevel.StockLevel;
                     outpostStockLevel.StockLevel = receivedStockLevel.StockLevel;
-                    outpostStockLevel.UpdatedMethod = SMS_UPDATED_METHOD;
+                    outpostStockLevel.UpdateMethod = SMS_UPDATED_METHOD;
                     saveCommandOutpostStockLevel.Execute(outpostStockLevel);
                 }
             }

@@ -16,25 +16,27 @@ namespace Web.Services
             this.saveCommandOutpostHistoricalStockLevel = saveCommandOutpostHistoricalStockLevel;
         }
 
-        public OutpostHistoricalStockLevel SetHistoricalOutpostStockLevelToPreviousOutpostStockLevelOfCurrent(OutpostStockLevel previousOutpostStockLevel)
+        public OutpostHistoricalStockLevel SetHistoricalOutpostStockLevelToPreviousOutpostStockLevelOfCurrent(OutpostStockLevel outpostStockLevel)
         {
-            var outpostStockLevelHistorical = new OutpostHistoricalStockLevel();
-            outpostStockLevelHistorical.OutpostId = previousOutpostStockLevel.OutpostId;
-            outpostStockLevelHistorical.PrevStockLevel = previousOutpostStockLevel.PrevStockLevel;
-            outpostStockLevelHistorical.ProdGroupId = previousOutpostStockLevel.ProdGroupId;
-            outpostStockLevelHistorical.ProdSmsRef = previousOutpostStockLevel.ProdSmsRef;
-            outpostStockLevelHistorical.ProductId = previousOutpostStockLevel.ProductId;
-            outpostStockLevelHistorical.StockLevel = previousOutpostStockLevel.StockLevel;
-            if (previousOutpostStockLevel.Updated != null)
-            {
-                outpostStockLevelHistorical.UpdateDate = previousOutpostStockLevel.Updated.Value;
-            }
-            else
-            {
-                outpostStockLevelHistorical.UpdateDate = DateTime.Now;
-            }
-            outpostStockLevelHistorical.UpdateMethod = previousOutpostStockLevel.UpdatedMethod;
-            return outpostStockLevelHistorical;
+            var outpostHistoricalStockLevel = new OutpostHistoricalStockLevel();
+
+            outpostHistoricalStockLevel.OutpostId = outpostStockLevel.Outpost.Id;
+            outpostHistoricalStockLevel.OutpostName = outpostStockLevel.Outpost.Name;
+
+            outpostHistoricalStockLevel.PrevStockLevel = outpostStockLevel.PrevStockLevel;
+
+            outpostHistoricalStockLevel.ProductGroupId = outpostStockLevel.ProductGroup.Id;
+            outpostHistoricalStockLevel.ProductGroupName = outpostStockLevel.ProductGroup.Name;
+
+            outpostHistoricalStockLevel.ProdSmsRef = outpostStockLevel.Product.SMSReferenceCode;
+            outpostHistoricalStockLevel.ProductId = outpostStockLevel.Product.Id;
+            outpostHistoricalStockLevel.ProductName = outpostStockLevel.Product.Name;
+
+            outpostHistoricalStockLevel.StockLevel = outpostStockLevel.StockLevel;
+            outpostHistoricalStockLevel.UpdateDate = outpostStockLevel.Updated;
+            outpostHistoricalStockLevel.UpdateMethod = outpostStockLevel.UpdateMethod;
+
+            return outpostHistoricalStockLevel;
         }
 
         public void SaveHistoricalOutpostStockLevelToPreviousOutpostStockLevelOfCurrent(OutpostStockLevel previousOutpostStockLevel)

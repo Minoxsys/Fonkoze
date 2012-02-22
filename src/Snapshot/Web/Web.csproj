@@ -234,7 +234,6 @@
     <Compile Include="Bootstrap\Container\EmailRegistrar.cs" />
     <Compile Include="Bootstrap\Container\FileRegistrar.cs" />
     <Compile Include="Bootstrap\Container\HttpServiceRegistrar.cs" />
-    <Compile Include="Bootstrap\Container\IqueryRole.cs" />
     <Compile Include="Bootstrap\Container\OutpostStockLevelServiceRegistrar.cs" />
     <Compile Include="Bootstrap\Container\QueryOutpostsRegistrar.cs" />
     <Compile Include="Bootstrap\Container\SmsGatewayRegistrar.cs" />
@@ -1606,7 +1605,6 @@
     <Folder Include="App_Data\" />
     <Folder Include="Areas\OutpostManagement\Services\" />
     <Folder Include="Models\Alerts\" />
-    <Folder Include="Assets\img\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

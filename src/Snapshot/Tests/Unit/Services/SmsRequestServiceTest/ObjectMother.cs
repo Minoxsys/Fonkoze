@@ -38,6 +38,7 @@ namespace Tests.Unit.Services.SmsRequestServiceTest
         public Outpost outpostWithNoMainContact;
         public Outpost outpostWithNoNumberContact;
         public ProductGroup productGroup;
+        public Product product;
         public List<OutpostStockLevel> stockLevels;
         public SmsReceived smsReceived;
         public SmsRequest smsRequest;
@@ -88,14 +89,18 @@ namespace Tests.Unit.Services.SmsRequestServiceTest
             productGroup.Name = PRODUCT_GROUP_NAME;
             productGroup.ReferenceCode = "MAL";
 
+            product = MockRepository.GeneratePartialMock<Product>();
+            product.Stub(p => p.Id).Return(productId);
+            product.SMSReferenceCode = SMS_REFERENCE_CODE;
+
             outpostStockLevelId = Guid.NewGuid();
             OutpostStockLevel stockLevel = MockRepository.GeneratePartialMock<OutpostStockLevel>();
             stockLevel.Stub(c => c.Id).Return(outpostStockLevelId);
-            stockLevel.ProdSmsRef = SMS_REFERENCE_CODE;
+            stockLevel.Product = product;
             stockLevel.StockLevel = STOCK_LEVEL;
-            stockLevel.OutpostId = outpostId;
-            stockLevel.ProdGroupId = productGroupId;
-            stockLevel.UpdatedMethod = MANUAL_UPDATED_METHOD;
+            stockLevel.Outpost = outpost;
+            stockLevel.ProductGroup = productGroup;
+            stockLevel.UpdateMethod = MANUAL_UPDATED_METHOD;
 
             stockLevels = new OutpostStockLevel[] { stockLevel }.ToList<OutpostStockLevel>();
 

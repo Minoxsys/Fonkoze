@@ -51,12 +51,16 @@ namespace Tests.Unit.Controllers.RequestScheduleControllerTests
         public void It_Receives_A_Schedule_Name_That_Exists_In_Db_And_Returns_A_Found_Message()
         {
             // Arrange
+            objectMother.queryServiceUsers.Expect(call => call.Query()).Return(new User[] { objectMother.user }.AsQueryable());
+            objectMother.queryServiceClients.Expect(call => call.Load(objectMother.clientId)).Return(objectMother.client);
             objectMother.queryServicetSchedule.Expect(call => call.Query()).Return(new Schedule[] { objectMother.scheduleForClient }.AsQueryable());
 
             // Act
             var result = objectMother.controller.DoesScheduleExist(ObjectMother.SCHEDULE_NAME);
 
             // Assert
+            objectMother.queryServiceUsers.VerifyAllExpectations();
+            objectMother.queryServiceClients.VerifyAllExpectations();
             objectMother.queryServicetSchedule.VerifyAllExpectations();
 
             Assert.IsNotNull(result);

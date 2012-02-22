@@ -29,7 +29,7 @@ namespace Tests.Unit.Services.SmsRequestServiceTest
 
             objectMother.saveCommandOutpostHistoricalStockLevel.Expect(call => call.Execute(Arg<OutpostHistoricalStockLevel>.Matches(
                 r => r.OutpostId.Equals(objectMother.outpostId) &&
-                r.ProdGroupId.Equals(objectMother.productGroupId) &&
+                r.ProductGroupId.Equals(objectMother.productGroupId) &&
                 r.ProdSmsRef.Equals(ObjectMother.SMS_REFERENCE_CODE) &&
                 r.StockLevel.Equals(ObjectMother.STOCK_LEVEL) &&
                 r.PrevStockLevel.Equals(0) &&
@@ -37,12 +37,12 @@ namespace Tests.Unit.Services.SmsRequestServiceTest
             )));
 
             objectMother.saveCommandOutpostStockLevel.Expect(call => call.Execute(Arg<OutpostStockLevel>.Matches(
-                r => r.OutpostId.Equals(objectMother.outpostId) &&
-                r.ProdGroupId.Equals(objectMother.productGroupId) &&
-                r.ProdSmsRef.Equals(ObjectMother.SMS_REFERENCE_CODE) &&
+                r => r.Outpost.Id.Equals(objectMother.outpostId) &&
+                r.ProductGroup.Id.Equals(objectMother.productGroupId) &&
+                r.Product.SMSReferenceCode.Equals(ObjectMother.SMS_REFERENCE_CODE) &&
                 r.StockLevel.Equals(ObjectMother.RECEIVED_STOCK_LEVEL) &&
                 r.PrevStockLevel.Equals(ObjectMother.STOCK_LEVEL) &&
-                r.UpdatedMethod.Equals(ObjectMother.SMS_UPDATED_METHOD)
+                r.UpdateMethod.Equals(ObjectMother.SMS_UPDATED_METHOD)
             )));
 
             // Act
