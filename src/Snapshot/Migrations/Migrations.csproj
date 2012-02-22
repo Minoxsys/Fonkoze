@@ -47,6 +47,7 @@
     <Compile Include="1_BasicAuthenticationInfrastructure.cs" />
     <Compile Include="3_ProductAdministration.cs" />
     <Compile Include="4_OutpostStockLevels.cs" />
+    <Compile Include="5_WorkItem.cs" />
     <Compile Include="AssignCommonColumnsExtensions.cs" />
     <Compile Include="ConstraintUtility.cs" />
     <Compile Include="DeleteExtensions.cs" />

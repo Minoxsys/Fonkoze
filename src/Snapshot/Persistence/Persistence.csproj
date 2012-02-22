@@ -52,12 +52,16 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="WebBackgrounder">
+      <HintPath>..\packages\WebBackgrounder.0.1\lib\net40\WebBackgrounder.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\NHibernateDeleteCommand.cs" />
@@ -70,6 +74,8 @@
     <Compile Include="INHibernateUnitOfWork.cs" />
     <Compile Include="NHibernateSessionFactory.cs" />
     <Compile Include="NHibernateUnitOfWork.cs" />
+    <Compile Include="NHibernateWorkItemRepository.cs" />
+    <Compile Include="Overrides\WorkItemAutoMappingOverride.cs" />
     <Compile Include="Overrides\CountryAutoMappingOverride.cs" />
     <Compile Include="Overrides\ContactAutoMappingOverride.cs" />
     <Compile Include="Overrides\DistrictAutoMappingOverride.cs" />

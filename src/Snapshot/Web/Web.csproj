@@ -143,6 +143,9 @@
     <Reference Include="System.EnterpriseServices">
       <Private>True</Private>
     </Reference>
+    <Reference Include="WebBackgrounder">
+      <HintPath>..\packages\WebBackgrounder.0.1\lib\net40\WebBackgrounder.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Areas\OutpostManagement\Controllers\AssignProductGroupController.cs" />
@@ -220,6 +223,7 @@
     <Compile Include="Areas\StockAdministration\Models\Product\ProductOverviewModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\StockLevel\OutpostStockLevelModel.cs" />
     <Compile Include="Areas\StockAdministration\StockAdministrationAreaRegistration.cs" />
+    <Compile Include="BackgroundJobs\EmptyJob.cs" />
     <Compile Include="Bootstrap\Container\EmailRegistrar.cs" />
     <Compile Include="Bootstrap\Container\FileRegistrar.cs" />
     <Compile Include="Bootstrap\Container\URLRegistrar.cs" />
