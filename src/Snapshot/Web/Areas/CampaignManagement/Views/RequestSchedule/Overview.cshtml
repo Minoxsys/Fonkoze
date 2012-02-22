@@ -300,7 +300,7 @@ User Administration Roles: Overview
                         flex: 1,
                         items: [
                             {
-                                icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/edit.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                                icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("img/edit.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
                                 handler: function (grid, rowIndex, colIndex) {
                                     InitModal();
                                     LoadDataFromSchedule(grid.getStore().getAt(rowIndex));
@@ -308,7 +308,7 @@ User Administration Roles: Overview
                                 }
                             },
                             {
-                                icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/delete.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                                icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("img/delete.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
                                 handler: function (grid, rowIndex, colIndex) {
                                     var rec = grid.getStore().getAt(rowIndex);
 
@@ -319,7 +319,6 @@ User Administration Roles: Overview
                                             var action = $.post(postToUrl, values);
 
                                             action.success(function (serverResponse) {
-                                                Ext.Msg.alert(serverResponse.Status, serverResponse.Message);
                                                 window.feature.store.load();
                                             });
                                         }
@@ -402,7 +401,6 @@ User Administration Roles: Overview
                     });
 
                     action.success(function (serverResponse) {
-                        Ext.Msg.alert(serverResponse.Status, serverResponse.Message);
                         window.feature.store.load();
                         window.feature.scheduleToEdit = null;
                     });
