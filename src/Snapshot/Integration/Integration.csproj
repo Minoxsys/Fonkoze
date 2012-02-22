@@ -89,6 +89,8 @@
     <Compile Include="When_WeWantToPersist_A_Campaign.cs" />
     <Compile Include="When_WeWantToPersist_An_SmsRequest.cs" />
     <Compile Include="When_WeWantToPersist_A_OutpostStockLevelHistorical.cs" />
+    <Compile Include="When_WeWantToPersist_A_RequestReminder.cs" />
+    <Compile Include="When_WeWantToPersist_A_Schedule.cs" />
     <Compile Include="When_WeWantToPersist_A_StockGroup.cs" />
     <Compile Include="SessionFactory.cs" />
     <Compile Include="GivenAPersistenceSpecification.cs" />
