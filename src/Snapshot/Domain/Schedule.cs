@@ -14,6 +14,7 @@ namespace Domain
         public virtual int StartOn { get; set; }
         public virtual IList<RequestReminder> Reminders { get; set; }
         public virtual string ScheduleBasis { get; set; }
+        public virtual Client Client { get; set; }
 
         public virtual void AddReminder(RequestReminder reminder)
         {

@@ -302,6 +302,7 @@ create table SmsRequests (
 	Created DATETIME null,
     Updated DATETIME null,
     ByUser_FK UNIQUEIDENTIFIER null,
+    Client_FK UNIQUEIDENTIFIER null,
 	primary key (Id)
 	)
 end

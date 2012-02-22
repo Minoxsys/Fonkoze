@@ -7,6 +7,7 @@ using Rhino.Mocks;
 using Domain;
 using System.Web.Mvc;
 using Web.Areas.CampaignManagement.Models.RequestSchedule;
+using Core.Domain;
 
 namespace Tests.Unit.Controllers.RequestScheduleControllerTests
 {
@@ -26,12 +27,16 @@ namespace Tests.Unit.Controllers.RequestScheduleControllerTests
         public void Return_JSON_With_List_Of_RequestSchedules()
         {
             // Arrange
-            objectMother.queryServicetSchedule.Expect(call => call.Query()).Return(new Schedule[] { objectMother.schedule }.AsQueryable());
+            objectMother.queryServiceUsers.Expect(call => call.Query()).Return(new User[] { objectMother.user }.AsQueryable());
+            objectMother.queryServiceClients.Expect(call => call.Load(objectMother.clientId)).Return(objectMother.client);
+            objectMother.queryServicetSchedule.Expect(call => call.Query()).Return(new Schedule[] { objectMother.scheduleForClient, objectMother.scheduleForOtherClient }.AsQueryable());
 
             // Act
             var jsonResult = objectMother.controller.GetListOfRequestSchedules(objectMother.indexModel);
 
             // Assert
+            objectMother.queryServiceUsers.VerifyAllExpectations();
+            objectMother.queryServiceClients.VerifyAllExpectations();
             objectMother.queryServicetSchedule.VerifyAllExpectations();
 
             Assert.IsNotNull(jsonResult);

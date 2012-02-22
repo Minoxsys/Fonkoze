@@ -7,11 +7,15 @@ using Web.Models.Shared;
 using Core.Persistence;
 using Domain;
 using Web.Areas.CampaignManagement.Models.RequestSchedule;
+using Core.Domain;
 
 namespace Web.Areas.CampaignManagement.Controllers
 {
     public class RequestScheduleController : Controller
     {
+        public IQueryService<User> QueryUsers { get; set; }
+
+        public IQueryService<Client> QueryClients { get; set; }
 
         public IQueryService<Schedule> QueryServiceSchedule { get; set; }
 
@@ -26,38 +30,57 @@ namespace Web.Areas.CampaignManagement.Controllers
             return View();
         }
 
+        private Client _client;
+        private User _user;
+
+        private void LoadUserAndClient()
+        {
+            var loggedUser = User.Identity.Name;
+            this._user = QueryUsers.Query().FirstOrDefault(m => m.UserName == loggedUser);
+
+            if (_user == null) throw new NullReferenceException("User is not logged in");
+
+            var clientId = Client.DEFAULT_ID;
+            if (_user.ClientId != Guid.Empty)
+                clientId = _user.ClientId;
+
+            this._client = QueryClients.Load(clientId);
+        }
+
         [HttpGet]
         public JsonResult GetListOfRequestSchedules(IndexModel indexModel)
         {
+            LoadUserAndClient();
+
             var pageSize = indexModel.limit.Value;
-            var schedulesDataQyery = QueryServiceSchedule.Query();
+            var schedulesDataQuery = QueryServiceSchedule.Query().Where(s => s.Client.Id == _client.Id);
 
             var orderByColumnDirection = new Dictionary<string, Func<IQueryable<Schedule>>>()
             {
-                { "Name-ASC", () => schedulesDataQyery.OrderBy(r => r.Name) },
-                { "Name-DESC", () => schedulesDataQyery.OrderByDescending(r => r.Name) },
-                { "ScheduleBasis-ASC", () => schedulesDataQyery.OrderBy(r => r.ScheduleBasis) },
-                { "ScheduleBasis-DESC", () => schedulesDataQyery.OrderByDescending(r => r.ScheduleBasis) },
-                { "Frequency-ASC", () => schedulesDataQyery.OrderBy(r => r.FrequencyType) },
-                { "Frequency-DESC", () => schedulesDataQyery.OrderByDescending(r => r.FrequencyType) },
-                { "Created-ASC", () => schedulesDataQyery.OrderBy(r => r.Created) },
-                { "Created-DESC", () => schedulesDataQyery.OrderByDescending(r => r.Created) }
+                { "Name-ASC", () => schedulesDataQuery.OrderBy(r => r.Name) },
+                { "Name-DESC", () => schedulesDataQuery.OrderByDescending(r => r.Name) },
+                { "ScheduleBasis-ASC", () => schedulesDataQuery.OrderBy(r => r.ScheduleBasis) },
+                { "ScheduleBasis-DESC", () => schedulesDataQuery.OrderByDescending(r => r.ScheduleBasis) },
+                { "Frequency-ASC", () => schedulesDataQuery.OrderBy(r => r.FrequencyType) },
+                { "Frequency-DESC", () => schedulesDataQuery.OrderByDescending(r => r.FrequencyType) },
+                { "Created-ASC", () => schedulesDataQuery.OrderBy(r => r.Created) },
+                { "Created-DESC", () => schedulesDataQuery.OrderByDescending(r => r.Created) }
             };
 
-            schedulesDataQyery = orderByColumnDirection[String.Format("{0}-{1}", indexModel.sort, indexModel.dir)].Invoke();
+            schedulesDataQuery = orderByColumnDirection[String.Format("{0}-{1}", indexModel.sort, indexModel.dir)].Invoke();
 
             if (!string.IsNullOrEmpty(indexModel.searchValue))
             {
-                schedulesDataQyery = schedulesDataQyery.Where(it => it.Name.Contains(indexModel.searchValue));
+                schedulesDataQuery = schedulesDataQuery.Where(it => it.Name.Contains(indexModel.searchValue));
             }
 
-            var totalItems = schedulesDataQyery.Count();
+            var totalItems = schedulesDataQuery.Count();
 
-            schedulesDataQyery = schedulesDataQyery
+            schedulesDataQuery = schedulesDataQuery
                 .Take(pageSize)
                 .Skip(indexModel.start.Value);
 
-            var scheduleListOfReferenceModelsProjection = (from schedule in schedulesDataQyery.ToList()
+            var scheduleListOfReferenceModelsProjection = (from schedule in schedulesDataQuery.ToList()
                                                            select new RequestScheduleReferenceModel
                                                        {
                                                            Id = schedule.Id,
@@ -83,6 +106,8 @@ namespace Web.Areas.CampaignManagement.Controllers
         [HttpPost]
         public JsonResult Create(RequestScheduleInputModel inputModel)
         {
+            LoadUserAndClient();
+
             Schedule request = CreateRequestScheduleFromRequestScheduleInputModel(inputModel);
 
             return Json(new JsonActionResponse() { Status = "Success", Message = string.Format("Request {0} has been saved.", request.Name) }, JsonRequestBehavior.AllowGet);
@@ -145,7 +170,9 @@ namespace Web.Areas.CampaignManagement.Controllers
         [HttpPost]
         public JsonResult DoesScheduleExist(string Name)
         {
-            Schedule schedule = QueryServiceSchedule.Query().Where(s => s.Name.Equals(Name)).FirstOrDefault();
+            LoadUserAndClient();
+
+            Schedule schedule = QueryServiceSchedule.Query().Where(s => s.Client == _client && s.Name.Equals(Name)).FirstOrDefault();
 
             if (schedule == null)
             {
@@ -169,27 +196,28 @@ namespace Web.Areas.CampaignManagement.Controllers
 
         private Schedule CreateRequestScheduleFromRequestScheduleInputModel(RequestScheduleInputModel inputModel)
         {
-            Schedule request = new Schedule
+            Schedule schedule = new Schedule
             {
                 Name = inputModel.Name,
                 ScheduleBasis = inputModel.Basis,
                 FrequencyType = inputModel.FrequencyType,
                 FrequencyValue = inputModel.FrequencyValue,
-                StartOn = inputModel.StartOn
+                StartOn = inputModel.StartOn,
+                Client = _client
             };
 
-            request.Reminders = new List<RequestReminder>();
+            schedule.Reminders = new List<RequestReminder>();
             if (inputModel.Reminders != null)
             {
                 foreach (RequestReminderInput reminder in inputModel.Reminders)
                 {
-                    request.AddReminder(new RequestReminder { PeriodType = reminder.PeriodType, PeriodValue = reminder.PeriodValue });
+                    schedule.AddReminder(new RequestReminder { PeriodType = reminder.PeriodType, PeriodValue = reminder.PeriodValue });
                 }
             }
 
-            SaveCommandRequestSchedule.Execute(request);
+            SaveCommandRequestSchedule.Execute(schedule);
 
-            return request;
+            return schedule;
         }
     }
 }

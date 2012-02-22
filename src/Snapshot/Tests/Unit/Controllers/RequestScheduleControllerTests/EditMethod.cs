@@ -27,11 +27,11 @@ namespace Tests.Unit.Controllers.RequestScheduleControllerTests
         {
             //Arrange
 
-            objectMother.queryServicetSchedule.Expect(call => call.Load(objectMother.scheduleId)).Return(objectMother.schedule);
+            objectMother.queryServicetSchedule.Expect(call => call.Load(objectMother.scheduleForClientId)).Return(objectMother.scheduleForClient);
             objectMother.deleteCommandRequestReminder.Expect(call => call.Execute(objectMother.reminder));
 
             objectMother.saveCommandSchedule.Expect(call => call.Execute(Arg<Schedule>.Matches(
-                    s => s.Id == objectMother.scheduleId &&
+                    s => s.Id == objectMother.scheduleForClientId &&
                         s.Name == ObjectMother.SCHEDULE_NAME &&
                         s.ScheduleBasis == ObjectMother.SCHEDULE_BASIS &&
                         s.FrequencyType == ObjectMother.FREQUENCY_TYPE &&

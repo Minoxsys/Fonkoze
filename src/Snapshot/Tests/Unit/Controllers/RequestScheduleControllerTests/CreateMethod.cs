@@ -6,6 +6,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Domain;
 using Web.Models.Shared;
+using Core.Domain;
 
 namespace Tests.Unit.Controllers.RequestScheduleControllerTests
 {
@@ -25,6 +26,8 @@ namespace Tests.Unit.Controllers.RequestScheduleControllerTests
         public void Returns_JSON_With_SuccessMessage_When_Request_Has_Been_Saved()
         {
             //Arrange
+            objectMother.queryServiceUsers.Expect(call => call.Query()).Return(new User[] { objectMother.user }.AsQueryable());
+            objectMother.queryServiceClients.Expect(call => call.Load(objectMother.clientId)).Return(objectMother.client);
 
             objectMother.saveCommandSchedule.Expect(call => call.Execute(Arg<Schedule>.Matches(
                     s => s.Name == ObjectMother.SCHEDULE_NAME &&
@@ -32,13 +35,16 @@ namespace Tests.Unit.Controllers.RequestScheduleControllerTests
                         s.FrequencyType == ObjectMother.FREQUENCY_TYPE &&
                         s.FrequencyValue == ObjectMother.FREQUENCY_VALUE &&
                         s.StartOn == ObjectMother.START_ON &&
-                        s.Reminders.Count == 1
+                        s.Reminders.Count == 1 &&
+                        s.Client == objectMother.client
                     )));
 
             //Act
             var jsonResult = objectMother.controller.Create(objectMother.inputModel);
 
             //Assert
+            objectMother.queryServiceUsers.VerifyAllExpectations();
+            objectMother.queryServiceClients.VerifyAllExpectations();
             objectMother.saveCommandSchedule.VerifyAllExpectations();
 
             Assert.IsNotNull(jsonResult);

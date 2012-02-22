@@ -57,12 +57,12 @@ namespace Tests.Unit.Controllers.RequestScheduleControllerTests
         public void Executes_DeleteCommand_WithTheSelectedUser()
         {
             //Arrange
-            objectMother.queryServicetSchedule.Expect(call => call.Load(objectMother.scheduleId)).Return(objectMother.schedule);
+            objectMother.queryServicetSchedule.Expect(call => call.Load(objectMother.scheduleForClientId)).Return(objectMother.scheduleForClient);
             objectMother.deleteCommandRequestReminder.Expect(call => call.Execute(objectMother.reminder));
-            objectMother.deleteCommandRequestSchedule.Expect(call => call.Execute(Arg<Schedule>.Matches(r => r.Id == objectMother.scheduleId)));
+            objectMother.deleteCommandRequestSchedule.Expect(call => call.Execute(Arg<Schedule>.Matches(r => r.Id == objectMother.scheduleForClientId)));
 
             //Act
-            var jsonResult = objectMother.controller.Delete(objectMother.scheduleId);
+            var jsonResult = objectMother.controller.Delete(objectMother.scheduleForClientId);
 
             //Assert
             objectMother.queryServicetSchedule.VerifyAllExpectations();
