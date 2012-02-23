@@ -5,8 +5,10 @@
             id: 'SideBar',
             group: 'SideBarGroup',
             smsRequest: 'Sidebar-CampaignAdministration-SMSRequestSchedule-Button',
-            existingRequest: 'SideBar-CampaignAdministration-ExistingRequest-Button'
-            
+            existingRequest: 'SideBar-CampaignAdministration-ExistingRequest-Button',
+            manageCampaigns: 'SideBar-CampaignAdministration-ManageCampaigns-Button',
+            automaticSchedules: 'SideBar-CampaignAdministration-AutomaticSchedules-Button',
+            createProductLevelRequests: 'SideBar-CampaignAdministration-CreateProductLevelRequests-Button'
         }
     };
 
@@ -71,8 +73,47 @@
                                 handler: function () {
                                     
                                 }
-                            }
-                           
+                            },
+                            {
+                                xtype: 'label',
+                                text: 'Management'
+                            },
+                            {
+                                xtype: 'button',
+                                id: contentRes.maincontent.sidebar.manageCampaigns,
+                                toggleGroup: contentRes.maincontent.sidebar.group,
+                                text: 'Manage Campaigns',
+                                icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/arrow.gif"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                                iconCls:'x-btn-text-icon',
+                                handler: function () {
+                                    
+                                },
+                                enableToggle: true
+                            },
+                            {
+                                xtype: 'button',
+                                id: contentRes.maincontent.sidebar.automaticSchedules,
+                                toggleGroup: contentRes.maincontent.sidebar.group,
+                                text: 'Automatic Schedules',
+                                icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/arrow.gif"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                                iconCls:'x-btn-text-icon',
+                                handler: function () {
+                                    navigateTo(window.res.link.automaticSchedules);
+                                },
+                                enableToggle: true
+                            },
+                            {
+                                xtype: 'button',
+                                id: contentRes.maincontent.sidebar.createProductLevelRequests,
+                                toggleGroup: contentRes.maincontent.sidebar.group,
+                                text: 'Create product level requests',
+                                icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/arrow.gif"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                                iconCls:'x-btn-text-icon',
+                                handler: function () {
+                                    
+                                },
+                                enableToggle: true
+                            },
                         ]
                     }
 

@@ -25,9 +25,9 @@ namespace Migrations
                 .WithCommonColumns()
                 .WithClientColumn()
                 .WithColumn("Name").AsString(ConstraintUtility.NAME_LENGTH)
-                .WithColumn("FrequencyType").AsString(ConstraintUtility.NAME_LENGTH)
-                .WithColumn("FrequencyValue").AsInt32()
-                .WithColumn("StartOn").AsInt32()
+                .WithColumn("FrequencyType").AsString(ConstraintUtility.NAME_LENGTH).Nullable()
+                .WithColumn("FrequencyValue").AsInt32().Nullable()
+                .WithColumn("StartOn").AsInt32().Nullable()
                 .WithColumn("ScheduleBasis").AsString(ConstraintUtility.NAME_LENGTH);
 
             Create.AddClientForeignKey("Schedules");
@@ -35,8 +35,8 @@ namespace Migrations
 
             Create.Table("RequestReminders")
                 .WithCommonColumns()
-                .WithColumn("PeriodType").AsString(ConstraintUtility.NAME_LENGTH)
-                .WithColumn("PeriodValue").AsInt32()
+                .WithColumn("PeriodType").AsString(ConstraintUtility.NAME_LENGTH).Nullable()
+                .WithColumn("PeriodValue").AsInt32().Nullable()
                 .WithColumn("Schedule_FK").AsGuid();
 
             Create.AddForeignKey("RequestReminders");

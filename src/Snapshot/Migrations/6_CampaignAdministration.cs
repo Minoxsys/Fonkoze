@@ -24,7 +24,7 @@ namespace Migrations
                 .WithColumn("StartDate").AsDateTime()
                 .WithColumn("EndDate").AsDateTime()
                 .WithColumn("CreationDate").AsDateTime()
-                .WithColumn("Open").AsBoolean()
+                .WithColumn("Opened").AsBoolean()
                 .WithColumn("Options").AsBinary()
                 ;
 
