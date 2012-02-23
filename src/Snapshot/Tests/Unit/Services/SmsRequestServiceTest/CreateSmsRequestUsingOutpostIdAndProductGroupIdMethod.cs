@@ -35,7 +35,8 @@ namespace Tests.Unit.Services.SmsRequestServiceTest
                     r.ProductGroupReferenceCode == ObjectMother.PRODUCT_GROUP_REFERENCE_CODE &&
                      r.OutpostId.Equals(objectMother.outpostId) &&
                      r.Message == SmsRequestService.MESSAGE_NOT_DELIVERED &&
-                     r.Number.Equals("1234567890")
+                     r.Number.Equals("1234567890") &&
+                     r.Client == objectMother.client
                 )));
 
             objectMother.saveCommandSmsRequest.Expect(it => it.Execute(Arg<SmsRequest>.Matches(
@@ -43,11 +44,12 @@ namespace Tests.Unit.Services.SmsRequestServiceTest
                     r.ProductGroupReferenceCode == ObjectMother.PRODUCT_GROUP_REFERENCE_CODE &&
                      r.OutpostId.Equals(objectMother.outpostId) &&
                      r.Number.Equals("1234567890") &&
+                     r.Client == objectMother.client &&
                      r.Message.Equals(string.Format(SMS_MESSAGE_TEMPLATE, "Malaria", "MAL R0"))
                 )));
 
             // Act
-            SmsRequest smsRequest = objectMother.smsRequestService.CreateSmsRequestUsingOutpostIdAndProductGroupId(objectMother.outpostId, objectMother.productGroupId);
+            SmsRequest smsRequest = objectMother.smsRequestService.CreateSmsRequestUsingOutpostIdAndProductGroupIdForClient(objectMother.outpostId, objectMother.productGroupId, objectMother.client);
 
             // Assert
             objectMother.queryServiceOutpost.VerifyAllExpectations();
@@ -65,7 +67,7 @@ namespace Tests.Unit.Services.SmsRequestServiceTest
             objectMother.queryServiceProductGroup.Expect(call => call.Load(objectMother.productGroupId)).Return(objectMother.productGroup);
             objectMother.queryServiceStockLevel.Expect(call => call.Query()).Return(objectMother.stockLevels.AsQueryable());
 
-            SmsRequest smsRequest = objectMother.smsRequestService.CreateSmsRequestUsingOutpostIdAndProductGroupId(objectMother.outpostId, objectMother.productGroupId);
+            SmsRequest smsRequest = objectMother.smsRequestService.CreateSmsRequestUsingOutpostIdAndProductGroupIdForClient(objectMother.outpostId, objectMother.productGroupId, objectMother.client);
 
             Assert.AreEqual(Guid.Empty, smsRequest.Id);
         }
@@ -77,7 +79,7 @@ namespace Tests.Unit.Services.SmsRequestServiceTest
             objectMother.queryServiceProductGroup.Expect(call => call.Load(objectMother.productGroupId)).Return(objectMother.productGroup);
             objectMother.queryServiceStockLevel.Expect(call => call.Query()).Return(objectMother.stockLevels.AsQueryable());
 
-            SmsRequest smsRequest = objectMother.smsRequestService.CreateSmsRequestUsingOutpostIdAndProductGroupId(objectMother.outpostId, objectMother.productGroupId);
+            SmsRequest smsRequest = objectMother.smsRequestService.CreateSmsRequestUsingOutpostIdAndProductGroupIdForClient(objectMother.outpostId, objectMother.productGroupId, objectMother.client);
 
             Assert.AreEqual(Guid.Empty, smsRequest.Id);
         }

@@ -13,5 +13,6 @@ namespace Domain
         public virtual string ProductGroupReferenceCode { get; set; }
         public virtual Guid OutpostId { get; set; }
         public virtual Guid ProductGroupId { get; set; }
+        public virtual Client Client { get; set; }
     }
 }

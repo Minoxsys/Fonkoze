@@ -41,7 +41,7 @@ namespace Web.Services
             this.saveCommandOutpostStockLevel = saveCommandOutpostStockLevel;
         }
 
-        public SmsRequest CreateSmsRequestUsingOutpostIdAndProductGroupId(Guid outpostId, Guid productGroupId)
+        public SmsRequest CreateSmsRequestUsingOutpostIdAndProductGroupIdForClient(Guid outpostId, Guid productGroupId, Client client)
         {
             outpost = queryServiceOutpost.Load(outpostId);
             productGroup = queryServiceProductGroup.Load(productGroupId);
@@ -51,6 +51,7 @@ namespace Web.Services
 
             if (!string.IsNullOrEmpty(numbers))
             {
+                smsRequest.Client = client;
                 smsRequest.Number = numbers;
                 smsRequest.OutpostId = outpostId;
                 smsRequest.ProductGroupId = productGroupId;

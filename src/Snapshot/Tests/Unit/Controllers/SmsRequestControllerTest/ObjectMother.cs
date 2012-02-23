@@ -8,6 +8,8 @@ using Domain;
 using Rhino.Mocks;
 using Web.Services;
 using Web.Models.SmsRequest;
+using MvcContrib.TestHelper.Fakes;
+using Core.Domain;
 
 namespace Tests.Unit.Controllers.SmsRequestControllerTest
 {
@@ -18,11 +20,16 @@ namespace Tests.Unit.Controllers.SmsRequestControllerTest
         public const string IN_NUMBER = "1234";
         public const string EMAIL = "a@a.ro";
         public const string CREDITS = "10";
+        public const string USERNAME = "admin";
 
+        public Guid clientId;
+        public Guid userId;
         public Guid outpostId;
         public Guid productGroupId;
         public Guid smsRequestId;
 
+        public Client client;
+        public User user;
         public Outpost outpost;
         public ProductGroup productGroup;
         public SmsRequest smsRequest;
@@ -31,6 +38,9 @@ namespace Tests.Unit.Controllers.SmsRequestControllerTest
         public RawSmsReceivedParseResult rawSmsReceivedParseResult;
         public RawSmsReceivedParseResult rawSmsReceivedParseResultFailed;
         public SmsReceived smsReceived;
+
+        public IQueryService<User> queryServiceUsers { get; set; }
+        public IQueryService<Client> queryServiceClients { get; set; }
 
         public IQueryService<Outpost> queryServiceOutpost;
         public IQueryService<ProductGroup> queryServiceProductGroup;
@@ -45,6 +55,9 @@ namespace Tests.Unit.Controllers.SmsRequestControllerTest
         {
             controller = new SmsRequestController();
 
+            queryServiceUsers = MockRepository.GenerateMock<IQueryService<User>>();
+            queryServiceClients = MockRepository.GenerateMock<IQueryService<Client>>();
+
             queryServiceOutpost = MockRepository.GenerateMock<IQueryService<Outpost>>();
             queryServiceProductGroup = MockRepository.GenerateMock<IQueryService<ProductGroup>>();
 
@@ -53,6 +66,11 @@ namespace Tests.Unit.Controllers.SmsRequestControllerTest
 
             saveCommandRawSmsReceived = MockRepository.GenerateMock<ISaveOrUpdateCommand<RawSmsReceived>>();
 
+            FakeControllerContext.Builder.HttpContext.User = new FakePrincipal(new FakeIdentity(USERNAME), new string[] { });
+            FakeControllerContext.Initialize(controller);
+
+            controller.QueryUsers = queryServiceUsers;
+            controller.QueryClients = queryServiceClients;
             controller.QueryOutpost = queryServiceOutpost;
             controller.QueryProductGroup = queryServiceProductGroup;
             controller.SmsRequestService = smsRequestService;
@@ -62,6 +80,17 @@ namespace Tests.Unit.Controllers.SmsRequestControllerTest
 
         public void SetUp_StubData()
         {
+            clientId = Guid.NewGuid();
+
+            client = MockRepository.GeneratePartialMock<Client>();
+            client.Stub(c => c.Id).Return(clientId);
+
+            userId = Guid.NewGuid();
+            user = MockRepository.GeneratePartialMock<User>();
+            user.Stub(u => u.Id).Return(userId);
+            user.UserName = USERNAME;
+            user.ClientId = clientId;
+
             outpostId = Guid.NewGuid();
             outpost = MockRepository.GeneratePartialMock<Outpost>();
             outpost.Stub(c => c.Id).Return(outpostId);

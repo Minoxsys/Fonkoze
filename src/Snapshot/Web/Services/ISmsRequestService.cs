@@ -8,7 +8,7 @@ namespace Web.Services
 {
     public interface ISmsRequestService
     {
-        SmsRequest CreateSmsRequestUsingOutpostIdAndProductGroupId(Guid outpostId, Guid productGroupId);
+        SmsRequest CreateSmsRequestUsingOutpostIdAndProductGroupIdForClient(Guid outpostId, Guid productGroupId, Client client);
         void UpdateOutpostStockLevelsWithValuesReceivedBySms(SmsReceived smsReceived);
     }
 }

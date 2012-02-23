@@ -10,14 +10,14 @@ namespace Migrations
 
         public override void Down()
         {
-            Delete.RemoveClientForeignKey("Campaign");
-            Delete.RemoveForeignKey("Campaign");
-            Delete.Table("Campaign");
+            Delete.RemoveClientForeignKey("Campaigns");
+            Delete.RemoveForeignKey("Campaigns");
+            Delete.Table("Campaigns");
         }
 
         public override void Up()
         {
-            Create.Table("Campaign")
+            Create.Table("Campaigns")
                 .WithCommonColumns()
                 .WithClientColumn()
                 .WithColumn("Name").AsString(ConstraintUtility.NAME_LENGTH)

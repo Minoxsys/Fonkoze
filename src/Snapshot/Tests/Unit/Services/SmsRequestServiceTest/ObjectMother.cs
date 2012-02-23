@@ -21,6 +21,7 @@ namespace Tests.Unit.Services.SmsRequestServiceTest
         public const int RECEIVED_STOCK_LEVEL = 2;
         public const string PHONE_NUMBER = "1234567890";
 
+        public Guid clientId;
         public Guid outpostId;
         public Guid productGroupId;
         public Guid productId;
@@ -34,6 +35,7 @@ namespace Tests.Unit.Services.SmsRequestServiceTest
         public ISaveOrUpdateCommand<OutpostStockLevel> saveCommandOutpostStockLevel;
         public ISaveOrUpdateCommand<OutpostHistoricalStockLevel> saveCommandOutpostHistoricalStockLevel;
 
+        public Client client;
         public Outpost outpost;
         public Outpost outpostWithNoMainContact;
         public Outpost outpostWithNoNumberContact;
@@ -65,6 +67,11 @@ namespace Tests.Unit.Services.SmsRequestServiceTest
 
         public void Setup_Stub_Data()
         {
+            clientId = Guid.NewGuid();
+
+            client = MockRepository.GeneratePartialMock<Client>();
+            client.Stub(c => c.Id).Return(clientId);
+
             outpostId = Guid.NewGuid();
             productGroupId = Guid.NewGuid();
             productId = Guid.NewGuid();

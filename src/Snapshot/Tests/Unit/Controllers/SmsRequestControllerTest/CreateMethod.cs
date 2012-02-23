@@ -7,6 +7,7 @@ using Rhino.Mocks;
 using Domain;
 using System.Web.Mvc;
 using Web.Models.SmsRequest;
+using Core.Domain;
 
 namespace Tests.Unit.Controllers.SmsRequestControllerTest
 {
@@ -26,6 +27,8 @@ namespace Tests.Unit.Controllers.SmsRequestControllerTest
         public void Get_Create_Returns_View_With_A_ListOfOutpost_And_A_ListOfProductGroups()
         {
             // Arange
+            objectMother.queryServiceUsers.Expect(call => call.Query()).Return(new User[] { objectMother.user }.AsQueryable());
+            objectMother.queryServiceClients.Expect(call => call.Load(objectMother.clientId)).Return(objectMother.client);
             objectMother.queryServiceOutpost.Expect(call => call.Query()).Return(new Outpost[] { objectMother.outpost }.AsQueryable());
             objectMother.queryServiceProductGroup.Expect(call => call.Query()).Return(new ProductGroup[] { objectMother.productGroup }.AsQueryable());
 
@@ -33,6 +36,8 @@ namespace Tests.Unit.Controllers.SmsRequestControllerTest
             var result = (ViewResult)objectMother.controller.Create();
 
             //Assert
+            objectMother.queryServiceUsers.VerifyAllExpectations();
+            objectMother.queryServiceClients.VerifyAllExpectations();
             objectMother.queryServiceOutpost.VerifyAllExpectations();
             objectMother.queryServiceProductGroup.VerifyAllExpectations();
 
@@ -50,7 +55,9 @@ namespace Tests.Unit.Controllers.SmsRequestControllerTest
                 ProductGroup = new ReferenceModel() { Id = objectMother.productGroupId, Name = objectMother.productGroup.Name }
             };
 
-            objectMother.smsRequestService.Expect(call => call.CreateSmsRequestUsingOutpostIdAndProductGroupId(objectMother.outpostId, objectMother.productGroupId)).Return(objectMother.smsRequest);
+            objectMother.queryServiceUsers.Expect(call => call.Query()).Return(new User[] { objectMother.user }.AsQueryable());
+            objectMother.queryServiceClients.Expect(call => call.Load(objectMother.clientId)).Return(objectMother.client);
+            objectMother.smsRequestService.Expect(call => call.CreateSmsRequestUsingOutpostIdAndProductGroupIdForClient(objectMother.outpostId, objectMother.productGroupId, objectMother.client)).Return(objectMother.smsRequest);
 
             objectMother.smsGatewayService.Expect(call => call.SendSmsRequest(objectMother.smsRequest)).Return("Post return");
 
@@ -58,6 +65,8 @@ namespace Tests.Unit.Controllers.SmsRequestControllerTest
             var redirectResult = (RedirectToRouteResult)objectMother.controller.Create(model);
 
             // Assert
+            objectMother.queryServiceUsers.VerifyAllExpectations();
+            objectMother.queryServiceClients.VerifyAllExpectations();
             objectMother.smsRequestService.VerifyAllExpectations();
             objectMother.smsGatewayService.VerifyAllExpectations();
 
@@ -74,11 +83,15 @@ namespace Tests.Unit.Controllers.SmsRequestControllerTest
                 Outpost = new ReferenceModel() { Name = string.Empty },
                 ProductGroup = new ReferenceModel() { Name = string.Empty }
             };
+            objectMother.queryServiceUsers.Expect(call => call.Query()).Return(new User[] { objectMother.user }.AsQueryable());
+            objectMother.queryServiceClients.Expect(call => call.Load(objectMother.clientId)).Return(objectMother.client);
 
             // Act
             var redirectResult = (RedirectToRouteResult)objectMother.controller.Create(model);
 
             // Assert
+            objectMother.queryServiceUsers.VerifyAllExpectations();
+            objectMother.queryServiceClients.VerifyAllExpectations();
             Assert.AreEqual("Create", redirectResult.RouteValues["Action"]);
         }
 
@@ -91,13 +104,16 @@ namespace Tests.Unit.Controllers.SmsRequestControllerTest
                 Outpost = new ReferenceModel() { Id = objectMother.outpostId, Name = objectMother.outpost.Name },
                 ProductGroup = new ReferenceModel() { Id = objectMother.productGroupId, Name = objectMother.productGroup.Name }
             };
-
-            objectMother.smsRequestService.Expect(call => call.CreateSmsRequestUsingOutpostIdAndProductGroupId(objectMother.outpostId, objectMother.productGroupId)).Return(objectMother.nullSmsRequest);
+            objectMother.queryServiceUsers.Expect(call => call.Query()).Return(new User[] { objectMother.user }.AsQueryable());
+            objectMother.queryServiceClients.Expect(call => call.Load(objectMother.clientId)).Return(objectMother.client);
+            objectMother.smsRequestService.Expect(call => call.CreateSmsRequestUsingOutpostIdAndProductGroupIdForClient(objectMother.outpostId, objectMother.productGroupId, objectMother.client)).Return(objectMother.nullSmsRequest);
 
             // Act
             var redirectResult = (RedirectToRouteResult)objectMother.controller.Create(model);
 
             // Assert
+            objectMother.queryServiceUsers.VerifyAllExpectations();
+            objectMother.queryServiceClients.VerifyAllExpectations();
             objectMother.smsRequestService.VerifyAllExpectations();
 
             Assert.AreEqual("Index", redirectResult.RouteValues["Action"]);

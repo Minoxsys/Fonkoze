@@ -10,18 +10,18 @@ namespace Migrations
 
         public override void Down()
         {
-            Delete.RemoveForeignKey("RequestReminder");
-            Delete.RemoveForeignKey("RequestReminder", "Schedule_FK", "Schedule");
-            Delete.Table("RequestReminder");
+            Delete.RemoveForeignKey("RequestReminders");
+            Delete.RemoveForeignKey("RequestReminders", "Schedule_FK", "Schedules");
+            Delete.Table("RequestReminders");
 
-            Delete.RemoveClientForeignKey("Schedule");
-            Delete.RemoveForeignKey("Schedule");
-            Delete.Table("Schedule");
+            Delete.RemoveClientForeignKey("Schedules");
+            Delete.RemoveForeignKey("Schedules");
+            Delete.Table("Schedules");
         }
 
         public override void Up()
         {
-            Create.Table("Schedule")
+            Create.Table("Schedules")
                 .WithCommonColumns()
                 .WithClientColumn()
                 .WithColumn("Name").AsString(ConstraintUtility.NAME_LENGTH)
@@ -30,15 +30,17 @@ namespace Migrations
                 .WithColumn("StartOn").AsInt32()
                 .WithColumn("ScheduleBasis").AsString(ConstraintUtility.NAME_LENGTH);
 
-            Create.AddClientForeignKey("Schedule");
-            Create.AddForeignKey("Schedule");
+            Create.AddClientForeignKey("Schedules");
+            Create.AddForeignKey("Schedules");
 
-            Create.Table("RequestReminder")
+            Create.Table("RequestReminders")
                 .WithCommonColumns()
                 .WithColumn("PeriodType").AsString(ConstraintUtility.NAME_LENGTH)
                 .WithColumn("PeriodValue").AsInt32()
                 .WithColumn("Schedule_FK").AsGuid();
-            Create.AddForeignKey("RequestReminder", "Schedule_FK", "Schedule");
+
+            Create.AddForeignKey("RequestReminders");
+            Create.AddForeignKey("RequestReminders", "Schedule_FK", "Schedules");
         }
     }
 }

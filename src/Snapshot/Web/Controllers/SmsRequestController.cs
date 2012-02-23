@@ -7,11 +7,15 @@ using Web.Models.SmsRequest;
 using Core.Persistence;
 using Domain;
 using Web.Services;
+using Core.Domain;
 
 namespace Web.Controllers
 {
     public class SmsRequestController : Controller
     {
+        public IQueryService<User> QueryUsers { get; set; }
+        public IQueryService<Client> QueryClients { get; set; }
+
         public IQueryService<Outpost> QueryOutpost { get; set; }
         public IQueryService<ProductGroup> QueryProductGroup { get; set; }
 
@@ -20,8 +24,26 @@ namespace Web.Controllers
 
         public ISaveOrUpdateCommand<RawSmsReceived> SaveCommandRawSmsReceived { get; set; }
 
+        private Client _client;
+        private User _user;
+
+        private void LoadUserAndClient()
+        {
+            var loggedUser = User.Identity.Name;
+            this._user = QueryUsers.Query().FirstOrDefault(m => m.UserName == loggedUser);
+
+            if (_user == null) throw new NullReferenceException("User is not logged in");
+
+            var clientId = Client.DEFAULT_ID;
+            if (_user.ClientId != Guid.Empty)
+                clientId = _user.ClientId;
+
+            this._client = QueryClients.Load(clientId);
+        }
+
         public ActionResult Create()
         {
+            LoadUserAndClient();
             SmsRequestCreateModel model = new SmsRequestCreateModel();
 
             model.Outposts = GetListOfAllOutposts();
@@ -39,6 +61,8 @@ namespace Web.Controllers
         [HttpPost]
         public ActionResult Create(SmsRequestCreateModel model)
         {
+            LoadUserAndClient();
+
             if (!ModelState.IsValid)
                 return View("Create", model);
 
@@ -47,7 +71,7 @@ namespace Web.Controllers
                 return RedirectToAction("Create", model);
             }
 
-            SmsRequest smsRequest = SmsRequestService.CreateSmsRequestUsingOutpostIdAndProductGroupId(model.Outpost.Id, model.ProductGroup.Id);
+            SmsRequest smsRequest = SmsRequestService.CreateSmsRequestUsingOutpostIdAndProductGroupIdForClient(model.Outpost.Id, model.ProductGroup.Id, _client);
 
             if (smsRequest.Id.Equals(Guid.Empty))
             {
@@ -84,7 +108,7 @@ namespace Web.Controllers
         private List<SelectListItem> GetListOfAllOutposts()
         {
             var outPosts = new List<SelectListItem>();
-            var queryResultOutposts = QueryOutpost.Query();
+            var queryResultOutposts = QueryOutpost.Query().Where(o => o.Client == _client);
             if (queryResultOutposts != null)
                 queryResultOutposts.ToList().ForEach(itemOutpost => outPosts.Add(new SelectListItem { Text = itemOutpost.Name, Value = itemOutpost.Id.ToString() }));
             return outPosts;

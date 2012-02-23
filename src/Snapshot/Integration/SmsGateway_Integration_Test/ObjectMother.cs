@@ -40,6 +40,8 @@ namespace IntegrationTests.SmsGateway_Integration_Test
         public ISaveOrUpdateCommand<OutpostHistoricalStockLevel> saveCommandOutpostHistoricalStockLevel;
         public IQueryOutposts queryOutposts;
 
+        public Guid clientId;
+        public Client client;
         public Outpost outpost;
         public ProductGroup productGroup;
         public Product product;
@@ -74,6 +76,11 @@ namespace IntegrationTests.SmsGateway_Integration_Test
 
         public void SetUp_StubData()
         {
+            clientId = Guid.NewGuid();
+
+            client = MockRepository.GeneratePartialMock<Client>();
+            client.Stub(c => c.Id).Return(clientId);
+
             session = SessionFactory.Instance.CreateSession();
 
             outpost = new Outpost();

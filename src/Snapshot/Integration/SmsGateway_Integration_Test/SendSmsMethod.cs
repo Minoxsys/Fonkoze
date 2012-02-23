@@ -35,7 +35,7 @@ namespace IntegrationTests.SmsGateway_Integration_Test
             objectMother.queryServiceProductGroup.Expect(call => call.Load(objectMother.productGroup.Id)).Return(objectMother.productGroup);
             objectMother.queryServiceStockLevel.Expect(call => call.Query()).Return(objectMother.stockLevels.AsQueryable<OutpostStockLevel>());
 
-            var smsRequest = objectMother.smsRequestService.CreateSmsRequestUsingOutpostIdAndProductGroupId(objectMother.outpost.Id, objectMother.productGroup.Id);
+            var smsRequest = objectMother.smsRequestService.CreateSmsRequestUsingOutpostIdAndProductGroupIdForClient(objectMother.outpost.Id, objectMother.productGroup.Id, objectMother.client);
 
             string response = objectMother.smsGatewayService.SendSmsRequest(smsRequest).Replace('\n', ' ');
 
