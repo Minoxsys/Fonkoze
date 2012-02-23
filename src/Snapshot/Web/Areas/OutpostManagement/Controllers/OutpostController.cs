@@ -77,6 +77,17 @@ namespace Web.Areas.OutpostManagement.Controllers
 
 			var outpostsQueryData = QueryService.Query().
 			Where(c => c.Client == this._client);
+
+			if (input.countryId.HasValue)
+			{
+				outpostsQueryData = outpostsQueryData.Where(o => o.Country.Id == input.countryId.Value);
+			}
+
+			if (input.countryId.HasValue)
+			{
+				outpostsQueryData = outpostsQueryData.Where(o => o.Region.Id == input.regionId.Value);
+			}
+
 			if (input.districtId.HasValue)
 			{
 				outpostsQueryData = outpostsQueryData.Where(o => o.District.Id == input.districtId.Value);
@@ -169,10 +180,10 @@ namespace Web.Areas.OutpostManagement.Controllers
 			this._client = LoadClient.Load(clientId);
 		}
 
-        public class OutpostCreateResponse : JsonActionResponse
-        {
-            public Guid OutpostId { get; set; }
-        }
+		public class OutpostCreateResponse : JsonActionResponse
+		{
+			public Guid OutpostId { get; set; }
+		}
 
 		[HttpPost]
 		public JsonResult Create(CreateOutpostInputModel model)
@@ -186,7 +197,7 @@ namespace Web.Areas.OutpostManagement.Controllers
 			return Json(new OutpostCreateResponse
 			{
 				Message = string.Format("Created successfully outpost {0}", outpost.Name),
-                OutpostId= outpost.Id,
+				OutpostId= outpost.Id,
 				Status = "Success"
 			});
 		}

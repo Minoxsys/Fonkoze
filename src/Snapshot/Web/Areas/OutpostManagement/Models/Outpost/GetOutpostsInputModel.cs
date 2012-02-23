@@ -18,6 +18,8 @@ namespace Web.Areas.OutpostManagement.Models.Outpost
 		public string sort { get; set; }
 		public string dir { get; set; }
 
+		public Guid? countryId { get; set; }
+		public Guid? regionId { get; set; }
 		public Guid? districtId { get; set; }
 
         public string search { get; set; }
