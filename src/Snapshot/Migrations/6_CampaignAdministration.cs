@@ -26,7 +26,10 @@ namespace Migrations
                 .WithColumn("CreationDate").AsDateTime()
                 .WithColumn("Open").AsBoolean()
                 .WithColumn("Options").AsBinary()
-                ;  
+                ;
+
+            Create.AddClientForeignKey("Campaigns");
+            Create.AddForeignKey("Campaigns");
         }
     }
 }

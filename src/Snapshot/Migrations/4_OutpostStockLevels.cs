@@ -14,7 +14,6 @@ namespace Migrations
 			Delete.RemoveClientForeignKey("OutpostStockLevels");
 			Delete.RemoveForeignKey("OutpostStockLevels");
 
-			Delete.RemoveClientForeignKey("OutpostHistoricalStockLevels");
 			Delete.RemoveForeignKey("OutpostHistoricalStockLevels");
 
 			Delete.Table("OutpostStockLevels");
