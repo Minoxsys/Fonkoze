@@ -148,6 +148,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Areas\CampaignManagement\Controllers\CampaignController.cs" />
+    <Compile Include="Areas\CampaignManagement\CampaignManagementAreaRegistration.cs" />
+    <Compile Include="Areas\CampaignManagement\Models\Campaign\CampaignInputModel.cs" />
+    <Compile Include="Areas\CampaignManagement\Models\Campaign\CampaignModel.cs" />
+    <Compile Include="Areas\CampaignManagement\Models\Campaign\CampaignOutputModel.cs" />
+    <Compile Include="Areas\CampaignManagement\Models\Campaign\CampaignOverviewInputModel.cs" />
+    <Compile Include="Areas\CampaignManagement\Models\Campaign\CampaignOverviewOutputModel.cs" />
+    <Compile Include="Areas\CampaignManagement\Models\Campaign\OptionsModel.cs" />
+    <Compile Include="Areas\CampaignManagement\Models\Campaign\ReferenceModel.cs" />
+    <Compile Include="Areas\CampaignManagement\Models\Campaign\ReferenceModelOutput.cs" />
     <Compile Include="Areas\OutpostManagement\Controllers\AssignProductGroupController.cs" />
     <Compile Include="Areas\CampaignManagement\CampaignManagementAreaRegistration.cs" />
     <Compile Include="Areas\CampaignManagement\Controllers\CampaignController.cs" />
@@ -2055,6 +2065,11 @@
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\core\_reset.scss" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\layout\_layout.scss" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\mixins\_background-gradient.scss" />
+    <Content Include="Areas\CampaignManagement\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\CampaignManagement\Views\Web.config" />
+    <Content Include="Areas\CampaignManagement\Views\Campaign\Overview.cshtml" />
+    <Content Include="Areas\CampaignManagement\Views\Shared\_CampaignManagementSideBar.cshtml" />
+    <Content Include="Areas\CampaignManagement\Views\Campaign\CampaignContainer.cshtml" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\mixins\_color-by-background.scss" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\mixins\_frame.scss" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\mixins\_inner-border.scss" />

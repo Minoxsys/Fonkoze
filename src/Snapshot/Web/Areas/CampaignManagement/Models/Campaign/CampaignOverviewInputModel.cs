@@ -7,12 +7,16 @@ namespace Web.Areas.CampaignManagement.Models.Campaign
 {
     public class CampaignOverviewInputModel
     {
+        public string _dc { get; set; }
+
+        public int? page { get; set; }
+
+        public int? start { get; set; }
+        public int? limit { get; set; }
+
         public string sort { get; set; }
         public string dir { get; set; }
-        public string SearchName { get; set; }
 
-        public int? Page { get; set; }
-        public int? Start { get; set; }
-        public int? Limit { get; set; }
+        public string searchValue { get; set; }
     }
 }

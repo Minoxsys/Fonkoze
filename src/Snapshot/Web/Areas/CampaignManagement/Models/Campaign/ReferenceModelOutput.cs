@@ -5,9 +5,9 @@ using System.Web;
 
 namespace Web.Areas.CampaignManagement.Models.Campaign
 {
-    public class CampaignOverviewOutputModel
+    public class ReferenceModelOutput
     {
-        public CampaignOutputModel[] Campaigns { get; set; }
+        public ReferenceModel[] Items { get; set; }
         public int TotalItems { get; set; }
     }
 }

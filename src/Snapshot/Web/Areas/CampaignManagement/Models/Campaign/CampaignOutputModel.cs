@@ -14,6 +14,5 @@ namespace Web.Areas.CampaignManagement.Models.Campaign
         public String CreationDate { get; set; }
         public String Status { get; set; }
         public String Options { get; set; }
-        
     }
 }

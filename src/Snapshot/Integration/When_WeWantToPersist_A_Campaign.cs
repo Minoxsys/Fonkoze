@@ -8,12 +8,12 @@ using NUnit.Framework;
 
 namespace IntegrationTests
 {
-    public class When_WeWantToPersist_A_Campaign: GivenAPersistenceSpecification<Campaign>
+    public class When_WeWantToPersist_A_Campaign : GivenAPersistenceSpecification<Campaign>
     {
         private const string CAMPAIGN_NAME = "Campaign1";
-        public DateTime StartDate = DateTime.Today;
-        public DateTime EndDate = DateTime.Today;
-        public DateTime CreationDate = DateTime.Today;
+        public DateTime StartDate = DateTime.UtcNow;
+        public DateTime EndDate = DateTime.UtcNow.AddDays(2);
+        public DateTime CreationDate = DateTime.UtcNow;
         private const bool OPEN = true;
         private Client CLIENT = new Client { Name = "Minoxsys" };
 
@@ -22,12 +22,12 @@ namespace IntegrationTests
         {
             var campaign = Specs.CheckProperty(e => e.Name, CAMPAIGN_NAME)
                 .CheckReference(c => c.Client, CLIENT)
-                .CheckProperty(c=>c.Opened,OPEN)
+                .CheckProperty(c => c.Opened, OPEN)
                 .VerifyTheMappings();
 
             Assert.IsNotNull(campaign);
             Assert.IsInstanceOf<Guid>(campaign.Id);
-           
+
 
             session.Delete(campaign);
             session.Flush();
