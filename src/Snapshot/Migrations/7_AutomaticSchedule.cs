@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using FluentMigrator;
 
 namespace Migrations
 {
-    [Migration(6)]
-    public class _6_AutomaticSchedule : Migration
+    [Migration(7)]
+    public class AutomaticSchedule : Migration
     {
 
         public override void Down()
@@ -16,6 +14,7 @@ namespace Migrations
             Delete.RemoveForeignKey("RequestReminder", "Schedule_FK", "Schedule");
             Delete.Table("RequestReminder");
 
+            Delete.RemoveClientForeignKey("Schedule");
             Delete.RemoveForeignKey("Schedule");
             Delete.Table("Schedule");
         }
@@ -24,11 +23,15 @@ namespace Migrations
         {
             Create.Table("Schedule")
                 .WithCommonColumns()
+                .WithClientColumn()
                 .WithColumn("Name").AsString(ConstraintUtility.NAME_LENGTH)
                 .WithColumn("FrequencyType").AsString(ConstraintUtility.NAME_LENGTH)
                 .WithColumn("FrequencyValue").AsInt32()
                 .WithColumn("StartOn").AsInt32()
                 .WithColumn("ScheduleBasis").AsString(ConstraintUtility.NAME_LENGTH);
+
+            Create.AddClientForeignKey("Schedule");
+            Create.AddForeignKey("Schedule");
 
             Create.Table("RequestReminder")
                 .WithCommonColumns()

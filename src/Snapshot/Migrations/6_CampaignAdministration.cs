@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using FluentMigrator;
 
 namespace Migrations
 {
-    [Migration(5)]
-    public class _5_CampaignAdministration: Migration
+    [Migration(6)]
+    public class CampaignAdministration: Migration
     {
 
         public override void Down()

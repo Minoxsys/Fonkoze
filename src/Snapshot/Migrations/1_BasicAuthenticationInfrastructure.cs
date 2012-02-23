@@ -37,7 +37,7 @@ namespace Migrations
 
 				.WithColumn("Email").AsString(ConstraintUtility.NAME_LENGTH).Nullable().Unique()
 				.WithColumn("ClientId").AsGuid()
-                                .WithColumn("RoleId").AsGuid();
+                .WithColumn("RoleId").AsGuid().Nullable();
             
 
 
