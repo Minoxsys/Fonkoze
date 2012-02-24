@@ -1,36 +1,45 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using Domain;
 using Core.Persistence;
-using Persistence.Queries.Products;
 using Web.Areas.StockAdministration.Models.ProductGroup;
 using AutoMapper;
-using Core.Domain;
 using Web.Models.Shared;
+using Core.Domain;
 
 
 namespace Web.Areas.StockAdministration.Controllers
 {
     public class ProductGroupController : Controller
     {
+        private Core.Domain.User _user;
+        private Client _client;
         public IQueryService<ProductGroup> QueryService { get; set; }
         public IQueryService<Product> QueryProduct { get; set; }
         public ISaveOrUpdateCommand<ProductGroup> SaveOrUpdateProductGroup { get; set; }
         public IDeleteCommand<ProductGroup> DeleteCommand { get; set; }
         
 
+        public IQueryService<User> QueryUsers { get; set; }
+
+        public IQueryService<Client> QueryClients { get; set; }
 
         public ActionResult Overview()
         {
             return View();
         }
 
+        public class ProductGroupOutputModel : JsonActionResponse
+        {
+            public string ProductGroupId { get; set; }
+
+        }
         [HttpPost]
         public JsonResult Create(ProductGroupInputModel model)
         {
+            LoadUserAndClient();
             if (string.IsNullOrEmpty(model.Name) && string.IsNullOrEmpty(model.Description))
             {
                 return Json(
@@ -46,13 +55,16 @@ namespace Web.Areas.StockAdministration.Controllers
             var productGroup = new ProductGroup();
             Mapper.Map(model, productGroup);
 
-            productGroup.ReferenceCode = productGroup.Name.Substring(0, 3).ToUpper(); // todo: remove this, is just for testing
+            productGroup.ByUser = _user;
+            productGroup.Client = _client;
+
             SaveOrUpdateProductGroup.Execute(productGroup);
 
             return Json(
-               new JsonActionResponse
+               new ProductGroupOutputModel
                {
                    Status = "Success",
+                   ProductGroupId = productGroup.Id.ToString(),
                    Message = String.Format("Product Group {0} has been saved.", productGroup.Name)
                });
         }
@@ -60,6 +72,7 @@ namespace Web.Areas.StockAdministration.Controllers
         [HttpPost]
         public JsonResult Edit(ProductGroupInputModel model)
         {
+            LoadUserAndClient();
             if (model.Id == Guid.Empty)
             {
                 return Json(
@@ -75,6 +88,7 @@ namespace Web.Areas.StockAdministration.Controllers
             var productGroup = QueryService.Load(model.Id);
 
             Mapper.Map(model, productGroup);
+            productGroup.ByUser = _user;
 
             SaveOrUpdateProductGroup.Execute(productGroup);
 
@@ -105,7 +119,7 @@ namespace Web.Areas.StockAdministration.Controllers
             {
                 if (productGroup != null)
                 {
-                    productResults = QueryProduct.Query().Where(it => it.ProductGroup.Id == productGroup.Id);
+                    productResults = productResults.Where(it => it.ProductGroup.Id == productGroup.Id);
 
                     if (productResults.ToList().Count != 0)
                     {
@@ -131,9 +145,12 @@ namespace Web.Areas.StockAdministration.Controllers
         [HttpGet]
         public JsonResult GetProductGroups(ProductGroupIndexModel indexModel)
         {
+            LoadUserAndClient();
+
             var pageSize = indexModel.limit.Value;
             var productGroupDataQuery = this.QueryService.Query();
-            var productQuery = this.QueryProduct.Query();
+            var productQuery = this.QueryProduct.Query()
+                .Where(p=>p.Client == _client);
 
             var orderByColumnDirection = new Dictionary<string, Func<IQueryable<ProductGroup>>>()
             {
@@ -195,56 +212,23 @@ namespace Web.Areas.StockAdministration.Controllers
             Mapper.CreateMap<ProductGroupOutputModel, ProductGroup>();
         }
 
+        private void LoadUserAndClient()
+        {
+            var loggedUser = User.Identity.Name;
+            this._user = QueryUsers.Query().FirstOrDefault(m => m.UserName == loggedUser);
+
+            if (_user == null)
+                throw new NullReferenceException("User is not logged in");
+
+            var clientId = Client.DEFAULT_ID;
+            if (_user.ClientId != Guid.Empty)
+                clientId = _user.ClientId;
+
+            this._client = QueryClients.Load(clientId);
+        }
 
 
 
 
-
-
-        //public ViewResult EditProducts(Guid guid)
-        //{
-        //    var ProductGroupOutputModel = new ProductGroupOutputModel();
-
-        //    var ProductGroup = QueryService.Load(guid);
-
-        //    CreateMappings();
-
-        //    Mapper.Map(ProductGroup, ProductGroupOutputModel);
-
-        //    return View(ProductGroupOutputModel);
-        //}
-
-        //[HttpPost]
-        //public ActionResult EditProducts(ProductGroupInputModel model)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return View("Edit", ProductGroupOutputModel);
-        //    }
-
-        //    CreateMappings();
-
-        //    var ProductGroup = new ProductGroup();
-
-        //    Mapper.Map(model, ProductGroup);
-
-        //    SaveOrUpdateProductGroup.Execute(ProductGroup);
-
-        //    return RedirectToAction("Overview");
-        //}
-
-        
-
-        //public ViewResult CreateProductGroupForProduct(bool CreateCommingFromProductCreate, bool CreateCommingFromProductEdit, Guid? productId)
-        //{
-        //    var ProductGroupOutputModel = new ProductGroupOutputModel();
-        //    TempData["FromProduct"] = CreateCommingFromProductCreate;
-        //    TempData["FromProductEdit"] = CreateCommingFromProductEdit;
-        //    if (productId != null)
-        //    {
-        //        TempData["ProductId"] = productId.Value.ToString();
-        //    }
-        //    return View("Create", ProductGroupOutputModel);
-        //}
     }
 }

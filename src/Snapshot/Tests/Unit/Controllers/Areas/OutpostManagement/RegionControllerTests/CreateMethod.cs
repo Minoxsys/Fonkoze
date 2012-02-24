@@ -37,7 +37,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.RegionControllerTests
         }
 
         [Test]
-        public void Returns_JSON_With_ErrorMessage_When_TheAreAllreadyARegionWithSameName()
+        public void Returns_JSON_With_ErrorMessage_When_TheIsAlreadyARegionWithSameName()
         {
             //Arrange
             RegionInputModel regionInputModel = new RegionInputModel()

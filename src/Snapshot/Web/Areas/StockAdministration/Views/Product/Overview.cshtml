@@ -41,7 +41,6 @@ Product Item: Overview
         window.feature.formProductGroupReferenceCodeId = 'productGroupRef';
         window.feature.formProductGroupDescriptionId = 'productGroupDesc';
         window.feature.productId = 'productId';
-        var timeout;
 
         window.feature.modalAddProductGroup = Ext.define('Ext.feature.productGroup.Modal', {
             extend: 'Ext.window.Window',
@@ -84,6 +83,11 @@ Product Item: Overview
             }
         });
 
+        });
+</script>
+<script type='text/javascript'>
+
+    Ext.onReady(function(){
         window.feature.ProductGroupStore = Ext.create('Ext.data.Store', {
             fields: ['Name', 'Id'],
             proxy: {
@@ -129,6 +133,10 @@ Product Item: Overview
                 }
             }
         });
+    });
+</script>
+<script type="text/javascript">
+    Ext.onReady(function(){
         function IsValid(productGroup, productName, productSMSCode) {
 
             var ok = true;
@@ -151,7 +159,35 @@ Product Item: Overview
             }
             return ok;
         }
-        window.feature.modal = Ext.define('Ext.feature.product.Modal', {
+
+          function IsValidProductGroup(name, description, referenceCode){
+            var ok = true;
+            if (name.getValue() == ''){
+                name.markInvalid('Field Name is required!');  
+                name.setValue(null);
+                ok = false;
+            }
+
+            if (description.getValue() == ''){
+                description.markInvalid('Field Description is required!');  
+                description.setValue(null);
+                ok = false;
+            }
+
+            if (referenceCode.getValue() == ''){
+                referenceCode.markInvalid('Field Product Group Reference Code is required!');  
+                referenceCode.setValue(null);
+                ok = false;
+            }else{
+                if (referenceCode.getValue().length>3 || referenceCode.getValue().length<3){
+                    referenceCode.markInvalid('Imput length value must be 3!');  
+                    ok = false;
+                }
+            }
+
+            return ok;
+        };
+        window.feature.modal = Ext.define('Ext.feature.product.AddModal', {
             extend: 'Ext.window.Window',
             title: 'Add new product',
             height: 320,
@@ -164,6 +200,8 @@ Product Item: Overview
             },
             initComponent: function () {
                 var me = this;
+
+                window.feature.ProductGroupStoreForModal.load();
 
                 Ext.applyIf(me, {
                     items: [{
@@ -178,8 +216,9 @@ Product Item: Overview
                             queryMode: 'local',
                             displayField: 'Name',
                             valueField: 'Id',
-                            id: window.feature.comboboxProductGroupsForModalId,
-                            emptyText: 'Select a product group'
+                            itemId: window.feature.comboboxProductGroupsForModalId,
+                            emptyText: 'Select a product group',
+                            value: me.recordProductGroupId
                         },{
                             xtype: 'button',
                             text: 'Add a New Group',
@@ -197,7 +236,7 @@ Product Item: Overview
                                         var productGroupDescription = winAdd.down('#'+window.feature.formProductGroupDescriptionId);
                                         var productGroupReferenceCode = winAdd.down('#'+window.feature.formProductGroupReferenceCodeId);
                                     
-                                        var ok = IsValid(productGroupName, productGroupDescription, productGroupReferenceCode);
+                                        var ok = IsValidProductGroup(productGroupName, productGroupDescription, productGroupReferenceCode);
                                         if (ok == true){
                                             var values = {
                                                 Name:  productGroupName.getValue(),
@@ -209,19 +248,15 @@ Product Item: Overview
                                             var action = $.post(postToUrl, values);
                                             action.success(function(serverResponse){
                                                 if(serverResponse.Status === "Error"){
+                                                     Ext.Msg.alert(result.Status, result.Message);
+                                                     return;
                                                 }
-                                                var productGroupNameSaved = productGroupName.getValue();
 
                                                 window.feature.ProductGroupStoreForModal.load();
+                                                var comboboxProductGroupsForModal = me.down('#'+window.feature.comboboxProductGroupsForModalId);
 
-                                                clearTimeout(timeout);
-                                                    timeout = setTimeout(function () {
-                                                 var comboboxProductGroupsForModal = Ext.getCmp(window.feature.comboboxProductGroupsForModalId); 
-                                                 var indexOfProductGroupSaved = window.feature.ProductGroupStoreForModal.find('Name',productGroupNameSaved);
-                                                 var record = window.feature.ProductGroupStoreForModal.getAt(indexOfProductGroupSaved);
-                                                 var id = record.data.Id;
-                                                 comboboxProductGroupsForModal.setValue(id);  
-                                                }, 1000);
+                                              
+                                                 comboboxProductGroupsForModal.setValue(serverResponse.ProductGroupId);  
                                                         
                                                 winAdd.close();
                                                 winAdd.destroy();                                                
@@ -245,49 +280,48 @@ Product Item: Overview
                         name: 'Name',
                         fieldLabel: 'Product',
                         allowBlank: false,
-                        id: window.feature.ProductNameId,
+                        itemId: window.feature.ProductNameId,
                         width: 10,
-                        anchor: '-10'
+                        anchor: '-10',
+                        value: me.recordName
                     }, {
                         xtype: 'textarea',
                         name: 'Description',
                         fieldLabel: 'Description',
 
-                        id: window.feature.ProductDescriptionId
+                        itemId: window.feature.ProductDescriptionId,
+                        value: me.recordDescription
 
                     }, { xtype: 'numberfield',
                         name: 'LowerLimit',
                         fieldLabel: 'Lower Limit',
-                        id: window.feature.ProductLowerLimitId
+                        itemId: window.feature.ProductLowerLimitId,
+                        value: me.recordLowerLimit
+
                     }, { xtype: 'numberfield',
                         name: 'UpperLimit',
                         fieldLabel: 'Upper Limit',
-                        id: window.feature.ProductUpperLimitId
+                        itemId: window.feature.ProductUpperLimitId,
+                        value: me.recordUpperLimit
 
                     }, { xtype: 'textfield',
                         name: 'SMSReferenceCode',
                         fieldLabel: 'SMS Code',
-                        id: window.feature.ProductSMSReferecenceCodeId
+                        itemId: window.feature.ProductSMSReferecenceCodeId,
+                        value: me.recordSMSReferenceCode
 
+                    },
+                    {
+                        xtype:'hiddenfield',
+                        name: 'Id',
+                        value: me.recordId
                     }]
                 });
-                me.listeners = {
-                    afterrender: function () {
-                        window.feature.ProductGroupStoreForModal.load();
-
-                        var selectedProductGroupId = window.feature.comboBoxProductGroups.getValue();
-                        var comboboxProductGroupsForModal = Ext.getCmp(window.feature.comboboxProductGroupsForModalId);
-
-                        if (selectedProductGroupId !== null) {
-                            comboboxProductGroupsForModal.value = selectedProductGroupId;
-                        }
-                    }
-                };
 
                 me.buttons = [{ text: 'Cancel', handler: function () { me.close(); me.destroy(); window.feature.ProductGroupStore.load(); }
                 }, {
                     text: 'Save', handler: function () {
-                        var productGroup = Ext.getCmp(window.feature.comboboxProductGroupsForModalId);
+                        var productGroup = me.down('#'+window.feature.comboboxProductGroupsForModalId);
                         var productName = me.down('#' + window.feature.ProductNameId);
                         var productDescription = me.down('#' + window.feature.ProductDescriptionId);
                         var productLowerLimit = me.down('#' + window.feature.ProductLowerLimitId);
@@ -297,198 +331,19 @@ Product Item: Overview
                         var ok = IsValid(productGroup, productName, productSMSCode);
                         if (ok == true) {
                             var values = {
-                                'inputProductModel.Name': productName.getValue(),
-                                'inputProductModel.ProductGroup.Id': productGroup.getValue(),
-                                'inputProductModel.LowerLimit': productLowerLimit.getValue(),
-                                'inputProductModel.UpperLimit': productUpperLimit.getValue(),
-                                'inputProductModel.SMSReferenceCode': productSMSCode.getValue(),
-                                'inputProductModel.Description': productDescription.getValue()
+                                'Name': productName.getValue(),
+                                'ProductGroup.Id': productGroup.getValue(),
+                                'LowerLimit': productLowerLimit.getValue(),
+                                'UpperLimit': productUpperLimit.getValue(),
+                                'SMSReferenceCode': productSMSCode.getValue(),
+                                'Description': productDescription.getValue()
                             };
-                            var postToUrl = '@Url.RouteUrl(StockAdministrationAreaRegistration.DEFAULT_ROUTE, new { controller = "Product", action = "Create" })';
-                            var action = $.post(postToUrl, values);
-                            action.success(function (result) {
-
-                                if (result.CloseModal === false) {
-                                    Ext.Msg.alert(result.Status, result.Message);
-                                }
-                                else {
-                                   if(result.Status === "Error"){
-                                                Ext.Msg.alert(result.Status, result.Message);
-                                                }
-                                    var selectedProductGroupInModal = Ext.getCmp(window.feature.comboboxProductGroupsForModalId).getValue();
-                                    me.close();
-                                    me.destroy();
-                                    window.feature.ProductGroupStore.load();
-
-                                    var comboboxProductGroups = Ext.getCmp(window.feature.comboboxProductGroupsId);
-                                    comboboxProductGroups.setValue(selectedProductGroupInModal);
-                                    Ext.getCmp(window.feature.comboboxProductGroupsId).value = selectedProductGroupInModal;
-
-                                    window.feature.store.proxy.extraParams.productGroupId = selectedProductGroupInModal;
-                                    window.feature.store.loadPage(1);
-                                }
-                            });
-                        }
-                    }
-                }]
-                me.callParent(arguments);
-            }
-        });
-
-         window.feature.modalEdit = Ext.define('Ext.feature.product.Modal', {
-            extend: 'Ext.window.Window',
-            title: 'Edit product',
-            height: 470,
-            width: 690,
-            modal: true,
-            layout: {
-                align: 'stretch',
-                padding: 10,
-                type: 'vbox'
-            },
-            initComponent: function () {
-                var me = this;
-
-                Ext.applyIf(me, {
-                    items: [{
-                        xtype: 'container',
-                        layout: {
-                            type: 'hbox'
-                        },
-                        height: 50,
-                        items: [{ xtype: 'combobox',
-                            fieldLabel: 'Product Group',
-                            store: window.feature.ProductGroupStoreForModal,
-                            queryMode: 'local',
-                            displayField: 'Name',
-                            valueField: 'Id',
-                            id: window.feature.comboboxProductGroupsForModalId,
-                            emptyText: 'Select a product group'
-                        }, {
-                            xtype: 'button',
-                            text: 'Add a New Group',
-                            width: 150,
-                            handler: function () {                            
-                            var winAdd = new window.feature.modalAddProductGroup({
-                                title: 'Add New Product Group',
-                                buttons: [
-                                    { text: 'Cancel', handler:function(){ winAdd.close(); winAdd.destroy();} },
-                                    { text: 'Save',  handler:function(){
-
-                                        var productGroupName = winAdd.down('#'+window.feature.formProductGroupNameId);
-                                        var productGroupDescription = winAdd.down('#'+window.feature.formProductGroupDescriptionId);
-                                        var productGroupReferenceCode = winAdd.down('#'+window.feature.formProductGroupReferenceCodeId);
-                                    
-                                        var ok = IsValid(productGroupName, productGroupDescription, productGroupReferenceCode);
-                                        if (ok == true){
-                                            var values = {
-                                                Name:  productGroupName.getValue(),
-                                                Description:  productGroupDescription.getValue(),
-                                                ReferenceCode: productGroupReferenceCode.getValue(),
-                                            };
-
-                                            var postToUrl = '@Url.RouteUrl(StockAdministrationAreaRegistration.DEFAULT_ROUTE, new { controller = "ProductGroup", action = "Create" })';
-                                            var action = $.post(postToUrl, values);
-                                            action.success(function(serverResponse){
-                                                if(serverResponse.Status === "Error"){
-                                                }
-                                                window.feature.ProductGroupStoreForModal.load();
-
-                                                clearTimeout(timeout);
-                                                    timeout = setTimeout(function () {
-                                                 var comboboxProductGroupsForModal = Ext.getCmp(window.feature.comboboxProductGroupsForModalId); 
-                                                 var indexOfProductGroupSaved = window.feature.ProductGroupStoreForModal.find('Name',productGroupName.getValue());
-                                                 var record = window.feature.ProductGroupStoreForModal.getAt(indexOfProductGroupSaved);
-                                                 var id = record.data.Id;
-                                                 comboboxProductGroupsForModal.setValue(id);  
-                                                }, 1000);
-                                                  
-                                                winAdd.close();
-                                                winAdd.destroy();                                                
-                                                window.feature.ProductGroupStore.load();
-                                                
-                                            });
-                                            
-                                        }
-
-                                    }
-                                    }
-                                ]
-                            });
-                            winAdd.show();
-
+                            if(me.recordId){
+                                values['Id'] = me.recordId;
                             }
-                        }]
-                    }, {
-                        xtype: 'textfield',
-                        name: 'Name',
-                        fieldLabel: 'Product',
-                        allowBlank: false,
-                        id: window.feature.ProductNameId,
-                        width: 50
-
-                    }, {
-                        xtype: 'textarea',
-                        name: 'Description',
-                        fieldLabel: 'Description',
-
-                        id: window.feature.ProductDescriptionId
-
-                    }, { xtype: 'numberfield',
-                        name: 'LowerLimit',
-                        fieldLabel: 'Lower Limit',
-                        id: window.feature.ProductLowerLimitId
-                    }, { xtype: 'numberfield',
-                        name: 'UpperLimit',
-                        fieldLabel: 'Upper Limit',
-                        id: window.feature.ProductUpperLimitId
-
-                    }, { xtype: 'textfield',
-                        name: 'SMSReferenceCode',
-                        fieldLabel: 'SMS Code',
-                        id: window.feature.ProductSMSReferecenceCodeId
-
-                    },{ xtype: 'textfield',
-                        hidden: true,
-                        id: window.feature.productId
-                    }]
-                });
-                me.listeners = {
-                    afterrender: function () {
-                        window.feature.ProductGroupStoreForModal.load();
-
-                        var selectedProductGroupId = window.feature.comboBoxProductGroups.getValue();
-                        var comboboxProductGroupsForModal = Ext.getCmp(window.feature.comboboxProductGroupsForModalId);
-
-                        if (selectedProductGroupId !== null) {
-                            comboboxProductGroupsForModal.value = selectedProductGroupId;
-                        }
-                    }
-                };
-
-                me.buttons = [{ text: 'Cancel', handler: function () { me.close(); me.destroy(); window.feature.ProductGroupStore.load(); }
-                }, {
-                    text: 'Save', handler: function () {
-                        var productGroup = Ext.getCmp(window.feature.comboboxProductGroupsForModalId);
-                        var productName = me.down('#' + window.feature.ProductNameId);
-                        var productDescription = me.down('#' + window.feature.ProductDescriptionId);
-                        var productLowerLimit = me.down('#' + window.feature.ProductLowerLimitId);
-                        var productUpperLimit = me.down('#' + window.feature.ProductUpperLimitId);
-                        var productSMSCode = me.down('#' + window.feature.ProductSMSReferecenceCodeId);
-                        var productId = me.down('#' + window.feature.productId);
-
-                        var ok = IsValid(productGroup, productName, productSMSCode);
-                        if (ok == true) {
-                            var values = {
-                                'inputProductModel.Name': productName.getValue(),
-                                'inputProductModel.ProductGroup.Id': productGroup.getValue(),
-                                'inputProductModel.LowerLimit': productLowerLimit.getValue(),
-                                'inputProductModel.UpperLimit': productUpperLimit.getValue(),
-                                'inputProductModel.SMSReferenceCode': productSMSCode.getValue(),
-                                'inputProductModel.Description': productDescription.getValue(),
-                                'inputProductModel.Id': productId.getValue()
-                            };
-                            var postToUrl = '@Url.RouteUrl(StockAdministrationAreaRegistration.DEFAULT_ROUTE, new { controller = "Product", action = "Edit" })';
+                            var createUrl =  '@Url.RouteUrl(StockAdministrationAreaRegistration.DEFAULT_ROUTE, new { controller = "Product", action = "Create" })';
+                            var editUrl =  '@Url.RouteUrl(StockAdministrationAreaRegistration.DEFAULT_ROUTE, new { controller = "Product", action = "Edit" })';
+                            var postToUrl = (me.recordId !== undefined ? editUrl : createUrl);
                             var action = $.post(postToUrl, values);
                             action.success(function (result) {
 
@@ -499,14 +354,13 @@ Product Item: Overview
                                    if(result.Status === "Error"){
                                                 Ext.Msg.alert(result.Status, result.Message);
                                                 }
-                                    var selectedProductGroupInModal = Ext.getCmp(window.feature.comboboxProductGroupsForModalId).getValue();
+                                    var selectedProductGroupInModal = me.down('#'+window.feature.comboboxProductGroupsForModalId).getValue();
                                     me.close();
                                     me.destroy();
                                     window.feature.ProductGroupStore.load();
 
                                     var comboboxProductGroups = Ext.getCmp(window.feature.comboboxProductGroupsId);
                                     comboboxProductGroups.setValue(selectedProductGroupInModal);
-                                    Ext.getCmp(window.feature.comboboxProductGroupsId).value = selectedProductGroupInModal;
 
                                     window.feature.store.proxy.extraParams.productGroupId = selectedProductGroupInModal;
                                     window.feature.store.loadPage(1);
@@ -519,10 +373,10 @@ Product Item: Overview
             }
         });
 
-        window.feature.store = Ext.create('Ext.data.Store', {
+     window.feature.store = Ext.create('Ext.data.Store', {
             pageSize: 50,
             remoteSort: true,
-            fields: ['Name', 'ProductGroupName', 'SMSReferenceCode', 'LowerLimit', 'UpperLimit', 'Id', 'Description'],
+            fields: ['Name', 'ProductGroupName', 'SMSReferenceCode', 'LowerLimit', 'UpperLimit', 'Id', 'Description', 'ProductGroupId'],
             proxy: {
                 type: 'ajax',
                 url: '@Url.RouteUrl(StockAdministrationAreaRegistration.DEFAULT_ROUTE, new { controller = "Product", action = "GetProducts" })',
@@ -584,16 +438,16 @@ Product Item: Overview
                     tooltip: _t('Edit this product'),
                     handler: function (grid, rowIndex, colIndex) {
                         var record = grid.store.getAt(rowIndex);
-                        var selectedProductGroupId = Ext.getCmp(window.feature.comboboxProductGroupsId).getValue();
                         
-                        var modalForEdit = new window.feature.modalEdit();
-                        Ext.getCmp(window.feature.ProductNameId).setValue(record.data.Name);
-                        Ext.getCmp(window.feature.ProductLowerLimitId).setValue(record.data.LowerLimit);
-                        Ext.getCmp(window.feature.ProductUpperLimitId).setValue(record.data.UpperLimit);
-                        Ext.getCmp(window.feature.ProductSMSReferecenceCodeId).setValue(record.data.SMSReferenceCode);
-                        Ext.getCmp(window.feature.ProductDescriptionId).setValue(record.data.Description);
-                        Ext.getCmp(window.feature.productId).setValue(record.data.Id);
-                        Ext.getCmp(window.feature.comboboxProductGroupsForModalId).setValue(record.data.ProductGroupId);
+                        var modalForEdit = new  window.feature.modal({
+                            recordName: record.get('Name'),
+                            recordUpperLimit: record.get('UpperLimit'),
+                            recordLowerLimit: record.get('LowerLimit'),
+                            recordSMSReferenceCode: record.get('SMSReferenceCode'),
+                            recordDescription: record.get('Description'),
+                            recordId: record.get('Id'),
+                            recordProductGroupId: record.get('ProductGroupId')
+                        });
                         modalForEdit.show();
                     }
                 },{
@@ -695,7 +549,9 @@ Product Item: Overview
                                     margin: '0 0 0 20',
                                     text: 'Add New Product',
                                     handler: function () {
-                                        var productModal = new window.feature.modal();
+                                        var productModal = new window.feature.modal({
+                                            recordProductGroupId: window.feature.comboBoxProductGroups.getValue()
+                                        });
                                         productModal.show();
                                     }
 								}]

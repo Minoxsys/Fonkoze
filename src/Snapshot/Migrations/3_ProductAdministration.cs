@@ -12,11 +12,10 @@ namespace Migrations
 		public override void Down()
 		{
 
-			Delete.RemoveForeignKey("Products", "Outpost_FK", "Outposts");
 			Delete.RemoveForeignKey("Products", "ProductGroup_FK", "ProductGroups");
 
-			Delete.RemoveClientForeignKey("ProductGroups");
-			Delete.RemoveClientForeignKey("Products");
+            Delete.RemoveClientForeignKey("ProductGroups");
+            Delete.RemoveClientForeignKey("Products");
 			Delete.RemoveForeignKey("ProductGroups");
 			Delete.RemoveForeignKey("Products");
 
@@ -46,11 +45,9 @@ namespace Migrations
 				.WithColumn("UpperLimit").AsInt32()
 				.WithColumn("SMSReferenceCode").AsFixedLengthString(1)
 				.WithColumn("ProductGroup_FK").AsGuid()
-				.WithColumn("Outpost_FK").AsGuid()
 				;
 			Create.AddForeignKey("Products");
 			Create.AddClientForeignKey("Products");
-			Create.AddForeignKey("Products", "Outpost_FK", "Outposts");
 			Create.AddForeignKey("Products", "ProductGroup_FK", "ProductGroups");
 		}
 	}

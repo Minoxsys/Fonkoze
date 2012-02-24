@@ -49,8 +49,8 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.RegionControllerTests
         {
             MockServices();
             Setup_Controller();
-            SetUp_StubData();
             StubUserAndItsClient();
+            SetUp_StubData();
         }
 
         private void MockServices()

@@ -13,6 +13,7 @@ using System.Collections;
 using Core.Domain;
 using Web.Models.Shared;
 using NHibernate.Linq;
+using Web.Areas.StockAdministration.Models.Product;
 
 namespace Web.Areas.OutpostManagement.Controllers
 {
@@ -52,10 +53,11 @@ namespace Web.Areas.OutpostManagement.Controllers
                    });
             }
 
-            if (QueryService.Query().Where(it => it.Name == regionInputModel.Name).ToList().Count > 0)
+            var queryRegionValidation = QueryService.Query().Where(p=>p.Client == _client);
+            if (queryRegionValidation.Where(it => it.Name == regionInputModel.Name).Count()> 0)
             {
                 return Json(
-                    new JsonActionResponse
+                    new ProductJsonActionResponse
                     {
                    Status = "Error",
                    CloseModal = false,
@@ -64,10 +66,10 @@ namespace Web.Areas.OutpostManagement.Controllers
  
             }
 
-            if (QueryService.Query().Where(it => it.Coordinates == regionInputModel.Coordinates).ToList().Count > 0)
+            if (queryRegionValidation.Where(it => it.Coordinates == regionInputModel.Coordinates).Count() > 0)
             {
                 return Json(
-                    new JsonActionResponse
+                    new ProductJsonActionResponse
                     {
                         Status = "Error",
                         CloseModal = false,
@@ -85,7 +87,7 @@ namespace Web.Areas.OutpostManagement.Controllers
             SaveOrUpdateCommand.Execute(region);
 
             return Json(
-               new JsonActionResponse
+               new ProductJsonActionResponse
                {
                    Status = "Success",
                    CloseModal = true,
@@ -101,7 +103,7 @@ namespace Web.Areas.OutpostManagement.Controllers
             if (regionInputModel.Id == Guid.Empty)
             {
                 return Json(
-                   new JsonActionResponse
+                   new ProductJsonActionResponse
                    {
                        Status = "Error",
                        CloseModal = true,
@@ -112,7 +114,7 @@ namespace Web.Areas.OutpostManagement.Controllers
             if (string.IsNullOrEmpty(regionInputModel.Name) || string.IsNullOrEmpty(regionInputModel.CountryId.ToString()))
             {
                 return Json(
-                   new JsonActionResponse
+                   new ProductJsonActionResponse
                    {
                        Status = "Error",
                        CloseModal = true,
@@ -120,10 +122,12 @@ namespace Web.Areas.OutpostManagement.Controllers
                    });
             }
 
-            if (QueryService.Query().Where(it => it.Name == regionInputModel.Name).ToList().Count > 0)
+            var queryRegionValidation = QueryService.Query().Where(p=>p.Client == _client);
+
+            if (queryRegionValidation.Where(it => it.Name == regionInputModel.Name).Count() > 0)
             {
                 return Json(
-                    new JsonActionResponse
+                    new ProductJsonActionResponse
                     {
                         Status = "Error",
                         CloseModal = false,
@@ -132,10 +136,10 @@ namespace Web.Areas.OutpostManagement.Controllers
 
             }
 
-            if (QueryService.Query().Where(it => it.Coordinates == regionInputModel.Coordinates).ToList().Count > 0)
+            if (queryRegionValidation.Where(it => it.Coordinates == regionInputModel.Coordinates && it.Id != regionInputModel.Id).Count() > 0)
             {
                 return Json(
-                    new JsonActionResponse
+                    new ProductJsonActionResponse
                     {
                         Status = "Error",
                         CloseModal = false,
@@ -149,12 +153,13 @@ namespace Web.Areas.OutpostManagement.Controllers
             Mapper.Map(regionInputModel, region);
 
             region.Country = QueryCountry.Load(regionInputModel.CountryId);
+            region.ByUser = this._user;
             region.Client = this._client;
 
             SaveOrUpdateCommand.Execute(region);
 
             return Json(
-               new JsonActionResponse
+               new ProductJsonActionResponse
                {
                    Status = "Success",
                    CloseModal =true,

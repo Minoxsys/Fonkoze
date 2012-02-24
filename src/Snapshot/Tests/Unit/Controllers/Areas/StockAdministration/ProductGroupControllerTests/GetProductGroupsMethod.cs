@@ -14,11 +14,30 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration.ProductGroupControlle
     public class GetProductGroupsMethod
     {
         public ObjectMother objectMother = new ObjectMother();
+        private IQueryable<ProductGroup> pageOfData;
 
         [SetUp]
         public void BeforeAll()
         {
             objectMother.Init();
+
+        }
+
+        [Test]
+        public void Loads_The_UserAndClient()
+        {
+            var indexModel = new ProductGroupIndexModel
+            {
+                dir = "ASC",
+                limit = 50,
+                page = 1,
+                start = 0,
+                sort = "Name"
+            };
+
+            MockPageOfData(indexModel);
+            var jsonResult = objectMother.controller.GetProductGroups(indexModel);
+            objectMother.VerifyUserAndClientQueries();
         }
 
         [Test]
@@ -33,9 +52,8 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration.ProductGroupControlle
                 start = 0,
                 sort = "Name"
             };
-            var pageOfData = objectMother.PageOfProductGroupData(indexModel);
-            objectMother.queryProductGroup.Expect(call => call.Query()).Return(pageOfData);
-            objectMother.queryProduct.Expect(call => call.Query()).Return(new Product[] {objectMother.product}.AsQueryable());
+
+            MockPageOfData(indexModel);
 
             //Act
             var jsonResult = objectMother.controller.GetProductGroups(indexModel);
@@ -63,9 +81,7 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration.ProductGroupControlle
                 start = 0,
                 sort = "Name"
             };
-            var pageOfData = objectMother.PageOfProductGroupData(indexModel);
-            objectMother.queryProductGroup.Expect(call => call.Query()).Return(pageOfData);
-            objectMother.queryProduct.Expect(call => call.Query()).Return(new Product[] { objectMother.product }.AsQueryable());
+            MockPageOfData(indexModel);
 
             //Act
             var jsonResult = objectMother.controller.GetProductGroups(indexModel);
@@ -79,6 +95,13 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration.ProductGroupControlle
             Assert.That(jsonData.ProductGroups[0].Name, Is.EqualTo("Malaria9"));
             Assert.That(jsonData.ProductGroups[0].Description, Is.EqualTo("9 Descriere pentru malaria"));
 
+        }
+
+        private void MockPageOfData(ProductGroupIndexModel indexModel)
+        {
+            pageOfData = objectMother.PageOfProductGroupData(indexModel);
+            objectMother.queryProductGroup.Expect(call => call.Query()).Return(pageOfData);
+            objectMother.queryProduct.Expect(call => call.Query()).Return(new Product[] { objectMother.product }.AsQueryable());
         }
     }
 }

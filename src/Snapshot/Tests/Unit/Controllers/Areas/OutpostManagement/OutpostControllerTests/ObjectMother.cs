@@ -67,7 +67,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.OutpostControllerTests
 
 			FakeControllerContext.Builder.HttpContext.User = new FakePrincipal(new FakeIdentity(FAKE_USERNAME), new string[] { });
 			FakeControllerContext.Initialize(controller);
-          
+		  
 			autoMock.Container.InjectUnsetProperties(controller);
 		}
 
@@ -158,18 +158,18 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.OutpostControllerTests
 				var outpost = new Mock<Outpost>();
 				outpost.Setup(c => c.Id).Returns(Guid.NewGuid());
 
-                if (i % 9 != 0)
-                {
-                    outpost.Setup(c => c.Name).Returns("Denhaag Outpost " + i);
-                }
-                else
-                {
-                    if (i % 8 != 0)
-                    {
-                        outpost.Setup(c => c.Name).Returns("Gama Outpost Denim " + i);
-                    }else
-                        outpost.Setup(c => c.Name).Returns("Beta Outpost " + i);
-                }
+				if (i % 9 != 0)
+				{
+					outpost.Setup(c => c.Name).Returns("Denhaag Outpost " + i);
+				}
+				else
+				{
+					if (i % 8 != 0)
+					{
+						outpost.Setup(c => c.Name).Returns("Gama Outpost Denim " + i);
+					}else
+						outpost.Setup(c => c.Name).Returns("Beta Outpost " + i);
+				}
 
 				outpost.Setup(c => c.IsWarehouse).Returns(true);
 				outpost.Setup(c => c.Client).Returns(clientMock.Object);
@@ -253,24 +253,24 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.OutpostControllerTests
 		}
 
 
-        internal GetOutpostsInputModel ExepectOutpostsToBeQueriedByName(string outpostName)
-        {
-            var model = new GetOutpostsInputModel()
-            {
-                dir = "ASC",
-                districtId = null,
-                limit = 50,
-                page = 1,
-                sort = "Name",
-                start = 0,
-                search = outpostName
-            };
+		internal GetOutpostsInputModel ExepectOutpostsToBeQueriedByName(string outpostName)
+		{
+			var model = new GetOutpostsInputModel()
+			{
+				dir = "ASC",
+				districtId = null,
+				limit = 50,
+				page = 1,
+				sort = "Name",
+				start = 0,
+				search = outpostName
+			};
 
-            var queryOutposts = Mock.Get(controller.QueryService);
+			var queryOutposts = Mock.Get(controller.QueryService);
 
-            queryOutposts.Setup(c => c.Query()).Returns(this.AllOutposts());
+			queryOutposts.Setup(c => c.Query()).Returns(this.AllOutposts());
 
-            return model;
-        }
-    }
+			return model;
+		}
+	}
 }

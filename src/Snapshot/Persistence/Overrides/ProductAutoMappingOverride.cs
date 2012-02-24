@@ -11,7 +11,7 @@ namespace Persistence.Overrides
     {
         public void Override(FluentNHibernate.Automapping.AutoMapping<Product> mapping)
         {
-            mapping.References(p => p.ProductGroup).Not.LazyLoad();
+            mapping.References(p => p.ProductGroup).Fetch.Join();
             mapping.References(p => p.ProductGroup).Cascade.SaveUpdate();    
 
 

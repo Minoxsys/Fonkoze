@@ -53,6 +53,16 @@
                                 }
                             },{
                                 xtype: 'button',
+                                id: subNavRes.buttonTabs.product,
+                                toggleGroup: subNavRes.buttonTabs.group,
+                                enableToggle: true,
+                                text: 'Product Administration',
+                                handler:function(){
+                                    navigateTo(res.link.productGroup); 
+                                }
+                            },
+                            {
+                                xtype: 'button',
                                 id: subNavRes.buttonTabs.user,
                                 toggleGroup: subNavRes.buttonTabs.group,
                                 enableToggle: true,
@@ -68,15 +78,6 @@
                                 text: 'Campaign Administration',
                                 handler:function(){
                                     navigateTo(res.link.campaignOverview); 
-                                }
-                            },{
-                                xtype: 'button',
-                                id: subNavRes.buttonTabs.product,
-                                toggleGroup: subNavRes.buttonTabs.group,
-                                enableToggle: true,
-                                text: 'Product Administration',
-                                handler:function(){
-                                    navigateTo(res.link.productGroup); 
                                 }
                             }
                         ]

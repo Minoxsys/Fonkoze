@@ -78,7 +78,7 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration.ProductControllerTest
             objectMother.queryService.VerifyAllExpectations();
             Assert.IsNotNull(response);
             Assert.AreEqual(response.Status, "Error");
-            Assert.AreEqual(response.Message, "The Product Group stockgroup1 already contains a product with the name StockItem1! Please insert a different name!"); 
+            Assert.AreEqual(response.Message, "The Product Group already contains a product with the name StockItem1! Please insert a different name!"); 
         }
     }
 }

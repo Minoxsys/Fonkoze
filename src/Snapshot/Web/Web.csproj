@@ -225,6 +225,7 @@
     <Compile Include="Areas\StockAdministration\Models\Product\ProductIndexModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\Product\ProductIndexOutputModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\Product\ProductInputModel.cs" />
+    <Compile Include="Areas\StockAdministration\Models\Product\ProductJsonActionResponse.cs" />
     <Compile Include="Areas\StockAdministration\Models\Product\ProductModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\Product\ProductOutputModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\Product\ProductOverviewModel.cs" />

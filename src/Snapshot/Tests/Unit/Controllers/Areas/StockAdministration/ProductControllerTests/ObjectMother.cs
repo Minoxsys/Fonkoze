@@ -6,6 +6,8 @@ using Core.Persistence;
 using Web.Areas.StockAdministration.Models.Product;
 using System.Linq;
 using System.Collections.Generic;
+using Core.Domain;
+using MvcContrib.TestHelper.Fakes;
 
 namespace Tests.Unit.Controllers.Areas.StockAdministration.ProductControllerTests
 {
@@ -26,11 +28,19 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration.ProductControllerTest
         public OutpostStockLevel outpostStockLevel;
         public OutpostHistoricalStockLevel outpostHystoricalStockLevel;
 
+        public IQueryService<User> queryUsers;
+
+        public IQueryService<Client> queryClients;
+
         Guid outpostHystoricalStockLevelId;
         Guid outpostStockLevelId;
         Guid productId;
         Guid productId2;
         Guid productGroupId;
+
+        private Client client;
+        private User user;
+        private const string FAKE_USERNAME = "fake-user-name";
 
         public ProductController controller;
 
@@ -45,11 +55,30 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration.ProductControllerTest
         public void Init()
         {
             BuildControllerAndServices();
+            StubUserAndClient();
             StubProductGroup();
             StubProduct();
             StubProduct2();
             StubOutpostStockLevel();
             StubOutpostHystoricalStockLevel();
+        }
+
+        private void StubUserAndClient()
+        {
+            client = MockRepository.GeneratePartialMock<Client>();
+            user = MockRepository.GeneratePartialMock<User>();
+
+            client.Stub(p => p.Id).Return(Guid.NewGuid());
+            client.Name = "Minoxsys";
+
+            user.Stub(p => p.Id).Return(Guid.NewGuid());
+            user.UserName = FAKE_USERNAME;
+            user.ClientId = client.Id;
+
+            queryClients.Expect(call => call.Load(client.Id)).Return(client);
+            queryUsers.Expect(call => call.Query()).Return(new User[] { user }.AsQueryable());
+
+
         }
 
         internal void StubProduct()
@@ -63,6 +92,8 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration.ProductControllerTest
             product.LowerLimit = PRODUCT_LOWERLIMIT;
             product.UpperLimit = PRODUCT_UPPERLIMIT;
             product.SMSReferenceCode = PRODUCT_SMSREFERENCE_CODE;
+            product.Client = client;
+            product.ByUser = user;
 
         }
         internal void StubProduct2()
@@ -76,6 +107,9 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration.ProductControllerTest
             product2.LowerLimit = PRODUCT_LOWERLIMIT;
             product2.UpperLimit = PRODUCT_UPPERLIMIT;
             product2.SMSReferenceCode = PRODUCT_SMSREFERENCE_CODE;
+
+            product2.Client = client;
+            product2.ByUser = user;
 
         }
         internal void StubOutpostStockLevel()
@@ -107,6 +141,10 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration.ProductControllerTest
         {
             controller = new ProductController();
 
+            FakeControllerContext.Builder.HttpContext.User = new FakePrincipal(new FakeIdentity(FAKE_USERNAME), new string[] { });
+            FakeControllerContext.Initialize(controller);
+
+
             queryProductGroup = MockRepository.GenerateMock<IQueryService<ProductGroup>>();
             saveOrUpdateProduct = MockRepository.GenerateMock<ISaveOrUpdateCommand<Product>>();
             deleteProduct = MockRepository.GenerateMock<IDeleteCommand<Product>>();
@@ -114,12 +152,18 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration.ProductControllerTest
             queryHistoricalOutpostStockLevel = MockRepository.GenerateMock<IQueryService<OutpostHistoricalStockLevel>>();
             queryOutpostStockLevel = MockRepository.GenerateMock<IQueryService<OutpostStockLevel>>();
 
+            queryClients = MockRepository.GenerateMock<IQueryService<Client>>();
+            queryUsers = MockRepository.GenerateMock<IQueryService<User>>();
+
             controller.QueryOutpostStockLevel = queryOutpostStockLevel;
             controller.QueryProductGroup = queryProductGroup;
             controller.SaveOrUpdateProduct = saveOrUpdateProduct;
             controller.DeleteProduct = deleteProduct;
             controller.QueryService = queryService;
             controller.QueryOutpostStockLevelHystorical = queryHistoricalOutpostStockLevel;
+
+            controller.QueryClients = queryClients;
+            controller.QueryUsers = queryUsers;
 
         }
 
@@ -131,12 +175,20 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration.ProductControllerTest
             {
                 productPageList.Add(new Product
                 {
+                    Client = client,
+                    ByUser = user,
                     Name = String.Format("Product{0}", i),
                     Description = product.Description,
                     ProductGroup = productGroup
                 });
             }
             return productPageList.AsQueryable();
+        }
+
+        internal void VerifyUserAndClientQueries()
+        {
+            controller.QueryUsers.VerifyAllExpectations();
+            controller.QueryClients.VerifyAllExpectations();
         }
     }
 }

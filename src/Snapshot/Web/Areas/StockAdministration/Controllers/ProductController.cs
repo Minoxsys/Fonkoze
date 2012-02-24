@@ -34,7 +34,6 @@ namespace Web.Areas.StockAdministration.Controllers
         public IQueryService<Client> QueryClients { get; set; }
         private Client _client;
         private User _user;
-        
 
         private const string TEMP_DATA_ERROR_HISTORY = "errorHistory";
         private const string TEMP_DATA_ERROR_CURRENT = "error";
@@ -43,12 +42,14 @@ namespace Web.Areas.StockAdministration.Controllers
         {
             return View();
         }
+
         private void LoadUserAndClient()
         {
             var loggedUser = User.Identity.Name;
             this._user = QueryUsers.Query().FirstOrDefault(m => m.UserName == loggedUser);
 
-            if (_user == null) throw new NullReferenceException("User is not logged in");
+            if (_user == null)
+                throw new NullReferenceException("User is not logged in");
 
             var clientId = Client.DEFAULT_ID;
             if (_user.ClientId != Guid.Empty)
@@ -56,9 +57,10 @@ namespace Web.Areas.StockAdministration.Controllers
 
             this._client = QueryClients.Load(clientId);
         }
+
         public JsonResult GetProductGroups()
         {
-            var productGroups = QueryProductGroup.Query().ToList();           
+            var productGroups = QueryProductGroup.Query().ToList();
             var productGroupModelList = new List<ProductGroupModel>();
 
             foreach (var productGroup in productGroups)
@@ -67,65 +69,45 @@ namespace Web.Areas.StockAdministration.Controllers
                 productGroupModel.Id = productGroup.Id;
                 productGroupModel.Name = productGroup.Name;
                 productGroupModelList.Add(productGroupModel);
-
             }
 
             return Json(new
             {
-                productGroups = productGroupModelList
-            ,
+                productGroups = productGroupModelList,
                 TotalItems = productGroupModelList.Count
             }, JsonRequestBehavior.AllowGet);
- 
         }
+
         public JsonResult GetProducts(ProductIndexModel indexModel)
         {
-            var products = QueryService.Query().Take(0);
+            LoadUserAndClient();
 
-            int pageSize = 0;
-
-            if (indexModel.Limit != null)
-                pageSize = indexModel.Limit.Value;
+            var products = QueryService.Query()
+                                       .Where(p => p.Client == _client);
 
             if (indexModel.ProductGroupId != null)
             {
-                if (indexModel.SearchName != null)
-                {
-                    products = QueryService.Query().Where(it => it.ProductGroup.Id == indexModel.ProductGroupId.Value && it.Name.Contains(indexModel.SearchName));
-                }
-                else
-                {
-                    products = QueryService.Query().Where(it => it.ProductGroup.Id == indexModel.ProductGroupId.Value);
-
-                }
-
+                products = products.Where(it => it.ProductGroup.Id == indexModel.ProductGroupId.Value);
             }
-            else
-            {
-                if (indexModel.SearchName != null)
-                {
-                    products = QueryService.Query().Where(it => it.Name.Contains(indexModel.SearchName));
-                }
-                else
-                {
-                    products = QueryService.Query();
 
-                }
- 
+            if (!string.IsNullOrWhiteSpace(indexModel.SearchName))
+            {
+                products = QueryService.Query().Where(it => it.Name.Contains(indexModel.SearchName));
             }
 
             var orderByColumnDirection = new Dictionary<string, Func<IQueryable<Product>>>()
             {
-                { "Name-ASC", () => products.OrderBy(it=>it.Name) },
+                { "Name-ASC", () => products.OrderBy(it => it.Name) },
                 { "Name-DESC", () => products.OrderByDescending(c => c.Name) },
-                { "ProductGroupName-ASC", () => products.OrderBy(it=>it.ProductGroup.Name)},
-                { "ProductGroupName-DESC", () => products.OrderByDescending(it=>it.ProductGroup.Name)}
+                { "ProductGroupName-ASC", () => products.OrderBy(it => it.ProductGroup.Name) },
+                { "ProductGroupName-DESC", () => products.OrderByDescending(it => it.ProductGroup.Name) }
             };
 
             products = orderByColumnDirection[String.Format("{0}-{1}", indexModel.sort, indexModel.dir)].Invoke();
             int totalItems = products.Count();
-            products = products.Take(pageSize)
+            products = products.Take(indexModel.Limit.Value)
                                .Skip(indexModel.Start.Value);
+
             var productList = new List<ProductModel>();
 
             foreach (var product in products.ToList())
@@ -134,7 +116,8 @@ namespace Web.Areas.StockAdministration.Controllers
                 CreateMappings();
                 Mapper.Map(product, productModel);
                 productModel.ProductGroupName = product.ProductGroup.Name;
-                productList.Add(productModel); 
+                productModel.ProductGroupId = product.ProductGroup.Id.ToString();
+                productList.Add(productModel);
             }
 
             return Json(new ProductIndexOutputModel
@@ -142,9 +125,8 @@ namespace Web.Areas.StockAdministration.Controllers
                 products = productList,
                 TotalItems = totalItems
             }, JsonRequestBehavior.AllowGet);
+        }
 
-            
-        }  
         private void CreateMappings()
         {
             Mapper.CreateMap<ProductModel, Product>();
@@ -174,100 +156,106 @@ namespace Web.Areas.StockAdministration.Controllers
             Mapper.CreateMap<Client, ClientModel>();
             Mapper.CreateMap<ClientModel, Client>();
         }
-              
+
         [HttpPost]
         public JsonResult Create(ProductInputModel inputProductModel)
-        {           
-          if ((string.IsNullOrEmpty(inputProductModel.Name)) && (string.IsNullOrEmpty(inputProductModel.SMSReferenceCode)))
-                {
-                    return Json(
-                        new JsonActionResponse
-                        {
-                            Status = "Error",
-                            Message = "The product has not been saved!",
-                            CloseModal = true
-                        });
-
-                }
-            
-            CreateMappings();
-
-            var products = QueryService.Query().Where(it => it.ProductGroup.Id == inputProductModel.ProductGroup.Id && it.Name == inputProductModel.Name).ToList();
-
-            if (products.Count > 0)
-            {
-                return Json(
-                        new JsonActionResponse
-                        {
-                            Status = "Error",
-                            Message = string.Format("The Product Group {0} already contains a product with the name {1}! Please insert a different name!", products[0].ProductGroup.Name, products[0].Name),
-                            CloseModal = false
-                        });               
-
-            }
-            else
-            {
-                var product = new Product();
-                Mapper.Map(inputProductModel, product);
-
-                product.ProductGroup = QueryProductGroup.Load(inputProductModel.ProductGroup.Id);
-
-                SaveOrUpdateProduct.Execute(product);
-
-                return Json(
-                        new JsonActionResponse
-                        {
-                            Status = "Success",
-                            Message = "The product has been saved!",
-                            CloseModal = true
-                        });
-            }
-        }
-              
-        [HttpPost]
-        public JsonResult Edit(ProductInputModel inputProductModel)
         {
+            LoadUserAndClient();
             if ((string.IsNullOrEmpty(inputProductModel.Name)) && (string.IsNullOrEmpty(inputProductModel.SMSReferenceCode)))
             {
                 return Json(
-                    new JsonActionResponse
+                    new ProductJsonActionResponse
+                    {
+                        Status = "Error",
+                        Message = "The product has not been saved!",
+                        CloseModal = true
+                    });
+            }
+
+            CreateMappings();
+
+            var products = QueryService.Query()
+                                       .Where(it => it.Client == _client)
+                                       .Where(it => it.ProductGroup.Id == inputProductModel.ProductGroup.Id)
+                                       .Where(it => it.Name == inputProductModel.Name);
+
+            if (products.Count() > 0)
+            {
+                return Json(
+                    new ProductJsonActionResponse
+                    {
+                        Status = "Error",
+                        Message = string.Format("The Product Group already contains a product with the name {0}! Please insert a different name!", inputProductModel.Name),
+                        CloseModal = false
+                    });
+            }
+
+            var product = new Product();
+            Mapper.Map(inputProductModel, product);
+
+            product.ProductGroup = QueryProductGroup.Load(inputProductModel.ProductGroup.Id);
+
+            product.ByUser = _user;
+            product.Client = _client;
+
+            SaveOrUpdateProduct.Execute(product);
+
+            return Json(
+                new ProductJsonActionResponse
+                {
+                    Status = "Success",
+                    Message = "The product has been saved!",
+                    CloseModal = true
+                });
+        }
+
+        [HttpPost]
+        public JsonResult Edit(ProductInputModel inputProductModel)
+        {
+            LoadUserAndClient();
+
+            if ((string.IsNullOrEmpty(inputProductModel.Name)) && (string.IsNullOrEmpty(inputProductModel.SMSReferenceCode)))
+            {
+                return Json(
+                    new ProductJsonActionResponse
                     {
                         Status = "Error",
                         Message = "The product has not been updated!",
                         CloseModal = true
                     });
-
             }
             var products = QueryService.Query().Where(it => it.ProductGroup.Id == inputProductModel.ProductGroup.Id && it.Name == inputProductModel.Name && it.Id != inputProductModel.Id).ToList();
 
             if (products.Count > 0)
-            {               
-                return Json(
-                        new JsonActionResponse
-                        {
-                            Status = "Error",
-                            Message = string.Format("The Product Group {0} already contains a product with the name {1}! Please insert a different name!", products[0].ProductGroup.Name, products[0].Name),
-                            CloseModal = false
-                        });  
-
-            }
-            else
             {
-                CreateMappings();
-
-                var product = QueryService.Load(inputProductModel.Id);
-                Mapper.Map(inputProductModel, product);
-                product.ProductGroup = QueryProductGroup.Load(inputProductModel.ProductGroup.Id);
-                SaveOrUpdateProduct.Execute(product);
-
                 return Json(
-                         new JsonActionResponse
-                         {
-                             Status = "Success",
-                             Message = "The product has been updated!",
-                             CloseModal = true
-                         }); 
+                    new ProductJsonActionResponse
+                    {
+                        Status = "Error",
+                        Message = string.Format("The Product Group {0} already contains a product with the name {1}! Please insert a different name!", products[0].ProductGroup.Name, products[0].Name),
+                        CloseModal = false
+                    });
             }
+
+            CreateMappings();
+
+            var product = QueryService.Load(inputProductModel.Id);
+            Mapper.Map(inputProductModel, product);
+
+            product.ProductGroup = QueryProductGroup.Load(inputProductModel.ProductGroup.Id);
+
+            product.ByUser = _user;
+            product.Client = _client;
+
+            SaveOrUpdateProduct.Execute(product);
+
+            return Json(
+                new ProductJsonActionResponse
+                {
+                    Status = "Success",
+                    Message = "The product has been updated!",
+                    CloseModal = true
+                });
         }
 
         [HttpPost]
@@ -283,37 +271,31 @@ namespace Web.Areas.StockAdministration.Controllers
                 if (outpostStockLevel.Count > 0)
                 {
                     return Json(
-                       new JsonActionResponse
-                       {
-                           Status = "Error",
-                           Message = string.Format("The product {0} has stock level available, so it can not be deleted", product.Name),
-                           
-                       });
-                   
+                        new JsonActionResponse
+                        {
+                            Status = "Error",
+                            Message = string.Format("The product {0} has stock level available, so it can not be deleted", product.Name),
+                        });
                 }
                 if (outpostStockLevelHystorical.Count > 0)
                 {
                     return Json(
-                       new JsonActionResponse
-                       {
-                           Status = "Error",
-                           Message = string.Format("The product {0} has stock level history available , so it can not be deleted", product.Name),
-
-                       });
-                   
+                        new JsonActionResponse
+                        {
+                            Status = "Error",
+                            Message = string.Format("The product {0} has stock level history available , so it can not be deleted", product.Name),
+                        });
                 }
 
                 DeleteProduct.Execute(product);
-
             }
 
             return Json(
-                       new JsonActionResponse
-                       {
-                           Status = "Success",
-                           Message = string.Format("The product {0} has been deleted!", product.Name),
-
-                       });
+                new JsonActionResponse
+                {
+                    Status = "Success",
+                    Message = string.Format("The product {0} has been deleted!", product.Name),
+                });
         }
     }
 }

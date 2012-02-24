@@ -7,6 +7,8 @@ using Core.Persistence;
 using Domain;
 using Rhino.Mocks;
 using Web.Areas.StockAdministration.Models.ProductGroup;
+using Core.Domain;
+using MvcContrib.TestHelper.Fakes;
 
 namespace Tests.Unit.Controllers.Areas.StockAdministration.ProductGroupControllerTests
 {
@@ -20,11 +22,19 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration.ProductGroupControlle
         public ISaveOrUpdateCommand<ProductGroup> saveCommand;
         public IDeleteCommand<ProductGroup> deleteCommand;
 
+        public IQueryService<User> queryUsers;
+
+        public IQueryService<Client> queryClients;
+
         public ProductGroup productGroup;
         public Product product;
 
         public Guid productGroupId;
         public Guid productId;
+
+        private Client client;
+        private User user;
+        private const string FAKE_USERNAME = "fake-user-name";
 
         private const string PRODUCTGROUP_NAME = "Malaria";
         private const string PRODUCTGROUP_DESCRIPTION = "Descriere pentru malaria";
@@ -35,7 +45,26 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration.ProductGroupControlle
         {
             MockServices();
             Setup_Controller();
+            StubUserAndClient();
             SetUp_StubData();
+        }
+
+        private void StubUserAndClient()
+        {
+            client = MockRepository.GeneratePartialMock<Client>();
+            user = MockRepository.GeneratePartialMock<User>();
+
+            client.Stub(p=>p.Id ).Return( Guid.NewGuid() );
+            client.Name = "Minoxsys";
+
+            user.Stub(p=>p.Id ).Return( Guid.NewGuid() );
+            user.UserName = FAKE_USERNAME;
+            user.ClientId = client.Id;
+
+            queryClients.Expect(call => call.Load(client.Id)).Return(client);
+            queryUsers.Expect(call => call.Query()).Return(new User[] { user }.AsQueryable());
+
+
         }
 
         private void MockServices()
@@ -44,16 +73,25 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration.ProductGroupControlle
             queryProductGroup = MockRepository.GenerateMock<IQueryService<ProductGroup>>();
             saveCommand = MockRepository.GenerateMock<ISaveOrUpdateCommand<ProductGroup>>();
             deleteCommand = MockRepository.GenerateMock<IDeleteCommand<ProductGroup>>();
+
+            queryClients = MockRepository.GenerateMock<IQueryService<Client>>();
+            queryUsers = MockRepository.GenerateMock<IQueryService<User>>();
         }
 
         private void Setup_Controller()
         {
             controller = new ProductGroupController();
 
+            FakeControllerContext.Builder.HttpContext.User = new FakePrincipal(new FakeIdentity(FAKE_USERNAME), new string[] { });
+            FakeControllerContext.Initialize(controller);
+
             controller.QueryService = queryProductGroup;
             controller.QueryProduct = queryProduct;
             controller.SaveOrUpdateProductGroup = saveCommand;
             controller.DeleteCommand = deleteCommand;
+
+            controller.QueryClients = queryClients;
+            controller.QueryUsers = queryUsers;
         }
 
         private void SetUp_StubData()
@@ -80,6 +118,8 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration.ProductGroupControlle
             {
                 productGroupPageList.Add(new ProductGroup
                 {
+                    Client = client,
+                    ByUser = user,
                     Name = "Malaria" + i,
                     Description = i + " " + PRODUCTGROUP_DESCRIPTION
                 });
@@ -87,8 +127,10 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration.ProductGroupControlle
             return productGroupPageList.AsQueryable();
         }
 
-
-        
-
+        internal void VerifyUserAndClientQueries()
+        {
+            controller.QueryUsers.VerifyAllExpectations();
+            controller.QueryClients.VerifyAllExpectations();
+        }
     }
 }

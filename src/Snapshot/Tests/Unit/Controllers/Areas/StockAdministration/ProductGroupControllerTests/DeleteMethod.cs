@@ -24,7 +24,6 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration.ProductGroupControlle
         public void Returns_JSON_With_ErrorMessage_When_ProductGroupId_IsNull()
         {
             //Arrange
-
             //Act
             var jsonResult = objectMother.controller.Delete(null);
 
@@ -40,7 +39,13 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration.ProductGroupControlle
         public void Executes_DeleteCommand_WithTheSelected_ProductGroup()
         {
             //Arrange
-            objectMother.queryProduct.Expect(call => call.Query()).Return(new Product[] { new Product() }.AsQueryable());
+            objectMother.queryProduct.Expect(call => call.Query()).Return(new Product[]
+            {
+                new Product
+                {
+                    ProductGroup = new ProductGroup()
+                }
+            }.AsQueryable());
             objectMother.queryProductGroup.Expect(call => call.Load(objectMother.productGroupId)).Return(objectMother.productGroup);
             objectMother.deleteCommand.Expect(call => call.Execute(Arg<ProductGroup>.Matches(p => p.Id == objectMother.productGroup.Id)));
 
