@@ -366,13 +366,16 @@
     <Content Include="Assets\css\ext-ie.css" />
     <Content Include="Assets\resources\img\arrow.gif" />
     <Content Include="Assets\css\snapshot-theme.css" />
-    <Content Include="Assets\img\arrow.gif" />
     <Content Include="Assets\resources\img\briefcase.png" />
+    <Content Include="Assets\resources\img\checked.gif" />
     <Content Include="Assets\resources\img\delete.png" />
     <Content Include="Assets\resources\img\edit.png" />
     <Content Include="Assets\js\ext-all-debug-w-comments.js" />
     <Content Include="Assets\js\jquery-1.7.1.min.js" />
     <Content Include="Assets\js\underscore.js" />
+    <Content Include="Assets\resources\img\open.png" />
+    <Content Include="Assets\resources\img\unchecked.gif" />
+    <Content Include="Assets\resources\img\Users\user.png" />
     <Content Include="Assets\resources\themes\compass_init.rb" />
     <Content Include="Assets\resources\themes\images\access\boundlist\trigger-arrow.png" />
     <Content Include="Assets\resources\themes\images\access\box\corners-blue.gif" />
