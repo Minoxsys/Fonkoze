@@ -45,7 +45,7 @@ namespace Web.Areas.CampaignManagement.Controllers
             campaign.Client = this._client;
             campaign.CreationDate = DateTime.UtcNow;
             campaign.Opened = true;
-            campaign.Options = StrToByteArray((ConvertToJSON(GetOptionsModel(model.CountriesIds, model.RegionsIds, model.DistrictsIds, model.OutpostsIds))));
+            campaign.Options = StrToByteArray("a");    //(ConvertToJSON(GetOptionsModel(model.CountriesIds, model.RegionsIds, model.DistrictsIds, model.OutpostsIds))));
 
             SaveOrUpdateCommand.Execute(campaign);
 

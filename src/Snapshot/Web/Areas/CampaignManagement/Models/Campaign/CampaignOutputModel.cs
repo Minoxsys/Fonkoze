@@ -8,7 +8,7 @@ namespace Web.Areas.CampaignManagement.Models.Campaign
     public class CampaignOutputModel
     {
         public Guid Id { get; set; }
-        public String Name { get; set; }
+        public string Name { get; set; }
         public String StartDate { get; set; }
         public String EndDate { get; set; }
         public String CreationDate { get; set; }

@@ -148,7 +148,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Areas\CampaignManagement\Controllers\CampaignController.cs" />
     <Compile Include="Areas\CampaignManagement\CampaignManagementAreaRegistration.cs" />
     <Compile Include="Areas\CampaignManagement\Models\Campaign\CampaignInputModel.cs" />
     <Compile Include="Areas\CampaignManagement\Models\Campaign\CampaignModel.cs" />
@@ -159,12 +158,8 @@
     <Compile Include="Areas\CampaignManagement\Models\Campaign\ReferenceModel.cs" />
     <Compile Include="Areas\CampaignManagement\Models\Campaign\ReferenceModelOutput.cs" />
     <Compile Include="Areas\OutpostManagement\Controllers\AssignProductGroupController.cs" />
-    <Compile Include="Areas\CampaignManagement\CampaignManagementAreaRegistration.cs" />
     <Compile Include="Areas\CampaignManagement\Controllers\CampaignController.cs" />
-    <Compile Include="Areas\CampaignManagement\Models\Campaign\CampaignOutputModel.cs" />
     <Compile Include="Areas\CampaignManagement\Models\RequestSchedule\RequestScheduleInputModel.cs" />
-    <Compile Include="Areas\CampaignManagement\Models\Campaign\CampaignOverviewInputModel.cs" />
-    <Compile Include="Areas\CampaignManagement\Models\Campaign\CampaignOverviewOutputModel.cs" />
     <Compile Include="Areas\CampaignManagement\Models\Campaign\LocationEntitiesInput.cs" />
     <Compile Include="Areas\CampaignManagement\Models\Campaign\LocationEntityModel.cs" />
     <Compile Include="Areas\OutpostManagement\Controllers\ContactController.cs" />

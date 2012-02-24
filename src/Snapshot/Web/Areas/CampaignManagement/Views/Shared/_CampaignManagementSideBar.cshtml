@@ -86,7 +86,7 @@
                                 icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/arrow.gif"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
                                 iconCls:'x-btn-text-icon',
                                 handler: function () {
-                                    
+                                    navigateTo(window.res.link.campaignOverview);
                                 },
                                 enableToggle: true
                             },

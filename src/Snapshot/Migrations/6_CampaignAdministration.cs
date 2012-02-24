@@ -25,7 +25,7 @@ namespace Migrations
                 .WithColumn("EndDate").AsDateTime()
                 .WithColumn("CreationDate").AsDateTime()
                 .WithColumn("Opened").AsBoolean()
-                .WithColumn("Options").AsBinary()
+                .WithColumn("Options").AsBinary(Int32.MaxValue)
                 ;
 
             Create.AddClientForeignKey("Campaigns");

@@ -1,14 +1,34 @@
-﻿@using Domain
-@using Microsoft.Web.Mvc;
-@section page_title{
-Campaign: Overview
+﻿@section page_title{
+Campaign Management
 }
 @{
     Html.RenderPartial("_SubNavigation");
     Html.RenderPartial("_CampaignManagementSideBar");
 }
+<style>
+    .x-grid-checkheader
+    {
+        height: 14px;
+        background-image: url(''@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/unchecked.gif"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))'');
+        background-position: 50% -2px;
+        background-repeat: no-repeat;
+        background-color: transparent;
+    }
+    
+    .x-grid-checkheader-checked
+    {
+        background-image: url('@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/checked.gif"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))');
+    }
+    
+    .x-grid-checkheader-editor .x-form-cb-wrap
+    {
+        text-align: center;
+    }
+</style>
 <script type="text/javascript">
+
     Ext.onReady(function () {
+
         var administrationBtnId = window.res.header.navigation.administration;
         var administrationBtn = Ext.getCmp(administrationBtnId);
         administrationBtn.toggle(true);
@@ -17,14 +37,21 @@ Campaign: Overview
         var campaignAdministrationBtn = Ext.getCmp(campaignAdministrationBtnId);
         campaignAdministrationBtn.toggle(true);
 
-        var campaignBtnId = window.res.content.maincontent.sidebar.manageCampaigns;
-        var campaignBtn = Ext.getCmp(campaignBtnId);
-        campaignBtn.toggle(true);
+        var smsRequestBtnId = window.res.content.maincontent.sidebar.smsRequest;
+        var smsrequestBtn = Ext.getCmp(smsRequestBtnId);
+        smsrequestBtn.toggle(true);
+
+
     });
 </script>
 <script type="text/javascript">
+
     Ext.onReady(function () {
-        window.feature = {};
+
+        window.feature.campaignButtonId = 'campaignButtonId';
+        window.feature.automaticScheduleButtonId = 'automaticScheduleButtonId';
+        window.feature.createRequestsButtonId = 'createRequestsId';
+
 
         window.feature.searchCampaignName = 'Campaign-Search-Name';
         window.feature.wizardCampaignManagement = 'Wizard-Campaign-Management';
@@ -40,6 +67,116 @@ Campaign: Overview
         window.feature.gridOutpostLeft = 'Grid-Add-Outpost-Left';
         window.feature.gridOutpostRight = 'Grid-Add-Outpost-Right';
         window.feature.nextButton = 'Form-Add-Campaign-Next-Button';
+
+        var navigate = function (panel, direction) {
+            var layout = panel.getLayout();
+            layout[direction]();
+            Ext.getCmp(window.feature.campaignButtonId).setDisabled(!layout.getPrev());
+            Ext.getCmp(window.feature.automaticScheduleButtonId).setDisabled(!layout.getNext());
+        };
+
+        Ext.QuickTips.init();
+
+        window.feature.modalSchedule = Ext.define('Ext.feature.Schedule.Modal', {
+            extend: 'Ext.window.Window',
+            title: 'Schedule Automatic Product Level Request',
+            height: 870,
+            width: 1090,
+            modal: true,
+            layout: {
+                align: 'stretch',
+                padding: 10,
+                type: 'vbox'
+            },
+            items: [{
+                xtype: 'tabpanel',
+                activeTab: 0,
+                align: 'stretch',
+                height: 810,
+                tabPosition: 'top',
+                items: [{
+                    title: 'Campaign',
+                    items: [{
+                        xtype: 'container',
+                        margin: '20 0 20 0',
+                        autoScroll: true,
+                        layout: {
+                            align: 'stretch',
+                            type: 'vbox'
+                        },
+                        items: [{
+                            xtype: 'container',
+                            layout: {
+                                type: 'hbox',
+                            },
+                            height: 70,
+                            items:[{
+                                xtype: 'container',
+                                flex: 1,
+                                layout: {
+                                    type: 'column'
+                                },
+                                height:70,
+                                items: [{
+                                    xtype: 'container',
+                                    height: 30,
+                                    width: 30,
+                                    html:'&nbsp;'
+                                },{
+                                    xtype: 'label',
+                                    text: 'Campaign Administration',
+                                },{
+                                    xtype: 'button',
+                                    margin: '0 0 0 20',
+                                    text: 'Add New Campaign',
+                                    handler: function(){
+                                        var modalWindowAddCampaign = new window.feature.modalAddCampaignManagement();
+                                        modalWindowAddCampaign.show();
+                                    }
+                                }]
+                            },{
+                                xtype: 'container',
+                                flex: 1,
+                                layout: {
+                                    type: 'hbox',
+                                    pack:'end'
+                                },
+                                height:70,
+                                items: [{
+                                    xtype: 'textfield',
+                                    id: window.feature.searchCampaignName,
+                                    width: 200,
+                                    frame: true,
+                                    emptyText: 'Campaign Search',
+                                    enableKeyEvents: true,
+                                    listeners: {
+                                        'keyup': {
+                                            fn: function(key) {
+                                                var searchValue = Ext.getCmp(window.feature.searchCampaignName).getValue();
+                                                window.feature.campaignStore.proxy.extraParams.searchValue = searchValue;
+                                                window.feature.campaignStore.loadPage(1);
+                                            }
+                                        }
+                                    }
+                                }]
+                            }]
+                        }, 
+                            window.feature.grid 
+                        ]
+                    }]
+                },
+                {
+                    title: 'Automatic Schedule',
+                    html: 'Automatic Schedule'
+                }, {
+                    title: 'Create product level requests',
+                    html: 'requests'
+                }]
+
+            }]
+        });
+
+        //Campaign
 
         window.feature.campaignStore = Ext.create('Ext.data.Store', {
             pageSize: 50,
@@ -65,7 +202,7 @@ Campaign: Overview
 
         window.feature.countryStore = Ext.create('Ext.data.Store', {
             remoteSuport: true,
-            fields: ['Id', 'Name'],
+            fields: ['Id','Name'],
             proxy: {
                 type: 'ajax',
                 url: '@Url.RouteUrl(Web.Areas.OutpostManagement.OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Region", action = "GetCountries" })',
@@ -82,9 +219,9 @@ Campaign: Overview
             }]
         });
 
-        window.feature.regionStore = Ext.create('Ext.data.Store', {
+         window.feature.regionStore = Ext.create('Ext.data.Store', {
             remoteSuport: true,
-            fields: ['Id', 'Name'],
+            fields: ['Id','Name'],
             proxy: {
                 type: 'ajax',
                 url: '@Url.RouteUrl(CampaignManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Campaign", action = "GetRegions" })',
@@ -104,7 +241,7 @@ Campaign: Overview
 
         window.feature.districtStore = Ext.create('Ext.data.Store', {
             remoteSuport: true,
-            fields: ['Id', 'Name'],
+            fields: ['Id','Name'],
             proxy: {
                 type: 'ajax',
                 url: '@Url.RouteUrl(CampaignManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Campaign", action = "GetDistricts" })',
@@ -124,7 +261,7 @@ Campaign: Overview
 
         window.feature.outpostStore = Ext.create('Ext.data.Store', {
             remoteSuport: true,
-            fields: ['Id', 'Name'],
+            fields: ['Id','Name'],
             proxy: {
                 type: 'ajax',
                 url: '@Url.RouteUrl(CampaignManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Campaign", action = "GetOutposts" })',
@@ -142,131 +279,49 @@ Campaign: Overview
             }]
         });
 
+        Ext.define('Ext.ux.CheckColumn', {
+        extend: 'Ext.grid.column.Column',
+        alias: 'widget.checkcolumn',
+        
+        tdCls: Ext.baseCSSPrefix + 'grid-cell-checkcolumn',
+                
+        constructor: function () {
+            this.addEvents(
+                'checkchange'
+                );
+            this.callParent(arguments);
+        },
+                
+        processEvent: function (type, view, cell, recordIndex, cellIndex, e) {
+            if (type == 'mousedown' || (type == 'keydown' && (e.getKey() == e.ENTER || e.getKey() == e.SPACE))) {
+                var record = view.panel.store.getAt(recordIndex),
+                dataIndex = this.dataIndex,
+                checked = !record.get(dataIndex);
 
-        window.feature.Header = Ext.create('Ext.container.Container', {
-            layout: 'hbox',
-            height: 50,
-            items: [
-                {
-                    xtype: 'container',
-                    flex: 1,
-                    layout: 'column',
-                    items: [{
-                        xtype: 'container',
-                        height: 30,
-                        width: 30,
-                        html:'&nbsp;'
-                    },{
-                        xtype: 'label',
-                        text: 'Campaign Administration',
-                        margin: '0 0 0 10'
-                    },{
-                        xtype: 'button',
-                        text: 'Add New Campaign',
-                        margin: '0 0 0 20',
-                        handler: function () {
-                            var modalWindowAddCampaign = new window.feature.modalAddCampaignManagement();
-                            modalWindowAddCampaign.show();
-                        }
-                    }]
-                },{
-                    xtype: 'container',
-                    layout: {
-                        type: 'hbox',
-                        pack: 'end'
-                    },
-                    flex: 1,
-                    items: [{
-                        xtype: 'textfield',
-                        id: window.feature.searchCampaignName,
-                        padding: '0 0 0 200',
-                        width: 200,
-                        frame: true,
-                        emptyText: 'Campaign Search',
-                        enableKeyEvents: true,
-                        listeners: {
-                            'keyup': {
-                                fn: function (key) {
-                                    var searchValue = Ext.getCmp(window.feature.searchCampaignName).getValue();
-                                    window.feature.campaignStore.proxy.extraParams.searchValue = searchValue;
-                                    window.feature.campaignStore.loadPage(1);
-                                }
-                            }
-                        }
-                    }]
-                }
-            ]
-        });
-
-        window.feature.grid = Ext.create('Ext.grid.Panel', {
-            store: window.feature.campaignStore,
-            flex: 3,
-            disableSelection: true,
-            loadMask: true,
-            columns: [{
-                text: "Campaign Name",
-                dataIndex: 'Name',
-                sortable: true,
-                flex: 1
-            }, {
-                text: "Start Date",
-                dataIndex: 'StartDate',
-                sortable: true,
-                flex: 1
-            }, {
-                text: "End Date",
-                dataIndex: 'EndDate',
-                sortable: true,
-                flex: 1
-            }, {
-                text: "Creation Date",
-                dataIndex: 'CreationDate',
-                sortable: true,
-                flex: 1
-            }, {
-                xtype: 'actioncolumn',
-                text: 'Actions',
-                items: [{
-                    icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/edit.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
-                    tooltip: _t('Edit this campaign'),
-                    handler: function (grid, rowIndex, colIndex) {
-                    }
-                }, {
-                    icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/open.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
-                    tooltip: _t('Reopen this campaign'),
-                    handler: function (grid, rowIndex, colIndex) {
-                    }
-                }
-
-        ]
-            }],
-            bbar: Ext.create('Ext.PagingToolbar', {
-                store: window.feature.store,
-                displayInfo: true,
-                displayMsg: 'Displaying topics {0} - {1} of {2}',
-                emptyMsg: "No topics to display"
-            })
-        });
-
-        window.feature.container = Ext.create('Ext.container.Container', {
-            margin: '20 50 20 0',
-            autoScroll: true,
-            id: 'TopContainer',
-            layout: {
-                align: 'stretch',
-                type: 'vbox'
-            },
-            items: [
-                window.feature.Header,
-                window.feature.grid,
-            {
-                xtype: 'container',
-                height: 150
-            }]
-        });
-
-
-        //needs to be refactored
+                hasStockLevels = record.get('HasStockLevels');
+                if (hasStockLevels)
+                    return false;
+    
+                record.set(dataIndex, checked);
+                this.fireEvent('checkchange', this, recordIndex, checked);
+                // cancel selection.
+                return false;
+            }
+            else {
+                return this.callParent(arguments);
+            }
+        },
+    
+        renderer: function (value, styles, record, recordIndex, columnIndex, store, gridView) {
+            var cssPrefix = Ext.baseCSSPrefix,
+            cls = [cssPrefix + 'grid-checkheader'];
+    
+            if (value) {
+                cls.push(cssPrefix + 'grid-checkheader-checked');
+            }
+            return '<div class="' + cls.join(' ') + '">&#160;</div>';
+        }
+    });
 
         var stepNumber = 0;
         var campaign = {};
@@ -274,7 +329,7 @@ Campaign: Overview
         window.feature.modalAddCampaignManagement = Ext.define('Ext.feature.campaign.Modal', {
             extend: 'Ext.window.Window',
             title: 'Add New Campaign',
-            modal: true,
+            modal:true,
             height: 400,
             width: 800,
             layout: {
@@ -288,27 +343,26 @@ Campaign: Overview
                     items: [window.feature.wizardCampaignManagementContainer]
 
                 });
-                me.buttons = [{
-                    text: 'Prev',
+                me.buttons = [{ 
+                    text: 'Prev', 
                     handler: function () {
                         stepNumber--;
                     }
-                }, {
-                    text: 'Cancel',
+                },{
+                    text: 'Cancel', 
                     handler: function () {
-                        me.close();
-                        me.destroy();
+                        me.close(); 
+                        me.destroy(); 
                     }
                 }, {
-                    text: 'Next',
+                    text: 'Next', 
                     id: window.feature.nextButton,
                     handler: function () {
                         stepNumber++;
-
-                        if (stepNumber == 1) {
-                            campaign.Name = window.feature.wizardCampaignManagementContainer.down('#' + window.feature.formCampaignNameId).getValue();
-                            campaign.StartDate = Ext.util.Format.date(window.feature.wizardCampaignManagementContainer.down('#' + window.feature.formCampaignStartDateId).getValue());
-                            campaign.EndDate = Ext.util.Format.date(window.feature.wizardCampaignManagementContainer.down('#' + window.feature.formCampaignEndDateId).getValue());
+                        if (stepNumber == 1){
+                            campaign.Name = window.feature.wizardCampaignManagementContainer.down('#'+ window.feature.formCampaignNameId).getValue(); 
+                            campaign.StartDate = Ext.util.Format.date(window.feature.wizardCampaignManagementContainer.down('#'+ window.feature.formCampaignStartDateId).getValue()); 
+                            campaign.EndDate = Ext.util.Format.date(window.feature.wizardCampaignManagementContainer.down('#'+ window.feature.formCampaignEndDateId).getValue()); 
 
                             me.remove(window.feature.wizardCampaignManagementContainer);
                             window.feature.countryStore.load();
@@ -316,13 +370,13 @@ Campaign: Overview
                             me.doLayout();
                         }
 
-                        if (stepNumber == 2) {
+                        if (stepNumber == 2){
                             var ids = '';
                             var gridRightStore = Ext.getCmp(window.feature.gridCountryRight).getStore();
-                            gridRightStore.each(function (record) {
-                                ids = ids + record.get('Id') + ',';
+                            gridRightStore.each(function(record){
+                                    ids = ids + record.get('Id') + ',';
                             });
-                            window.feature.regionStore.proxy.extraParams.countryIdList = ids;
+                            window.feature.regionStore.proxy.extraParams.countryIdList = ids; 
                             campaign.Countries = ids;
 
                             me.remove(window.feature.wizardCountryManagementContainer);
@@ -331,13 +385,13 @@ Campaign: Overview
                             me.doLayout();
                         }
 
-                        if (stepNumber == 3) {
+                        if (stepNumber == 3){
                             var ids = '';
                             var gridRightStore = Ext.getCmp(window.feature.gridRegionRight).getStore();
-                            gridRightStore.each(function (record) {
-                                ids = ids + record.get('Id') + ',';
+                            gridRightStore.each(function(record){
+                                    ids = ids + record.get('Id') + ',';
                             });
-                            window.feature.districtStore.proxy.extraParams.regionIdList = ids;
+                            window.feature.districtStore.proxy.extraParams.regionIdList = ids; 
                             campaign.Regions = ids;
 
                             me.remove(window.feature.wizardRegionManagementContainer);
@@ -346,14 +400,14 @@ Campaign: Overview
                             me.doLayout();
                         }
 
-                        if (stepNumber == 4) {
+                        if (stepNumber == 4){
                             Ext.getCmp(window.feature.nextButton).setText('Save');
                             var ids = '';
                             var gridRightStore = Ext.getCmp(window.feature.gridDistrictRight).getStore();
-                            gridRightStore.each(function (record) {
-                                ids = ids + record.get('Id') + ',';
+                            gridRightStore.each(function(record){
+                                    ids = ids + record.get('Id') + ',';
                             });
-                            window.feature.outpostStore.proxy.extraParams.districtIdList = ids;
+                            window.feature.outpostStore.proxy.extraParams.districtIdList = ids; 
                             campaign.Districts = ids;
 
                             me.remove(window.feature.wizardDistrictManagementContainer);
@@ -362,19 +416,19 @@ Campaign: Overview
                             me.doLayout();
                         }
 
-                        if (stepNumber == 5) {
+                        if (stepNumber == 5){
 
                             var ids = '';
                             var gridRightStore = Ext.getCmp(window.feature.gridOutpostRight).getStore();
-                            gridRightStore.each(function (record) {
-                                ids = ids + record.get('Id') + ',';
-                            });
+                            gridRightStore.each(function(record){
+                                    ids = ids + record.get('Id') + ',';
+                            }); 
                             campaign.Outposts = ids;
 
-                            var values = {
-                                CampaignName: campaign.Name,
-                                StartDate: campaign.StartDate,
-                                EndDate: campaign.EndDate,
+                            var values = { 
+                                CampaignName:  campaign.Name,
+                                StartDate:  campaign.StartDate,
+                                EndDate:  campaign.EndDate,
                                 CountriesIds: campaign.Countries,
                                 RegionsIds: campaign.Regions,
                                 DistrictsIds: campaign.Districts,
@@ -383,20 +437,22 @@ Campaign: Overview
 
                             var postToUrl = '@Url.RouteUrl(CampaignManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Campaign", action = "Create" })';
                             var action = $.post(postToUrl, values);
-                            action.success(function (serverResponse) {
-                                if (serverResponse.CloseModal == false) {
+                            action.success(function(serverResponse){
+                                if(serverResponse.CloseModal ==false)
+                                {
                                     Ext.Msg.alert(serverResponse.Status, serverResponse.Message);
                                 }
-                                else {
+                                else
+                                {                                                    
                                     me.close();
                                     me.destroy();
 
-                                    window.feature.campaignStore.loadPage(1);
+                                    window.feature.campaignStore.loadPage(1); 
                                 }
                             });
 
                         }
-
+                        
                     }
                 }],
                 me.callParent(arguments);
@@ -936,13 +992,97 @@ Campaign: Overview
             }]
         });
 
-        //end
+        //window.feature.wizardSelectionContainer = Ext.create('Ext.container.Container', {
+
+
+        window.feature.grid = Ext.create('Ext.grid.Panel', {
+            store: window.feature.campaignStore,
+            disableSelection: true,
+            loadMask: true,
+            columns: [{
+                text: "Campaign Name",
+                dataIndex: 'Name',
+                sortable: true,
+                flex: 1
+            }, {
+                text: "Start Date",
+                dataIndex: 'StartDate',
+                sortable: true,
+                flex: 1
+            }, {
+                text: "End Date",
+                dataIndex: 'EndDate',
+                sortable: true,
+                flex: 1
+            }, {
+                text: "Creation Date",
+                dataIndex: 'CreationDate',
+                sortable: true,
+                flex: 1
+            }, {
+                xtype: 'actioncolumn',
+                text: 'Actions',
+                items: [{
+                    icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/edit.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                    tooltip: _t('Edit this campaign'),
+                    handler: function (grid, rowIndex, colIndex) {
+                    }
+                }, {
+                    icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/open.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                    tooltip: _t('Reopen this campaign'),
+                    handler: function (grid, rowIndex, colIndex) {
+                    }
+                }
+
+            ]
+            }],
+            bbar: Ext.create('Ext.PagingToolbar', {
+                store: window.feature.store,
+                displayInfo: true,
+                displayMsg: 'Displaying topics {0} - {1} of {2}',
+                emptyMsg: "No topics to display"
+            })
+        });
+
+        //End Campaign
 
         var contentRes = window.res.content;
-        var mainContent = Ext.getCmp(contentRes.maincontent.id);
 
-        mainContent.add(window.feature.container);
-        window.feature.campaignStore.loadPage(1); 
+        var mainContent = Ext.getCmp(contentRes.maincontent.id);
+        mainContent.add({
+            xtype: 'container',
+            margin: '20 50 20 0',
+            autoScroll: true,
+            id: 'TopContainer',
+            layout: {
+                align: 'stretch',
+                type: 'vbox'
+            },
+            items: [{
+                xtype: 'fieldset',
+                height: 200,
+                defaults: { anchor: '100%' },
+                layout: 'vbox',
+                items: [{ xtype: 'container',
+                    align: 'center',
+                    padding: '60 50 0 500',
+                    layout: { align: 'center', type: 'anchor' },
+                    items: [{
+                        xtype: 'button',
+                        pack: 'end',
+                        text: 'Schedule Automatic Product Level Request',
+                        handler: function () {
+                            var modalWindow = new window.feature.modalSchedule();
+                            // modalWindow.items.items[0].items.items[0].title = 'Campaign';
+                            modalWindow.show();
+                        }
+                    }]
+                }, { xtype: 'label',
+                    padding: '0 10 0 500',
+                    text: 'Click to open'
+                }]
+            }]
+        });
 
 
     });
