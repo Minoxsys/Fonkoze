@@ -13,7 +13,7 @@
     };
 
     //window.res.link.campaignOverview = '@(Url.RouteUrl<Web.Areas.CampaignManagement.Controllers.CampaignController>( x=>x.Overview() ,  Web.Areas.CampaignManagement.CampaignManagementAreaRegistration.DEFAULT_ROUTE ))';
-   
+    window.res.link.productLevelRequest = '@(Url.RouteUrl<ProductLevelRequestController>(x => x.Overview(), CampaignManagementAreaRegistration.DEFAULT_ROUTE))';
     Ext.onReady(function () {
 
         var contentRes = window.res.content;
@@ -110,7 +110,7 @@
                                 icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/arrow.gif"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
                                 iconCls:'x-btn-text-icon',
                                 handler: function () {
-                                    
+                                    navigateTo(window.res.link.productLevelRequest);
                                 },
                                 enableToggle: true
                             },

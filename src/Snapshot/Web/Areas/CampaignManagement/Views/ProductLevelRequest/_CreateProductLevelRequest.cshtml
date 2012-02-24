@@ -1,0 +1,134 @@
+﻿@using Web.Areas.StockAdministration;
+<script type="text/javascript">
+
+
+    window.feature.modal={};
+    window.feature.modal.stores ={};
+
+    window.feature.modal.stores.productGroups = Ext.define('snapshot-Outpost-ProductGroupsStore', {
+        
+        extend: 'Ext.data.Store',
+        fields: ['Id', 'Name'],
+        proxy: {
+            type: 'ajax',
+            url: '@Url.RouteUrl(StockAdministrationAreaRegistration.DEFAULT_ROUTE, new { controller = "Product", action = "GetProductGroups" })',
+            reader: {
+                type: 'json',
+                root: 'productGroups'
+            }
+        }
+    });
+
+    window.feature.createProductLevelRequest = Ext.define('snapshot-Outpost-AssignProductsModalWindow', {
+        extend: 'Ext.window.Window',
+        modal: true,
+        height: 600,
+        width: 1200,
+        bodyPadding: 0,
+        bodyStyle: 'background-color:#fff',
+        layout: 'fit',
+
+        initComponent: function () {
+            var me = this;
+
+            me.buttons = [
+                {
+                    text: 'Cancel', handler: function () {
+                        me.close();
+                        me.destroy();
+                    }
+                }, {
+                    text: 'Save', handler: function () {
+                    }
+                }
+            ];
+
+            me.productGroupStore = new window.feature.modal.stores.productGroups();
+
+            me.items = [
+                {
+                    xtype: 'panel',
+                    layout: {
+                        type: 'vbox',
+                        align: 'stretch'
+                    },
+                    items: [
+                        {
+                            xtype: 'panel',
+                            height: 50,
+                            layout: 'column',
+                            items: [
+                                {
+                                    xtype: 'combobox',
+                                    fieldLabel: 'Campaign',
+                                    emptyText: 'Campaign List'
+                                }, {
+                                    xtype: 'combobox',
+                                    fieldLabel: 'Product Group',
+                                    store: me.productGroupStore,
+                                    emptyText: 'Product Group List',
+                                    queryMode:'local',
+                                    valueField: 'Id',
+                                    displayField: 'Name'
+                                }
+                            ]
+                        }, {
+                            xtype: 'gridpanel',
+                            autoscroll: true,
+                            columns: [
+                                {
+                                    header: 'Product Item',
+                                    dataIndex: 'ProductItem',
+                                    flex: 1
+                                }, {
+                                    header: 'SMS Code',
+                                    dataIndex: 'SmsCode',
+                                    flex: 1
+                                }, {
+                                    header: 'Selected',
+                                    dataIndex: 'Selected'
+                                }
+                            ],
+                            flex: 1
+                        }, {
+                            xtype: 'panel',
+                            height: 30,
+                            html: _t('Please select a schedule')
+                        }, {
+                            xtype: 'gridpanel',
+                            autoscroll: true,
+                            columns: [
+                                {
+                                    header: 'Schedule',
+                                    dataIndex: 'ScheduleName',
+                                    flex: 1
+                                }, {
+                                    header: 'Basis',
+                                    dataIndex: 'Basis'
+                                }, {
+                                    header: 'Frequency',
+                                    dataIndex: 'Fequency'
+                                }, {
+                                    header: 'Reminders',
+                                    flex: 1,
+                                    dataIndex: 'Reminders'
+                                }, {
+                                    header: 'Selected',
+                                    dataIndex: 'Selected'
+                                }
+                            ],
+                            flex: 1
+                        }
+                    ]
+
+                }
+
+            ];
+
+            me.callParent(arguments);
+            me.productGroupStore.load();
+
+        }
+
+    });
+</script>

@@ -1,0 +1,218 @@
+﻿@section page_title{
+	Campaign Administration: Product Level Requests
+}
+@{
+	Html.RenderPartial("_SubNavigation");
+	Html.RenderPartial("_CampaignManagementSideBar");
+}
+
+<script type="text/javascript">
+	Ext.onReady(function () {
+		var administrationBtnId = window.res.header.navigation.administration;
+		var administrationBtn = Ext.getCmp(administrationBtnId);
+		administrationBtn.toggle(true);
+
+		var campaignAdministrationBtnId = window.res.header.subnavigation.buttonTabs.campaign;
+		var campaignAdministrationBtn = Ext.getCmp(campaignAdministrationBtnId);
+		campaignAdministrationBtn.toggle(true);
+
+		var sidebarSelectionId = window.res.content.maincontent.sidebar.createProductLevelRequests;
+		var sidebarSelection = Ext.getCmp(sidebarSelectionId);
+		sidebarSelection.toggle(true);
+	});
+</script>
+
+<script type="text/javascript">
+	window.feature = {};
+
+	window.feature.ids = {};
+	window.feature.ids.btnAdd = 'Create-Product-Level-Request-Button';
+	window.feature.ids.searchInput = 'Search-By-Campaign-Name';
+	window.feature.ids.grid = 'Create-Product-Level-Request-Grid';
+
+</script>
+
+@{
+ Html.RenderPartial("_CreateProductLevelRequest");   
+}
+
+<script type="text/javascript">
+	window.feature.models = {};
+	window.feature.stores = {};
+	Ext.onReady(function () {
+
+		window.feature.models.ProductLevelRequest = Ext.define('ProductLevelRequestModel', {
+			extend: 'Ext.data.Model',
+			fields: [
+				{
+					name: 'id', type: 'string',
+					convert: function (value, record) {
+						return record.get('Id');
+					}
+				},
+				{ name: 'CampaignName'      , type: 'string' },
+				{ name: 'StartDate'         , type: 'string' },
+				{ name: 'EndDate'           , type: 'string' },
+				{ name: 'ScheduleName'      , type: 'string' },
+				{ name: 'Fequency'          , type: 'string' },
+				{ name: 'ProductGroupName'  , type: 'string' },
+				{ name: 'ProductsSmsCodes'  , type: 'string' },
+				{ name: 'Id'                , type: 'string' }
+			]
+		});
+
+		window.feature.stores.ProductLevelRequest = Ext.define('ProductLevelRequestStore', {
+
+			extend: 'Ext.data.Store',
+			model: window.feature.models.ProductLevelRequest,
+
+			proxy: {
+				type: 'memory',
+				url: '@Url.RouteUrl(CampaignManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "ProductLevelRequest", action = "Index" })',
+				reader: {
+					type: 'json',
+					root: 'Requests'
+				}
+			}
+		
+		});
+
+	});
+</script>
+
+<script type="text/javascript">
+	Ext.onReady(function () {
+		window.feature.gridStore = new window.feature.stores.ProductLevelRequest();
+		window.feature.gridStore.loadData([
+			{
+				'CampaignName': 'Campaign 1',
+				'StartDate': '10-Feb-2012',
+				'EndDate': '25-Feb-2012',
+				'ScheduleName': 'Every Day',
+				'Fequency': 'Daily',
+				'ProductGroupName': 'Malaria',
+				'ProductsSmsCodes': 'Y/R/G/B',
+				'Id': '@Guid.NewGuid()'
+			}
+
+		]);
+	});
+</script>
+
+<script type="text/javascript">
+	Ext.onReady(function () {
+		//        window.feature.stores.ProductLevelRequests.loadData
+		window.feature.grid = Ext.create('Ext.grid.Panel', {
+			flex:1,
+			store:  window.feature.gridStore,
+			columns: [
+				{ header:'Campaign'    ,  dataIndex:'CampaignName', flex:2     },
+				{ header:'Start Date'       ,  dataIndex:'StartDate'        },
+				{ header:'End Date'         ,  dataIndex:'EndDate'          },
+				{ header:'Schedule'    ,  dataIndex:'ScheduleName'     },
+				{ header:'Fequency'        ,  dataIndex:'Fequency'         },
+				{ header:'Product Group',  dataIndex:'ProductGroupName', flex:1 },
+				{ header:'Sms Codes',  dataIndex:'ProductsSmsCodes', flex:2 },{
+					header:'Actions',  
+					xtype: 'actioncolumn',
+					items:[
+	
+						{
+							icon: '@Url.AssetUrl("/img/edit.png")',  
+							text: 'Edit',
+							handler: function(grid, rowIndex, colIndex) {
+							}
+						},{
+							icon: '@Url.AssetUrl("img/delete.png")',  
+							text: 'Delete',
+							handler: function(grid, rowIndex, colIndex) {
+							}
+						}
+					]
+				},
+			],
+			bbar: Ext.create('Ext.PagingToolbar', {
+				store: window.feature.outpostsStore,
+				displayInfo: true,
+				displayMsg: 'Displaying product requests {0} - {1} of {2}',
+				emptyMsg: "No product requests to display",
+			})
+	
+		});
+	});
+</script>
+<script type="text/javascript">
+
+    function showCreateProductLevelRequest() {
+        var modal = new window.feature.createProductLevelRequest({
+            title:' Create a New Product Level Request'
+        });
+        modal.show();
+    }
+
+</script>
+<script type="text/javascript">
+	Ext.onReady(function () {
+		var contentRes = window.res.content;
+		var mainContent = Ext.getCmp(contentRes.maincontent.id);
+
+		var topContainer = Ext.create('Ext.container.Container', {
+			margin:'20 50 20 0',
+			autoScroll:true,
+			id:'TopContainer',
+			layout: {
+				align: 'stretch',
+				type: 'vbox'
+			},
+			items:[
+				{
+					xtype: 'container',
+					layout: {
+						type: 'hbox',
+					},
+					height: 50,
+					items:[
+						{
+							xtype:'container',
+							flex:1,
+							layout:'column',
+							items:[
+								{xtype:'label', html:'Product Level Requests'},
+								{
+									xtype:'button',
+									text:'Create Product Level Request',
+									handler:function(btn){
+                                    showCreateProductLevelRequest();
+									}
+								}
+							]
+						},
+						{
+							xtype:'container',
+							flex:1,
+							layout:{
+								type:'hbox',
+								pack:'end'
+							},
+							items:[
+								{   xtype:'textfield',
+									emptyText: 'Campaign Search',
+									id:  window.feature.ids.searchInput,
+									width:200
+								}
+							]
+
+						}
+					]
+				},
+				window.feature.grid,{
+					xtype: 'container',
+					html:'&nbsp;',
+					height: 150
+				}
+			]
+		});
+	
+		mainContent.add(topContainer);
+	});
+</script>

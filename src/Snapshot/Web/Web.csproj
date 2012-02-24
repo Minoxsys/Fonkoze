@@ -148,6 +148,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Areas\CampaignManagement\Controllers\ProductLevelRequestController.cs" />
     <Compile Include="Areas\AnalysisManagement\AnalysisManagementAreaRegistration.cs" />
     <Compile Include="Areas\AnalysisManagement\Controllers\AnalysisController.cs" />
     <Compile Include="Areas\AnalysisManagement\Controllers\ReportDistrictLevelController.cs" />
@@ -2078,6 +2079,8 @@
     <Content Include="Areas\OutpostManagement\Views\Outpost\_OutpostAssignProducts.cshtml">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="Areas\CampaignManagement\Views\ProductLevelRequest\Overview.cshtml" />
+    <Content Include="Areas\CampaignManagement\Views\ProductLevelRequest\_CreateProductLevelRequest.cshtml" />
     <Content Include="Assets\resources\themes\stylesheets\snapshot\default\accessories\scss\config.rb" />
     <Content Include="Areas\AnalysisManagement\Views\ReportDistrictLevel\Overview.cshtml" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\core\_core.scss" />
