@@ -1946,6 +1946,10 @@
     <Content Include="Assets\resources\themes\stylesheets\neptune\default\accessories\scss\config.rb" />
     <Content Include="Assets\resources\themes\templates\resources\sass\config.rb" />
     <Content Include="Assets\sass\config.rb" />
+    <Content Include="Assets\stylesheets\button-template.css" />
+    <Content Include="Assets\stylesheets\color-scheme.css" />
+    <Content Include="Assets\stylesheets\global-values.css" />
+    <Content Include="Assets\stylesheets\snapshot-theme.css" />
     <Content Include="Global.asax" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>

@@ -8950,32 +8950,7 @@ svg, vml {
 .x-html {
   /* Begin bidirectionality settings (do not change) */ }
   /* line 32, ../resources/themes/stylesheets/ext4/snapshot/widgets/_html.scss */
-  .x-html html,
-  .x-html address,
-  .x-html blockquote,
-  .x-html body,
-  .x-html dd,
-  .x-html div,
-  .x-html dl,
-  .x-html dt,
-  .x-html fieldset,
-  .x-html form,
-  .x-html frame, .x-html frameset,
-  .x-html h1,
-  .x-html h2,
-  .x-html h3,
-  .x-html h4,
-  .x-html h5,
-  .x-html h6,
-  .x-html noframes,
-  .x-html ol,
-  .x-html p,
-  .x-html ul,
-  .x-html center,
-  .x-html dir,
-  .x-html hr,
-  .x-html menu,
-  .x-html pre {
+  .x-html html, .x-html address, .x-html blockquote, .x-html body, .x-html dd, .x-html div, .x-html dl, .x-html dt, .x-html fieldset, .x-html form, .x-html frame, .x-html frameset, .x-html h1, .x-html h2, .x-html h3, .x-html h4, .x-html h5, .x-html h6, .x-html noframes, .x-html ol, .x-html p, .x-html ul, .x-html center, .x-html dir, .x-html hr, .x-html menu, .x-html pre {
     display: block; }
   /* line 33, ../resources/themes/stylesheets/ext4/snapshot/widgets/_html.scss */
   .x-html li {
@@ -9006,8 +8981,7 @@ svg, vml {
   .x-html colgroup {
     display: table-column-group; }
   /* line 43, ../resources/themes/stylesheets/ext4/snapshot/widgets/_html.scss */
-  .x-html td,
-  .x-html th {
+  .x-html td, .x-html th {
     display: table-cell; }
   /* line 44, ../resources/themes/stylesheets/ext4/snapshot/widgets/_html.scss */
   .x-html caption {
@@ -9035,16 +9009,7 @@ svg, vml {
     font-size: 1.17em;
     margin: .83em 0; }
   /* line 60, ../resources/themes/stylesheets/ext4/snapshot/widgets/_html.scss */
-  .x-html h4,
-  .x-html p,
-  .x-html blockquote,
-  .x-html ul,
-  .x-html fieldset,
-  .x-html form,
-  .x-html ol,
-  .x-html dl,
-  .x-html dir,
-  .x-html menu {
+  .x-html h4, .x-html p, .x-html blockquote, .x-html ul, .x-html fieldset, .x-html form, .x-html ol, .x-html dl, .x-html dir, .x-html menu {
     margin: 1.12em 0; }
   /* line 61, ../resources/themes/stylesheets/ext4/snapshot/widgets/_html.scss */
   .x-html h5 {
@@ -9055,49 +9020,29 @@ svg, vml {
     font-size: .75em;
     margin: 1.67em 0; }
   /* line 70, ../resources/themes/stylesheets/ext4/snapshot/widgets/_html.scss */
-  .x-html h1,
-  .x-html h2,
-  .x-html h3,
-  .x-html h4,
-  .x-html h5,
-  .x-html h6,
-  .x-html b,
-  .x-html strong {
+  .x-html h1, .x-html h2, .x-html h3, .x-html h4, .x-html h5, .x-html h6, .x-html b, .x-html strong {
     font-weight: bolder; }
   /* line 71, ../resources/themes/stylesheets/ext4/snapshot/widgets/_html.scss */
   .x-html blockquote {
     margin-left: 40px;
     margin-right: 40px; }
   /* line 76, ../resources/themes/stylesheets/ext4/snapshot/widgets/_html.scss */
-  .x-html i,
-  .x-html cite,
-  .x-html em,
-  .x-html var,
-  .x-html address {
+  .x-html i, .x-html cite, .x-html em, .x-html var, .x-html address {
     font-style: italic; }
   /* line 81, ../resources/themes/stylesheets/ext4/snapshot/widgets/_html.scss */
-  .x-html pre,
-  .x-html tt,
-  .x-html code,
-  .x-html kbd,
-  .x-html samp {
+  .x-html pre, .x-html tt, .x-html code, .x-html kbd, .x-html samp {
     font-family: monospace; }
   /* line 82, ../resources/themes/stylesheets/ext4/snapshot/widgets/_html.scss */
   .x-html pre {
     white-space: pre; }
   /* line 86, ../resources/themes/stylesheets/ext4/snapshot/widgets/_html.scss */
-  .x-html button,
-  .x-html textarea,
-  .x-html input,
-  .x-html select {
+  .x-html button, .x-html textarea, .x-html input, .x-html select {
     display: inline-block; }
   /* line 87, ../resources/themes/stylesheets/ext4/snapshot/widgets/_html.scss */
   .x-html big {
     font-size: 1.17em; }
   /* line 90, ../resources/themes/stylesheets/ext4/snapshot/widgets/_html.scss */
-  .x-html small,
-  .x-html sub,
-  .x-html sup {
+  .x-html small, .x-html sub, .x-html sup {
     font-size: .83em; }
   /* line 91, ../resources/themes/stylesheets/ext4/snapshot/widgets/_html.scss */
   .x-html sub {
@@ -9109,28 +9054,19 @@ svg, vml {
   .x-html table {
     border-spacing: 2px; }
   /* line 96, ../resources/themes/stylesheets/ext4/snapshot/widgets/_html.scss */
-  .x-html thead,
-  .x-html tbody,
-  .x-html tfoot {
+  .x-html thead, .x-html tbody, .x-html tfoot {
     vertical-align: middle; }
   /* line 98, ../resources/themes/stylesheets/ext4/snapshot/widgets/_html.scss */
-  .x-html td,
-  .x-html th {
+  .x-html td, .x-html th {
     vertical-align: inherit; }
   /* line 101, ../resources/themes/stylesheets/ext4/snapshot/widgets/_html.scss */
-  .x-html s,
-  .x-html strike,
-  .x-html del {
+  .x-html s, .x-html strike, .x-html del {
     text-decoration: line-through; }
   /* line 102, ../resources/themes/stylesheets/ext4/snapshot/widgets/_html.scss */
   .x-html hr {
     border: 1px inset; }
   /* line 107, ../resources/themes/stylesheets/ext4/snapshot/widgets/_html.scss */
-  .x-html ol,
-  .x-html ul,
-  .x-html dir,
-  .x-html menu,
-  .x-html dd {
+  .x-html ol, .x-html ul, .x-html dir, .x-html menu, .x-html dd {
     margin-left: 40px; }
   /* line 108, ../resources/themes/stylesheets/ext4/snapshot/widgets/_html.scss */
   .x-html ul, .x-html menu, .x-html dir {
@@ -9139,15 +9075,11 @@ svg, vml {
   .x-html ol {
     list-style-type: decimal; }
   /* line 113, ../resources/themes/stylesheets/ext4/snapshot/widgets/_html.scss */
-  .x-html ol ul,
-  .x-html ul ol,
-  .x-html ul ul,
-  .x-html ol ol {
+  .x-html ol ul, .x-html ul ol, .x-html ul ul, .x-html ol ol {
     margin-top: 0;
     margin-bottom: 0; }
   /* line 115, ../resources/themes/stylesheets/ext4/snapshot/widgets/_html.scss */
-  .x-html u,
-  .x-html ins {
+  .x-html u, .x-html ins {
     text-decoration: underline; }
   /* line 116, ../resources/themes/stylesheets/ext4/snapshot/widgets/_html.scss */
   .x-html br:before {

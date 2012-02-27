@@ -6,11 +6,11 @@ Syntax error: File to import not found or unreadable: ext4/snapshot/all.
                 C:/Ruby193/lib/ruby/gems/1.9.1/gems/compass-0.12.alpha.0/frameworks/compass/stylesheets
                 Compass::SpriteImporter
         on line 46 of D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/sass/color-scheme.scss
-        from line 1 of D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/sass/button-template.scss
+        from line 1 of D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/sass/general-css.scss
 
 Backtrace:
 D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/sass/color-scheme.scss:46
-D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/sass/button-template.scss:1
+D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/sass/general-css.scss:1
 C:/Ruby193/lib/ruby/gems/1.9.1/gems/sass-3.1.7/lib/sass/tree/import_node.rb:64:in `rescue in import'
 C:/Ruby193/lib/ruby/gems/1.9.1/gems/sass-3.1.7/lib/sass/tree/import_node.rb:42:in `import'
 C:/Ruby193/lib/ruby/gems/1.9.1/gems/sass-3.1.7/lib/sass/tree/import_node.rb:25:in `imported_file'
@@ -62,4 +62,4 @@ C:/Ruby193/bin/compass:19:in `<main>'
 body:before {
   white-space: pre;
   font-family: monospace;
-  content: "Syntax error: File to import not found or unreadable: ext4/snapshot/all.\A               Load paths:\A                 D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/sass\A                 C:/Ruby193/lib/ruby/gems/1.9.1/gems/compass-0.12.alpha.0/frameworks/blueprint/stylesheets\A                 C:/Ruby193/lib/ruby/gems/1.9.1/gems/compass-0.12.alpha.0/frameworks/compass/stylesheets\A                 Compass::SpriteImporter\A         on line 46 of D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/sass/color-scheme.scss\A         from line 1 of D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/sass/button-template.scss"; }
+  content: "Syntax error: File to import not found or unreadable: ext4/snapshot/all.\A               Load paths:\A                 D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/sass\A                 C:/Ruby193/lib/ruby/gems/1.9.1/gems/compass-0.12.alpha.0/frameworks/blueprint/stylesheets\A                 C:/Ruby193/lib/ruby/gems/1.9.1/gems/compass-0.12.alpha.0/frameworks/compass/stylesheets\A                 Compass::SpriteImporter\A         on line 46 of D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/sass/color-scheme.scss\A         from line 1 of D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/sass/general-css.scss"; }

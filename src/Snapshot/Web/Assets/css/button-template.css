@@ -18290,6 +18290,15 @@ svg, vml {
   background-image: linear-gradient(#207cca 0%, #4e92c9 0%, #95caf9 1%, #64b0f4 3%, #4e92c9 100%);
   box-shadow: 2px 0px 2px 0px #d1d0d0; }
 
+/* line 7, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/sass/general-css.scss */
+.x-add-navigation-gradient {
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #207cca), color-stop(0%, #7193b2), color-stop(94%, #426076), color-stop(96%, #3b5264), color-stop(98%, #3b5264));
+  background-image: -webkit-linear-gradient(#207cca 0%, #7193b2 0%, #426076 94%, #3b5264 96%, #3b5264 98%);
+  background-image: -moz-linear-gradient(#207cca 0%, #7193b2 0%, #426076 94%, #3b5264 96%, #3b5264 98%);
+  background-image: -o-linear-gradient(#207cca 0%, #7193b2 0%, #426076 94%, #3b5264 96%, #3b5264 98%);
+  background-image: -ms-linear-gradient(#207cca 0%, #7193b2 0%, #426076 94%, #3b5264 96%, #3b5264 98%);
+  background-image: linear-gradient(#207cca 0%, #7193b2 0%, #426076 94%, #3b5264 96%, #3b5264 98%); }
+
 /**
  * @var {string} $prefix 
  * The prefix to be applied to all CSS selectors. If this is changed, it must also be changed in your 

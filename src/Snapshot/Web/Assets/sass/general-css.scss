@@ -4,6 +4,10 @@
 	box-shadow: 2px 0px 2px 0px #d1d0d0;
 }
 
+.x-add-navigation-gradient {
+	@include background-image(linear-gradient(#207cca 0%,#7193b2 0%,#426076 94%,#3b5264 96%,#3b5264 98%));
+}
+
 $global-font-family: Lucida Sans Unicode, Arial, Verdana, Geneva, Helvetica, sans-serif;
 $button_font_weight: normal;
 $button_font_size: 12px;
