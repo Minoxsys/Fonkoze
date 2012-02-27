@@ -92,7 +92,7 @@ namespace Web.Areas.StockAdministration.Controllers
 
             if (!string.IsNullOrWhiteSpace(indexModel.SearchName))
             {
-                products = QueryService.Query().Where(it => it.Name.Contains(indexModel.SearchName));
+                products = products.Where(it => it.Name.Contains(indexModel.SearchName));
             }
 
             var orderByColumnDirection = new Dictionary<string, Func<IQueryable<Product>>>()
