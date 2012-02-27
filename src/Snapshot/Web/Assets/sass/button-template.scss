@@ -1,0 +1,103 @@
+@import 'color-scheme.scss';
+@import 'general-css.scss';
+// Unless you want to include all components, you must set $include-default to false
+// IF you set this to true, you can also remove lines 10 to 38 of this file
+$include-default: true;
+
+// Insert your custom variables here.
+$base-color: #fefefe; 
+
+// ============================
+// BUTONS
+// ============================
+$my-button-base-color: #5095cd;
+//base colors for the default button
+$button-default-base-color:#63aef2;
+$button-default-base-color-over: adjust-color($my-button-base-color, $hue: -6.667deg, $saturation: 44.444%, $lightness: 10.588%) !default; //E4F3FF
+$button-default-base-color-focus: $button-default-base-color-over !default;
+$button-default-base-color-pressed: adjust-color($my-button-base-color, $hue: -0.725deg, $saturation: -9.556%, $lightness: -3.725%) !default; //B6CBE4
+$button-default-base-color-disabled: adjust-color($my-button-base-color, $hue: 0deg, $saturation: -55.556%, $lightness: 12.745%) !default; //F7F7F7
+
+$button-default-color: #fff !default;
+
+// =============================
+// GRID
+// =============================
+$grid-base-color: #aa5858 !default;
+$grid-header-over-border-color: #cd7a7a !default;
+
+
+$grid-header-over-border-color: #aa5858 !default;
+$grid-header-over-background-color: #aa5858 !default;
+
+$grid-header-background-color: $grid-base-color;
+$grid-header-color: #fff !default;
+
+$grid-header-background-gradient: 'panel-header' !default;
+/// =====================
+/// PANEL
+/// =====================
+$panel-header-background-color: adjust-color(#aa5858, $hue: 0deg, $saturation: 6.402%, $lightness: -4.51%) !default;
+$panel-header-color: #fff; 
+
+$accordion-header-background-color: #aa5858 !default;
+$accordion-header-color: #fff !default;
+
+
+@import 'compass';
+@import 'ext4/snapshot/all';
+
+@include extjs-button-ui(
+    'snapshot-button-small',
+
+    $border-radius: 3px,
+    $border-width: 1px,
+
+    $border-color: $add-button-border-color,
+    $border-color-over: $add-button-border-color,
+    $border-color-focus: $add-button-border-color,
+    $border-color-pressed: $add-button-border-color,
+    $border-color-disabled: $add-button-border-color,
+
+	$background-gradient: (#207cca 0%,#4e92c9 0%,#95caf9 1%,#64b0f4 3%,#4e92c9 100%),
+    $background-gradient-over: (#207cca 0%,#4e92c9 0%,#95caf9 1%,#64b0f4 3%,#4e92c9 100%),
+    $background-gradient-focus: (#207cca 0%,#4e92c9 0%,#95caf9 1%,#64b0f4 3%,#4e92c9 100%),
+    $background-gradient-pressed: (#207cca 0%,#4e92c9 0%,#95caf9 1%,#64b0f4 3%,#4e92c9 100%),
+    $background-gradient-disabled: (#207cca 0%,#4e92c9 0%,#95caf9 1%,#64b0f4 3%,#4e92c9 100%),
+
+    $color: $add-button-color,
+    $color-over: $add-button-color,
+    $color-focus: $add-button-color,
+    $color-pressed: $add-button-color,
+    $color-disabled: $add-button-color,
+
+	$padding: 4px 9px,
+    $text-padding: 0px,
+
+    $font-size: $button_font_size,
+    $font-size-over: $button_font_size,
+    $font-size-focus: $button_font_size,
+    $font-size-pressed: $button_font_size,
+    $font-size-disabled: $button_font_size,
+
+    $font-weight: $button_font_weight,
+    $font-weight-over: $button_font_weight,
+    $font-weight-focus: $button_font_weight,
+    $font-weight-pressed: $button_font_weight,
+    $font-weight-disabled: $button_font_weight,
+
+    $font-family: $global-font-family,
+    $font-family-over: $global-font-family,
+    $font-family-focus: $global-font-family,
+    $font-family-pressed: $global-font-family,
+    $font-family-disabled: $global-font-family
+
+);
+
+
+// This line changes the location of your images when creating UIs to be relative instead of within the ExtJS directory.
+// You MUST set this to true/string value if you are creating new UIs + supporting legacy browsers.
+// This only applies to new UIs. It does not apply to default component images (i.e. when changing $base-color)
+// The value can either be true, in which case the image path will be "../images/"
+// or a string, of where the path is
+$relative-image-path-for-uis: true; // defaults to "../images/" when true

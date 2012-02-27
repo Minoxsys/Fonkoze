@@ -651,6 +651,8 @@
 											xtype: 'button',
 											margin: '0 0 0 20',
 											text: 'Add New Outpost',
+                                    ui: 'snapshot-button',
+                                    cls: 'x-add-button-gradient',
 											handler: function(){
 												var winAdd = new window.feature.modal({
 													url: '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Outpost", action = "Create" })',
