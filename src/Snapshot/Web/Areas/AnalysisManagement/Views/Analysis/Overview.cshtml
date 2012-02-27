@@ -1,0 +1,142 @@
+﻿@section page_title{
+Analysis
+}
+
+@using Web.Areas.AnalysisManagement.Controllers;
+@using Web.Areas.AnalysisManagement;
+@using Microsoft.Web.Mvc;
+
+
+@{
+    Html.RenderPartial("AnalysisMainContent");
+}
+<script type="text/javascript">
+
+    Ext.onReady(function () {
+
+        var analysisBtnId = window.res.header.navigation.analysisAndReports;
+        var analysisBtn = Ext.getCmp(analysisBtnId);
+        analysisBtn.toggle(true);
+
+    });
+
+</script>
+<script type="text/javascript">
+    Ext.onReady(function () {
+
+        window.feature = {};
+
+        var contentRes = window.res.content;
+
+        var mainContent = Ext.getCmp(contentRes.maincontent.id);
+        mainContent.add({
+            xtype: 'container',
+            margin: '20 50 20 0',
+            autoScroll: true,
+            id: 'TopContainer',
+            layout: {
+                align: 'stretch',
+                type: 'vbox'
+            },
+            items: [{
+                xtype: 'fieldset',
+                height: 700,
+                width: 1100,
+                defaults: { anchor: '100%' },
+                layout: 'vbox',
+                items: [{ xtype: 'container',
+                    align: 'center',
+                    layout: {
+                        type: 'vbox'
+                    },
+                    items: [{ xtype: 'container',
+                        align: 'center',
+                        layout: {
+                            type: 'hbox'
+                        },
+                        items: [{ xtype: 'container',
+                            align: 'center',
+                            layout: {
+                                type: 'hbox'
+                            },
+                            items: [{
+                            }, { xtype: 'container',
+                                layout: {
+                                    type: 'vbox'
+                                },
+                                items: [{ xtype: 'box',
+                                    autoEl: { tag: 'a', style: { color: 'blue' }, href: '@(Url.RouteUrl<ReportRegionLevelController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))', html: 'Stock level information at a region level' },
+                                    margin: '70 30 0 80'
+                                    //text: ''
+                                }, { xtype: 'label',
+                                    margin: '0 0 0 80',
+                                    text: 'Report description'
+                                }]
+                            }]
+                        }, { xtype: 'container',
+                            align: 'center',
+                            layout: {
+                                type: 'hbox'
+                            },
+                            items: [{}, { xtype: 'container',
+                                layout: {
+                                    type: 'vbox'
+                                },
+                                items: [{ xtype: 'box',
+                                    margin: '70 30 0 80',
+                                    autoEl: { tag: 'a', style: { color: 'blue' }, href: '', html: 'Stock level information at a district level' }
+                                }, { xtype: 'label',
+                                    margin: '0 0 0 80',
+                                    text: 'Report description'
+                                }]
+                            }]
+                        }]
+                    }, { xtype: 'container',
+                        align: 'center',
+                        layout: {
+                            type: 'hbox'
+                        },
+                        items: [{ xtype: 'container',
+                            align: 'center',
+                            layout: {
+                                type: 'hbox'
+                            },
+                            items: [{}, { xtype: 'container',
+                                layout: {
+                                    type: 'vbox'
+                                },
+                                items: [{ xtype: 'box',
+                                    margin: '70 30 0 80',
+                                    autoEl: { tag: 'a', style: { color: 'blue' }, href: '', html: 'Activity report for an outpost' }
+                                 }, { xtype: 'label',
+                                    margin: '0 0 0 80',
+                                    text: 'Report description'
+                                }]
+                            }]
+                        }, { xtype: 'container',
+                            align: 'center',
+                            layout: {
+                                type: 'hbox'
+                            },
+                            items: [{}, { xtype: 'container',
+                                layout: {
+                                    type: 'vbox'
+                                },
+                                items: [{ xtype: 'box',
+                                    margin: '70 30 0 135',
+                                    autoEl: { tag: 'a', style:{color: 'blue'}, href: '', html: 'Outpost list with excess levels of a stock item' }
+                                    }, { xtype: 'label',
+                                    margin: '0 0 0 135',
+                                    text: 'Report description'
+                                }]
+                            }]
+                        }]
+                    }]
+
+                }]
+            }]
+        });
+
+
+    });
+</script>

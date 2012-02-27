@@ -148,10 +148,15 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Areas\AnalysisManagement\AnalysisManagementAreaRegistration.cs" />
+    <Compile Include="Areas\AnalysisManagement\Controllers\AnalysisController.cs" />
+    <Compile Include="Areas\AnalysisManagement\Controllers\ReportRegionLevelController.cs" />
+    <Compile Include="Areas\OutpostManagement\Controllers\AssignProductGroupController.cs" />
     <Compile Include="Areas\CampaignManagement\CampaignManagementAreaRegistration.cs" />
     <Compile Include="Areas\CampaignManagement\Models\Campaign\CampaignInputModel.cs" />
     <Compile Include="Areas\CampaignManagement\Models\Campaign\CampaignModel.cs" />
     <Compile Include="Areas\CampaignManagement\Models\Campaign\CampaignOutputModel.cs" />
+    <Compile Include="Areas\CampaignManagement\Models\RequestSchedule\RequestScheduleInputModel.cs" />
     <Compile Include="Areas\CampaignManagement\Models\Campaign\CampaignOverviewInputModel.cs" />
     <Compile Include="Areas\CampaignManagement\Models\Campaign\CampaignOverviewOutputModel.cs" />
     <Compile Include="Areas\CampaignManagement\Models\Campaign\OptionsModel.cs" />
@@ -1987,6 +1992,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Areas\AnalysisManagement\Models\" />
     <Folder Include="Areas\OutpostManagement\Services\" />
     <Folder Include="Models\Alerts\" />
   </ItemGroup>
@@ -2064,6 +2070,24 @@
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\core\_reset.scss" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\layout\_layout.scss" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\mixins\_background-gradient.scss" />
+    <Content Include="Areas\AnalysisManagement\Views\Web.config" />
+    <Content Include="Areas\AnalysisManagement\Views\Analysis\Overview.cshtml" />
+    <Content Include="Areas\AnalysisManagement\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\AnalysisManagement\Views\Shared\AnalysisMainContent.cshtml" />
+    <Content Include="Areas\AnalysisManagement\Views\ReportRegionLevel\Overview.cshtml" />
+    <Content Include="Areas\AnalysisManagement\Views\Shared\ReportRegionLevelMainContent.cshtml" />
+    <None Include="Assets\resources\themes\stylesheets\ext4\default\core\_core.scss" />
+    <None Include="Assets\resources\themes\stylesheets\ext4\default\core\_reset.scss" />
+    <None Include="Assets\resources\themes\stylesheets\ext4\default\layout\_layout.scss" />
+    <None Include="Assets\resources\themes\stylesheets\ext4\default\mixins\_background-gradient.scss" />
+    <None Include="Assets\resources\themes\stylesheets\ext4\default\mixins\_color-by-background.scss" />
+    <None Include="Assets\resources\themes\stylesheets\ext4\default\mixins\_frame.scss" />
+    <Content Include="Areas\CampaignManagement\Views\Web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CampaignManagement\Views\Campaign\Overview.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
     <Content Include="Areas\CampaignManagement\Views\Shared\_CampaignManagementSideBar.cshtml" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\mixins\_color-by-background.scss" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\mixins\_frame.scss" />

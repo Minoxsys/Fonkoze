@@ -1,0 +1,35 @@
+﻿<script type="text/javascript">
+    window.res.content.maincontent = {
+        id: 'MainContent'
+    };
+
+    Ext.onReady(function () {
+
+        var contentRes = window.res.content;
+
+        var content = Ext.getCmp(contentRes.id);
+
+        content.add(
+            {
+                xtype: 'container',
+                layout: {
+                    align: 'stretch',
+                    type: 'hbox'
+                },
+                items: [
+                     {
+                         xtype: 'container',
+                         id: contentRes.maincontent.id,
+                         width: 1100,
+                         layout: {
+                             align: 'stretch',
+                             type: 'fit'
+                         },
+                         flex: 1
+                     }]
+
+            }
+        );
+
+    });
+</script>

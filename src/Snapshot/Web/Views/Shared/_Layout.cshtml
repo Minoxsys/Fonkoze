@@ -3,6 +3,8 @@
 @using Web.Areas.StockAdministration.Controllers;
 @using Web.Areas.CampaignManagement.Controllers;
 @using Web.Areas.CampaignManagement;
+@using Web.Areas.AnalysisManagement.Controllers;
+@using Web.Areas.AnalysisManagement;
 @using Web.Bootstrap.Routes;
 
 <!DOCTYPE html>
@@ -45,7 +47,7 @@
             campaignOverview: '@(Url.RouteUrl<CampaignController>(x=>x.Overview(),CampaignManagementAreaRegistration.DEFAULT_ROUTE))',
             alerts: '@(Url.RouteUrl<AlertsController>(x => x.Overview(), Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE))',
             automaticSchedules: '@(Url.RouteUrl<RequestScheduleController>(x=>x.Overview(),CampaignManagementAreaRegistration.DEFAULT_ROUTE))',
-
+            analysisAndReports: '@(Url.RouteUrl<AnalysisController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))'
         },
         header:{
             id:'Header',
@@ -159,7 +161,10 @@
                                 width: 170,
                                 toggleGroup:res.header.navigation.toggleGroup,
                                 enableToggle:true,
-                                text: 'Analysis and Reports'
+                                text: 'Analysis and Reports',
+                                handler:function(){
+                                    navigateTo( res.link.analysisAndReports ); 
+                                },
                             }] 
                         },
                         {

@@ -1,0 +1,146 @@
+﻿@section page_title{
+Analysis
+}
+@using Web.Areas.AnalysisManagement;
+@{
+    Html.RenderPartial("ReportRegionLevelMainContent");
+}
+<script type="text/javascript">
+
+    Ext.onReady(function () {
+
+        var analysisBtnId = window.res.header.navigation.analysisAndReports;
+        var analysisBtn = Ext.getCmp(analysisBtnId);
+        analysisBtn.toggle(true);
+    });
+
+</script>
+
+<script type="text/javascript">
+    Ext.onReady(function () {
+        window.feature = {};
+
+        window.feature.comboboxCountriesId = 'comboboxCountriesId';
+        window.feature.comboboxRegionsId = 'combobxRegionsId';
+
+        window.feature.CountryStore = Ext.create('Ext.data.Store', {
+            fields: ['Name', 'Id'],
+            proxy: {
+                type: 'ajax',
+                url: '@Url.RouteUrl(AnalysisManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "ReportRegionLevelController", action = "GetCountries" })',
+                reader: {
+                    type: 'json',
+                    root: 'countries',
+                    disableCaching: true,
+                    totalProperty: 'TotalItems'
+                }
+            }
+        });
+
+        window.feature.RegionStore = Ext.create('Ext.data.Store', {
+            fields: ['Name', 'Id'],
+            proxy: {
+                type: 'ajax',
+                url: '@Url.RouteUrl(AnalysisManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "ReportRegionLevelController", action = "GetRegions" })',
+                reader: {
+                    type: 'json',
+                    root: 'regions',
+                    disableCaching: true,
+                    totalProperty: 'TotalItems'
+                }
+            }
+        });
+
+        window.feature.comboBoxCountries = Ext.create('Ext.form.ComboBox', {
+            store: window.feature.CountryStore,
+            queryMode: 'local',
+            id: window.feature.comboboxCountriesId,
+            labelAlign: 'top',
+            fieldLabel: 'Selected Country',
+            displayField: 'Name',
+            valueField: 'Id',
+            emptyText: _t('Country List'),
+            listeners: {
+                select: function (combo, record, index) {
+                    
+
+                }
+            }
+        });
+
+        window.feature.comboBoxRegions = Ext.create('Ext.form.ComboBox', {
+            store: window.feature.RegionStore,
+            queryMode: 'local',
+            id: window.feature.comboboxRegionsId,
+            labelAlign: 'top',
+            fieldLabel: 'Selected Region',
+            displayField: 'Name',
+            valueField: 'Id',
+            disabled: true,
+            margin: '0 0 0 20',
+            emptyText: _t('Region List'),
+            listeners: {
+                select: function (combo, record, index) {
+                }
+            }
+        });
+
+
+
+        var contentRes = window.res.content;
+
+        var mainContent = Ext.getCmp(contentRes.maincontent.id);
+        mainContent.add({
+            xtype: 'container',
+            margin: '20 50 20 0',
+            autoScroll: true,
+            id: 'TopContainer',
+            layout: {
+                align: 'stretch',
+                type: 'vbox'
+            },
+            items: [{
+                xtype: 'container',
+                layout: {
+                    align: 'stretch',
+                    type: 'vbox'
+                },
+                height:120,
+                items: [
+                {
+                    xtype: 'container',
+                    flex: 1,
+                    layout: {
+                        type: 'column'
+                    },
+                    items: [{
+                        xtype: 'container',
+                        height: 30,
+                        width: 30,
+                        html:'&nbsp;'
+                    },{
+                        xtype: 'label',
+                        text: 'Stock level information at region level',
+                    }]
+                    },{
+						xtype: 'container',
+                        flex: 1,
+						layout: {
+							type: 'column'
+						},
+						items: [
+						{
+							xtype: 'container',
+							height: 30,
+							width: 30,
+							html:'&nbsp;'
+						}, 
+                            window.feature.comboBoxCountries, 
+							window.feature.comboBoxRegions							
+                        ]
+				    }]
+			}]
+        });
+
+    });
+</script>
