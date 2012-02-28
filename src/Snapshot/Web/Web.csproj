@@ -2071,6 +2071,8 @@
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\mixins\_inner-border.scss" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\mixins\_reset-extras.scss" />
     <Content Include="Areas\CampaignManagement\Views\Web.config" />
+    <Content Include="Views\Shared\GoogleMapPanel.cshtml" />
+    <Content Include="Views\Shared\SelectPositionGoogleMapWindow.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\CampaignManagement\Views\Campaign\Overview.cshtml" />

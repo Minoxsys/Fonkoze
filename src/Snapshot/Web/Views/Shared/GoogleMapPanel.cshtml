@@ -1,0 +1,61 @@
+﻿<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
+<script src="" type="text/javascript"></script>
+<script type="text/javascript">
+    Ext.define('Ext.feature.GoogleMapPanel', {
+        extend: 'Ext.panel.Panel',
+        alias: 'widget.googlemappanel',
+        initComponent: function () {
+            var config = {
+                centerPosition: new google.maps.LatLng(9.032593162447107, 22.152814189453125),
+                zoom: 13,
+                setupGoogleMapEventsHandler: function (map) {
+                },
+                markerEndDragHandler: function (marker, event) {
+
+                }
+            };
+
+            Ext.applyIf(this, config);
+            this.callParent();
+        },
+        afterRender: function () {
+            var that = this;
+            var mapOptions = {
+                zoom: that.zoom,
+                mapTypeId: google.maps.MapTypeId.ROADMAP,
+                center: this.centerPosition
+            };
+
+            that.gmap = new google.maps.Map(that.body.dom, mapOptions);
+
+            that.setupGoogleMapEventsHandler(that.gmap);
+        },
+        getMap: function () {
+            return this.gmap;
+        },
+        getMarkers: function () {
+            if (this.markers !== undefined) {
+                return this.markers;
+            }
+
+            return [];
+        },
+        addMarker: function (markerOptions) {
+            var that = this;
+            markerOptions.map = that.getMap();
+            var marker = new google.maps.Marker(markerOptions);
+
+            if (that.markers === undefined) {
+                that.markers = [];
+            }
+
+            that.markers.push(marker);
+
+            google.maps.event.addListener(marker, 'mouseup', function (event) {
+                that.markerEndDragHandler(marker, event);
+            });
+
+            return marker;
+        }
+    });
+</script> 
