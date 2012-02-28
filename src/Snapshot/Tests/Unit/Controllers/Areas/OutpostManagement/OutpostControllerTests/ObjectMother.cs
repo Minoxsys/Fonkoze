@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Core.Persistence;
-using Domain;
-using Web.Areas.OutpostManagement.Controllers;
 using Autofac;
 using AutofacContrib.Moq;
-using MvcContrib.TestHelper.Fakes;
-using System.Web.Mvc;
-using Moq;
 using Core.Domain;
+using Domain;
+using Moq;
+using MvcContrib.TestHelper.Fakes;
+using Web.Areas.OutpostManagement.Controllers;
 using Web.Areas.OutpostManagement.Models.Outpost;
 
 namespace Tests.Unit.Controllers.Areas.OutpostManagement.OutpostControllerTests

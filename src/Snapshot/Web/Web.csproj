@@ -13,7 +13,7 @@
     <RootNamespace>Web</RootNamespace>
     <AssemblyName>Web</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <MvcBuildViews>false</MvcBuildViews>
+    <MvcBuildViews>true</MvcBuildViews>
     <UseIISExpress>false</UseIISExpress>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -149,6 +149,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Areas\CampaignManagement\Controllers\ProductLevelRequestController.cs" />
+    <Compile Include="Areas\CampaignManagement\Models\ProductLevelRequest\RequestReminderModel.cs" />
+    <Compile Include="Areas\CampaignManagement\Models\ProductLevelRequest\ScheduleModel.cs" />
     <Compile Include="Areas\AnalysisManagement\AnalysisManagementAreaRegistration.cs" />
     <Compile Include="Areas\AnalysisManagement\Controllers\AnalysisController.cs" />
     <Compile Include="Areas\AnalysisManagement\Controllers\ReportDistrictLevelController.cs" />

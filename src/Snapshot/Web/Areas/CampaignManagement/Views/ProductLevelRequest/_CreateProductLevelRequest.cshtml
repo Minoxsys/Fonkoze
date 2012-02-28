@@ -4,7 +4,54 @@
 
     window.feature.modal={};
     window.feature.modal.stores ={};
+    window.feature.modal.models ={};
 
+</script>
+<script type="text/javascript">
+    window.feature.modal.models.Schedule =  Ext.define('Ext.feature.Schedule', {
+        extend: 'Ext.data.Model',
+        fields: [
+                { name: 'Id', type: 'string' },
+                { name: 'ScheduleName', type: 'string' },
+                { name: 'Basis', type: 'string' },
+                { name: 'FrequencyType', type: 'string' },
+                { name: 'FrequencyValue', type: 'string' },
+                { name: 'Reminders' },
+                {
+                    name: 'RemindersDisplay',
+                    type: 'string',
+                    convert: function (value, record) {
+                        var result = [];
+                        var i;
+                        var reminders = record.get('Reminders');
+                        if (reminders.length > 0) {
+                            for (i = 0; i < reminders.length; i++) {
+                                var periodType = reminders[i].PeriodType == 'Hourly' ? 'Hour' : 'Day';
+                                var periodValue = reminders[i].PeriodValue;
+
+                                if (periodValue > 1) {
+                                    periodType += 's';
+                                }
+
+                                var postfixes = ['', 'st', 'nd', 'rd'];
+                                var index = i + 1;
+                                var indexStr = index + (index < 4 ? postfixes[index] : 'th');
+
+                                result[i] = Ext.String.format('{0} {1} {2} later', indexStr, periodValue, periodType);
+                            }
+                            return result.join('&nbsp;&nbsp;&nbsp;');
+                        }
+                        else {
+                            return '-';
+                        }
+                    }
+                },
+                { name: 'CreationDate', type: 'string' }
+            ]
+    });
+</script>
+
+<script type="text/javascript">
     window.feature.modal.stores.productGroups = Ext.define('snapshot-Outpost-ProductGroupsStore', {
         
         extend: 'Ext.data.Store',
@@ -18,6 +65,26 @@
             }
         }
     });
+
+</script>
+
+<script type="text/javascript">
+    window.feature.modal.stores.schedules = Ext.define('snapshot-SchedulesStore', {
+        extend: 'Ext.data.Store',
+        model: window.feature.modal.models.Schedule,
+        proxy: {
+            type: 'ajax',
+            url: '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "ProductLevelRequest", action = "GetSchedules" })',
+            reader: {
+                type: 'json'
+            }
+        },
+        remoteSort: true
+    });
+
+</script>
+
+<script type="text/javascript">
 
     window.feature.createProductLevelRequest = Ext.define('snapshot-Outpost-AssignProductsModalWindow', {
         extend: 'Ext.window.Window',
@@ -44,6 +111,7 @@
             ];
 
             me.productGroupStore = new window.feature.modal.stores.productGroups();
+            me.schedules = new window.feature.modal.stores.schedules();
 
             me.items = [
                 {
@@ -67,7 +135,7 @@
                                     fieldLabel: 'Product Group',
                                     store: me.productGroupStore,
                                     emptyText: 'Product Group List',
-                                    queryMode:'local',
+                                    queryMode: 'local',
                                     valueField: 'Id',
                                     displayField: 'Name'
                                 }
@@ -96,6 +164,7 @@
                             html: _t('Please select a schedule')
                         }, {
                             xtype: 'gridpanel',
+                            store: me.schedules,
                             autoscroll: true,
                             columns: [
                                 {
@@ -111,7 +180,7 @@
                                 }, {
                                     header: 'Reminders',
                                     flex: 1,
-                                    dataIndex: 'Reminders'
+                                    dataIndex: 'RemindersDisplay'
                                 }, {
                                     header: 'Selected',
                                     dataIndex: 'Selected'
@@ -127,6 +196,7 @@
 
             me.callParent(arguments);
             me.productGroupStore.load();
+            me.schedules.load();
 
         }
 
