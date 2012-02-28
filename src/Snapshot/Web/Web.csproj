@@ -375,9 +375,9 @@
     <Content Include="Assets\css\global-values.css" />
     <Content Include="Assets\resources\img\arrow.gif" />
     <Content Include="Assets\css\snapshot-theme.css" />
-    <Content Include="Assets\img\arrow.gif" />
     <Content Include="Assets\resources\img\briefcase.png" />
     <Content Include="Assets\resources\img\checked.gif" />
+    <Content Include="Assets\resources\img\copy.png" />
     <Content Include="Assets\resources\img\delete.png" />
     <Content Include="Assets\resources\img\edit.png" />
     <Content Include="Assets\js\ext-all-debug-w-comments.js" />
