@@ -9,10 +9,14 @@ namespace Web.Areas.CampaignManagement.Models.Campaign
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
-        public String StartDate { get; set; }
-        public String EndDate { get; set; }
-        public String CreationDate { get; set; }
-        public String Status { get; set; }
-        public String Options { get; set; }
+        public string StartDate { get; set; }
+        public string EndDate { get; set; }
+        public string CreationDate { get; set; }
+        public bool Opened { get; set; }
+        public string CountriesIds { get; set; }
+        public string RegionsIds { get; set; }
+        public string DistrictsIds { get; set; }
+        public string OutpostsIds { get; set; }
+
     }
 }

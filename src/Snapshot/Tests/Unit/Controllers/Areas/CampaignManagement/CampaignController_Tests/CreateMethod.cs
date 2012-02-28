@@ -8,7 +8,7 @@ using Web.Areas.CampaignManagement.Models.Campaign;
 using Domain;
 using Web.Models.Shared;
 
-namespace Tests.Unit.Controllers.Areas.CampaignManagement
+namespace Tests.Unit.Controllers.Areas.CampaignManagement.CampaignController_Tests
 {
     [TestFixture]
     public class CreateMethod
@@ -30,7 +30,7 @@ namespace Tests.Unit.Controllers.Areas.CampaignManagement
                 CampaignName = objectMother.campaign.Name,
                 StartDate = objectMother.campaign.StartDate.ToString(),
                 EndDate = objectMother.campaign.EndDate.ToString(),
-                CountriesIds = objectMother.country.Id.ToString(),
+                CountriesIds = objectMother.country1.Id.ToString(),
                 RegionsIds = objectMother.regionId.ToString(),
                 DistrictsIds = objectMother.districtId.ToString(),
                 OutpostsIds = objectMother.outpostId.ToString()
@@ -40,7 +40,8 @@ namespace Tests.Unit.Controllers.Areas.CampaignManagement
                                                                             p.Name == objectMother.campaign.Name &&
                                                                             p.Opened == objectMother.campaign.Opened &&
                                                                             p.StartDate.Value.ToShortDateString() == objectMother.campaign.StartDate.Value.ToShortDateString() &&
-                                                                            p.EndDate.Value.ToShortDateString() == objectMother.campaign.EndDate.Value.ToShortDateString()
+                                                                            p.EndDate.Value.ToShortDateString() == objectMother.campaign.EndDate.Value.ToShortDateString() &&
+                                                                            p.Options.Count() == objectMother.campaign.Options.Count()
                                                                  )));
 
             //Act
@@ -54,5 +55,8 @@ namespace Tests.Unit.Controllers.Areas.CampaignManagement
             Assert.That(response.Status, Is.EqualTo("Success"));
             Assert.That(response.Message, Is.EqualTo("Campaign Campania 1 has been saved."));
         }
+
+
+
     }
 }

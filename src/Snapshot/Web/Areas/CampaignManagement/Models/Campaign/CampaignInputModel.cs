@@ -7,6 +7,7 @@ namespace Web.Areas.CampaignManagement.Models.Campaign
 {
     public class CampaignInputModel
     {
+        public Guid? Id { get; set; }
         public string CampaignName { get; set; }
         public string StartDate { get; set; }
         public string EndDate { get; set; }

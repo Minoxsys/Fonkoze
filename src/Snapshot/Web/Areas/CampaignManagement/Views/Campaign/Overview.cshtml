@@ -1,5 +1,6 @@
 ﻿@using Domain
 @using Microsoft.Web.Mvc;
+@using Web.Models.Shared;
 @section page_title{
 Campaign: Overview
 }
@@ -22,29 +23,47 @@ Campaign: Overview
         campaignBtn.toggle(true);
     });
 </script>
+<style>
+    .x-grid-checkheader
+    {
+        height: 14px;
+        background-image: url('@Url.AssetUrl("img/unchecked.gif")');
+        background-position: 50% -2px;
+        background-repeat: no-repeat;
+        background-color: transparent;
+    }
+    
+    .x-grid-checkheader-checked
+    {
+        background-image: url('@Url.AssetUrl("img/checked.gif")');
+    }
+    
+    .x-grid-checkheader-editor .x-form-cb-wrap
+    {
+        text-align: center;
+    }
+</style>
 <script type="text/javascript">
     Ext.onReady(function () {
         window.feature = {};
 
         window.feature.searchCampaignName = 'Campaign-Search-Name';
-        window.feature.wizardCampaignManagement = 'Wizard-Campaign-Management';
+        window.feature.leftGrid = 'Grid-Add-Campaign-Left';
+        window.feature.rightGrid = 'Grid-Add-Campaign-Right';
+        window.feature.rightGridTopLabel = 'Label-For-Right-Grid';
+        window.feature.leftGridTopLabel = 'Label-For-Left-Grid';
         window.feature.formCampaignNameId = 'Form-Campaign-Name';
         window.feature.formCampaignStartDateId = 'Form-Campaign-Start-Date';
         window.feature.formCampaignEndDateId = 'Form-Campaign-End-Date';
-        window.feature.gridCountryLeft = 'Grid-Add-Country-Left';
-        window.feature.gridCountryRight = 'Grid-Add-Country-Right';
-        window.feature.gridRegionLeft = 'Grid-Add-Region-Left';
-        window.feature.gridRegionRight = 'Grid-Add-Region-Right';
-        window.feature.gridDistrictLeft = 'Grid-Add-District-Left';
-        window.feature.gridDistrictRight = 'Grid-Add-District-Right';
-        window.feature.gridOutpostLeft = 'Grid-Add-Outpost-Left';
-        window.feature.gridOutpostRight = 'Grid-Add-Outpost-Right';
+        window.feature.wizardCampaignManagement = 'Wizard-Campaign-Management';       
         window.feature.nextButton = 'Form-Add-Campaign-Next-Button';
+        window.feature.pressedButton = '';
+        var campaign = {};
 
         window.feature.campaignStore = Ext.create('Ext.data.Store', {
             pageSize: 50,
             remoteSuport: true,
-            fields: ['Id', 'Name', 'StartDate', 'EndDate', 'CreationDate', 'Status'],
+            fields: ['Id', 'Name', 'StartDate', 'EndDate', 'CreationDate', 'Opened', 'CountriesIds', 'RegionsIds', 'DistrictsIds', 'OutpostsIds'],
             proxy: {
                 type: 'ajax',
                 url: '@Url.RouteUrl(CampaignManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Campaign", action = "GetCampaigns" })',
@@ -63,37 +82,21 @@ Campaign: Overview
             }]
         });
 
-        window.feature.countryStore = Ext.create('Ext.data.Store', {
+        window.feature.leftGridStore = Ext.create('Ext.data.Store', {
             remoteSuport: true,
-            fields: ['Id', 'Name'],
+            fields: ['Id', 'Name', 'Selected'],
             proxy: {
                 type: 'ajax',
-                url: '@Url.RouteUrl(Web.Areas.OutpostManagement.OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Region", action = "GetCountries" })',
-                reader: {
-                    type: 'json',
-                    root: 'Countries',
-                    totalProperty: 'TotalItems'
-                },
-                simpleSortMode: true
-            },
-            sorters: [{
-                property: 'Name',
-                direction: 'ASC'
-            }]
-        });
-
-        window.feature.regionStore = Ext.create('Ext.data.Store', {
-            remoteSuport: true,
-            fields: ['Id', 'Name'],
-            proxy: {
-                type: 'ajax',
-                url: '@Url.RouteUrl(CampaignManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Campaign", action = "GetRegions" })',
+                url: '@Url.RouteUrl(CampaignManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Campaign", action = "GetLeftGridStore" })',
                 reader: {
                     type: 'json',
                     root: 'Items',
                     totalProperty: 'TotalItems'
                 },
-                extraParams: { countryIdList: '' },
+                extraParams: { 
+                    options: '',
+                    idList: ''
+                },
                 simpleSortMode: true
             },
             sorters: [{
@@ -102,38 +105,21 @@ Campaign: Overview
             }]
         });
 
-        window.feature.districtStore = Ext.create('Ext.data.Store', {
+        window.feature.rightGridStore = Ext.create('Ext.data.Store', {
             remoteSuport: true,
-            fields: ['Id', 'Name'],
+            fields: ['Id', 'Name', 'Selected'],
             proxy: {
                 type: 'ajax',
-                url: '@Url.RouteUrl(CampaignManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Campaign", action = "GetDistricts" })',
+                url: '@Url.RouteUrl(CampaignManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Campaign", action = "GetRightGridStore" })',
                 reader: {
                     type: 'json',
                     root: 'Items',
                     totalProperty: 'TotalItems'
                 },
-                extraParams: { regionIdList: '' },
-                simpleSortMode: true
-            },
-            sorters: [{
-                property: 'Name',
-                direction: 'ASC'
-            }]
-        });
-
-        window.feature.outpostStore = Ext.create('Ext.data.Store', {
-            remoteSuport: true,
-            fields: ['Id', 'Name'],
-            proxy: {
-                type: 'ajax',
-                url: '@Url.RouteUrl(CampaignManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Campaign", action = "GetOutposts" })',
-                reader: {
-                    type: 'json',
-                    root: 'Items',
-                    totalProperty: 'TotalItems'
+                extraParams: { 
+                    options: '',
+                    idList: ''
                 },
-                extraParams: { districtIdList: '' },
                 simpleSortMode: true
             },
             sorters: [{
@@ -142,6 +128,50 @@ Campaign: Overview
             }]
         });
 
+        gridSelModels = Ext.define('MyApp.selModel', {
+             extend: 'Ext.selection.CheckboxModel',
+             checkOnly:true
+        }); 
+
+        Ext.define('Ext.ux.CheckColumn', {
+            extend: 'Ext.grid.column.Column',
+            alias: 'widget.checkcolumn',
+        
+            tdCls: Ext.baseCSSPrefix + 'grid-cell-checkcolumn',
+                
+            constructor: function () {
+                this.addEvents(
+                    'checkchange'
+                    );
+                this.callParent(arguments);
+            },
+                
+            processEvent: function (type, view, cell, recordIndex, cellIndex, e) {
+                if (type == 'mousedown' || (type == 'keydown' && (e.getKey() == e.ENTER || e.getKey() == e.SPACE))) {
+                    var record = view.panel.store.getAt(recordIndex),
+                    dataIndex = this.dataIndex,
+                    checked = !record.get(dataIndex);
+   
+                    record.set(dataIndex, checked);
+                    this.fireEvent('checkchange', this, recordIndex, checked);
+                    // cancel selection.
+                    return false;
+                }
+                else {
+                    return this.callParent(arguments);
+                }
+            },
+    
+            renderer: function (value, styles, record, recordIndex, columnIndex, store, gridView) {
+                var cssPrefix = Ext.baseCSSPrefix,
+                cls = [cssPrefix + 'grid-checkheader'];
+    
+                if (value) {
+                    cls.push(cssPrefix + 'grid-checkheader-checked');
+                }
+                return '<div class="' + cls.join(' ') + '">&#160;</div>';
+            }
+        });
 
         window.feature.Header = Ext.create('Ext.container.Container', {
             layout: 'hbox',
@@ -165,7 +195,8 @@ Campaign: Overview
                         text: 'Add New Campaign',
                         margin: '0 0 0 20',
                         handler: function () {
-                            var modalWindowAddCampaign = new window.feature.modalAddCampaignManagement();
+                            window.feature.pressedButton = 'Add';
+                            var modalWindowAddCampaign = new window.feature.modalCampaignManagement();
                             modalWindowAddCampaign.show();
                         }
                     }]
@@ -189,13 +220,157 @@ Campaign: Overview
                                 fn: function (key) {
                                     var searchValue = Ext.getCmp(window.feature.searchCampaignName).getValue();
                                     window.feature.campaignStore.proxy.extraParams.searchValue = searchValue;
-                                    window.feature.campaignStore.loadPage(1);
+                                    window.feature.doSearch.delay(500);
                                 }
                             }
                         }
                     }]
                 }
             ]
+        });
+
+        window.feature.doSearch = new Ext.util.DelayedTask(function(){
+			window.feature.campaignStore.loadPage(1);
+		});
+
+       
+        window.feature.modalCampaignManagement = Ext.define('Ext.feature.campaign.Modal', {
+            extend: 'Ext.window.Window',
+            title: 'Add New Campaign',
+            modal: true,
+            height: 400,
+            width: 800,
+            layout: {
+                type: 'vbox',
+                align: 'stretch'
+            },
+
+            initComponent: function () {
+                var me = this;
+
+                var firstContainer = new window.feature.wizardCampaignManagementContainer();
+                var gridsContainer = new window.feature.wizardGridManagementContainer();
+         
+                ClearFields();
+                var stepNumber = 0;
+                
+                Ext.applyIf(me, {
+                    items: [firstContainer]
+
+                });
+
+                me.buttons = [{
+                    text: 'Cancel',
+                    handler: function () {
+                        firstContainer.destroy();
+                        gridsContainer.destroy();
+
+                        me.close();
+                        me.destroy();
+                    }
+                }, {
+                    text: 'Next',
+                    id: window.feature.nextButton,
+                    handler: function () {
+                        stepNumber++;
+
+                        if (stepNumber == 1) {
+                            var name = Ext.getCmp(window.feature.formCampaignNameId);
+                            var startDate = Ext.getCmp(window.feature.formCampaignStartDateId);
+                            var endDate = Ext.getCmp(window.feature.formCampaignEndDateId);
+                            
+                            if (IsValid(name, startDate, endDate) == true){
+                                GetCampainsFirstPageInfos(name, startDate, endDate);
+
+                                firstContainer.destroy();
+
+                                PrepareCountryDisplay();
+                                me.add(gridsContainer);
+                                me.doLayout();
+                                
+                            }else{
+                                stepNumber--;
+                            }
+                        }
+
+                        if (stepNumber == 2) {
+                            var ids = GetRightGridStoreIds();
+                            if (ids.length > 0){
+                                DisplayRegions(ids);
+                            }else{
+                                Ext.Msg.alert("Error", "You need to select at least one country");
+                                stepNumber--;
+                            }
+                        }
+
+                        if (stepNumber == 3) {
+                            var ids = GetRightGridStoreIds();
+                            if (ids.length > 0){
+                                DisplayDistricts(ids);
+                            }else{
+                                Ext.Msg.alert("Error", "You need to select at least one region");
+                                stepNumber--;
+                            }
+                        }
+
+                        if (stepNumber == 4) {
+                            var ids = GetRightGridStoreIds();
+                            if (ids.length > 0){
+                                DisplayOutposts(ids);
+                            }else{
+                                Ext.Msg.alert("Error", "You need to select at least one district");
+                                stepNumber--;
+                            }
+                        }
+
+                        if (stepNumber == 5) {
+                            var ids = GetRightGridStoreIds();
+                            if (ids.length > 0){
+                                stepNumber = 0;
+                                campaign.Outposts = ids;
+                                window.feature.rightGridStore.removeAll();
+                                window.feature.leftGridStore.removeAll();
+
+                                var values = {
+                                    Id: campaign.Id,
+                                    CampaignName: campaign.Name,
+                                    StartDate: campaign.StartDate,
+                                    EndDate: campaign.EndDate,
+                                    CountriesIds: campaign.Countries,
+                                    RegionsIds: campaign.Regions,
+                                    DistrictsIds: campaign.Districts,
+                                    OutpostsIds: campaign.Outposts
+                                };
+
+                                if (window.feature.pressedButton == 'Edit'){
+                                    var postToUrl = '@Url.RouteUrl(CampaignManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Campaign", action = "Edit" })';
+                                }else{
+                                    var postToUrl = '@Url.RouteUrl(CampaignManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Campaign", action = "Create" })';
+                                }
+
+                                var action = $.post(postToUrl, values);
+                                action.success(function (serverResponse) {
+                                    if (serverResponse.Status == "Error") {
+                                        Ext.Msg.alert(serverResponse.Status, serverResponse.Message);
+                                    }
+                                    else {
+                                        gridsContainer.destroy();
+                                    
+                                        me.close();
+                                        me.destroy();
+
+                                        window.feature.campaignStore.loadPage(1);
+                                    }
+                                });
+                            }else{
+                                Ext.Msg.alert("Error", "You need to select at least one outpost");
+                                stepNumber--;
+                            }
+                        }
+                    }
+                }],
+                me.callParent(arguments);
+            }
         });
 
         window.feature.grid = Ext.create('Ext.grid.Panel', {
@@ -230,18 +405,38 @@ Campaign: Overview
                     icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/edit.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
                     tooltip: _t('Edit this campaign'),
                     handler: function (grid, rowIndex, colIndex) {
+                        window.feature.pressedButton = 'Edit';
+                        var rec = grid.getStore().getAt(rowIndex);
+
+                        if (rec.get('Opened') == false){
+                            var modalWindowEditCampaign = new window.feature.modalCampaignManagement();
+                            SetCampaignValues(rec);
+                            modalWindowEditCampaign.show();
+                        }else{
+                            Ext.Msg.alert("Alert","This campaign is in process. It cannot be edited!");
+                        }
                     }
                 }, {
-                    icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/open.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
-                    tooltip: _t('Reopen this campaign'),
+                    icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/copy.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                    tooltip: _t('Clone this campaign'),
                     handler: function (grid, rowIndex, colIndex) {
-                    }
-                }
+                        var rec = grid.getStore().getAt(rowIndex);
 
-        ]
+                        var values = { id: rec.get('Id') };
+
+                        var postToUrl = '@Url.RouteUrl(CampaignManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Campaign", action = "Clone" })';
+
+                        var action = $.post(postToUrl, values);
+                        action.success(function (serverResponse) {
+                            Ext.Msg.alert(serverResponse.Status, serverResponse.Message);
+                            window.feature.campaignStore.loadPage(1); 
+                        });
+
+                    }
+                }]
             }],
             bbar: Ext.create('Ext.PagingToolbar', {
-                store: window.feature.store,
+                store: window.feature.campaignStore,
                 displayInfo: true,
                 displayMsg: 'Displaying topics {0} - {1} of {2}',
                 emptyMsg: "No topics to display"
@@ -265,145 +460,8 @@ Campaign: Overview
             }]
         });
 
-
-        //needs to be refactored
-
-        var stepNumber = 0;
-        var campaign = {};
-
-        window.feature.modalAddCampaignManagement = Ext.define('Ext.feature.campaign.Modal', {
-            extend: 'Ext.window.Window',
-            title: 'Add New Campaign',
-            modal: true,
-            height: 400,
-            width: 800,
-            layout: {
-                type: 'vbox',
-                align: 'stretch'
-            },
-            initComponent: function () {
-                var me = this;
-
-                Ext.applyIf(me, {
-                    items: [window.feature.wizardCampaignManagementContainer]
-
-                });
-                me.buttons = [{
-                    text: 'Prev',
-                    handler: function () {
-                        stepNumber--;
-                    }
-                }, {
-                    text: 'Cancel',
-                    handler: function () {
-                        me.close();
-                        me.destroy();
-                    }
-                }, {
-                    text: 'Next',
-                    id: window.feature.nextButton,
-                    handler: function () {
-                        stepNumber++;
-
-                        if (stepNumber == 1) {
-                            campaign.Name = window.feature.wizardCampaignManagementContainer.down('#' + window.feature.formCampaignNameId).getValue();
-                            campaign.StartDate = Ext.util.Format.date(window.feature.wizardCampaignManagementContainer.down('#' + window.feature.formCampaignStartDateId).getValue());
-                            campaign.EndDate = Ext.util.Format.date(window.feature.wizardCampaignManagementContainer.down('#' + window.feature.formCampaignEndDateId).getValue());
-
-                            me.remove(window.feature.wizardCampaignManagementContainer);
-                            window.feature.countryStore.load();
-                            me.add(window.feature.wizardCountryManagementContainer);
-                            me.doLayout();
-                        }
-
-                        if (stepNumber == 2) {
-                            var ids = '';
-                            var gridRightStore = Ext.getCmp(window.feature.gridCountryRight).getStore();
-                            gridRightStore.each(function (record) {
-                                ids = ids + record.get('Id') + ',';
-                            });
-                            window.feature.regionStore.proxy.extraParams.countryIdList = ids;
-                            campaign.Countries = ids;
-
-                            me.remove(window.feature.wizardCountryManagementContainer);
-                            window.feature.regionStore.load();
-                            me.add(window.feature.wizardRegionManagementContainer);
-                            me.doLayout();
-                        }
-
-                        if (stepNumber == 3) {
-                            var ids = '';
-                            var gridRightStore = Ext.getCmp(window.feature.gridRegionRight).getStore();
-                            gridRightStore.each(function (record) {
-                                ids = ids + record.get('Id') + ',';
-                            });
-                            window.feature.districtStore.proxy.extraParams.regionIdList = ids;
-                            campaign.Regions = ids;
-
-                            me.remove(window.feature.wizardRegionManagementContainer);
-                            window.feature.districtStore.load();
-                            me.add(window.feature.wizardDistrictManagementContainer);
-                            me.doLayout();
-                        }
-
-                        if (stepNumber == 4) {
-                            Ext.getCmp(window.feature.nextButton).setText('Save');
-                            var ids = '';
-                            var gridRightStore = Ext.getCmp(window.feature.gridDistrictRight).getStore();
-                            gridRightStore.each(function (record) {
-                                ids = ids + record.get('Id') + ',';
-                            });
-                            window.feature.outpostStore.proxy.extraParams.districtIdList = ids;
-                            campaign.Districts = ids;
-
-                            me.remove(window.feature.wizardDistrictManagementContainer);
-                            window.feature.outpostStore.load();
-                            me.add(window.feature.wizardOutpostManagementContainer);
-                            me.doLayout();
-                        }
-
-                        if (stepNumber == 5) {
-
-                            var ids = '';
-                            var gridRightStore = Ext.getCmp(window.feature.gridOutpostRight).getStore();
-                            gridRightStore.each(function (record) {
-                                ids = ids + record.get('Id') + ',';
-                            });
-                            campaign.Outposts = ids;
-
-                            var values = {
-                                CampaignName: campaign.Name,
-                                StartDate: campaign.StartDate,
-                                EndDate: campaign.EndDate,
-                                CountriesIds: campaign.Countries,
-                                RegionsIds: campaign.Regions,
-                                DistrictsIds: campaign.Districts,
-                                OutpostsIds: campaign.Outposts
-                            };
-
-                            var postToUrl = '@Url.RouteUrl(CampaignManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Campaign", action = "Create" })';
-                            var action = $.post(postToUrl, values);
-                            action.success(function (serverResponse) {
-                                if (serverResponse.CloseModal == false) {
-                                    Ext.Msg.alert(serverResponse.Status, serverResponse.Message);
-                                }
-                                else {
-                                    me.close();
-                                    me.destroy();
-
-                                    window.feature.campaignStore.loadPage(1);
-                                }
-                            });
-
-                        }
-
-                    }
-                }],
-                me.callParent(arguments);
-            }
-        });
-
-        window.feature.wizardCampaignManagementContainer = Ext.create('Ext.container.Container', {
+        window.feature.wizardCampaignManagementContainer = Ext.define('MyApp.view.ui.MyContainer', {
+            extend: 'Ext.container.Container',
             id: window.feature.wizardCampaignManagement,
             flex: 1,
             margin: '20 0 0 20',
@@ -421,19 +479,19 @@ Campaign: Overview
                 items: [{
                     xtype: 'textfield',
                     fieldLabel: 'Campaign Name',
-                    itemId: window.feature.formCampaignNameId,
+                    id: window.feature.formCampaignNameId,
                 },{
                     xtype: 'datefield',
                     margin: '20 0 0 0',
                     fieldLabel: 'Start Date',
-                    format: 'm/d/Y',
-                    itemId: window.feature.formCampaignStartDateId,
+                    format: 'd-M-Y',
+                    id: window.feature.formCampaignStartDateId,
                 },{
                     xtype: 'datefield',
                     margin: '20 0 0 0',
                     fieldLabel: 'End Date',
-                    format: 'm/d/Y',
-                    itemId: window.feature.formCampaignEndDateId,
+                    format: 'd-M-Y',
+                    id: window.feature.formCampaignEndDateId,
                 }] 
             },{
                 xtype: 'container',
@@ -441,21 +499,8 @@ Campaign: Overview
             }]
         });
 
-        var sml = Ext.create('Ext.selection.CheckboxModel',{
-     	    checkOnly:true
-	    });
-        var smr = Ext.create('Ext.selection.CheckboxModel',{
-     	    checkOnly:true
-	    });
-
-        var countryRightStore = Ext.create('Ext.data.ArrayStore', {
-            fields: [
-               {name: 'Id'},
-               {name: 'Name'},     
-            ]
-        });
-
-        window.feature.wizardCountryManagementContainer = Ext.create('Ext.container.Container', {
+        window.feature.wizardGridManagementContainer =  Ext.define('MyApp.view.ui.MyContainer', {
+            extend: 'Ext.container.Container',
             id: window.feature.wizarCountryManagement,
             flex: 1,
             margin: '20 0 0 20',
@@ -463,6 +508,7 @@ Campaign: Overview
                 type: 'hbox',
                 align: 'stretch'
             },
+
             items: [{
                 xtype: 'container',
                 flex: 2,
@@ -472,12 +518,11 @@ Campaign: Overview
                 },
                 items: [{
                     xtype: 'label',
-                    text: 'Country',
+                    id: window.feature.leftGridTopLabel,
                 },{
                     xtype: 'gridpanel',
-                    id: window.feature.gridCountryLeft,
-                    store: window.feature.countryStore,
-                    selModel: sml,
+                    id: window.feature.leftGrid,
+                    store: window.feature.leftGridStore,
                     columnLines: true,
                     margin: '0 0 10 0',
                     loadMask: true,
@@ -488,6 +533,11 @@ Campaign: Overview
                         dataIndex: 'Name',
                         flex: 1,
                         sortable: true
+                    }, {
+                        xtype: 'checkcolumn',
+                        sortable: false,
+                        dataIndex: 'Selected',
+                        text: 'Selected'
                     }]
                 }]
             },{
@@ -511,28 +561,35 @@ Campaign: Overview
                         width: 80,
                         text: 'Add',
                         handler: function () {
-                            var gridRight = Ext.getCmp(window.feature.gridCountryRight);
-                            var gridLeft = Ext.getCmp(window.feature.gridCountryLeft);
+                            var gridRight = Ext.getCmp(window.feature.rightGrid);
+                            var gridLeft = Ext.getCmp(window.feature.leftGrid);
 
-	                        Ext.each(gridLeft.getSelectionModel().getSelection(), function(row, index, value) {
-                                var newValue = {
-                                    Id: row.get('Id'), 
-                                    Name: row.get('Name')
-                                };
-                                countryRightStore.insert(0, newValue);
-	                        });
+                            var gridLeftStore = Ext.getCmp(window.feature.leftGrid).getStore();
+                            gridLeftStore.each(function (record) {
+                                if (record.dirty){
+                                    var newValue = {
+                                        Id: record.get('Id'), 
+                                        Name: record.get('Name'),
+                                    };
+                                    var contains = RightGridContains(newValue, gridRight);
+                                    if (contains == false){
+                                        window.feature.rightGridStore.insert(0, newValue);
+                                    }
+                                }
+                            });
+
                         }
                     },{
                         xtype: 'button',
                         width: 80,
                         text: 'Remove',
                         handler: function () {
-                            var gridRight = Ext.getCmp(window.feature.gridCountryRight);
-                            var selection = gridRight.getSelectionModel().getSelection();
-
-                            for (var i = 0; i < selection.length; i++) {
-                                countryRightStore.remove(selection[i]);
-                            }
+                            var rightGridStore = Ext.getCmp(window.feature.rightGrid).getStore();
+                            rightGridStore.each(function (record) {
+                                if (record.dirty){
+                                    rightGridStore.remove(record);
+                                }
+                            });
                         }
                     }]
 
@@ -545,73 +602,14 @@ Campaign: Overview
                     align: 'stretch'
                 },
                 items: [{
-                    xtype: 'container',
-                    height: 25,
-                    layout: {
-                        type: 'hbox',
-                    },
-                    items: [{
-                        xtype: 'label',
-                        text: 'Country',
-                        flex: 1,
-                    }]
+                    xtype: 'label',
+                    id: window.feature.rightGridTopLabel,
                 },{
                     xtype: 'gridpanel',
-                    id: window.feature.gridCountryRight,
-                    store: countryRightStore,
-                    selModel: smr,
+                    id: window.feature.rightGrid,
+                    store: window.feature.rightGridStore,
                     columnLines: true,
-                    margin: '0 40 10 0',
-                    loadMask: true,
-                    flex:3,
-                    autoScroll:true,
-                    columns: [{
-                        text: "Name",
-                        dataIndex: 'Name',
-                        flex: 1,
-                        sortable: true
-                    }]
-                }]
-            }]
-        });
-
-
-        var selModelRegionLeft = Ext.create('Ext.selection.CheckboxModel',{
-     	    checkOnly:true
-	    });
-        var selModelRegionRight = Ext.create('Ext.selection.CheckboxModel',{
-     	    checkOnly:true
-	    });
-
-        var regionRightStore = Ext.create('Ext.data.ArrayStore', {
-            fields: [
-               {name: 'Id'},
-               {name: 'Name'},     
-            ]
-        });
-
-        window.feature.wizardRegionManagementContainer  = Ext.create('Ext.container.Container', {
-            id: window.feature.wizardRegionManagement,
-            flex: 1,
-            margin: '20 0 0 20',
-            layout: {
-                type: 'hbox',
-                align: 'stretch'
-            },
-            items: [{
-                xtype: 'container',
-                flex: 2,
-                layout: {
-                    type: 'vbox',
-                    align: 'stretch'
-                },
-                items: [{
-                    xtype: 'gridpanel',
-                    id: window.feature.gridRegionLeft,
-                    store: window.feature.regionStore,
                     margin: '0 0 10 0',
-                    selModel: selModelRegionLeft,
-                    columnLines: true,
                     loadMask: true,
                     flex:3,
                     autoScroll:true,
@@ -620,330 +618,172 @@ Campaign: Overview
                         dataIndex: 'Name',
                         flex: 1,
                         sortable: true
-                    }]
-                }]
-            },{
-                xtype: 'container',
-                flex: 1,
-                layout: {
-                    type: 'vbox',
-                    align: 'center'
-                },
-
-                items: [{
-                    xtype: 'container',
-                    flex: 1,
-                    layout: {
-                        type: 'vbox',
-                        pack: 'center',
-                    },
-                    items: [{
-                        xtype: 'button',
-                        margin: '0 0 5 0',
-                        width: 80,
-                        text: 'Add',
-                        handler: function () {
-                            var gridRight = Ext.getCmp(window.feature.gridRegionRight);
-                            var gridLeft = Ext.getCmp(window.feature.gridRegionLeft);
-
-	                        Ext.each(gridLeft.getSelectionModel().getSelection(), function(row, index, value) {
-                                var newValue = {
-                                    Id: row.get('Id'), 
-                                    Name: row.get('Name')
-                                };
-                                regionRightStore.insert(0, newValue);
-	                        });
-                        }
-                    },{
-                        xtype: 'button',
-                        width: 80,
-                        text: 'Remove',
-                        handler: function () {
-                            var gridRight = Ext.getCmp(window.feature.gridRegionRight);
-                            var selection = gridRight.getSelectionModel().getSelection();
-
-                            for (var i = 0; i < selection.length; i++) {
-                                regionRightStore.remove(selection[i]);
-                            }
-                        }
-                    }]
-
-                }]
-            },{
-                xtype: 'container',
-                flex: 2,
-                layout: {
-                    type: 'vbox',
-                    align: 'stretch'
-                },
-                items: [{
-                    xtype: 'gridpanel',
-                    id: window.feature.gridRegionRight,
-                    store: regionRightStore,
-                    margin: '0 40 10 0',
-                    selModel: selModelRegionRight,
-                    columnLines: true,
-                    loadMask: true,
-                    flex:3,
-                    autoScroll:true,
-                    columns: [{
-                        text: "Name",
-                        dataIndex: 'Name',
-                        flex: 1,
-                        sortable: true
+                    }, {
+                        xtype: 'checkcolumn',
+                        sortable: false,
+                        dataIndex: 'Selected',
+                        header: 'Selected'
                     }]
                 }]
             }]
         });
 
-        var selModelDistrictLeft = Ext.create('Ext.selection.CheckboxModel',{
-     	    checkOnly:true
-	    });
-        var selModelDistrictRight = Ext.create('Ext.selection.CheckboxModel',{
-     	    checkOnly:true
-	    });
+         function PrepareCountryDisplay(){
+            SetLabelText('Countries');
+            LoadLeftGrid('GetCountries', '' );
+            window.feature.rightGridStore.removeAll();
+                            
+            if (window.feature.pressedButton == 'Edit'){
+                LoadRightGrid('GetCountriesForIds', campaign.countriesEdit);
+            }
+        };
 
-        var districtRightStore = Ext.create('Ext.data.ArrayStore', {
-            fields: [
-               {name: 'Id'},
-               {name: 'Name'},     
-            ]
-        });
+        function DisplayRegions(ids){
+            campaign.Countries = ids;
+            SetLabelText('Regions');
+            LoadLeftGrid('GetRegions', ids);
+            window.feature.rightGridStore.removeAll();
 
-        window.feature.wizardDistrictManagementContainer  = Ext.create('Ext.container.Container', {
-            id: window.feature.wizardDistrictManagement,
-            flex: 1,
-            margin: '20 0 0 20',
-            layout: {
-                type: 'hbox',
-                align: 'stretch'
-            },
-            items: [{
-                xtype: 'container',
-                flex: 2,
-                layout: {
-                    type: 'vbox',
-                    align: 'stretch'
-                },
-                items: [{
-                    xtype: 'gridpanel',
-                    id: window.feature.gridDistrictLeft,
-                    store: window.feature.districtStore,
-                    margin: '0 0 10 0',
-                    selModel: selModelDistrictLeft,
-                    columnLines: true,
-                    loadMask: true,
-                    flex:3,
-                    autoScroll:true,
-                    columns: [{
-                        text: "Name",
-                        dataIndex: 'Name',
-                        flex: 1,
-                        sortable: true
-                    }]
-                }]
-            },{
-                xtype: 'container',
-                flex: 1,
-                layout: {
-                    type: 'vbox',
-                    align: 'center'
-                },
+            if (window.feature.pressedButton == 'Edit'){
+                LoadRightGrid('GetRegionsForIds', campaign.regionsEdit);
+            }
+        };
 
-                items: [{
-                    xtype: 'container',
-                    flex: 1,
-                    layout: {
-                        type: 'vbox',
-                        pack: 'center',
-                    },
-                    items: [{
-                        xtype: 'button',
-                        margin: '0 0 5 0',
-                        width: 80,
-                        text: 'Add',
-                        handler: function () {
-                            var gridRight = Ext.getCmp(window.feature.gridDistrictRight);
-                            var gridLeft = Ext.getCmp(window.feature.gridDistrictLeft);
+        function DisplayDistricts(ids){
+            campaign.Regions = ids;
+            SetLabelText('Districts');
+            LoadLeftGrid('GetDistricts', ids);
+            window.feature.rightGridStore.removeAll();
 
-	                        Ext.each(gridLeft.getSelectionModel().getSelection(), function(row, index, value) {
-                                var newValue = {
-                                    Id: row.get('Id'), 
-                                    Name: row.get('Name')
-                                };
-                                districtRightStore.insert(0, newValue);
-	                        });
-                        }
-                    },{
-                        xtype: 'button',
-                        width: 80,
-                        text: 'Remove',
-                        handler: function () {
-                            var gridRight = Ext.getCmp(window.feature.gridDistrictRight);
-                            var selection = gridRight.getSelectionModel().getSelection();
+            if (window.feature.pressedButton == 'Edit'){
+                LoadRightGrid('GetDistrictsForIds', campaign.districtsEdit);
+            }
+        };
 
-                            for (var i = 0; i < selection.length; i++) {
-                                districtRightStore.remove(selection[i]);
-                            }
-                        }
-                    }]
+        function DisplayOutposts(ids){
+            Ext.getCmp(window.feature.nextButton).setText('Save');
+            campaign.Districts = ids;
 
-                }]
-            },{
-                xtype: 'container',
-                flex: 2,
-                layout: {
-                    type: 'vbox',
-                    align: 'stretch'
-                },
-                items: [{
-                    xtype: 'gridpanel',
-                    id: window.feature.gridDistrictRight,
-                    store: districtRightStore,
-                    margin: '0 40 10 0',
-                    selModel: selModelDistrictRight,
-                    columnLines: true,
-                    loadMask: true,
-                    flex:3,
-                    autoScroll:true,
-                    columns: [{
-                        text: "Name",
-                        dataIndex: 'Name',
-                        flex: 1,
-                        sortable: true
-                    }]
-                }]
-            }]
-        });
+            SetLabelText('Outposts');
+            LoadLeftGrid('GetOutposts', ids);
+            window.feature.rightGridStore.removeAll();
 
-        var selModelOutpostLeft = Ext.create('Ext.selection.CheckboxModel',{
-     	    checkOnly:true
-	    });
-        var selModelOutpostRight = Ext.create('Ext.selection.CheckboxModel',{
-     	    checkOnly:true
-	    });
+            if (window.feature.pressedButton == 'Edit'){
+                LoadRightGrid('GetOutpostsForIds', campaign.outpostsEdit);
+            }
+        };
 
-        var outpostRightStore = Ext.create('Ext.data.ArrayStore', {
-            fields: [
-               {name: 'Id'},
-               {name: 'Name'},     
-            ]
-        });
+        function RightGridContains(value, grid){
+            var ok = false;
+            var gridRightStore = Ext.getCmp(window.feature.rightGrid).getStore();
+            gridRightStore.each(function (record) {
+                if (record.get('Id') == value.Id || record.get('Name') == value.Name)
+                    ok = true;
+            });
 
-        window.feature.wizardOutpostManagementContainer  = Ext.create('Ext.container.Container', {
-            id: window.feature.wizardOutpostManagement,
-            flex: 1,
-            margin: '20 0 0 20',
-            layout: {
-                type: 'hbox',
-                align: 'stretch'
-            },
-            items: [{
-                xtype: 'container',
-                flex: 2,
-                layout: {
-                    type: 'vbox',
-                    align: 'stretch'
-                },
-                items: [{
-                    xtype: 'gridpanel',
-                    id: window.feature.gridOutpostLeft,
-                    store: window.feature.outpostStore,
-                    margin: '0 0 10 0',
-                    selModel: selModelOutpostLeft,
-                    columnLines: true,
-                    loadMask: true,
-                    flex:3,
-                    autoScroll:true,
-                    columns: [{
-                        text: "Name",
-                        dataIndex: 'Name',
-                        flex: 1,
-                        sortable: true
-                    }]
-                }]
-            },{
-                xtype: 'container',
-                flex: 1,
-                layout: {
-                    type: 'vbox',
-                    align: 'center'
-                },
+            return ok;
+        }
 
-                items: [{
-                    xtype: 'container',
-                    flex: 1,
-                    layout: {
-                        type: 'vbox',
-                        pack: 'center',
-                    },
-                    items: [{
-                        xtype: 'button',
-                        margin: '0 0 5 0',
-                        width: 80,
-                        text: 'Add',
-                        handler: function () {
-                            var gridRight = Ext.getCmp(window.feature.gridOutpostRight);
-                            var gridLeft = Ext.getCmp(window.feature.gridOutpostLeft);
+        function LoadLeftGrid(option, ids){
+            if (ids != ''){
+                window.feature.leftGridStore.proxy.extraParams.idList = ids;
+            }
+            window.feature.leftGridStore.proxy.extraParams.options = option;
+            window.feature.leftGridStore.load();
+        };
 
-	                        Ext.each(gridLeft.getSelectionModel().getSelection(), function(row, index, value) {
-                                var newValue = {
-                                    Id: row.get('Id'), 
-                                    Name: row.get('Name')
-                                };
-                                outpostRightStore.insert(0, newValue);
-	                        });
-                        }
-                    },{
-                        xtype: 'button',
-                        width: 80,
-                        text: 'Remove',
-                        handler: function () {
-                            var gridRight = Ext.getCmp(window.feature.gridOutpostRight);
-                            var selection = gridRight.getSelectionModel().getSelection();
+        function SetLabelText(textMessage){
+            Ext.getCmp(window.feature.leftGridTopLabel).setText(textMessage);
+            Ext.getCmp(window.feature.rightGridTopLabel).setText('Selected ' +textMessage);
+        };
 
-                            for (var i = 0; i < selection.length; i++) {
-                                outpostRightStore.remove(selection[i]);
-                            }
-                        }
-                    }]
+        function GetRightGridStoreIds(){
+            var ids = '';
+            var gridRightStore = Ext.getCmp(window.feature.rightGrid).getStore();
+            gridRightStore.each(function (record) {
+                ids = ids + record.get('Id') + ',';
+            });
+            return ids;
+        };
+        function ClearFields(){
+            Ext.getCmp(window.feature.formCampaignNameId).setValue(''); 
+            Ext.getCmp(window.feature.formCampaignStartDateId).setValue(''); 
+            Ext.getCmp(window.feature.formCampaignEndDateId).setValue('');
+        };
 
-                }]
-            },{
-                xtype: 'container',
-                flex: 2,
-                layout: {
-                    type: 'vbox',
-                    align: 'stretch'
-                },
-                items: [{
-                    xtype: 'gridpanel',
-                    id: window.feature.gridOutpostRight,
-                    store: outpostRightStore,
-                    margin: '0 40 10 0',
-                    selModel: selModelOutpostRight,
-                    columnLines: true,
-                    loadMask: true,
-                    flex:3,
-                    autoScroll:true,
-                    columns: [{
-                        text: "Name",
-                        dataIndex: 'Name',
-                        flex: 1,
-                        sortable: true
-                    }]
-                }]
-            }]
-        });
+        function SetCampaignValues(rec){
+            Ext.getCmp(window.feature.formCampaignNameId).setValue(rec.get('Name'));
+            Ext.getCmp(window.feature.formCampaignStartDateId).setValue(rec.get('StartDate'));
+            Ext.getCmp(window.feature.formCampaignEndDateId).setValue(rec.get('EndDate'));
 
-        //end
+            campaign.Id = rec.get('Id');
+            campaign.countriesEdit = rec.get('CountriesIds');
+            campaign.regionsEdit = rec.get('RegionsIds');
+            campaign.districtsEdit = rec.get('DistrictsIds');
+            campaign.outpostsEdit = rec.get('OutpostsIds');
+        };
+
+        function LoadRightGrid(option, ids){
+            window.feature.rightGridStore.proxy.extraParams.options = option;
+            window.feature.rightGridStore.proxy.extraParams.idList = ids;
+            window.feature.rightGridStore.load();
+        };
+
+        function GetCampainsFirstPageInfos(name, startDate, endDate){
+            campaign.Name = name.getValue(); 
+            campaign.StartDate = Ext.util.Format.date(startDate.getValue()); 
+            campaign.EndDate = Ext.util.Format.date(endDate.getValue()); 
+        };
+
+        function IsValid(name, startDate, endDate){
+            var ok = true;
+            if (name.getValue() == ''){
+                name.markInvalid('Field Name is required!');  
+                name.setValue(null);
+                ok = false;
+            }
+
+            if (startDate.getValue() == null){
+                startDate.markInvalid('Field Start Date is required!');  
+                startDate.setValue(null);
+                ok = false;
+            }
+
+            if (endDate.getValue() == ''){
+                endDate.markInvalid('Field End Date is required!');  
+                endDate.setValue(null);
+                ok = false;
+            }
+            return ok;
+        };
+
+        function IsValid(name, startDate, endDate){
+            var ok = true;
+            if (name.getValue() == ''){
+                name.markInvalid('Field Name is required!');  
+                name.setValue(null);
+                ok = false;
+            }
+
+            if (startDate.getValue() == null){
+                startDate.markInvalid('Field Start Date is required!');  
+                startDate.setValue(null);
+                ok = false;
+            }
+
+            if (endDate.getValue() == null){
+                endDate.markInvalid('Field End Date is required!');  
+                endDate.setValue(null);
+                ok = false;
+            }
+            return ok;
+        }
 
         var contentRes = window.res.content;
         var mainContent = Ext.getCmp(contentRes.maincontent.id);
 
         mainContent.add(window.feature.container);
         window.feature.campaignStore.loadPage(1); 
-
 
     });
 </script>

@@ -95,8 +95,13 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Unit\Controllers\AccountControllerTest.cs" />
-    <Compile Include="Unit\Controllers\Areas\CampaignManagement\CreateMethod.cs" />
-    <Compile Include="Unit\Controllers\Areas\CampaignManagement\ObjectMother.cs" />
+    <Compile Include="Unit\Controllers\Areas\CampaignManagement\CampaignController_Tests\CloneMethod.cs" />
+    <Compile Include="Unit\Controllers\Areas\CampaignManagement\CampaignController_Tests\CreateMethod.cs" />
+    <Compile Include="Unit\Controllers\Areas\CampaignManagement\CampaignController_Tests\EditMethos.cs" />
+    <Compile Include="Unit\Controllers\Areas\CampaignManagement\CampaignController_Tests\GetCampaignsMethod.cs" />
+    <Compile Include="Unit\Controllers\Areas\CampaignManagement\CampaignController_Tests\GetLeftGridStoreMethod.cs" />
+    <Compile Include="Unit\Controllers\Areas\CampaignManagement\CampaignController_Tests\GetRightGridStoreMethod.cs" />
+    <Compile Include="Unit\Controllers\Areas\CampaignManagement\CampaignController_Tests\ObjectMother.cs" />
     <Compile Include="Unit\Controllers\Areas\OutpostManagement\AssignProductGroupController_Tests\GetOutpostStockLevels_Method.cs" />
     <Compile Include="Unit\Controllers\Areas\OutpostManagement\AssignProductGroupController_Tests\GetProducts_Method.cs" />
     <Compile Include="Unit\Controllers\Areas\OutpostManagement\AssignProductGroupController_Tests\ModifyProductAssignments_Method.cs" />

@@ -375,6 +375,7 @@
     <Content Include="Assets\css\global-values.css" />
     <Content Include="Assets\resources\img\arrow.gif" />
     <Content Include="Assets\css\snapshot-theme.css" />
+    <Content Include="Assets\img\arrow.gif" />
     <Content Include="Assets\resources\img\briefcase.png" />
     <Content Include="Assets\resources\img\checked.gif" />
     <Content Include="Assets\resources\img\delete.png" />
@@ -2083,7 +2084,6 @@
   <ItemGroup>
     <Content Include="Views\SmsRequest\Create.cshtml" />
     <Content Include="Views\SmsRequest\Overview.cshtml" />
-    <Content Include="Areas\CampaignManagement\Views\Campaign\CampaignContainer.cshtml" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\mixins\_theme-background-image.scss" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\util\_dragdrop.scss" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\util\_focus.scss" />

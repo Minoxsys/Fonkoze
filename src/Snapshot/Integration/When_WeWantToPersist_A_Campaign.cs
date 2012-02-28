@@ -22,7 +22,7 @@ namespace IntegrationTests
         public void It_Should_Successfully_Persist_A_Campaign()
         {
             var s = Convert.ToBase64String(Encoding.UTF8.GetBytes("ana are mere"));
-             byte[] OPTIONS = Convert.FromBase64String(s);
+            byte[] OPTIONS = Convert.FromBase64String(s);
 
             var campaign = Specs.CheckProperty(e => e.Name, CAMPAIGN_NAME)
                 .CheckReference(c => c.Client, CLIENT)
