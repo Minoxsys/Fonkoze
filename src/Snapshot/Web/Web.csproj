@@ -149,6 +149,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Areas\CampaignManagement\Controllers\ProductLevelRequestController.cs" />
+    <Compile Include="Areas\CampaignManagement\Models\ProductLevelRequest\CreateProductLevelRequestInput.cs" />
+    <Compile Include="Areas\CampaignManagement\Models\ProductLevelRequest\GetProductsInput.cs" />
+    <Compile Include="Areas\CampaignManagement\Models\ProductLevelRequest\ProductModel.cs" />
     <Compile Include="Areas\CampaignManagement\Models\ProductLevelRequest\RequestReminderModel.cs" />
     <Compile Include="Areas\CampaignManagement\Models\ProductLevelRequest\ScheduleModel.cs" />
     <Compile Include="Areas\AnalysisManagement\AnalysisManagementAreaRegistration.cs" />

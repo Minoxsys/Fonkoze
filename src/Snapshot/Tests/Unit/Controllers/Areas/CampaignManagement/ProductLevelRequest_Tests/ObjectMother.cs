@@ -8,6 +8,7 @@ using Domain;
 using Autofac;
 using MvcContrib.TestHelper.Fakes;
 using System.Collections.Generic;
+using Web.Areas.CampaignManagement.Models.ProductLevelRequest;
 
 namespace Tests.Unit.Controllers.Areas.CampaignManagement.ProductLevelRequest_Tests
 {
@@ -127,6 +128,50 @@ namespace Tests.Unit.Controllers.Areas.CampaignManagement.ProductLevelRequest_Te
             reminder.SetupGet(x => x.ByUser).Returns(userMock.Object);
 
             return new List<RequestReminder>{ reminder.Object};
+        }
+
+        private Guid productGroupId = Guid.NewGuid();
+
+        internal GetProductsInput ProductsInput()
+        {
+
+            var productsService = Mock.Get(controller.QueryProducts);
+            productsService.Setup(c => c.Query()).Returns(ListOfProducts());
+            return new GetProductsInput
+            {
+                ProductGroupId = productGroupId
+            };
+        }
+
+        private  IQueryable<Product> ListOfProducts()
+        {
+            var products = new List<Product>();
+            var productGroup = new Mock<ProductGroup>();
+            productGroup.SetupGet(p => p.Id).Returns(productGroupId);
+            productGroup.SetupGet(p => p.Name).Returns("Product Group");
+
+            products.Add(MakeProduct(0, productGroup.Object));
+
+            return products.AsQueryable();
+        }
+
+        private Product MakeProduct(int idx, ProductGroup productGroup)
+        {
+            var product = new Mock<Product>();
+            product.SetupGet(c => c.Id).Returns(Guid.NewGuid());
+            product.SetupGet(c => c.Name).Returns("Product_" + idx);
+            product.SetupGet(c => c.SMSReferenceCode).Returns(Char.ConvertFromUtf32(idx));
+            product.SetupGet(c => c.Client).Returns(clientMock.Object);
+            product.SetupGet(c => c.ByUser).Returns(userMock.Object);
+            product.SetupGet(c => c.ProductGroup).Returns(productGroup);
+
+            return product.Object;
+        }
+
+        internal void VerifyProductsQueried()
+        {
+            var productsService = Mock.Get(controller.QueryProducts);
+            productsService.Verify(call => call.Query());
         }
     }
 }

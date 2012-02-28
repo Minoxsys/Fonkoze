@@ -19,6 +19,8 @@ namespace Web.Areas.CampaignManagement.Controllers
 
         public IQueryService<Schedule> QueryServiceSchedule { get; set; }
 
+        public IQueryService<Product> QueryProducts { get; set; }
+
         public ActionResult Overview()
         {
             return View();
@@ -34,17 +36,48 @@ namespace Web.Areas.CampaignManagement.Controllers
                 new ScheduleModel
                 {
                     Basis = schedule.ScheduleBasis,
-                    Frequency = schedule.FrequencyType??string.Empty,
+                    Frequency = schedule.FrequencyType?? "-",
                     ScheduleName = schedule.Name,
                     Id = schedule.Id.ToString(),
                     Reminders = schedule.Reminders.Select(reminder => new RequestReminderModel
                     {
                         PeriodType = reminder.PeriodType,
                         PeriodValue = reminder.PeriodValue
-                    }).ToArray()
+                    }).ToArray(),
+                    Selected = false
                 }).ToArray();
 
             return Json(schedules, JsonRequestBehavior.AllowGet);
+        }
+
+
+        public JsonResult GetProducts(GetProductsInput input)
+        {
+            LoadUserAndClient();
+            if (input.ProductGroupId.HasValue == false)
+            {
+                throw new ArgumentNullException("No product group id specified");
+            }
+
+            var productsDataQry = QueryProducts.Query().Where(p => p.Client == _client && p.ProductGroup.Id == input.ProductGroupId.Value).ToList();
+
+            var products = productsDataQry.Select(product =>
+                new ProductModel
+                {
+                    Id = product.Id.ToString(),
+                    ProductItem = product.Name,
+                    SmsCode = product.SMSReferenceCode,
+                    Selected = false // todo define selection rule
+
+                }).ToArray();
+
+            
+            return Json(products, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult Create(CreateProductLevelRequestInput createProductLevelRequestInput)
+        {
+            throw new NotImplementedException();
         }
 
         private void LoadUserAndClient()
@@ -61,6 +94,7 @@ namespace Web.Areas.CampaignManagement.Controllers
 
             this._client = LoadClient.Load(clientId);
         }
+
 
 
     }

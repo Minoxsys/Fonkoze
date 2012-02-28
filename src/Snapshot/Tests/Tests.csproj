@@ -96,6 +96,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Unit\Controllers\AccountControllerTest.cs" />
     <Compile Include="Unit\Controllers\AlertsController_Tests\GetAlertsMethod.cs" />
+    <Compile Include="Unit\Controllers\Areas\CampaignManagement\ProductLevelRequest_Tests\CreateMethod.cs" />
+    <Compile Include="Unit\Controllers\Areas\CampaignManagement\ProductLevelRequest_Tests\GetProductsMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\CampaignManagement\ProductLevelRequest_Tests\GetSchedulesMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\CampaignManagement\ProductLevelRequest_Tests\ObjectMother.cs" />
     <Compile Include="Unit\Controllers\AlertsController_Tests\ObjectMother.cs" />
