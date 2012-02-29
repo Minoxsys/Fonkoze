@@ -1,54 +1,17 @@
-@import 'color-scheme.scss';
-@import 'general-css.scss';
 // Unless you want to include all components, you must set $include-default to false
 // IF you set this to true, you can also remove lines 10 to 38 of this file
+
 $include-default: true;
 
-// Insert your custom variables here.
-$base-color: #fefefe; 
-
-// ============================
-// BUTONS
-// ============================
-$my-button-base-color: #5095cd;
-//base colors for the default button
-$button-default-base-color:#63aef2;
-$button-default-base-color-over: adjust-color($my-button-base-color, $hue: -6.667deg, $saturation: 44.444%, $lightness: 10.588%) !default; //E4F3FF
-$button-default-base-color-focus: $button-default-base-color-over !default;
-$button-default-base-color-pressed: adjust-color($my-button-base-color, $hue: -0.725deg, $saturation: -9.556%, $lightness: -3.725%) !default; //B6CBE4
-$button-default-base-color-disabled: adjust-color($my-button-base-color, $hue: 0deg, $saturation: -55.556%, $lightness: 12.745%) !default; //F7F7F7
-
-$button-default-color: #fff !default;
-
-// =============================
-// GRID
-// =============================
-$grid-base-color: #aa5858 !default;
-$grid-header-over-border-color: #cd7a7a !default;
-
-
-$grid-header-over-border-color: #aa5858 !default;
-$grid-header-over-background-color: #aa5858 !default;
-
-$grid-header-background-color: $grid-base-color;
-$grid-header-color: #fff !default;
-
-$grid-header-background-gradient: 'panel-header' !default;
-/// =====================
-/// PANEL
-/// =====================
-$panel-header-background-color: adjust-color(#aa5858, $hue: 0deg, $saturation: 6.402%, $lightness: -4.51%) !default;
-$panel-header-color: #fff; 
-
-$accordion-header-background-color: #aa5858 !default;
-$accordion-header-color: #fff !default;
-
-
+@import 'color-scheme.scss';
+@import 'general-css.scss';
+@import 'global-values.scss';
 @import 'compass';
 @import 'ext4/snapshot/all';
+@import "compass/css3/gradient";
 
 @include extjs-button-ui(
-    'snapshot-button-small',
+    'snapshot-add-btn-small',
 
     $border-radius: 3px,
     $border-width: 1px,
@@ -59,41 +22,201 @@ $accordion-header-color: #fff !default;
     $border-color-pressed: $add-button-border-color,
     $border-color-disabled: $add-button-border-color,
 
-	$background-gradient: (#207cca 0%,#4e92c9 0%,#95caf9 1%,#64b0f4 3%,#4e92c9 100%),
-    $background-gradient-over: (#207cca 0%,#4e92c9 0%,#95caf9 1%,#64b0f4 3%,#4e92c9 100%),
-    $background-gradient-focus: (#207cca 0%,#4e92c9 0%,#95caf9 1%,#64b0f4 3%,#4e92c9 100%),
-    $background-gradient-pressed: (#207cca 0%,#4e92c9 0%,#95caf9 1%,#64b0f4 3%,#4e92c9 100%),
-    $background-gradient-disabled: (#207cca 0%,#4e92c9 0%,#95caf9 1%,#64b0f4 3%,#4e92c9 100%),
-
-    $color: $add-button-color,
-    $color-over: $add-button-color,
-    $color-focus: $add-button-color,
-    $color-pressed: $add-button-color,
-    $color-disabled: $add-button-color,
-
-	$padding: 4px 9px,
+    $padding: 4px 9px,
     $text-padding: 0px,
 
-    $font-size: $button_font_size,
-    $font-size-over: $button_font_size,
-    $font-size-focus: $button_font_size,
-    $font-size-pressed: $button_font_size,
-    $font-size-disabled: $button_font_size,
+    $background-color: #ffff00,
+    $background-color-over:  #ffff00,
+    $background-color-focus:  #ffff00,
+    $background-color-pressed:  #ffff00,
+    $background-color-disabled:  #ffff00,
 
-    $font-weight: $button_font_weight,
-    $font-weight-over: $button_font_weight,
-    $font-weight-focus: $button_font_weight,
-    $font-weight-pressed: $button_font_weight,
-    $font-weight-disabled: $button_font_weight,
+    $background-gradient: color_stops(#207cca 0%,#4e92c9 0%,#95caf9 1%,#64b0f4 3%,#4e92c9 100%),
+    $background-gradient-over: color_stops(#207cca 0%,#4e92c9 0%,#95caf9 1%,#64b0f4 3%,#4e92c9 100%),
+    $background-gradient-focus: color_stops(#207cca 0%,#4e92c9 0%,#95caf9 1%,#64b0f4 3%,#4e92c9 100%), //like $background-gradient
+    $background-gradient-pressed: color_stops(#207cca 0%,#4e92c9 0%,#95caf9 1%,#64b0f4 3%,#4e92c9 100%),
+    $background-gradient-disabled: color_stops(#207cca 0%,#4e92c9 0%,#95caf9 1%,#64b0f4 3%,#4e92c9 100%),
+
+    $color: $default-button-color,
+    $color-over: $default-button-color,
+    $color-focus: $default-button-color,
+    $color-pressed: $default-button-color,
+    $color-disabled: $default-button-color,
+
+    $font-size: $font_size-normal,
+    $font-size-over: $font_size-normal,
+    $font-size-focus: $font_size-normal,
+    $font-size-pressed: $font_size-normal,
+    $font-size-disabled: $font_size-normal,
+
+    $font-weight: $font_weight-normal,
+    $font-weight-over: $font_weight-normal,
+    $font-weight-focus: $font_weight-normal,
+    $font-weight-pressed: $font_weight-normal,
+    $font-weight-disabled: $font_weight-normal,
+
+    $font-family: $global2-font-family,
+    $font-family-over: $global2-font-family,
+    $font-family-focus: $global2-font-family,
+    $font-family-pressed: $global2-font-family,
+    $font-family-disabled: $global2-font-family
+);
+
+@include extjs-button-ui(
+    'snapshot-navigation-btn-small',
+
+    $border-radius: 0,
+    $border-width: 0 1px,
+
+    $border-color: transparent,
+    $border-color-over: $navigation-btn-border-color,
+    $border-color-focus: $navigation-btn-border-color,
+    $border-color-pressed:$navigation-btn-border-color,
+    $border-color-disabled: $navigation-btn-border-color,
+
+    $padding: 0,
+    $text-padding: 0px,
+
+    $background-color:transparent,
+    $background-color-over:  #ffff00,
+    $background-color-focus:  #ffff00,
+    $background-color-pressed:  #ffff00,
+    $background-color-disabled:  transparent,
+
+    $background-gradient: transparent,
+    $background-gradient-over: color_stops(#415b71 0%,#3d5468 100%),
+    $background-gradient-focus: color_stops(#415b71 0%,#3d5468 100%), //like $background-gradient
+    $background-gradient-pressed: color_stops(#415b71 0%,#3d5468 100%),
+    $background-gradient-disabled: transparent,
+
+    $color: $default-button-color,
+    $color-over: $default-button-color,
+    $color-focus: $default-button-color,
+    $color-pressed: $default-button-color,
+    $color-disabled: $default-button-color,
+
+    $font-size: $font_size-larger,
+    $font-size-over: $font_size-larger,
+    $font-size-focus: $font_size-larger,
+    $font-size-pressed: $font_size-larger,
+    $font-size-disabled: $font_size-larger,
+
+    $font-weight: $font_weight-bold,
+    $font-weight-over: $font_weight-bold,
+    $font-weight-focus: $font_weight-bold,
+    $font-weight-pressed: $font_weight-bold,
+    $font-weight-disabled: $font_weight-bold,
 
     $font-family: $global-font-family,
     $font-family-over: $global-font-family,
     $font-family-focus: $global-font-family,
     $font-family-pressed: $global-font-family,
     $font-family-disabled: $global-font-family
-
 );
 
+@include extjs-button-ui(
+    'snapshot-sidebar-btn-small',
+
+    $border-radius: 3px,
+    $border-width: 1px 1px 1px 1px,
+
+    $border-color:#b8b9b9 #b8b9b9 #b8b9b9 transparent,
+    $border-color-over: #b8b9b9 #b8b9b9 #b8b9b9 transparent,
+    $border-color-focus: #b8b9b9 #b8b9b9 #b8b9b9 transparent,
+    $border-color-pressed: #b8b9b9 #b8b9b9 #b8b9b9 transparent,
+    $border-color-disabled: #b8b9b9 #b8b9b9 #b8b9b9 transparent,
+
+    $padding: 0,
+    $text-padding: 0px,
+
+    $background-color: transparent,
+    $background-color-over: transparent,
+    $background-color-focus:  transparent,
+    $background-color-pressed:  #fff,
+    $background-color-disabled:  transparent,
+
+    $background-gradient: color_stops(#f4f4f4 0%, #ececec 100%),
+    $background-gradient-over: color_stops(#f4f4f4 0%, #ececec 100%),
+    $background-gradient-focus: color_stops(#f4f4f4 0%, #ececec 100%),
+    $background-gradient-pressed: transparent,
+    $background-gradient-disabled: color_stops(#f4f4f4 0%, #ececec 100%),
+
+    $color: $bluish-font-color,
+    $color-over: $bluish-font-color,
+    $color-focus: $bluish-font-color,
+    $color-pressed: $black-font-color,
+    $color-disabled: $bluish-font-color,
+
+    $font-size: $font_size-normal,
+    $font-size-over: $font_size-normal,
+    $font-size-focus: $font_size-normal,
+    $font-size-pressed: $font_size-normal,
+    $font-size-disabled: $font_size-normal,
+
+    $font-weight: $font_weight-normal,
+    $font-weight-over: $font_weight-normal,
+    $font-weight-focus: $font_weight-normal,
+    $font-weight-pressed: $font_weight-normal,
+    $font-weight-disabled: $font_weight-normal,
+
+    $font-family: $global2-font-family,
+    $font-family-over: $global2-font-family,
+    $font-family-focus: $global2-font-family,
+    $font-family-pressed: $global2-font-family,
+    $font-family-disabled: $global2-font-family
+);
+
+@include extjs-button-ui(
+    'snapshot-submenu-btn-small',
+
+    $border-radius: 3px 3px 0 0,
+    $border-width: 1px 1px 1px 1px,
+
+    $border-color: #b8bcc0 #b8bcc0 #b8bcc0 #b8bcc0 ,
+    $border-color-over: #b8bcc0 #b8bcc0 #b8bcc0 #b8bcc0,
+    $border-color-focus: #b8bcc0 #b8bcc0 #b8bcc0 #b8bcc0,
+    $border-color-pressed: #b8bcc0 #b8bcc0 transparent #b8bcc0,
+    $border-color-disabled: #b8bcc0 #b8bcc0 #b8bcc0 #b8bcc0,
+
+    $padding: 0,
+    $text-padding: 0px,
+
+    $background-color: transparent,
+    $background-color-over: transparent,
+    $background-color-focus:  transparent,
+    $background-color-pressed:  #fff,
+    $background-color-disabled:  transparent,
+
+    $background-gradient: color_stops(#f4f4f4 0%, #ececec 100%),
+    $background-gradient-over: color_stops(#f4f4f4 0%, #ececec 100%),
+    $background-gradient-focus: color_stops(#f4f4f4 0%, #ececec 100%),
+    $background-gradient-pressed: transparent,
+    $background-gradient-disabled: color_stops(#f4f4f4 0%, #ececec 100%),
+
+    $color: $bluish-font-color,
+    $color-over: $bluish-font-color,
+    $color-focus: $bluish-font-color,
+    $color-pressed: $black-font-color,
+    $color-disabled: $bluish-font-color,
+
+    $font-size: $font_size-normal,
+    $font-size-over: $font_size-normal,
+    $font-size-focus: $font_size-normal,
+    $font-size-pressed: $font_size-normal,
+    $font-size-disabled: $font_size-normal,
+
+    $font-weight: $font_weight-normal,
+    $font-weight-over: $font_weight-normal,
+    $font-weight-focus: $font_weight-normal,
+    $font-weight-pressed: $font_weight-normal,
+    $font-weight-disabled: $font_weight-normal,
+
+    $font-family: $global2-font-family,
+    $font-family-over: $global2-font-family,
+    $font-family-focus: $global2-font-family,
+    $font-family-pressed: $global2-font-family,
+    $font-family-disabled: $global2-font-family
+);
 
 // This line changes the location of your images when creating UIs to be relative instead of within the ExtJS directory.
 // You MUST set this to true/string value if you are creating new UIs + supporting legacy browsers.

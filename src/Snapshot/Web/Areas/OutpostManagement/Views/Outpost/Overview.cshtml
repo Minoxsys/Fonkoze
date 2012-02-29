@@ -526,6 +526,8 @@
 													xtype:'button',
 													margin:'20 0 0 0',
 													text:'FIND ON MAP',
+						                                                        ui: 'snapshot-add-btn',
+                                                                                                        cls: 'x-add-button-gradient',
 													handler: function() {
 														var coordinatesTextField = me.down('#' + window.feature.modalIds.coordinatesId);
 														var outpostNameTextField = me.down('#' + window.feature.modalIds.nameId);
@@ -619,6 +621,8 @@
 								{
 									xtype:'button',
 									text: 'ADD NEW CONTACT METHOD',
+                                    ui: 'snapshot-button',
+                                    cls: 'x-add-button-gradient',
 									margin:'20 10 0 10',
 									handler: function(){
 										window.feature.rowEditor.cancelEdit();
@@ -649,7 +653,7 @@
 		});
 	
 		window.feature.container = Ext.create('Ext.container.Container', {
-			margin:'20 50 20 0',
+			margin:'45 50 20 0',
 			autoScroll:true,
 			id:'TopContainer',
 			layout: {

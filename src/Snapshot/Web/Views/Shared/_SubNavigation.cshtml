@@ -18,7 +18,7 @@
                 id: subNavRes.buttonTabs.id,
                 margin: 0,
                 padding: 0,
-                width: 500,
+                width: 800,
                 layout: {
                     align: 'stretch',
                     padding: 0,
@@ -47,7 +47,10 @@
                                 toggleGroup: subNavRes.buttonTabs.group,
                                 enableToggle: true,
                                 pressed: true,
+                                height: 38,
+                                margin: '10 7 0 150',
                                 text: 'Location Administration',
+                                ui: 'snapshot-submenu-btn',
                                 handler:function(){
                                     navigateTo(res.link.administration); 
                                 }
@@ -56,7 +59,10 @@
                                 id: subNavRes.buttonTabs.product,
                                 toggleGroup: subNavRes.buttonTabs.group,
                                 enableToggle: true,
+                                height: 38,
+                                margin: '10 7 0 0',
                                 text: 'Product Administration',
+                                ui: 'snapshot-submenu-btn',
                                 handler:function(){
                                     navigateTo(res.link.productGroup); 
                                 }
@@ -66,7 +72,10 @@
                                 id: subNavRes.buttonTabs.user,
                                 toggleGroup: subNavRes.buttonTabs.group,
                                 enableToggle: true,
+                                height: 38,
+                                margin: '10 7 0 0',
                                 text: 'User Administration',
+                                ui: 'snapshot-submenu-btn',
                                 handler:function(){
                                     navigateTo(res.link.clientsOverview); 
                                 }
@@ -75,7 +84,10 @@
                                 id: subNavRes.buttonTabs.campaign,
                                 toggleGroup: subNavRes.buttonTabs.group,
                                 enableToggle: true,
+                                height: 38,
+                                margin: '10 7 0 0',
                                 text: 'Campaign Administration',
+                                ui: 'snapshot-submenu-btn',
                                 handler:function(){
                                     navigateTo(res.link.campaignOverview); 
                                 }
@@ -112,8 +124,9 @@
                                     {
                                         xtype: 'label',
                                         style:'text-align:right;',  
-                                        margin: '10, 20, 10, 0',
-                                        text: 'Anothony Wolf (UNICEF)' 
+                                        margin: '25, 20, 7, 0',
+                                        text: 'Anothony Wolf (UNICEF)',
+                                        cls: 'x-username-label' 
                                     },{
                                         xtype: 'container',
                                         style:'text-align:right;', 
@@ -121,15 +134,18 @@
                                             {
                                                 xtype: 'label', 
                                                 margin: '0, 20, 0, 0',
+                                                cls: 'x-userMenu-label',
                                                 text: 'Help'
                                             },{
                                                 xtype: 'label', 
                                                 margin: '0, 20, 0, 0',
-                                                text: 'Account Options' 
+                                                cls: 'x-userMenu-label',
+                                                text: ' · Account Options ·' 
                                             },{
                                                 xtype: 'label', 
                                                 text: 'Log Out (L)',
                                                 margin: '0, 20, 0, 0',
+                                                cls: 'x-userMenu-label',
                                                 autoEl: {tag: 'a', href: '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "Account", action = "LogOff" })'}
                                             }
                                         ]
@@ -138,7 +154,8 @@
                             },{
                                 xtype: 'container',
                                 itemId: 'userPhoto',
-                                width: 80,
+                                margin: '14, 0, 0, 0',
+                                width: 161,
                                 items: [
                                     { 
                                         xtype: 'image',

@@ -132,7 +132,7 @@ Outpost Management Regions: Overview
         });
 
         window.feature.container = Ext.create('Ext.container.Container', {
-            margin:'20 50 20 0',
+            margin:'45 50 20 0',
             autoScroll:true,
             id:'TopContainer',
             layout: {
@@ -166,7 +166,7 @@ Outpost Management Regions: Overview
                             xtype: 'button',
                             margin: '0 0 0 20',
                             text: 'Add New Region',
-                            ui: 'snapshot-button',
+                            ui: 'snapshot-add-btn',
                             cls: 'x-add-button-gradient',
                             handler: function(){
                                 var winAdd = new window.feature.modal({

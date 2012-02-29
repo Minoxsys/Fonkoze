@@ -168,7 +168,7 @@ User Administration Users: Overview
         });
 
         window.feature.container = Ext.create('Ext.container.Container', {
-            margin: '20 50 20 0',
+            margin: '45 50 20 0',
             autoScroll: true,
             id: 'TopContainer',
             layout: {
@@ -200,6 +200,8 @@ User Administration Users: Overview
                         xtype: 'button',
                         margin: '0 0 0 20',
                         text: 'Add New User',
+                        ui: 'snapshot-add-btn',
+                        cls: 'x-add-button-gradient',
                         handler: function(){
                             var winAdd = new window.feature.modal({
                                 title: 'Add New User',

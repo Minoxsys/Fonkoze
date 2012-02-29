@@ -40,7 +40,7 @@
                     {
                         xtype: 'container',
                         id: 'SideBar',
-                        width: 210,
+                        width: 310,
                         layout: {
                             align: 'stretch',
                             type: 'vbox'
@@ -50,8 +50,11 @@
                                 xtype: 'button',
                                 id: contentRes.maincontent.sidebar.country,
                                 toggleGroup: contentRes.maincontent.sidebar.group,
-                                enableToggle: true,                               
+                                enableToggle: true,
                                 text: 'Country',
+                                height: 30,
+                                margin: '45 100 0 0',
+                                ui: 'snapshot-sidebar-btn',
                                 handler: function () {
                                     navigateTo(window.res.link.country);
                                 }
@@ -61,6 +64,9 @@
                                 id: contentRes.maincontent.sidebar.region,
                                 toggleGroup: contentRes.maincontent.sidebar.group,
                                 text: 'Region',
+                                height: 30,
+                                margin: '0 100 0 0',
+                                ui: 'snapshot-sidebar-btn',
                                 handler: function () {
                                     navigateTo(window.res.link.regionOverview);
                                 },
@@ -71,7 +77,10 @@
                                 id: window.res.content.maincontent.sidebar.district,
                                 toggleGroup: contentRes.maincontent.sidebar.group,
                                 enableToggle: true,
+                                height: 30,
+                                margin: '0 100 0 0',
                                 text: 'District',
+                                ui: 'snapshot-sidebar-btn',
                                 handler: function () {
                                     navigateTo(window.res.link.district);
                                 }
@@ -81,7 +90,10 @@
                                 id: contentRes.maincontent.sidebar.outpost,
                                 toggleGroup: contentRes.maincontent.sidebar.group,
                                 enableToggle: true,
+                                height: 30,
                                 text: 'Outpost',
+                                margin: '0 100 0 0',
+                                ui: 'snapshot-sidebar-btn',
                                 handler: function () {
                                     navigateTo(window.res.link.outpost);
                                 }

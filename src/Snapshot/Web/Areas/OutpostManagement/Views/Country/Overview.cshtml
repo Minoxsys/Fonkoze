@@ -257,7 +257,8 @@
             xtype: 'container',
             id:'TopContainer',
             autoScroll:true,
-            margin:'20 50 20 0',
+            margin:'45 50 20 150',
+            padding:'20 0 0 0',
             layout: {
                 align: 'stretch',
                 type: 'vbox'
@@ -277,11 +278,12 @@
                             html:'&nbsp;'
                         },{
                             xtype: 'label',
+                            cls: 'x-title-label',
                             text: 'Country Administration'
                         },{
                             xtype: 'button',
                             margin: '0 0 0 20',
-                            ui: 'snapshot-button',
+                            ui: 'snapshot-add-btn',
                             cls: 'x-add-button-gradient',
                             text: 'Add New Country',
                             handler:function(){
@@ -294,7 +296,7 @@
                 window.feature.grid,
                 {
                     xtype:'container',
-                    height:150
+                    height: 150
                 },
             ]
         });

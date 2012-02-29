@@ -2026,7 +2026,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="config\cachingConfiguration.config" />
-    <Content Include="config\css.config" />
+    <Content Include="config\css.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="config\scripts.config" />
   </ItemGroup>
   <ItemGroup>
@@ -2335,6 +2337,7 @@
     <None Include="Assets\resources\themes\templates\resources\sass\my-ext-theme.scss" />
     <None Include="Assets\sass\button-template.scss" />
     <None Include="Assets\sass\color-scheme.scss" />
+    <None Include="Assets\sass\grid-template.scss" />
     <None Include="Assets\sass\general-css.scss" />
     <None Include="Assets\sass\global-values.scss" />
     <None Include="Assets\sass\snapshot-theme.scss" />

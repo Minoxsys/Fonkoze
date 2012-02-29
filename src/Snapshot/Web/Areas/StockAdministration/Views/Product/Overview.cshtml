@@ -231,6 +231,8 @@
                                 },{
                                     xtype: 'button',
                                     text: 'Add a New Group',
+                                    ui: 'snapshot-add-btn',
+                                    cls: 'x-add-button-gradient',
                                     width: 160,
                                     height: 24,
                                     margin: '0 0 0 70',
@@ -541,7 +543,7 @@
         var mainContent = Ext.getCmp(contentRes.maincontent.id);
         mainContent.add({
             xtype: 'container',
-            margin:'20 50 20 0',
+            margin:'45 50 20 0',
             autoScroll:true,
             id:'TopContainer',
             layout: {
@@ -582,6 +584,8 @@
                                         },{
                                             xtype: 'button',
                                             margin: '0 0 0 20',
+                                            ui: 'snapshot-add-btn',
+                                            cls: 'x-add-button-gradient',
                                             text: 'Add New Product',
                                             handler: function () {
                                                 var productModal = new window.feature.modal({

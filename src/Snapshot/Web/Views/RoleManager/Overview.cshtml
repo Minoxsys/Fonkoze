@@ -201,6 +201,8 @@ User Administration Roles: Overview
                             {
                                 xtype: 'button',
                                 text: 'Add New Role',
+                                ui: 'snapshot-add-btn',
+                                cls: 'x-add-button-gradient',
                                 margin: '0 0 0 20',
                                 handler: function () {
                                     window.feature.role = null;
@@ -305,7 +307,7 @@ User Administration Roles: Overview
         });
 
         window.feature.container = Ext.create('Ext.container.Container', {
-            margin: '20 50 20 0',
+            margin: '45 50 20 0',
             height: 760,
             autoScroll: true,
             id: 'TopContainer',

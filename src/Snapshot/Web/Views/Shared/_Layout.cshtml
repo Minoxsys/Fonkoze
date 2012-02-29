@@ -75,8 +75,8 @@
         var viewport = Ext.create('Ext.container.Viewport', {
             id: res.viewport,
             renderTo:Ext.getBody(),
-
-                padding: '0 120 0 170',
+                margin: '0 auto',
+                padding: '0',
             layout: {
                 type: 'fit',
             },
@@ -95,12 +95,13 @@
                             xtype: 'container',
                             height: 70,
                             id: res.header.navigation.id,
-                             cls: 'x-add-navigation-gradient',
+                            cls: 'x-add-navigation-gradient',
                             layout:'column',
                             items:[
                             {
                                 xtype: 'container',
                                 height: 70,
+                                margin: '0 0 0 150',
                                 id: res.header.navigation.logo,
                                 padding: 0,
                                 width: 150
@@ -111,6 +112,7 @@
                                 height: 70,
                                 padding: 0,
                                 width: 170,
+                                ui: 'snapshot-navigation-btn',
                                 toggleGroup:res.header.navigation.toggleGroup,
                                 enableToggle:true,
                                 pressed:true,
@@ -122,6 +124,7 @@
                                 height: 70,
                                 padding: 0,
                                 width: 170,
+                                ui: 'snapshot-navigation-btn',
                                 toggleGroup:res.header.navigation.toggleGroup,
                                 handler:function(){
                                     navigateTo( res.link.administration ); 
@@ -134,6 +137,7 @@
                                 height: 70,
                                 padding: 0,
                                 width: 170,
+                                ui: 'snapshot-navigation-btn',
                                 toggleGroup:res.header.navigation.toggleGroup,
                                 enableToggle:true,
                                 handler:function(){
@@ -146,6 +150,7 @@
                                 height: 70,
                                 padding: 0,
                                 width: 170,
+                                ui: 'snapshot-navigation-btn',
                                 toggleGroup:res.header.navigation.toggleGroup,
                                 enableToggle:true,
                                 handler:function(){
@@ -159,6 +164,7 @@
                                 height: 70,
                                 padding: 0,
                                 width: 170,
+                                ui: 'snapshot-navigation-btn',
                                 toggleGroup:res.header.navigation.toggleGroup,
                                 enableToggle:true,
                                 text: 'Analysis and Reports',
