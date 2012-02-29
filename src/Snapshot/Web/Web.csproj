@@ -367,6 +367,9 @@
     <Compile Include="Validation\ValidDate\ValidDate.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Areas\CampaignManagement\Views\Campaign\Overview.cshtml" />
+    <Content Include="Areas\CampaignManagement\Views\Web.config" />
+    <Content Include="Areas\CampaignManagement\Views\_ViewStart.cshtml" />
     <Content Include="Assets\css\button-template.css" />
     <Content Include="Assets\css\color-scheme.css" />
     <Content Include="Assets\css\ext-all.css" />
@@ -2061,27 +2064,16 @@
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\core\_reset.scss" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\layout\_layout.scss" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\mixins\_background-gradient.scss" />
-    <Content Include="Areas\CampaignManagement\Views\_ViewStart.cshtml" />
-    <Content Include="Areas\CampaignManagement\Views\Web.config" />
-    <Content Include="Areas\CampaignManagement\Views\Campaign\Overview.cshtml" />
     <Content Include="Areas\CampaignManagement\Views\Shared\_CampaignManagementSideBar.cshtml" />
-    <Content Include="Areas\CampaignManagement\Views\Campaign\CampaignContainer.cshtml" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\mixins\_color-by-background.scss" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\mixins\_frame.scss" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\mixins\_inner-border.scss" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\mixins\_reset-extras.scss" />
-    <Content Include="Areas\CampaignManagement\Views\Web.config" />
     <Content Include="Views\Shared\GoogleMapPanel.cshtml" />
     <Content Include="Views\Shared\SelectPositionGoogleMapWindow.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Areas\CampaignManagement\Views\Campaign\Overview.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Areas\CampaignManagement\Views\Shared\_CampaignManagementSideBar.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\CampaignManagement\Views\_ViewStart.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\SmsRequest\Create.cshtml" />

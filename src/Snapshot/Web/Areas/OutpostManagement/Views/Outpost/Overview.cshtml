@@ -6,7 +6,7 @@
 @{
 	Html.RenderPartial("_SubNavigation");
 	Html.RenderPartial("_OutpostAdministrationSideBar");
-    Html.RenderPartial("SelectPositionGoogleMapWindow");
+	Html.RenderPartial("SelectPositionGoogleMapWindow");
 }
 <script type="text/javascript">
 	window.feature = {};
@@ -430,7 +430,7 @@
 										},{
 											xtype: 'combobox',
 											columnWidth: 1 / 4,
-											id: window.feature.modalIds.countryId,
+											itemId: window.feature.modalIds.countryId,
 											name: 'CountryId',
 											fieldLabel: 'Country',
 											emptyText: 'Select Country', 
@@ -505,7 +505,6 @@
 											labelAlign:'left',
 											margin:'20 10 0 10',
 											itemId: window.feature.modalIds.nameId,
-                                            id: window.feature.modalIds.nameId,
 											name: 'Name',
 											allowBlank:false,
 											fieldLabel: 'Outpost Name'
@@ -519,49 +518,52 @@
 												{
 													xtype: 'textfield',
 													itemId: window.feature.modalIds.coordinatesId,
-                                                    id: window.feature.modalIds.coordinatesId,
 													name: 'Coordinates',
 													flex: 1,
 													fieldLabel: 'Coordinates',
-                                                    readOnly: true
+													readOnly: true
 												},{
 													xtype:'button',
 													margin:'20 0 0 0',
 													text:'FIND ON MAP',
-                                                    handler: function() {
-                                                        var coordinatesTextField = Ext.getCmp(window.feature.modalIds.coordinatesId);
-                                                        var outpostNameTextField = Ext.getCmp(window.feature.modalIds.nameId);
-                                                        var countryNameControl = Ext.getCmp(window.feature.modalIds.countryId);
+													handler: function() {
+														var coordinatesTextField = me.down('#' + window.feature.modalIds.coordinatesId);
+														var outpostNameTextField = me.down('#' + window.feature.modalIds.nameId);
+														var countryNameControl = me.down('#' + window.feature.modalIds.countryId);
 
-                                                        if (window.feature.googleMapWindow === undefined)
-                                                        {
+														if (!window.feature.googleMapWindow){
                                                             window.feature.googleMapWindow = Ext.create('Ext.feature.GoogleMapWindow', {
-                                                                zoom: 4,
+                                                                zoom: 5,
                                                                 closeAction: 'hide',
-                                                                selectLocationHandler: function() {
-                                                                    window.feature.googleMapWindow.close();
-                                                                    coordinatesTextField.setValue(window.feature.googleMapWindow.getSelectedPosition());
-                                                                }
+                                                                selectLocationHandler: Ext.emptyFn 
                                                             });
                                                         }
 
-                                                        if (coordinatesTextField.getValue() !== null && $.trim(coordinatesTextField.getValue()) !== '') {
-                                                            var markerOptions = {};
-                                                            markerOptions.position = getGooglePositionFromText(coordinatesTextField.getValue());
+                                                        window.feature.googleMapWindow.getSelectButton().handler = function() {
+                                                            window.feature.googleMapWindow.close();
+                                                            coordinatesTextField.setValue(window.feature.googleMapWindow.getSelectedPosition());
+                                                        };
 
-                                                            markerOptions.title = outpostNameTextField.getValue();
+                                                        window.feature.googleMapWindow.centerMap( new google.maps.LatLng(9.032593162447107, 22.152814189453125));
+	
+														if (coordinatesTextField.getValue() !== null && $.trim(coordinatesTextField.getValue()) !== '') {
+															var markerOptions = {};
+															markerOptions.position = getGooglePositionFromText(coordinatesTextField.getValue());
+	
+															markerOptions.title = outpostNameTextField.getValue();
+	
+															window.feature.googleMapWindow.setMarker(markerOptions);
+														}
+														else {
+															if (countryNameControl.getValue() !== null && $.trim(countryNameControl.getValue()) !== '') {
+																var countryId = countryNameControl.getValue();
+																var countryName = countryNameControl.getStore().findRecord('Id', countryId).get('Name');
+																window.feature.googleMapWindow.centerOnPlace(countryName);
+															}
+														}
 
-                                                            window.feature.googleMapWindow.setMarker(markerOptions);
-                                                        } else {
-                                                            if (countryNameControl.getValue() !== null && $.trim(countryNameControl.getValue()) !== '') {
-                                                                var countryId = countryNameControl.getValue();
-                                                                var countryName = countryNameControl.getStore().findRecord('Id', countryId).get('Name');
-                                                                window.feature.googleMapWindow.centerOnPlace(countryName);
-                                                            }
-                                                        }
-
-                                                        window.feature.googleMapWindow.show();
-                                                    }
+														window.feature.googleMapWindow.show();
+													}
 												}
 											] 
 										},{
@@ -689,8 +691,8 @@
 											xtype: 'button',
 											margin: '0 0 0 20',
 											text: 'Add New Outpost',
-                                    ui: 'snapshot-button',
-                                    cls: 'x-add-button-gradient',
+											ui: 'snapshot-button',
+											cls: 'x-add-button-gradient',
 											handler: function(){
 												var winAdd = new window.feature.modal({
 													url: '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Outpost", action = "Create" })',
@@ -894,12 +896,12 @@
 			districtId:null
 		});
 
-        function getGooglePositionFromText(coordinates) {
-            return new google.maps.LatLng(
-                parseFloat(coordinates.substring(1, coordinates.indexOf(','))), 
-                parseFloat(coordinates.substring(coordinates.indexOf(',') + 1, coordinates.length - 1)
-            ));
-        }
+		function getGooglePositionFromText(coordinates) {
+			return new google.maps.LatLng(
+				parseFloat(coordinates.substring(1, coordinates.indexOf(','))), 
+				parseFloat(coordinates.substring(coordinates.indexOf(',') + 1, coordinates.length - 1)
+				));
+		}
 	});
 </script>
-	
+

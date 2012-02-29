@@ -33,6 +33,10 @@
         },
         centerOnPlace: function (place) {
             centerOnPlace.apply(this, [place]);
+        },
+        getSelectButton:function(){
+            var me = this;
+            return me.down('#select-googlemap-position-button-id');
         }
     });
 
@@ -67,6 +71,7 @@
 
         that._selectButton = Ext.create('Ext.Button', {
             text: 'Select',
+            itemId:'select-googlemap-position-button-id',
             handler: that.selectLocationHandler
         });
 
