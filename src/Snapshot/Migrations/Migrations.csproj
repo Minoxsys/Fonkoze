@@ -51,6 +51,7 @@
     <Compile Include="6_CampaignAdministration.cs" />
     <Compile Include="7_AutomaticSchedule.cs" />
     <Compile Include="8_SmsRequest.cs" />
+    <Compile Include="9_Alerts.cs" />
     <Compile Include="AssignCommonColumnsExtensions.cs" />
     <Compile Include="ConstraintUtility.cs" />
     <Compile Include="DeleteExtensions.cs" />

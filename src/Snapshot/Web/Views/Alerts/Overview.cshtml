@@ -19,10 +19,37 @@ User Administration Clients: Overview
     });
 </script>
 
+
 <script type="text/javascript">
     Ext.onReady(function () {
         window.feature = {};
-        window.feature.searchAlerts = 'Search-Client-Name-Id';
+        window.feature.searchAlerts = 'Search-OutpostName-ALerts-Name-Id';
+
+        window.feature.alertsStore = Ext.create('Ext.data.Store', {
+            pageSize: 50,
+            remoteSuport: true,
+            fields: ['Id', 'OutpostId', 'OutpostName', 'ProductGroupId', 'ProductGroupName', 'LowLevelStock', 'LastUpdate', 'Contact'],
+            proxy: {
+                type: 'ajax',
+                url: '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "Alerts", action = "GetAlerts" })',
+                reader: {
+                    type: 'json',
+                    root: 'Alerts',
+                    totalProperty: 'TotalItems'
+                },
+                extraParams: { searchValue: '' },
+                simpleSortMode: true
+            },
+            remoteSort: true,
+            sorters: [{
+                property: 'OutpostName',
+                direction: 'ASC'
+            }]
+        });
+
+        window.feature.doSearch = new Ext.util.DelayedTask(function(){
+			window.feature.alertsStore.loadPage(1);
+		});
 
         window.feature.container = Ext.create('Ext.container.Container', {
             margin: '20 50 20 0',
@@ -64,7 +91,7 @@ User Administration Clients: Overview
                     height:50,
                     items: [{
                         xtype: 'textfield',
-                        itemId: window.feature.searchAlerts,
+                        id: window.feature.searchAlerts,
                         width: 200,
                         frame: true,
                         emptyText: 'Alerts Search',
@@ -72,9 +99,9 @@ User Administration Clients: Overview
                         listeners: {
                             'keyup': {
                                 fn: function(key) {
-//                                    var searchValue = window.feature.container.down('#'+window.feature.searchClientName).getValue();
-//                                    window.feature.ClientsStore.proxy.extraParams.searchValue = searchValue;
-//                                    window.feature.ClientsStore.loadPage(1);
+                                    var searchValue = window.feature.container.down('#'+window.feature.searchAlerts).getValue();
+                                    window.feature.alertsStore.proxy.extraParams.searchValue = searchValue;
+                                    window.feature.doSearch.delay(500);
                                 }
                             }
                         }
@@ -82,42 +109,35 @@ User Administration Clients: Overview
                 }]
             },{
                 xtype: 'gridpanel',
+                store: window.feature.alertsStore,
                 loadMask: true,
                 disableSelection: true,
                 flex:3,
                 autoScroll:true,
                 columns: [{
                     header: 'Outpost Name',
-                    dataIndex: 'Name',
+                    dataIndex: 'OutpostName',
                     flex: 1,
                     sortable: true
                 },{
                     header: 'Contact',
-                    dataIndex: 'NoOfUsers',
+                    dataIndex: 'Contact',
                     flex: 1
                 },{
-                    header: 'Stock Group',
-                    dataIndex: 'name',
+                    header: 'Product Group',
+                    dataIndex: 'ProductGroupName',
                     flex: 1
                 },{
                     header: 'Low Level Stocks',
-                    dataIndex: 'Stock Group',
+                    dataIndex: 'LowLevelStock',
                     flex: 1
                 },{
                     header: 'Last Update',
-                    dataIndex: 'Stock Group',
-                    flex: 1
-                },{
-                    header: 'Nearby outpost',
-                    dataIndex: 'Stock Group',
-                    flex: 1
-                },{
-                    header: 'Acted through following method',
-                    dataIndex: 'Stock Group',
+                    dataIndex: 'LastUpdate',
                     flex: 1
                 }],
                 bbar: Ext.create('Ext.PagingToolbar', {
-                    store: window.feature.ClientsStore,
+                    store: window.feature.alertsStore,
                     displayInfo: true,
                     displayMsg: 'Displaying topics {0} - {1} of {2}',
                     emptyMsg: "No topics to display",
@@ -133,7 +153,7 @@ User Administration Clients: Overview
         var mainContent = Ext.getCmp(contentRes.maincontent.id);
 
         mainContent.add(window.feature.container);
-        window.feature.ClientsStore.loadPage(1);
+        window.feature.alertsStore.loadPage(1); 
 
     });
 

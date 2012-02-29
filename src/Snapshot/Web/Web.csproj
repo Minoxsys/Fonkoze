@@ -245,6 +245,7 @@
     <Compile Include="Areas\StockAdministration\Models\Product\ProductOverviewModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\StockLevel\OutpostStockLevelModel.cs" />
     <Compile Include="Areas\StockAdministration\StockAdministrationAreaRegistration.cs" />
+    <Compile Include="BackgroundJobs\AddAlertsJob.cs" />
     <Compile Include="BackgroundJobs\EmptyJob.cs" />
     <Compile Include="Bootstrap\Container\EmailRegistrar.cs" />
     <Compile Include="Bootstrap\Container\FileRegistrar.cs" />
@@ -301,6 +302,10 @@
     <Compile Include="Models\Account\ChangePasswordModel.cs" />
     <Compile Include="Models\Account\LogOnModel.cs" />
     <Compile Include="Models\Account\RegisterModel.cs" />
+    <Compile Include="Models\Alerts\AlertModel.cs" />
+    <Compile Include="Models\Alerts\AlertOutputModel.cs" />
+    <Compile Include="Models\Alerts\AlertsIndexModel.cs" />
+    <Compile Include="Models\Alerts\AlertsIndexOutputModel.cs" />
     <Compile Include="Models\ClientManager\ClientIndexOutputModel.cs" />
     <Compile Include="Models\ClientManager\ClientManagerIndexModel.cs" />
     <Compile Include="Models\ClientManager\ClientManagerModel.cs" />
@@ -2001,7 +2006,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\OutpostManagement\Services\" />
-    <Folder Include="Models\Alerts\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -2092,6 +2096,7 @@
     <None Include="Assets\resources\themes\stylesheets\ext4\default\mixins\_color-by-background.scss" />
     <None Include="Assets\resources\themes\stylesheets\ext4\default\mixins\_frame.scss" />
     <Content Include="Areas\CampaignManagement\Views\Web.config" />
+    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\CampaignManagement\Views\Campaign\Overview.cshtml" />
@@ -2356,7 +2361,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>9245</DevelopmentServerPort>
+          <DevelopmentServerPort>52618</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost/Snapshot</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
