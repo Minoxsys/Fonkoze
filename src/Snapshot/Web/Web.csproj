@@ -150,16 +150,17 @@
   <ItemGroup>
     <Compile Include="Areas\AnalysisManagement\AnalysisManagementAreaRegistration.cs" />
     <Compile Include="Areas\AnalysisManagement\Controllers\AnalysisController.cs" />
+    <Compile Include="Areas\AnalysisManagement\Controllers\ReportDistrictLevelController.cs" />
     <Compile Include="Areas\AnalysisManagement\Controllers\ReportRegionLevelController.cs" />
+    <Compile Include="Areas\AnalysisManagement\Models\ReportDistrictLevel\ReportDistrictLevelInputModel.cs" />
+    <Compile Include="Areas\AnalysisManagement\Models\ReportDistrictLevel\ReportDistrictLevelTreeModel.cs" />
     <Compile Include="Areas\AnalysisManagement\Models\ReportRegionLevel\InputModel.cs" />
     <Compile Include="Areas\AnalysisManagement\Models\ReportRegionLevel\LocationEntityModel.cs" />
     <Compile Include="Areas\AnalysisManagement\Models\ReportRegionLevel\ReportRegionLevelTreeModel.cs" />
-    <Compile Include="Areas\OutpostManagement\Controllers\AssignProductGroupController.cs" />
     <Compile Include="Areas\CampaignManagement\CampaignManagementAreaRegistration.cs" />
     <Compile Include="Areas\CampaignManagement\Models\Campaign\CampaignInputModel.cs" />
     <Compile Include="Areas\CampaignManagement\Models\Campaign\CampaignModel.cs" />
     <Compile Include="Areas\CampaignManagement\Models\Campaign\CampaignOutputModel.cs" />
-    <Compile Include="Areas\CampaignManagement\Models\RequestSchedule\RequestScheduleInputModel.cs" />
     <Compile Include="Areas\CampaignManagement\Models\Campaign\CampaignOverviewInputModel.cs" />
     <Compile Include="Areas\CampaignManagement\Models\Campaign\CampaignOverviewOutputModel.cs" />
     <Compile Include="Areas\CampaignManagement\Models\Campaign\OptionsModel.cs" />
@@ -168,6 +169,8 @@
     <Compile Include="Areas\CampaignManagement\Controllers\CampaignController.cs" />
     <Compile Include="Areas\CampaignManagement\Models\Campaign\LocationEntitiesInput.cs" />
     <Compile Include="Areas\CampaignManagement\Models\Campaign\LocationEntityModel.cs" />
+    <Compile Include="Areas\CampaignManagement\Models\RequestSchedule\RequestScheduleInputModel.cs" />
+    <Compile Include="Areas\OutpostManagement\Controllers\AssignProductGroupController.cs" />
     <Compile Include="Areas\OutpostManagement\Controllers\ContactController.cs" />
     <Compile Include="Areas\OutpostManagement\Controllers\CountryController.cs" />
     <Compile Include="Areas\OutpostManagement\Controllers\DistrictController.cs" />
@@ -2070,6 +2073,7 @@
       <SubType>Code</SubType>
     </Content>
     <Content Include="Assets\resources\themes\stylesheets\snapshot\default\accessories\scss\config.rb" />
+    <Content Include="Areas\AnalysisManagement\Views\ReportDistrictLevel\Overview.cshtml" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\core\_core.scss" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\core\_reset.scss" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\layout\_layout.scss" />
@@ -2079,7 +2083,7 @@
     <Content Include="Areas\AnalysisManagement\Views\_ViewStart.cshtml" />
     <Content Include="Areas\AnalysisManagement\Views\Shared\AnalysisMainContent.cshtml" />
     <Content Include="Areas\AnalysisManagement\Views\ReportRegionLevel\Overview.cshtml" />
-    <Content Include="Areas\AnalysisManagement\Views\Shared\ReportRegionLevelMainContent.cshtml" />
+    <Content Include="Areas\AnalysisManagement\Views\Shared\ReportMainContent.cshtml" />
     <Content Include="Areas\AnalysisManagement\Views\Shared\AnalysisUserInfoContainer.cshtml" />
     <None Include="Assets\resources\themes\stylesheets\ext4\default\core\_core.scss" />
     <None Include="Assets\resources\themes\stylesheets\ext4\default\core\_reset.scss" />
