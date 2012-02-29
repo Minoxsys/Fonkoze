@@ -165,9 +165,7 @@
     <Compile Include="Areas\CampaignManagement\Models\Campaign\OptionsModel.cs" />
     <Compile Include="Areas\CampaignManagement\Models\Campaign\ReferenceModel.cs" />
     <Compile Include="Areas\CampaignManagement\Models\Campaign\ReferenceModelOutput.cs" />
-    <Compile Include="Areas\OutpostManagement\Controllers\AssignProductGroupController.cs" />
     <Compile Include="Areas\CampaignManagement\Controllers\CampaignController.cs" />
-    <Compile Include="Areas\CampaignManagement\Models\RequestSchedule\RequestScheduleInputModel.cs" />
     <Compile Include="Areas\CampaignManagement\Models\Campaign\LocationEntitiesInput.cs" />
     <Compile Include="Areas\CampaignManagement\Models\Campaign\LocationEntityModel.cs" />
     <Compile Include="Areas\OutpostManagement\Controllers\ContactController.cs" />
