@@ -13,7 +13,7 @@
     <RootNamespace>Web</RootNamespace>
     <AssemblyName>Web</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <MvcBuildViews>true</MvcBuildViews>
+    <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>false</UseIISExpress>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -149,7 +149,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Areas\CampaignManagement\Controllers\ProductLevelRequestController.cs" />
+    <Compile Include="Areas\CampaignManagement\Models\ProductLevelRequest\CampaignModel.cs" />
     <Compile Include="Areas\CampaignManagement\Models\ProductLevelRequest\CreateProductLevelRequestInput.cs" />
+    <Compile Include="Areas\CampaignManagement\Models\ProductLevelRequest\GetProductLevelRequestInput.cs" />
+    <Compile Include="Areas\CampaignManagement\Models\ProductLevelRequest\GetProductLevelRequestModel.cs" />
+    <Compile Include="Areas\CampaignManagement\Models\ProductLevelRequest\GetProductLevelRequestResponse.cs" />
     <Compile Include="Areas\CampaignManagement\Models\ProductLevelRequest\GetProductsInput.cs" />
     <Compile Include="Areas\CampaignManagement\Models\ProductLevelRequest\ProductModel.cs" />
     <Compile Include="Areas\CampaignManagement\Models\ProductLevelRequest\RequestReminderModel.cs" />
@@ -298,6 +302,7 @@
     <Compile Include="Controllers\JavascriptController.cs" />
     <Compile Include="Controllers\RoleManagerController.cs" />
     <Compile Include="Controllers\UserManagerController.cs" />
+    <Compile Include="Helpers\BinaryJsonStore.cs" />
     <Compile Include="Helpers\DateFormatter.cs" />
     <Compile Include="Helpers\DomainEntityHelper.cs" />
     <Compile Include="Helpers\EmptyStringToDotsFormatter.cs" />
@@ -2112,15 +2117,12 @@
     <Content Include="Areas\CampaignManagement\Views\Campaign\Overview.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Areas\CampaignManagement\Views\Shared\_CampaignManagementSideBar.cshtml" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\mixins\_color-by-background.scss" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\mixins\_frame.scss" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\mixins\_inner-border.scss" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\mixins\_reset-extras.scss" />
     <Content Include="Views\Shared\GoogleMapPanel.cshtml" />
     <Content Include="Views\Shared\SelectPositionGoogleMapWindow.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Areas\CampaignManagement\Views\_ViewStart.cshtml" />
   </ItemGroup>
   <ItemGroup>

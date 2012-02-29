@@ -76,6 +76,7 @@
     <Compile Include="NHibernateUnitOfWork.cs" />
     <Compile Include="NHibernateWorkItemRepository.cs" />
     <Compile Include="Overrides\CampaignAutoMappingOverride.cs" />
+    <Compile Include="Overrides\ProductLevelRequestAutoMappingOverride.cs" />
     <Compile Include="Overrides\WorkItemAutoMappingOverride.cs" />
     <Compile Include="Overrides\CountryAutoMappingOverride.cs" />
     <Compile Include="Overrides\ContactAutoMappingOverride.cs" />

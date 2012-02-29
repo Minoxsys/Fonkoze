@@ -17,9 +17,12 @@ namespace Tests.Unit.Controllers.Areas.CampaignManagement.ProductLevelRequest_Te
             _.Init();
         }
 
+        [Test]
         public void CreatesANewProductLevelRequest()
         {
-            _.controller.Create(new CreateProductLevelRequestInput());
+            _.controller.Create(_.CreateInput());
+
+            _.VerifyCreateExpectations();
         }
     }
 }

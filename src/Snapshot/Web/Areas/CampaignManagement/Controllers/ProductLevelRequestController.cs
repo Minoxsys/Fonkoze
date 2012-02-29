@@ -5,6 +5,10 @@ using Domain;
 using Core.Persistence;
 using Core.Domain;
 using Web.Areas.CampaignManagement.Models.ProductLevelRequest;
+using Web.Helpers;
+using Web.Models.Shared;
+using System.Collections.Generic;
+using System.Text;
 
 namespace Web.Areas.CampaignManagement.Controllers
 {
@@ -17,20 +21,89 @@ namespace Web.Areas.CampaignManagement.Controllers
 
         public IQueryService<User> QueryUsers { get; set; }
 
-        public IQueryService<Schedule> QueryServiceSchedule { get; set; }
+        public IQueryService<Schedule> QuerySchedules { get; set; }
 
         public IQueryService<Product> QueryProducts { get; set; }
+
+        public IQueryService<Campaign> QueryCampaigns { get; set; }
+
+        public IQueryService<ProductGroup> LoadProductGroup { get; set; }
+
+        public IQueryService<ProductLevelRequest> QueryProductLevelRequests { get; set; }
+
+        public ISaveOrUpdateCommand<ProductLevelRequest> SaveProductLevelRequest{get;set;}
 
         public ActionResult Overview()
         {
             return View();
         }
 
+        public JsonResult GetProductLevelRequests(GetProductLevelRequestInput input)
+        {
+
+            LoadUserAndClient();
+            var productLevelRequestData = QueryProductLevelRequests.Query().Where(c => c.Client == _client);
+
+            if (!string.IsNullOrWhiteSpace(input.search))
+            {
+                productLevelRequestData = productLevelRequestData.Where(c => c.Campaign.Name.Contains(input.search));
+            }
+
+            var orderByColumnDirection = new Dictionary<string, Func<IQueryable<ProductLevelRequest>>>()
+			{
+                { "ScheduleName-ASC", () => productLevelRequestData.OrderBy(c => c.Schedule.Name) },
+                { "ScheduleName-DESC", () => productLevelRequestData.OrderByDescending(c => c.Schedule.Name) },
+                { "Campaign-ASC", () => productLevelRequestData.OrderBy(c => c.Campaign.Name) },
+                { "Campaign-DESC", () => productLevelRequestData.OrderByDescending(c => c.Campaign.Name) }
+			};
+            var totalItems = productLevelRequestData.Count();
+			productLevelRequestData = productLevelRequestData.Take(input.limit.Value).Skip(input.start.Value);
+
+
+            var productLevelRequests = productLevelRequestData.ToList().Select(req =>
+                new GetProductLevelRequestModel
+                {
+                    Campaign = req.Campaign.Name,
+                    StartDate = req.Campaign.StartDate.HasValue ? req.Campaign.StartDate.Value.ToString("dd-MMM-yyyy") : "-",
+                    EndDate = req.Campaign.EndDate.HasValue ? req.Campaign.EndDate.Value.ToString("dd-MMM-yyyy") : "-",
+                    ProductGroup = req.ProductGroup.Name,
+                    ScheduleName = req.Schedule.Name,
+                    ProductSmsCodes = req.Products != null ? GetSmsCodesRepresentation(req.Products) : string.Empty,
+                    Frequency = req.Schedule.FrequencyType ?? "Now",
+                    Editable = req.Campaign.StartDate > DateTime.UtcNow
+
+                }).ToArray();
+
+
+
+            return Json(new GetProductLevelRequestResponse
+            {
+                TotalItems = totalItems,
+                ProductLevelRequests = productLevelRequests
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        private string GetSmsCodesRepresentation(byte[] binarySerializedProducts)
+        {
+            var sb = new StringBuilder();
+
+            var products = BinaryJsonStore<CreateProductLevelRequestInput.ProductModel[]>.From(binarySerializedProducts);
+            if (products == null) return "--";
+
+            for (int i = 0; i < products.Length; i++)
+            {
+                string format = i == products.Length-1 ? "{0}" : "{0}/";
+                sb.AppendFormat(format, products[i].SmsCode);
+            }
+
+                return sb.ToString();
+        }
+
         public JsonResult GetSchedules()
         {
             LoadUserAndClient();
 
-            var schedulesData = QueryServiceSchedule.Query().ToList();
+            var schedulesData = QuerySchedules.Query().Where(c=>c.Client == _client).ToList();
 
             var schedules = schedulesData.Select(schedule =>
                 new ScheduleModel
@@ -77,7 +150,48 @@ namespace Web.Areas.CampaignManagement.Controllers
 
         public JsonResult Create(CreateProductLevelRequestInput createProductLevelRequestInput)
         {
-            throw new NotImplementedException();
+            LoadUserAndClient();
+            var productGroup = LoadProductGroup.Load(createProductLevelRequestInput.ProductGroupId.Value);
+            var schedule = QuerySchedules.Load(createProductLevelRequestInput.ScheduleId.Value);
+            var campaign = QueryCampaigns.Load(createProductLevelRequestInput.CampaignId.Value);
+
+            var products = BinaryJsonStore<CreateProductLevelRequestInput.ProductModel[]>.From(createProductLevelRequestInput.Products);
+
+            var productLevelRequest = new ProductLevelRequest
+            {
+                ProductGroup = productGroup,
+                Schedule = schedule,
+                Campaign = campaign,
+                Products = products,
+                ByUser = _user,
+                Client = _client
+            };
+
+            SaveProductLevelRequest.Execute(productLevelRequest);
+
+            return Json(new JsonActionResponse
+            {
+                Status="Success",
+                Message = "Saved Product Level Request"
+            });
+
+        }
+
+        public JsonResult GetCampaigns()
+        {
+            LoadUserAndClient();
+            var campaignsDataQry = QueryCampaigns.Query().Where(p => p.Client == _client).ToList();
+
+            var campaigns = campaignsDataQry.Select(campaign =>
+                new CampaignModel
+                {
+                    Id = campaign.Id.ToString(),
+                    Name=campaign.Name
+
+                }).ToArray();
+
+
+            return Json(campaigns, JsonRequestBehavior.AllowGet);
         }
 
         private void LoadUserAndClient()

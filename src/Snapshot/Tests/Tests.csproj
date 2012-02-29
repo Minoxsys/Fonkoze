@@ -97,6 +97,7 @@
     <Compile Include="Unit\Controllers\AccountControllerTest.cs" />
     <Compile Include="Unit\Controllers\AlertsController_Tests\GetAlertsMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\CampaignManagement\ProductLevelRequest_Tests\CreateMethod.cs" />
+    <Compile Include="Unit\Controllers\Areas\CampaignManagement\ProductLevelRequest_Tests\GetCampaignsMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\CampaignManagement\ProductLevelRequest_Tests\GetProductsMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\CampaignManagement\ProductLevelRequest_Tests\GetSchedulesMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\CampaignManagement\ProductLevelRequest_Tests\ObjectMother.cs" />
@@ -134,6 +135,7 @@
     <Compile Include="Unit\Controllers\Areas\OutpostManagement\OutpostControllerTests\EditMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\OutpostManagement\OutpostControllerTests\GetDistrictsMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\OutpostManagement\OutpostControllerTests\GetOutpostsMethod.cs" />
+    <Compile Include="Unit\Controllers\Areas\CampaignManagement\ProductLevelRequest_Tests\GetProductLevelRequestsMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\OutpostManagement\OutpostControllerTests\GetWarehousesMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\OutpostManagement\OutpostControllerTests\ObjectMother.cs" />
     <Compile Include="Unit\Controllers\Areas\OutpostManagement\OutpostControllerTests\OverviewMethod.cs" />

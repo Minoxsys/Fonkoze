@@ -10,6 +10,7 @@ using Persistence;
 using Autofac;
 using Autofac.Integration.Mvc;
 using WebBackgrounder;
+using Autofac.Core;
 
 namespace Web
 {

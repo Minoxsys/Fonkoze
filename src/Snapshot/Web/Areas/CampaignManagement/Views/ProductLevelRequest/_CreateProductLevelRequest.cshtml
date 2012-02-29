@@ -133,6 +133,23 @@
 
 
 <script type="text/javascript">
+    window.feature.modal.stores.campaigns = Ext.define('snapshot-Outpost-CampaignsStore', {
+        
+        extend: 'Ext.data.Store',
+        fields: ['Id', 'Name'],
+        proxy: {
+            type: 'ajax',
+            url: '@Url.RouteUrl(CampaignManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "ProductLevelRequest", action = "GetCampaigns" })',
+            reader: {
+                type: 'json'
+            }
+        }
+    });
+
+</script>
+
+
+<script type="text/javascript">
     window.feature.modal.stores.products = Ext.define('snapshot-Outpost-ProductsStore', {
 
         extend: 'Ext.data.Store',
@@ -194,6 +211,7 @@
             me.productGroupStore = new window.feature.modal.stores.productGroups();
             me.schedules = new window.feature.modal.stores.schedules();
             me.products = new window.feature.modal.stores.products();
+            me.campaigns = new window.feature.modal.stores.campaigns();
 
             me.items = [
                 {
@@ -212,7 +230,12 @@
                                     xtype: 'combobox',
                                     itemId: 'campaign',
                                     fieldLabel: 'Campaign',
-                                    emptyText: 'Campaign List'
+                                    store: me.campaigns,
+                                    emptyText: 'Campaign List',
+                                    queryMode: 'local',
+                                    valueField: 'Id',
+                                    displayField: 'Name'
+
                                 }, {
                                     xtype: 'combobox',
                                     itemId: 'productGroup',
@@ -305,6 +328,7 @@
             ];
 
             me.callParent(arguments);
+            me.campaigns.load();
             me.productGroupStore.load();
             me.schedules.load();
 
@@ -344,7 +368,6 @@
                 params.ScheduleId = record.get('Id');
             }
 
-            console.log('params', params);
             var url = '@Url.RouteUrl(CampaignManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "ProductLevelRequest", action = "Create" })';
             var action = $.ajax({
                 url: url,
@@ -355,7 +378,8 @@
             });
 
             action.success(function () {
-                me.outpostStockLevelStore.load();
+               me.gridStore.loadPage(1);
+               me.destroy();
             });
 
         }

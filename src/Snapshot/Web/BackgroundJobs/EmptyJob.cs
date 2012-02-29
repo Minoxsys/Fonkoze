@@ -34,6 +34,7 @@ namespace Web.BackgroundJobs
                 }
 
             });
+            
         }
 
         public TimeSpan Interval

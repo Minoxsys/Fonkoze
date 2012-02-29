@@ -9,6 +9,7 @@ using Autofac;
 using MvcContrib.TestHelper.Fakes;
 using System.Collections.Generic;
 using Web.Areas.CampaignManagement.Models.ProductLevelRequest;
+using Web.Helpers;
 
 namespace Tests.Unit.Controllers.Areas.CampaignManagement.ProductLevelRequest_Tests
 {
@@ -77,7 +78,7 @@ namespace Tests.Unit.Controllers.Areas.CampaignManagement.ProductLevelRequest_Te
 
         internal void VerifySchedulesQueried()
         {
-            var querySchedules = Mock.Get(this.controller.QueryServiceSchedule);
+            var querySchedules = Mock.Get(this.controller.QuerySchedules);
 
             querySchedules.Verify(call => call.Query());
         }
@@ -85,7 +86,7 @@ namespace Tests.Unit.Controllers.Areas.CampaignManagement.ProductLevelRequest_Te
         internal void StubSchedulesData()
         {
             
-            var querySchedules = Mock.Get(this.controller.QueryServiceSchedule);
+            var querySchedules = Mock.Get(this.controller.QuerySchedules);
 
             querySchedules.Setup(c => c.Query()).Returns(ListOfSchedules());
         }
@@ -131,6 +132,8 @@ namespace Tests.Unit.Controllers.Areas.CampaignManagement.ProductLevelRequest_Te
         }
 
         private Guid productGroupId = Guid.NewGuid();
+        private Guid campaignId;
+        private Guid scheduleId;
 
         internal GetProductsInput ProductsInput()
         {
@@ -172,6 +175,160 @@ namespace Tests.Unit.Controllers.Areas.CampaignManagement.ProductLevelRequest_Te
         {
             var productsService = Mock.Get(controller.QueryProducts);
             productsService.Verify(call => call.Query());
+        }
+
+        internal void VerifyCampaignsQueried()
+        {
+            var campaignsService = Mock.Get(controller.QueryCampaigns);
+            campaignsService.Verify(call => call.Query());
+        }
+
+        internal CreateProductLevelRequestInput CreateInput()
+        {
+            productGroupId = Guid.NewGuid();
+            campaignId = Guid.NewGuid();
+            scheduleId = Guid.NewGuid();
+
+            return new CreateProductLevelRequestInput
+            {
+                ProductGroupId = productGroupId,
+                CampaignId = campaignId,
+                ScheduleId = scheduleId,
+                Products = new CreateProductLevelRequestInput.ProductModel[] {
+                    new CreateProductLevelRequestInput.ProductModel{
+                        Id = Guid.NewGuid(),
+                        ProductItem = "Orange",
+                        Selected= false,
+                        SmsCode = "O"
+                    } 
+                }
+            };
+        }
+
+        internal void VerifyCreateExpectations()
+        {
+            
+            var campaignsService = Mock.Get(controller.QueryCampaigns);
+            var productGroupsService = Mock.Get(controller.LoadProductGroup);
+            var schedulesService = Mock.Get(controller.QuerySchedules);
+            var saveProductLevelRequest = Mock.Get(controller.SaveProductLevelRequest);
+
+            campaignsService.Verify(c => c.Load(campaignId));
+            productGroupsService.Verify(c => c.Load(productGroupId));
+            schedulesService.Verify(c => c.Load(scheduleId));
+
+            saveProductLevelRequest.Verify(c => c.Execute(It.IsAny<ProductLevelRequest>()));
+        }
+
+        internal GetProductLevelRequestInput GetProductLevelRequestsInput()
+        {
+            var model = new GetProductLevelRequestInput
+            {
+                dir="ASC",
+                limit = 10,
+                start = 0,
+                page =1 ,
+                sort="Campaign"
+            };
+
+            FakeQueryProductLevelRequest();
+
+            return model;
+        }
+
+        private void FakeQueryProductLevelRequest()
+        {
+            var productLevelRequestService = Mock.Get(controller.QueryProductLevelRequests);
+
+            productLevelRequestService.Setup(c => c.Query()).Returns(ListOfProductLevelRequests());
+
+        }
+
+        private  IQueryable<ProductLevelRequest> ListOfProductLevelRequests()
+        {
+            var list = new List<ProductLevelRequest>();
+
+            for (int i = 0; i < 200; i++)
+            {
+
+                var plr = new Mock<ProductLevelRequest>();
+
+                plr.SetupGet(c => c.Id).Returns(Guid.NewGuid());
+                plr.SetupGet(c => c.Campaign).Returns(MockCampaign(i));
+                plr.SetupGet(c => c.ProductGroup).Returns(MockProductGroup(i));
+                plr.SetupGet(c => c.Products).Returns(MockProducts(i));
+                plr.SetupGet(c => c.Schedule).Returns(MockSchedule(i));
+
+
+                plr.SetupGet(c => c.Client).Returns(clientMock.Object);
+                plr.SetupGet(c => c.ByUser).Returns(userMock.Object);
+
+                list.Add(plr.Object);
+            }
+
+            return list.AsQueryable();
+        }
+
+        private Schedule MockSchedule(int i)
+        {
+            var schedule = new Mock<Schedule>();
+
+            schedule.SetupGet(c => c.Id).Returns(Guid.NewGuid());
+            schedule.SetupGet(c => c.Name).Returns("Product Group " + i);
+            schedule.SetupGet(c => c.FrequencyType).Returns("Daily");
+            schedule.SetupGet(c => c.FrequencyValue).Returns(2);
+            schedule.SetupGet(c => c.ByUser).Returns(userMock.Object);
+            schedule.SetupGet(c => c.Client).Returns(clientMock.Object);
+
+            return schedule.Object;
+        }
+
+        private byte[] MockProducts(int i)
+        {
+            var products = new List<CreateProductLevelRequestInput.ProductModel>();
+
+            for (int j = 0; i < 2; i++)
+            {
+                products.Add(new CreateProductLevelRequestInput.ProductModel
+                {
+                    Id = Guid.NewGuid(),
+                    ProductItem = "Product " + (i*j*100),
+                    Selected = false,
+                    SmsCode = Char.ConvertFromUtf32(i+97)
+                });
+            }
+
+            return BinaryJsonStore<CreateProductLevelRequestInput.ProductModel[]>.From(products.ToArray());
+        }
+
+        private ProductGroup MockProductGroup(int i)
+        {
+            var productGroup = new Mock<ProductGroup>();
+
+            productGroup.SetupGet(c => c.Id).Returns(Guid.NewGuid());
+            productGroup.SetupGet(c => c.Name).Returns("Product Group " + i);
+            productGroup.SetupGet(c => c.ReferenceCode).Returns("PG"+ (i%10));
+
+            return productGroup.Object;
+        }
+
+        private Campaign MockCampaign(int i)
+        {
+            var campaign = new Mock<Campaign>();
+
+            campaign.SetupGet(c => c.Id).Returns(Guid.NewGuid());
+            campaign.SetupGet(c => c.Name).Returns("Campaign " + i);
+            campaign.SetupGet(c => c.StartDate).Returns(DateTime.UtcNow);
+            campaign.SetupGet(c => c.EndDate).Returns(DateTime.UtcNow.AddDays(7));
+
+            return campaign.Object;
+        }
+
+        internal void VerifyProductLevelRequestsQueried()
+        {
+            var productLevelRequestService = Mock.Get(controller.QueryProductLevelRequests);
+
+            productLevelRequestService.Verify(c => c.Query());
         }
     }
 }

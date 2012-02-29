@@ -50,13 +50,14 @@
 						return record.get('Id');
 					}
 				},
-				{ name: 'CampaignName'      , type: 'string' },
+				{ name: 'Campaign'      , type: 'string' },
+                { name: 'Editable', type: 'bool' },
 				{ name: 'StartDate'         , type: 'string' },
 				{ name: 'EndDate'           , type: 'string' },
 				{ name: 'ScheduleName'      , type: 'string' },
 				{ name: 'Fequency'          , type: 'string' },
-				{ name: 'ProductGroupName'  , type: 'string' },
-				{ name: 'ProductsSmsCodes'  , type: 'string' },
+				{ name: 'ProductGroup'  , type: 'string' },
+				{ name: 'ProductSmsCodes'  , type: 'string' },
 				{ name: 'Id'                , type: 'string' }
 			]
 		});
@@ -67,11 +68,12 @@
 			model: window.feature.models.ProductLevelRequest,
 
 			proxy: {
-				type: 'memory',
-				url: '@Url.RouteUrl(CampaignManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "ProductLevelRequest", action = "Index" })',
+				type: 'ajax',
+				url: '@Url.RouteUrl(CampaignManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "ProductLevelRequest", action = "GetProductLevelRequests" })',
 				reader: {
 					type: 'json',
-					root: 'Requests'
+                    totalProperty: 'TotalItems',
+					root: 'ProductLevelRequests'
 				}
 			}
 		
@@ -82,37 +84,19 @@
 
 <script type="text/javascript">
 	Ext.onReady(function () {
-		window.feature.gridStore = new window.feature.stores.ProductLevelRequest();
-		window.feature.gridStore.loadData([
-			{
-				'CampaignName': 'Campaign 1',
-				'StartDate': '10-Feb-2012',
-				'EndDate': '25-Feb-2012',
-				'ScheduleName': 'Every Day',
-				'Fequency': 'Daily',
-				'ProductGroupName': 'Malaria',
-				'ProductsSmsCodes': 'Y/R/G/B',
-				'Id': '@Guid.NewGuid()'
-			}
+        window.feature.gridStore = new window.feature.stores.ProductLevelRequest();
 
-		]);
-	});
-</script>
-
-<script type="text/javascript">
-	Ext.onReady(function () {
-		//        window.feature.stores.ProductLevelRequests.loadData
 		window.feature.grid = Ext.create('Ext.grid.Panel', {
 			flex:1,
 			store:  window.feature.gridStore,
 			columns: [
-				{ header:'Campaign'    ,  dataIndex:'CampaignName', flex:2     },
+				{ header:'Campaign'    ,  dataIndex:'Campaign', flex:2     },
 				{ header:'Start Date'       ,  dataIndex:'StartDate'        },
 				{ header:'End Date'         ,  dataIndex:'EndDate'          },
 				{ header:'Schedule'    ,  dataIndex:'ScheduleName'     },
 				{ header:'Fequency'        ,  dataIndex:'Fequency'         },
-				{ header:'Product Group',  dataIndex:'ProductGroupName', flex:1 },
-				{ header:'Sms Codes',  dataIndex:'ProductsSmsCodes', flex:2 },{
+				{ header:'Product Group',  dataIndex:'ProductGroup', flex:1 },
+				{ header:'Sms Codes',  dataIndex:'ProductSmsCodes', flex:2 },{
 					header:'Actions',  
 					xtype: 'actioncolumn',
 					items:[
@@ -132,20 +116,23 @@
 				},
 			],
 			bbar: Ext.create('Ext.PagingToolbar', {
-				store: window.feature.outpostsStore,
+				store: window.feature.gridStore,
 				displayInfo: true,
 				displayMsg: 'Displaying product requests {0} - {1} of {2}',
 				emptyMsg: "No product requests to display",
 			})
 	
 		});
+
+        window.feature.gridStore.loadPage(1);
 	});
 </script>
 <script type="text/javascript">
 
     function showCreateProductLevelRequest() {
         var modal = new window.feature.createProductLevelRequest({
-            title:' Create a New Product Level Request'
+            title:' Create a New Product Level Request',
+            gridStore: window.feature.gridStore
         });
         modal.show();
     }

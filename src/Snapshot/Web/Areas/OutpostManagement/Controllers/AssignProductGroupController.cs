@@ -61,7 +61,8 @@ namespace Web.Areas.OutpostManagement.Controllers
                 .Where(o=>o.OutpostId == outpost.Id);
 
 			var products = QueryProducts.Query();
-			// todo add product.Client in the where clause, after Elena fixes the issues
+            products = products.Where(p => p.Client == _client && p.ProductGroup == productGroup);
+
 			var selectedProducts = (from p in products
 									select new GetProductsOutputModel
 									{
