@@ -97,6 +97,8 @@
     <Compile Include="Unit\Controllers\AccountControllerTest.cs" />
     <Compile Include="Unit\Controllers\Areas\CampaignManagement\CampaignController_Tests\CloneMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\CampaignManagement\CampaignController_Tests\CreateMethod.cs" />
+    <Compile Include="Unit\Controllers\Areas\AnalysisManagement\ReportRegionLevelControllerTests\GetReportsMethod.cs" />
+    <Compile Include="Unit\Controllers\Areas\AnalysisManagement\ReportRegionLevelControllerTests\ObjectMother.cs" />
     <Compile Include="Unit\Controllers\Areas\CampaignManagement\CampaignController_Tests\EditMethos.cs" />
     <Compile Include="Unit\Controllers\Areas\CampaignManagement\CampaignController_Tests\GetCampaignsMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\CampaignManagement\CampaignController_Tests\GetLeftGridStoreMethod.cs" />
@@ -140,7 +142,6 @@
     <Compile Include="Unit\Controllers\Areas\StockAdministration\HistoricalProductLevelControllerTests\GetHistoricalProductLevelMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\StockAdministration\HistoricalProductLevelControllerTests\GetOutpostsMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\StockAdministration\HistoricalProductLevelControllerTests\ObjectMother.cs" />
-    <Compile Include="Unit\Controllers\Areas\StockAdministration\OutpostStockLevelControllerTests\Build_OutpostHistoricalStockLevel.cs" />
     <Compile Include="Unit\Controllers\Areas\StockAdministration\OutpostStockLevelControllerTests\Method_Edit.cs" />
     <Compile Include="Unit\Controllers\Areas\StockAdministration\OutpostStockLevelControllerTests\Method_Overview.cs" />
     <Compile Include="Unit\Controllers\Areas\StockAdministration\OutpostStockLevelControllerTests\ObjectMother.cs" />

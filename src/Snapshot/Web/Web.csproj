@@ -151,6 +151,9 @@
     <Compile Include="Areas\AnalysisManagement\AnalysisManagementAreaRegistration.cs" />
     <Compile Include="Areas\AnalysisManagement\Controllers\AnalysisController.cs" />
     <Compile Include="Areas\AnalysisManagement\Controllers\ReportRegionLevelController.cs" />
+    <Compile Include="Areas\AnalysisManagement\Models\ReportRegionLevel\InputModel.cs" />
+    <Compile Include="Areas\AnalysisManagement\Models\ReportRegionLevel\LocationEntityModel.cs" />
+    <Compile Include="Areas\AnalysisManagement\Models\ReportRegionLevel\ReportRegionLevelTreeModel.cs" />
     <Compile Include="Areas\OutpostManagement\Controllers\AssignProductGroupController.cs" />
     <Compile Include="Areas\CampaignManagement\CampaignManagementAreaRegistration.cs" />
     <Compile Include="Areas\CampaignManagement\Models\Campaign\CampaignInputModel.cs" />
@@ -381,6 +384,10 @@
     <Content Include="Assets\css\ext-ie.css" />
     <Content Include="Assets\css\general-css.css" />
     <Content Include="Assets\css\global-values.css" />
+    <Content Include="Assets\resources\img\Analysis\ActivityReport.png" />
+    <Content Include="Assets\resources\img\Analysis\OutpostList.png" />
+    <Content Include="Assets\resources\img\Analysis\StockLevelDistrict.png" />
+    <Content Include="Assets\resources\img\Analysis\StockLevelRegion.png" />
     <Content Include="Assets\resources\img\arrow.gif" />
     <Content Include="Assets\css\snapshot-theme.css" />
     <Content Include="Assets\resources\img\briefcase.png" />
@@ -1992,7 +1999,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Areas\AnalysisManagement\Models\" />
     <Folder Include="Areas\OutpostManagement\Services\" />
     <Folder Include="Models\Alerts\" />
   </ItemGroup>
@@ -2076,6 +2082,7 @@
     <Content Include="Areas\AnalysisManagement\Views\Shared\AnalysisMainContent.cshtml" />
     <Content Include="Areas\AnalysisManagement\Views\ReportRegionLevel\Overview.cshtml" />
     <Content Include="Areas\AnalysisManagement\Views\Shared\ReportRegionLevelMainContent.cshtml" />
+    <Content Include="Areas\AnalysisManagement\Views\Shared\AnalysisUserInfoContainer.cshtml" />
     <None Include="Assets\resources\themes\stylesheets\ext4\default\core\_core.scss" />
     <None Include="Assets\resources\themes\stylesheets\ext4\default\core\_reset.scss" />
     <None Include="Assets\resources\themes\stylesheets\ext4\default\layout\_layout.scss" />
@@ -2097,7 +2104,7 @@
     <Content Include="Views\Shared\SelectPositionGoogleMapWindow.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Areas\CampaignManagement\Views\Shared\_CampaignManagementSideBar.cshtml" />
+    <Content Include="Areas\CampaignManagement\Views\_ViewStart.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\SmsRequest\Create.cshtml" />

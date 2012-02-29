@@ -4,6 +4,7 @@ Analysis
 @using Web.Areas.AnalysisManagement;
 @{
     Html.RenderPartial("ReportRegionLevelMainContent");
+    Html.RenderPartial("AnalysisUserInfoContainer");
 }
 <script type="text/javascript">
 
@@ -27,7 +28,7 @@ Analysis
             fields: ['Name', 'Id'],
             proxy: {
                 type: 'ajax',
-                url: '@Url.RouteUrl(AnalysisManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "ReportRegionLevelController", action = "GetCountries" })',
+                url: '@Url.RouteUrl(AnalysisManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "ReportRegionLevel", action = "GetCountries" })',
                 reader: {
                     type: 'json',
                     root: 'countries',
@@ -41,15 +42,20 @@ Analysis
             fields: ['Name', 'Id'],
             proxy: {
                 type: 'ajax',
-                url: '@Url.RouteUrl(AnalysisManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "ReportRegionLevelController", action = "GetRegions" })',
+                url: '@Url.RouteUrl(AnalysisManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "ReportRegionLevel", action = "GetRegions" })',
                 reader: {
                     type: 'json',
                     root: 'regions',
                     disableCaching: true,
                     totalProperty: 'TotalItems'
                 }
-            }
-        });
+            },
+            listeners: {
+            datachanged: function(){
+                 var regionIdAll = this.data.items[0].data.Id;
+                 window.feature.comboBoxRegions.setValue(regionIdAll);
+            }}
+        });       
 
         window.feature.comboBoxCountries = Ext.create('Ext.form.ComboBox', {
             store: window.feature.CountryStore,
@@ -62,9 +68,17 @@ Analysis
             emptyText: _t('Country List'),
             listeners: {
                 select: function (combo, record, index) {
-                    
-
-                }
+                    var selectedCountryId = record[0].data.Id;
+                    window.feature.comboBoxRegions.setValue(null);
+                    window.feature.treegrid.setRootNode(null);
+                    window.feature.RegionStore.load({
+                                           params: { CountryId: selectedCountryId }
+                                       });                     
+                     window.feature.treegrid.getStore().proxy.extraParams.CountryId = selectedCountryId;
+                     window.feature.treegrid.getStore().proxy.extraParams.RegionId = '';
+                     window.feature.treegrid.getRootNode().expand();
+                     
+                  }
             }
         });
 
@@ -76,16 +90,64 @@ Analysis
             fieldLabel: 'Selected Region',
             displayField: 'Name',
             valueField: 'Id',
-            disabled: true,
             margin: '0 0 0 20',
             emptyText: _t('Region List'),
             listeners: {
                 select: function (combo, record, index) {
+                 var selectedRegionId = record[0].data.Id;
+                 window.feature.treegrid.setRootNode(null);
+                 window.feature.treegrid.getStore().proxy.extraParams.RegionId = selectedRegionId;
+                 window.feature.treegrid.getRootNode().expand();
                 }
             }
         });
+        Ext.define('ReportRegionLevel', {
+            extend: 'Ext.data.Model',
+            fields: ['Name','ProductLevelSum','leaf']
+        });
 
+        window.feature.treeStore = Ext.create('Ext.data.TreeStore', {
+            model: 'ReportRegionLevel',
+            autoLoad: false,
+            root: {},
+            proxy: {
+                type: 'ajax',
+                url: '@Url.RouteUrl(AnalysisManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "ReportRegionLevel", action = "GetReports" })',
+                extraParams: { CountryId: '', RegionId: '' }
+            }
+        });
 
+        window.feature.treegrid = Ext.create('Ext.tree.Panel', {
+            useArrows: true,
+            rootVisible: false,
+            flex: 3,
+            height: 600,
+            root: {},
+            store: window.feature.treeStore,
+            multiSelect: true,
+            singleExpand: false,
+            columns: [{
+                xtype: 'treecolumn',
+                text: 'Region / Product Group / Product',
+                flex: 2,
+                sortable: true,
+                dataIndex: 'Name'
+            }, {
+                xtype: 'templatecolumn',
+                text: 'Product Level',
+                flex: 1,
+                sortable: true,
+                dataIndex: 'ProductLevelSum',
+                align: 'center',
+                tpl: Ext.create('Ext.XTemplate', '{ProductLevelSum:this.ProductLevelSum}', {
+                    ProductLevelSum: function (value) {
+                        return value;
+                    }
+                })
+            }]
+        });
+
+         window.feature.CountryStore.load();
 
         var contentRes = window.res.content;
 
@@ -139,7 +201,7 @@ Analysis
 							window.feature.comboBoxRegions							
                         ]
 				    }]
-			}]
+			}, window.feature.treegrid]
         });
 
     });

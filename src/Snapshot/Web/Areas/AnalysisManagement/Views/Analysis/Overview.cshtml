@@ -9,6 +9,7 @@ Analysis
 
 @{
     Html.RenderPartial("AnalysisMainContent");
+    Html.RenderPartial("AnalysisUserInfoContainer");
 }
 <script type="text/javascript">
 
@@ -59,17 +60,19 @@ Analysis
                             layout: {
                                 type: 'hbox'
                             },
-                            items: [{
+                            items: [{xtype: 'image',
+                                src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Analysis/StockLevelRegion.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                                margin: '60 0 0 90'
                             }, { xtype: 'container',
                                 layout: {
                                     type: 'vbox'
                                 },
                                 items: [{ xtype: 'box',
                                     autoEl: { tag: 'a', style: { color: 'blue' }, href: '@(Url.RouteUrl<ReportRegionLevelController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))', html: 'Stock level information at a region level' },
-                                    margin: '70 30 0 80'
+                                    margin: '70 30 10 80'
                                     //text: ''
                                 }, { xtype: 'label',
-                                    margin: '0 0 0 80',
+                                    margin: '0 0 10 80',
                                     text: 'Report description'
                                 }]
                             }]
@@ -78,15 +81,18 @@ Analysis
                             layout: {
                                 type: 'hbox'
                             },
-                            items: [{}, { xtype: 'container',
+                            items: [{ xtype: 'image',
+                                src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Analysis/StockLevelDistrict.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                                margin: '60 0 0 90'
+                            }, { xtype: 'container',
                                 layout: {
                                     type: 'vbox'
                                 },
                                 items: [{ xtype: 'box',
-                                    margin: '70 30 0 80',
+                                    margin: '70 30 10 80',
                                     autoEl: { tag: 'a', style: { color: 'blue' }, href: '', html: 'Stock level information at a district level' }
                                 }, { xtype: 'label',
-                                    margin: '0 0 0 80',
+                                    margin: '0 0 10 80',
                                     text: 'Report description'
                                 }]
                             }]
@@ -101,15 +107,18 @@ Analysis
                             layout: {
                                 type: 'hbox'
                             },
-                            items: [{}, { xtype: 'container',
+                            items: [{ xtype: 'image',
+                                src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Analysis/ActivityReport.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                                margin: '60 0 0 90'
+                            }, { xtype: 'container',
                                 layout: {
                                     type: 'vbox'
                                 },
                                 items: [{ xtype: 'box',
-                                    margin: '70 30 0 80',
+                                    margin: '70 30 10 80',
                                     autoEl: { tag: 'a', style: { color: 'blue' }, href: '', html: 'Activity report for an outpost' }
                                  }, { xtype: 'label',
-                                    margin: '0 0 0 80',
+                                    margin: '0 0 10 80',
                                     text: 'Report description'
                                 }]
                             }]
@@ -118,15 +127,18 @@ Analysis
                             layout: {
                                 type: 'hbox'
                             },
-                            items: [{}, { xtype: 'container',
+                            items: [{ xtype: 'image',
+                                src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Analysis/OutpostList.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                                margin: '60 0 0 140'
+                            }, { xtype: 'container',
                                 layout: {
                                     type: 'vbox'
                                 },
                                 items: [{ xtype: 'box',
-                                    margin: '70 30 0 135',
+                                    margin: '70 30 10 90',
                                     autoEl: { tag: 'a', style:{color: 'blue'}, href: '', html: 'Outpost list with excess levels of a stock item' }
                                     }, { xtype: 'label',
-                                    margin: '0 0 0 135',
+                                    margin: '0 0 10 90',
                                     text: 'Report description'
                                 }]
                             }]
