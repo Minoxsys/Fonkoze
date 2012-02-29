@@ -8,3 +8,9 @@ _ReSharper.EvozonAdministration/
 *.user
 *.Cache
 *.dotCover
+
+# SAASS #
+#########
+*/*/.sass-cache
+*.scssc
+src/Snapshot/Web/Assets/.sass-cache
