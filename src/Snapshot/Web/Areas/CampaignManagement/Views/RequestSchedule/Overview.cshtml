@@ -27,7 +27,6 @@ User Administration Roles: Overview
         window.feature = {};
         window.feature.searchScheduleId = 'Search-Schedule-Id';
         window.feature.NameId = 'Schedule-Name-Id';
-        window.feature.scheduleBasisId = 'Schedule-Basis-Id';
         window.feature.recurEveryId = 'Recur-Every-Id';
         window.feature.firstReminderId = 'First-Reminder-Id';
 
@@ -127,21 +126,7 @@ User Administration Roles: Overview
                         align: 'strech'
                     },
                     items: [
-                        { xtype: 'textfield', id: window.feature.NameId, fieldLabel: 'Schedule Name', allowBlank: false, padding: '0 30 0 0' },
-                        {
-                            xtype: 'combobox',
-                            id: window.feature.scheduleBasisId,
-                            fieldLabel: 'Schedule Basis',
-                            allowBlank: false,
-                            emptyText: 'Select Schedule Basis',
-                            store: ['On a schedule', 'Now'],
-                            value: 'On a schedule',
-                            editable: false,
-                            listeners: {
-                                scope: this,
-                                'change': UpdateUiBasedOnBasis
-                            }
-                        }
+                        { xtype: 'textfield', id: window.feature.NameId, fieldLabel: 'Schedule Name', allowBlank: false, padding: '0 30 0 0'}
                     ]
                 },
                     {
@@ -339,21 +324,19 @@ User Administration Roles: Overview
 
         function InitModal() {
             Ext.getCmp(window.feature.NameId).setValue('');
-            Ext.getCmp(window.feature.scheduleBasisId).setValue('On a schedule');
             Ext.getCmp(window.feature.recurEveryId).setValue('');
             Ext.getCmp(window.feature.firstReminderId).setValue('');
         }
 
         function SaveSchedule() {
             var Name = Ext.getCmp(window.feature.NameId);
-            var scheduleBasis = Ext.getCmp(window.feature.scheduleBasisId);
             var recurEvery = Ext.getCmp(window.feature.recurEveryId);
             var firstReminder = Ext.getCmp(window.feature.firstReminderId);
 
-            var ok = isValid(Name, scheduleBasis, recurEvery, firstReminder);
+            var ok = isValid(Name, recurEvery, firstReminder);
 
             if (ok) {
-                VerifyNameIsAvailable(Name, scheduleBasis, recurEvery, firstReminder, function (Name, scheduleBasis, recurEvery, firstReminder) {
+                VerifyNameIsAvailable(Name, recurEvery, firstReminder, function (Name, recurEvery, firstReminder) {
 
                     var requestSchedule = {};
                     var postToUrl;
@@ -367,7 +350,6 @@ User Administration Roles: Overview
                     window.feature.modal.hide();
 
                     requestSchedule.Name = Name.getValue();
-                    requestSchedule.Basis = scheduleBasis.getValue();
                     if (window.feature.validateFrequency) {
                         requestSchedule.FrequencyType = 'Daily';
                         requestSchedule.FrequencyValue = recurEvery.getValue();
@@ -394,7 +376,7 @@ User Administration Roles: Overview
             }
         }
 
-        function isValid(Name, scheduleBasis, recurEvery, firstReminder) {
+        function isValid(Name, recurEvery, firstReminder) {
             var ok = true;
 
             var validateFrequency = window.feature.validateFrequency;
@@ -402,12 +384,6 @@ User Administration Roles: Overview
             if (Name.getValue() == null || $.trim(Name.getValue()) == '') {
                 Name.markInvalid('Field Schedule Name is required!');
                 Name.setValue('');
-                ok = false;
-            }
-
-            if (scheduleBasis.getValue() == null || $.trim(scheduleBasis.getValue()) == '') {
-                scheduleBasis.markInvalid('Field Schedule Basis is required!');
-                scheduleBasis.setValue('');
                 ok = false;
             }
 
@@ -448,17 +424,17 @@ User Administration Roles: Overview
             return ok;
         }
 
-        function VerifyNameIsAvailable(Name, scheduleBasis, recurEvery, firstReminder, onSuccessHandler) {
+        function VerifyNameIsAvailable(Name, recurEvery, firstReminder, onSuccessHandler) {
             var needToAskServer = window.feature.scheduleToEdit == null || window.feature.scheduleToEdit.get('Name') != Name.getValue();
 
             if (!needToAskServer) {
-                onSuccessHandler(Name, scheduleBasis, recurEvery, firstReminder);
+                onSuccessHandler(Name, recurEvery, firstReminder);
             } else {
                 var getFromUrl = '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "RequestSchedule", action = "DoesScheduleExist" })';
                 var action = $.post(getFromUrl, { Name: Name.getValue() });
                 action.success(function (response) {
                     if (response.Status == 'NotFound') {
-                        onSuccessHandler(Name, scheduleBasis, recurEvery, firstReminder);
+                        onSuccessHandler(Name, recurEvery, firstReminder);
                     } else {
                         Name.markInvalid('This schedule name is not available!');
                     }
@@ -468,41 +444,22 @@ User Administration Roles: Overview
 
         function LoadDataFromSchedule(schedule) {
             var nameTextBox = Ext.getCmp(window.feature.NameId);
-            var basisTextBox = Ext.getCmp(window.feature.scheduleBasisId);
             var recurEveryTextBox = Ext.getCmp(window.feature.recurEveryId);
             var firstReminderTextBox = Ext.getCmp(window.feature.firstReminderId);
 
             var name = schedule.get('Name');
-            var basis = schedule.get('Basis');
             var frequencyValue = schedule.get('FrequencyValue');
-            var firstReminder = schedule.get('Reminders').Length > 0 ? schedule.get('Reminders')[0].PeriodValue : null;
+            var firstReminder = schedule.get('Reminders').length > 0 ? schedule.get('Reminders')[0].PeriodValue : null;
 
             nameTextBox.setValue(name);
-            basisTextBox.setValue(basis);
-            UpdateUiBasedOnBasis();
             if (frequencyValue != null) {
                 recurEveryTextBox.setValue(frequencyValue);
             }
             if (firstReminder != null) {
-                firstReminderTextBox.setValue();
+                firstReminderTextBox.setValue(firstReminder);
             }
             window.feature.scheduleToEdit = schedule;
         }
 
-        function UpdateUiBasedOnBasis() {
-            var basis = Ext.getCmp(window.feature.scheduleBasisId).getValue();
-            var frequencyContainer = Ext.getCmp(window.feature.frequencyContainerId);
-            var recurrencyContainer = Ext.getCmp(window.feature.recurrencyContainerId);
-
-            if (basis == 'On a schedule') {
-                frequencyContainer.show();
-                recurrencyContainer.show();
-                window.feature.validateFrequency = true;
-            } else {
-                frequencyContainer.hide();
-                recurrencyContainer.hide();
-                window.feature.validateFrequency = false;
-            }
-        }
     });
 </script>

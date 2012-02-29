@@ -15,7 +15,6 @@ namespace Web.Areas.CampaignManagement.Models.RequestSchedule
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
-        public string Basis { get; set; }
         public string FrequencyType { get; set; }
         public int FrequencyValue { get; set; }
         public int StartOn { get; set; }

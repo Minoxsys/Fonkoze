@@ -13,6 +13,8 @@ namespace Web.Areas.CampaignManagement.Controllers
 {
     public class RequestScheduleController : Controller
     {
+        public const string ON_A_SCHEDULE_BASIS = "On a schedule";
+
         public IQueryService<User> QueryUsers { get; set; }
 
         public IQueryService<Client> QueryClients { get; set; }
@@ -129,7 +131,7 @@ namespace Web.Areas.CampaignManagement.Controllers
             }
 
             schedule.Name = inputModel.Name;
-            schedule.ScheduleBasis = inputModel.Basis;
+            schedule.ScheduleBasis = ON_A_SCHEDULE_BASIS;
             schedule.FrequencyType = inputModel.FrequencyType;
             schedule.FrequencyValue = inputModel.FrequencyValue;
             schedule.StartOn = inputModel.StartOn;
@@ -199,7 +201,7 @@ namespace Web.Areas.CampaignManagement.Controllers
             Schedule schedule = new Schedule
             {
                 Name = inputModel.Name,
-                ScheduleBasis = inputModel.Basis,
+                ScheduleBasis = ON_A_SCHEDULE_BASIS,
                 FrequencyType = inputModel.FrequencyType,
                 FrequencyValue = inputModel.FrequencyValue,
                 StartOn = inputModel.StartOn,

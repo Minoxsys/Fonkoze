@@ -16,7 +16,6 @@ namespace Tests.Unit.Controllers.RequestScheduleControllerTests
     public class ObjectMother
     {
         public const string SCHEDULE_NAME = "Schedule New";
-        public const string SCHEDULE_BASIS = "On a schedule";
         public const string FREQUENCY_TYPE = "Daily";
         public const int FREQUENCY_VALUE = 5;
         public const int START_ON = 3;
@@ -117,7 +116,6 @@ namespace Tests.Unit.Controllers.RequestScheduleControllerTests
             {
                 Id = scheduleForClientId,
                 Name = SCHEDULE_NAME,
-                Basis = SCHEDULE_BASIS,
                 FrequencyType = FREQUENCY_TYPE, 
                 FrequencyValue = FREQUENCY_VALUE,
                 StartOn = START_ON,
