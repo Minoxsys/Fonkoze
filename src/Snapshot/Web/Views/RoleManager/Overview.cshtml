@@ -203,6 +203,7 @@ User Administration Roles: Overview
                                 text: 'Add New Role',
                                 margin: '0 0 0 20',
                                 handler: function () {
+                                    window.feature.role = null;
                                     InitUiRoleData();
                                     window.feature.modal.setTitle('Add a New Role');
                                     Ext.getCmp(window.feature.saveButtonId).setText('ADD');
@@ -365,8 +366,8 @@ User Administration Roles: Overview
         }
 
         function SetupUiForRole() {
-            Ext.getCmp(window.feature.roleNameId).setValue('');
-            Ext.getCmp(window.feature.roleDescriptionId).setValue('');
+            Ext.getCmp(window.feature.roleNameId).reset();
+            Ext.getCmp(window.feature.roleDescriptionId).reset();
             _.each(GetCheckboxControlsFromUi(), function(item) {
                 item.setValue(false);
             });
@@ -418,7 +419,6 @@ User Administration Roles: Overview
             postToUrl = postToUrl.replace("actionName", actionName);
             var action = $.post(postToUrl, role);
             action.success(function(serverResponse) {
-                    Ext.Msg.alert(serverResponse.Status, serverResponse.Message);
                     window.feature.store.load();
                     window.feature.modal.hide();
             });
