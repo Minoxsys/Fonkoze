@@ -102,12 +102,14 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration.ProductGroupControlle
             productGroup.Name = PRODUCTGROUP_NAME;
             productGroup.Description = PRODUCTGROUP_DESCRIPTION;
             productGroup.ReferenceCode = PRODUCTGROUP_REFERENCECODE;
+            productGroup.Client = client;
 
             productId = Guid.NewGuid();
             product = MockRepository.GeneratePartialMock<Product>();
             product.Stub(c => c.Id).Return(productId);
             product.Name = PRODUCT_NAME;
             product.ProductGroup = productGroup;
+            productGroup.Client = client;
         }
 
         public IQueryable<ProductGroup> PageOfProductGroupData(ProductGroupIndexModel indexModel)
@@ -132,5 +134,6 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration.ProductGroupControlle
             controller.QueryUsers.VerifyAllExpectations();
             controller.QueryClients.VerifyAllExpectations();
         }
+
     }
 }

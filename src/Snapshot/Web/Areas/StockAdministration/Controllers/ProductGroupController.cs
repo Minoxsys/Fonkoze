@@ -50,6 +50,17 @@ namespace Web.Areas.StockAdministration.Controllers
                    });
             }
 
+            var queryProductGroupValidation = QueryService.Query().Where(p => p.Client == _client);
+            if (queryProductGroupValidation.Where(it => it.Name == model.Name).Count() > 0)
+            {
+                return Json(
+                    new ProductGroupOutputModel
+                    {
+                        Status = "Error",
+                        Message = string.Format("There is already a product group with this name: {0} ! Please insert a different name!", model.Name)
+                    });
+            }
+
             CreateMappings();
 
             var productGroup = new ProductGroup();
@@ -81,6 +92,18 @@ namespace Web.Areas.StockAdministration.Controllers
                        Status = "Error",
                        Message = "You must supply a prouctGroupId in order to edit the region."
                    });
+            }
+
+            var queryProductGroupValidation = QueryService.Query().Where(p => p.Client == _client);
+            if (queryProductGroupValidation.Where(it => it.Name == model.Name && it.Id != model.Id).Count() > 0)
+            {
+                return Json(
+                    new ProductGroupOutputModel
+                    {
+                        Status = "Error",
+                        Message = string.Format("There is already a product group with this name: {0} ! Please insert a different name!", model.Name)
+                    });
+
             }
 
             CreateMappings();
