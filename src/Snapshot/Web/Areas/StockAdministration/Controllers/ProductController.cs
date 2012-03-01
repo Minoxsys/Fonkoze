@@ -176,10 +176,9 @@ namespace Web.Areas.StockAdministration.Controllers
 
             var products = QueryService.Query()
                                        .Where(it => it.Client == _client)
-                                       .Where(it => it.ProductGroup.Id == inputProductModel.ProductGroup.Id)
-                                       .Where(it => it.Name == inputProductModel.Name);
+                                       .Where(it => it.ProductGroup.Id == inputProductModel.ProductGroup.Id);
 
-            if (products.Count() > 0)
+            if (products.Where(it=>it.Name == inputProductModel.Name).Count() > 0)
             {
                 return Json(
                     new ProductJsonActionResponse
@@ -190,6 +189,17 @@ namespace Web.Areas.StockAdministration.Controllers
                     });
             }
 
+            if (products.Where(it => it.SMSReferenceCode == inputProductModel.SMSReferenceCode).Count() > 0)
+            {
+                return Json(
+                   new ProductJsonActionResponse
+                   {
+                       Status = "Error",
+                       Message = string.Format("The Product Group already contains a product with SMS Reference code {0}! Please insert a different SMS Reference Code!", inputProductModel.SMSReferenceCode),
+                       CloseModal = false
+                   });
+ 
+            }
             var product = new Product();
             Mapper.Map(inputProductModel, product);
 

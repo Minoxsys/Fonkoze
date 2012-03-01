@@ -392,6 +392,7 @@ Districts: Overview
                     var selectedCountryId = record[0].data.Id;
                     window.feature.comboBoxRegions.setValue(null);
                     window.feature.store.proxy.extraParams.countryId = selectedCountryId;
+                    window.feature.store.loadPage(1);
                     window.feature.regionsStore.load({
                         params: { countryId: selectedCountryId }
                     });
