@@ -380,6 +380,17 @@
 						text: 'Cancel', handler:function(){
 							me.close();
 							me.destroy();
+
+                            if( window.feature.comboBoxFilters.country.getValue() == null)
+                            {
+                                window.feature.regionsStore.removeAll();
+                                window.feature.districtsStore.removeAll();
+                            }
+
+                            if( window.feature.comboBoxFilters.region.getValue() == null )
+                            {
+                                window.feature.districtsStore.removeAll();
+                            }
 						}
 					},{
 						text: 'Save', handler:function(){
