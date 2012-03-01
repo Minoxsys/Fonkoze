@@ -472,6 +472,8 @@ Historical Product Level: Overview
 			                valueField:'Id',
 			                emptyText: 'Country List', 
 			                typeAhead: true,
+                            editable: false,
+                            typeAhead: false,
 			                listeners:{
 				                'select': function(combo, record){
                                     ResetCountryDependencies();
@@ -501,6 +503,8 @@ Historical Product Level: Overview
 			                valueField:'Id',
 			                emptyText: 'Region List', 
 			                typeAhead: true,
+                            editable: false,
+                            typeAhead: false,
 			                listeners:{
                                 'select': function(combo, record){
                                     ResetRegionDependencies();
@@ -530,6 +534,8 @@ Historical Product Level: Overview
 			                valueField:'Id',
 			                emptyText: 'District List', 
 			                typeAhead: true,
+                            editable: false,
+                            typeAhead: false,
 			                listeners:{
                                 'select': function(combo, record){
                                     ResetDistrictDependencies();
@@ -559,6 +565,8 @@ Historical Product Level: Overview
 			                valueField:'Id',
 			                emptyText: 'Outpost List', 
 			                typeAhead: true,
+                            editable: false,
+                            typeAhead: false,
                             listeners:{
                                 'select': function(combo, record){
                                     var viewButton = window.feature.container.down('#'+window.feature.viewProductStockLevelId);

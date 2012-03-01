@@ -102,7 +102,8 @@ Outpost Management Regions: Overview
                         displayField: 'Name',
                         valueField: 'Id',
                         store: window.feature.countryStore,
-                        typeAhead: true,
+                        editable: false,
+                        typeAhead: false,
                         value: overviewComboboxValue,
                         listeners:{
 				            'select': function(combo, record){
@@ -230,7 +231,8 @@ Outpost Management Regions: Overview
 			                    displayField: 'Name',
 			                    valueField:'Id',
 			                    emptyText: 'Select Country', 
-			                    typeAhead: true,
+			                    editable: false,
+                                typeAhead: false,
 			                    listeners:{
 				                    'select': function(combo, record){
 					                    window.feature.container.down('#'+window.feature.overviewcomboboxid).setValue(combo.getValue());

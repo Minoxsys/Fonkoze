@@ -96,6 +96,8 @@ Outpost Stock Level Current
             displayField: 'Name',
             valueField: 'Id',
             emptyText: _t('Country List'),
+            editable: false,
+            typeAhead: false,
             listeners: {
                 select: function (combo, record, index) {
                     var selectedCountryId = record[0].data.Id;
@@ -128,6 +130,8 @@ Outpost Stock Level Current
             displayField: 'Name',
             valueField: 'Id',
             disabled: true,
+            editable: false,
+            typeAhead: false,
             margin: '0 0 0 20',
             emptyText: _t('Region List'),
             listeners: {
@@ -155,6 +159,8 @@ Outpost Stock Level Current
             displayField: 'Name',
             valueField: 'Id',
             disabled: true,
+            editable: false,
+            typeAhead: false,
             margin: '0 0 0 20',
             emptyText: _t('District List'),
             listeners: {
@@ -177,6 +183,8 @@ Outpost Stock Level Current
             displayField: 'Name',
             valueField: 'Id',
             disabled: true,
+            editable: false,
+            typeAhead: false,
             margin: '0 0 0 20',
             emptyText: _t('Outpost List')
 

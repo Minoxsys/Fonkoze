@@ -122,6 +122,8 @@
             valueField: 'Id',
             margin: '0 0 0 30',
             emptyText: _t('Selected product group'),
+            editable: false,
+            typeAhead: false,
             listeners: {
                 select: function (combo, record, index) {
                     var selectedProductGroupId = record[0].data.Id;
@@ -217,6 +219,8 @@
                                     fieldLabel: 'Product Group',
                                     valueField: 'Id',
                                     emptyText: _t('Select Product group'),
+                                    editable: false,
+                                    typeAhead: false,
                                     value: me.recordProductGroupId,
                                     listeners: {
                                         select: function (combo, record, index) {
