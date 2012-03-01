@@ -23,8 +23,8 @@ namespace Web.BackgroundJobs
         {
             return new Task(() => {
 
-                var cutoffDate = DateTime.UtcNow.Subtract(TimeSpan.FromMinutes(5));
-                var oldItems = queryWorkItems.Query().Where(w => w.Completed != null && w.Completed < cutoffDate && w.JobName == EMPTY_JOB_NAME);
+                var cutoffDate = DateTime.UtcNow.Subtract(TimeSpan.FromMinutes(15));
+                var oldItems = queryWorkItems.Query().Where(w => w.Completed != null);
                 if (oldItems.Any())
                 {
                     foreach (var workItem in oldItems.ToList())
