@@ -21,6 +21,7 @@ using Web.Areas.OutpostManagement.Models.Country;
 using Web.Areas.OutpostManagement.Models.Client;
 using Core.Domain;
 using Web.Models.Shared;
+using Web.Areas.StockAdministration.Models.Product;
 
 namespace Web.Areas.OutpostManagement.Controllers
 {
@@ -257,7 +258,8 @@ namespace Web.Areas.OutpostManagement.Controllers
                     new JsonActionResponse
                     {
                         Status = "Error",
-                        Message = "The district has not been saved!"
+                        Message = "The district has not been saved!"                       
+
                     });
 
             }
@@ -272,6 +274,19 @@ namespace Web.Areas.OutpostManagement.Controllers
             district.Client = client;
             district.Region = region;
 
+            var districts = QueryService.Query().Where(it =>it.Client.Id == _client.Id && it.Region.Id == districtInputModel.Region.Id && it.Name == districtInputModel.Name);
+
+            if (districts.Count() > 0)
+            {
+                return Json(
+                    new ToModalJsonActionResponse
+                    {
+                        Status = "Error",
+                        Message = string.Format("The region already contains a district with the name {0}! Please insert a different name!", districtInputModel.Name),
+                        CloseModal = false
+                    });
+ 
+            }
             SaveOrUpdateCommand.Execute(district);
 
             return Json(
@@ -286,6 +301,7 @@ namespace Web.Areas.OutpostManagement.Controllers
         [HttpPost]
         public JsonResult Edit(DistrictInputModel districtInputModel)
         {
+            LoadUserAndClient();
             if (string.IsNullOrEmpty(districtInputModel.Name))
             {
                 return Json(
@@ -294,6 +310,20 @@ namespace Web.Areas.OutpostManagement.Controllers
                        Status = "Error",
                        Message = "The district has not been updated!"
                    });
+            }
+
+            var districts = QueryService.Query().Where(it => it.Client.Id == _client.Id && it.Id != districtInputModel.Id && it.Region.Id == districtInputModel.Region.Id && it.Name == districtInputModel.Name);
+
+            if (districts.Count() > 0)
+            {
+                return Json(
+                    new ToModalJsonActionResponse
+                    {
+                        Status = "Error",
+                        Message = string.Format("The region already contains a district with the name {0}! Please insert a different name!", districtInputModel.Name),
+                        CloseModal = false
+                    });
+
             }
 
             District district = QueryService.Load(districtInputModel.Id);
@@ -305,7 +335,7 @@ namespace Web.Areas.OutpostManagement.Controllers
             var client = QueryClients.Load(districtInputModel.Client.Id);
             district.Region = region;
             district.Client = client;
-
+            
             SaveOrUpdateCommand.Execute(district);
             return Json(
                 new JsonActionResponse

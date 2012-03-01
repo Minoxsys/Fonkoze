@@ -166,7 +166,7 @@ namespace Web.Areas.StockAdministration.Controllers
             if ((string.IsNullOrEmpty(inputProductModel.Name)) && (string.IsNullOrEmpty(inputProductModel.SMSReferenceCode)))
             {
                 return Json(
-                    new ProductJsonActionResponse
+                    new ToModalJsonActionResponse
                     {
                         Status = "Error",
                         Message = "The product has not been saved!",
@@ -183,7 +183,7 @@ namespace Web.Areas.StockAdministration.Controllers
             if (products.Where(it=>it.Name == inputProductModel.Name).Count() > 0)
             {
                 return Json(
-                    new ProductJsonActionResponse
+                    new ToModalJsonActionResponse
                     {
                         Status = "Error",
                         Message = string.Format("The Product Group already contains a product with the name {0}! Please insert a different name!", inputProductModel.Name),
@@ -194,7 +194,7 @@ namespace Web.Areas.StockAdministration.Controllers
             if (products.Where(it => it.SMSReferenceCode == inputProductModel.SMSReferenceCode).Count() > 0)
             {
                 return Json(
-                   new ProductJsonActionResponse
+                   new ToModalJsonActionResponse
                    {
                        Status = "Error",
                        Message = string.Format("The Product Group already contains a product with SMS Reference code {0}! Please insert a different SMS Reference Code!", inputProductModel.SMSReferenceCode),
@@ -213,7 +213,7 @@ namespace Web.Areas.StockAdministration.Controllers
             SaveOrUpdateProduct.Execute(product);
 
             return Json(
-                new ProductJsonActionResponse
+                new ToModalJsonActionResponse
                 {
                     Status = "Success",
                     Message = "The product has been saved!",
@@ -229,24 +229,37 @@ namespace Web.Areas.StockAdministration.Controllers
             if ((string.IsNullOrEmpty(inputProductModel.Name)) && (string.IsNullOrEmpty(inputProductModel.SMSReferenceCode)))
             {
                 return Json(
-                    new ProductJsonActionResponse
+                    new ToModalJsonActionResponse
                     {
                         Status = "Error",
                         Message = "The product has not been updated!",
                         CloseModal = true
                     });
             }
-            var products = QueryService.Query().Where(it => it.ProductGroup.Id == inputProductModel.ProductGroup.Id && it.Name == inputProductModel.Name && it.Id != inputProductModel.Id).ToList();
-
-            if (products.Count > 0)
+            var products = QueryService.Query()
+                                       .Where(it => it.Client == _client && it.Id != inputProductModel.Id)
+                                       .Where(it => it.ProductGroup.Id == inputProductModel.ProductGroup.Id);
+            if (products.Where(it=>it.Name == inputProductModel.Name).Count() > 0)
             {
                 return Json(
-                    new ProductJsonActionResponse
+                    new ToModalJsonActionResponse
                     {
                         Status = "Error",
-                        Message = string.Format("The Product Group {0} already contains a product with the name {1}! Please insert a different name!", products[0].ProductGroup.Name, products[0].Name),
+                        Message = string.Format("The Product Group already contains a product with the name {0}! Please insert a different name!",inputProductModel.Name),
                         CloseModal = false
                     });
+            }
+
+            if (products.Where(it => it.SMSReferenceCode == inputProductModel.SMSReferenceCode).Count() > 0)
+            {
+                return Json(
+                   new ToModalJsonActionResponse
+                   {
+                       Status = "Error",
+                       Message = string.Format("The Product Group already contains a product with SMS Reference code {0}! Please insert a different SMS Reference Code!", inputProductModel.SMSReferenceCode),
+                       CloseModal = false
+                   });
+
             }
 
             CreateMappings();
@@ -262,7 +275,7 @@ namespace Web.Areas.StockAdministration.Controllers
             SaveOrUpdateProduct.Execute(product);
 
             return Json(
-                new ProductJsonActionResponse
+                new ToModalJsonActionResponse
                 {
                     Status = "Success",
                     Message = "The product has been updated!",

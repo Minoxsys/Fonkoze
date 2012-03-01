@@ -146,7 +146,7 @@ Districts: Overview
                                                 name: 'Name',
                                                 fieldLabel: 'District Name',
                                                 allowBlank:false,
-                                                id: window.feature.districtNameId,
+                                                itemId: window.feature.districtNameId,
                                                 anchor: '100%'
                                             }]
                 });
@@ -194,8 +194,11 @@ Districts: Overview
                         var postToUrl = '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "District", action = "Create" })';
                         var action = $.post(postToUrl, values);
                         action.success(function (result) {
-                            if(result.Status == "Error"){
-                            }
+
+                        if(result.CloseModal === false){
+                        Ext.Msg.alert(result.Status, result.Message);
+                        }
+                        else{
                             var selectedCountryInModal = Ext.getCmp(window.feature.comboboxCountriesForModalId).getValue();
                             var selectedRegionInModal = Ext.getCmp(window.feature.comboboxRegionsForModalId).getValue();
                             me.close();
@@ -211,6 +214,7 @@ Districts: Overview
                             window.feature.store.loadPage(1, {
                                 params: { RegionId: selectedRegionInModal }
                             });
+                            }
                         });
                     }}
                 }]
@@ -276,7 +280,7 @@ Districts: Overview
 
                     },{ xtype: 'textfield',
                         hidden: true,
-                        name: 'ClientId',
+                        name: 'Id',
                         id: window.feature.DistrictId
 
                     }]
@@ -313,7 +317,7 @@ Districts: Overview
                 me.buttons = [{ text: 'Cancel', handler: function () { me.close(); me.destroy(); }
                 }, {
                     text: 'Save', handler: function () {
-                    var districtName = me.down('#' + window.feature.districtNameId);
+                    var districtName = me.down('#' + window.feature.districtNameEditModalId);
                     var region = Ext.getCmp(window.feature.comboboxRegionsForModalId);
                     
                     var ok = IsValid(region, districtName);
@@ -327,8 +331,10 @@ Districts: Overview
                         var postToUrl = '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "District", action = "Edit" })';
                         var action = $.post(postToUrl, values);
                         action.success(function (result) {
-                            if(result.Status == "Error"){
+                             if(result.CloseModal === false){
+                                Ext.Msg.alert(result.Status, result.Message);
                             }
+                            else{
                             var selectedCountryInModal = Ext.getCmp(window.feature.comboboxCountriesForModalId).getValue();
                             var selectedRegionInModal = Ext.getCmp(window.feature.comboboxRegionsForModalId).getValue();
                             me.close();
@@ -344,6 +350,7 @@ Districts: Overview
                             window.feature.store.loadPage(1, {
                                 params: { RegionId: selectedRegionInModal }
                             });
+                            }
                         });
                       }
                     }

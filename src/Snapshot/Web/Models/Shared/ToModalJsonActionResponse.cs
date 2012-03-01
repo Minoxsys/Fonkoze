@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using Web.Models.Shared;
 
-namespace Web.Areas.StockAdministration.Models.Product
+namespace Web.Models.Shared
 {
-    public class ProductJsonActionResponse : JsonActionResponse
+    public class ToModalJsonActionResponse : JsonActionResponse
     {
         public bool CloseModal { get; set; }
     }

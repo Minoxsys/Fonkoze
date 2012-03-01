@@ -57,7 +57,7 @@ namespace Web.Areas.OutpostManagement.Controllers
             if (queryRegionValidation.Where(it => it.Name == regionInputModel.Name).Count()> 0)
             {
                 return Json(
-                    new ProductJsonActionResponse
+                    new ToModalJsonActionResponse
                     {
                    Status = "Error",
                    CloseModal = false,
@@ -69,7 +69,7 @@ namespace Web.Areas.OutpostManagement.Controllers
             if (queryRegionValidation.Where(it => it.Coordinates == regionInputModel.Coordinates).Count() > 0)
             {
                 return Json(
-                    new ProductJsonActionResponse
+                    new ToModalJsonActionResponse
                     {
                         Status = "Error",
                         CloseModal = false,
@@ -87,7 +87,7 @@ namespace Web.Areas.OutpostManagement.Controllers
             SaveOrUpdateCommand.Execute(region);
 
             return Json(
-               new ProductJsonActionResponse
+               new ToModalJsonActionResponse
                {
                    Status = "Success",
                    CloseModal = true,
@@ -103,7 +103,7 @@ namespace Web.Areas.OutpostManagement.Controllers
             if (regionInputModel.Id == Guid.Empty)
             {
                 return Json(
-                   new ProductJsonActionResponse
+                   new ToModalJsonActionResponse
                    {
                        Status = "Error",
                        CloseModal = true,
@@ -114,7 +114,7 @@ namespace Web.Areas.OutpostManagement.Controllers
             if (string.IsNullOrEmpty(regionInputModel.Name) || string.IsNullOrEmpty(regionInputModel.CountryId.ToString()))
             {
                 return Json(
-                   new ProductJsonActionResponse
+                   new ToModalJsonActionResponse
                    {
                        Status = "Error",
                        CloseModal = true,
@@ -127,7 +127,7 @@ namespace Web.Areas.OutpostManagement.Controllers
             if (queryRegionValidation.Where(it => it.Name == regionInputModel.Name && it.Id != regionInputModel.Id && it.Country.Id == regionInputModel.CountryId).Count() > 0)
             {
                 return Json(
-                    new ProductJsonActionResponse
+                    new ToModalJsonActionResponse
                     {
                         Status = "Error",
                         CloseModal = false,
@@ -139,7 +139,7 @@ namespace Web.Areas.OutpostManagement.Controllers
             if (queryRegionValidation.Where(it => it.Coordinates == regionInputModel.Coordinates && it.Id != regionInputModel.Id).Count() > 0)
             {
                 return Json(
-                    new ProductJsonActionResponse
+                    new ToModalJsonActionResponse
                     {
                         Status = "Error",
                         CloseModal = false,
@@ -159,7 +159,7 @@ namespace Web.Areas.OutpostManagement.Controllers
             SaveOrUpdateCommand.Execute(region);
 
             return Json(
-               new ProductJsonActionResponse
+               new ToModalJsonActionResponse
                {
                    Status = "Success",
                    CloseModal =true,

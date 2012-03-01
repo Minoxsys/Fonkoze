@@ -154,6 +154,11 @@
                 productSMSCode.setValue(null);
                 ok = false;
             }
+
+             if (productSMSCode.getValue().length > 1) {
+                productSMSCode.markInvalid('Field SMS Code should have maximum one character!');
+                ok = false;
+            }
             return ok;
         };
     
@@ -329,6 +334,7 @@
                             xtype: 'textfield',
                             name: 'SMSReferenceCode',
                             fieldLabel: 'SMS Code',
+                            allowBlank:false,
                             itemId: window.feature.ProductSMSReferecenceCodeId,
                             value: me.recordSMSReferenceCode
     
