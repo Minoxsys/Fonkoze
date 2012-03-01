@@ -479,17 +479,20 @@ Campaign: Overview
                 items: [{
                     xtype: 'textfield',
                     fieldLabel: 'Campaign Name',
+                    allowBlank:false,
                     id: window.feature.formCampaignNameId,
                 },{
                     xtype: 'datefield',
                     margin: '20 0 0 0',
                     fieldLabel: 'Start Date',
                     format: 'd-M-Y',
+                    allowBlank:false,
                     id: window.feature.formCampaignStartDateId,
                 },{
                     xtype: 'datefield',
                     margin: '20 0 0 0',
                     fieldLabel: 'End Date',
+                    allowBlank:false,
                     format: 'd-M-Y',
                     id: window.feature.formCampaignEndDateId,
                 }] 
@@ -776,6 +779,13 @@ Campaign: Overview
                 endDate.setValue(null);
                 ok = false;
             }
+
+            if (endDate.getValue()!= null && startDate.getValue() != null && startDate.getValue() >= endDate.getValue()){
+                endDate.markInvalid('End Date must be after Start Date!');  
+                ok = false;
+            }
+
+            
             return ok;
         }
 
