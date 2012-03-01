@@ -27536,6 +27536,11 @@ svg, vml {
   font-size: 22px;
   color: black; }
 
+/* line 49, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/sass/general-css.scss */
+#SideBar #SideBar-innerCt div em button span {
+  text-align: left;
+  padding: 0 0 0 40px; }
+
 /**
  * @var {string} $prefix 
  * The prefix to be applied to all CSS selectors. If this is changed, it must also be changed in your 
@@ -46125,6 +46130,314 @@ svg, vml {
   background-image: url('../resources/themes/images/default/btn/btn-snapshot-add-btn-small-disabled-bg.gif'); }
 
 /* line 625, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-btn-snapshot-add-btn-small {
+  border-color: #4979a2; }
+
+/* line 58, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/mixins/_frame.scss */
+.x-btn-snapshot-add-btn-small {
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  -o-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -khtml-border-radius: 3px;
+  border-radius: 3px;
+  padding: 4px 9px 4px 9px;
+  border-width: 1px;
+  border-style: solid;
+  background-image: none;
+  background-color: yellow;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #207cca), color-stop(0%, #4e92c9), color-stop(1%, #95caf9), color-stop(3%, #64b0f4), color-stop(100%, #4e92c9));
+  background-image: -webkit-linear-gradient(top, #207cca 0%, #4e92c9 0%, #95caf9 1%, #64b0f4 3%, #4e92c9 100%);
+  background-image: -moz-linear-gradient(top, #207cca 0%, #4e92c9 0%, #95caf9 1%, #64b0f4 3%, #4e92c9 100%);
+  background-image: -o-linear-gradient(top, #207cca 0%, #4e92c9 0%, #95caf9 1%, #64b0f4 3%, #4e92c9 100%);
+  background-image: -ms-linear-gradient(top, #207cca 0%, #4e92c9 0%, #95caf9 1%, #64b0f4 3%, #4e92c9 100%);
+  background-image: linear-gradient(top, #207cca 0%, #4e92c9 0%, #95caf9 1%, #64b0f4 3%, #4e92c9 100%); }
+
+/* line 91, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/mixins/_frame.scss */
+.x-nlg .x-btn-snapshot-add-btn-small-mc {
+  background-image: url('../images/default/btn/btn-snapshot-add-btn-small-bg.gif');
+  background-color: yellow; }
+
+/* line 104, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/mixins/_frame.scss */
+.x-nbr .x-btn-snapshot-add-btn-small {
+  padding: 0 !important;
+  border-width: 0 !important;
+  -moz-border-radius: 0px;
+  -webkit-border-radius: 0px;
+  -o-border-radius: 0px;
+  -ms-border-radius: 0px;
+  -khtml-border-radius: 0px;
+  border-radius: 0px;
+  background-color: transparent;
+  background-position: 1100303px 1000303px; }
+/* line 147, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/mixins/_frame.scss */
+.x-nbr .x-btn-snapshot-add-btn-small-tl,
+.x-nbr .x-btn-snapshot-add-btn-small-bl,
+.x-nbr .x-btn-snapshot-add-btn-small-tr,
+.x-nbr .x-btn-snapshot-add-btn-small-br,
+.x-nbr .x-btn-snapshot-add-btn-small-tc,
+.x-nbr .x-btn-snapshot-add-btn-small-bc,
+.x-nbr .x-btn-snapshot-add-btn-small-ml,
+.x-nbr .x-btn-snapshot-add-btn-small-mr {
+  zoom: 1;
+  background-image: url('../images/default/btn/btn-snapshot-add-btn-small-corners.gif'); }
+/* line 168, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/mixins/_frame.scss */
+.x-nbr .x-btn-snapshot-add-btn-small-ml,
+.x-nbr .x-btn-snapshot-add-btn-small-mr {
+  zoom: 1;
+  background-image: url('../images/default/btn/btn-snapshot-add-btn-small-sides.gif');
+  background-position: 0 0; }
+/* line 200, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/mixins/_frame.scss */
+.x-nbr .x-btn-snapshot-add-btn-small-mc {
+  padding: 2px 7px 2px 7px; }
+
+/* line 631, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-btn-snapshot-add-btn-small .x-btn-inner {
+  font-size: 12px;
+  font-weight: normal;
+  font-family: Lucida Sans Unicode, Arial, Verdana, Geneva, Helvetica, sans-serif;
+  color: white;
+  background-repeat: no-repeat;
+  padding: 0 0px; }
+
+/* line 643, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-btn-snapshot-add-btn-small-icon button,
+.x-btn-snapshot-add-btn-small-icon .x-btn-inner,
+.x-btn-snapshot-add-btn-small-noicon button,
+.x-btn-snapshot-add-btn-small-noicon .x-btn-inner {
+  height: null;
+  line-height: null; }
+
+/* line 651, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-btn-snapshot-add-btn-small-icon button {
+  padding: 0;
+  width: null !important;
+  height: null; }
+/* line 657, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-btn-snapshot-add-btn-small-icon .x-btn-icon {
+  width: null;
+  height: null;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0; }
+
+/* line 668, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-btn-snapshot-add-btn-small-icon-text-left button {
+  height: null; }
+/* line 671, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-btn-snapshot-add-btn-small-icon-text-left .x-btn-inner {
+  height: null;
+  line-height: null;
+  padding-left: null4px; }
+/* line 677, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-btn-snapshot-add-btn-small-icon-text-left .x-btn-icon {
+  width: null;
+  height: auto;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: auto; }
+  /* line 686, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+  .x-ie6 .x-btn-snapshot-add-btn-small-icon-text-left .x-btn-icon, .x-quirks .x-btn-snapshot-add-btn-small-icon-text-left .x-btn-icon {
+    height: null; }
+
+/* line 693, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-btn-snapshot-add-btn-small-icon-text-right button {
+  height: null; }
+/* line 696, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-btn-snapshot-add-btn-small-icon-text-right .x-btn-inner {
+  height: null;
+  line-height: null;
+  padding-right: null4px !important; }
+/* line 702, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-btn-snapshot-add-btn-small-icon-text-right .x-btn-icon {
+  width: null;
+  height: auto;
+  top: 0;
+  left: auto;
+  bottom: 0;
+  right: 0; }
+  /* line 711, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+  .x-ie6 .x-btn-snapshot-add-btn-small-icon-text-right .x-btn-icon, .x-quirks .x-btn-snapshot-add-btn-small-icon-text-right .x-btn-icon {
+    height: null; }
+
+/* line 718, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-btn-snapshot-add-btn-small-icon-text-top .x-btn-inner {
+  padding-top: null4px; }
+/* line 722, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-btn-snapshot-add-btn-small-icon-text-top .x-btn-icon {
+  width: auto;
+  height: null;
+  top: 0;
+  left: 0;
+  bottom: auto;
+  right: 0; }
+  /* line 731, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+  .x-ie6 .x-btn-snapshot-add-btn-small-icon-text-top .x-btn-icon, .x-quirks .x-ie .x-btn-snapshot-add-btn-small-icon-text-top .x-btn-icon {
+    width: null; }
+
+/* line 738, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-btn-snapshot-add-btn-small-icon-text-bottom .x-btn-inner {
+  padding-bottom: null4px; }
+/* line 742, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-btn-snapshot-add-btn-small-icon-text-bottom .x-btn-icon {
+  width: auto;
+  height: null;
+  top: auto;
+  left: 0;
+  bottom: 0;
+  right: 0; }
+  /* line 751, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+  .x-ie6 .x-btn-snapshot-add-btn-small-icon-text-bottom .x-btn-icon, .x-quirks .x-ie .x-btn-snapshot-add-btn-small-icon-text-bottom .x-btn-icon {
+    width: null; }
+
+/* line 757, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-btn-snapshot-add-btn-small-over {
+  background-image: none;
+  background-color: yellow;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #207cca), color-stop(0%, #4e92c9), color-stop(1%, #95caf9), color-stop(3%, #64b0f4), color-stop(100%, #4e92c9));
+  background-image: -webkit-linear-gradient(top, #207cca 0%, #4e92c9 0%, #95caf9 1%, #64b0f4 3%, #4e92c9 100%);
+  background-image: -moz-linear-gradient(top, #207cca 0%, #4e92c9 0%, #95caf9 1%, #64b0f4 3%, #4e92c9 100%);
+  background-image: -o-linear-gradient(top, #207cca 0%, #4e92c9 0%, #95caf9 1%, #64b0f4 3%, #4e92c9 100%);
+  background-image: -ms-linear-gradient(top, #207cca 0%, #4e92c9 0%, #95caf9 1%, #64b0f4 3%, #4e92c9 100%);
+  background-image: linear-gradient(top, #207cca 0%, #4e92c9 0%, #95caf9 1%, #64b0f4 3%, #4e92c9 100%); }
+
+/* line 781, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-btn-snapshot-add-btn-small-focus {
+  background-image: none;
+  background-color: yellow;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #207cca), color-stop(0%, #4e92c9), color-stop(1%, #95caf9), color-stop(3%, #64b0f4), color-stop(100%, #4e92c9));
+  background-image: -webkit-linear-gradient(top, #207cca 0%, #4e92c9 0%, #95caf9 1%, #64b0f4 3%, #4e92c9 100%);
+  background-image: -moz-linear-gradient(top, #207cca 0%, #4e92c9 0%, #95caf9 1%, #64b0f4 3%, #4e92c9 100%);
+  background-image: -o-linear-gradient(top, #207cca 0%, #4e92c9 0%, #95caf9 1%, #64b0f4 3%, #4e92c9 100%);
+  background-image: -ms-linear-gradient(top, #207cca 0%, #4e92c9 0%, #95caf9 1%, #64b0f4 3%, #4e92c9 100%);
+  background-image: linear-gradient(top, #207cca 0%, #4e92c9 0%, #95caf9 1%, #64b0f4 3%, #4e92c9 100%); }
+
+/* line 806, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-btn-snapshot-add-btn-small-menu-active,
+.x-btn-snapshot-add-btn-small-pressed {
+  background-image: none;
+  background-color: yellow;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #207cca), color-stop(0%, #4e92c9), color-stop(1%, #95caf9), color-stop(3%, #64b0f4), color-stop(100%, #4e92c9));
+  background-image: -webkit-linear-gradient(top, #207cca 0%, #4e92c9 0%, #95caf9 1%, #64b0f4 3%, #4e92c9 100%);
+  background-image: -moz-linear-gradient(top, #207cca 0%, #4e92c9 0%, #95caf9 1%, #64b0f4 3%, #4e92c9 100%);
+  background-image: -o-linear-gradient(top, #207cca 0%, #4e92c9 0%, #95caf9 1%, #64b0f4 3%, #4e92c9 100%);
+  background-image: -ms-linear-gradient(top, #207cca 0%, #4e92c9 0%, #95caf9 1%, #64b0f4 3%, #4e92c9 100%);
+  background-image: linear-gradient(top, #207cca 0%, #4e92c9 0%, #95caf9 1%, #64b0f4 3%, #4e92c9 100%); }
+
+/* line 830, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-btn-snapshot-add-btn-small-disabled {
+  background-image: none;
+  background-color: yellow;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #207cca), color-stop(0%, #4e92c9), color-stop(1%, #95caf9), color-stop(3%, #64b0f4), color-stop(100%, #4e92c9));
+  background-image: -webkit-linear-gradient(top, #207cca 0%, #4e92c9 0%, #95caf9 1%, #64b0f4 3%, #4e92c9 100%);
+  background-image: -moz-linear-gradient(top, #207cca 0%, #4e92c9 0%, #95caf9 1%, #64b0f4 3%, #4e92c9 100%);
+  background-image: -o-linear-gradient(top, #207cca 0%, #4e92c9 0%, #95caf9 1%, #64b0f4 3%, #4e92c9 100%);
+  background-image: -ms-linear-gradient(top, #207cca 0%, #4e92c9 0%, #95caf9 1%, #64b0f4 3%, #4e92c9 100%);
+  background-image: linear-gradient(top, #207cca 0%, #4e92c9 0%, #95caf9 1%, #64b0f4 3%, #4e92c9 100%); }
+
+/* line 878, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-nbr .x-btn-snapshot-add-btn-small-over .x-frame-tl,
+.x-nbr .x-btn-snapshot-add-btn-small-over .x-frame-bl,
+.x-nbr .x-btn-snapshot-add-btn-small-over .x-frame-tr,
+.x-nbr .x-btn-snapshot-add-btn-small-over .x-frame-br,
+.x-nbr .x-btn-snapshot-add-btn-small-over .x-frame-tc,
+.x-nbr .x-btn-snapshot-add-btn-small-over .x-frame-bc {
+  background-image: url('../resources/themes/images/default/btn/btn-snapshot-add-btn-small-over-corners.gif'); }
+/* line 882, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-nbr .x-btn-snapshot-add-btn-small-over .x-frame-ml,
+.x-nbr .x-btn-snapshot-add-btn-small-over .x-frame-mr {
+  background-image: url('../resources/themes/images/default/btn/btn-snapshot-add-btn-small-over-sides.gif'); }
+/* line 885, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-nbr .x-btn-snapshot-add-btn-small-over .x-frame-mc {
+  background-color: yellow;
+  background-image: url('../resources/themes/images/default/btn/btn-snapshot-add-btn-small-over-bg.gif'); }
+/* line 899, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-nbr .x-btn-snapshot-add-btn-small-focus .x-frame-tl,
+.x-nbr .x-btn-snapshot-add-btn-small-focus .x-frame-bl,
+.x-nbr .x-btn-snapshot-add-btn-small-focus .x-frame-tr,
+.x-nbr .x-btn-snapshot-add-btn-small-focus .x-frame-br,
+.x-nbr .x-btn-snapshot-add-btn-small-focus .x-frame-tc,
+.x-nbr .x-btn-snapshot-add-btn-small-focus .x-frame-bc {
+  background-image: url('../resources/themes/images/default/btn/btn-snapshot-add-btn-small-focus-corners.gif'); }
+/* line 903, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-nbr .x-btn-snapshot-add-btn-small-focus .x-frame-ml,
+.x-nbr .x-btn-snapshot-add-btn-small-focus .x-frame-mr {
+  background-image: url('../resources/themes/images/default/btn/btn-snapshot-add-btn-small-focus-sides.gif'); }
+/* line 906, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-nbr .x-btn-snapshot-add-btn-small-focus .x-frame-mc {
+  background-color: yellow;
+  background-image: url('../resources/themes/images/default/btn/btn-snapshot-add-btn-small-focus-bg.gif'); }
+/* line 921, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-nbr .x-btn-snapshot-add-btn-small-menu-active .x-frame-tl,
+.x-nbr .x-btn-snapshot-add-btn-small-menu-active .x-frame-bl,
+.x-nbr .x-btn-snapshot-add-btn-small-menu-active .x-frame-tr,
+.x-nbr .x-btn-snapshot-add-btn-small-menu-active .x-frame-br,
+.x-nbr .x-btn-snapshot-add-btn-small-menu-active .x-frame-tc,
+.x-nbr .x-btn-snapshot-add-btn-small-menu-active .x-frame-bc,
+.x-nbr .x-btn-snapshot-add-btn-small-pressed .x-frame-tl,
+.x-nbr .x-btn-snapshot-add-btn-small-pressed .x-frame-bl,
+.x-nbr .x-btn-snapshot-add-btn-small-pressed .x-frame-tr,
+.x-nbr .x-btn-snapshot-add-btn-small-pressed .x-frame-br,
+.x-nbr .x-btn-snapshot-add-btn-small-pressed .x-frame-tc,
+.x-nbr .x-btn-snapshot-add-btn-small-pressed .x-frame-bc {
+  background-image: url('../resources/themes/images/default/btn/btn-snapshot-add-btn-small-pressed-corners.gif'); }
+/* line 925, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-nbr .x-btn-snapshot-add-btn-small-menu-active .x-frame-ml,
+.x-nbr .x-btn-snapshot-add-btn-small-menu-active .x-frame-mr,
+.x-nbr .x-btn-snapshot-add-btn-small-pressed .x-frame-ml,
+.x-nbr .x-btn-snapshot-add-btn-small-pressed .x-frame-mr {
+  background-image: url('../resources/themes/images/default/btn/btn-snapshot-add-btn-small-pressed-sides.gif'); }
+/* line 928, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-nbr .x-btn-snapshot-add-btn-small-menu-active .x-frame-mc,
+.x-nbr .x-btn-snapshot-add-btn-small-pressed .x-frame-mc {
+  background-color: yellow;
+  background-image: url('../resources/themes/images/default/btn/btn-snapshot-add-btn-small-pressed-bg.gif'); }
+/* line 942, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-nbr .x-btn-snapshot-add-btn-small-disabled .x-frame-tl,
+.x-nbr .x-btn-snapshot-add-btn-small-disabled .x-frame-bl,
+.x-nbr .x-btn-snapshot-add-btn-small-disabled .x-frame-tr,
+.x-nbr .x-btn-snapshot-add-btn-small-disabled .x-frame-br,
+.x-nbr .x-btn-snapshot-add-btn-small-disabled .x-frame-tc,
+.x-nbr .x-btn-snapshot-add-btn-small-disabled .x-frame-bc {
+  background-image: url('../resources/themes/images/default/btn/btn-snapshot-add-btn-small-disabled-corners.gif'); }
+/* line 946, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-nbr .x-btn-snapshot-add-btn-small-disabled .x-frame-ml,
+.x-nbr .x-btn-snapshot-add-btn-small-disabled .x-frame-mr {
+  background-image: url('../resources/themes/images/default/btn/btn-snapshot-add-btn-small-disabled-sides.gif'); }
+/* line 949, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-nbr .x-btn-snapshot-add-btn-small-disabled .x-frame-mc {
+  background-color: yellow;
+  background-image: url('../resources/themes/images/default/btn/btn-snapshot-add-btn-small-disabled-bg.gif'); }
+
+/* line 962, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-nlg .x-btn-snapshot-add-btn-small {
+  background-repeat: repeat-x;
+  background-image: url('../resources/themes/images/default/btn/btn-snapshot-add-btn-small-bg.gif'); }
+
+/* line 971, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-nlg .x-btn-snapshot-add-btn-small-over {
+  background-repeat: repeat-x;
+  background-image: url('../resources/themes/images/default/btn/btn-snapshot-add-btn-small-over-bg.gif'); }
+
+/* line 980, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-nlg .x-btn-snapshot-add-btn-small-focus {
+  background-repeat: repeat-x;
+  background-image: url('../resources/themes/images/default/btn/btn-snapshot-add-btn-small-focus-bg.gif'); }
+
+/* line 990, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-nlg .x-btn-snapshot-add-btn-small-menu-active,
+.x-nlg .x-btn-snapshot-add-btn-small-pressed {
+  background-repeat: repeat-x;
+  background-image: url('../resources/themes/images/default/btn/btn-snapshot-add-btn-small-pressed-bg.gif'); }
+
+/* line 999, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-nlg .x-btn-snapshot-add-btn-small-disabled {
+  background-repeat: repeat-x;
+  background-image: url('../resources/themes/images/default/btn/btn-snapshot-add-btn-small-disabled-bg.gif'); }
+
+/* line 625, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
 .x-btn-snapshot-navigation-btn-small {
   border-color: transparent; }
 
@@ -46997,3 +47310,619 @@ svg, vml {
 .x-nlg .x-btn-snapshot-submenu-btn-small-disabled {
   background-repeat: repeat-x;
   background-image: url('../resources/themes/images/default/btn/btn-snapshot-submenu-btn-small-disabled-bg.gif'); }
+
+/* line 625, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-btn-snapshot-cancel-btn-small {
+  border-color: #757575; }
+
+/* line 58, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/mixins/_frame.scss */
+.x-btn-snapshot-cancel-btn-small {
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  -o-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -khtml-border-radius: 3px;
+  border-radius: 3px;
+  padding: 4px 9px 4px 9px;
+  border-width: 1px;
+  border-style: solid;
+  background-image: none;
+  background-color: yellow;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(3%, #b6b6b6), color-stop(6%, #a9a9a9), color-stop(100%, #8d8d8d));
+  background-image: -webkit-linear-gradient(top, #b6b6b6 3%, #a9a9a9 6%, #8d8d8d 100%);
+  background-image: -moz-linear-gradient(top, #b6b6b6 3%, #a9a9a9 6%, #8d8d8d 100%);
+  background-image: -o-linear-gradient(top, #b6b6b6 3%, #a9a9a9 6%, #8d8d8d 100%);
+  background-image: -ms-linear-gradient(top, #b6b6b6 3%, #a9a9a9 6%, #8d8d8d 100%);
+  background-image: linear-gradient(top, #b6b6b6 3%, #a9a9a9 6%, #8d8d8d 100%); }
+
+/* line 91, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/mixins/_frame.scss */
+.x-nlg .x-btn-snapshot-cancel-btn-small-mc {
+  background-image: url('../images/default/btn/btn-snapshot-cancel-btn-small-bg.gif');
+  background-color: yellow; }
+
+/* line 104, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/mixins/_frame.scss */
+.x-nbr .x-btn-snapshot-cancel-btn-small {
+  padding: 0 !important;
+  border-width: 0 !important;
+  -moz-border-radius: 0px;
+  -webkit-border-radius: 0px;
+  -o-border-radius: 0px;
+  -ms-border-radius: 0px;
+  -khtml-border-radius: 0px;
+  border-radius: 0px;
+  background-color: transparent;
+  background-position: 1100303px 1000303px; }
+/* line 147, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/mixins/_frame.scss */
+.x-nbr .x-btn-snapshot-cancel-btn-small-tl,
+.x-nbr .x-btn-snapshot-cancel-btn-small-bl,
+.x-nbr .x-btn-snapshot-cancel-btn-small-tr,
+.x-nbr .x-btn-snapshot-cancel-btn-small-br,
+.x-nbr .x-btn-snapshot-cancel-btn-small-tc,
+.x-nbr .x-btn-snapshot-cancel-btn-small-bc,
+.x-nbr .x-btn-snapshot-cancel-btn-small-ml,
+.x-nbr .x-btn-snapshot-cancel-btn-small-mr {
+  zoom: 1;
+  background-image: url('../images/default/btn/btn-snapshot-cancel-btn-small-corners.gif'); }
+/* line 168, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/mixins/_frame.scss */
+.x-nbr .x-btn-snapshot-cancel-btn-small-ml,
+.x-nbr .x-btn-snapshot-cancel-btn-small-mr {
+  zoom: 1;
+  background-image: url('../images/default/btn/btn-snapshot-cancel-btn-small-sides.gif');
+  background-position: 0 0; }
+/* line 200, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/mixins/_frame.scss */
+.x-nbr .x-btn-snapshot-cancel-btn-small-mc {
+  padding: 2px 7px 2px 7px; }
+
+/* line 631, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-btn-snapshot-cancel-btn-small .x-btn-inner {
+  font-size: 12px;
+  font-weight: normal;
+  font-family: Lucida Sans Unicode, Arial, Verdana, Geneva, Helvetica, sans-serif;
+  color: white;
+  background-repeat: no-repeat;
+  padding: 0 0px; }
+
+/* line 643, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-btn-snapshot-cancel-btn-small-icon button,
+.x-btn-snapshot-cancel-btn-small-icon .x-btn-inner,
+.x-btn-snapshot-cancel-btn-small-noicon button,
+.x-btn-snapshot-cancel-btn-small-noicon .x-btn-inner {
+  height: null;
+  line-height: null; }
+
+/* line 651, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-btn-snapshot-cancel-btn-small-icon button {
+  padding: 0;
+  width: null !important;
+  height: null; }
+/* line 657, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-btn-snapshot-cancel-btn-small-icon .x-btn-icon {
+  width: null;
+  height: null;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0; }
+
+/* line 668, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-btn-snapshot-cancel-btn-small-icon-text-left button {
+  height: null; }
+/* line 671, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-btn-snapshot-cancel-btn-small-icon-text-left .x-btn-inner {
+  height: null;
+  line-height: null;
+  padding-left: null4px; }
+/* line 677, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-btn-snapshot-cancel-btn-small-icon-text-left .x-btn-icon {
+  width: null;
+  height: auto;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: auto; }
+  /* line 686, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+  .x-ie6 .x-btn-snapshot-cancel-btn-small-icon-text-left .x-btn-icon, .x-quirks .x-btn-snapshot-cancel-btn-small-icon-text-left .x-btn-icon {
+    height: null; }
+
+/* line 693, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-btn-snapshot-cancel-btn-small-icon-text-right button {
+  height: null; }
+/* line 696, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-btn-snapshot-cancel-btn-small-icon-text-right .x-btn-inner {
+  height: null;
+  line-height: null;
+  padding-right: null4px !important; }
+/* line 702, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-btn-snapshot-cancel-btn-small-icon-text-right .x-btn-icon {
+  width: null;
+  height: auto;
+  top: 0;
+  left: auto;
+  bottom: 0;
+  right: 0; }
+  /* line 711, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+  .x-ie6 .x-btn-snapshot-cancel-btn-small-icon-text-right .x-btn-icon, .x-quirks .x-btn-snapshot-cancel-btn-small-icon-text-right .x-btn-icon {
+    height: null; }
+
+/* line 718, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-btn-snapshot-cancel-btn-small-icon-text-top .x-btn-inner {
+  padding-top: null4px; }
+/* line 722, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-btn-snapshot-cancel-btn-small-icon-text-top .x-btn-icon {
+  width: auto;
+  height: null;
+  top: 0;
+  left: 0;
+  bottom: auto;
+  right: 0; }
+  /* line 731, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+  .x-ie6 .x-btn-snapshot-cancel-btn-small-icon-text-top .x-btn-icon, .x-quirks .x-ie .x-btn-snapshot-cancel-btn-small-icon-text-top .x-btn-icon {
+    width: null; }
+
+/* line 738, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-btn-snapshot-cancel-btn-small-icon-text-bottom .x-btn-inner {
+  padding-bottom: null4px; }
+/* line 742, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-btn-snapshot-cancel-btn-small-icon-text-bottom .x-btn-icon {
+  width: auto;
+  height: null;
+  top: auto;
+  left: 0;
+  bottom: 0;
+  right: 0; }
+  /* line 751, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+  .x-ie6 .x-btn-snapshot-cancel-btn-small-icon-text-bottom .x-btn-icon, .x-quirks .x-ie .x-btn-snapshot-cancel-btn-small-icon-text-bottom .x-btn-icon {
+    width: null; }
+
+/* line 757, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-btn-snapshot-cancel-btn-small-over {
+  background-image: none;
+  background-color: yellow;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(3%, #b6b6b6), color-stop(6%, #a9a9a9), color-stop(100%, #8d8d8d));
+  background-image: -webkit-linear-gradient(top, #b6b6b6 3%, #a9a9a9 6%, #8d8d8d 100%);
+  background-image: -moz-linear-gradient(top, #b6b6b6 3%, #a9a9a9 6%, #8d8d8d 100%);
+  background-image: -o-linear-gradient(top, #b6b6b6 3%, #a9a9a9 6%, #8d8d8d 100%);
+  background-image: -ms-linear-gradient(top, #b6b6b6 3%, #a9a9a9 6%, #8d8d8d 100%);
+  background-image: linear-gradient(top, #b6b6b6 3%, #a9a9a9 6%, #8d8d8d 100%); }
+
+/* line 781, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-btn-snapshot-cancel-btn-small-focus {
+  background-image: none;
+  background-color: yellow;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(3%, #b6b6b6), color-stop(6%, #a9a9a9), color-stop(100%, #8d8d8d));
+  background-image: -webkit-linear-gradient(top, #b6b6b6 3%, #a9a9a9 6%, #8d8d8d 100%);
+  background-image: -moz-linear-gradient(top, #b6b6b6 3%, #a9a9a9 6%, #8d8d8d 100%);
+  background-image: -o-linear-gradient(top, #b6b6b6 3%, #a9a9a9 6%, #8d8d8d 100%);
+  background-image: -ms-linear-gradient(top, #b6b6b6 3%, #a9a9a9 6%, #8d8d8d 100%);
+  background-image: linear-gradient(top, #b6b6b6 3%, #a9a9a9 6%, #8d8d8d 100%); }
+
+/* line 806, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-btn-snapshot-cancel-btn-small-menu-active,
+.x-btn-snapshot-cancel-btn-small-pressed {
+  background-image: none;
+  background-color: yellow;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(3%, #b6b6b6), color-stop(6%, #a9a9a9), color-stop(100%, #8d8d8d));
+  background-image: -webkit-linear-gradient(top, #b6b6b6 3%, #a9a9a9 6%, #8d8d8d 100%);
+  background-image: -moz-linear-gradient(top, #b6b6b6 3%, #a9a9a9 6%, #8d8d8d 100%);
+  background-image: -o-linear-gradient(top, #b6b6b6 3%, #a9a9a9 6%, #8d8d8d 100%);
+  background-image: -ms-linear-gradient(top, #b6b6b6 3%, #a9a9a9 6%, #8d8d8d 100%);
+  background-image: linear-gradient(top, #b6b6b6 3%, #a9a9a9 6%, #8d8d8d 100%); }
+
+/* line 830, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-btn-snapshot-cancel-btn-small-disabled {
+  background-image: none;
+  background-color: yellow;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(3%, #b6b6b6), color-stop(6%, #a9a9a9), color-stop(100%, #8d8d8d));
+  background-image: -webkit-linear-gradient(top, #b6b6b6 3%, #a9a9a9 6%, #8d8d8d 100%);
+  background-image: -moz-linear-gradient(top, #b6b6b6 3%, #a9a9a9 6%, #8d8d8d 100%);
+  background-image: -o-linear-gradient(top, #b6b6b6 3%, #a9a9a9 6%, #8d8d8d 100%);
+  background-image: -ms-linear-gradient(top, #b6b6b6 3%, #a9a9a9 6%, #8d8d8d 100%);
+  background-image: linear-gradient(top, #b6b6b6 3%, #a9a9a9 6%, #8d8d8d 100%); }
+
+/* line 878, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-nbr .x-btn-snapshot-cancel-btn-small-over .x-frame-tl,
+.x-nbr .x-btn-snapshot-cancel-btn-small-over .x-frame-bl,
+.x-nbr .x-btn-snapshot-cancel-btn-small-over .x-frame-tr,
+.x-nbr .x-btn-snapshot-cancel-btn-small-over .x-frame-br,
+.x-nbr .x-btn-snapshot-cancel-btn-small-over .x-frame-tc,
+.x-nbr .x-btn-snapshot-cancel-btn-small-over .x-frame-bc {
+  background-image: url('../resources/themes/images/default/btn/btn-snapshot-cancel-btn-small-over-corners.gif'); }
+/* line 882, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-nbr .x-btn-snapshot-cancel-btn-small-over .x-frame-ml,
+.x-nbr .x-btn-snapshot-cancel-btn-small-over .x-frame-mr {
+  background-image: url('../resources/themes/images/default/btn/btn-snapshot-cancel-btn-small-over-sides.gif'); }
+/* line 885, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-nbr .x-btn-snapshot-cancel-btn-small-over .x-frame-mc {
+  background-color: yellow;
+  background-image: url('../resources/themes/images/default/btn/btn-snapshot-cancel-btn-small-over-bg.gif'); }
+/* line 899, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-nbr .x-btn-snapshot-cancel-btn-small-focus .x-frame-tl,
+.x-nbr .x-btn-snapshot-cancel-btn-small-focus .x-frame-bl,
+.x-nbr .x-btn-snapshot-cancel-btn-small-focus .x-frame-tr,
+.x-nbr .x-btn-snapshot-cancel-btn-small-focus .x-frame-br,
+.x-nbr .x-btn-snapshot-cancel-btn-small-focus .x-frame-tc,
+.x-nbr .x-btn-snapshot-cancel-btn-small-focus .x-frame-bc {
+  background-image: url('../resources/themes/images/default/btn/btn-snapshot-cancel-btn-small-focus-corners.gif'); }
+/* line 903, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-nbr .x-btn-snapshot-cancel-btn-small-focus .x-frame-ml,
+.x-nbr .x-btn-snapshot-cancel-btn-small-focus .x-frame-mr {
+  background-image: url('../resources/themes/images/default/btn/btn-snapshot-cancel-btn-small-focus-sides.gif'); }
+/* line 906, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-nbr .x-btn-snapshot-cancel-btn-small-focus .x-frame-mc {
+  background-color: yellow;
+  background-image: url('../resources/themes/images/default/btn/btn-snapshot-cancel-btn-small-focus-bg.gif'); }
+/* line 921, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-nbr .x-btn-snapshot-cancel-btn-small-menu-active .x-frame-tl,
+.x-nbr .x-btn-snapshot-cancel-btn-small-menu-active .x-frame-bl,
+.x-nbr .x-btn-snapshot-cancel-btn-small-menu-active .x-frame-tr,
+.x-nbr .x-btn-snapshot-cancel-btn-small-menu-active .x-frame-br,
+.x-nbr .x-btn-snapshot-cancel-btn-small-menu-active .x-frame-tc,
+.x-nbr .x-btn-snapshot-cancel-btn-small-menu-active .x-frame-bc,
+.x-nbr .x-btn-snapshot-cancel-btn-small-pressed .x-frame-tl,
+.x-nbr .x-btn-snapshot-cancel-btn-small-pressed .x-frame-bl,
+.x-nbr .x-btn-snapshot-cancel-btn-small-pressed .x-frame-tr,
+.x-nbr .x-btn-snapshot-cancel-btn-small-pressed .x-frame-br,
+.x-nbr .x-btn-snapshot-cancel-btn-small-pressed .x-frame-tc,
+.x-nbr .x-btn-snapshot-cancel-btn-small-pressed .x-frame-bc {
+  background-image: url('../resources/themes/images/default/btn/btn-snapshot-cancel-btn-small-pressed-corners.gif'); }
+/* line 925, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-nbr .x-btn-snapshot-cancel-btn-small-menu-active .x-frame-ml,
+.x-nbr .x-btn-snapshot-cancel-btn-small-menu-active .x-frame-mr,
+.x-nbr .x-btn-snapshot-cancel-btn-small-pressed .x-frame-ml,
+.x-nbr .x-btn-snapshot-cancel-btn-small-pressed .x-frame-mr {
+  background-image: url('../resources/themes/images/default/btn/btn-snapshot-cancel-btn-small-pressed-sides.gif'); }
+/* line 928, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-nbr .x-btn-snapshot-cancel-btn-small-menu-active .x-frame-mc,
+.x-nbr .x-btn-snapshot-cancel-btn-small-pressed .x-frame-mc {
+  background-color: yellow;
+  background-image: url('../resources/themes/images/default/btn/btn-snapshot-cancel-btn-small-pressed-bg.gif'); }
+/* line 942, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-nbr .x-btn-snapshot-cancel-btn-small-disabled .x-frame-tl,
+.x-nbr .x-btn-snapshot-cancel-btn-small-disabled .x-frame-bl,
+.x-nbr .x-btn-snapshot-cancel-btn-small-disabled .x-frame-tr,
+.x-nbr .x-btn-snapshot-cancel-btn-small-disabled .x-frame-br,
+.x-nbr .x-btn-snapshot-cancel-btn-small-disabled .x-frame-tc,
+.x-nbr .x-btn-snapshot-cancel-btn-small-disabled .x-frame-bc {
+  background-image: url('../resources/themes/images/default/btn/btn-snapshot-cancel-btn-small-disabled-corners.gif'); }
+/* line 946, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-nbr .x-btn-snapshot-cancel-btn-small-disabled .x-frame-ml,
+.x-nbr .x-btn-snapshot-cancel-btn-small-disabled .x-frame-mr {
+  background-image: url('../resources/themes/images/default/btn/btn-snapshot-cancel-btn-small-disabled-sides.gif'); }
+/* line 949, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-nbr .x-btn-snapshot-cancel-btn-small-disabled .x-frame-mc {
+  background-color: yellow;
+  background-image: url('../resources/themes/images/default/btn/btn-snapshot-cancel-btn-small-disabled-bg.gif'); }
+
+/* line 962, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-nlg .x-btn-snapshot-cancel-btn-small {
+  background-repeat: repeat-x;
+  background-image: url('../resources/themes/images/default/btn/btn-snapshot-cancel-btn-small-bg.gif'); }
+
+/* line 971, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-nlg .x-btn-snapshot-cancel-btn-small-over {
+  background-repeat: repeat-x;
+  background-image: url('../resources/themes/images/default/btn/btn-snapshot-cancel-btn-small-over-bg.gif'); }
+
+/* line 980, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-nlg .x-btn-snapshot-cancel-btn-small-focus {
+  background-repeat: repeat-x;
+  background-image: url('../resources/themes/images/default/btn/btn-snapshot-cancel-btn-small-focus-bg.gif'); }
+
+/* line 990, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-nlg .x-btn-snapshot-cancel-btn-small-menu-active,
+.x-nlg .x-btn-snapshot-cancel-btn-small-pressed {
+  background-repeat: repeat-x;
+  background-image: url('../resources/themes/images/default/btn/btn-snapshot-cancel-btn-small-pressed-bg.gif'); }
+
+/* line 999, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-nlg .x-btn-snapshot-cancel-btn-small-disabled {
+  background-repeat: repeat-x;
+  background-image: url('../resources/themes/images/default/btn/btn-snapshot-cancel-btn-small-disabled-bg.gif'); }
+
+/* line 625, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-btn-snapshot-pagination-btn-small {
+  border-color: #2e3c49; }
+
+/* line 58, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/mixins/_frame.scss */
+.x-btn-snapshot-pagination-btn-small {
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  -o-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -khtml-border-radius: 3px;
+  border-radius: 3px;
+  padding: 4px 9px 4px 9px;
+  border-width: 1px;
+  border-style: solid;
+  background-image: none;
+  background-color: yellow;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(3%, #acb7c0), color-stop(6%, #888e93), color-stop(100%, #525a61));
+  background-image: -webkit-linear-gradient(top, #acb7c0 3%, #888e93 6%, #525a61 100%);
+  background-image: -moz-linear-gradient(top, #acb7c0 3%, #888e93 6%, #525a61 100%);
+  background-image: -o-linear-gradient(top, #acb7c0 3%, #888e93 6%, #525a61 100%);
+  background-image: -ms-linear-gradient(top, #acb7c0 3%, #888e93 6%, #525a61 100%);
+  background-image: linear-gradient(top, #acb7c0 3%, #888e93 6%, #525a61 100%); }
+
+/* line 91, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/mixins/_frame.scss */
+.x-nlg .x-btn-snapshot-pagination-btn-small-mc {
+  background-image: url('../images/default/btn/btn-snapshot-pagination-btn-small-bg.gif');
+  background-color: yellow; }
+
+/* line 104, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/mixins/_frame.scss */
+.x-nbr .x-btn-snapshot-pagination-btn-small {
+  padding: 0 !important;
+  border-width: 0 !important;
+  -moz-border-radius: 0px;
+  -webkit-border-radius: 0px;
+  -o-border-radius: 0px;
+  -ms-border-radius: 0px;
+  -khtml-border-radius: 0px;
+  border-radius: 0px;
+  background-color: transparent;
+  background-position: 1100303px 1000303px; }
+/* line 147, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/mixins/_frame.scss */
+.x-nbr .x-btn-snapshot-pagination-btn-small-tl,
+.x-nbr .x-btn-snapshot-pagination-btn-small-bl,
+.x-nbr .x-btn-snapshot-pagination-btn-small-tr,
+.x-nbr .x-btn-snapshot-pagination-btn-small-br,
+.x-nbr .x-btn-snapshot-pagination-btn-small-tc,
+.x-nbr .x-btn-snapshot-pagination-btn-small-bc,
+.x-nbr .x-btn-snapshot-pagination-btn-small-ml,
+.x-nbr .x-btn-snapshot-pagination-btn-small-mr {
+  zoom: 1;
+  background-image: url('../images/default/btn/btn-snapshot-pagination-btn-small-corners.gif'); }
+/* line 168, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/mixins/_frame.scss */
+.x-nbr .x-btn-snapshot-pagination-btn-small-ml,
+.x-nbr .x-btn-snapshot-pagination-btn-small-mr {
+  zoom: 1;
+  background-image: url('../images/default/btn/btn-snapshot-pagination-btn-small-sides.gif');
+  background-position: 0 0; }
+/* line 200, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/mixins/_frame.scss */
+.x-nbr .x-btn-snapshot-pagination-btn-small-mc {
+  padding: 2px 7px 2px 7px; }
+
+/* line 631, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-btn-snapshot-pagination-btn-small .x-btn-inner {
+  font-size: 12px;
+  font-weight: normal;
+  font-family: Lucida Sans Unicode, Arial, Verdana, Geneva, Helvetica, sans-serif;
+  color: white;
+  background-repeat: no-repeat;
+  padding: 0 0px; }
+
+/* line 643, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-btn-snapshot-pagination-btn-small-icon button,
+.x-btn-snapshot-pagination-btn-small-icon .x-btn-inner,
+.x-btn-snapshot-pagination-btn-small-noicon button,
+.x-btn-snapshot-pagination-btn-small-noicon .x-btn-inner {
+  height: null;
+  line-height: null; }
+
+/* line 651, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-btn-snapshot-pagination-btn-small-icon button {
+  padding: 0;
+  width: null !important;
+  height: null; }
+/* line 657, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-btn-snapshot-pagination-btn-small-icon .x-btn-icon {
+  width: null;
+  height: null;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0; }
+
+/* line 668, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-btn-snapshot-pagination-btn-small-icon-text-left button {
+  height: null; }
+/* line 671, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-btn-snapshot-pagination-btn-small-icon-text-left .x-btn-inner {
+  height: null;
+  line-height: null;
+  padding-left: null4px; }
+/* line 677, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-btn-snapshot-pagination-btn-small-icon-text-left .x-btn-icon {
+  width: null;
+  height: auto;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: auto; }
+  /* line 686, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+  .x-ie6 .x-btn-snapshot-pagination-btn-small-icon-text-left .x-btn-icon, .x-quirks .x-btn-snapshot-pagination-btn-small-icon-text-left .x-btn-icon {
+    height: null; }
+
+/* line 693, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-btn-snapshot-pagination-btn-small-icon-text-right button {
+  height: null; }
+/* line 696, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-btn-snapshot-pagination-btn-small-icon-text-right .x-btn-inner {
+  height: null;
+  line-height: null;
+  padding-right: null4px !important; }
+/* line 702, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-btn-snapshot-pagination-btn-small-icon-text-right .x-btn-icon {
+  width: null;
+  height: auto;
+  top: 0;
+  left: auto;
+  bottom: 0;
+  right: 0; }
+  /* line 711, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+  .x-ie6 .x-btn-snapshot-pagination-btn-small-icon-text-right .x-btn-icon, .x-quirks .x-btn-snapshot-pagination-btn-small-icon-text-right .x-btn-icon {
+    height: null; }
+
+/* line 718, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-btn-snapshot-pagination-btn-small-icon-text-top .x-btn-inner {
+  padding-top: null4px; }
+/* line 722, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-btn-snapshot-pagination-btn-small-icon-text-top .x-btn-icon {
+  width: auto;
+  height: null;
+  top: 0;
+  left: 0;
+  bottom: auto;
+  right: 0; }
+  /* line 731, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+  .x-ie6 .x-btn-snapshot-pagination-btn-small-icon-text-top .x-btn-icon, .x-quirks .x-ie .x-btn-snapshot-pagination-btn-small-icon-text-top .x-btn-icon {
+    width: null; }
+
+/* line 738, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-btn-snapshot-pagination-btn-small-icon-text-bottom .x-btn-inner {
+  padding-bottom: null4px; }
+/* line 742, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-btn-snapshot-pagination-btn-small-icon-text-bottom .x-btn-icon {
+  width: auto;
+  height: null;
+  top: auto;
+  left: 0;
+  bottom: 0;
+  right: 0; }
+  /* line 751, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+  .x-ie6 .x-btn-snapshot-pagination-btn-small-icon-text-bottom .x-btn-icon, .x-quirks .x-ie .x-btn-snapshot-pagination-btn-small-icon-text-bottom .x-btn-icon {
+    width: null; }
+
+/* line 757, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-btn-snapshot-pagination-btn-small-over {
+  background-image: none;
+  background-color: yellow;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(3%, #acb7c0), color-stop(6%, #888e93), color-stop(100%, #525a61));
+  background-image: -webkit-linear-gradient(top, #acb7c0 3%, #888e93 6%, #525a61 100%);
+  background-image: -moz-linear-gradient(top, #acb7c0 3%, #888e93 6%, #525a61 100%);
+  background-image: -o-linear-gradient(top, #acb7c0 3%, #888e93 6%, #525a61 100%);
+  background-image: -ms-linear-gradient(top, #acb7c0 3%, #888e93 6%, #525a61 100%);
+  background-image: linear-gradient(top, #acb7c0 3%, #888e93 6%, #525a61 100%); }
+
+/* line 781, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-btn-snapshot-pagination-btn-small-focus {
+  background-image: none;
+  background-color: yellow;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(3%, #acb7c0), color-stop(6%, #888e93), color-stop(100%, #525a61));
+  background-image: -webkit-linear-gradient(top, #acb7c0 3%, #888e93 6%, #525a61 100%);
+  background-image: -moz-linear-gradient(top, #acb7c0 3%, #888e93 6%, #525a61 100%);
+  background-image: -o-linear-gradient(top, #acb7c0 3%, #888e93 6%, #525a61 100%);
+  background-image: -ms-linear-gradient(top, #acb7c0 3%, #888e93 6%, #525a61 100%);
+  background-image: linear-gradient(top, #acb7c0 3%, #888e93 6%, #525a61 100%); }
+
+/* line 806, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-btn-snapshot-pagination-btn-small-menu-active,
+.x-btn-snapshot-pagination-btn-small-pressed {
+  background-image: none;
+  background-color: yellow;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(3%, #acb7c0), color-stop(6%, #888e93), color-stop(100%, #525a61));
+  background-image: -webkit-linear-gradient(top, #acb7c0 3%, #888e93 6%, #525a61 100%);
+  background-image: -moz-linear-gradient(top, #acb7c0 3%, #888e93 6%, #525a61 100%);
+  background-image: -o-linear-gradient(top, #acb7c0 3%, #888e93 6%, #525a61 100%);
+  background-image: -ms-linear-gradient(top, #acb7c0 3%, #888e93 6%, #525a61 100%);
+  background-image: linear-gradient(top, #acb7c0 3%, #888e93 6%, #525a61 100%); }
+
+/* line 830, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-btn-snapshot-pagination-btn-small-disabled {
+  background-image: none;
+  background-color: yellow;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(3%, #acb7c0), color-stop(6%, #888e93), color-stop(100%, #525a61));
+  background-image: -webkit-linear-gradient(top, #acb7c0 3%, #888e93 6%, #525a61 100%);
+  background-image: -moz-linear-gradient(top, #acb7c0 3%, #888e93 6%, #525a61 100%);
+  background-image: -o-linear-gradient(top, #acb7c0 3%, #888e93 6%, #525a61 100%);
+  background-image: -ms-linear-gradient(top, #acb7c0 3%, #888e93 6%, #525a61 100%);
+  background-image: linear-gradient(top, #acb7c0 3%, #888e93 6%, #525a61 100%); }
+
+/* line 878, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-nbr .x-btn-snapshot-pagination-btn-small-over .x-frame-tl,
+.x-nbr .x-btn-snapshot-pagination-btn-small-over .x-frame-bl,
+.x-nbr .x-btn-snapshot-pagination-btn-small-over .x-frame-tr,
+.x-nbr .x-btn-snapshot-pagination-btn-small-over .x-frame-br,
+.x-nbr .x-btn-snapshot-pagination-btn-small-over .x-frame-tc,
+.x-nbr .x-btn-snapshot-pagination-btn-small-over .x-frame-bc {
+  background-image: url('../resources/themes/images/default/btn/btn-snapshot-pagination-btn-small-over-corners.gif'); }
+/* line 882, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-nbr .x-btn-snapshot-pagination-btn-small-over .x-frame-ml,
+.x-nbr .x-btn-snapshot-pagination-btn-small-over .x-frame-mr {
+  background-image: url('../resources/themes/images/default/btn/btn-snapshot-pagination-btn-small-over-sides.gif'); }
+/* line 885, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-nbr .x-btn-snapshot-pagination-btn-small-over .x-frame-mc {
+  background-color: yellow;
+  background-image: url('../resources/themes/images/default/btn/btn-snapshot-pagination-btn-small-over-bg.gif'); }
+/* line 899, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-nbr .x-btn-snapshot-pagination-btn-small-focus .x-frame-tl,
+.x-nbr .x-btn-snapshot-pagination-btn-small-focus .x-frame-bl,
+.x-nbr .x-btn-snapshot-pagination-btn-small-focus .x-frame-tr,
+.x-nbr .x-btn-snapshot-pagination-btn-small-focus .x-frame-br,
+.x-nbr .x-btn-snapshot-pagination-btn-small-focus .x-frame-tc,
+.x-nbr .x-btn-snapshot-pagination-btn-small-focus .x-frame-bc {
+  background-image: url('../resources/themes/images/default/btn/btn-snapshot-pagination-btn-small-focus-corners.gif'); }
+/* line 903, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-nbr .x-btn-snapshot-pagination-btn-small-focus .x-frame-ml,
+.x-nbr .x-btn-snapshot-pagination-btn-small-focus .x-frame-mr {
+  background-image: url('../resources/themes/images/default/btn/btn-snapshot-pagination-btn-small-focus-sides.gif'); }
+/* line 906, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-nbr .x-btn-snapshot-pagination-btn-small-focus .x-frame-mc {
+  background-color: yellow;
+  background-image: url('../resources/themes/images/default/btn/btn-snapshot-pagination-btn-small-focus-bg.gif'); }
+/* line 921, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-nbr .x-btn-snapshot-pagination-btn-small-menu-active .x-frame-tl,
+.x-nbr .x-btn-snapshot-pagination-btn-small-menu-active .x-frame-bl,
+.x-nbr .x-btn-snapshot-pagination-btn-small-menu-active .x-frame-tr,
+.x-nbr .x-btn-snapshot-pagination-btn-small-menu-active .x-frame-br,
+.x-nbr .x-btn-snapshot-pagination-btn-small-menu-active .x-frame-tc,
+.x-nbr .x-btn-snapshot-pagination-btn-small-menu-active .x-frame-bc,
+.x-nbr .x-btn-snapshot-pagination-btn-small-pressed .x-frame-tl,
+.x-nbr .x-btn-snapshot-pagination-btn-small-pressed .x-frame-bl,
+.x-nbr .x-btn-snapshot-pagination-btn-small-pressed .x-frame-tr,
+.x-nbr .x-btn-snapshot-pagination-btn-small-pressed .x-frame-br,
+.x-nbr .x-btn-snapshot-pagination-btn-small-pressed .x-frame-tc,
+.x-nbr .x-btn-snapshot-pagination-btn-small-pressed .x-frame-bc {
+  background-image: url('../resources/themes/images/default/btn/btn-snapshot-pagination-btn-small-pressed-corners.gif'); }
+/* line 925, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-nbr .x-btn-snapshot-pagination-btn-small-menu-active .x-frame-ml,
+.x-nbr .x-btn-snapshot-pagination-btn-small-menu-active .x-frame-mr,
+.x-nbr .x-btn-snapshot-pagination-btn-small-pressed .x-frame-ml,
+.x-nbr .x-btn-snapshot-pagination-btn-small-pressed .x-frame-mr {
+  background-image: url('../resources/themes/images/default/btn/btn-snapshot-pagination-btn-small-pressed-sides.gif'); }
+/* line 928, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-nbr .x-btn-snapshot-pagination-btn-small-menu-active .x-frame-mc,
+.x-nbr .x-btn-snapshot-pagination-btn-small-pressed .x-frame-mc {
+  background-color: yellow;
+  background-image: url('../resources/themes/images/default/btn/btn-snapshot-pagination-btn-small-pressed-bg.gif'); }
+/* line 942, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-nbr .x-btn-snapshot-pagination-btn-small-disabled .x-frame-tl,
+.x-nbr .x-btn-snapshot-pagination-btn-small-disabled .x-frame-bl,
+.x-nbr .x-btn-snapshot-pagination-btn-small-disabled .x-frame-tr,
+.x-nbr .x-btn-snapshot-pagination-btn-small-disabled .x-frame-br,
+.x-nbr .x-btn-snapshot-pagination-btn-small-disabled .x-frame-tc,
+.x-nbr .x-btn-snapshot-pagination-btn-small-disabled .x-frame-bc {
+  background-image: url('../resources/themes/images/default/btn/btn-snapshot-pagination-btn-small-disabled-corners.gif'); }
+/* line 946, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-nbr .x-btn-snapshot-pagination-btn-small-disabled .x-frame-ml,
+.x-nbr .x-btn-snapshot-pagination-btn-small-disabled .x-frame-mr {
+  background-image: url('../resources/themes/images/default/btn/btn-snapshot-pagination-btn-small-disabled-sides.gif'); }
+/* line 949, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-nbr .x-btn-snapshot-pagination-btn-small-disabled .x-frame-mc {
+  background-color: yellow;
+  background-image: url('../resources/themes/images/default/btn/btn-snapshot-pagination-btn-small-disabled-bg.gif'); }
+
+/* line 962, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-nlg .x-btn-snapshot-pagination-btn-small {
+  background-repeat: repeat-x;
+  background-image: url('../resources/themes/images/default/btn/btn-snapshot-pagination-btn-small-bg.gif'); }
+
+/* line 971, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-nlg .x-btn-snapshot-pagination-btn-small-over {
+  background-repeat: repeat-x;
+  background-image: url('../resources/themes/images/default/btn/btn-snapshot-pagination-btn-small-over-bg.gif'); }
+
+/* line 980, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-nlg .x-btn-snapshot-pagination-btn-small-focus {
+  background-repeat: repeat-x;
+  background-image: url('../resources/themes/images/default/btn/btn-snapshot-pagination-btn-small-focus-bg.gif'); }
+
+/* line 990, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-nlg .x-btn-snapshot-pagination-btn-small-menu-active,
+.x-nlg .x-btn-snapshot-pagination-btn-small-pressed {
+  background-repeat: repeat-x;
+  background-image: url('../resources/themes/images/default/btn/btn-snapshot-pagination-btn-small-pressed-bg.gif'); }
+
+/* line 999, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/snapshot/widgets/_button.scss */
+.x-nlg .x-btn-snapshot-pagination-btn-small-disabled {
+  background-repeat: repeat-x;
+  background-image: url('../resources/themes/images/default/btn/btn-snapshot-pagination-btn-small-disabled-bg.gif'); }

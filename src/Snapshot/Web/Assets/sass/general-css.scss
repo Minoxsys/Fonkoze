@@ -46,4 +46,9 @@
 	color: $black-font-color;
 }
 
+#SideBar #SideBar-innerCt div em button span {
+	text-align: left;
+	padding: 0 0 0 40px;
+}
+
 $relative-image-path-for-uis: true; // defaults to "../images/" when true

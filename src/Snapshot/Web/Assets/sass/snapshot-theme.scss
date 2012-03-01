@@ -1,9 +1,13 @@
 // Unless you want to include all components, you must set $include-default to false
 // IF you set this to true, you can also remove lines 10 to 38 of this file
-$include-default: true;
+$theme-name: 'snapshot';
+$include-default: false;
+$include-missing-images: true;
+
+$global-font-family: Arial, Lucida Sans Unicode, Verdana, Geneva, Helvetica, sans-serif;
 
 // Insert your custom variables here.
-$base-color: #fefefe; 
+
 
 // ============================
 // BUTONS
@@ -21,17 +25,7 @@ $button-default-color: #fff !default;
 // =============================
 // GRID
 // =============================
-$grid-base-color: #aa5858 !default;
-$grid-header-over-border-color: #cd7a7a !default;
 
-
-$grid-header-over-border-color: #aa5858 !default;
-$grid-header-over-background-color: #aa5858 !default;
-
-$grid-header-background-color: $grid-base-color;
-$grid-header-color: #fff !default;
-
-$grid-header-background-gradient: 'panel-header' !default;
 /// =====================
 /// PANEL
 /// =====================
@@ -44,6 +38,34 @@ $accordion-header-color: #fff !default;
 
 @import 'compass';
 @import 'ext4/snapshot/all';
+
+//Remove any componenets that are not used within the application for smaller CSS file size
+@include extjs-boundlist;
+@include extjs-button;
+@include extjs-btn-group;
+@include extjs-datepicker;
+//@include extjs-colorpicker;
+@include extjs-menu;
+@include extjs-grid;
+@include extjs-form;
+    @include extjs-form-field;
+    @include extjs-form-fieldset;
+    @include extjs-form-checkboxfield;
+    @include extjs-form-checkboxgroup;
+    @include extjs-form-triggerfield;
+    //@include extjs-form-htmleditor;
+@include extjs-panel;
+@include extjs-qtip;
+@include extjs-slider;
+@include extjs-progress;
+@include extjs-toolbar;
+@include extjs-window;
+//@include extjs-messagebox;
+@include extjs-tabbar;
+@include extjs-tab;
+@include extjs-tree;
+//@include extjs-drawcomponent;
+@include extjs-viewport;
 
 
 // This line changes the location of your images when creating UIs to be relative instead of within the ExtJS directory.
