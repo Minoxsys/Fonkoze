@@ -83,7 +83,7 @@ namespace Web.Areas.OutpostManagement.Controllers
 				outpostsQueryData = outpostsQueryData.Where(o => o.Country.Id == input.countryId.Value);
 			}
 
-			if (input.countryId.HasValue)
+			if (input.regionId.HasValue)
 			{
 				outpostsQueryData = outpostsQueryData.Where(o => o.Region.Id == input.regionId.Value);
 			}

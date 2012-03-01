@@ -177,7 +177,12 @@
 			'select':{
 				country:function(combo, record){
 					window.feature.resetRegionDependencies();
-	
+                    
+                    window.feature.outpostsStore.getProxy().extraParams = {
+						countryId: combo.getValue()
+					};
+                    window.feature.outpostsStore.loadPage(1);
+
 					window.feature.regionsStore.load({
 						params:{
 							countryId: combo.getValue()
@@ -186,6 +191,12 @@
 				},
 				region:function(combo, record){
 					window.feature.resetDistrictDependencies();
+
+                    window.feature.outpostsStore.getProxy().extraParams = {
+						regionId: combo.getValue()
+					};
+					window.feature.outpostsStore.loadPage(1);
+
 					window.feature.districtsStore.load({
 						params:{
 							regionId: combo.getValue()
@@ -262,7 +273,7 @@
 			window.feature.comboBoxFilters.district.setValue(null);
 
 			window.feature.outpostsStore.getProxy().extraParams.districtId = null;
-			window.feature.outpostsStore.loadPage(1);
+			
 		};
 
 		window.feature.doSearch = new Ext.util.DelayedTask(function(){
