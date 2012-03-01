@@ -386,10 +386,10 @@
     <Content Include="Areas\CampaignManagement\Views\_ViewStart.cshtml" />
     <Content Include="Assets\css\button-template.css" />
     <Content Include="Assets\css\color-scheme.css" />
-    <Content Include="Assets\css\ext-all.css" />
     <Content Include="Assets\css\ext-ie.css" />
     <Content Include="Assets\css\general-css.css" />
     <Content Include="Assets\css\global-values.css" />
+    <Content Include="Assets\css\grid-template.css" />
     <Content Include="Assets\resources\img\Analysis\ActivityReport.png" />
     <Content Include="Assets\resources\img\Analysis\OutpostList.png" />
     <Content Include="Assets\resources\img\Analysis\StockLevelDistrict.png" />
