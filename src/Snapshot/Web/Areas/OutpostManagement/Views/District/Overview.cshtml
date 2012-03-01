@@ -30,6 +30,7 @@ Districts: Overview
         window.feature.comboboxCountriesForModalId = 'countriesComboboxForModalId';
         window.feature.comboboxRegionsForModalId = 'regionsComboboxForModalId';
         window.feature.districtNameId = 'districtName';
+        window.feature.districtNameEditModalId = 'districtNameModal';
         window.feature.comboboxRegionsId = 'regionsCombobox';
         window.feature.comboboxCountriesId = 'countriesCombobox';
         window.feature.clientId = 'clientIdForEditModal';
@@ -264,7 +265,7 @@ Districts: Overview
                     }, { xtype: 'textfield',
                         name: 'Name',
                         fieldLabel: _t('District Name'),
-                        id: window.feature.districtNameId,
+                        id: window.feature.districtNameEditModalId,
                         allowBlank: false,
                         editable: false,
                         anchor: '100%'
@@ -472,7 +473,7 @@ Districts: Overview
 
 
                         var modalForEdit = new window.feature.modalEdit();
-                        Ext.getCmp(window.feature.districtNameId).setValue(record.data.Name);
+                        Ext.getCmp(window.feature.districtNameEditModalId).setValue(record.data.Name);
                         Ext.getCmp(window.feature.clientId).setValue(record.data.ClientId);
                         Ext.getCmp(window.feature.DistrictId).setValue(record.data.Id);
                         modalForEdit.show();
