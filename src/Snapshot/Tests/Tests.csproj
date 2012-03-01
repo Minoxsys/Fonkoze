@@ -205,9 +205,7 @@
     <Compile Include="Unit\Helpers\EmptyStringToDotsFormatter_Tests.cs" />
     <Compile Include="Unit\Helpers\NullableDoubleFormatter_Tests.cs" />
     <Compile Include="Unit\Helpers\NullableIntFormatter_Tests.cs" />
-    <Compile Include="Unit\ModelProviders\UserManagerEditModelProvider.cs" />
     <Compile Include="Unit\ModelProviders\UserManagerListModelProvider.cs" />
-    <Compile Include="Unit\ModelProviders\UserManagerUnAssignModelProvider.cs" />
     <Compile Include="Unit\ModelProviders\Mocks.cs" />
     <Compile Include="Unit\ModelProviders\RoleManagerAssignModelProvider.cs" />
     <Compile Include="Unit\ModelProviders\RoleManagerEditOutput_Tests.cs" />
@@ -218,7 +216,6 @@
     <Compile Include="Unit\Routes\ScriptsRegistrar_Tests.cs" />
     <Compile Include="Unit\Security\AuthenticateUser_Tests.cs" />
     <Compile Include="Unit\Security\RequiresAttributeTests.cs" />
-    <Compile Include="Unit\ModelProviders\UserManagerAssignModelProvider.cs" />
     <Compile Include="Unit\Security\SecurePassword_Tests.cs" />
     <Compile Include="Unit\Services\SmsGatewayServiceTest\AssignOutpostToRawSmsReceivedBySenderNumber.cs" />
     <Compile Include="Unit\Services\SmsGatewayServiceTest\ObjectMother.cs" />

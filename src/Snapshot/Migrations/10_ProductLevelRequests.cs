@@ -32,6 +32,8 @@ namespace Migrations
             Create.AddForeignKey(PRODUCT_LEVEL_REQUESTS);
             Create.AddForeignKey(PRODUCT_LEVEL_REQUESTS, "Campaign_FK", "Campaigns");
             Create.AddForeignKey(PRODUCT_LEVEL_REQUESTS, "Schedule_FK", "Schedules");
+
+            this.IfDatabase("sqlserver").Execute.EmbeddedScript(@"Migrations.Scripts.sqlserver_InsertIntoTables.sql");
         }
     }
 }

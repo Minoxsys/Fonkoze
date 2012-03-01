@@ -27,12 +27,14 @@ namespace Tests.Unit.Controllers.RoleManagerControllerTests
         {
             // Arrange
             objectMother.queryServiceRole.Expect(call => call.Query()).Return(new Role[] { objectMother.role }.AsQueryable());
+            objectMother.queryServiceUser.Expect(call => call.Query()).Return(new User[] { }.AsQueryable());
 
             // Act
             var jsonResult = objectMother.controller.GetListOfRoles(objectMother.indexModel);
             
             // Assert
             objectMother.queryServiceRole.VerifyAllExpectations();
+            objectMother.queryServiceUser.VerifyAllExpectations();
 
             Assert.IsNotNull(jsonResult);
             Assert.IsInstanceOf(typeof(JsonResult), jsonResult);

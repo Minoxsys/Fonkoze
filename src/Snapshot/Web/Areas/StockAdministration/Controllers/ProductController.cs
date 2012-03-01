@@ -60,7 +60,9 @@ namespace Web.Areas.StockAdministration.Controllers
 
         public JsonResult GetProductGroups()
         {
-            var productGroups = QueryProductGroup.Query().ToList();
+            LoadUserAndClient();
+
+            var productGroups = QueryProductGroup.Query().Where(p => p.Client == _client).ToList();
             var productGroupModelList = new List<ProductGroupModel>();
 
             foreach (var productGroup in productGroups)

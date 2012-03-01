@@ -11,7 +11,6 @@ namespace Persistence.Overrides
     {
         public void Override(FluentNHibernate.Automapping.AutoMapping<User> mapping)
         {
-            mapping.HasManyToMany(user => user.Roles).Cascade.All();
             mapping.Map(p => p.UserName).Unique();
         }
     }

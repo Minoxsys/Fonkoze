@@ -22,16 +22,16 @@ namespace Web.Models.UserManager
 		{
 			Roles = new List<EmployeeRole>();
 
-			 User = queryEmployees.Load(id);
+			User = queryEmployees.Load(id);
 			if(User == null ) return;
 
-			var empRoles = User.Roles.ToList();
-			 var roles = queryRoles.Query().ToList();
+			var empRoleId = User.RoleId;
+			var roles = queryRoles.Query().ToList();
 
 			roles.ForEach(role => Roles.Add(
 				new EmployeeRole{
 					Role=role,
-					IsLinked = empRoles.Exists(r => r== role)
+                    IsLinked = empRoleId == role.Id
 				}));
 		}
 

@@ -171,7 +171,7 @@ namespace Web.Areas.StockAdministration.Controllers
             LoadUserAndClient();
 
             var pageSize = indexModel.limit.Value;
-            var productGroupDataQuery = this.QueryService.Query();
+            var productGroupDataQuery = this.QueryService.Query().Where(p => p.Client == _client); ;
             var productQuery = this.QueryProduct.Query()
                 .Where(p=>p.Client == _client);
 

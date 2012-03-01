@@ -20,6 +20,7 @@ namespace Tests.Unit.Controllers.RoleManagerControllerTests
         public RoleManagerController controller;
         
         public IQueryService<Role> queryServiceRole;
+        public IQueryService<User> queryServiceUser;
         public IQueryService<Permission> queryServicePermission;
         public ISaveOrUpdateCommand<Role> saveCommandRole;
         public IDeleteCommand<Role> deleteCommandRole;
@@ -40,12 +41,14 @@ namespace Tests.Unit.Controllers.RoleManagerControllerTests
             saveCommandRole = MockRepository.GenerateMock<ISaveOrUpdateCommand<Role>>();
             deleteCommandRole = MockRepository.GenerateMock<IDeleteCommand<Role>>();
             queryRole = MockRepository.GenerateMock<IQueryRole>();
+            queryServiceUser = MockRepository.GenerateMock<IQueryService<User>>();
 
             controller.QueryServiceRole = queryServiceRole;
             controller.SaveOrUpdate = saveCommandRole;
             controller.QueryServicePermission = queryServicePermission;
             controller.DeleteCommand = deleteCommandRole;
             controller.QueryRole = queryRole;
+            controller.QueryServiceUsers = queryServiceUser;
         }
 
         public void Init_Stub_Data()
@@ -62,7 +65,6 @@ namespace Tests.Unit.Controllers.RoleManagerControllerTests
             role.Stub(r => r.Id).Return(roleId);
             role.Name = ROLE_NAME;
             role.Description = ROLE_DESCRIPTION;
-            role.Employees = new List<User>();
             role.Functions = permissions.ToList();
 
             indexModel = new IndexModel()

@@ -55,9 +55,6 @@ namespace Migrations
 
 			Create.AddForeignKey("OutpostHistoricalStockLevels");
 
-
-            this.IfDatabase("sqlserver").Execute.EmbeddedScript(@"Migrations.Scripts.sqlserver_InsertIntoTables.sql");
-
 		}
 	}
 }

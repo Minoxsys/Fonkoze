@@ -359,7 +359,6 @@
     <Compile Include="Models\UserManager\UserManagerIndexModel.cs" />
     <Compile Include="Models\UserManager\UserManagerInputModel.cs" />
     <Compile Include="Models\UserManager\UserManagerListModel.cs" />
-    <Compile Include="Models\UserManager\UserManagerUnAssignModel.cs" />
     <Compile Include="Models\UserManager\UserModel.cs" />
     <Compile Include="Models\UserManager\UserOutputModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

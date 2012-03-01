@@ -31,14 +31,6 @@ begin
     )
 end
 
-if not exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'RoleUsers')
-begin
-    create table RoleUsers (
-       Role_FK UNIQUEIDENTIFIER not null,
-       User_FK UNIQUEIDENTIFIER not null
-    )
-end
-
 if not exists(select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME=N'Users')
 begin
     create table Users (

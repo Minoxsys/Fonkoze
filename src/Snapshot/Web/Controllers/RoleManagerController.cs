@@ -31,6 +31,12 @@ namespace Web.Controllers
             set;
         }
 
+        public IQueryService<User> QueryServiceUsers
+        {
+            get;
+            set;
+        }
+
         public IQueryService<Permission> QueryServicePermission
         {
             get;
@@ -88,7 +94,7 @@ namespace Web.Controllers
                                                            Id = role.Id,
                                                            Name = role.Name,
                                                            Description = role.Description,
-                                                           NumberOfUsers = role.Employees.Count
+                                                           NumberOfUsers = GetNumberOfUsers(role.Id)
                                                        }).ToArray();
 
             return Json(new RoleManagerListForJsonOutput
@@ -96,6 +102,11 @@ namespace Web.Controllers
                 Roles = roleListOfReferenceModelsProjection,
                 TotalItems = totalItems
             }, JsonRequestBehavior.AllowGet);
+        }
+
+        private int GetNumberOfUsers(Guid roleId)
+        {
+            return QueryServiceUsers.Query().Where(it => it.RoleId == roleId).Count();
         }
 
         [HttpPost]

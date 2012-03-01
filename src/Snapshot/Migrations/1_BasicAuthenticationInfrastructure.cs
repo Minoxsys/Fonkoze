@@ -24,10 +24,6 @@ namespace Migrations
 				.WithColumn("Name").AsString(ConstraintUtility.NAME_LENGTH).Unique()
 				.WithColumn("Description").AsString(ConstraintUtility.DESCRIPTION_LENGTH).Nullable();
 
-			Create.Table("RoleUsers")
-				.WithColumn("User_FK").AsGuid().NotNullable()
-				.WithColumn("Role_FK").AsGuid().NotNullable();
-
 			Create.Table("Users").WithCommonColumns()
 				.WithColumn("UserName").AsString(ConstraintUtility.NAME_LENGTH).NotNullable().Unique()
 				.WithColumn("Password").AsString(ConstraintUtility.NAME_LENGTH).NotNullable()
@@ -52,7 +48,6 @@ namespace Migrations
 
 			Delete.Table("PermissionRoles");
 			Delete.Table("Permissions");
-			Delete.Table("RoleUsers");
 			Delete.Table("Roles");
 			Delete.Table("Users");
 		}

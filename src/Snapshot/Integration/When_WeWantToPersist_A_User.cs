@@ -19,6 +19,7 @@ namespace IntegrationTests
         const string PASSWORD = "123adn";
         const string EMAIL = "some@evoz.com";
         Guid CLIENT_ID = Guid.Empty;
+        Guid ROLE_ID = Guid.NewGuid();
         const string USERNAME = "mihai.lazar";
 
 		[Test]
@@ -27,8 +28,8 @@ namespace IntegrationTests
 
             var employee = Specs
                 .CheckProperty(e => e.UserName, USERNAME)
-                .CheckList(e => e.Roles, new List<Role> { new Role { Name = "Admnistrator", Description = "The users with this role will " } })
                 .CheckProperty(e => e.ClientId, CLIENT_ID)
+                .CheckProperty(e => e.RoleId, ROLE_ID)
                 .CheckProperty(e => e.Email, EMAIL)
                 .CheckProperty(e => e.Password, PASSWORD)
                 .VerifyTheMappings();
@@ -38,11 +39,10 @@ namespace IntegrationTests
             Assert.AreEqual(PASSWORD, employee.Password);
             Assert.AreEqual(EMAIL, employee.Email);
             Assert.AreEqual(CLIENT_ID, employee.ClientId);
+            Assert.AreEqual(ROLE_ID, employee.RoleId);
 
             Assert.IsInstanceOf<Guid>(employee.ClientId);
-           	Assert.IsNotNull(employee.Roles);
-			Assert.AreEqual(1, employee.Roles.Count);
-
+            Assert.IsInstanceOf<Guid>(employee.RoleId);
             
 			session.Delete(employee);            
             session.Flush();
@@ -54,10 +54,10 @@ namespace IntegrationTests
 		{
 			var employee = Specs
 				.CheckProperty(e => e.UserName, USERNAME)
+                .CheckProperty(e => e.RoleId, ROLE_ID)
                 .CheckProperty(e=> e.ClientId,CLIENT_ID)
                 .CheckProperty( e => e.Password,PASSWORD)
                 .CheckProperty(e=>e.Email,EMAIL)
-				.CheckList(e => e.Roles, new List<Role> { new Role { Name = "Admnistrator", Description = "The users with this role will " } })
 				.VerifyTheMappings();
 
 			Assert.IsNotNull(employee);
@@ -65,17 +65,14 @@ namespace IntegrationTests
             Assert.AreEqual(PASSWORD, employee.Password);
             Assert.AreEqual(EMAIL, employee.Email);
             Assert.AreEqual(CLIENT_ID, employee.ClientId);
-
-			Assert.IsNotNull(employee.Roles);
-			Assert.AreEqual(1, employee.Roles.Count);
-
+            Assert.AreEqual(ROLE_ID, employee.RoleId);
 
 			var unitOfWork = new NHibernateUnitOfWork(_sessionFactory);
 			unitOfWork.Initialize();
 
 
 			var s = new Persistence.Queries.NHibernateQueryService<User>(unitOfWork.CurrentSession);
-			;
+
 			var emplByName = new UserByUserName(USERNAME);
 
 			var xx = s.Query(emplByName);

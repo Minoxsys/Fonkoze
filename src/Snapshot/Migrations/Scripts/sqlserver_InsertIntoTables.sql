@@ -1,3 +1,17 @@
+-- Roles
+GO
+if not exists(select [Name] from Roles where [Name]=N'AllAccess')
+begin
+INSERT  INTO Roles
+           (Id
+           ,Name
+           ,Description)
+     VALUES
+           ('461e581b-e60b-4dfd-a5a8-88229f14379b'
+           ,N'AllAccess'
+           ,N'This role permits access to the entire application')
+end	
+
 -- Users
 GO
 
@@ -7,6 +21,7 @@ INSERT INTO Users
            ([Id]
            ,[UserName]
            ,[ClientId]
+		   ,[RoleId]
            ,[Password]
            ,[Email]
            ,[Created]
@@ -16,6 +31,7 @@ INSERT INTO Users
            ('E8346290-DE35-47FB-8FEC-D2562DED7F40'
            ,'admin'
            ,'BEEC53CE-A73C-4F03-A354-C617F68BC813'
+		   ,'461e581b-e60b-4dfd-a5a8-88229f14379b'
            ,'1VEeTz7YcRY='
            ,'admin@evozon.com'
            ,GETDATE()
@@ -91,31 +107,8 @@ VALUES
            ('80CDE125-6F44-477D-AAB7-171803030477'
            ,N'Home.Index')
 end           
--- Roles
-GO
-if not exists(select [Name] from Roles where [Name]=N'AllAccess')
-begin
-INSERT  INTO Roles
-           (Id
-           ,Name
-           ,Description)
-     VALUES
-           ('461e581b-e60b-4dfd-a5a8-88229f14379b'
-           ,N'AllAccess'
-           ,N'This role permits access to the entire application')
-end		   
--- RoleUsers 
-GO
-if not exists(select * from RoleUsers 
-	where [Role_FK] = '461e581b-e60b-4dfd-a5a8-88229f14379b' and [User_FK] = 'E8346290-DE35-47FB-8FEC-D2562DED7F40')
-begin
-INSERT INTO RoleUsers
-           (Role_FK
-           ,User_FK)
-     VALUES
-           ('461e581b-e60b-4dfd-a5a8-88229f14379b'
-            ,'E8346290-DE35-47FB-8FEC-D2562DED7F40' )
-end			
+	   
+		
 -- PermissionRoles
 GO
 if not exists(select [Permission_FK], [Role_FK] from [PermissionRoles] where [Permission_FK]='80CDE125-6F44-477D-AAB7-171803030477' and [Role_FK] ='461e581b-e60b-4dfd-a5a8-88229f14379b')

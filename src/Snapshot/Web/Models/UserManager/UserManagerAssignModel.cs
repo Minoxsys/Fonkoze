@@ -28,7 +28,7 @@ namespace Web.Models.UserManager
 			var employee = queryEmployee.Load(userId);
 			var role = queryRole.Load(roleId);
 
-			employee.AddRole(role);
+            employee.RoleId = role.Id;
 
 			updateEmployee.Execute(employee);
 		}

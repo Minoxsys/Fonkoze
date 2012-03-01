@@ -47,12 +47,12 @@ namespace Persistence.Security
 				return false;
 
 			var rolesAssignedToThisFunction = functionEntity.Roles.ToList();
-			var rolesAssignedToThisEmployee = empl.Roles.ToList();
+            var roleIdAssignedToThisEmployee = empl.RoleId;
 
 
 			foreach (var functionRight in rolesAssignedToThisFunction)
 			{
-				if (rolesAssignedToThisEmployee.Exists(role => role == functionRight))
+                if (roleIdAssignedToThisEmployee == functionRight.Id)
 					return true;
 			}
 			return false;
