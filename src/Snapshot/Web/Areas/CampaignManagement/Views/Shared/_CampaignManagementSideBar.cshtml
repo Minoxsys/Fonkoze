@@ -52,18 +52,6 @@
                             },
                             {
                                 xtype: 'button',
-                                id: contentRes.maincontent.sidebar.smsRequest,
-                                toggleGroup: contentRes.maincontent.sidebar.group,
-                                text: 'SMS Request Schedule',
-                                icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/arrow.gif"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
-                                iconCls:'x-btn-text-icon',
-                                handler: function () {
-                                    navigateTo(window.res.link.campaignOverview);
-                                },
-                                enableToggle: true
-                            },
-                            {
-                                xtype: 'button',
                                 id: window.res.content.maincontent.sidebar.existingRequest,
                                 toggleGroup: contentRes.maincontent.sidebar.group,
                                 enableToggle: true,

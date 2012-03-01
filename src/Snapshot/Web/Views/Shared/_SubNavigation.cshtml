@@ -48,23 +48,37 @@
                                 enableToggle: true,
                                 pressed: true,
                                 height: 38,
-                                margin: '10 7 0 150',
+                                margin: '10 7 0 0',
                                 text: 'Location Administration',
                                 ui: 'snapshot-submenu-btn',
                                 handler:function(){
                                     navigateTo(res.link.administration); 
                                 }
-                            },{
+                            },
+                            {
                                 xtype: 'button',
                                 id: subNavRes.buttonTabs.product,
                                 toggleGroup: subNavRes.buttonTabs.group,
                                 enableToggle: true,
+                                margin: '10 7 0 150',
                                 height: 38,
-                                margin: '10 7 0 0',
                                 text: 'Product Administration',
                                 ui: 'snapshot-submenu-btn',
                                 handler:function(){
                                     navigateTo(res.link.productGroup); 
+                                }
+                            },
+                            {
+                                xtype: 'button',
+                                id: subNavRes.buttonTabs.campaign,
+                                toggleGroup: subNavRes.buttonTabs.group,
+                                enableToggle: true,
+                                height: 38,
+                                margin: '10 7 0 0',
+                                text: 'Campaign Administration',
+                                ui: 'snapshot-submenu-btn',
+                                handler:function(){
+                                    navigateTo(res.link.campaignOverview); 
                                 }
                             },
                             {
@@ -79,19 +93,7 @@
                                 handler:function(){
                                     navigateTo(res.link.clientsOverview); 
                                 }
-                            },{
-                                xtype: 'button',
-                                id: subNavRes.buttonTabs.campaign,
-                                toggleGroup: subNavRes.buttonTabs.group,
-                                enableToggle: true,
-                                height: 38,
-                                margin: '10 7 0 0',
-                                text: 'Campaign Administration',
-                                ui: 'snapshot-submenu-btn',
-                                handler:function(){
-                                    navigateTo(res.link.campaignOverview); 
-                                }
-                            }                        
+                            }                       
                         ]
                     }
                 ]

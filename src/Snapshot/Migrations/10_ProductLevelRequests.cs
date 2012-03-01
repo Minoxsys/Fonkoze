@@ -4,7 +4,7 @@ using FluentMigrator;
 
 namespace Migrations
 {
-    [Migration(9)]
+    [Migration(10)]
     public class ProductLevelRequests:Migration
     {
         const string PRODUCT_LEVEL_REQUESTS = "ProductLevelRequests";
@@ -25,6 +25,7 @@ namespace Migrations
                 .WithColumn("Campaign_FK").AsGuid()
                 .WithColumn("Schedule_FK").AsGuid()
                 .WithColumn("ProductGroup_FK").AsGuid()
+                .WithColumn("IsStopped").AsBoolean().WithDefaultValue(false)
                 .WithColumn("Products").AsBinary(Int32.MaxValue).Nullable()
                 ;
             Create.AddClientForeignKey(PRODUCT_LEVEL_REQUESTS);

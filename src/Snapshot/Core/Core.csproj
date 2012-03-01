@@ -40,6 +40,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Web.Routing" />
     <Reference Include="System.Xml.Linq" />
@@ -62,6 +63,7 @@
     <Compile Include="Security\EvozonPrincipal.cs" />
     <Compile Include="Security\DefaultPermissions.cs" />
     <Compile Include="Security\IPermissionsService.cs" />
+    <Compile Include="Services\BinaryJsonStore.cs" />
     <Compile Include="Services\Configuration\FileElement.cs" />
     <Compile Include="Services\Configuration\FileElementCollection.cs" />
     <Compile Include="Services\Configuration\GroupElement.cs" />

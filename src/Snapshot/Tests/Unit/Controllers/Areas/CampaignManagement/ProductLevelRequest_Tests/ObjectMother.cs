@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Core.Services;
 using Web.Areas.CampaignManagement.Controllers;
 using AutofacContrib.Moq;
 using Moq;
@@ -9,7 +10,6 @@ using Autofac;
 using MvcContrib.TestHelper.Fakes;
 using System.Collections.Generic;
 using Web.Areas.CampaignManagement.Models.ProductLevelRequest;
-using Web.Helpers;
 
 namespace Tests.Unit.Controllers.Areas.CampaignManagement.ProductLevelRequest_Tests
 {
@@ -115,6 +115,7 @@ namespace Tests.Unit.Controllers.Areas.CampaignManagement.ProductLevelRequest_Te
 
             schedule.Setup(x => x.Reminders).Returns(Reminders(schedule.Object));
 
+            schedule.SetupGet(x => x.Client).Returns(clientMock.Object);
             return schedule.Object;
         }
 
@@ -256,7 +257,7 @@ namespace Tests.Unit.Controllers.Areas.CampaignManagement.ProductLevelRequest_Te
                 plr.SetupGet(c => c.Id).Returns(Guid.NewGuid());
                 plr.SetupGet(c => c.Campaign).Returns(MockCampaign(i));
                 plr.SetupGet(c => c.ProductGroup).Returns(MockProductGroup(i));
-                plr.SetupGet(c => c.Products).Returns(MockProducts(i));
+                plr.Setup(c => c.RestoreProducts<CreateProductLevelRequestInput.ProductModel[]>()).Returns(MockProducts(i));
                 plr.SetupGet(c => c.Schedule).Returns(MockSchedule(i));
 
 
@@ -283,7 +284,7 @@ namespace Tests.Unit.Controllers.Areas.CampaignManagement.ProductLevelRequest_Te
             return schedule.Object;
         }
 
-        private byte[] MockProducts(int i)
+        private CreateProductLevelRequestInput.ProductModel[] MockProducts(int i)
         {
             var products = new List<CreateProductLevelRequestInput.ProductModel>();
 
@@ -298,7 +299,7 @@ namespace Tests.Unit.Controllers.Areas.CampaignManagement.ProductLevelRequest_Te
                 });
             }
 
-            return BinaryJsonStore<CreateProductLevelRequestInput.ProductModel[]>.From(products.ToArray());
+            return products.ToArray();
         }
 
         private ProductGroup MockProductGroup(int i)

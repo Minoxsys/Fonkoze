@@ -302,7 +302,6 @@
     <Compile Include="Controllers\JavascriptController.cs" />
     <Compile Include="Controllers\RoleManagerController.cs" />
     <Compile Include="Controllers\UserManagerController.cs" />
-    <Compile Include="Helpers\BinaryJsonStore.cs" />
     <Compile Include="Helpers\DateFormatter.cs" />
     <Compile Include="Helpers\DomainEntityHelper.cs" />
     <Compile Include="Helpers\EmptyStringToDotsFormatter.cs" />
@@ -2093,6 +2092,7 @@
     <Content Include="Areas\CampaignManagement\Views\ProductLevelRequest\_CreateProductLevelRequest.cshtml" />
     <Content Include="Assets\resources\themes\stylesheets\snapshot\default\accessories\scss\config.rb" />
     <Content Include="Areas\AnalysisManagement\Views\ReportDistrictLevel\Overview.cshtml" />
+    <Content Include="Areas\CampaignManagement\Views\Shared\_CampaignManagementSideBar.cshtml" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\core\_core.scss" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\core\_reset.scss" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\layout\_layout.scss" />

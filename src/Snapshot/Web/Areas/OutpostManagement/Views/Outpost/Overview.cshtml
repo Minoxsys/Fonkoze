@@ -386,11 +386,6 @@
 	
 								var createAction = $.post(me.url, form.getValues());
 								createAction.success(function(serverResponse){
-									Ext.Msg.show({
-										title: serverResponse.Status,
-										buttons: Ext.Msg.OK,
-										msg: serverResponse.Message
-									});
 									window.feature.outpostsStore.loadPage(1);
 	
 									me.postContactsFromMemoryProxy(serverResponse.OutpostId);

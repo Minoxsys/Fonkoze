@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Linq;
 using System.Web.Mvc;
+using Core.Services;
 using Domain;
 using Core.Persistence;
 using Core.Domain;
 using Web.Areas.CampaignManagement.Models.ProductLevelRequest;
-using Web.Helpers;
 using Web.Models.Shared;
 using System.Collections.Generic;
 using System.Text;
@@ -68,7 +68,7 @@ namespace Web.Areas.CampaignManagement.Controllers
                     EndDate = req.Campaign.EndDate.HasValue ? req.Campaign.EndDate.Value.ToString("dd-MMM-yyyy") : "-",
                     ProductGroup = req.ProductGroup.Name,
                     ScheduleName = req.Schedule.Name,
-                    ProductSmsCodes = req.Products != null ? GetSmsCodesRepresentation(req.Products) : string.Empty,
+                    ProductSmsCodes = req.Products != null ? GetSmsCodesRepresentation(req) : string.Empty,
                     Frequency = req.Schedule.FrequencyType ?? "Now",
                     Editable = req.Campaign.StartDate > DateTime.UtcNow
 
@@ -83,11 +83,11 @@ namespace Web.Areas.CampaignManagement.Controllers
             }, JsonRequestBehavior.AllowGet);
         }
 
-        private string GetSmsCodesRepresentation(byte[] binarySerializedProducts)
+        private string GetSmsCodesRepresentation(ProductLevelRequest req)
         {
             var sb = new StringBuilder();
 
-            var products = BinaryJsonStore<CreateProductLevelRequestInput.ProductModel[]>.From(binarySerializedProducts);
+            var products = req.RestoreProducts<CreateProductLevelRequestInput.ProductModel[]>(); //  BinaryJsonStore<CreateProductLevelRequestInput.ProductModel[]>.From(binarySerializedProducts);
             if (products == null) return "--";
 
             for (int i = 0; i < products.Length; i++)
@@ -155,17 +155,17 @@ namespace Web.Areas.CampaignManagement.Controllers
             var schedule = QuerySchedules.Load(createProductLevelRequestInput.ScheduleId.Value);
             var campaign = QueryCampaigns.Load(createProductLevelRequestInput.CampaignId.Value);
 
-            var products = BinaryJsonStore<CreateProductLevelRequestInput.ProductModel[]>.From(createProductLevelRequestInput.Products);
-
             var productLevelRequest = new ProductLevelRequest
             {
                 ProductGroup = productGroup,
                 Schedule = schedule,
                 Campaign = campaign,
-                Products = products,
+                
                 ByUser = _user,
                 Client = _client
             };
+
+            productLevelRequest.StoreProducts<CreateProductLevelRequestInput.ProductModel[]>(createProductLevelRequestInput.Products);
 
             SaveProductLevelRequest.Execute(productLevelRequest);
 

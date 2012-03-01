@@ -232,6 +232,7 @@
                                     fieldLabel: 'Campaign',
                                     store: me.campaigns,
                                     emptyText: 'Campaign List',
+                                    allowBlank:false,
                                     queryMode: 'local',
                                     valueField: 'Id',
                                     displayField: 'Name'
@@ -242,6 +243,7 @@
                                     fieldLabel: 'Product Group',
                                     store: me.productGroupStore,
                                     emptyText: 'Product Group List',
+                                    allowBlank:false,
                                     queryMode: 'local',
                                     valueField: 'Id',
                                     displayField: 'Name',
@@ -350,6 +352,14 @@
             var campaign = me.down('#campaign');
             var productGroup = me.down('#productGroup');
 
+            if (!campaign.validate()) {
+                return;
+            }
+
+            if (!productGroup.validate()) {
+                return;
+            }
+
             var params = {
                 CampaignId: campaign.getValue(),
                 ProductGroupId: productGroup.getValue(),
@@ -357,16 +367,28 @@
                 ScheduleId: null
             }
 
+            var atLeastOneProductSelected = false;
             me.products.each(function (schedule) {
                 var value = _(schedule.data).clone();
                 delete value.id;
+                atLeastOneProductSelected = atLeastOneProductSelected || value.Selected;
+
                 params.Products.push(value);
             });
+
+            if (!atLeastOneProductSelected) {
+                Ext.Msg.alert('No product selected', 'At least one product must be selected in order to create a product level request.');
+                return;
+            }
 
             var record = me.schedules.findRecord('Selected', true);
             if (record) {
                 params.ScheduleId = record.get('Id');
+            } else {
+                Ext.Msg.alert('No schedule selected', 'A schedule must be selected in order to create a product level request.');
+                return;
             }
+
 
             var url = '@Url.RouteUrl(CampaignManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "ProductLevelRequest", action = "Create" })';
             var action = $.ajax({
@@ -378,8 +400,8 @@
             });
 
             action.success(function () {
-               me.gridStore.loadPage(1);
-               me.destroy();
+                me.gridStore.loadPage(1);
+                me.destroy();
             });
 
         }

@@ -40,6 +40,10 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.AssignProductGroupContr
 
             InitializeController();
             StubUserAndItsClient();
+
+            historicalStockLevels.Clear();
+            stockLevels.Clear();
+            products.Clear();
         }
 
         private void InitializeController()
@@ -145,6 +149,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.AssignProductGroupContr
 			product.Setup(c => c.Name).Returns("Product " + i);
 			product.Setup(c => c.ProductGroup).Returns(group.Object);
 			product.Setup(c => c.ByUser).Returns(userMock.Object);
+			product.Setup(c => c.Client).Returns(clientMock.Object);
 
 			return product;
 		}

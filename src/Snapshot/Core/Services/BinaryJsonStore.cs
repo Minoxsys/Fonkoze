@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 
-namespace Web.Helpers
+namespace Core.Services
 {
     public class BinaryJsonStore<T>
     {
-        private  string ConvertToJSON(T model)
+        private string ConvertToJSON(T model)
         {
             System.Web.Script.Serialization.JavaScriptSerializer serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
             return serializer.Serialize(model);

@@ -73,7 +73,7 @@ namespace Migrations
 				.WithCommonColumns()
 				.WithClientColumn()
 				.WithColumn("Name").AsString(ConstraintUtility.NAME_LENGTH)
-				.WithColumn("Coordinates").AsString(ConstraintUtility.COORDINATES_LENGTH)
+				.WithColumn("Coordinates").AsString(ConstraintUtility.COORDINATES_LENGTH).Nullable()
 				.WithColumn("Country_FK").AsGuid();
 			Create.AddForeignKey("Regions");
 			Create.AddForeignKey("Regions", "Country_FK", "Countries");
