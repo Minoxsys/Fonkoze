@@ -58,6 +58,9 @@ Campaign: Overview
         window.feature.wizardCampaignManagement = 'Wizard-Campaign-Management';       
         window.feature.nextButton = 'Form-Add-Campaign-Next-Button';
         window.feature.pressedButton = '';
+        window.feature.initialStepNumber = 1;
+        window.feature.campaignToEdit = null;
+
         var campaign = {};
 
         window.feature.campaignStore = Ext.create('Ext.data.Store', {
@@ -195,6 +198,7 @@ Campaign: Overview
                         text: 'Add New Campaign',
                         margin: '0 0 0 20',
                         handler: function () {
+                            window.feature.campaignToEdit = null;
                             window.feature.pressedButton = 'Add';
                             var modalWindowAddCampaign = new window.feature.modalCampaignManagement();
                             modalWindowAddCampaign.show();
@@ -253,7 +257,7 @@ Campaign: Overview
                 var gridsContainer = new window.feature.wizardGridManagementContainer();
          
                 ClearFields();
-                var stepNumber = 0;
+                var stepNumber = window.feature.initialStepNumber;
                 
                 Ext.applyIf(me, {
                     items: [firstContainer]
@@ -273,14 +277,13 @@ Campaign: Overview
                     text: 'Next',
                     id: window.feature.nextButton,
                     handler: function () {
-                        stepNumber++;
 
                         if (stepNumber == 1) {
                             var name = Ext.getCmp(window.feature.formCampaignNameId);
                             var startDate = Ext.getCmp(window.feature.formCampaignStartDateId);
                             var endDate = Ext.getCmp(window.feature.formCampaignEndDateId);
                             
-                            if (IsValid(name, startDate, endDate) == true){
+                            Validate(name, startDate, endDate, function(name, startDate, endDate) {
                                 GetCampainsFirstPageInfos(name, startDate, endDate);
 
                                 firstContainer.destroy();
@@ -288,19 +291,20 @@ Campaign: Overview
                                 PrepareCountryDisplay();
                                 me.add(gridsContainer);
                                 me.doLayout();
-                                
-                            }else{
-                                stepNumber--;
-                            }
+
+                                stepNumber++;
+                            });
+                            return;
                         }
 
                         if (stepNumber == 2) {
                             var ids = GetRightGridStoreIds();
                             if (ids.length > 0){
                                 DisplayRegions(ids);
+                                stepNumber++;
+                                return;
                             }else{
                                 Ext.Msg.alert("Error", "You need to select at least one country");
-                                stepNumber--;
                             }
                         }
 
@@ -308,9 +312,10 @@ Campaign: Overview
                             var ids = GetRightGridStoreIds();
                             if (ids.length > 0){
                                 DisplayDistricts(ids);
+                                stepNumber++;
+                                return;
                             }else{
                                 Ext.Msg.alert("Error", "You need to select at least one region");
-                                stepNumber--;
                             }
                         }
 
@@ -318,16 +323,17 @@ Campaign: Overview
                             var ids = GetRightGridStoreIds();
                             if (ids.length > 0){
                                 DisplayOutposts(ids);
+                                stepNumber++;
+                                return;
                             }else{
                                 Ext.Msg.alert("Error", "You need to select at least one district");
-                                stepNumber--;
                             }
                         }
 
                         if (stepNumber == 5) {
                             var ids = GetRightGridStoreIds();
                             if (ids.length > 0){
-                                stepNumber = 0;
+                                stepNumber = window.feature.initialStepNumber;
                                 campaign.Outposts = ids;
                                 window.feature.rightGridStore.removeAll();
                                 window.feature.leftGridStore.removeAll();
@@ -363,9 +369,10 @@ Campaign: Overview
                                         window.feature.campaignStore.loadPage(1);
                                     }
                                 });
+                                stepNumber++;
+                                return;
                             }else{
                                 Ext.Msg.alert("Error", "You need to select at least one outpost");
-                                stepNumber--;
                             }
                         }
                     }
@@ -408,9 +415,10 @@ Campaign: Overview
                     handler: function (grid, rowIndex, colIndex) {
                         window.feature.pressedButton = 'Edit';
                         var rec = grid.getStore().getAt(rowIndex);
-
+                        
                         if (rec.get('Opened') == false){
                             var modalWindowEditCampaign = new window.feature.modalCampaignManagement();
+                            window.feature.campaignToEdit = rec;
                             SetCampaignValues(rec);
                             modalWindowEditCampaign.show();
                         }else{
@@ -738,7 +746,7 @@ Campaign: Overview
             campaign.EndDate = Ext.util.Format.date(endDate.getValue()); 
         };
 
-        function IsValid(name, startDate, endDate){
+        function Validate(name, startDate, endDate, isValidHandler){
             var ok = true;
             if (name.getValue() == ''){
                 name.markInvalid('Field Name is required!');  
@@ -757,27 +765,22 @@ Campaign: Overview
                 endDate.setValue(null);
                 ok = false;
             }
-            return ok;
-        };
 
-        function IsValid(name, startDate, endDate){
-            var ok = true;
-            if (name.getValue() == ''){
-                name.markInvalid('Field Name is required!');  
-                name.setValue(null);
-                ok = false;
-            }
+            if (ok) {
+                var needToAskServer = window.feature.campaignToEdit == null || window.feature.campaignToEdit.get('Name') != name.getValue();
 
-            if (startDate.getValue() == null){
-                startDate.markInvalid('Field Start Date is required!');  
-                startDate.setValue(null);
-                ok = false;
-            }
-
-            if (endDate.getValue() == null){
-                endDate.markInvalid('Field End Date is required!');  
-                endDate.setValue(null);
-                ok = false;
+            if (!needToAskServer) {
+                isValidHandler(name, startDate, endDate);
+            } else {
+                var getFromUrl = '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "Campaign", action = "DoesCampaignExist" })';
+                var action = $.post(getFromUrl, { Name: name.getValue() });
+                action.success(function (response) {
+                    if (response.Status == 'NotFound') {
+                        isValidHandler(name, startDate, endDate);
+                    } else {
+                        name.markInvalid('This campaign name is not available!');
+                    }
+                });
             }
 
             if (endDate.getValue()!= null && startDate.getValue() != null && startDate.getValue() >= endDate.getValue()){
@@ -786,8 +789,8 @@ Campaign: Overview
             }
 
             
-            return ok;
-        }
+            }
+        };
 
         var contentRes = window.res.content;
         var mainContent = Ext.getCmp(contentRes.maincontent.id);

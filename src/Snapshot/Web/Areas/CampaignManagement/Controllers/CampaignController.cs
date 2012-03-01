@@ -249,6 +249,23 @@ namespace Web.Areas.CampaignManagement.Controllers
             }, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpPost]
+        public JsonResult DoesCampaignExist(string Name)
+        {
+            LoadUserAndClient();
+
+            Campaign campaign = QueryCampaign.Query().Where(c => c.Client == _client && c.Name.Equals(Name)).FirstOrDefault();
+
+            if (campaign == null)
+            {
+                return Json(new JsonActionResponse() { Status = "NotFound", Message = "Campaign " + Name + " was not found in the DB." });
+            }
+            else
+            {
+                return Json(new JsonActionResponse() { Status = "Success", Message = "There is a campaign with the name " + Name + " in the DB." });
+            }
+        }
+
         private void LoadUserAndClient()
         {
             var loggedUser = User.Identity.Name;

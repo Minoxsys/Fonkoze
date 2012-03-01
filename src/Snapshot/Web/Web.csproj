@@ -2113,9 +2113,6 @@
     <None Include="ClassDiagram1.cd" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Areas\CampaignManagement\Views\Campaign\Overview.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\mixins\_color-by-background.scss" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\mixins\_frame.scss" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\mixins\_inner-border.scss" />

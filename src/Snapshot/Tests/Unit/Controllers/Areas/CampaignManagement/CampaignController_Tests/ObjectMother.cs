@@ -14,6 +14,8 @@ namespace Tests.Unit.Controllers.Areas.CampaignManagement.CampaignController_Tes
 {
     public class ObjectMother
     {
+        public const string CAMPAIGN_NAME = "Campania 1";
+
         public CampaignController controller;
 
         public IQueryService<Campaign> queryCampaign;
@@ -51,8 +53,8 @@ namespace Tests.Unit.Controllers.Areas.CampaignManagement.CampaignController_Tes
         {
             MockServices();
             Setup_Controller();
-            SetUp_StubData();
             StubUserAndItsClient();
+            SetUp_StubData();
         }
 
         private void MockServices()
@@ -125,12 +127,13 @@ namespace Tests.Unit.Controllers.Areas.CampaignManagement.CampaignController_Tes
             campaignId = Guid.NewGuid();
             campaign = MockRepository.GeneratePartialMock<Campaign>();
             campaign.Stub(c => c.Id).Return(campaignId);
-            campaign.Name = "Campania 1";
+            campaign.Name = CAMPAIGN_NAME;
             campaign.Opened = false;
             campaign.StartDate = DateTime.UtcNow;
             campaign.EndDate = DateTime.UtcNow.AddDays(2);
             campaign.CreationDate = DateTime.UtcNow;
             campaign.Options = StrToByteArray((ConvertToJSON(GetOptionsModel(countryId1.ToString(), regionId.ToString(), districtId.ToString(), outpostId.ToString()))));
+            campaign.Client = client;
         }
 
         public void StubUserAndItsClient()
