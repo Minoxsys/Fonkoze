@@ -124,7 +124,7 @@ namespace Web.Areas.OutpostManagement.Controllers
 
             var queryRegionValidation = QueryService.Query().Where(p=>p.Client == _client);
 
-            if (queryRegionValidation.Where(it => it.Name == regionInputModel.Name).Count() > 0)
+            if (queryRegionValidation.Where(it => it.Name == regionInputModel.Name && it.Id != regionInputModel.Id).Count() > 0)
             {
                 return Json(
                     new ProductJsonActionResponse

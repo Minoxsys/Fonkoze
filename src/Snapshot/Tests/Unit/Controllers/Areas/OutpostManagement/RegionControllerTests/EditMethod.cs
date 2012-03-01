@@ -62,7 +62,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.RegionControllerTests
                 Coordinates = objectMother.region.Coordinates,
                 CountryId = objectMother.region.Country.Id
             };
-            objectMother.queryRegion.Expect(call => call.Query()).Return(new Region[] { objectMother.region }.AsQueryable());
+            objectMother.queryRegion.Expect(call => call.Query()).Return(new Region[] { objectMother.region2 }.AsQueryable());
             //Act
             var jsonResult = objectMother.controller.Edit(regionInputModel);
 

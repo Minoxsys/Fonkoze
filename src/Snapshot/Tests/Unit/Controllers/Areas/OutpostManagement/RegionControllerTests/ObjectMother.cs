@@ -27,12 +27,14 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.RegionControllerTests
 
         public Country country;
         public Region region;
+        public Region region2;
         public District district;
         public Client client;
         public User user;
 
         public Guid countryId;
         public Guid regionId;
+        public Guid regionId2;
         public Guid districtId;
         public Guid clientId;
         public Guid userId;
@@ -93,6 +95,14 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.RegionControllerTests
             region.Coordinates = REGION_COORDINATES;
             region.Country = country;
             region.Client = client;
+
+            regionId2 = Guid.NewGuid();
+            region2 = MockRepository.GeneratePartialMock<Region>();
+            region2.Stub(c => c.Id).Return(regionId2);
+            region2.Name = REGION_NAME;
+            region2.Coordinates = REGION_COORDINATES;
+            region2.Country = country;
+            region2.Client = client;
 
             districtId = Guid.NewGuid();
             district = MockRepository.GeneratePartialMock<District>();
