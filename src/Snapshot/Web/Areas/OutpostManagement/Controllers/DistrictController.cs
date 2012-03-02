@@ -57,55 +57,22 @@ namespace Web.Areas.OutpostManagement.Controllers
         {
             LoadUserAndClient();
 
-            var districts = QueryService.Query().Take(0);
+            var districts = QueryService.Query().Where(it => it.Client.Id == _client.Id);
 
             int pageSize = 0;
 
             if (indexModel.Limit != null)
                 pageSize = indexModel.Limit.Value;
 
-            if ((indexModel.RegionId == null) && (indexModel.CountryId == null))
-            {
-                if (indexModel.SearchName != null)
-                {
-                    districts = QueryService.Query().Where(it => it.Client == _client && it.Name.Contains(indexModel.SearchName));
+            if (indexModel.CountryId != null)
+                districts = districts.Where(it => it.Region.Country.Id == indexModel.CountryId.Value);
 
-                }
-                else
-                {
-                    districts = QueryService.Query().Where(it => it.Client == _client);
-                }
-            }
-            else
-            {
-                if (indexModel.CountryId != null)
-                {
-                    if (indexModel.SearchName != null)
-                    {
-                        districts = QueryService.Query().Where(it => it.Region.Country.Id == indexModel.CountryId.Value && it.Client == _client && it.Name.Contains(indexModel.SearchName));
+            if (indexModel.RegionId != null)
+                districts =  districts.Where(it => it.Region.Id == indexModel.RegionId); 
 
-                    }
-                    else
-                    {
-                        districts = QueryService.Query().Where(it => it.Region.Country.Id == indexModel.CountryId.Value && it.Client == _client);
+            if (indexModel.SearchName != null)
+                districts = districts.Where(it => it.Name.Contains(indexModel.SearchName));
 
-
-                    }
-                }
-                else
-                {
-                    if (indexModel.SearchName == null)
-                    {
-                        districts = QueryService.Query().Where(it => it.Region.Id == indexModel.RegionId.Value && it.Client == _client);
-
-                    }
-                    else
-                    {
-                        districts = QueryService.Query().Where(it => it.Region.Id == indexModel.RegionId.Value && it.Client == _client && it.Name.Contains(indexModel.SearchName));
-
-                    }
-                }
-            }
 
             var orderByColumnDirection = new Dictionary<string, Func<IQueryable<District>>>()
             {
