@@ -86,7 +86,7 @@ namespace Web.Areas.OutpostManagement.Controllers
                 districts = orderByColumnDirection[String.Format("{0}-{1}", indexModel.sort, indexModel.dir)].Invoke();
                 totalItems = districts.Count();
                 districts = districts.Take(pageSize)
-                                                   .Skip(indexModel.Start.Value);
+                                     .Skip(indexModel.Start.Value);
             }
 
             var districtModelList = new List<DistrictModel>();
@@ -99,6 +99,7 @@ namespace Web.Areas.OutpostManagement.Controllers
                 districtModel.Id = district.Id;
                 districtModel.ClientId = district.Client.Id;
                 districtModel.RegionId = district.Region.Id;
+                districtModel.CountryId = district.Region.Country.Id;
                 districtModel.OutpostNo = QueryOutpost.Query().Count(it => it.District.Id == district.Id && it.Client == _client);
                 districtModelList.Add(districtModel);
 

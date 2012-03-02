@@ -434,7 +434,7 @@ Districts: Overview
         window.feature.store = Ext.create('Ext.data.Store', {
             pageSize: 50,
             remoteSort: true,
-            fields: ['Name', 'OutpostNo', 'Id', 'ClientId', 'RegionId'],
+            fields: ['Name', 'OutpostNo', 'Id', 'ClientId', 'RegionId', 'CountryId'],
             proxy: {
                 type: 'ajax',
                 url: '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "District", action = "Index" })',
@@ -476,9 +476,13 @@ Districts: Overview
                     tooltip: _t('Edit this district'),
                     handler: function (grid, rowIndex, colIndex) {
                         var record = grid.store.getAt(rowIndex);
-                        var selectedCountryId = Ext.getCmp(window.feature.comboboxCountriesId).getValue();
-                        var selectedRegionId = Ext.getCmp(window.feature.comboboxRegionsId).getValue();
-
+                        
+                        window.feature.countriesStore.load();
+                        window.feature.comboBoxCountries.setValue(record.get('CountryId'));
+                        window.feature.regionsStore.load({
+                            params: { countryId: record.get('CountryId') }
+                        });
+                        window.feature.comboBoxRegions.setValue(record.get('RegionId'));
 
                         var modalForEdit = new window.feature.modalEdit();
                         Ext.getCmp(window.feature.districtNameEditModalId).setValue(record.data.Name);
