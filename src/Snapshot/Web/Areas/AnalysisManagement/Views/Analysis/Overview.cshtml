@@ -70,10 +70,9 @@ Analysis
                                 items: [{ xtype: 'box',
                                     autoEl: { tag: 'a', style: { color: 'blue' }, href: '@(Url.RouteUrl<ReportRegionLevelController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))', html: 'Stock level information at a region level' },
                                     margin: '70 30 10 80'
-                                    //text: ''
-                                }, { xtype: 'label',
+                                   }, { xtype: 'label',
                                     margin: '0 0 10 80',
-                                    text: 'Report description'
+                                    text: 'This report will show you the latest data of products level at the region level'
                                 }]
                             }]
                         }, { xtype: 'container',
@@ -85,6 +84,7 @@ Analysis
                                 src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Analysis/StockLevelDistrict.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
                                 margin: '60 0 0 90'
                             }, { xtype: 'container',
+                                width: 400,
                                 layout: {
                                     type: 'vbox'
                                 },
@@ -93,7 +93,7 @@ Analysis
                                     autoEl: { tag: 'a', style: { color: 'blue' }, href: '@(Url.RouteUrl<ReportDistrictLevelController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))', html: 'Stock level information at a district level' }
                                 }, { xtype: 'label',
                                     margin: '0 0 10 80',
-                                    text: 'Report description'
+                                    text: 'This report will show you the latest data of products level at the district level'
                                 }]
                             }]
                         }]
@@ -111,6 +111,7 @@ Analysis
                                 src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Analysis/ActivityReport.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
                                 margin: '60 0 0 90'
                             }, { xtype: 'container',
+                                width:400,
                                 layout: {
                                     type: 'vbox'
                                 },
@@ -129,7 +130,7 @@ Analysis
                             },
                             items: [{ xtype: 'image',
                                 src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Analysis/OutpostList.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
-                                margin: '60 0 0 140'
+                                margin: '60 0 0 190'
                             }, { xtype: 'container',
                                 layout: {
                                     type: 'vbox'
