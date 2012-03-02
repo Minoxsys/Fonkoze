@@ -134,7 +134,7 @@
             }
         });
 
-        function IsValid(productGroup, productName, productSMSCode) {
+        function IsValid(productGroup, productName, productSMSCode,productLowerLimit, productUpperLimit) {
     
             var ok = true;
             if (productGroup.getValue() == '') {
@@ -142,7 +142,11 @@
                 productGroup.setValue(null);
                 ok = false;
             }
-    
+            
+            if(productLowerLimit.getValue() > productUpperLimit.getValue()){
+            productLowerLimit.markInvalid('Value of product lower limit should be less than value of product upper limit!');
+            ok = false;
+            }
             if (productName.getValue() == '') {
                 productName.markInvalid('Field Product is required!');
                 productName.setValue(null);
@@ -362,7 +366,7 @@
                             var productUpperLimit = me.down('#' + window.feature.ProductUpperLimitId);
                             var productSMSCode = me.down('#' + window.feature.ProductSMSReferecenceCodeId);
 
-                            var ok = IsValid(productGroup, productName, productSMSCode);
+                            var ok = IsValid(productGroup, productName, productSMSCode,productLowerLimit,productUpperLimit);
 
                             if (ok == true) {
                                 var values = {
