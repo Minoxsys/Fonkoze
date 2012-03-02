@@ -544,7 +544,8 @@ Outpost Stock Level Current
                             handler: function () {
                                 var selectedOutpostId = window.feature.comboBoxOutposts.getValue();
                                 var selectedDistrictId = window.feature.comboBoxDistricts.getValue();
-                                           
+                                
+                                window.feature.treeStore.setRootNode(null);        
                                 if(selectedOutpostId !==null){
                                     window.feature.treegrid.getStore().proxy.extraParams.OutpostId = selectedOutpostId;
                                     window.feature.treegrid.getStore().proxy.extraParams.DistrictId = selectedDistrictId;
