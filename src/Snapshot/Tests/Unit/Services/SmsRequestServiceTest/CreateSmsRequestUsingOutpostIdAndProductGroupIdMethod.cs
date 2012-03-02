@@ -35,7 +35,7 @@ namespace Tests.Unit.Services.SmsRequestServiceTest
                     r.ProductGroupReferenceCode == ObjectMother.PRODUCT_GROUP_REFERENCE_CODE &&
                      r.OutpostId.Equals(objectMother.outpostId) &&
                      r.Message == SmsRequestService.MESSAGE_NOT_DELIVERED &&
-                     r.Number.Equals("1234567890") &&
+                     r.Number.Equals(ObjectMother.PHONE_NUMBER) &&
                      r.Client == objectMother.client
                 )));
 
@@ -43,9 +43,9 @@ namespace Tests.Unit.Services.SmsRequestServiceTest
                 r => r.ProductGroupId.Equals(objectMother.productGroupId) &&
                     r.ProductGroupReferenceCode == ObjectMother.PRODUCT_GROUP_REFERENCE_CODE &&
                      r.OutpostId.Equals(objectMother.outpostId) &&
-                     r.Number.Equals("1234567890") &&
+                     r.Number.Equals(ObjectMother.PHONE_NUMBER) &&
                      r.Client == objectMother.client &&
-                     r.Message.Equals(string.Format(SMS_MESSAGE_TEMPLATE, "Malaria", "MAL R0"))
+                     r.Message.Equals(string.Format(SMS_MESSAGE_TEMPLATE, ObjectMother.PRODUCT_GROUP_NAME, ObjectMother.PRODUCT_GROUP_REFERENCE_CODE + " A0B0"))
                 )));
 
             // Act

@@ -8,7 +8,7 @@ using Domain;
 using Web.Models.Shared;
 using Core.Domain;
 
-namespace Tests.Unit.Controllers.RequestScheduleControllerTests
+namespace Tests.Unit.Controllers.Areas.CampaignManagement.RequestScheduleController_Tests
 {
     [TestFixture]
     public class DoesScheduleExistMethod

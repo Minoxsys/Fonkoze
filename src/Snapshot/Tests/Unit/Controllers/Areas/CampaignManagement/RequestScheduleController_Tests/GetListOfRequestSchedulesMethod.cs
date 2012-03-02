@@ -9,7 +9,7 @@ using System.Web.Mvc;
 using Web.Areas.CampaignManagement.Models.RequestSchedule;
 using Core.Domain;
 
-namespace Tests.Unit.Controllers.RequestScheduleControllerTests
+namespace Tests.Unit.Controllers.Areas.CampaignManagement.RequestScheduleController_Tests
 {
     [TestFixture]
     public class GetListOfRequestSchedulesMethod

@@ -8,7 +8,7 @@ using Domain;
 using Web.Models.Shared;
 using Web.Areas.CampaignManagement.Models.RequestSchedule;
 
-namespace Tests.Unit.Controllers.RequestScheduleControllerTests
+namespace Tests.Unit.Controllers.Areas.CampaignManagement.RequestScheduleController_Tests
 {
     [TestFixture]
     public class EditMethod

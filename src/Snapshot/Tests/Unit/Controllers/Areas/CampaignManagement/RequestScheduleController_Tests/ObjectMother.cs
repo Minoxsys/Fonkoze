@@ -11,7 +11,7 @@ using Web.Areas.CampaignManagement.Models.RequestSchedule;
 using Core.Domain;
 using MvcContrib.TestHelper.Fakes;
 
-namespace Tests.Unit.Controllers.RequestScheduleControllerTests
+namespace Tests.Unit.Controllers.Areas.CampaignManagement.RequestScheduleController_Tests
 {
     public class ObjectMother
     {

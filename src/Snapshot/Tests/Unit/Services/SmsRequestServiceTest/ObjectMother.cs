@@ -6,6 +6,8 @@ using Domain;
 using Rhino.Mocks;
 using Core.Persistence;
 using Web.Services;
+using Web.Areas.CampaignManagement.Models.ProductLevelRequest;
+using Web.Areas.CampaignManagement.Models.Campaign;
 
 namespace Tests.Unit.Services.SmsRequestServiceTest
 {
@@ -14,13 +16,17 @@ namespace Tests.Unit.Services.SmsRequestServiceTest
         public const string OUTPOST_NAME = "Spitalul Judetean";
         public const string PRODUCT_GROUP_NAME = "Malaria";
         public const string PRODUCT_GROUP_REFERENCE_CODE = "MAL";
-        public const string SMS_REFERENCE_CODE = "R";
+        public const string SMS_REFERENCE_CODE = "A";
+        public const string PRODUCT_NAME = "Product";
         public const string MANUAL_UPDATED_METHOD = "Manual";
         public const string SMS_UPDATED_METHOD = "SMS";
         public const int STOCK_LEVEL = 1;
         public const int RECEIVED_STOCK_LEVEL = 2;
         public const string PHONE_NUMBER = "1234567890";
 
+        public const string CAMPAIGN_NAME = "Campaign Name";
+
+        public Guid productLevelRequestId;
         public Guid clientId;
         public Guid outpostId;
         public Guid productGroupId;
@@ -29,18 +35,20 @@ namespace Tests.Unit.Services.SmsRequestServiceTest
 
         public IQueryService<Outpost> queryServiceOutpost;
         public IQueryService<ProductGroup> queryServiceProductGroup;
+        public IQueryService<Product> queryServiceProduct;
         public IQueryService<OutpostStockLevel> queryServiceStockLevel;
         public IQueryService<SmsRequest> queryServiceSmsRequest;
         public ISaveOrUpdateCommand<SmsRequest> saveCommandSmsRequest;
         public ISaveOrUpdateCommand<OutpostStockLevel> saveCommandOutpostStockLevel;
         public ISaveOrUpdateCommand<OutpostHistoricalStockLevel> saveCommandOutpostHistoricalStockLevel;
 
+        public ProductLevelRequest productLevelRequest;
+        public Campaign campaign;
         public Client client;
         public Outpost outpost;
         public Outpost outpostWithNoMainContact;
         public Outpost outpostWithNoNumberContact;
         public ProductGroup productGroup;
-        public Product product;
         public List<OutpostStockLevel> stockLevels;
         public SmsReceived smsReceived;
         public SmsRequest smsRequest;
@@ -53,6 +61,7 @@ namespace Tests.Unit.Services.SmsRequestServiceTest
         {
             queryServiceOutpost = MockRepository.GenerateMock<IQueryService<Outpost>>();
             queryServiceProductGroup = MockRepository.GenerateMock<IQueryService<ProductGroup>>();
+            queryServiceProduct = MockRepository.GenerateMock<IQueryService<Product>>();
             queryServiceStockLevel = MockRepository.GenerateMock<IQueryService<OutpostStockLevel>>();
             queryServiceSmsRequest = MockRepository.GenerateMock<IQueryService<SmsRequest>>();
             saveCommandSmsRequest = MockRepository.GenerateMock<ISaveOrUpdateCommand<SmsRequest>>();
@@ -94,32 +103,83 @@ namespace Tests.Unit.Services.SmsRequestServiceTest
             productGroup = MockRepository.GeneratePartialMock<ProductGroup>();
             productGroup.Stub(c => c.Id).Return(productGroupId);
             productGroup.Name = PRODUCT_GROUP_NAME;
-            productGroup.ReferenceCode = "MAL";
+            productGroup.ReferenceCode = PRODUCT_GROUP_REFERENCE_CODE;
 
-            product = MockRepository.GeneratePartialMock<Product>();
-            product.Stub(p => p.Id).Return(productId);
-            product.SMSReferenceCode = SMS_REFERENCE_CODE;
-
-            outpostStockLevelId = Guid.NewGuid();
-            OutpostStockLevel stockLevel = MockRepository.GeneratePartialMock<OutpostStockLevel>();
-            stockLevel.Stub(c => c.Id).Return(outpostStockLevelId);
-            stockLevel.Product = product;
-            stockLevel.StockLevel = STOCK_LEVEL;
-            stockLevel.Outpost = outpost;
-            stockLevel.ProductGroup = productGroup;
-            stockLevel.UpdateMethod = MANUAL_UPDATED_METHOD;
-
-            stockLevels = new OutpostStockLevel[] { stockLevel }.ToList<OutpostStockLevel>();
+            stockLevels = GenerateListOfOutpostStockLevels();
 
             smsReceived = new SmsReceived() {
                 ProductGroupReferenceCode = PRODUCT_GROUP_REFERENCE_CODE,
                 Number = PHONE_NUMBER,
                 ReceivedStockLevels = new ReceivedStockLevel[] { 
-                    new ReceivedStockLevel() { ProductSmsReference = SMS_REFERENCE_CODE, StockLevel = RECEIVED_STOCK_LEVEL } }.ToList()
+                    new ReceivedStockLevel() { ProductSmsReference = stockLevels[0].Product.SMSReferenceCode, StockLevel = RECEIVED_STOCK_LEVEL } }.ToList()
                 };
 
             smsRequest = new SmsRequest() { OutpostId = outpostId, ProductGroupId = productGroupId, Number = PHONE_NUMBER, Created = DateTime.Now, ProductGroupReferenceCode = PRODUCT_GROUP_REFERENCE_CODE };
             smsRequestWithDifferentPhoneNumber = new SmsRequest() { OutpostId = outpostId, ProductGroupId = productGroupId, Number = PHONE_NUMBER + "1", Created = DateTime.Now, ProductGroupReferenceCode = PRODUCT_GROUP_REFERENCE_CODE };
+        }
+
+        private List<OutpostStockLevel> GenerateListOfOutpostStockLevels()
+        {
+            List<OutpostStockLevel> stockLevels = new List<OutpostStockLevel>();
+
+            for (int i = 0; i < 2; i++)
+            {
+                Guid productId = Guid.NewGuid();
+                Product product = MockRepository.GeneratePartialMock<Product>();
+                product.Stub(p => p.Id).Return(productId);
+                product.SMSReferenceCode = Char.ConvertFromUtf32(i + (int)'A');
+                product.Name = PRODUCT_NAME + " " + i;
+
+                Guid stockLevelId = Guid.NewGuid();
+                OutpostStockLevel stockLevel = MockRepository.GeneratePartialMock<OutpostStockLevel>(); ;
+                stockLevel.Stub(c => c.Id).Return(outpostStockLevelId);
+                stockLevel.Product = product;
+                stockLevel.StockLevel = STOCK_LEVEL;
+                stockLevel.Outpost = outpost;
+                stockLevel.ProductGroup = productGroup;
+                stockLevel.UpdateMethod = MANUAL_UPDATED_METHOD;
+
+                stockLevels.Add(stockLevel);
+            }
+
+            return stockLevels;
+        }
+
+        public void Setup_ProductLevelRequest()
+        {
+            campaign = new Campaign
+            {
+                Name = CAMPAIGN_NAME,
+                StartDate = DateTime.Now,
+                EndDate = DateTime.Now.AddDays(7),
+                Opened = true,
+                Options = StrToByteArray((ConvertToJSON(new OptionsModel { Outposts = outpostId.ToString() })))
+            };
+
+            productLevelRequest = new ProductLevelRequest
+            {
+                Campaign = campaign,
+                ProductGroup = productGroup
+            };
+
+            productLevelRequestId = Guid.NewGuid();
+
+            CreateProductLevelRequestInput.ProductModel[] model = new CreateProductLevelRequestInput.ProductModel[] { 
+                new CreateProductLevelRequestInput.ProductModel { ProductItem = PRODUCT_NAME + " 0", Selected = true, SmsCode = SMS_REFERENCE_CODE },
+                new CreateProductLevelRequestInput.ProductModel { ProductItem = PRODUCT_NAME + " 1", Selected = false, SmsCode = "P" } };
+            productLevelRequest.StoreProducts<CreateProductLevelRequestInput.ProductModel[]>(model);
+        }
+
+        private static byte[] StrToByteArray(string str)
+        {
+            System.Text.UTF8Encoding encoding = new System.Text.UTF8Encoding();
+            return encoding.GetBytes(str);
+        }
+
+        private string ConvertToJSON(OptionsModel model)
+        {
+            System.Web.Script.Serialization.JavaScriptSerializer serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
+            return serializer.Serialize(model);
         }
     }
 }

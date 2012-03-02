@@ -177,10 +177,11 @@ namespace Web.Areas.CampaignManagement.Controllers
 
             for (int i = 0; i < products.Length; i++)
             {
-                string format = "{0}/";
                 if (products[i].Selected)
                 {
+                    string format = i == products.Length - 1 ? "{0}" : "{0}/";
                     sb.AppendFormat(format, products[i].SmsCode);
+                }
                 }
             }
             if (sb.Length > 0)

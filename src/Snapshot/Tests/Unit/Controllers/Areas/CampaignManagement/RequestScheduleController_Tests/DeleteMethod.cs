@@ -8,7 +8,7 @@ using Core.Domain;
 using Rhino.Mocks;
 using Domain;
 
-namespace Tests.Unit.Controllers.RequestScheduleControllerTests
+namespace Tests.Unit.Controllers.Areas.CampaignManagement.RequestScheduleController_Tests
 {
     [TestFixture]
     public class DeleteMethod
