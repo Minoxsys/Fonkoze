@@ -15,19 +15,20 @@
 	window.feature.districtOverviewComboId = "outpost-region-district-combobox-id";
 </script>
 <script type="text/javascript">
-	Ext.onReady(function () {
-		var administrationBtnId = window.res.header.navigation.administration;
-		var administrationBtn = Ext.getCmp(administrationBtnId);
-		administrationBtn.toggle(true);
+    Ext.onReady(function () {
+        var administrationBtnId = window.res.header.navigation.administration;
+        var administrationBtn = Ext.getCmp(administrationBtnId);
+        administrationBtn.toggle(true);
 
-		var outpostAdministrationBtnId = window.res.header.subnavigation.buttonTabs.outpost;
-		var outpostAdministrationBtn = Ext.getCmp(outpostAdministrationBtnId);
-		outpostAdministrationBtn.toggle(true);
+      
+        var outpostAdministrationBtnId = window.res.header.subnavigation.buttonTabs.outpost;
+        var outpostAdministrationBtn = Ext.getCmp(outpostAdministrationBtnId);
+        outpostAdministrationBtn.toggle(true);
 
-		var outpostBtnId = window.res.content.maincontent.sidebar.outpost;
-		var outpostBtn = Ext.getCmp(outpostBtnId);
-		outpostBtn.toggle(true);
-	});
+        var outpostBtnId = window.res.content.maincontent.sidebar.outpost;
+        var outpostBtn = Ext.getCmp(outpostBtnId);
+        outpostBtn.toggle(true);
+    });
 
 </script>
 @{
@@ -705,7 +706,10 @@
 											height: 30,
 											width: 30,
 											html:'&nbsp;'
-										},{
+										},{xtype: 'image',
+                                            src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/Content/outpost.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                                            margin: '0 10 10 10'
+                                        },{
 											xtype: 'label',
 											text: 'Outpost Administration',
 										},{
@@ -789,7 +793,7 @@
 						{
 							text: "Outpost Name",
 							dataIndex: 'Name',
-							flex: 1,
+							flex: 0.3,
 							sortable: true,
 	
 							processEvent: function (type, view, cell, recordIndex, cellIndex, e) {
@@ -830,6 +834,7 @@
 						},{
 							xtype: 'actioncolumn',
 							text: 'Actions',
+                            flex: 1,
 							items: [
 								{
 									icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/edit.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',  

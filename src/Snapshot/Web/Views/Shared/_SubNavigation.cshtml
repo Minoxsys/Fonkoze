@@ -48,10 +48,14 @@
                                 enableToggle: true,
                                 pressed: true,
                                 height: 38,
+                                icon:'@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/SubMenu/LocationNotSelected.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                                iconAlign: 'left',
                                 margin: '10 7 0 150',
                                 text: 'Location Administration',
                                 ui: 'snapshot-submenu-btn',
                                 handler:function(){
+                                    SetUnselectedImagesToButtons();
+                                    this.icon = '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/SubMenu/LocationSelected.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))';
                                     navigateTo(res.link.administration); 
                                 }
                             },
@@ -62,9 +66,13 @@
                                 enableToggle: true,
                                 margin: '10 7 0 0',
                                 height: 38,
+                                icon:'@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/SubMenu/ProductNotSelected.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                                iconAlign: 'left',
                                 text: 'Product Administration',
                                 ui: 'snapshot-submenu-btn',
                                 handler:function(){
+                                    SetUnselectedImagesToButtons();
+                                    this.icon = '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/SubMenu/ProductSelected.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))';
                                     navigateTo(res.link.productGroup); 
                                 }
                             },
@@ -75,9 +83,13 @@
                                 enableToggle: true,
                                 height: 38,
                                 margin: '10 7 0 0',
+                                icon:'@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/SubMenu/CampaignNotSelected.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                                iconAlign: 'left',
                                 text: 'Campaign Administration',
                                 ui: 'snapshot-submenu-btn',
                                 handler:function(){
+                                    SetUnselectedImagesToButtons();
+                                    this.icon = '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/SubMenu/CampaignSelected.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))';
                                     navigateTo(res.link.campaignOverview); 
                                 }
                             },
@@ -88,9 +100,13 @@
                                 enableToggle: true,
                                 height: 38,
                                 margin: '10 7 0 0',
+                                icon:'@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/SubMenu/UserNotSelected.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                                iconAlign: 'left',
                                 text: 'User Administration',
                                 ui: 'snapshot-submenu-btn',
                                 handler:function(){
+                                    SetUnselectedImagesToButtons();
+                                    this.icon = '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/SubMenu/UserSelected.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))';
                                     navigateTo(res.link.clientsOverview); 
                                 }
                             }                       
@@ -173,5 +189,13 @@
                         
         subnav.ownerCt.doLayout();
 
+        function SetUnselectedImagesToButtons()
+        {
+            Ext.getCmp(subNavRes.buttonTabs.outpost).icon = '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/SubMenu/LocationNotSelected.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))';
+            Ext.getCmp(subNavRes.buttonTabs.product).icon = '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/SubMenu/ProductNotSelected.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))';
+            Ext.getCmp(subNavRes.buttonTabs.campaign).icon = '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/SubMenu/CampaignNotSelected.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))';
+            Ext.getCmp(subNavRes.buttonTabs.user).icon = '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/SubMenu/UserNotSelected.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))';
+        }
+       
     });
 </script>

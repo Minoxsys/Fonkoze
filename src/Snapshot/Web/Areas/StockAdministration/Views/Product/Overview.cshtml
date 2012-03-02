@@ -19,6 +19,7 @@
         var productBtn = Ext.getCmp(productSideBarBtnId);
 
         productBtn.toggle(true);
+       
 
         var productAdministrationBtnId = window.res.header.subnavigation.buttonTabs.product;
         var productAdministrationBtn = Ext.getCmp(productAdministrationBtnId);
@@ -477,6 +478,7 @@
                 }, {
                     xtype: 'actioncolumn',
                     text: 'Actions',
+                    flex:1,
                     items: [
                         {
                             icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/edit.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',     
@@ -592,6 +594,9 @@
                                             height: 30,
                                             width: 30,
                                             html:'&nbsp;'
+                                        },{xtype: 'image',
+                                          src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/SubMenu/ProductSelected.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                                          margin: '0 10 10 10'
                                         },{
                                             xtype: 'label',
                                             text: 'Products',

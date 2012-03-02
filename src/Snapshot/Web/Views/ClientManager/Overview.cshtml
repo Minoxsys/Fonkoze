@@ -19,7 +19,7 @@ User Administration Clients: Overview
         var userAdministrationBtnId = window.res.header.subnavigation.buttonTabs.user;
         var userAdministrationBtn = Ext.getCmp(userAdministrationBtnId);
         userAdministrationBtn.toggle(true);
-
+       
         var clientsGroupBtnId = window.res.content.maincontent.sidebar.clients;
         var clientsGroupBtn = Ext.getCmp(clientsGroupBtnId);
         clientsGroupBtn.toggle(true);
@@ -192,6 +192,7 @@ User Administration Clients: Overview
                 },{
                     xtype: 'actioncolumn',
 			        text: 'Actions',
+                    flex: 0.3,
                     items: [{
                         icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/edit.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))', 
                         handler: function(grid, rowIndex, colIndex) {

@@ -17,6 +17,7 @@ Districts: Overview
         var administrationBtn = Ext.getCmp(administrationBtnId);
         administrationBtn.toggle(true);
 
+        
         var districtSideBarBtnId = window.res.content.maincontent.sidebar.district;
         var districtBtn = Ext.getCmp(districtSideBarBtnId);
 
@@ -471,6 +472,7 @@ Districts: Overview
             }, {
                 xtype: 'actioncolumn',
                 text: 'Actions',
+                flex: 0.3,
                 items: [{
                     icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/edit.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
                     tooltip: _t('Edit this district'),
@@ -593,7 +595,10 @@ Districts: Overview
 									height: 30,
 									width: 30,
 									html:'&nbsp;'
-								},{
+								},{xtype: 'image',
+                                src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/Content/pinIcon.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                                margin: '0 10 10 10'
+                                },{
 									xtype: 'label',
 									text: 'District Administration'
 								},{

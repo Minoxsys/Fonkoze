@@ -158,10 +158,11 @@
         var outpostAdministrationBtnId = window.res.header.subnavigation.buttonTabs.outpost;
         var outpostAdministrationBtn = Ext.getCmp(outpostAdministrationBtnId);
         outpostAdministrationBtn.toggle(true);
-
+        
         var btnId = window.res.content.maincontent.sidebar.country;
         var btn = Ext.getCmp(btnId);
         btn.toggle(true);
+
     });
 </script>
 <script type="text/javascript">
@@ -276,6 +277,9 @@
                             height: 30,
                             width: 30,
                             html:'&nbsp;'
+                        },{xtype: 'image',
+                           src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/Content/pinIcon.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                           margin: '0 10 10 10'
                         },{
                             xtype: 'label',
                             cls: 'x-title-label',

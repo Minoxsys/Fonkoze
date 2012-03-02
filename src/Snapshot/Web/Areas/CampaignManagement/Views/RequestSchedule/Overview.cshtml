@@ -16,7 +16,7 @@ User Administration Roles: Overview
         var campaignAdministrationBtnId = window.res.header.subnavigation.buttonTabs.campaign;
         var campaignAdministrationBtn = Ext.getCmp(campaignAdministrationBtnId);
         campaignAdministrationBtn.toggle(true);
-
+       
         var automaticSchedulesBtnId = window.res.content.maincontent.sidebar.automaticSchedules;
         var automaticSchedulesBtn = Ext.getCmp(automaticSchedulesBtnId);
         automaticSchedulesBtn.toggle(true);
@@ -177,12 +177,10 @@ User Administration Roles: Overview
                     flex: 1,
                     layout: 'column',
                     items: [
-                        Ext.create('Ext.Img',
-                        {
-                            src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/briefcase.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
-                            width: 35,
-                            height: 35
-                        }),
+                       { xtype: 'image',
+                           src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/SubMenu/CampaignSelected.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                           margin: '0 10 10 10'
+                       },
                         {
                             xtype: 'label',
                             text: 'Automatic Schedule',

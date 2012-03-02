@@ -77,7 +77,10 @@ User Administration Clients: Overview
                         height: 30,
                         width: 30,
                         html:'&nbsp;'
-                    },{
+                    },{xtype: 'image',
+                       src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Alerts/AlertsAdministration.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                       margin: '0 10 10 10'
+                      },{
                         xtype: 'label',
                         text: 'Alerts Administration',
                     }]

@@ -7,19 +7,19 @@
 }
 
 <script type="text/javascript">
-	Ext.onReady(function () {
-		var administrationBtnId = window.res.header.navigation.administration;
-		var administrationBtn = Ext.getCmp(administrationBtnId);
-		administrationBtn.toggle(true);
+    Ext.onReady(function () {
+        var administrationBtnId = window.res.header.navigation.administration;
+        var administrationBtn = Ext.getCmp(administrationBtnId);
+        administrationBtn.toggle(true);
 
-		var campaignAdministrationBtnId = window.res.header.subnavigation.buttonTabs.campaign;
-		var campaignAdministrationBtn = Ext.getCmp(campaignAdministrationBtnId);
-		campaignAdministrationBtn.toggle(true);
-
-		var sidebarSelectionId = window.res.content.maincontent.sidebar.createProductLevelRequests;
-		var sidebarSelection = Ext.getCmp(sidebarSelectionId);
-		sidebarSelection.toggle(true);
-	});
+        var campaignAdministrationBtnId = window.res.header.subnavigation.buttonTabs.campaign;
+        var campaignAdministrationBtn = Ext.getCmp(campaignAdministrationBtnId);
+        campaignAdministrationBtn.toggle(true);
+       
+        var sidebarSelectionId = window.res.content.maincontent.sidebar.createProductLevelRequests;
+        var sidebarSelection = Ext.getCmp(sidebarSelectionId);
+        sidebarSelection.toggle(true);
+    });
 </script>
 
 <script type="text/javascript">

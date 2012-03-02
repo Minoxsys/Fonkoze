@@ -17,10 +17,12 @@ Campaign: Overview
         var campaignAdministrationBtnId = window.res.header.subnavigation.buttonTabs.campaign;
         var campaignAdministrationBtn = Ext.getCmp(campaignAdministrationBtnId);
         campaignAdministrationBtn.toggle(true);
+        
 
         var campaignBtnId = window.res.content.maincontent.sidebar.manageCampaigns;
         var campaignBtn = Ext.getCmp(campaignBtnId);
         campaignBtn.toggle(true);
+
     });
 </script>
 <style>
@@ -189,7 +191,10 @@ Campaign: Overview
                         height: 30,
                         width: 30,
                         html:'&nbsp;'
-                    },{
+                    },{xtype: 'image',
+                       src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/SubMenu/CampaignSelected.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                       margin: '0 10 10 10'
+                      },{
                         xtype: 'label',
                         text: 'Campaign Administration',
                         margin: '0 0 0 10'
@@ -475,6 +480,7 @@ Campaign: Overview
             }, {
                 xtype: 'actioncolumn',
                 text: 'Actions',
+                flex: 1,
                 items: [{
                     icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/edit.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
                     tooltip: _t('Edit this campaign'),

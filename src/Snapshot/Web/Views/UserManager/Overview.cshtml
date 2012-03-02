@@ -313,6 +313,7 @@ User Administration Users: Overview
                 },{
                     xtype: 'actioncolumn',
 			        text: 'Actions',
+                    flex: 1,
                     items: [{
                         icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/edit.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))', 
                         handler: function(grid, rowIndex, colIndex) {

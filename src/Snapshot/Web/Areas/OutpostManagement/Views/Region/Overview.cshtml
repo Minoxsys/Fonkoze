@@ -20,6 +20,7 @@ Outpost Management Regions: Overview
         var outpostAdministrationBtn = Ext.getCmp(outpostAdministrationBtnId);
         outpostAdministrationBtn.toggle(true);
 
+       
         var regionBtnId = window.res.content.maincontent.sidebar.region;
         var regionBtn = Ext.getCmp(regionBtnId);
         regionBtn.toggle(true);
@@ -160,6 +161,9 @@ Outpost Management Regions: Overview
                             height: 30,
                             width: 30,
                             html:'&nbsp;'
+                        },{xtype: 'image',
+                           src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/Content/pinIcon.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                           margin: '0 10 10 10'
                         },{
                             xtype: 'label',
                             text: 'Region Administration',
@@ -262,6 +266,7 @@ Outpost Management Regions: Overview
                     },{
                         xtype: 'actioncolumn',
 			            text: 'Actions',
+                        flex: 0.3,
                         items: [{
                             icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/edit.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',  
                             text: 'Edit',
