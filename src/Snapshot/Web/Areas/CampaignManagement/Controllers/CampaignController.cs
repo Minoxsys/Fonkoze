@@ -92,20 +92,19 @@ namespace Web.Areas.CampaignManagement.Controllers
                });
         }
 
-        public JsonResult Clone(Guid? id)
+        public JsonResult Clone(CampaignInputModel model)
         {
-            if (!id.HasValue)
+            if (!model.Id.HasValue)
             {
-                return Json(
-               new JsonActionResponse
+                return Json(new JsonActionResponse
                {
                    Status = "Error",
                    Message = String.Format("You must supply a campaignId in order to clone the campaign.")
                });
             }
 
-            Campaign campaignOld = QueryCampaign.Load(id.Value);
-            Campaign campaignClone = CopyCampaign(campaignOld);
+            Campaign campaignOld = QueryCampaign.Load(model.Id.Value);
+            Campaign campaignClone = CopyCampaign(model, campaignOld);
 
             SaveOrUpdateCommand.Execute(campaignClone);
 
@@ -117,13 +116,13 @@ namespace Web.Areas.CampaignManagement.Controllers
                });
         }
 
-        private Campaign CopyCampaign(Campaign campaign)
+        private Campaign CopyCampaign(CampaignInputModel model, Campaign campaign)
         {
             return new Campaign()
             {
-                Name = campaign.Name+ "_Copy",
-                StartDate = campaign.StartDate,
-                EndDate = campaign.EndDate,
+                Name = model.CampaignName,
+                StartDate = DateTime.Parse(model.StartDate),
+                EndDate = DateTime.Parse(model.EndDate),
                 CreationDate = DateTime.UtcNow,
                 Opened = false,
                 Options = campaign.Options,

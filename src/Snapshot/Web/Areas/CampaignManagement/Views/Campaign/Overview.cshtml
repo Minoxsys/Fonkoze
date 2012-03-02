@@ -198,7 +198,6 @@ Campaign: Overview
                         text: 'Add New Campaign',
                         margin: '0 0 0 20',
                         handler: function () {
-                            window.feature.campaignToEdit = null;
                             window.feature.pressedButton = 'Add';
                             var modalWindowAddCampaign = new window.feature.modalCampaignManagement();
                             modalWindowAddCampaign.show();
@@ -242,7 +241,6 @@ Campaign: Overview
             extend: 'Ext.window.Window',
             title: 'Add New Campaign',
             modal: true,
-            margin: '45 50 20 0',
             height: 400,
             width: 800,
             layout: {
@@ -255,8 +253,7 @@ Campaign: Overview
 
                 var firstContainer = new window.feature.wizardCampaignManagementContainer();
                 var gridsContainer = new window.feature.wizardGridManagementContainer();
-         
-                ClearFields();
+
                 var stepNumber = window.feature.initialStepNumber;
                 
                 Ext.applyIf(me, {
@@ -275,20 +272,19 @@ Campaign: Overview
                     }
                 }, {
                     text: 'Next',
-                    id: window.feature.nextButton,
+                    itemId: window.feature.nextButton,
                     handler: function () {
-
                         if (stepNumber == 1) {
-                            var name = Ext.getCmp(window.feature.formCampaignNameId);
-                            var startDate = Ext.getCmp(window.feature.formCampaignStartDateId);
-                            var endDate = Ext.getCmp(window.feature.formCampaignEndDateId);
-                            
+                            var name = firstContainer.down('#'+window.feature.formCampaignNameId);
+                            var startDate =firstContainer.down('#'+window.feature.formCampaignStartDateId);
+                            var endDate = firstContainer.down('#'+window.feature.formCampaignEndDateId);
+
                             Validate(name, startDate, endDate, function(name, startDate, endDate) {
                                 GetCampainsFirstPageInfos(name, startDate, endDate);
 
                                 firstContainer.destroy();
 
-                                PrepareCountryDisplay();
+                                PrepareCountryDisplay(gridsContainer);
                                 me.add(gridsContainer);
                                 me.doLayout();
 
@@ -298,9 +294,9 @@ Campaign: Overview
                         }
 
                         if (stepNumber == 2) {
-                            var ids = GetRightGridStoreIds();
+                            var ids = GetRightGridStoreIds(gridsContainer);
                             if (ids.length > 0){
-                                DisplayRegions(ids);
+                                DisplayRegions(gridsContainer, ids);
                                 stepNumber++;
                                 return;
                             }else{
@@ -309,9 +305,9 @@ Campaign: Overview
                         }
 
                         if (stepNumber == 3) {
-                            var ids = GetRightGridStoreIds();
+                            var ids = GetRightGridStoreIds(gridsContainer);
                             if (ids.length > 0){
-                                DisplayDistricts(ids);
+                                DisplayDistricts(gridsContainer, ids);
                                 stepNumber++;
                                 return;
                             }else{
@@ -320,9 +316,9 @@ Campaign: Overview
                         }
 
                         if (stepNumber == 4) {
-                            var ids = GetRightGridStoreIds();
+                            var ids = GetRightGridStoreIds(gridsContainer);
                             if (ids.length > 0){
-                                DisplayOutposts(ids);
+                                DisplayOutposts(me, gridsContainer, ids);
                                 stepNumber++;
                                 return;
                             }else{
@@ -331,7 +327,7 @@ Campaign: Overview
                         }
 
                         if (stepNumber == 5) {
-                            var ids = GetRightGridStoreIds();
+                            var ids = GetRightGridStoreIds(gridsContainer);
                             if (ids.length > 0){
                                 stepNumber = window.feature.initialStepNumber;
                                 campaign.Outposts = ids;
@@ -381,6 +377,76 @@ Campaign: Overview
             }
         });
 
+         window.feature.modalCampaignManagementClone = Ext.define('Ext.feature.campaign.Modal', {
+            extend: 'Ext.window.Window',
+            title: 'Clone Campaign',
+            modal: true,
+            height: 400,
+            width: 800,
+            layout: {
+                type: 'vbox',
+                align: 'stretch'
+            },
+
+            initComponent: function () {
+                var me = this;
+                var firstContainer = new window.feature.wizardCampaignManagementContainer();
+
+                Ext.applyIf(me, {
+                    items: [firstContainer]
+
+                });
+
+                me.buttons = [{
+                    text: 'Cancel',
+                    handler: function () {
+                        firstContainer.destroy();
+
+                        me.close();
+                        me.destroy();
+                    }
+                }, {
+                    text: 'Save',
+                    handler: function () {
+                         var name = me.down('#'+window.feature.formCampaignNameId);
+                         var startDate =me.down('#'+window.feature.formCampaignStartDateId);
+                         var endDate = me.down('#'+window.feature.formCampaignEndDateId);
+
+                         Validate(name, startDate, endDate, function(name, startDate, endDate) {
+                            GetCampainsFirstPageInfos(name, startDate, endDate);
+
+                            var values = {
+                                    Id: campaign.Id,
+                                    CampaignName: campaign.Name,
+                                    StartDate: campaign.StartDate,
+                                    EndDate: campaign.EndDate,
+                                };
+
+                            var postToUrl = '@Url.RouteUrl(CampaignManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Campaign", action = "Clone" })';
+
+                            var action = $.post(postToUrl, values);
+                            action.success(function (serverResponse) {
+                                if (serverResponse.Status == "Error") {
+                                        Ext.Msg.alert(serverResponse.Status, serverResponse.Message);
+                                }
+                                else {
+                                    firstContainer.destroy();
+                                    
+                                    me.close();
+                                    me.destroy();
+
+                                    window.feature.campaignStore.loadPage(1); 
+                                }                                
+                            });
+                        });
+                            
+                     }
+                }],
+
+                me.callParent(arguments);
+            }
+        });
+
         window.feature.grid = Ext.create('Ext.grid.Panel', {
             store: window.feature.campaignStore,
             flex: 3,
@@ -417,9 +483,9 @@ Campaign: Overview
                         var rec = grid.getStore().getAt(rowIndex);
                         
                         if (rec.get('Opened') == false){
-                            var modalWindowEditCampaign = new window.feature.modalCampaignManagement();
+                            var modalWindowEditCampaign = new window.feature.modalCampaignManagement({title: "Edit Campaign"});
                             window.feature.campaignToEdit = rec;
-                            SetCampaignValues(rec);
+                            SetCampaignValues(modalWindowEditCampaign, rec);
                             modalWindowEditCampaign.show();
                         }else{
                             Ext.Msg.alert("Alert","This campaign is in process. It cannot be edited!");
@@ -429,18 +495,12 @@ Campaign: Overview
                     icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/copy.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
                     tooltip: _t('Clone this campaign'),
                     handler: function (grid, rowIndex, colIndex) {
+                        window.feature.pressedButton = 'Clone';
                         var rec = grid.getStore().getAt(rowIndex);
+                        campaign.Id =  rec.get('Id');
 
-                        var values = { id: rec.get('Id') };
-
-                        var postToUrl = '@Url.RouteUrl(CampaignManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Campaign", action = "Clone" })';
-
-                        var action = $.post(postToUrl, values);
-                        action.success(function (serverResponse) {
-                            Ext.Msg.alert(serverResponse.Status, serverResponse.Message);
-                            window.feature.campaignStore.loadPage(1); 
-                        });
-
+                        var modalWindowClone = new window.feature.modalCampaignManagementClone();
+                        modalWindowClone.show();
                     }
                 }]
             }],
@@ -470,7 +530,6 @@ Campaign: Overview
 
         window.feature.wizardCampaignManagementContainer = Ext.define('MyApp.view.ui.MyContainer', {
             extend: 'Ext.container.Container',
-            id: window.feature.wizardCampaignManagement,
             flex: 1,
             margin: '20 0 0 20',
             layout: {
@@ -488,21 +547,21 @@ Campaign: Overview
                     xtype: 'textfield',
                     fieldLabel: 'Campaign Name',
                     allowBlank:false,
-                    id: window.feature.formCampaignNameId,
+                    itemId: window.feature.formCampaignNameId,
                 },{
                     xtype: 'datefield',
                     margin: '20 0 0 0',
                     fieldLabel: 'Start Date',
                     format: 'd-M-Y',
                     allowBlank:false,
-                    id: window.feature.formCampaignStartDateId,
+                    itemId: window.feature.formCampaignStartDateId,
                 },{
                     xtype: 'datefield',
                     margin: '20 0 0 0',
                     fieldLabel: 'End Date',
                     allowBlank:false,
                     format: 'd-M-Y',
-                    id: window.feature.formCampaignEndDateId,
+                    itemId: window.feature.formCampaignEndDateId,
                 }] 
             },{
                 xtype: 'container',
@@ -512,7 +571,6 @@ Campaign: Overview
 
         window.feature.wizardGridManagementContainer =  Ext.define('MyApp.view.ui.MyContainer', {
             extend: 'Ext.container.Container',
-            id: window.feature.wizarCountryManagement,
             flex: 1,
             margin: '20 0 0 20',
             layout: {
@@ -520,127 +578,134 @@ Campaign: Overview
                 align: 'stretch'
             },
 
-            items: [{
-                xtype: 'container',
-                flex: 2,
-                layout: {
-                    type: 'vbox',
-                    align: 'stretch'
-                },
-                items: [{
-                    xtype: 'label',
-                    id: window.feature.leftGridTopLabel,
-                },{
-                    xtype: 'gridpanel',
-                    id: window.feature.leftGrid,
-                    store: window.feature.leftGridStore,
-                    columnLines: true,
-                    margin: '0 0 10 0',
-                    loadMask: true,
-                    flex:3,
-                    autoScroll:true,
-                    columns: [{
-                        text: "Name",
-                        dataIndex: 'Name',
-                        flex: 1,
-                        sortable: true
-                    }, {
-                        xtype: 'checkcolumn',
-                        sortable: false,
-                        dataIndex: 'Selected',
-                        text: 'Selected'
-                    }]
-                }]
-            },{
-                xtype: 'container',
-                flex: 1,
-                layout: {
-                    type: 'vbox',
-                    align: 'center'
-                },
-
-                items: [{
-                    xtype: 'container',
-                    flex: 1,
-                    layout: {
-                        type: 'vbox',
-                        pack: 'center',
-                    },
+            initComponent: function () {
+                var me = this; 
+                              
+                Ext.applyIf(me, {
                     items: [{
-                        xtype: 'button',
-                        margin: '0 0 5 0',
-                        width: 80,
-                        text: 'Add',
-                        handler: function () {
-                            var gridRight = Ext.getCmp(window.feature.rightGrid);
-                            var gridLeft = Ext.getCmp(window.feature.leftGrid);
-
-                            var gridLeftStore = Ext.getCmp(window.feature.leftGrid).getStore();
-                            gridLeftStore.each(function (record) {
-                                if (record.dirty){
-                                    var newValue = {
-                                        Id: record.get('Id'), 
-                                        Name: record.get('Name'),
-                                    };
-                                    var contains = RightGridContains(newValue, gridRight);
-                                    if (contains == false){
-                                        window.feature.rightGridStore.insert(0, newValue);
-                                    }
-                                }
-                            });
-
-                        }
+                        xtype: 'container',
+                        flex: 2,
+                        layout: {
+                            type: 'vbox',
+                            align: 'stretch'
+                        },
+                        items: [{
+                            xtype: 'label',
+                            itemId: window.feature.leftGridTopLabel,
+                        },{
+                            xtype: 'gridpanel',
+                            itemId: window.feature.leftGrid,
+                            store: window.feature.leftGridStore,
+                            columnLines: true,
+                            margin: '0 0 10 0',
+                            loadMask: true,
+                            flex:3,
+                            autoScroll:true,
+                            columns: [{
+                                text: "Name",
+                                dataIndex: 'Name',
+                                flex: 1,
+                                sortable: true
+                            }, {
+                                xtype: 'checkcolumn',
+                                sortable: false,
+                                dataIndex: 'Selected',
+                                text: 'Selected'
+                            }]
+                        }]
                     },{
-                        xtype: 'button',
-                        width: 80,
-                        text: 'Remove',
-                        handler: function () {
-                            var rightGridStore = Ext.getCmp(window.feature.rightGrid).getStore();
-                            rightGridStore.each(function (record) {
-                                if (record.dirty){
-                                    rightGridStore.remove(record);
-                                }
-                            });
-                        }
-                    }]
-
-                }]
-            },{
-                xtype: 'container',
-                flex: 2,
-                layout: {
-                    type: 'vbox',
-                    align: 'stretch'
-                },
-                items: [{
-                    xtype: 'label',
-                    id: window.feature.rightGridTopLabel,
-                },{
-                    xtype: 'gridpanel',
-                    id: window.feature.rightGrid,
-                    store: window.feature.rightGridStore,
-                    columnLines: true,
-                    margin: '0 0 10 0',
-                    loadMask: true,
-                    flex:3,
-                    autoScroll:true,
-                    columns: [{
-                        text: "Name",
-                        dataIndex: 'Name',
+                        xtype: 'container',
                         flex: 1,
-                        sortable: true
-                    }, {
-                        xtype: 'checkcolumn',
-                        sortable: false,
-                        dataIndex: 'Selected',
-                        header: 'Selected'
+                        layout: {
+                            type: 'vbox',
+                            align: 'center'
+                        },
+
+                        items: [{
+                            xtype: 'container',
+                            flex: 1,
+                            layout: {
+                                type: 'vbox',
+                                pack: 'center',
+                            },
+                            items: [{
+                                xtype: 'button',
+                                margin: '0 0 5 0',
+                                width: 80,
+                                text: 'Add',
+                                handler: function () {
+                                    var gridRight = me.down('#'+window.feature.rightGrid);
+                                    var gridLeft = me.down('#'+window.feature.leftGrid);
+
+                                    var gridLeftStore = me.down('#'+window.feature.leftGrid).getStore();
+                                    gridLeftStore.each(function (record) {
+                                        if (record.dirty){
+                                            var newValue = {
+                                                Id: record.get('Id'), 
+                                                Name: record.get('Name'),
+                                            };
+                                            var contains = RightGridContains(me, newValue, gridRight);
+                                            if (contains == false){
+                                                window.feature.rightGridStore.insert(0, newValue);
+                                            }
+                                        }
+                                    });
+
+                                }
+                            },{
+                                xtype: 'button',
+                                width: 80,
+                                text: 'Remove',
+                                handler: function () {
+                                    var rightGridStore = me.down('#'+window.feature.rightGrid).getStore();
+                                    rightGridStore.each(function (record) {
+                                        if (record.dirty){
+                                            rightGridStore.remove(record);
+                                        }
+                                    });
+                                }
+                            }]
+
+                        }]
+                    },{
+                        xtype: 'container',
+                        flex: 2,
+                        layout: {
+                            type: 'vbox',
+                            align: 'stretch'
+                        },
+                        items: [{
+                            xtype: 'label',
+                            itemId: window.feature.rightGridTopLabel,
+                        },{
+                            xtype: 'gridpanel',
+                            itemId: window.feature.rightGrid,
+                            store: window.feature.rightGridStore,
+                            columnLines: true,
+                            margin: '0 0 10 0',
+                            loadMask: true,
+                            flex:3,
+                            autoScroll:true,
+                            columns: [{
+                                text: "Name",
+                                dataIndex: 'Name',
+                                flex: 1,
+                                sortable: true
+                            }, {
+                                xtype: 'checkcolumn',
+                                sortable: false,
+                                dataIndex: 'Selected',
+                                header: 'Selected'
+                            }]
+                        }]
                     }]
-                }]
-            }]
+                });
+                me.callParent(arguments);
+            }
         });
 
-         function PrepareCountryDisplay(){
-            SetLabelText('Countries');
+         function PrepareCountryDisplay(mee){
+            SetLabelText(mee, 'Countries');
             LoadLeftGrid('GetCountries', '' );
             window.feature.rightGridStore.removeAll();
                             
@@ -649,9 +714,9 @@ Campaign: Overview
             }
         };
 
-        function DisplayRegions(ids){
+        function DisplayRegions(mee, ids){
             campaign.Countries = ids;
-            SetLabelText('Regions');
+            SetLabelText(mee, 'Regions');
             LoadLeftGrid('GetRegions', ids);
             window.feature.rightGridStore.removeAll();
 
@@ -660,9 +725,9 @@ Campaign: Overview
             }
         };
 
-        function DisplayDistricts(ids){
+        function DisplayDistricts(mee, ids){
             campaign.Regions = ids;
-            SetLabelText('Districts');
+            SetLabelText(mee, 'Districts');
             LoadLeftGrid('GetDistricts', ids);
             window.feature.rightGridStore.removeAll();
 
@@ -671,11 +736,11 @@ Campaign: Overview
             }
         };
 
-        function DisplayOutposts(ids){
-            Ext.getCmp(window.feature.nextButton).setText('Save');
+        function DisplayOutposts(parent, mee, ids){
+            parent.down('#'+window.feature.nextButton).setText('Save');
             campaign.Districts = ids;
 
-            SetLabelText('Outposts');
+            SetLabelText(mee, 'Outposts');
             LoadLeftGrid('GetOutposts', ids);
             window.feature.rightGridStore.removeAll();
 
@@ -684,9 +749,9 @@ Campaign: Overview
             }
         };
 
-        function RightGridContains(value, grid){
+        function RightGridContains(mee, value, grid){
             var ok = false;
-            var gridRightStore = Ext.getCmp(window.feature.rightGrid).getStore();
+            var gridRightStore = mee.down('#'+window.feature.rightGrid).getStore();
             gridRightStore.each(function (record) {
                 if (record.get('Id') == value.Id || record.get('Name') == value.Name)
                     ok = true;
@@ -703,29 +768,24 @@ Campaign: Overview
             window.feature.leftGridStore.load();
         };
 
-        function SetLabelText(textMessage){
-            Ext.getCmp(window.feature.leftGridTopLabel).setText(textMessage);
-            Ext.getCmp(window.feature.rightGridTopLabel).setText('Selected ' +textMessage);
+        function SetLabelText(mee, textMessage){
+            mee.down('#'+window.feature.leftGridTopLabel).setText(textMessage);
+            mee.down('#'+window.feature.rightGridTopLabel).setText('Selected ' +textMessage);
         };
 
-        function GetRightGridStoreIds(){
+        function GetRightGridStoreIds(mee){
             var ids = '';
-            var gridRightStore = Ext.getCmp(window.feature.rightGrid).getStore();
+            var gridRightStore = mee.down('#'+window.feature.rightGrid).getStore();
             gridRightStore.each(function (record) {
                 ids = ids + record.get('Id') + ',';
             });
             return ids;
         };
-        function ClearFields(){
-            Ext.getCmp(window.feature.formCampaignNameId).setValue(''); 
-            Ext.getCmp(window.feature.formCampaignStartDateId).setValue(''); 
-            Ext.getCmp(window.feature.formCampaignEndDateId).setValue('');
-        };
 
-        function SetCampaignValues(rec){
-            Ext.getCmp(window.feature.formCampaignNameId).setValue(rec.get('Name'));
-            Ext.getCmp(window.feature.formCampaignStartDateId).setValue(rec.get('StartDate'));
-            Ext.getCmp(window.feature.formCampaignEndDateId).setValue(rec.get('EndDate'));
+        function SetCampaignValues(mee, rec){
+            mee.down('#'+window.feature.formCampaignNameId).setValue(rec.get('Name'));
+            mee.down('#'+window.feature.formCampaignStartDateId).setValue(rec.get('StartDate'));
+            mee.down('#'+window.feature.formCampaignEndDateId).setValue(rec.get('EndDate'));
 
             campaign.Id = rec.get('Id');
             campaign.countriesEdit = rec.get('CountriesIds');
@@ -760,7 +820,7 @@ Campaign: Overview
                 ok = false;
             }
 
-            if (endDate.getValue() == ''){
+            if (endDate.getValue() == null){
                 endDate.markInvalid('Field End Date is required!');  
                 endDate.setValue(null);
                 ok = false;

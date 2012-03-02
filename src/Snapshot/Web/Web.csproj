@@ -2111,6 +2111,7 @@
     <None Include="Assets\resources\themes\stylesheets\ext4\default\mixins\_frame.scss" />
     <Content Include="Areas\CampaignManagement\Views\Web.config" />
     <None Include="ClassDiagram1.cd" />
+    <Content Include="Views\Shared\_EmptySideBar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\mixins\_color-by-background.scss" />

@@ -27,7 +27,7 @@ namespace Tests.Unit.Controllers.Areas.CampaignManagement.CampaignController_Tes
             //Arrange
 
             //Act
-            var jsonResult = objectMother.controller.Clone(null);
+            var jsonResult = objectMother.controller.Clone(new CampaignInputModel());
 
             //Assert
             var response = jsonResult.Data as JsonActionResponse;
@@ -40,15 +40,22 @@ namespace Tests.Unit.Controllers.Areas.CampaignManagement.CampaignController_Tes
         public void Returns_JSON_With_SuccessMessage_When_Campaign_Has_Been_Cloned()
         {
             //Arrange
+            CampaignInputModel model = new CampaignInputModel()
+            {
+                Id = objectMother.campaign.Id,
+                CampaignName = "New Campaign",
+                StartDate = DateTime.UtcNow.AddDays(2).ToShortDateString(),
+                EndDate = DateTime.UtcNow.AddDays(10).ToShortDateString()
+            };
             objectMother.queryCampaign.Expect(call => call.Load(objectMother.campaignId)).Return(objectMother.campaign);
             objectMother.saveCommand.Expect(call => call.Execute(Arg<Campaign>.Matches(p =>
-                                                                            p.Name == objectMother.campaign.Name + "_Copy" &&
+                                                                            p.Name == model.CampaignName &&
                                                                             p.Opened == false &&
-                                                                            p.StartDate.Value.ToShortDateString() == objectMother.campaign.StartDate.Value.ToShortDateString() &&
-                                                                            p.EndDate.Value.ToShortDateString() == objectMother.campaign.EndDate.Value.ToShortDateString()
+                                                                            p.StartDate.Value.ToShortDateString() == model.StartDate &&
+                                                                            p.EndDate.Value.ToShortDateString() == model.EndDate
                                                                  )));
             //Act
-            var jsonResult = objectMother.controller.Clone(objectMother.campaignId);
+            var jsonResult = objectMother.controller.Clone(model);
 
             //Assert
             objectMother.queryCampaign.VerifyAllExpectations();
@@ -56,7 +63,7 @@ namespace Tests.Unit.Controllers.Areas.CampaignManagement.CampaignController_Tes
             var response = jsonResult.Data as JsonActionResponse;
             Assert.IsNotNull(response);
             Assert.That(response.Status, Is.EqualTo("Success"));
-            Assert.That(response.Message, Is.EqualTo("Campaign Campania 1_Copy has been saved."));
+            Assert.That(response.Message, Is.EqualTo("Campaign "+model.CampaignName+" has been saved."));
         }
 
     }
