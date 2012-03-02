@@ -766,6 +766,19 @@ Campaign: Overview
                 ok = false;
             }
 
+            if (endDate.getValue()!= null && startDate.getValue() != null && startDate.getValue() >= endDate.getValue()){
+                endDate.markInvalid('End Date must be after Start Date!');  
+                ok = false;
+            }
+            
+            var now = Ext.util.Format.date(new Date());
+            var startdate = Ext.util.Format.date(startDate.getValue());
+
+            if (startdate < now){
+                startDate.markInvalid('Start Date cannot be in the past!');  
+                ok = false;
+            }
+
             if (ok) {
                 var needToAskServer = window.feature.campaignToEdit == null || window.feature.campaignToEdit.get('Name') != name.getValue();
 
@@ -782,12 +795,6 @@ Campaign: Overview
                     }
                 });
             }
-
-            if (endDate.getValue()!= null && startDate.getValue() != null && startDate.getValue() >= endDate.getValue()){
-                endDate.markInvalid('End Date must be after Start Date!');  
-                ok = false;
-            }
-
             
             }
         };
