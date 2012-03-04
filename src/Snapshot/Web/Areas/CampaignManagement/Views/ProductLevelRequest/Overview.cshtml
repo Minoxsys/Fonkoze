@@ -58,7 +58,12 @@
 				{ name: 'Fequency'          , type: 'string' },
 				{ name: 'ProductGroup'  , type: 'string' },
 				{ name: 'ProductSmsCodes'  , type: 'string' },
-				{ name: 'Id'                , type: 'string' }
+				{ name: 'Id', type: 'string' },
+				{ name: 'CampaignId', type: 'string' },
+				{ name: 'ProductGroupId', type: 'string' },
+				{ name: 'ScheduleId', type: 'string' },
+				{ name: 'ProductIds', type: 'array' }
+
 			]
 		});
 
@@ -83,6 +88,19 @@
 </script>
 
 <script type="text/javascript">
+
+    function editProductLevelRequest(recordData) {
+    	console.log('recordData ->', recordData);
+        var modal = new window.feature.createProductLevelRequest({
+        	title: 'Edit Product Level Request',
+			data: recordData,
+            gridStore: window.feature.gridStore
+        });
+        modal.show();
+    }
+
+</script>
+<script type="text/javascript">
 	Ext.onReady(function () {
         window.feature.gridStore = new window.feature.stores.ProductLevelRequest();
 
@@ -105,6 +123,8 @@
 							icon: '@Url.AssetUrl("/img/edit.png")',  
 							text: 'Edit',
 							handler: function(grid, rowIndex, colIndex) {
+								var record = grid.store.getAt(rowIndex);
+								editProductLevelRequest(_(record.data).clone());
 							}
 						},{
 							icon: '@Url.AssetUrl("img/delete.png")',  

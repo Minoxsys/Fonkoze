@@ -195,8 +195,8 @@ namespace Tests.Unit.Controllers.Areas.CampaignManagement.ProductLevelRequest_Te
                 ProductGroupId = productGroupId,
                 CampaignId = campaignId,
                 ScheduleId = scheduleId,
-                Products = new CreateProductLevelRequestInput.ProductModel[] {
-                    new CreateProductLevelRequestInput.ProductModel{
+                Products = new ProductModel[] {
+                    new ProductModel{
                         Id = Guid.NewGuid(),
                         ProductItem = "Orange",
                         Selected= false,
@@ -257,7 +257,7 @@ namespace Tests.Unit.Controllers.Areas.CampaignManagement.ProductLevelRequest_Te
                 plr.SetupGet(c => c.Id).Returns(Guid.NewGuid());
                 plr.SetupGet(c => c.Campaign).Returns(MockCampaign(i));
                 plr.SetupGet(c => c.ProductGroup).Returns(MockProductGroup(i));
-                plr.Setup(c => c.RestoreProducts<CreateProductLevelRequestInput.ProductModel[]>()).Returns(MockProducts(i));
+                plr.Setup(c => c.RestoreProducts<ProductModel[]>()).Returns(MockProducts(i));
                 plr.SetupGet(c => c.Schedule).Returns(MockSchedule(i));
 
 
@@ -284,13 +284,13 @@ namespace Tests.Unit.Controllers.Areas.CampaignManagement.ProductLevelRequest_Te
             return schedule.Object;
         }
 
-        private CreateProductLevelRequestInput.ProductModel[] MockProducts(int i)
+        private ProductModel[] MockProducts(int i)
         {
-            var products = new List<CreateProductLevelRequestInput.ProductModel>();
+            var products = new List<ProductModel>();
 
             for (int j = 0; i < 2; i++)
             {
-                products.Add(new CreateProductLevelRequestInput.ProductModel
+                products.Add(new ProductModel
                 {
                     Id = Guid.NewGuid(),
                     ProductItem = "Product " + (i*j*100),

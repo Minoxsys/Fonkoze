@@ -63,6 +63,12 @@ namespace Web.Areas.CampaignManagement.Controllers
             var productLevelRequests = productLevelRequestData.ToList().Select(req =>
                 new GetProductLevelRequestModel
                 {
+					Id= req.Id.ToString(),
+					CampaignId = req.Campaign.Id.ToString(),
+					ProductGroupId = req.ProductGroup.Id.ToString(),
+					ScheduleId = req.Schedule.Id.ToString(),
+					ProductIds = GetProductIds(req),
+
                     Campaign = req.Campaign.Name,
                     StartDate = req.Campaign.StartDate.HasValue ? req.Campaign.StartDate.Value.ToString("dd-MMM-yyyy") : "-",
                     EndDate = req.Campaign.EndDate.HasValue ? req.Campaign.EndDate.Value.ToString("dd-MMM-yyyy") : "-",
@@ -83,11 +89,18 @@ namespace Web.Areas.CampaignManagement.Controllers
             }, JsonRequestBehavior.AllowGet);
         }
 
+		private string[] GetProductIds(ProductLevelRequest req)
+		{
+            var products = req.RestoreProducts<ProductModel[]>();
+
+			return products.Where(p => p.Selected).Select(p => p.Id.ToString()).ToArray();
+		}
+
         private string GetSmsCodesRepresentation(ProductLevelRequest req)
         {
             var sb = new StringBuilder();
 
-            var products = req.RestoreProducts<CreateProductLevelRequestInput.ProductModel[]>(); //  BinaryJsonStore<CreateProductLevelRequestInput.ProductModel[]>.From(binarySerializedProducts);
+            var products = req.RestoreProducts<ProductModel[]>(); 
             if (products == null) return "--";
 
             for (int i = 0; i < products.Length; i++)
@@ -137,7 +150,7 @@ namespace Web.Areas.CampaignManagement.Controllers
             var products = productsDataQry.Select(product =>
                 new ProductModel
                 {
-                    Id = product.Id.ToString(),
+                    Id = product.Id,
                     ProductItem = product.Name,
                     SmsCode = product.SMSReferenceCode,
                     Selected = false // todo define selection rule
@@ -165,7 +178,7 @@ namespace Web.Areas.CampaignManagement.Controllers
                 Client = _client
             };
 
-            productLevelRequest.StoreProducts<CreateProductLevelRequestInput.ProductModel[]>(createProductLevelRequestInput.Products);
+            productLevelRequest.StoreProducts<ProductModel[]>(createProductLevelRequestInput.Products);
 
             SaveProductLevelRequest.Execute(productLevelRequest);
 
@@ -176,6 +189,34 @@ namespace Web.Areas.CampaignManagement.Controllers
             });
 
         }
+
+
+		public JsonResult Edit(EditProductLevelRequestInput editProductLevelRequestInput)
+		{
+			LoadUserAndClient();
+			var productGroup = LoadProductGroup.Load(editProductLevelRequestInput.ProductGroupId.Value);
+			var schedule = QuerySchedules.Load(editProductLevelRequestInput.ScheduleId.Value);
+			var campaign = QueryCampaigns.Load(editProductLevelRequestInput.CampaignId.Value);
+
+			var productLevelRequest = QueryProductLevelRequests.Load(editProductLevelRequestInput.Id.Value);
+				productLevelRequest.ProductGroup = productGroup;
+				productLevelRequest.Schedule = schedule;
+				productLevelRequest.Campaign = campaign;
+
+				productLevelRequest.ByUser = _user;
+				productLevelRequest.Client = _client;
+
+			productLevelRequest.StoreProducts<ProductModel[]>(editProductLevelRequestInput.Products);
+
+			SaveProductLevelRequest.Execute(productLevelRequest);
+
+			return Json(new JsonActionResponse
+			{
+				Status = "Success",
+				Message = "Saved Product Level Request"
+			});
+
+		}
 
         public JsonResult GetCampaigns()
         {

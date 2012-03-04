@@ -150,6 +150,7 @@
   <ItemGroup>
     <Compile Include="Areas\CampaignManagement\Controllers\ProductLevelRequestController.cs" />
     <Compile Include="Areas\CampaignManagement\Models\ProductLevelRequest\CampaignModel.cs" />
+    <Compile Include="Areas\CampaignManagement\Models\ProductLevelRequest\EditProductLevelRequestInput.cs" />
     <Compile Include="Areas\CampaignManagement\Models\ProductLevelRequest\CreateProductLevelRequestInput.cs" />
     <Compile Include="Areas\CampaignManagement\Models\ProductLevelRequest\GetProductLevelRequestInput.cs" />
     <Compile Include="Areas\CampaignManagement\Models\ProductLevelRequest\GetProductLevelRequestModel.cs" />
