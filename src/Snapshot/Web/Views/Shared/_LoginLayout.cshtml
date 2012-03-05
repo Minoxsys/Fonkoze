@@ -4,9 +4,11 @@
 <head>
     <meta charset="utf-8" />
     <title>@RenderSection("page_title", required: true)</title>
-   <link href="@(Url.RouteUrl<CssController>(req => req.Index("site"), ScriptsRoutesRegistrar.CSS))"
+  <link href="@(Url.RouteUrl<CssController>(req => req.Index("theme"), ScriptsRoutesRegistrar.CSS))"
         rel="stylesheet" type="text/css" media="screen,projection" />
-    <link href="@(Url.RouteUrl<CssController>(req => req.Index("another"), ScriptsRoutesRegistrar.CSS))"
+    <link href="@(Url.RouteUrl<CssController>(req => req.Index("button"), ScriptsRoutesRegistrar.CSS))"
+        rel="stylesheet" type="text/css" media="screen,projection" />
+    <link href="@(Url.RouteUrl<CssController>(req => req.Index("toolbar"), ScriptsRoutesRegistrar.CSS))"
         rel="stylesheet" type="text/css" media="screen,projection" />
     <!--[if IE]>
     <link href="@(Url.RouteUrl<CssController>(req => req.Index("ie"), ScriptsRoutesRegistrar.CSS))"

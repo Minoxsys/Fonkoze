@@ -2140,6 +2140,7 @@
     <None Include="Assets\resources\themes\stylesheets\ext4\default\mixins\_color-by-background.scss" />
     <None Include="Assets\resources\themes\stylesheets\ext4\default\mixins\_frame.scss" />
     <Content Include="Areas\CampaignManagement\Views\Web.config" />
+    <None Include="Assets\sass\toolbar-template.scss" />
     <None Include="Assets\sass\panel-template.scss" />
     <None Include="ClassDiagram1.cd" />
     <Content Include="Views\Shared\_EmptySideBar.cshtml" />

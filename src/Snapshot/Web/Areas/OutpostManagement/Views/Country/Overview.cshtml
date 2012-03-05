@@ -197,6 +197,7 @@
                 displayInfo: true,
                 displayMsg: 'Displaying topics {0} - {1} of {2}',
                 emptyMsg: "No topics to display",
+                ui: 'snapshot-pagination-toolbar'
             });
         window.feature.grid = Ext.create('Ext.grid.Panel', {
             store: window.feature.store,
@@ -235,7 +236,6 @@
                 },{
                     xtype: 'actioncolumn',
                     text: 'Actions',
-                    cls: 'cop-grid-column',
                     items: [
                         {
                             icon:'@(Url.RouteUrl<Web.Controllers.AssetsController>(_ => _.Shared("img/delete.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
@@ -280,7 +280,8 @@
                 {
                     xtype: 'container',
                     layout: {
-                        type: 'column'
+                        type: 'column',
+                        
                     },
                     height: 50,
                     items: [
