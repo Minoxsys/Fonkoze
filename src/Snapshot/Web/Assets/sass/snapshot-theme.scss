@@ -29,6 +29,7 @@
 @include extjs-viewport;
 
 //custom CSS here
+
 .x-add-button-gradient {
 	box-shadow: 2px 0px 2px 0px #d1d0d0;
 }
@@ -122,4 +123,14 @@
 
 .x-btn-snapshot-submenu-btn-small .x-btn-inner {
 	padding: 0 10px 0 25px !important;
+}
+
+.x-form-text, textarea.x-form-field {
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+}
+
+.x-border-box .x-form-text {
+    height: 27px;
 }
