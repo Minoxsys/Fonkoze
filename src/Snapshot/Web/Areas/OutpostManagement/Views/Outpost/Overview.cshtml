@@ -292,7 +292,7 @@
 			coordinatesId:'window-feature-textfield-coordinates'
 		};
 	
-		window.feature.modal = Ext.define('Ext.feature.region.Modal', {
+		window.feature.modal = Ext.define('Ext.feature.outpost.Modal', {
 			extend: 'Ext.window.Window',
 			modal:true,
 			height: 600,
@@ -318,7 +318,7 @@
 						url: '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Contact", action = "Index" })',
 						appendId: false,
 						extraParams: {
-							OutpostId: me.entityId,
+							OutpostId: me.entityId
 						},
 						id: 'ContactModelProxy',
 						reader: {
@@ -648,7 +648,7 @@
 										// Create a record instance through the ModelManager
 										var r = new window.feature.ContactModel({
 											'ContactType': 'Email', 
-											'ContactDetail': 'someone@outpost.com',
+											'ContactDetail': null,
 											'IsMainContact': false
 										});
 	

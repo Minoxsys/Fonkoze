@@ -403,8 +403,10 @@
     <Content Include="Assets\resources\img\Administration\Content\ArrowDown.png" />
     <Content Include="Assets\resources\img\Administration\Content\ArrowUp.png" />
     <Content Include="Assets\resources\img\Administration\Content\CountryIcon.png" />
+    <Content Include="Assets\resources\img\Administration\Content\CreateProductLevelRequest.png" />
     <Content Include="Assets\resources\img\Administration\Content\outpost.png" />
     <Content Include="Assets\resources\img\Administration\Content\pinIcon.png" />
+    <Content Include="Assets\resources\img\Administration\Content\Users.png" />
     <Content Include="Assets\resources\img\Administration\SubMenu\CampaignNotSelected.png" />
     <Content Include="Assets\resources\img\Administration\SubMenu\CampaignSelected.png" />
     <Content Include="Assets\resources\img\Administration\SubMenu\LocationNotSelected.png" />

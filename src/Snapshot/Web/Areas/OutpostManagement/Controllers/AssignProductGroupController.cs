@@ -100,7 +100,7 @@ namespace Web.Areas.OutpostManagement.Controllers
         public JsonResult GetOutpostStockLevels(GetOutpostStockLevelInput input)
         {
             LoadUserAndClient();
-            if (input.OutpostId.HasValue == null)
+            if (!input.OutpostId.HasValue)
             {
                 throw new ArgumentNullException("outpostId");
             }

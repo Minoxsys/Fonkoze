@@ -204,7 +204,10 @@
 							flex:1,
 							layout:'column',
 							items:[
-								{xtype:'label', html:'Product Level Requests'},
+								{xtype: 'image',
+                                src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/Content/CreateProductLevelRequest.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                                 margin: '0 10 10 10'
+                                },{xtype:'label', html:'Product Level Requests'},
 								{
 									xtype:'button',
 									text:'Create Product Level Request',

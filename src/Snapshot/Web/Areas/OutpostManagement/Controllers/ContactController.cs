@@ -52,8 +52,7 @@ namespace Web.Areas.OutpostManagement.Controllers
                                           ContactType = c.ContactType,
                                           Id = c.Id
                                       });
-
-            return Json(contactsModelArray, JsonRequestBehavior.AllowGet);
+           return Json(contactsModelArray, JsonRequestBehavior.AllowGet);
         }
 
         private Outpost LoadOutpost(Guid? outpostId)

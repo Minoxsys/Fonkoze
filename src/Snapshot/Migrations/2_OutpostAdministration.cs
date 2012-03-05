@@ -114,8 +114,8 @@ namespace Migrations
 			Create.Table("Contacts")
 				.WithCommonColumns()
 				.WithClientColumn()
-				.WithColumn("ContactType").AsFixedLengthString(15).Nullable()
-				.WithColumn("ContactDetail").AsFixedLengthString(100).Nullable()
+				.WithColumn("ContactType").AsString(15).Nullable()
+				.WithColumn("ContactDetail").AsString(100).Nullable()
                 .WithColumn("IsMainContact").AsBoolean()
 				.WithColumn("Outpost_FK").AsGuid();
 
