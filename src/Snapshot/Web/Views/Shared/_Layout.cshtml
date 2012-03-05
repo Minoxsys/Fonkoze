@@ -14,6 +14,8 @@
     <title>@RenderSection("page_title", required: true)</title>
     <link href="@(Url.RouteUrl<CssController>(req => req.Index("site"), ScriptsRoutesRegistrar.CSS))"
         rel="stylesheet" type="text/css" media="screen,projection" />
+    <link href="@(Url.RouteUrl<CssController>(req => req.Index("another"), ScriptsRoutesRegistrar.CSS))"
+        rel="stylesheet" type="text/css" media="screen,projection" />
     <!--[if IE]>
     <link href="@(Url.RouteUrl<CssController>(req => req.Index("ie"), ScriptsRoutesRegistrar.CSS))"
         rel="stylesheet" type="text/css" media="screen, projection" />
