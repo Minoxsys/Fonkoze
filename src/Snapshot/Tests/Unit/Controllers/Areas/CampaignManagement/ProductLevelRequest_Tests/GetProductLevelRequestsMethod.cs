@@ -37,7 +37,7 @@ namespace Tests.Unit.Controllers.Areas.CampaignManagement.ProductLevelRequest_Te
             var response = result.Data as GetProductLevelRequestResponse;
             Assert.AreEqual(response.TotalItems, 200);
             Assert.AreEqual(response.ProductLevelRequests.Length, 10);
-            Assert.AreEqual(response.ProductLevelRequests[0].ProductSmsCodes, "a/b");
+            Assert.AreEqual(response.ProductLevelRequests[0].ProductSmsCodes, "a");
         }
 
     }

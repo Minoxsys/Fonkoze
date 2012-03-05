@@ -31,7 +31,13 @@ namespace Web.Areas.CampaignManagement.Controllers
 
         public IQueryService<ProductLevelRequest> QueryProductLevelRequests { get; set; }
 
-        public ISaveOrUpdateCommand<ProductLevelRequest> SaveProductLevelRequest{get;set;}
+        public ISaveOrUpdateCommand<ProductLevelRequest> SaveProductLevelRequest { get; set; }
+
+        public void StopProductLevelRequest(StopProductLevelRequestInput stopProductLevelRequestInput)
+        {
+            // TODO: Implement this method
+            throw new NotImplementedException();
+        }
 
         public ActionResult Overview()
         {
@@ -57,7 +63,7 @@ namespace Web.Areas.CampaignManagement.Controllers
                 { "Campaign-DESC", () => productLevelRequestData.OrderByDescending(c => c.Campaign.Name) }
 			};
             var totalItems = productLevelRequestData.Count();
-			productLevelRequestData = productLevelRequestData.Take(input.limit.Value).Skip(input.start.Value);
+            productLevelRequestData = productLevelRequestData.Take(input.limit.Value).Skip(input.start.Value);
 
 
             var productLevelRequests = productLevelRequestData.ToList().Select(req =>
@@ -105,24 +111,31 @@ namespace Web.Areas.CampaignManagement.Controllers
 
             for (int i = 0; i < products.Length; i++)
             {
-                string format = i == products.Length-1 ? "{0}" : "{0}/";
-                sb.AppendFormat(format, products[i].SmsCode);
+                string format = "{0}/";
+                if (products[i].Selected)
+                {
+                    sb.AppendFormat(format, products[i].SmsCode);
+                }
+            }
+            if (sb.Length > 0)
+            {
+                sb.Remove(sb.Length - 1, 1);
             }
 
-                return sb.ToString();
+            return sb.ToString();
         }
 
         public JsonResult GetSchedules()
         {
             LoadUserAndClient();
 
-            var schedulesData = QuerySchedules.Query().Where(c=>c.Client == _client).ToList();
+            var schedulesData = QuerySchedules.Query().Where(c => c.Client == _client).ToList();
 
             var schedules = schedulesData.Select(schedule =>
                 new ScheduleModel
                 {
                     Basis = schedule.ScheduleBasis,
-                    Frequency = schedule.FrequencyType?? "-",
+                    Frequency = schedule.FrequencyType ?? "-",
                     ScheduleName = schedule.Name,
                     Id = schedule.Id.ToString(),
                     Reminders = schedule.Reminders.Select(reminder => new RequestReminderModel
@@ -157,7 +170,7 @@ namespace Web.Areas.CampaignManagement.Controllers
 
                 }).ToArray();
 
-            
+
             return Json(products, JsonRequestBehavior.AllowGet);
         }
 
@@ -173,7 +186,7 @@ namespace Web.Areas.CampaignManagement.Controllers
                 ProductGroup = productGroup,
                 Schedule = schedule,
                 Campaign = campaign,
-                
+
                 ByUser = _user,
                 Client = _client
             };
@@ -227,7 +240,7 @@ namespace Web.Areas.CampaignManagement.Controllers
                 new CampaignModel
                 {
                     Id = campaign.Id.ToString(),
-                    Name=campaign.Name
+                    Name = campaign.Name
 
                 }).ToArray();
 

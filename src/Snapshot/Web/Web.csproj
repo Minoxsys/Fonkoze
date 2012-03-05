@@ -180,6 +180,7 @@
     <Compile Include="Areas\CampaignManagement\Controllers\CampaignController.cs" />
     <Compile Include="Areas\CampaignManagement\Models\Campaign\LocationEntitiesInput.cs" />
     <Compile Include="Areas\CampaignManagement\Models\Campaign\LocationEntityModel.cs" />
+    <Compile Include="Areas\CampaignManagement\Models\ProductLevelRequest\StopProductLevelRequestInput.cs" />
     <Compile Include="Areas\CampaignManagement\Models\RequestSchedule\RequestScheduleInputModel.cs" />
     <Compile Include="Areas\OutpostManagement\Controllers\AssignProductGroupController.cs" />
     <Compile Include="Areas\OutpostManagement\Controllers\ContactController.cs" />

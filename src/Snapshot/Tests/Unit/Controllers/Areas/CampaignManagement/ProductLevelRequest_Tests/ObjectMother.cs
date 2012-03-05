@@ -24,6 +24,8 @@ namespace Tests.Unit.Controllers.Areas.CampaignManagement.ProductLevelRequest_Te
         private Mock<User> userMock;
         public Mock<Client> clientMock;
 
+        Guid productLevelRequestId;
+
         internal void Init()
         {
             autoMock = AutoMock.GetLoose();
@@ -294,7 +296,7 @@ namespace Tests.Unit.Controllers.Areas.CampaignManagement.ProductLevelRequest_Te
                 {
                     Id = Guid.NewGuid(),
                     ProductItem = "Product " + (i*j*100),
-                    Selected = false,
+                    Selected = i%2 == 0,
                     SmsCode = Char.ConvertFromUtf32(i+97)
                 });
             }
@@ -330,6 +332,23 @@ namespace Tests.Unit.Controllers.Areas.CampaignManagement.ProductLevelRequest_Te
             var productLevelRequestService = Mock.Get(controller.QueryProductLevelRequests);
 
             productLevelRequestService.Verify(c => c.Query());
+        }
+
+        internal StopProductLevelRequestInput StopProductLevelRequestInput()
+        {
+            productLevelRequestId = Guid.NewGuid();
+
+            return new StopProductLevelRequestInput
+            {
+                Id = productLevelRequestId
+            };
+        }
+
+        internal void VerifySaveCommandInvoked_With_ProductLevelRequestSetTo_True()
+        {
+            var mockSaveOrUpdateCommand = Mock.Get(controller.SaveProductLevelRequest);
+
+            mockSaveOrUpdateCommand.Setup(call => call.Execute(It.Is<ProductLevelRequest>(p => p.IsStopped == true)));
         }
     }
 }
