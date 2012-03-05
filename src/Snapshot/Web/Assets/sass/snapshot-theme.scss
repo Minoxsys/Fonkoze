@@ -110,3 +110,16 @@
 .x-btn-icon {
 	padding: 0 10px 0 0;
 }
+
+.x-btn-snapshot-submenu-btn-small-icon-text-left .x-btn-icon {
+	bottom: 0;
+    height: 40px;
+    left: 0;
+    right: auto;
+    top: 5px;
+    width: 50px;
+}
+
+.x-btn-snapshot-submenu-btn-small .x-btn-inner {
+	padding: 0 10px 0 25px !important;
+}
