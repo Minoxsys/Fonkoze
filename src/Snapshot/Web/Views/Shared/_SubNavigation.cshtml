@@ -1,5 +1,4 @@
-﻿
-<script type="text/javascript">
+﻿<script type="text/javascript">
     window.res.header.subnavigation.buttonTabs = {
         id: 'ButtonTabs',
         group: 'AdministrationButtonsGroup',
@@ -56,7 +55,6 @@
                                 ui: 'snapshot-submenu-btn',
                                 handler:function(){
                                     SetUnselectedImagesToButtons();
-                                    this.icon = '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/SubMenu/LocationSelected.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))';
                                     navigateTo(res.link.administration); 
                                 }
                             },
@@ -74,7 +72,6 @@
                                 ui: 'snapshot-submenu-btn',
                                 handler:function(){
                                     SetUnselectedImagesToButtons();
-                                    this.icon = '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/SubMenu/ProductSelected.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))';
                                     navigateTo(res.link.productGroup); 
                                 }
                             },
@@ -92,7 +89,6 @@
                                 ui: 'snapshot-submenu-btn',
                                 handler:function(){
                                     SetUnselectedImagesToButtons();
-                                    this.icon = '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/SubMenu/CampaignSelected.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))';
                                     navigateTo(res.link.campaignOverview); 
                                 }
                             },
@@ -110,7 +106,6 @@
                                 ui: 'snapshot-submenu-btn',
                                 handler:function(){
                                     SetUnselectedImagesToButtons();
-                                    this.icon = '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/SubMenu/UserSelected.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))';
                                     navigateTo(res.link.clientsOverview); 
                                 }
                             }                       
@@ -195,11 +190,11 @@
 
         function SetUnselectedImagesToButtons()
         {
-            Ext.getCmp(subNavRes.buttonTabs.outpost).icon = '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/SubMenu/LocationNotSelected.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))';
-            Ext.getCmp(subNavRes.buttonTabs.product).icon = '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/SubMenu/ProductNotSelected.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))';
-            Ext.getCmp(subNavRes.buttonTabs.campaign).icon = '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/SubMenu/CampaignNotSelected.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))';
-            Ext.getCmp(subNavRes.buttonTabs.user).icon = '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/SubMenu/UserNotSelected.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))';
+            Ext.getCmp(subNavRes.buttonTabs.outpost).setIcon('@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/SubMenu/LocationNotSelected.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))');
+            Ext.getCmp(subNavRes.buttonTabs.product).setIcon('@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/SubMenu/ProductNotSelected.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))');
+            Ext.getCmp(subNavRes.buttonTabs.campaign).setIcon('@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/SubMenu/CampaignNotSelected.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))');
+            Ext.getCmp(subNavRes.buttonTabs.user).setIcon('@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/SubMenu/UserNotSelected.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))');
         }
-       
+      
     });
 </script>

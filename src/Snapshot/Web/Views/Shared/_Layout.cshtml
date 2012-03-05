@@ -103,10 +103,13 @@
                             {
                                 xtype: 'container',
                                 height: 70,
-                                margin: '0 0 0 150',
+                                margin: '15 180 0 150',
                                 id: res.header.navigation.logo,
                                 padding: 0,
-                                width: 150
+                                width: 150,
+                                items:[{ xtype: 'image',
+                                        src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Logo.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))'
+                                }]
                             },
                             {
                                 xtype: 'button',

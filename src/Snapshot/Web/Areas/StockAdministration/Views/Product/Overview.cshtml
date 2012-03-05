@@ -24,6 +24,7 @@
         var productAdministrationBtnId = window.res.header.subnavigation.buttonTabs.product;
         var productAdministrationBtn = Ext.getCmp(productAdministrationBtnId);
         productAdministrationBtn.toggle(true);
+        productAdministrationBtn.setIcon('@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/SubMenu/ProductSelected.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))');
     });
 </script>
 <script type="text/javascript">
@@ -452,8 +453,9 @@
                     flex: 1,
                     renderer: function (value, metaData, record, colIndex, store, view) {
                         var description = record.data.Description;
-                        metaData.tdAttr = 'data-qtip="' + value + '"';
+                        metaData.tdAttr = 'data-qtip="' + description + '"';
                         return value;
+                        
                     }
                 }, {
                     text: "Product Groups",
@@ -547,6 +549,23 @@
                 emptyMsg: "No topics to display"
             })
         });
+       
+       //Tooltip on each row!
+//         window.feature.grid.getView().on('render', function(view) {
+//            view.tip = Ext.create('Ext.tip.ToolTip', {
+//            target: view.el,
+//            delegate: view.itemSelector,
+//            listeners: {
+//              beforeshow: function updateTipBody(tip) {
+//                var gridColums = view.getGridColumns();
+//                var viewd = view;
+//                var record = view.getRecord(tip.triggerElement);
+//                var val=record.data.Description;
+//                tip.update(val);
+//            }
+//        }
+//    });
+//});
         function GetStoreWithProductsSpecificToProductGroupWith(selectedProductGroupId) {
     
             window.feature.store.proxy.extraParams.productGroupId = selectedProductGroupId;

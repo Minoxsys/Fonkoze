@@ -19,6 +19,7 @@ User Administration Users: Overview
         var userAdministrationBtnId = window.res.header.subnavigation.buttonTabs.user;
         var userAdministrationBtn = Ext.getCmp(userAdministrationBtnId);
         userAdministrationBtn.toggle(true);
+        userAdministrationBtn.setIcon('@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/SubMenu/UserSelected.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))');
 
         var usersGroupBtnId = window.res.content.maincontent.sidebar.users;
         var usersGroupBtn = Ext.getCmp(usersGroupBtnId);

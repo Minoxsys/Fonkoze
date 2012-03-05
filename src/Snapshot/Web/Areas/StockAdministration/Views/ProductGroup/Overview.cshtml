@@ -20,6 +20,7 @@ Product Administration Product Groups: Overview
         var productAdministrationBtnId = window.res.header.subnavigation.buttonTabs.product;
         var productAdministrationBtn = Ext.getCmp(productAdministrationBtnId);
         productAdministrationBtn.toggle(true);
+        productAdministrationBtn.setIcon('@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/SubMenu/ProductSelected.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))');
        
         var productGroupBtnId = window.res.content.maincontent.sidebar.productGroup;
         var productGroupBtn = Ext.getCmp(productGroupBtnId);

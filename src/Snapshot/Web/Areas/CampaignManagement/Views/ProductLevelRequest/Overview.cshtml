@@ -15,6 +15,7 @@
         var campaignAdministrationBtnId = window.res.header.subnavigation.buttonTabs.campaign;
         var campaignAdministrationBtn = Ext.getCmp(campaignAdministrationBtnId);
         campaignAdministrationBtn.toggle(true);
+        campaignAdministrationBtn.setIcon('@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/SubMenu/CampaignSelected.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))');
        
         var sidebarSelectionId = window.res.content.maincontent.sidebar.createProductLevelRequests;
         var sidebarSelection = Ext.getCmp(sidebarSelectionId);

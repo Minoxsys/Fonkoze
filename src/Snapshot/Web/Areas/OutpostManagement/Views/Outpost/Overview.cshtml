@@ -24,6 +24,7 @@
         var outpostAdministrationBtnId = window.res.header.subnavigation.buttonTabs.outpost;
         var outpostAdministrationBtn = Ext.getCmp(outpostAdministrationBtnId);
         outpostAdministrationBtn.toggle(true);
+        outpostAdministrationBtn.setIcon('@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/SubMenu/LocationSelected.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))');
 
         var outpostBtnId = window.res.content.maincontent.sidebar.outpost;
         var outpostBtn = Ext.getCmp(outpostBtnId);
