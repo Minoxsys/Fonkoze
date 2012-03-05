@@ -92,3 +92,7 @@
 	font-weight: $font_weight-bold;
 	font-size: $font_size-larger;
 }
+
+.x-grid-with-row-lines .x-grid-cell-inner {
+    line-height: 25px;
+}

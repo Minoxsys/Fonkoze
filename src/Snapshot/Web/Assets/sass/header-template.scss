@@ -13,8 +13,12 @@ $include-missing-images: true;
 
 //GRID COMPONENT STYLES
 $grid-cell-font: $font_weight-bold  $font_size-larger $global-font-family;
-//$grid-cell-inner-padding:
-$grid-cell-with-col-lines-border-color: #E0E3E6;
+
+$grid-cell-inner-padding: 27px;
+
+$grid-row-cell-line-height: 25px;
+
+$grid-cell-with-col-lines-border-color: #fff;
 $grid-grouped-header-background-color: #bcc1c4;
 $grid-grouped-header-border-color: transparent;
 $grid-grouped-header-border-style: solid;
@@ -25,29 +29,25 @@ $grid-grouped-title-font: $font_weight-bold  $font_size-larger $global-font-fami
 
 $grid-header-background-color: #bcc1c4;
 $grid-header-background-gradient: color_stops(#cf7b7b 0%,#a95757 100%);
-
 $grid-header-color: #FFFFFF;
-
 $grid-header-over-background-color: #bcc1c4;
 $grid-header-over-background-gradient: color_stops(#cf7b7b 0%,#a95757 100%);
-
 $grid-header-over-border-color: transparent;
-//$grid-header-padding:
+$grid-header-padding: 11px;
 //$grid-header-trigger-width:
 
 $grid-row-body-font: normal $font_size-normal-13 $global2-font-family;
-//$grid-row-body-padding:
-
+$grid-row-body-padding: 0px;
 $grid-row-cell-alt-background: #f5f5f5;
 
-$grid-row-cell-border-color: #f5f5f5;
+$grid-row-cell-border-color: #fff;
 $grid-row-cell-border-style: solid;
 $grid-row-cell-border-width: 0;
 
 $grid-row-cell-color: #666666;
 $grid-row-cell-focus-background-color: #e7edf4;
 
-$grid-row-cell-focus-border-color: #b3b3b3;
+$grid-row-cell-focus-border-color: #fff;
 $grid-row-cell-font: normal $font_size-normal-13 $global2-font-family;
 
 $grid-row-cell-over-border-color: #fff;
@@ -60,7 +60,7 @@ $grid-row-editor-border: 0;
 $grid-row-editor-border-color: #fff;
 $grid-row-editor-font: normal $font_size-normal-13 $global2-font-family;
 
-//$grid-row-padding:
+$grid-row-padding: 12px;
 $grid-row-wrap-border-color: #fff;
 $grid-row-wrap-border-style: solid;
 $grid-row-wrap-border-width: 0;
