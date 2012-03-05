@@ -129,8 +129,30 @@
 	-webkit-border-radius: 3px;
 	-moz-border-radius: 3px;
 	border-radius: 3px;
+	padding: 2px 10px;
 }
 
 .x-border-box .x-form-text {
     height: 27px;
+}
+
+.x-window-header-snapshot-popup-window-top {
+    background-color: black !important;
+    border-radius: 0 0 0 0;
+    border-style: solid;
+    border-width: 1px;
+    padding: 7px 6px 5px !important;
+}
+
+.x-form-trigger {
+    background-image: url("../resources/themes/images/snapshot/form/dropdown.png") !important;
+	width: 27px !important;
+	height: 27px !important;
+	background-repeat: no-repeat;
+	border-bottom: 0px !important;
+}
+
+.x-form-trigger-over {
+	background-position: 0 0 !important;
+	border-bottom: 0px !important;
 }

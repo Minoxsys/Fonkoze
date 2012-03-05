@@ -281,11 +281,11 @@
     $background-color-pressed: #ffff00,
     $background-color-disabled: #ffff00,
 
-    $background-gradient: color_stops(#b6b6b6 3%,#a9a9a9 6%,#8d8d8d 100%),
-    $background-gradient-over: color_stops(#b6b6b6 3%,#a9a9a9 6%,#8d8d8d 100%),
-    $background-gradient-focus: color_stops(#b6b6b6 3%,#a9a9a9 6%,#8d8d8d 100%),
-    $background-gradient-pressed: color_stops(#b6b6b6 3%,#a9a9a9 6%,#8d8d8d 100%),
-    $background-gradient-disabled: color_stops(#b6b6b6 3%,#a9a9a9 6%,#8d8d8d 100%),
+    $background-gradient: color_stops(#b6b6b6 1%,#a9a9a9 5%,#8d8d8d 100%),
+    $background-gradient-over: color_stops(#b6b6b6 1%,#a9a9a9 5%,#8d8d8d 100%),
+    $background-gradient-focus: color_stops(#b6b6b6 1%,#a9a9a9 5%,#8d8d8d 100%),
+    $background-gradient-pressed: color_stops(#b6b6b6 1%,#a9a9a9 5%,#8d8d8d 100%),
+    $background-gradient-disabled: color_stops(#b6b6b6 1%,#a9a9a9 5%,#8d8d8d 100%),
 
     $color: $default-button-color,
     $color-over: $default-button-color,

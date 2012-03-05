@@ -1,0 +1,22 @@
+@import 'header-template.scss';
+
+//WINDOW STYLES
+@include extjs-window-ui(
+    'snapshot-popup-window',
+
+    $ui-border-radius: 0,
+    $ui-border-color: transparent,
+    $ui-inner-border-color: #ffffff,
+
+    $ui-header-color: #ffffff,
+    $ui-header-font-size: $font_size-normal-13,
+    $ui-header-font-weight: $font_weight-bold,
+
+    $ui-body-border-color: #ffffff,
+    $ui-body-background-color: #ffffff,
+    $ui-body-color: #000000,
+
+    $ui-background-color: #ffffff
+);
+
+@import 'footer-template.scss';
