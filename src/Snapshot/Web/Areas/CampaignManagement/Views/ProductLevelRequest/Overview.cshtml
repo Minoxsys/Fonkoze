@@ -62,6 +62,7 @@
 				{ name: 'CampaignId', type: 'string' },
 				{ name: 'ProductGroupId', type: 'string' },
 				{ name: 'ScheduleId', type: 'string' },
+				{ name: 'IsStopped', type: 'bool' },
 				{ name: 'ProductIds', type: 'array' }
 
 			]
@@ -90,13 +91,27 @@
 <script type="text/javascript">
 
     function editProductLevelRequest(recordData) {
-    	console.log('recordData ->', recordData);
+        if (!recordData.Editable) {
+            Ext.Msg.alert('Edit disabled', 'Edit is disabled because Campaign is already running');
+            return;
+        }
         var modal = new window.feature.createProductLevelRequest({
         	title: 'Edit Product Level Request',
 			data: recordData,
             gridStore: window.feature.gridStore
         });
         modal.show();
+    }
+    function stopProductLevelRequest(recordData) {
+        console.log('stop recordData ->', recordData, recordData.Id);
+        var url = '@Url.RouteUrl(CampaignManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "ProductLevelRequest", action = "StopProductLevelRequest" })';
+        var params = {
+            Id: recordData.Id
+        };
+
+        $.post(url, params);
+
+      
     }
 
 </script>
@@ -114,9 +129,11 @@
 				{ header:'Schedule'    ,  dataIndex:'ScheduleName'     },
 				{ header:'Fequency'        ,  dataIndex:'Fequency'         },
 				{ header:'Product Group',  dataIndex:'ProductGroup', flex:1 },
+				{ header:'Stopped',  dataIndex:'IsStopped', xtype: 'templatecolumn', tpl: '<tpl if="IsStopped">Yes</tpl><tpl if="!IsStopped">No</tpl>'},
 				{ header:'Sms Codes',  dataIndex:'ProductSmsCodes', flex:2 },{
 					header:'Actions',  
 					xtype: 'actioncolumn',
+                    width: 170,
 					items:[
 	
 						{
@@ -127,9 +144,12 @@
 								editProductLevelRequest(_(record.data).clone());
 							}
 						},{
-							icon: '@Url.AssetUrl("img/delete.png")',  
+							icon: '@Url.AssetUrl("img/stop.png")',  
 							text: 'Delete',
 							handler: function(grid, rowIndex, colIndex) {
+								var record = grid.store.getAt(rowIndex);
+                                stopProductLevelRequest(record.data);
+								
 							}
 						}
 					]

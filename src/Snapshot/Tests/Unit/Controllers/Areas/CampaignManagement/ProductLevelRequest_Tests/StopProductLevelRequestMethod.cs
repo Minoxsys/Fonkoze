@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using NUnit.Framework;
 
 namespace Tests.Unit.Controllers.Areas.CampaignManagement.ProductLevelRequest_Tests
@@ -9,10 +7,25 @@ namespace Tests.Unit.Controllers.Areas.CampaignManagement.ProductLevelRequest_Te
     [TestFixture]
     public class StopProductLevelRequestMethod
     {
+        ObjectMother _ = new ObjectMother();
+
+        [SetUp]
+        public void BeforeEach()
+        {
+            _.Init();
+        }
+
+        [Test]
+        public void QueriesTheProductLevelRequests_ById_IsStopped_Property()
+        {
+
+            _.controller.StopProductLevelRequest(_.StopProductLevelRequestInput());
+
+            _.VerifyThatLoadWasCalledOnQueryProductLevelRequests();
+        }
         [Test]
         public void UpdatesTheProductRequests_IsStopped_Property()
         {
-            ObjectMother _ = new ObjectMother();
 
             _.controller.StopProductLevelRequest(_.StopProductLevelRequestInput());
 

@@ -208,19 +208,69 @@ namespace Tests.Unit.Controllers.Areas.CampaignManagement.ProductLevelRequest_Te
             };
         }
 
+
+
         internal void VerifyCreateExpectations()
         {
-            
             var campaignsService = Mock.Get(controller.QueryCampaigns);
             var productGroupsService = Mock.Get(controller.LoadProductGroup);
             var schedulesService = Mock.Get(controller.QuerySchedules);
             var saveProductLevelRequest = Mock.Get(controller.SaveProductLevelRequest);
 
-            campaignsService.Verify(c => c.Load(campaignId));
-            productGroupsService.Verify(c => c.Load(productGroupId));
-            schedulesService.Verify(c => c.Load(scheduleId));
+            campaignsService.Verify(c => c.Load(It.IsAny<Guid>()));
+            productGroupsService.Verify(c => c.Load(It.IsAny<Guid>()));
+            schedulesService.Verify(c => c.Load(It.IsAny<Guid>()));
 
             saveProductLevelRequest.Verify(c => c.Execute(It.IsAny<ProductLevelRequest>()));
+        }
+
+        internal EditProductLevelRequestInput EditInput()
+        {
+            var productLevelRequestId = Guid.NewGuid();
+            var queryProductLevelRequest = Mock.Get(controller.QueryProductLevelRequests);
+            var productLevelRequestMock = MockProductLevelRequest(0);
+
+            productLevelRequestMock.SetupGet(p => p.Id).Returns(productLevelRequestId);
+            productLevelRequestMock.SetupAllProperties();
+
+            queryProductLevelRequest.Setup(call => call.Load(productLevelRequestId)).Returns(productLevelRequestMock.Object);
+
+            return new EditProductLevelRequestInput
+            {
+                Id = productLevelRequestId,
+                CampaignId = Guid.NewGuid(),
+                ProductGroupId = Guid.NewGuid(),
+                ScheduleId = Guid.NewGuid(),
+                Products = new ProductModel[] { 
+                        new ProductModel{
+                            Id = Guid.NewGuid(),
+                            ProductItem = "orange",
+                            Selected = true,
+                            SmsCode ="O"
+                        }
+                }
+
+            };
+        }
+
+        internal void VerifyEditExpectations(EditProductLevelRequestInput input)
+        {
+            var queryProductLevelRequest = Mock.Get(controller.QueryProductLevelRequests);
+
+            var campaignsService = Mock.Get(controller.QueryCampaigns);
+            var productGroupsService = Mock.Get(controller.LoadProductGroup);
+            var schedulesService = Mock.Get(controller.QuerySchedules);
+            var saveProductLevelRequest = Mock.Get(controller.SaveProductLevelRequest);
+
+            campaignsService.Verify(c => c.Load(input.CampaignId.Value));
+            productGroupsService.Verify(c => c.Load(input.ProductGroupId.Value));
+            schedulesService.Verify(c => c.Load(input.ScheduleId.Value));
+
+            saveProductLevelRequest.Verify(c => c.Execute(It.IsAny<ProductLevelRequest>()));
+
+            queryProductLevelRequest.Setup(c => c.Load(It.IsAny<Guid>()));
+            
+
         }
 
         internal GetProductLevelRequestInput GetProductLevelRequestsInput()
@@ -254,22 +304,28 @@ namespace Tests.Unit.Controllers.Areas.CampaignManagement.ProductLevelRequest_Te
             for (int i = 0; i < 200; i++)
             {
 
-                var plr = new Mock<ProductLevelRequest>();
-
-                plr.SetupGet(c => c.Id).Returns(Guid.NewGuid());
-                plr.SetupGet(c => c.Campaign).Returns(MockCampaign(i));
-                plr.SetupGet(c => c.ProductGroup).Returns(MockProductGroup(i));
-                plr.Setup(c => c.RestoreProducts<ProductModel[]>()).Returns(MockProducts(i));
-                plr.SetupGet(c => c.Schedule).Returns(MockSchedule(i));
-
-
-                plr.SetupGet(c => c.Client).Returns(clientMock.Object);
-                plr.SetupGet(c => c.ByUser).Returns(userMock.Object);
+                var plr = MockProductLevelRequest(i);
 
                 list.Add(plr.Object);
             }
 
             return list.AsQueryable();
+        }
+
+        private Mock<ProductLevelRequest> MockProductLevelRequest(int i)
+        {
+            var plr = new Mock<ProductLevelRequest>();
+
+            plr.SetupGet(c => c.Id).Returns(Guid.NewGuid());
+            plr.SetupGet(c => c.Campaign).Returns(MockCampaign(i));
+            plr.SetupGet(c => c.ProductGroup).Returns(MockProductGroup(i));
+            plr.Setup(c => c.RestoreProducts<ProductModel[]>()).Returns(MockProducts(i));
+            plr.SetupGet(c => c.Schedule).Returns(MockSchedule(i));
+
+
+            plr.SetupGet(c => c.Client).Returns(clientMock.Object);
+            plr.SetupGet(c => c.ByUser).Returns(userMock.Object);
+            return plr;
         }
 
         private Schedule MockSchedule(int i)
@@ -338,6 +394,16 @@ namespace Tests.Unit.Controllers.Areas.CampaignManagement.ProductLevelRequest_Te
         {
             productLevelRequestId = Guid.NewGuid();
 
+
+            var queryProductLevelRequest = Mock.Get(controller.QueryProductLevelRequests);
+            var productLevelRequestMock = MockProductLevelRequest(0);
+
+            productLevelRequestMock.SetupGet(p => p.Id).Returns(productLevelRequestId);
+            productLevelRequestMock.SetupAllProperties();
+
+            queryProductLevelRequest.Setup(call => call.Load(It.IsAny<Guid>())).Returns(productLevelRequestMock.Object);
+
+
             return new StopProductLevelRequestInput
             {
                 Id = productLevelRequestId
@@ -348,7 +414,15 @@ namespace Tests.Unit.Controllers.Areas.CampaignManagement.ProductLevelRequest_Te
         {
             var mockSaveOrUpdateCommand = Mock.Get(controller.SaveProductLevelRequest);
 
-            mockSaveOrUpdateCommand.Setup(call => call.Execute(It.Is<ProductLevelRequest>(p => p.IsStopped == true)));
+            mockSaveOrUpdateCommand.Verify(call => call.Execute(It.Is<ProductLevelRequest>(p => p.IsStopped == true)));
         }
+
+        internal void VerifyThatLoadWasCalledOnQueryProductLevelRequests()
+        {
+            var queryProductLevelRequest = Mock.Get(controller.QueryProductLevelRequests);
+
+            queryProductLevelRequest.Verify(call => call.Load(It.IsAny<Guid>()));
+        }
+
     }
 }

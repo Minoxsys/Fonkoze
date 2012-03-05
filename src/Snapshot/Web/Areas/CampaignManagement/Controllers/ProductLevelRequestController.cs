@@ -33,16 +33,68 @@ namespace Web.Areas.CampaignManagement.Controllers
 
         public ISaveOrUpdateCommand<ProductLevelRequest> SaveProductLevelRequest { get; set; }
 
-        public void StopProductLevelRequest(StopProductLevelRequestInput stopProductLevelRequestInput)
-        {
-            // TODO: Implement this method
-            throw new NotImplementedException();
-        }
 
         public ActionResult Overview()
         {
             return View();
         }
+
+        public JsonResult Create(CreateProductLevelRequestInput createProductLevelRequestInput)
+        {
+            LoadUserAndClient();
+            var productGroup = LoadProductGroup.Load(createProductLevelRequestInput.ProductGroupId.Value);
+            var schedule = QuerySchedules.Load(createProductLevelRequestInput.ScheduleId.Value);
+            var campaign = QueryCampaigns.Load(createProductLevelRequestInput.CampaignId.Value);
+
+            var productLevelRequest = new ProductLevelRequest
+            {
+                ProductGroup = productGroup,
+                Schedule = schedule,
+                Campaign = campaign,
+
+                ByUser = _user,
+                Client = _client
+            };
+
+            productLevelRequest.StoreProducts<ProductModel[]>(createProductLevelRequestInput.Products);
+
+            SaveProductLevelRequest.Execute(productLevelRequest);
+
+            return Json(new JsonActionResponse
+            {
+                Status="Success",
+                Message = "Saved Product Level Request"
+            });
+
+        }
+
+
+		public JsonResult Edit(EditProductLevelRequestInput editProductLevelRequestInput)
+		{
+			LoadUserAndClient();
+			var productGroup = LoadProductGroup.Load(editProductLevelRequestInput.ProductGroupId.Value);
+			var schedule = QuerySchedules.Load(editProductLevelRequestInput.ScheduleId.Value);
+			var campaign = QueryCampaigns.Load(editProductLevelRequestInput.CampaignId.Value);
+
+			var productLevelRequest = QueryProductLevelRequests.Load(editProductLevelRequestInput.Id.Value);
+				productLevelRequest.ProductGroup = productGroup;
+				productLevelRequest.Schedule = schedule;
+				productLevelRequest.Campaign = campaign;
+
+				productLevelRequest.ByUser = _user;
+				productLevelRequest.Client = _client;
+
+			productLevelRequest.StoreProducts<ProductModel[]>(editProductLevelRequestInput.Products);
+
+			SaveProductLevelRequest.Execute(productLevelRequest);
+
+			return Json(new JsonActionResponse
+			{
+				Status = "Success",
+				Message = "Saved Product Level Request"
+			});
+
+		}
 
         public JsonResult GetProductLevelRequests(GetProductLevelRequestInput input)
         {
@@ -74,6 +126,8 @@ namespace Web.Areas.CampaignManagement.Controllers
 					ProductGroupId = req.ProductGroup.Id.ToString(),
 					ScheduleId = req.Schedule.Id.ToString(),
 					ProductIds = GetProductIds(req),
+
+                    IsStopped = req.IsStopped,
 
                     Campaign = req.Campaign.Name,
                     StartDate = req.Campaign.StartDate.HasValue ? req.Campaign.StartDate.Value.ToString("dd-MMM-yyyy") : "-",
@@ -174,63 +228,6 @@ namespace Web.Areas.CampaignManagement.Controllers
             return Json(products, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult Create(CreateProductLevelRequestInput createProductLevelRequestInput)
-        {
-            LoadUserAndClient();
-            var productGroup = LoadProductGroup.Load(createProductLevelRequestInput.ProductGroupId.Value);
-            var schedule = QuerySchedules.Load(createProductLevelRequestInput.ScheduleId.Value);
-            var campaign = QueryCampaigns.Load(createProductLevelRequestInput.CampaignId.Value);
-
-            var productLevelRequest = new ProductLevelRequest
-            {
-                ProductGroup = productGroup,
-                Schedule = schedule,
-                Campaign = campaign,
-
-                ByUser = _user,
-                Client = _client
-            };
-
-            productLevelRequest.StoreProducts<ProductModel[]>(createProductLevelRequestInput.Products);
-
-            SaveProductLevelRequest.Execute(productLevelRequest);
-
-            return Json(new JsonActionResponse
-            {
-                Status="Success",
-                Message = "Saved Product Level Request"
-            });
-
-        }
-
-
-		public JsonResult Edit(EditProductLevelRequestInput editProductLevelRequestInput)
-		{
-			LoadUserAndClient();
-			var productGroup = LoadProductGroup.Load(editProductLevelRequestInput.ProductGroupId.Value);
-			var schedule = QuerySchedules.Load(editProductLevelRequestInput.ScheduleId.Value);
-			var campaign = QueryCampaigns.Load(editProductLevelRequestInput.CampaignId.Value);
-
-			var productLevelRequest = QueryProductLevelRequests.Load(editProductLevelRequestInput.Id.Value);
-				productLevelRequest.ProductGroup = productGroup;
-				productLevelRequest.Schedule = schedule;
-				productLevelRequest.Campaign = campaign;
-
-				productLevelRequest.ByUser = _user;
-				productLevelRequest.Client = _client;
-
-			productLevelRequest.StoreProducts<ProductModel[]>(editProductLevelRequestInput.Products);
-
-			SaveProductLevelRequest.Execute(productLevelRequest);
-
-			return Json(new JsonActionResponse
-			{
-				Status = "Success",
-				Message = "Saved Product Level Request"
-			});
-
-		}
-
         public JsonResult GetCampaigns()
         {
             LoadUserAndClient();
@@ -246,6 +243,16 @@ namespace Web.Areas.CampaignManagement.Controllers
 
 
             return Json(campaigns, JsonRequestBehavior.AllowGet);
+        }
+
+        public void StopProductLevelRequest(StopProductLevelRequestInput stopProductLevelRequestInput)
+        {
+            var productLevelRequest = QueryProductLevelRequests.Load(stopProductLevelRequestInput.Id.Value);
+
+            productLevelRequest.IsStopped = true;
+
+            SaveProductLevelRequest.Execute(productLevelRequest);
+
         }
 
         private void LoadUserAndClient()

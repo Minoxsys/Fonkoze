@@ -14,50 +14,57 @@
         console.log(window.location);
 
         viewport.add(
-                 {
-                     xtype: 'form',
-                     height: 150,
-                     bodyPadding: 30,
-                     width: 400,
-                     padding: 0,
-                     title: 'Login',
-                     url: '@Url.RouteUrl(DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "Account", action = "LogOn" })', //window.location.pathname,
-                     standardSubmit: true,
-                     buttons: [
-                     {
-                         text: 'Submit',
-                         formBind: true, //only enabled once the form is valid
-                         disabled: true,
-                         handler: function () {
-                             var form = this.up('form').getForm();
-                             if (form.isValid()) {
-                                 form.submit({
-                                     success: function (form, action) {
-                                         Ext.Msg.alert('Success', action.result.msg);
-                                     },
-                                     failure: function (form, action) {
-                                         Ext.Msg.alert('Failed', action.result.msg);
-                                     }
-                                 });
-                             }
-                         }
-                     }],
-
-                     items: [
-                     {
-                         xtype: 'textfield',
-                         name: 'UserName',
-                         fieldLabel: '@Html.NameFor(m=>m.UserName)',
-                         anchor: '100%'
-                     },
+            {
+            xtype: 'form',
+            height: 150,
+            bodyPadding: 30,
+            width: 400,
+            padding: 0,
+            title: 'Login',
+            url: '@Url.RouteUrl(DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "Account", action = "LogOn" })', //window.location.pathname,
+            standardSubmit: true,
+            buttons: [
                     {
-                        xtype: 'textfield',
-                        inputType: 'password',
-                        name: 'Password',
-                        fieldLabel: '@Html.NameFor(m=>m.Password)',
-                        anchor: '100%'
-                    }]
-                 });
-    });
+                    text: 'Submit',
+                    formBind: true, //only enabled once the form is valid
+                    disabled: true,
+                    handler: function () {
+                        var form = this.up('form').getForm();
+                        if (form.isValid()) {
+                            form.submit({
+                                success: function (form, action) {
+                                    Ext.Msg.alert('Success', action.result.msg);
+                                },
+                                failure: function (form, action) {
+                                    Ext.Msg.alert('Failed', action.result.msg);
+                                }
+                            });
+                        }
+                    }
+                }
+                ],
     
+            items: [
+                    {
+                    xtype: 'textfield',
+                    name: 'UserName',
+                    fieldLabel: '@Html.NameFor(m => m.UserName)',
+                    anchor: '100%'
+                },{
+                    xtype: 'textfield',
+                    inputType: 'password',
+                    name: 'Password',
+                    fieldLabel: '@Html.NameFor(m => m.Password)',
+                    listeners: {
+                        specialkey: function(field, e){
+                            if (e.getKey() == e.ENTER) {
+                                var form = field.up('form').getForm();
+                                form.submit();
+                            }
+                        },
+                        anchor: '100%'
+                    }
+                ]
+        });
+    });    
 </script>

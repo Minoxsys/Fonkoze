@@ -22,5 +22,7 @@ namespace Web.Areas.CampaignManagement.Models.ProductLevelRequest
 
         public bool Editable { get; set; }
 
+
+        public bool IsStopped { get; set; }
     }
 }

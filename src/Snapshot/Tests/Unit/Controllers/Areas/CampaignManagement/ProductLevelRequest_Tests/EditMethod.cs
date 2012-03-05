@@ -4,9 +4,8 @@ using NUnit.Framework;
 
 namespace Tests.Unit.Controllers.Areas.CampaignManagement.ProductLevelRequest_Tests
 {
-
     [TestFixture]
-    public class CreateMethod
+    public class EditMethod
     {
         ObjectMother _ = new ObjectMother();
 
@@ -19,9 +18,10 @@ namespace Tests.Unit.Controllers.Areas.CampaignManagement.ProductLevelRequest_Te
         [Test]
         public void CreatesANewProductLevelRequest()
         {
-            _.controller.Create(_.CreateInput());
+            var input = _.EditInput();
+            _.controller.Edit(input);
 
-            _.VerifyCreateExpectations();
+            _.VerifyEditExpectations(input);
         }
     }
 }
