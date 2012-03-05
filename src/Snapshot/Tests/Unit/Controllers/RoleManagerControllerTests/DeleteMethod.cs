@@ -54,11 +54,32 @@ namespace Tests.Unit.Controllers.RoleManagerControllerTests
         }
 
         [Test]
+        public void Returns_JSON_With_ErrorMessage_When_Role_HasUsersAssociated()
+        {
+            objectMother.queryServiceRole.Expect(call => call.Load(objectMother.roleId)).Return(objectMother.role);
+            objectMother.queryServiceUser.Expect(call => call.Query()).Return(new User[] { new User() { UserName = "Marian", RoleId = objectMother.roleId } }.AsQueryable());
+
+            //Act
+            var jsonResult = objectMother.controller.Delete(objectMother.roleId);
+
+            //Assert
+            objectMother.queryServiceRole.VerifyAllExpectations();
+            objectMother.queryServiceUser.VerifyAllExpectations();
+
+            Assert.IsNotNull(jsonResult);
+
+            var response = jsonResult.Data as JsonActionResponse;
+
+            Assert.That(response.Status, Is.EqualTo("Error"));
+        }
+
+        [Test]
         public void Executes_DeleteCommand_WithTheSelectedUser()
         {
             //Arrange
             objectMother.queryServiceRole.Expect(call => call.Load(objectMother.roleId)).Return(objectMother.role);
             objectMother.deleteCommandRole.Expect(call => call.Execute(Arg<Role>.Matches(r => r.Id == objectMother.roleId)));
+            objectMother.queryServiceUser.Expect(call => call.Query()).Return(new User[] {  }.AsQueryable());
 
             //Act
             var jsonResult = objectMother.controller.Delete(objectMother.roleId);
@@ -66,6 +87,7 @@ namespace Tests.Unit.Controllers.RoleManagerControllerTests
             //Assert
             objectMother.queryServiceRole.VerifyAllExpectations();
             objectMother.deleteCommandRole.VerifyAllExpectations();
+            objectMother.queryServiceUser.VerifyAllExpectations();
 
             Assert.IsNotNull(jsonResult);
 

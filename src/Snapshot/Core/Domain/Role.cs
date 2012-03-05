@@ -25,26 +25,14 @@ namespace Core.Domain
 			set;
 		}
 
-		public virtual IList<User> Employees
-		{
-			get;
-			set;
-		}
-
 		public Role()
 		{
 			Functions = new List<Permission>();
-			Employees = new List<User>();
 		}
 
 		public virtual void AddFunction( Permission function )
 		{
 			Functions.Add(function);
-		}
-
-		public virtual void AddEmployee( User employee )
-		{
-			Employees.Add(employee);
 		}
 
 		public virtual void RemoveFunction( Permission function )

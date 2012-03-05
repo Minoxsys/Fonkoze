@@ -70,9 +70,7 @@ namespace Web.Controllers
             var orderByColumnDirection = new Dictionary<string, Func<IQueryable<Role>>>()
             {
                 { "Name-ASC", () => rolesDataQuery.OrderBy(r => r.Name) },
-                { "Name-DESC", () => rolesDataQuery.OrderByDescending(r => r.Name) },
-                { "NumberOfUsers-ASC", () => rolesDataQuery.OrderBy(r => r.Employees.Count) },
-                { "NumberOfUsers-DESC", () => rolesDataQuery.OrderByDescending(c => c.Employees.Count) },
+                { "Name-DESC", () => rolesDataQuery.OrderByDescending(r => r.Name) }
             };
 
             rolesDataQuery = orderByColumnDirection[String.Format("{0}-{1}", indexModel.sort, indexModel.dir)].Invoke();
@@ -112,7 +110,12 @@ namespace Web.Controllers
         [HttpPost]
         public JsonResult Create(RoleManagerInputModel inputModel)
         {
-            Role role = new Role(); 
+            Role role = new Role();
+            var existsRoleName = QueryServiceRole.Query().Where(it => it.Name == inputModel.Name).Any();
+            if (existsRoleName)
+            {
+                return Json(new JsonActionResponse() { Status = "Error", Message = string.Format("Role with the name {0} already exists!", inputModel.Name) }, JsonRequestBehavior.AllowGet);
+            }
 
             UpdateRoleWithRoleManagerInputModel(role, inputModel);   
 
@@ -134,6 +137,12 @@ namespace Web.Controllers
                 return Json(new JsonActionResponse() { Status = "Error", Message = "You must supply the roleId of a role that exists in the DB in order to edit it." });
             }
 
+            var existsRoleName = QueryServiceRole.Query().Where(it => it.Name == inputModel.Name && it.Id != role.Id).Any();
+            if (existsRoleName)
+            {
+                return Json(new JsonActionResponse() { Status = "Error", Message = string.Format("Role with name {0} already exists!", inputModel.Name) }, JsonRequestBehavior.AllowGet);
+            }
+
             UpdateRoleWithRoleManagerInputModel(role, inputModel);
 
             return Json(new JsonActionResponse() { Status = "Success", Message = string.Format("Role {0} has been saved.", role.Name) }, JsonRequestBehavior.AllowGet);
@@ -152,6 +161,12 @@ namespace Web.Controllers
             if (role == null)
             {
                 return Json(new JsonActionResponse() { Status = "Error", Message = "You must supply the roleId of a role that exists in the DB in order to remove it." });
+            }
+
+            var numberOfUsers = GetNumberOfUsers(roleId.Value);
+            if (numberOfUsers > 0)
+            {
+                return Json(new JsonActionResponse() { Status = "Error", Message = string.Format("This role is associated with {0} users. It cannot be deleted!", numberOfUsers) });
             }
 
             DeleteCommand.Execute(role);

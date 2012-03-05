@@ -153,7 +153,7 @@ namespace Web.Controllers
                                                 ClientName = GetClientName(user.ClientId),
                                                 RoleName = GetRoleName(user.RoleId),
                                                 ClientId = user.ClientId,
-                                                RoleId = user.RoleId
+                                                RoleId = user.RoleId,
                                             }).ToArray();
 
 
@@ -166,15 +166,17 @@ namespace Web.Controllers
 
         private string GetRoleName(Guid guid)
         {
-            if (guid != Guid.Empty)
-                return QueryRoles.Load(guid).Name;
+            var role = QueryRoles.Load(guid);
+            if (role != null)
+                return role.Name;
             return string.Empty;
         }
 
         private string GetClientName(Guid guid)
         {
-            if (guid != Guid.Empty)
-                return QueryClients.Load(guid).Name;
+            var client = QueryClients.Load(guid);
+            if (client != null)
+                return client.Name;
             return string.Empty;
         }
 

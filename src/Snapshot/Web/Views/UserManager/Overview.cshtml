@@ -169,6 +169,10 @@ User Administration Users: Overview
             }
         });
 
+         window.feature.doSearch = new Ext.util.DelayedTask(function(){
+			                        window.feature.UsersStore.loadPage(1);
+                                });
+
         window.feature.container = Ext.create('Ext.container.Container', {
             margin: '45 50 20 0',
             autoScroll: true,
@@ -267,7 +271,8 @@ User Administration Users: Overview
                                 fn: function(key) {
                                     var searchValue = window.feature.container.down('#'+window.feature.searchUserName).getValue();
                                     window.feature.UsersStore.proxy.extraParams.searchValue = searchValue;
-                                    window.feature.UsersStore.loadPage(1);
+                                    window.feature.doSearch.delay(500);
+                                    
                                 }
                             }
                         }

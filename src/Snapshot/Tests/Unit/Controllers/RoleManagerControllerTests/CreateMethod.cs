@@ -28,7 +28,7 @@ namespace Tests.Unit.Controllers.RoleManagerControllerTests
             //Arrange
 
             objectMother.queryServicePermission.Expect(call => call.Query()).Return(objectMother.permissions.AsQueryable());
-
+            objectMother.queryServiceRole.Expect(call => call.Query()).Return(new Role[] { objectMother.role2 }.AsQueryable());
             objectMother.saveCommandRole.Expect(call => call.Execute(Arg<Role>.Matches(
                     r => //r.Id == Guid.Empty &&
                     r.Name == ObjectMother.ROLE_NAME &&
@@ -47,6 +47,24 @@ namespace Tests.Unit.Controllers.RoleManagerControllerTests
             Assert.IsNotNull(response);
             Assert.That(response.Status, Is.EqualTo("Success"));
             Assert.That(response.Message, Is.EqualTo("Role " + ObjectMother.ROLE_NAME + " has been saved."));
+        }
+
+        [Test]
+        public void Returns_JSON_With_ErrorMessage_When_RoleName_Exists()
+        {
+            //Arrange
+            objectMother.queryServiceRole.Expect(call => call.Query()).Return(new Role[] { objectMother.role} .AsQueryable());
+
+            //Act
+            var jsonResult = objectMother.controller.Create(objectMother.inputModel);
+
+            //Assert
+            objectMother.queryServiceRole.VerifyAllExpectations();
+            Assert.IsNotNull(jsonResult);
+            var response = jsonResult.Data as JsonActionResponse;
+            Assert.IsNotNull(response);
+            Assert.That(response.Status, Is.EqualTo("Error"));
+
         }
     }
 }

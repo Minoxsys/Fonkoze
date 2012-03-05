@@ -15,6 +15,7 @@ namespace Tests.Unit.Controllers.RoleManagerControllerTests
     public class ObjectMother
     {
         public const string ROLE_NAME = "Country Manager";
+        public const string ROLE_NAME2 = "Region Manager";
         public const string ROLE_DESCRIPTION = "This role gives you access to manage countries.";
 
         public RoleManagerController controller;
@@ -28,6 +29,8 @@ namespace Tests.Unit.Controllers.RoleManagerControllerTests
 
         public Guid roleId;
         public Role role;
+        public Guid roleId2;
+        public Role role2;
 
         public IndexModel indexModel;
         public RoleManagerInputModel inputModel;
@@ -66,6 +69,14 @@ namespace Tests.Unit.Controllers.RoleManagerControllerTests
             role.Name = ROLE_NAME;
             role.Description = ROLE_DESCRIPTION;
             role.Functions = permissions.ToList();
+
+            roleId2 = Guid.NewGuid();
+            role2 = MockRepository.GeneratePartialMock<Role>();
+            role2.Stub(r => r.Id).Return(roleId2);
+            role2.Name = ROLE_NAME2;
+            role2.Description = ROLE_DESCRIPTION;
+            role2.Functions = permissions.ToList();
+
 
             indexModel = new IndexModel()
             {

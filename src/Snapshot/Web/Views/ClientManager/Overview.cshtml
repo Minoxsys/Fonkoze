@@ -54,6 +54,10 @@ User Administration Clients: Overview
             }]
         });
 
+        window.feature.doSearch = new Ext.util.DelayedTask(function(){
+		    window.feature.ClientsStore.loadPage(1);
+        });
+
         window.feature.modal = Ext.define('Ext.feature.region.Modal', {
             extend: 'Ext.window.Window',
             modal:true,
@@ -166,7 +170,7 @@ User Administration Clients: Overview
                                 fn: function(key) {
                                     var searchValue = window.feature.container.down('#'+window.feature.searchClientName).getValue();
                                     window.feature.ClientsStore.proxy.extraParams.searchValue = searchValue;
-                                    window.feature.ClientsStore.loadPage(1);
+                                    window.feature.doSearch.delay(500);
                                 }
                             }
                         }

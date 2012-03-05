@@ -28,7 +28,7 @@ namespace Tests.Unit.Controllers.RoleManagerControllerTests
             //Arrange
 
             objectMother.queryServiceRole.Expect(call => call.Load(objectMother.roleId)).Return(objectMother.role);
-
+            objectMother.queryServiceRole.Expect(call => call.Query()).Return(new Role[] { objectMother.role }.AsQueryable());
             objectMother.queryServicePermission.Expect(call => call.Query()).Return(objectMother.permissions.AsQueryable());
 
             objectMother.saveCommandRole.Expect(call => call.Execute(Arg<Role>.Matches(
@@ -80,6 +80,23 @@ namespace Tests.Unit.Controllers.RoleManagerControllerTests
             Assert.IsNotNull(response);
             Assert.That(response.Status, Is.EqualTo("Error"));
             Assert.That(response.Message, Is.EqualTo("You must supply the roleId of a role that exists in the DB in order to edit it."));
+        }
+
+        [Test]
+        public void Returns_JSON_With_ErrorMessage_When_RoleName_Exists()
+        {
+            //Arrange
+            objectMother.queryServiceRole.Expect(call => call.Query()).Return(new Role[] { objectMother.role }.AsQueryable());
+            objectMother.queryServiceRole.Expect(call => call.Load(objectMother.roleId2)).Return(objectMother.role2);
+
+            //Act
+            var jsonResult = objectMother.controller.Edit(new RoleManagerInputModel() { Id = objectMother.roleId2, Name = objectMother.role.Name});
+
+            //Assert
+            objectMother.queryServiceRole.VerifyAllExpectations();
+            var response = jsonResult.Data as JsonActionResponse;
+            Assert.IsNotNull(response);
+            Assert.That(response.Status, Is.EqualTo("Error"));
         }
     }
 }
