@@ -69,7 +69,7 @@ namespace Web.Areas.OutpostManagement.Controllers
             }
 
             var queryRegionValidation = QueryService.Query().Where(p=>p.Client == _client);
-            if (queryRegionValidation.Where(it => it.Name == regionInputModel.Name).Count()> 0)
+            if (queryRegionValidation.Where(it => it.Name == regionInputModel.Name && it.Country.Id == regionInputModel.CountryId).Count()> 0)
             {
                 return Json(
                     new ToModalJsonActionResponse
@@ -88,7 +88,7 @@ namespace Web.Areas.OutpostManagement.Controllers
                     {
                         Status = "Error",
                         CloseModal = false,
-                        Message = string.Format("There is already associated a region with coordinates {0} for this country! Please insert different coordinates!", regionInputModel.Coordinates)
+                        Message = string.Format("There is already a region with coordinates {0}! Please insert different coordinates!", regionInputModel.Coordinates)
                     });
             }
             Region region = new Region();
@@ -146,7 +146,7 @@ namespace Web.Areas.OutpostManagement.Controllers
                     {
                         Status = "Error",
                         CloseModal = false,
-                        Message = string.Format("There is already associated a region with the name {0} for this country! Please insert a different name!", regionInputModel.Name)
+                        Message = string.Format("There is already a region with the name {0} for this country! Please insert a different name!", regionInputModel.Name)
                     });
 
             }
@@ -158,7 +158,7 @@ namespace Web.Areas.OutpostManagement.Controllers
                     {
                         Status = "Error",
                         CloseModal = false,
-                        Message = string.Format("There is already associated a region with coordinates {0} for this country! Please insert different coordinates!", regionInputModel.Coordinates)
+                        Message = string.Format("There is already a region with coordinates {0}! Please insert different coordinates!", regionInputModel.Coordinates)
                     });
             }
 
