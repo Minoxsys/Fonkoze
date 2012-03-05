@@ -4,11 +4,9 @@ using System.Linq;
 using System.Text;
 using NUnit.Framework;
 using System.Web.Mvc;
-using Rhino.Mocks;
-using Domain;
-using Web.Areas.OutpostManagement.Models.Region;
+using Web.Areas.OutpostManagement.Models.District;
 
-namespace Tests.Unit.Controllers.Areas.OutpostManagement.RegionControllerTests
+namespace Tests.Unit.Controllers.Areas.OutpostManagement.DistrictControllerTests
 {
     [TestFixture]
     public class OverviewMethod
@@ -31,8 +29,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.RegionControllerTests
 
             // Assert
             Assert.AreEqual("Overview", viewResult.ViewName);
-            Assert.IsInstanceOf<FromCountryModel>(viewResult.Model);
+            Assert.IsInstanceOf<FromRegionModel>(viewResult.Model);
         }
-
     }
 }

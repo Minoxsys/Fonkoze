@@ -201,6 +201,7 @@
     <Compile Include="Areas\OutpostManagement\Models\Country\ClientModelCountry.cs" />
     <Compile Include="Areas\OutpostManagement\Models\District\DistrictIndexModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\District\DistrictIndexOutputModel.cs" />
+    <Compile Include="Areas\OutpostManagement\Models\District\FromRegionModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Outpost\CreateOutpostInputModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Outpost\EditOutpostInputModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Outpost\GetDistrictsOutputModel.cs" />
@@ -214,6 +215,7 @@
     <Compile Include="Areas\OutpostManagement\Models\District\DistrictOverviewModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Outpost\OutpostOverviewModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\PagingInfo.cs" />
+    <Compile Include="Areas\OutpostManagement\Models\Region\FromCountryModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Region\RegionIndexModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Region\RegionIndexOuputModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Region\RegionInputModel.cs" />

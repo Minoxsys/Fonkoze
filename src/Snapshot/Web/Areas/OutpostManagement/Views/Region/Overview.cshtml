@@ -1,6 +1,6 @@
 ﻿@using Web.Areas.OutpostManagement.HtmlHelpers
 @using Web.Areas.OutpostManagement.Models.Region
-@model RegionOverviewModel
+@model FromCountryModel
 
 @section page_title{
 Outpost Management Regions: Overview
@@ -257,7 +257,17 @@ Outpost Management Regions: Overview
                         text: "Name",
                         dataIndex: 'Name',
                         flex: 1,
-                        sortable: true
+                        sortable: true,
+                        processEvent: function (type, view, cell, recordIndex, cellIndex, e) {
+						    if (type == 'click'){
+                                var rec = view.panel.store.getAt(recordIndex);
+	                            var link = '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "District", action = "FromRegions" })';
+                                link = link + "/?regionId=" + rec.get('Id');
+                                navigateTo(link);
+							    return false;
+						    }
+						    return true;
+					    }
                     },{
                         text: "Coordinates",
                         dataIndex: 'Coordinates',
@@ -374,12 +384,24 @@ Outpost Management Regions: Overview
                 ok = false;
             }
             return ok;
-        }
+        };
+
+        function navigateTo(endpoint){
+            var loc = window.location;
+            window.location.href = loc.protocol + '//' +  loc.host + endpoint;
+        };
         
         var contentRes = window.res.content;
         var mainContent = Ext.getCmp(contentRes.maincontent.id);
-
         mainContent.add(window.feature.container);
+
+        if ('@Model.CountryId' != '@Guid.Empty')
+        {
+            window.feature.regionStore.proxy.extraParams.countryId = '@Model.CountryId';
+            window.feature.countryStore.load();
+            window.feature.container.down('#'+window.feature.overviewcomboboxid).setValue('@Model.CountryId');
+
+        }
         window.feature.regionStore.loadPage(1);
     });
 </script>

@@ -2,6 +2,7 @@
 using System.Linq;
 using NUnit.Framework;
 using System.Web.Mvc;
+using Web.Areas.OutpostManagement.Models.Outpost;
 
 
 namespace Tests.Unit.Controllers.Areas.OutpostManagement.OutpostControllerTests
@@ -19,11 +20,14 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.OutpostControllerTests
         [Test]
         public void Returns_The_DefaultView()
         {
+            //Arrange
 
-            var viewResult = _.controller.Overview() as ViewResult;
+            // Act
+            var viewResult = (ViewResult)_.controller.Overview();
 
-            Assert.IsNotNull(viewResult);
-            Assert.That(viewResult.ViewName, Is.Empty);
+            // Assert
+            Assert.AreEqual("Overview", viewResult.ViewName);
+            Assert.IsInstanceOf<OutpostOverviewModel>(viewResult.Model);
         }
     }
 }

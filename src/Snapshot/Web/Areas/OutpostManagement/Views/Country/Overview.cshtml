@@ -203,14 +203,24 @@
             loadMask: true,
             cls: 'white-border',
             flex:3,
-            autoScroll:true,
+            autoScroll:true,	
             // grid columns
             columns:[
                 {
                     text: "Name",
                     dataIndex: 'Name',
                     flex: 1,
-                    sortable: true
+                    sortable: true,
+                    processEvent: function (type, view, cell, recordIndex, cellIndex, e) {
+						if (type == 'click'){
+                            var rec = view.panel.store.getAt(recordIndex);
+	                        var link = '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Region", action = "FromCountries" })';
+                            link = link + "/?countryId=" + rec.get('Id');
+                            navigateTo(link);
+							return false;
+						}
+						return true;
+					}
                 },{
                     text: "Country Abbreviation",
                     dataIndex: 'ISOCode',
@@ -305,6 +315,12 @@
                 },
             ]
         });
+
+        function navigateTo(endpoint){
+            var loc = window.location;
+
+            window.location.href = loc.protocol + '//' +  loc.host + endpoint;
+        };
     
         window.feature.store.loadPage(1);
     });

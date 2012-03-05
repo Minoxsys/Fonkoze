@@ -49,10 +49,31 @@ namespace Web.Areas.OutpostManagement.Controllers
         private Client _client;
         private User _user;
 
+        [HttpGet]
         public ActionResult Overview()
         {
-            return View();
+            Guid? regionId = (Guid?)TempData["FromRegionsId"];
+
+            FromRegionModel model = new FromRegionModel();
+            if (regionId.HasValue)
+            {
+                var region = QueryRegion.Load(regionId.Value);
+                model.RegionId = region.Id;
+                model.CountryId = region.Country.Id;
+            }
+
+            return View("Overview", model);
         }
+
+        [HttpGet]
+        public ActionResult FromRegions(Guid? regionId)
+        {
+            if (regionId.HasValue)
+                TempData.Add("FromRegionsId", regionId.Value);
+
+            return RedirectToAction("Overview");
+        }
+
         public JsonResult Index(DistrictIndexModel indexModel)
         {
             LoadUserAndClient();

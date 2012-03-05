@@ -44,14 +44,31 @@ namespace Web.Areas.OutpostManagement.Controllers
 		private Client _client;
 
 
+        [HttpGet]
+        public ActionResult Overview()
+        {
+            Guid? districtId = (Guid?)TempData["FromDistrictsId"];
 
-		[HttpGet]
-		public ActionResult Overview()
-		{
-			OutpostOverviewModel model = new OutpostOverviewModel();
+            OutpostOverviewModel model = new OutpostOverviewModel();
+            if (districtId.HasValue)
+            {
+                var district = QueryDistrict.Load(districtId.Value);
+                model.DistrictId = district.Id;
+                model.RegionId = district.Region.Id;
+                model.CountryId = district.Region.Country.Id;
+            }
 
-			return View(model);
-		}
+            return View("Overview", model);
+        }
+
+        [HttpGet]
+        public ActionResult FromDistricts(Guid? districtId)
+        {
+            if (districtId.HasValue)
+                TempData.Add("FromDistrictsId", districtId.Value);
+
+            return RedirectToAction("Overview", "Outpost");
+        }
 
 		[HttpPost]
 		public JsonResult Delete(Guid outpostId)

@@ -131,11 +131,14 @@
     <Compile Include="Unit\Controllers\Areas\OutpostManagement\DistrictControllerTests\CreateMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\OutpostManagement\DistrictControllerTests\DeleteMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\OutpostManagement\DistrictControllerTests\EditMethod.cs" />
+    <Compile Include="Unit\Controllers\Areas\OutpostManagement\DistrictControllerTests\FromRegionsMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\OutpostManagement\DistrictControllerTests\IndexMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\OutpostManagement\DistrictControllerTests\ObjectMother.cs" />
+    <Compile Include="Unit\Controllers\Areas\OutpostManagement\DistrictControllerTests\OverviewMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\OutpostManagement\OutpostControllerTests\CreateMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\OutpostManagement\OutpostControllerTests\DeleteMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\OutpostManagement\OutpostControllerTests\EditMethod.cs" />
+    <Compile Include="Unit\Controllers\Areas\OutpostManagement\OutpostControllerTests\FromDistrictsMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\OutpostManagement\OutpostControllerTests\GetDistrictsMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\OutpostManagement\OutpostControllerTests\GetOutpostsMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\CampaignManagement\ProductLevelRequest_Tests\GetProductLevelRequestsMethod.cs" />
@@ -145,6 +148,7 @@
     <Compile Include="Unit\Controllers\Areas\OutpostManagement\RegionControllerTests\CreateMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\OutpostManagement\RegionControllerTests\DeleteMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\OutpostManagement\RegionControllerTests\EditMethod.cs" />
+    <Compile Include="Unit\Controllers\Areas\OutpostManagement\RegionControllerTests\FromCountriesMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\OutpostManagement\RegionControllerTests\GetCountriesMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\OutpostManagement\RegionControllerTests\GetRegionsMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\OutpostManagement\RegionControllerTests\ObjectMother.cs" />

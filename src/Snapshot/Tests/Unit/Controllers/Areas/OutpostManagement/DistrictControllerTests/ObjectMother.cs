@@ -13,7 +13,7 @@ using MvcContrib.TestHelper.Fakes;
 
 namespace Tests.Unit.Controllers.Areas.OutpostManagement.DistrictControllerTests
 {
-    class ObjectMother
+    public class ObjectMother
     {
         const string DEFAULT_VIEW_NAME = "";
         const string DISTRICT_NAME = "Cluj";

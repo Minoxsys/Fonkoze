@@ -916,11 +916,28 @@
 	
 		var contentRes = window.res.content;
 		var mainContent = Ext.getCmp(contentRes.maincontent.id);
-	
 		mainContent.add(window.feature.container);
-		window.feature.outpostsStore.loadPage(1, {
-			districtId:null
-		});
+
+        if ('@Model.CountryId' != '@Guid.Empty' && '@Model.RegionId' != '@Guid.Empty' && '@Model.DistrictId' != '@Guid.Empty')
+        { 
+            window.feature.countryStore.load();
+            window.feature.regionsStore.load({
+                params: { countryId: '@Model.CountryId' }
+            });
+            window.feature.districtsStore.load({
+				params:{ regionId: '@Model.RegionId' }
+			});
+
+            window.feature.comboBoxFilters.country.setValue('@Model.CountryId');
+			window.feature.comboBoxFilters.region.setValue('@Model.RegionId');
+			window.feature.comboBoxFilters.district.setValue('@Model.DistrictId');				
+
+            window.feature.outpostsStore.proxy.extraParams.countryId = '@Model.CountryId';
+            window.feature.outpostsStore.proxy.extraParams.regionId = '@Model.RegionId';
+            window.feature.outpostsStore.proxy.extraParams.districtId = '@Model.DistrictId';
+        }
+
+		window.feature.outpostsStore.loadPage(1);
 
 		function getGooglePositionFromText(coordinates) {
 			return new google.maps.LatLng(

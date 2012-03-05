@@ -35,7 +35,22 @@ namespace Web.Areas.OutpostManagement.Controllers
         [HttpGet]
         public ActionResult Overview()
         {
-            return View();
+            Guid? countryId = (Guid?)TempData["CountryId"];
+
+            FromCountryModel model = new FromCountryModel();
+            if (countryId.HasValue)
+                model.CountryId = countryId.Value;
+
+            return View("Overview", model);
+        }
+
+        [HttpGet]
+        public ActionResult FromCountries(Guid? countryId)
+        {
+            if (countryId.HasValue)
+                TempData.Add("CountryId", countryId.Value);
+
+            return RedirectToAction("Overview", "Region");
         }
 
         [HttpPost]

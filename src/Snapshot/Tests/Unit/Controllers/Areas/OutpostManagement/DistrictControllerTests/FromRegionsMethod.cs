@@ -4,14 +4,11 @@ using System.Linq;
 using System.Text;
 using NUnit.Framework;
 using System.Web.Mvc;
-using Rhino.Mocks;
-using Domain;
-using Web.Areas.OutpostManagement.Models.Region;
 
-namespace Tests.Unit.Controllers.Areas.OutpostManagement.RegionControllerTests
+namespace Tests.Unit.Controllers.Areas.OutpostManagement.DistrictControllerTests
 {
     [TestFixture]
-    public class OverviewMethod
+    public class FromRegionsMethod
     {
         public ObjectMother objectMother = new ObjectMother();
 
@@ -22,17 +19,15 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.RegionControllerTests
         }
 
         [Test]
-        public void Returns_The_ViewModel()
+        public void Redirects_To_Overview()
         {
             //Arrange
 
             // Act
-            var viewResult = (ViewResult)objectMother.controller.Overview();
+            var redirectResult = (RedirectToRouteResult)objectMother.controller.FromRegions(null);
 
             // Assert
-            Assert.AreEqual("Overview", viewResult.ViewName);
-            Assert.IsInstanceOf<FromCountryModel>(viewResult.Model);
+            Assert.AreEqual("Overview", redirectResult.RouteValues["Action"]);
         }
-
     }
 }

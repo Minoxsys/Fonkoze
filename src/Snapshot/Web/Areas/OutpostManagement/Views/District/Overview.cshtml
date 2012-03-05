@@ -1,4 +1,4 @@
-﻿@model Web.Areas.OutpostManagement.Models.District.DistrictOverviewModel
+﻿@model Web.Areas.OutpostManagement.Models.District.FromRegionModel
 @using Microsoft.Web.Mvc
 @{
     ViewBag.Title = "Overview";
@@ -463,7 +463,17 @@ Districts: Overview
                 dataIndex: 'Name',
                 anchor: '90%',
                 sortable: true,
-                flex: 1
+                flex: 1,
+                processEvent: function (type, view, cell, recordIndex, cellIndex, e) {
+					if (type == 'click'){
+                        var rec = view.panel.store.getAt(recordIndex);
+	                    var link = '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Outpost", action = "FromDistricts" })';
+                        link = link + "/?districtId=" + rec.get('Id');
+                        navigateTo(link);
+						return false;
+					}
+					return true;
+				}
             }, {
                 text: "No of outposts",
                 dataIndex: 'OutpostNo',
@@ -696,6 +706,21 @@ Districts: Overview
         });
 
         window.feature.countriesStore.load();
+
+        if ('@Model.CountryId' != '@Guid.Empty' && '@Model.RegionId' != '@Guid.Empty')
+        {
+
+            window.feature.regionsStore.load({
+                params: { countryId: '@Model.CountryId' }
+            });
+
+            window.feature.comboBoxCountries.setValue('@Model.CountryId');
+            window.feature.comboBoxRegions.setValue('@Model.RegionId');
+
+            window.feature.store.proxy.extraParams.countryId = '@Model.CountryId';
+            window.feature.store.proxy.extraParams.regionId = '@Model.RegionId';
+        }
+
         window.feature.store.loadPage(1);
 
     });
