@@ -8977,21 +8977,28 @@ textarea.x-form-invalid-field {
   border: 0px solid transparent; }
 
 /* line 87, ../sass/snapshot-theme.scss */
+.blue-label {
+  font-family: Arial, Lucida Sans Unicode, Verdana, Geneva, Helvetica, sans-serif;
+  font-weight: normal;
+  font-size: 22px;
+  color: #07668c; }
+
+/* line 94, ../sass/snapshot-theme.scss */
 .x-panel .x-grid-body {
   border: 0px; }
 
-/* line 91, ../sass/snapshot-theme.scss */
+/* line 98, ../sass/snapshot-theme.scss */
 .x-column-header-text {
   font-family: Arial, Lucida Sans Unicode, Verdana, Geneva, Helvetica, sans-serif;
   font-weight: bold;
   font-size: 13px;
   padding-right: 25px !important; }
 
-/* line 98, ../sass/snapshot-theme.scss */
+/* line 105, ../sass/snapshot-theme.scss */
 .x-grid-with-row-lines .x-grid-cell-inner {
   line-height: 25px; }
 
-/* line 102, ../sass/snapshot-theme.scss */
+/* line 109, ../sass/snapshot-theme.scss */
 .x-btn-snapshot-navigation-btn-small-icon-text-left .x-btn-icon {
   bottom: 0;
   height: 40px;
@@ -9000,11 +9007,11 @@ textarea.x-form-invalid-field {
   top: 13px;
   width: 50px; }
 
-/* line 111, ../sass/snapshot-theme.scss */
+/* line 118, ../sass/snapshot-theme.scss */
 .x-btn-icon {
   padding: 0 10px 0 0; }
 
-/* line 115, ../sass/snapshot-theme.scss */
+/* line 122, ../sass/snapshot-theme.scss */
 .x-btn-snapshot-submenu-btn-small-icon-text-left .x-btn-icon {
   bottom: 0;
   height: 40px;
@@ -9013,22 +9020,22 @@ textarea.x-form-invalid-field {
   top: 5px;
   width: 50px; }
 
-/* line 124, ../sass/snapshot-theme.scss */
+/* line 131, ../sass/snapshot-theme.scss */
 .x-btn-snapshot-submenu-btn-small .x-btn-inner {
   padding: 0 10px 0 25px !important; }
 
-/* line 128, ../sass/snapshot-theme.scss */
+/* line 135, ../sass/snapshot-theme.scss */
 .x-form-text, textarea.x-form-field {
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
   border-radius: 3px;
   padding: 2px 10px; }
 
-/* line 135, ../sass/snapshot-theme.scss */
+/* line 142, ../sass/snapshot-theme.scss */
 .x-border-box .x-form-text {
   height: 27px; }
 
-/* line 139, ../sass/snapshot-theme.scss */
+/* line 146, ../sass/snapshot-theme.scss */
 .x-window-header-snapshot-popup-window-top {
   background-color: black !important;
   border-radius: 0 0 0 0;
@@ -9036,7 +9043,7 @@ textarea.x-form-invalid-field {
   border-width: 1px;
   padding: 7px 6px 5px !important; }
 
-/* line 147, ../sass/snapshot-theme.scss */
+/* line 154, ../sass/snapshot-theme.scss */
 .x-form-trigger {
   background-image: url("../resources/themes/images/snapshot/form/dropdown.png") !important;
   width: 27px !important;
@@ -9044,7 +9051,7 @@ textarea.x-form-invalid-field {
   background-repeat: no-repeat;
   border-bottom: 0px !important; }
 
-/* line 155, ../sass/snapshot-theme.scss */
+/* line 162, ../sass/snapshot-theme.scss */
 .x-form-trigger-over {
   background-position: 0 0 !important;
   border-bottom: 0px !important; }

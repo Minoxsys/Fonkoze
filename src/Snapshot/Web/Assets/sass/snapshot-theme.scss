@@ -84,6 +84,13 @@
 	border: 0px solid transparent;
 }
 
+.blue-label {
+	font-family: $global-font-family;
+	font-weight: $font_weight-normal;
+	font-size: $font_size-largest;
+	color: #07668c;
+}
+
 .x-panel .x-grid-body {
 	border: 0px;
 }

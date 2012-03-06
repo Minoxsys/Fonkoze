@@ -32,8 +32,8 @@ Analysis
         var mainContent = Ext.getCmp(contentRes.maincontent.id);
         mainContent.add({
             xtype: 'container',
-            margin: '45 50 20 20',
-            padding: '20 0 0 20',
+            margin: '45 50 20 10',
+            padding: '20 0 0 10',
             autoScroll: true,
             id: 'TopContainer',
             layout: {
@@ -42,8 +42,8 @@ Analysis
             },
             items: [{
                 xtype: 'fieldset',
+                width: 1200,
                 height: 700,
-                width: 1100,
                 defaults: { anchor: '100%' },
                 layout: 'vbox',
                 items: [{ xtype: 'container',
@@ -63,13 +63,13 @@ Analysis
                             },
                             items: [{xtype: 'image',
                                 src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Analysis/StockLevelRegion.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
-                                margin: '60 0 0 90'
+                                margin: '60 0 0 40'
                             }, { xtype: 'container',
                                 layout: {
                                     type: 'vbox'
                                 },
                                 items: [{ xtype: 'box',
-                                    autoEl: { tag: 'a', style: { color: 'blue' }, href: '@(Url.RouteUrl<ReportRegionLevelController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))', html: 'Stock level information at a region level' },
+                                    autoEl: { tag: 'a', cls: 'blue-label', href: '@(Url.RouteUrl<ReportRegionLevelController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))', html: 'Stock level information at a region level' },
                                     margin: '70 30 10 80'
                                    }, { xtype: 'label',
                                     margin: '0 0 10 80',
@@ -83,7 +83,7 @@ Analysis
                             },
                             items: [{ xtype: 'image',
                                 src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Analysis/StockLevelDistrict.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
-                                margin: '60 0 0 90'
+                                margin: '60 0 0 40'
                             }, { xtype: 'container',
                                 width: 400,
                                 layout: {
@@ -91,7 +91,7 @@ Analysis
                                 },
                                 items: [{ xtype: 'box',
                                     margin: '70 30 10 80',
-                                    autoEl: { tag: 'a', style: { color: 'blue' }, href: '@(Url.RouteUrl<ReportDistrictLevelController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))', html: 'Stock level information at a district level' }
+                                    autoEl: { tag: 'a', cls: 'blue-label', href: '@(Url.RouteUrl<ReportDistrictLevelController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))', html: 'Stock level information at a district level' }
                                 }, { xtype: 'label',
                                     margin: '0 0 10 80',
                                     text: 'This report will show you the latest data of products level at the district level'
@@ -110,15 +110,15 @@ Analysis
                             },
                             items: [{ xtype: 'image',
                                 src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Analysis/ActivityReport.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
-                                margin: '60 0 0 90'
+                                margin: '60 0 0 40'
                             }, { xtype: 'container',
                                 width:400,
                                 layout: {
                                     type: 'vbox'
                                 },
                                 items: [{ xtype: 'box',
-                                    margin: '70 30 10 80',
-                                    autoEl: { tag: 'a', style: { color: 'blue' }, href: '', html: 'Activity report for an outpost' }
+                                    margin: '70 0 10 80',
+                                    autoEl: { tag: 'a', cls: 'blue-label', href: '', html: 'Activity report for an outpost' }
                                  }, { xtype: 'label',
                                     margin: '0 0 10 80',
                                     text: 'Report description'
@@ -131,14 +131,14 @@ Analysis
                             },
                             items: [{ xtype: 'image',
                                 src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Analysis/OutpostList.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
-                                margin: '60 0 0 190'
+                                margin: '60 0 0 140'
                             }, { xtype: 'container',
                                 layout: {
                                     type: 'vbox'
                                 },
                                 items: [{ xtype: 'box',
-                                    margin: '70 30 10 90',
-                                    autoEl: { tag: 'a', style:{color: 'blue'}, href: '', html: 'Outpost list with excess levels of a stock item' }
+                                    margin: '70 0 10 90',
+                                    autoEl: { tag: 'a', cls: 'blue-label', href: '', html: 'Outpost list with excess levels of a stock item' }
                                     }, { xtype: 'label',
                                     margin: '0 0 10 90',
                                     text: 'Report description'
