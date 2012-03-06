@@ -122,13 +122,21 @@ namespace Web.Areas.CampaignManagement.Controllers
             productLevelRequestData = productLevelRequestData.Take(input.limit.Value).Skip(input.start.Value);
 
 
+            var nowSchedule = new Schedule
+            {
+                Name = "Now",
+                FrequencyType = "Now",
+                FrequencyValue = 0,
+
+            };
+
             var productLevelRequests = productLevelRequestData.ToList().Select(req =>
                 new GetProductLevelRequestModel
                 {
 					Id= req.Id.ToString(),
 					CampaignId = req.Campaign.Id.ToString(),
 					ProductGroupId = req.ProductGroup.Id.ToString(),
-					ScheduleId = req.Schedule.Id.ToString(),
+					ScheduleId =  (req.Schedule??nowSchedule).Id.ToString(),
 					ProductIds = GetProductIds(req),
 
                     IsStopped = req.IsStopped,
@@ -137,9 +145,9 @@ namespace Web.Areas.CampaignManagement.Controllers
                     StartDate = req.Campaign.StartDate.HasValue ? req.Campaign.StartDate.Value.ToString("dd-MMM-yyyy") : "-",
                     EndDate = req.Campaign.EndDate.HasValue ? req.Campaign.EndDate.Value.ToString("dd-MMM-yyyy") : "-",
                     ProductGroup = req.ProductGroup.Name,
-                    ScheduleName = req.Schedule.Name,
+                    ScheduleName = (req.Schedule??nowSchedule).Name,
                     ProductSmsCodes = req.Products != null ? GetSmsCodesRepresentation(req) : string.Empty,
-                    Frequency = req.Schedule.FrequencyType ?? "Now",
+                    Frequency = (req.Schedule??nowSchedule).FrequencyType ?? "Now",
                     Editable = req.Campaign.StartDate > DateTime.UtcNow
 
                 }).ToArray();

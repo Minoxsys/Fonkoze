@@ -40,5 +40,20 @@ namespace Tests.Unit.Controllers.Areas.CampaignManagement.ProductLevelRequest_Te
             Assert.AreEqual(response.ProductLevelRequests[0].ProductSmsCodes, "a");
         }
 
+        [Test]
+        public void ProductLevelRequest_HaveNull_When_ScheduleIsConsideredToBe_Now()
+        {
+            var result = _.controller.GetProductLevelRequests(_.GetProductLevelRequestsInput());
+
+            Assert.IsNotNull(result.Data);
+            Assert.IsInstanceOf<GetProductLevelRequestResponse>(result.Data);
+
+            var response = result.Data as GetProductLevelRequestResponse;
+            Assert.AreEqual(response.TotalItems, 200);
+            Assert.AreEqual(response.ProductLevelRequests.Length, 10);
+            Assert.AreEqual(response.ProductLevelRequests[0].ScheduleId, Guid.Empty.ToString());
+            Assert.AreEqual(response.ProductLevelRequests[0].ScheduleName, "Now");
+        }
+
     }
 }

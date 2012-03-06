@@ -323,7 +323,7 @@ namespace Tests.Unit.Controllers.Areas.CampaignManagement.ProductLevelRequest_Te
             plr.SetupGet(c => c.Campaign).Returns(MockCampaign(i));
             plr.SetupGet(c => c.ProductGroup).Returns(MockProductGroup(i));
             plr.Setup(c => c.RestoreProducts<ProductModel[]>()).Returns(MockProducts(i));
-            plr.SetupGet(c => c.Schedule).Returns(MockSchedule(i));
+            plr.SetupGet(c => c.Schedule).Returns( (i==0)? null : MockSchedule(i));
 
 
             plr.SetupGet(c => c.Client).Returns(clientMock.Object);

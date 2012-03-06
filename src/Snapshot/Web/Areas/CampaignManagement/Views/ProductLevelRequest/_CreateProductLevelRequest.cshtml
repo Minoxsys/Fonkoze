@@ -72,51 +72,50 @@
 </script>
 
 <script type="text/javascript">
-    window.feature.modal.models.Schedule =  Ext.define('Ext.feature.Schedule', {
+    window.feature.modal.models.Schedule = Ext.define('Ext.feature.Schedule', {
         extend: 'Ext.data.Model',
         fields: [
-                { name: 'Id', type: 'string' },
-                { name: 'ScheduleName', type: 'string' },
-                { name: 'Basis', type: 'string' },
-                { name: 'Frequency', type: 'string' },
-                { name: 'Reminders' },
-                {
-                    name: 'RemindersDisplay',
-                    type: 'string',
-                    convert: function (value, record) {
-                        var result = [];
-                        var i;
-                        var reminders = record.get('Reminders');
-                        if (reminders.length > 0) {
-                            for (i = 0; i < reminders.length; i++) {
-                                var periodType = reminders[i].PeriodType == 'Hourly' ? 'Hour' : 'Day';
-                                var periodValue = reminders[i].PeriodValue;
-
-                                if (periodValue > 1) {
-                                    periodType += 's';
-                                }
-
-                                var postfixes = ['', 'st', 'nd', 'rd'];
-                                var index = i + 1;
-                                var indexStr = index + (index < 4 ? postfixes[index] : 'th');
-
-                                result[i] = Ext.String.format('{0} {1} {2} later', indexStr, periodValue, periodType);
+            { name: 'Id', type: 'string' },
+            { name: 'ScheduleName', type: 'string' },
+            { name: 'Basis', type: 'string' },
+            { name: 'Frequency', type: 'string' },
+            { name: 'Reminders' },{
+                name: 'RemindersDisplay',
+                type: 'string',
+                convert: function (value, record) {
+                    var result = [];
+                    var i;
+                    var reminders = record.get('Reminders');
+                    if (reminders.length > 0) {
+                        for (i = 0; i < reminders.length; i++) {
+                            var periodType = reminders[i].PeriodType == 'Hourly' ? 'Hour' : 'Day';
+                            var periodValue = reminders[i].PeriodValue;
+    
+                            if (periodValue > 1) {
+                                periodType += 's';
                             }
-                            return result.join('&nbsp;&nbsp;&nbsp;');
+    
+                            var postfixes = ['', 'st', 'nd', 'rd'];
+                            var index = i + 1;
+                            var indexStr = index + (index < 4 ? postfixes[index] : 'th');
+    
+                            result[i] = Ext.String.format('{0} {1} {2} later', indexStr, periodValue, periodType);
                         }
-                        else {
-                            return '-';
-                        }
+                        return result.join('&nbsp;&nbsp;&nbsp;');
                     }
-                },
-                { name: 'CreationDate', type: 'string' }
-            ]
+                    else {
+                        return '-';
+                    }
+                }
+            },
+            { name: 'CreationDate', type: 'string' }
+        ]
     });
 </script>
 
 <script type="text/javascript">
     window.feature.modal.stores.productGroups = Ext.define('snapshot-Outpost-ProductGroupsStore', {
-        
+    
         extend: 'Ext.data.Store',
         fields: ['Id', 'Name'],
         proxy: {
@@ -128,13 +127,12 @@
             }
         }
     });
-
+    
 </script>
-
 
 <script type="text/javascript">
     window.feature.modal.stores.campaigns = Ext.define('snapshot-Outpost-CampaignsStore', {
-        
+    
         extend: 'Ext.data.Store',
         fields: ['Id', 'Name'],
         proxy: {
@@ -145,13 +143,12 @@
             }
         }
     });
-
+    
 </script>
-
 
 <script type="text/javascript">
     window.feature.modal.stores.products = Ext.define('snapshot-Outpost-ProductsStore', {
-
+    
         extend: 'Ext.data.Store',
         fields: ['Id', 'ProductItem','SmsCode', 'Selected'],
         proxy: {
@@ -162,7 +159,7 @@
             }
         }
     });
-
+    
 </script>
 
 <script type="text/javascript">
@@ -178,151 +175,151 @@
         },
         remoteSort: true
     });
-
+    
 </script>
 
 <script type="text/javascript">
 
-	window.feature.createProductLevelRequest = Ext.define('snapshot-Outpost-AssignProductsModalWindow', {
-		extend: 'Ext.window.Window',
-		modal: true,
-		height: 600,
-		width: 1200,
-		bodyPadding: 0,
-		bodyStyle: 'background-color:#fff',
-		layout: 'fit',
+    window.feature.createProductLevelRequest = Ext.define('snapshot-Outpost-AssignProductsModalWindow', {
+        extend: 'Ext.window.Window',
+        modal: true,
+        height: 600,
+        width: 1200,
+        bodyPadding: 0,
+        bodyStyle: 'background-color:#fff',
+        layout: 'fit',
 
-		initComponent: function () {
-			var me = this;
+        initComponent: function () {
+            var me = this;
 
-			me.buttons = [
+            me.buttons = [
                 {
-                	text: 'Cancel', handler: function () {
-                		me.close();
-                		me.destroy();
-                	}
+                    text: 'Cancel', handler: function () {
+                        me.close();
+                        me.destroy();
+                    }
                 }, {
-                	text: 'Save', handler: function () {
-                		me.onSave();
-                	}
+                    text: 'Save', handler: function () {
+                        me.onSave();
+                    }
                 }
             ];
 
-			me.productGroupStore = new window.feature.modal.stores.productGroups();
-			me.schedules = new window.feature.modal.stores.schedules();
-			me.products = new window.feature.modal.stores.products();
-			me.campaigns = new window.feature.modal.stores.campaigns();
+            me.productGroupStore = new window.feature.modal.stores.productGroups();
+            me.schedules = new window.feature.modal.stores.schedules();
+            me.products = new window.feature.modal.stores.products();
+            me.campaigns = new window.feature.modal.stores.campaigns();
 
-			me.items = [
+            me.items = [
                 {
-                	xtype: 'panel',
-                	layout: {
-                		type: 'vbox',
-                		align: 'stretch'
-                	},
-                	items: [
+                    xtype: 'panel',
+                    layout: {
+                        type: 'vbox',
+                        align: 'stretch'
+                    },
+                    items: [
                         {
-                        	xtype: 'panel',
-                        	height: 50,
-                        	layout: 'column',
-                        	items: [
+                            xtype: 'panel',
+                            height: 50,
+                            layout: 'column',
+                            items: [
                                 {
-                                	xtype: 'combobox',
-                                	itemId: 'campaign',
-                                	fieldLabel: 'Campaign',
-                                	store: me.campaigns,
-                                	emptyText: 'Campaign List',
-                                	allowBlank: false,
-                                	queryMode: 'local',
-                                	valueField: 'Id',
-                                	displayField: 'Name'
+                                    xtype: 'combobox',
+                                    itemId: 'campaign',
+                                    fieldLabel: 'Campaign',
+                                    store: me.campaigns,
+                                    emptyText: 'Campaign List',
+                                    allowBlank: false,
+                                    queryMode: 'local',
+                                    valueField: 'Id',
+                                    displayField: 'Name'
 
                                 }, {
-                                	xtype: 'combobox',
-                                	itemId: 'productGroup',
-                                	fieldLabel: 'Product Group',
-                                	store: me.productGroupStore,
-                                	emptyText: 'Product Group List',
-                                	allowBlank: false,
-                                	queryMode: 'local',
-                                	valueField: 'Id',
-                                	displayField: 'Name',
-                                	listeners: {
-                                		'select': function (cmb) {
-                                			me.onChangeProductGroup.apply(me, [cmb]);
-                                		}
-                                	}
+                                    xtype: 'combobox',
+                                    itemId: 'productGroup',
+                                    fieldLabel: 'Product Group',
+                                    store: me.productGroupStore,
+                                    emptyText: 'Product Group List',
+                                    allowBlank: false,
+                                    queryMode: 'local',
+                                    valueField: 'Id',
+                                    displayField: 'Name',
+                                    listeners: {
+                                        'select': function (cmb) {
+                                            me.onChangeProductGroup.apply(me, [cmb]);
+                                        }
+                                    }
                                 }
                             ]
                         }, {
-                        	xtype: 'gridpanel',
-                        	autoscroll: true,
-                        	store: me.products,
-                        	columns: [
+                            xtype: 'gridpanel',
+                            autoscroll: true,
+                            store: me.products,
+                            columns: [
                                 {
-                                	header: 'Product Item',
-                                	dataIndex: 'ProductItem',
-                                	flex: 1
+                                    header: 'Product Item',
+                                    dataIndex: 'ProductItem',
+                                    flex: 1
                                 }, {
-                                	header: 'SMS Code',
-                                	dataIndex: 'SmsCode',
-                                	flex: 1
+                                    header: 'SMS Code',
+                                    dataIndex: 'SmsCode',
+                                    flex: 1
                                 }, {
-                                	xtype: 'checkcolumn',
-                                	listeners: {
-                                		'checkchange': function (column, rowIndex, value) {
-                                			var record = me.products.getAt(rowIndex);
-                                			record.commit();
-                                		}
-                                	},
-                                	header: 'Selected',
-                                	dataIndex: 'Selected'
+                                    xtype: 'checkcolumn',
+                                    listeners: {
+                                        'checkchange': function (column, rowIndex, value) {
+                                            var record = me.products.getAt(rowIndex);
+                                            record.commit();
+                                        }
+                                    },
+                                    header: 'Selected',
+                                    dataIndex: 'Selected'
                                 }
                             ],
-                        	flex: 1
+                            flex: 1
                         }, {
-                        	xtype: 'panel',
-                        	height: 30,
-                        	html: _t('Please select a schedule')
+                            xtype: 'panel',
+                            height: 30,
+                            html: _t('Please select a schedule')
                         }, {
-                        	xtype: 'gridpanel',
-                        	itemId: 'schedules',
-                        	store: me.schedules,
-                        	autoscroll: true,
-                        	columns: [
+                            xtype: 'gridpanel',
+                            itemId: 'schedules',
+                            store: me.schedules,
+                            autoscroll: true,
+                            columns: [
                                 {
-                                	header: 'Schedule',
-                                	dataIndex: 'ScheduleName',
-                                	flex: 1
+                                    header: 'Schedule',
+                                    dataIndex: 'ScheduleName',
+                                    flex: 1
                                 }, {
-                                	header: 'Basis',
-                                	dataIndex: 'Basis'
+                                    header: 'Basis',
+                                    dataIndex: 'Basis'
                                 }, {
-                                	header: 'Frequency',
-                                	dataIndex: 'Frequency'
+                                    header: 'Frequency',
+                                    dataIndex: 'Frequency'
                                 }, {
-                                	header: 'Reminders',
-                                	flex: 1,
-                                	dataIndex: 'RemindersDisplay'
+                                    header: 'Reminders',
+                                    flex: 1,
+                                    dataIndex: 'RemindersDisplay'
                                 }, {
-                                	xtype: 'checkcolumn',
-                                	listeners: {
-                                		'checkchange': function (column, rowIndex, value) {
-                                			if (value) {
-                                				me.schedules.each(function (row, rowIdx) {
-                                					row.set('Selected', rowIdx == rowIndex);
-                                				});
-                                			}
-                                		}
-                                	},
-                                	header: 'Selected',
-                                	dataIndex: 'Selected'
+                                    xtype: 'checkcolumn',
+                                    listeners: {
+                                        'checkchange': function (column, rowIndex, value) {
+                                            if (value) {
+                                                me.schedules.each(function (row, rowIdx) {
+                                                    row.set('Selected', rowIdx == rowIndex);
+                                                });
+                                            }
+                                        }
+                                    },
+                                    header: 'Selected',
+                                    dataIndex: 'Selected'
                                 }
                             ],
-                        	viewConfig: {
+                            viewConfig: {
 
-                        	},
-                        	flex: 1
+                            },
+                            flex: 1
                         }
                     ]
 
@@ -330,119 +327,132 @@
 
             ];
 
-			me.callParent(arguments);
-			me.campaigns.load();
-			me.productGroupStore.load();
-			if (me.data) {
-				me.schedules.on('datachanged', function () {
-					me.schedules.each(function (schedule) {
-						console.log('schedule-', me.data.ScheduleId, schedule.get('Id'));
-						if (schedule.get('Id') === me.data.ScheduleId) {
-							_.delay(function () {
-								schedule.set('Selected', true);
-								schedule.commit();
-							}, 10);
-						}
-					});
-				});
+            me.callParent(arguments);
+            me.campaigns.load();
+            me.productGroupStore.load();
+            if (me.data) {
+                me.schedules.on('datachanged', function () {
+                    me.schedules.each(function (schedule) {
+                        if (schedule.get('Id') === me.data.ScheduleId) {
+                            _.delay(function () {
+                                schedule.set('Selected', true);
+                                schedule.commit();
+                            }, 10);
+                        }
+                    });
+                });
 
-				me.products.on('datachanged', function () {
-					me.products.each(function (product) {
-						console.log('prdct', product);
-						if (_(me.data.ProductIds).include(product.get('Id'))) {
-							_.delay(function () {
-								product.set('Selected', true);
-								product.commit();
-							}, 10);
-						}
-					});
+                me.products.on('datachanged', function () {
+                    me.products.each(function (product) {
+                        console.log('prdct', product);
+                        if (_(me.data.ProductIds).include(product.get('Id'))) {
+                            _.delay(function () {
+                                product.set('Selected', true);
+                                product.commit();
+                            }, 10);
+                        }
+                    });
 
-				});
-			}
-			me.schedules.load();
-			if (me.data) {
-				me.down('#campaign').setValue(me.data.CampaignId);
-				var prdGroup = me.down('#productGroup');
-				prdGroup.setValue(me.data.ProductGroupId);
+                });
+            }
+            me.schedules.on('load', function () {
 
-				me.onChangeProductGroup(prdGroup);
+//                _.delay(function () {
+                    me.schedules.insert(0, [
+                    {
+                        Id: '@Guid.Empty',
+                        ScheduleName: 'Now',
+                        Basis: 'Now',
+                        Frequency: 'Now',
+                        Reminders: []
+                    }
+                ]);
+//                }, 1000);
+            });
+            me.schedules.load();
+            if (me.data) {
+                me.down('#campaign').setValue(me.data.CampaignId);
+                var prdGroup = me.down('#productGroup');
+                prdGroup.setValue(me.data.ProductGroupId);
 
-			}
+                me.onChangeProductGroup(prdGroup);
 
-		},
+            }
 
-		onChangeProductGroup: function (cmb) {
-			var me = this;
+        },
 
-			me.products.proxy.extraParams = {
-				productGroupId: cmb.getValue()
-			}
+        onChangeProductGroup: function (cmb) {
+            var me = this;
 
-			me.products.load();
-		},
-		onSave: function () {
-			var me = this;
+            me.products.proxy.extraParams = {
+                productGroupId: cmb.getValue()
+            }
 
-			var campaign = me.down('#campaign');
-			var productGroup = me.down('#productGroup');
+            me.products.load();
+        },
+        onSave: function () {
+            var me = this;
 
-			if (!campaign.validate()) {
-				return;
-			}
+            var campaign = me.down('#campaign');
+            var productGroup = me.down('#productGroup');
 
-			if (!productGroup.validate()) {
-				return;
-			}
+            if (!campaign.validate()) {
+                return;
+            }
 
-			var params = {
-				CampaignId: campaign.getValue(),
-				ProductGroupId: productGroup.getValue(),
-				Products: [],
-				ScheduleId: null
-			}
+            if (!productGroup.validate()) {
+                return;
+            }
 
-			var atLeastOneProductSelected = false;
-			me.products.each(function (schedule) {
-				var value = _(schedule.data).clone();
-				delete value.id;
-				atLeastOneProductSelected = atLeastOneProductSelected || value.Selected;
+            var params = {
+                CampaignId: campaign.getValue(),
+                ProductGroupId: productGroup.getValue(),
+                Products: [],
+                ScheduleId: null
+            }
 
-				params.Products.push(value);
-			});
+            var atLeastOneProductSelected = false;
+            me.products.each(function (schedule) {
+                var value = _(schedule.data).clone();
+                delete value.id;
+                atLeastOneProductSelected = atLeastOneProductSelected || value.Selected;
 
-			if (!atLeastOneProductSelected) {
-				Ext.Msg.alert('No product selected', 'At least one product must be selected in order to create a product level request.');
-				return;
-			}
+                params.Products.push(value);
+            });
 
-			var record = me.schedules.findRecord('Selected', true);
-			if (record) {
-				params.ScheduleId = record.get('Id');
-			} else {
-				Ext.Msg.alert('No schedule selected', 'A schedule must be selected in order to create a product level request.');
-				return;
-			}
+            if (!atLeastOneProductSelected) {
+                Ext.Msg.alert('No product selected', 'At least one product must be selected in order to create a product level request.');
+                return;
+            }
 
+            var record = me.schedules.findRecord('Selected', true);
+            if (record) {
+                params.ScheduleId = record.get('Id');
+            }
+            else {
+                Ext.Msg.alert('No schedule selected', 'A schedule must be selected in order to create a product level request.');
+                return;
+            }
 
-			var url = '@Url.RouteUrl(CampaignManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "ProductLevelRequest", action = "Create" })';
-			if (me.data) {
-				params.Id = me.data.Id;
-				url = '@Url.RouteUrl(CampaignManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "ProductLevelRequest", action = "Edit" })';
-			}
-			var action = $.ajax({
-				url: url,
-				type: 'POST',
-				contentType: 'application/json; charset=UTF-8',
-				data: Ext.encode(params),
-				dataType: "json"
-			});
+            var url = '@Url.RouteUrl(CampaignManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "ProductLevelRequest", action = "Create" })';
+            if (me.data) {
+                params.Id = me.data.Id;
+                url = '@Url.RouteUrl(CampaignManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "ProductLevelRequest", action = "Edit" })';
+            }
+            var action = $.ajax({
+                url: url,
+                type: 'POST',
+                contentType: 'application/json; charset=UTF-8',
+                data: Ext.encode(params),
+                dataType: "json"
+            });
 
-			action.success(function () {
-				me.gridStore.loadPage(1);
-				me.destroy();
-			});
+            action.success(function () {
+                me.gridStore.loadPage(1);
+                me.destroy();
+            });
 
-		}
+        }
 
-	});
+    });
 </script>

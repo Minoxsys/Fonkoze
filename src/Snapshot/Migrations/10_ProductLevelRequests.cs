@@ -23,7 +23,7 @@ namespace Migrations
                 .WithCommonColumns()
                 .WithClientColumn()
                 .WithColumn("Campaign_FK").AsGuid()
-                .WithColumn("Schedule_FK").AsGuid()
+                .WithColumn("Schedule_FK").AsGuid().Nullable()
                 .WithColumn("ProductGroup_FK").AsGuid()
                 .WithColumn("IsStopped").AsBoolean().WithDefaultValue(false)
                 .WithColumn("Products").AsBinary(Int32.MaxValue).Nullable()
