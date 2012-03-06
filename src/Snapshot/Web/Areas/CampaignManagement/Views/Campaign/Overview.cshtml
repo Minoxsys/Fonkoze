@@ -197,10 +197,13 @@ Campaign: Overview
                        margin: '0 10 10 10'
                       },{
                         xtype: 'label',
+                        cls: 'x-title-label',
                         text: 'Campaign Administration',
                         margin: '0 0 0 10'
                     },{
                         xtype: 'button',
+                        ui: 'snapshot-add-btn',
+                        cls: 'x-add-button-gradient',
                         text: 'Add New Campaign',
                         margin: '0 0 0 20',
                         handler: function () {
@@ -522,6 +525,8 @@ Campaign: Overview
         window.feature.container = Ext.create('Ext.container.Container', {
             autoScroll: true,
             id: 'TopContainer',
+            margin:'45 50 20 20',
+            padding:'20 0 0 20',
             layout: {
                 align: 'stretch',
                 type: 'vbox'
@@ -592,7 +597,7 @@ Campaign: Overview
                     items: [{
                         xtype: 'container',
                         flex: 2,
-                margin: '45 50 20 0',
+                        margin: '45 50 20 0',
                         layout: {
                             type: 'vbox',
                             align: 'stretch'

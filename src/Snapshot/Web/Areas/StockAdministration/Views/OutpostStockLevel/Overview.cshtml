@@ -487,7 +487,8 @@ Outpost Stock Level Current
         var mainContent = Ext.getCmp(contentRes.maincontent.id);
         mainContent.add({
             xtype: 'container',
-            margin:'45 50 20 0',
+            margin:'45 50 20 20',
+            padding:'20 0 0 20',
             autoScroll:true,
             id:'TopContainer',
             layout: {
@@ -519,6 +520,7 @@ Outpost Stock Level Current
                        margin: '0 10 10 10'
                       },{
                         xtype: 'label',
+                        cls: 'x-title-label',
                         text: 'Current Product Level',
                     }]
                     },{
@@ -542,7 +544,7 @@ Outpost Stock Level Current
                             xtype: 'button',
                             margin: '20 0 0 20',
                             text: 'View Product Stock Level',
-                            ui: 'snapshot-button',
+                            ui: 'snapshot-add-btn',
                             cls: 'x-add-button-gradient',
                             handler: function () {
                                 var selectedOutpostId = window.feature.comboBoxOutposts.getValue();

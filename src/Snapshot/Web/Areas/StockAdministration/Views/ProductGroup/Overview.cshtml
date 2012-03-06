@@ -116,7 +116,8 @@ Product Administration Product Groups: Overview
 		});    
 
         window.feature.container = Ext.create('Ext.container.Container', {
-            margin: '45 50 20 0',
+            margin:'45 50 20 20',
+            padding:'20 0 0 20',
             autoScroll: true,
             id: 'TopContainer',
             layout: {
@@ -146,6 +147,7 @@ Product Administration Product Groups: Overview
                        margin: '0 10 10 10'
                       },{
                         xtype: 'label',
+                        cls: 'x-title-label',
                         text: 'Product Group',
                     },{
                         xtype: 'button',

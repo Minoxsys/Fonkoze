@@ -88,7 +88,8 @@ User Administration Clients: Overview
         });
 
         window.feature.container = Ext.create('Ext.container.Container', {
-            margin: '45 50 20 0',
+            margin:'45 50 20 20',
+            padding:'20 0 0 20',
             autoScroll: true,
             id: 'TopContainer',
             layout: {
@@ -115,6 +116,7 @@ User Administration Clients: Overview
                         html:'&nbsp;'
                     },{
                         xtype: 'label',
+                        cls: 'x-title-label',
                         text: 'Client Administration',
                     },{
                         xtype: 'button',
