@@ -56,6 +56,7 @@
     <Compile Include="Region.cs" />
     <Compile Include="ProductGroup.cs" />
     <Compile Include="Product.cs" />
+    <Compile Include="RequestRecord.cs" />
     <Compile Include="WorkItem.cs" />
     <Compile Include="RequestReminder.cs" />
     <Compile Include="Schedule.cs" />

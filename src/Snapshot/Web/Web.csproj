@@ -148,6 +148,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Areas\CampaignManagement\Controllers\ExistingRequestsController.cs" />
+    <Compile Include="Areas\CampaignManagement\Models\ExistingRequests\GetExistingRequestModel.cs" />
+    <Compile Include="Areas\CampaignManagement\Models\ExistingRequests\GetExistingRequestsInput.cs" />
+    <Compile Include="Areas\CampaignManagement\Models\ExistingRequests\GetExistingRequestsOutput.cs" />
+    <Compile Include="Areas\CampaignManagement\Models\ExistingRequests\GetOutpostsInput.cs" />
+    <Compile Include="Areas\CampaignManagement\Models\ExistingRequests\GetOutpostsOutput.cs" />
     <Compile Include="Areas\CampaignManagement\Controllers\ProductLevelRequestController.cs" />
     <Compile Include="Areas\CampaignManagement\Models\ProductLevelRequest\CampaignModel.cs" />
     <Compile Include="Areas\CampaignManagement\Models\ProductLevelRequest\EditProductLevelRequestInput.cs" />
@@ -2123,6 +2129,7 @@
     <Content Include="Assets\resources\themes\stylesheets\snapshot\default\accessories\scss\config.rb" />
     <Content Include="Areas\AnalysisManagement\Views\ReportDistrictLevel\Overview.cshtml" />
     <Content Include="Areas\CampaignManagement\Views\Shared\_CampaignManagementSideBar.cshtml" />
+    <Content Include="Areas\CampaignManagement\Views\ExistingRequests\Overview.cshtml" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\core\_core.scss" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\core\_reset.scss" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\layout\_layout.scss" />
@@ -2153,7 +2160,6 @@
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\mixins\_reset-extras.scss" />
     <Content Include="Views\Shared\GoogleMapPanel.cshtml" />
     <Content Include="Views\Shared\SelectPositionGoogleMapWindow.cshtml" />
-    <Content Include="Areas\CampaignManagement\Views\_ViewStart.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\SmsRequest\Create.cshtml" />

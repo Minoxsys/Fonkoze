@@ -220,7 +220,7 @@ namespace Web.Areas.CampaignManagement.Controllers
                     Id = product.Id,
                     ProductItem = product.Name,
                     SmsCode = product.SMSReferenceCode,
-                    Selected = false // todo define selection rule
+                    Selected = false 
 
                 }).ToArray();
 
