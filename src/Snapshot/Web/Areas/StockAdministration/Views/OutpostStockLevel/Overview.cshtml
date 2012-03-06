@@ -94,6 +94,7 @@ Outpost Stock Level Current
             labelAlign: 'top',
             fieldLabel: 'Selected Country',
             displayField: 'Name',
+            labelClsExtra: 'combo-label',
             valueField: 'Id',
             emptyText: _t('Country List'),
             editable: false,
@@ -127,6 +128,7 @@ Outpost Stock Level Current
             id: window.feature.comboboxRegionsId,
             labelAlign: 'top',
             fieldLabel: 'Selected Region',
+            labelClsExtra: 'combo-label',
             displayField: 'Name',
             valueField: 'Id',
             disabled: true,
@@ -156,6 +158,7 @@ Outpost Stock Level Current
             id: window.feature.comboboxDistrictsId,
             labelAlign: 'top',
             fieldLabel: 'Selected District',
+            labelClsExtra: 'combo-label',
             displayField: 'Name',
             valueField: 'Id',
             disabled: true,
@@ -181,6 +184,7 @@ Outpost Stock Level Current
             labelAlign: 'top',
             fieldLabel: 'Selected Outpost',
             displayField: 'Name',
+            labelClsExtra: 'combo-label',
             valueField: 'Id',
             disabled: true,
             editable: false,
@@ -374,12 +378,14 @@ Outpost Stock Level Current
                 xtype: 'treecolumn',
                 text: 'Products',
                 flex: 2,
+                menuDisabled: true,
                 sortable: true,
                 dataIndex: 'Name'
             }, {
                 xtype: 'templatecolumn',
                 text: 'Product Level',
                 flex: 1,
+                menuDisabled: true,
                 sortable: true,
                 dataIndex: 'ProductLevel',
                 align: 'right',
@@ -396,6 +402,7 @@ Outpost Stock Level Current
                 xtype: 'templatecolumn',
                 text: 'SMS Code',
                 flex: 1,
+                menuDisabled:true,
                 sortable: false,
                 dataIndex: 'SMSCode',
                 align: 'right',
@@ -411,6 +418,7 @@ Outpost Stock Level Current
             }, { xtype: 'templatecolumn',
                 text: 'Last Update',
                 flex: 1,
+                menuDisabled: true,
                 dataIndex: 'LastUpdate',
                 align: 'center',
                 tpl: Ext.create('Ext.XTemplate', '{LastUpdate:this.LastUpdate}', {
@@ -425,6 +433,7 @@ Outpost Stock Level Current
             }, { xtype: 'templatecolumn',
                 text: 'Update Method',
                 flex: 1,
+                menuDisabled: true,
                 dataIndex: 'UpdateMethod',
                 align: 'center',
                 tpl: Ext.create('Ext.XTemplate', '{UpdateMethod:this.UpdateMethod}', {
@@ -439,6 +448,7 @@ Outpost Stock Level Current
             }, { xtype: 'templatecolumn',
                 text: ' Previous Level',
                 flex: 1,
+                menuDisabled: true,
                 dataIndex: 'PreviousLevel',
                 align: 'right',
                 tpl: Ext.create('Ext.XTemplate', '{PreviousLevel:this.PreviousLevel}', {
@@ -451,6 +461,8 @@ Outpost Stock Level Current
                     }
                 })
             }, { xtype: 'actioncolumn',
+                 menuDisabled: true,
+                 flex:1,
                 items: [{ icon: '@Url.AssetUrl("img/edit.png")',
                     tooltip: _t('Edit product level'),
                     handler: function (grid, rowIndex, colIndex) {

@@ -237,9 +237,11 @@ Historical Product Level: Overview
                             xtype: 'textfield',
                             fieldLabel: 'Outpost',
                             margin: '0 20 0 0',
+                            readOnly:true,
                             itemId: window.feature.outpostName
                         },{
                             xtype: 'textfield',
+                            readOnly: true,
                             fieldLabel: 'Product Group',
                             itemId: window.feature.productGroupName
                         }]
@@ -251,21 +253,25 @@ Historical Product Level: Overview
                         store: window.feature.productGroupLevels,
                         columns: [{
                             header: "Product",
+                            menuDisabled: true,
                             dataIndex: 'ProductName',
                             flex: 1,
                             sortable: true
                         },{
                             header: "SMS Reference Code",
                             dataIndex: 'SMSReferenceCode',
+                            menuDisabled: true,
                             flex: 1
                         },{
                             header: "Product Stock Level",
                             dataIndex: 'ProductStockLevel',
+                            menuDisabled:true,
                             flex: 1,
                             sortable: true
                         },{
                             header: "Last Update",
                             dataIndex: 'LastUpdated',
+                            menuDisabled:true,
                             flex: 1,
                             sortable: true
                         }],
@@ -475,6 +481,7 @@ Historical Product Level: Overview
                             fieldLabel: 'Selected Country',
 			                displayField: 'Name',
 			                valueField:'Id',
+                            labelClsExtra: 'combo-label',
 			                emptyText: 'Country List', 
 			                typeAhead: true,
                             editable: false,
@@ -506,6 +513,7 @@ Historical Product Level: Overview
                             fieldLabel: 'Selected Region',
 			                displayField: 'Name',
 			                valueField:'Id',
+                            labelClsExtra: 'combo-label',
 			                emptyText: 'Region List', 
 			                typeAhead: true,
                             editable: false,
@@ -536,6 +544,7 @@ Historical Product Level: Overview
                             labelAlign: 'top',
                             fieldLabel: 'Selected District',
 			                displayField: 'Name',
+                            labelClsExtra: 'combo-label',
 			                valueField:'Id',
 			                emptyText: 'District List', 
 			                typeAhead: true,
@@ -565,6 +574,7 @@ Historical Product Level: Overview
                             disabled: true,
                             margin: '0 0 0 20',
                             labelAlign: 'top',
+                            labelClsExtra: 'combo-label',
                             fieldLabel: 'Selected Outpost',
 			                displayField: 'Name',
 			                valueField:'Id',
@@ -619,16 +629,19 @@ Historical Product Level: Overview
                 columns: [{
                     header: "Product Group",
                     dataIndex: 'ProductGroupName',
+                    menuDisabled:true,
                     flex: 1,
                     sortable: true
                 },{
                     header: "SMS Response Date",
                     dataIndex: 'SMSResponseDate',
+                    menuDisabled:true,
                     flex: 1,
                     sortable: true
                 },{
                     header: "Number Of Products",
                     dataIndex: 'NumberOfProducts',
+                    menuDisabled:true,
                     flex: 1,
                     sortable: true
                 }],

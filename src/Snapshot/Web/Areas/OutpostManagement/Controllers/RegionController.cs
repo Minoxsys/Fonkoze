@@ -139,7 +139,7 @@ namespace Web.Areas.OutpostManagement.Controllers
 
             var queryRegionValidation = QueryService.Query().Where(p=>p.Client == _client);
 
-            if (queryRegionValidation.Where(it => it.Name == regionInputModel.Name && it.Id != regionInputModel.Id && it.Country.Id == regionInputModel.CountryId).Count() > 0)
+            if (queryRegionValidation.Where(it => it.Name == regionInputModel.Name && it.Country.Id == regionInputModel.CountryId && it.Id != regionInputModel.Id).Count() > 0)
             {
                 return Json(
                     new ToModalJsonActionResponse
@@ -151,6 +151,7 @@ namespace Web.Areas.OutpostManagement.Controllers
 
             }
 
+            
             if (queryRegionValidation.Where(it => it.Coordinates == regionInputModel.Coordinates && it.Id != regionInputModel.Id).Count() > 0)
             {
                 return Json(

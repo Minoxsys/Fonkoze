@@ -34,6 +34,7 @@
     window.feature.isocodeId = 'isocodeid';
     window.feature.phoneprefixId = 'phoneprefix';
 
+    
     window.feature.modal = Ext.define('Ext.feature.country.Modal', {
         extend: 'Ext.window.Window',
         modal:true,
@@ -214,6 +215,7 @@
                 emptyMsg: "No topics to display",
                 ui: 'snapshot-pagination-toolbar'
             });
+
         window.feature.grid = Ext.create('Ext.grid.Panel', {
             store: window.feature.store,
             disableSelection: true,
@@ -266,8 +268,11 @@
 
                                 var action = $.post(postToUrl, { countryId: record.data.Id});
                                 action.success(function(serverResponse){
-                                    
-                                    Ext.Msg.alert(serverResponse.Status, serverResponse.Message);
+                                    var msgAlert = Ext.Msg;
+                                    msgAlert.ui = 'snapshot-popup-window';
+                                    msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                    msgAlert.alert(serverResponse.Status, serverResponse.Message);
+
                                     window.feature.paging.doRefresh();
                                     window.feature.refreshModalStore();
                                 });

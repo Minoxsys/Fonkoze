@@ -17,8 +17,11 @@ Snapshot Application
         var content = Ext.getCmp(window.res.content.id);
 
         content.add({
-            xtype: 'label',
-            text: 'Not YET Iimplemented'
+            xtype: 'image',
+            src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/dashboard_image.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+            height: 700,
+            width:1100,
+            margin: '10 10 0 400'
         });
 
     });

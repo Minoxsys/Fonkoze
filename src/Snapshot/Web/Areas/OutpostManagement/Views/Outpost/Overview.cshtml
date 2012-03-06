@@ -219,8 +219,11 @@
 			itemId: window.feature.countryOverviewComboId,
 			store: window.feature.countryStore,
 			displayField: 'Name',
+            labelAlign: 'top',
+            fieldLabel: 'Selected Country',
 			valueField:'Id',
-			emptyText: 'Select Country', 
+            labelClsExtra: 'combo-label',
+			emptyText: 'Selected Country', 
 			typeAhead: true,
 			listeners:{
 				specialkey: window.feature.comboBoxFilters.listeners.specialkey,
@@ -235,8 +238,11 @@
 			margin: '0 0 0 20',
 			queryMode:'local',
 			displayField: 'Name',
+            labelAlign: 'top',
+            fieldLabel: 'Selected Region',
 			valueField:'Id',
-			emptyText: 'Select Region', 
+            labelClsExtra: 'combo-label',
+			emptyText: 'Selected Region', 
 			typeAhead: true,
 			listeners:{
 				specialkey: window.feature.comboBoxFilters.listeners.specialkey,
@@ -250,8 +256,11 @@
 			margin: '0 0 0 20',
 			queryMode:'local',
 			displayField: 'Name',
+            labelAlign: 'top',
+            fieldLabel: 'Selected District',
+            labelClsExtra: 'combo-label',
 			valueField:'Id',
-			emptyText: 'Select District', 
+			emptyText: 'Selected District', 
 			typeAhead: true,
 			listeners:{
 				specialkey: window.feature.comboBoxFilters.listeners.specialkey,
@@ -797,6 +806,7 @@
 							text: "Outpost Name",
 							dataIndex: 'Name',
 							flex: 0.3,
+                            menuDisabled: true,
 							sortable: true,
 	
 							processEvent: function (type, view, cell, recordIndex, cellIndex, e) {
@@ -817,26 +827,31 @@
 						},{
 							text: "Contact method",
 							dataIndex: 'ContactMethod',
+                            menuDisabled:true,
 							flex: 1,
 							sortable: false
 						},{
 							text: "Coordinates",
 							dataIndex: 'Coordinates',
 							flex: 1,
+                            menuDisabled: true,
 							sortable: false
 						},{
 							text: "Is Warehouse",
 							dataIndex: 'IsWarehouse',
 							flex: 1,
+                            menuDisabled:true,
 							sortable: false
 						},{
 							text: "Warehouse name",
 							dataIndex: 'WarehouseName',
 							flex: 1,
+                            menuDisabled:true,
 							sortable: false
 						},{
 							xtype: 'actioncolumn',
 							text: 'Actions',
+                            menuDisabled: true,
                             flex: 1,
 							items: [
 								{

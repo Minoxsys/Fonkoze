@@ -105,6 +105,10 @@ Districts: Overview
             height: 170,
             width: 390,
             modal: true,
+            ui: 'snapshot-popup-window',
+            fieldDefaults: {
+            msgTarget: 'under'
+            },
             layout: {
                 align: 'stretch',
                 padding: 10,
@@ -184,9 +188,17 @@ Districts: Overview
 
                 };
 
-                me.buttons = [{ text: 'Cancel', handler: function () { me.close(); me.destroy(); }
+                me.buttons = [{ text: 'Cancel',
+                             margin: '10 10 20 0',
+                             ui: 'snapshot-cancel-btn',
+                             cls: 'x-add-button-gradient',
+                             handler: function () { me.close(); me.destroy(); }
                 }, {
-                    text: 'Save', handler: function () {
+                    text: 'Save',
+                    margin: '0 20 20 10',
+                    ui: 'snapshot-add-btn',
+                    cls: 'x-add-button-gradient',
+                    handler: function () {
                         var region =Ext.getCmp(window.feature.comboboxRegionsForModalId);
                         var districtName = me.down('#' + window.feature.districtNameId);
 
@@ -234,6 +246,7 @@ Districts: Overview
             height: 170,
             width: 390,
             modal: true,
+            ui: 'snapshot-popup-window',
             layout: {
                 align: 'stretch',
                 padding: 10,
@@ -319,9 +332,17 @@ Districts: Overview
 
                 };
 
-                me.buttons = [{ text: 'Cancel', handler: function () { me.close(); me.destroy(); }
+                me.buttons = [{ text: 'Cancel',
+                    margin: '10 10 20 0',
+                    ui: 'snapshot-cancel-btn',
+                    cls: 'x-add-button-gradient',
+                    handler: function () { me.close(); me.destroy(); }
                 }, {
-                    text: 'Save', handler: function () {
+                    text: 'Save',
+                    margin: '0 20 20 10',
+                    ui: 'snapshot-add-btn',
+                    cls: 'x-add-button-gradient', 
+                    handler: function () {
                     var districtName = me.down('#' + window.feature.districtNameEditModalId);
                     var region = Ext.getCmp(window.feature.comboboxRegionsForModalId);
                     
@@ -396,6 +417,9 @@ Districts: Overview
             queryMode: 'local',
             id: window.feature.comboboxCountriesId,
             displayField: 'Name',
+            labelAlign: 'top',
+            labelClsExtra: 'combo-label',
+            fieldLabel: 'Selected Country',
             valueField: 'Id',
             margin: '0 0 0 30',
             emptyText: _t('Selected country'),
@@ -418,6 +442,9 @@ Districts: Overview
             queryMode: 'local',
             displayField: 'Name',
             valueField: 'Id',
+            labelAlign: 'top',
+            labelClsExtra: 'combo-label',
+            fieldLabel: 'Selected Region',
             id: window.feature.comboboxRegionsId,
             margin: '0 0 0 20',
             emptyText: _t('Selected region'),
@@ -461,12 +488,14 @@ Districts: Overview
             flex: 3,
             store: window.feature.store,
             disableSelection: true,
+            cls: 'white-border',
             loadMask: true,
             columns: [{
                 text: "Name",
                 dataIndex: 'Name',
                 anchor: '90%',
                 sortable: true,
+                menuDisabled:true,
                 flex: 1,
                 processEvent: function (type, view, cell, recordIndex, cellIndex, e) {
 					if (type == 'click'){
@@ -481,11 +510,13 @@ Districts: Overview
             }, {
                 text: "No of outposts",
                 dataIndex: 'OutpostNo',
+                menuDisabled:true,
                 sortable: true,
                 flex: 1
             }, {
                 xtype: 'actioncolumn',
                 text: 'Actions',
+                menuDisabled:true,
                 flex: 0.3,
                 items: [{
                     icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/edit.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
@@ -555,7 +586,8 @@ Districts: Overview
                 store: window.feature.store,
                 displayInfo: true,
                 displayMsg: 'Displaying topics {0} - {1} of {2}',
-                emptyMsg: "No topics to display"
+                emptyMsg: "No topics to display",
+                ui: 'snapshot-pagination-toolbar'
             })
         });
         function GetStoreWithDistrictsByNameSpecificToRegionWith(SelectedRegionId, SearchByName) {

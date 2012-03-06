@@ -81,14 +81,17 @@ Outpost Management Regions: Overview
         window.feature.modal = Ext.define('Ext.feature.region.Modal', {
             extend: 'Ext.window.Window',
             modal:true,
-            height: 170,
+            height: 200,
             width: 390,
             layout: {
                 align: 'stretch',
                 padding: 10,
                 type: 'vbox'
             },
-
+            ui: 'snapshot-popup-window',
+            fieldDefaults: {
+            msgTarget: 'under'
+            },
             initComponent: function () {
                 var me = this;
                 var overviewComboboxValue = window.feature.container.down('#'+window.feature.overviewcomboboxid).getValue(); 
@@ -179,8 +182,16 @@ Outpost Management Regions: Overview
                                 var winAdd = new window.feature.modal({
                                     title: 'Add New Region',
                                     buttons: [
-                                        { text: 'Cancel', handler:function(){ winAdd.close(); winAdd.destroy();} },
-                                        { text: 'Save', handler:function(){
+                                        { text: 'Cancel',
+                                        margin: '10 10 20 0',
+                                        ui: 'snapshot-cancel-btn',
+                                        cls: 'x-add-button-gradient',
+                                        handler:function(){ winAdd.close(); winAdd.destroy();} },
+                                        { text: 'Save',
+                                        margin: '0 20 20 10',
+                                        ui: 'snapshot-add-btn',
+                                        cls: 'x-add-button-gradient',
+                                        handler:function(){
                                            
                                             var regionName = winAdd.down('#'+window.feature.formregionnameid);
                                             var country = winAdd.down('#'+window.feature.formcomboboxid);
@@ -199,7 +210,10 @@ Outpost Management Regions: Overview
                                                 action.success(function(serverResponse){
                                                  if(serverResponse.CloseModal ==false)
                                                  {
-                                                   Ext.Msg.alert(serverResponse.Status, serverResponse.Message);
+                                                   var msgAlert = Ext.Msg;
+                                                    msgAlert.ui = 'snapshot-popup-window';
+                                                    msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                                    msgAlert.alert(serverResponse.Status, serverResponse.Message);
                                                  }
                                                  else
                                                  {                                                    
@@ -236,7 +250,10 @@ Outpost Management Regions: Overview
 			                    store: window.feature.countryStore,
 			                    displayField: 'Name',
 			                    valueField:'Id',
-			                    emptyText: 'Select Country', 
+			                    emptyText: 'Selected Country',
+                                labelAlign: 'top',
+                                labelClsExtra: 'combo-label',
+                                fieldLabel: 'Selected Country', 
 			                    editable: false,
                                 typeAhead: false,
 			                    listeners:{
@@ -254,11 +271,13 @@ Outpost Management Regions: Overview
                     disableSelection: true,
                     loadMask: true,
                     flex:3,
+                    cls: 'white-border',
                     autoScroll:true,
                     columns: [{
                         text: "Name",
                         dataIndex: 'Name',
                         flex: 1,
+                        menuDisabled:true,
                         sortable: true,
                         processEvent: function (type, view, cell, recordIndex, cellIndex, e) {
 						    if (type == 'click'){
@@ -274,10 +293,12 @@ Outpost Management Regions: Overview
                         text: "Coordinates",
                         dataIndex: 'Coordinates',
                         flex: 1,
+                        menuDisabled:true,
                         sortable: true
                     },{
                         xtype: 'actioncolumn',
 			            text: 'Actions',
+                        menuDisabled:true,
                         flex: 0.3,
                         items: [{
                             icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/edit.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',  
@@ -286,10 +307,18 @@ Outpost Management Regions: Overview
                                 var rec = grid.getStore().getAt(rowIndex);
 
                                 var winEdit = new window.feature.modal({
-                                    title: Ext.String.format('Edit Region {0}', rec.get('Name')),
+                                    title: Ext.String.format('Edit Region'),
                                     buttons: [
-                                        { text: 'Cancel', handler:function(){ winEdit.close(); winEdit.destroy();} },
-                                        { text: 'Save', handler:function(){
+                                        { text: 'Cancel',
+                                        margin: '10 10 20 0',
+                                        ui: 'snapshot-cancel-btn',
+                                        cls: 'x-add-button-gradient',
+                                        handler:function(){ winEdit.close(); winEdit.destroy();} },
+                                        { text: 'Save',
+                                        margin: '0 20 20 10',
+                                        ui: 'snapshot-add-btn',
+                                        cls: 'x-add-button-gradient',
+                                        handler:function(){
 
                                             var regionName = winEdit.down('#'+window.feature.formregionnameid);
                                             var country = winEdit.down('#'+window.feature.formcomboboxid);
@@ -309,7 +338,10 @@ Outpost Management Regions: Overview
                                                     action.success(function(serverResponse){
                                                     if(serverResponse.CloseModal ==false)
                                                  {
-                                                   Ext.Msg.alert(serverResponse.Status, serverResponse.Message);
+                                                   var msgAlert = Ext.Msg;
+                                                     msgAlert.ui = 'snapshot-popup-window';
+                                                     msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                                     msgAlert.alert(serverResponse.Status, serverResponse.Message);
                                                  }
                                                  else
                                                  {   
@@ -337,8 +369,11 @@ Outpost Management Regions: Overview
 					        action: 'Delete',
 					        handler: function(grid, rowIndex, colIndex) {
                                 var rec = grid.getStore().getAt(rowIndex);
-   
-                                Ext.MessageBox.confirm('Warning', Ext.String.format('Are you sure you want to delete {0} ?', rec.get('Name')), function(btn)
+                                    var msgConfirm = Ext.Msg;
+                                    msgConfirm.ui = 'snapshot-popup-window';
+                                    msgConfirm.msgButtons['no'].ui = 'snapshot-cancel-btn';
+                                    msgConfirm.msgButtons['yes'].ui = 'snapshot-add-btn';
+                                    msgConfirm.confirm('Warning', Ext.String.format('Are you sure you want to delete {0} ?', rec.get('Name')), function(btn)
                                 {
                                     if (btn=='yes'){
                                         var values = { regionId: rec.get('Id') };
@@ -346,6 +381,12 @@ Outpost Management Regions: Overview
                                         var action = $.post(postToUrl, values);
 
                                         action.success(function(serverResponse){
+                                            if(serverResponse.Status == "Error"){
+                                            var msgAlert = Ext.Msg;
+                                            msgAlert.ui = 'snapshot-popup-window';
+                                            msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                            msgAlert.alert(serverResponse.Status, serverResponse.Message);
+                                            }
                                            window.feature.regionStore.loadPage(1);
                                         });
                                     }
@@ -359,6 +400,7 @@ Outpost Management Regions: Overview
                         displayInfo: true,
                         displayMsg: 'Displaying topics {0} - {1} of {2}',
                         emptyMsg: "No topics to display",
+                        ui: 'snapshot-pagination-toolbar'
                     })
             },{
                 xtype:'container',
