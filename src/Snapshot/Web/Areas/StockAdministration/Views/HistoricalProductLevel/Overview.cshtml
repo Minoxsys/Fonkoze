@@ -434,7 +434,7 @@ Historical Product Level: Overview
                     align: 'stretch',
                     type: 'vbox'
                 },
-                height:120,
+                height: 150,
                 items: [
                 {
                     xtype: 'container',
@@ -449,9 +449,10 @@ Historical Product Level: Overview
                         html:'&nbsp;'
                     },{xtype: 'image',
                        src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/OutpostStockLevel/HistoricalProductLevel.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
-                       margin: '0 10 10 10'
+                       margin: '0 10 0 10'
                       },{
                         xtype: 'label',
+                        cls: 'x-title-label',
                         text: 'Historical Product Level',
                     }]
                     },{
@@ -464,7 +465,7 @@ Historical Product Level: Overview
 						{
 							xtype: 'container',
 							height: 30,
-							width: 30,
+							width: 75,
 							html:'&nbsp;'
 						},{ 
                             xtype: 'combobox',
@@ -589,6 +590,8 @@ Historical Product Level: Overview
                             xtype: 'button',
                             margin: '20 0 0 20',
                             text: 'View Product Stock Level',
+                            ui: 'snapshot-add-btn',
+							cls: 'x-add-button-gradient',
                             disabled: true,
                             itemId: window.feature.viewProductStockLevelId,
                             handler: function(){

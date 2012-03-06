@@ -687,7 +687,7 @@
 						align: 'stretch',
 						type: 'vbox'
 					},
-					height:70,
+					height: 130,
 					items: [
 						{
 							xtype: 'container',
@@ -713,12 +713,13 @@
                                             margin: '0 10 10 10'
                                         },{
 											xtype: 'label',
+                                            cls: 'x-title-label',
 											text: 'Outpost Administration',
 										},{
 											xtype: 'button',
 											margin: '0 0 0 20',
 											text: 'Add New Outpost',
-											ui: 'snapshot-button',
+											ui: 'snapshot-add-btn',
 											cls: 'x-add-button-gradient',
 											handler: function(){
 												var winAdd = new window.feature.modal({
@@ -771,7 +772,7 @@
 								{
 									xtype: 'container',
 									height: 30,
-									width: 30,
+									margin: '0 0 0 75',
 									html:'&nbsp;'
 								},
 								window.feature.comboBoxFilters.country,
