@@ -17,11 +17,14 @@ namespace Domain
         public virtual byte[] Options { get; set; }
         public virtual Client Client { get; set; }
 
+        public virtual void StoreOptions<T>(T model)
+        {
+            this.Options = BinaryJsonStore<T>.From(model);
+        }
+
         public virtual T RestoreOptions<T>()
         {
             return BinaryJsonStore<T>.From(this.Options);
         }
-
-        //TODO: refactor code that assigns Options to this entity and add StoreOptions virtual method. Example of this on ProductLevelRequest entity
     }
 }

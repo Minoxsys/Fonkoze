@@ -8,6 +8,7 @@ using Core.Persistence;
 using Web.Services;
 using Web.Areas.CampaignManagement.Models.ProductLevelRequest;
 using Web.Areas.CampaignManagement.Models.Campaign;
+using Web.Helpers;
 
 namespace Tests.Unit.Services.SmsRequestServiceTest
 {
@@ -25,6 +26,7 @@ namespace Tests.Unit.Services.SmsRequestServiceTest
         public const string PHONE_NUMBER = "1234567890";
 
         public const string CAMPAIGN_NAME = "Campaign Name";
+        public const string MESSAGE_NOT_DELIVERED = "Message not delivered";
 
         public Guid productLevelRequestId;
         public Guid clientId;
@@ -53,9 +55,13 @@ namespace Tests.Unit.Services.SmsRequestServiceTest
         public SmsReceived smsReceived;
         public SmsRequest smsRequest;
         public SmsRequest smsRequestWithDifferentPhoneNumber;
+        public ProductLevelRequestMessageInput productLevelRequestMessageInput;
+        public ProductLevelRequestMessageInput productLevelRequestMessageInputWithoutProducts;
+        public ProductLevelRequestMessageInput productLevelRequestMessageInputWithoutMobileNumber;
 
         public IOutpostStockLevelService outpostStockLevelService;
-        public ISmsRequestService smsRequestService;
+        public SmsRequestService smsRequestService;
+        public ISmsGatewayService smsGatewayService;
 
         public void Setup_SmsRequestService_And_MockServices()
         {
@@ -68,10 +74,12 @@ namespace Tests.Unit.Services.SmsRequestServiceTest
             saveCommandOutpostStockLevel = MockRepository.GenerateMock<ISaveOrUpdateCommand<OutpostStockLevel>>();
             saveCommandOutpostHistoricalStockLevel = MockRepository.GenerateMock<ISaveOrUpdateCommand<OutpostHistoricalStockLevel>>();
 
+            smsGatewayService = MockRepository.GenerateMock<ISmsGatewayService>();
+
             outpostStockLevelService = new OutpostStockLevelService(saveCommandOutpostHistoricalStockLevel);
 
             smsRequestService = new SmsRequestService(queryServiceOutpost, queryServiceProductGroup, queryServiceStockLevel, queryServiceSmsRequest,
-                saveCommandSmsRequest, outpostStockLevelService, saveCommandOutpostStockLevel);
+                saveCommandSmsRequest, outpostStockLevelService, saveCommandOutpostStockLevel, smsGatewayService);
         }
 
         public void Setup_Stub_Data()
@@ -153,7 +161,7 @@ namespace Tests.Unit.Services.SmsRequestServiceTest
                 StartDate = DateTime.Now,
                 EndDate = DateTime.Now.AddDays(7),
                 Opened = true,
-                Options = StrToByteArray((ConvertToJSON(new OptionsModel { Outposts = outpostId.ToString() })))
+                Options = ConvertHelper.StrToByteArray((ConvertHelper.ConvertToJSON(new OptionsModel { Outposts = outpostId.ToString() })))
             };
 
             productLevelRequest = new ProductLevelRequest
@@ -164,22 +172,45 @@ namespace Tests.Unit.Services.SmsRequestServiceTest
 
             productLevelRequestId = Guid.NewGuid();
 
-            CreateProductLevelRequestInput.ProductModel[] model = new CreateProductLevelRequestInput.ProductModel[] { 
-                new CreateProductLevelRequestInput.ProductModel { ProductItem = PRODUCT_NAME + " 0", Selected = true, SmsCode = SMS_REFERENCE_CODE },
-                new CreateProductLevelRequestInput.ProductModel { ProductItem = PRODUCT_NAME + " 1", Selected = false, SmsCode = "P" } };
-            productLevelRequest.StoreProducts<CreateProductLevelRequestInput.ProductModel[]>(model);
+            ProductModel[] model = new ProductModel[] { 
+                new ProductModel { ProductItem = PRODUCT_NAME + " 0", Selected = true, SmsCode = SMS_REFERENCE_CODE },
+                new ProductModel { ProductItem = PRODUCT_NAME + " 1", Selected = false, SmsCode = "P" } };
+            productLevelRequest.StoreProducts<ProductModel[]>(model);
         }
 
-        private static byte[] StrToByteArray(string str)
+        public void Setup_ProductLevelRequestMessageInput()
         {
-            System.Text.UTF8Encoding encoding = new System.Text.UTF8Encoding();
-            return encoding.GetBytes(str);
-        }
+            Product product = MockRepository.GeneratePartialMock<Product>();
+            product.Stub(p => p.Id).Return(productId);
+            product.SMSReferenceCode = SMS_REFERENCE_CODE;
+            product.Name = PRODUCT_NAME ;
 
-        private string ConvertToJSON(OptionsModel model)
-        {
-            System.Web.Script.Serialization.JavaScriptSerializer serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
-            return serializer.Serialize(model);
+            productLevelRequestMessageInput = new ProductLevelRequestMessageInput
+            {
+                Client = client,
+                Contact = new Contact { ContactType = "Mobile Number", ContactDetail = PHONE_NUMBER },
+                Outpost = outpost,
+                ProductGroup = productGroup,
+                Products = new Product[] { product }.ToList()
+            };
+
+            productLevelRequestMessageInputWithoutProducts = new ProductLevelRequestMessageInput
+            {
+                Client = client,
+                Contact = new Contact { ContactDetail = PHONE_NUMBER },
+                Outpost = outpost,
+                ProductGroup = productGroup,
+                Products = new Product[] { }.ToList()
+            };
+
+            productLevelRequestMessageInputWithoutMobileNumber = new ProductLevelRequestMessageInput
+            {
+                Client = client,
+                Contact = new Contact { ContactType = "E-mail", ContactDetail = "" },
+                Outpost = outpost,
+                ProductGroup = productGroup,
+                Products = new Product[] { product }.ToList()
+            };
         }
     }
 }

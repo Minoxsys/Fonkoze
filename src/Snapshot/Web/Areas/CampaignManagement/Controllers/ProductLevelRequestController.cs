@@ -9,6 +9,7 @@ using Web.Areas.CampaignManagement.Models.ProductLevelRequest;
 using Web.Models.Shared;
 using System.Collections.Generic;
 using System.Text;
+using Web.Services;
 
 namespace Web.Areas.CampaignManagement.Controllers
 {
@@ -34,6 +35,8 @@ namespace Web.Areas.CampaignManagement.Controllers
         public ISaveOrUpdateCommand<ProductLevelRequest> SaveProductLevelRequest { get; set; }
 
         public ISaveOrUpdateCommand<Campaign> SaveCampaign { get; set; }
+
+        public IProductLevelRequestMessagesDispatcherService DispatcherService { get; set; }
 
         public ActionResult Overview()
         {
@@ -63,6 +66,11 @@ namespace Web.Areas.CampaignManagement.Controllers
 
             campaign.Opened = true;
             SaveCampaign.Execute(campaign);
+
+            if (createProductLevelRequestInput.ScheduleId.Equals(Guid.Empty))
+            {
+                DispatcherService.DispatchMessagesForProductLevelRequest(productLevelRequest);
+            }
 
             return Json(new JsonActionResponse
             {
@@ -181,7 +189,6 @@ namespace Web.Areas.CampaignManagement.Controllers
                 {
                     string format = i == products.Length - 1 ? "{0}" : "{0}/";
                     sb.AppendFormat(format, products[i].SmsCode);
-                }
                 }
             }
             if (sb.Length > 0)

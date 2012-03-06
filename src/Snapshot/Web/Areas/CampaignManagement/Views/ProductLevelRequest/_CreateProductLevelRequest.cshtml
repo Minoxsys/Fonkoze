@@ -357,7 +357,6 @@
 
                 me.products.on('datachanged', function () {
                     me.products.each(function (product) {
-                        console.log('prdct', product);
                         if (_(me.data.ProductIds).include(product.get('Id'))) {
                             _.delay(function () {
                                 product.set('Selected', true);
@@ -370,7 +369,6 @@
             }
             me.schedules.on('load', function () {
 
-//                _.delay(function () {
                     me.schedules.insert(0, [
                     {
                         Id: '@Guid.Empty',
@@ -380,7 +378,6 @@
                         Reminders: []
                     }
                 ]);
-//                }, 1000);
             });
             me.schedules.load();
             if (me.data) {

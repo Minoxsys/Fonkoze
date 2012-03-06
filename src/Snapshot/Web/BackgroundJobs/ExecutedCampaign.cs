@@ -8,6 +8,7 @@ using Core.Persistence;
 using Domain;
 using Web.Areas.CampaignManagement.Models.ProductLevelRequest;
 using Web.Areas.CampaignManagement.Models.Campaign;
+using Web.Services;
 
 namespace Web.BackgroundJobs
 {
@@ -21,14 +22,23 @@ namespace Web.BackgroundJobs
         private readonly IQueryService<ProductLevelRequest> queryProductLevelRequests;
         private readonly IQueryService<RequestRecord> queryExistingRequests;
         private readonly IQueryService<Outpost> queryOutposts;
+        private readonly IQueryService<Contact> queryServiceContact;
+        private readonly IQueryService<OutpostStockLevel> queryServiceStockLevel;
         private readonly ISaveOrUpdateCommand<RequestRecord> saveOrUpdateCommand;
+        private readonly IProductLevelRequestMessagesDispatcherService dispatcherService;
 
-        public CampaignExecutionJob(IQueryService<ProductLevelRequest> queryProductLevelRequests, IQueryService<RequestRecord> queryExecutedCampaign, ISaveOrUpdateCommand<RequestRecord> saveOrUpdateCommand, IQueryService<Outpost> queryOutposts)
+        public CampaignExecutionJob(IQueryService<ProductLevelRequest> queryProductLevelRequests, IQueryService<RequestRecord> queryExecutedCampaign,
+            IQueryService<Contact> queryServiceContact, IQueryService<OutpostStockLevel> queryServiceStockLevel,
+            ISaveOrUpdateCommand<RequestRecord> saveOrUpdateCommand, IQueryService<Outpost> queryOutposts,
+            IProductLevelRequestMessagesDispatcherService dispatcherService)
         {
             this.queryProductLevelRequests = queryProductLevelRequests;
             this.queryExistingRequests = queryExecutedCampaign;
+            this.queryServiceContact = queryServiceContact;
+            this.queryServiceStockLevel = queryServiceStockLevel;
             this.saveOrUpdateCommand = saveOrUpdateCommand;
             this.queryOutposts = queryOutposts;
+            this.dispatcherService = dispatcherService;
         }
 
         public System.Threading.Tasks.Task Execute()
@@ -38,7 +48,8 @@ namespace Web.BackgroundJobs
                 List<ProductLevelRequest> needToBeExecuted = GetListOfProductLevelRequestsThatNeedToBeExecuted();
                 foreach (var productLevelRequest in needToBeExecuted)
                 {
-                    //Execute(productLevelRequest);
+                    dispatcherService.DispatchMessagesForProductLevelRequest(productLevelRequest);
+                    
                     SaveLastExecutionFor(productLevelRequest);
                 }
 

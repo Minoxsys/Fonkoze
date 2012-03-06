@@ -12,6 +12,9 @@ using Persistence.Commands;
 using Persistence;
 using NHibernate;
 using Persistence.Queries.Outposts;
+using Web.Helpers;
+using Web.Areas.CampaignManagement.Models.Campaign;
+using Web.Areas.CampaignManagement.Models.ProductLevelRequest;
 
 namespace IntegrationTests.SmsGateway_Integration_Test
 {
@@ -23,6 +26,8 @@ namespace IntegrationTests.SmsGateway_Integration_Test
         private const string MESSAGE = "MAL R0J0";
         private const string NUMBERS = "1234567890";
         private const string SMS_REFERENCE_CODE = "R";
+        public const string CAMPAIGN_NAME = "Campaign Name";
+        public const string PRODUCT_NAME = "Product";
 
         public string url;
         public string postRequest;
@@ -46,6 +51,8 @@ namespace IntegrationTests.SmsGateway_Integration_Test
         public ProductGroup productGroup;
         public Product product;
         public OutpostStockLevel stockLevel;
+        public Campaign campaign;
+        public ProductLevelRequest productLevelRequest;
         public List<OutpostStockLevel> stockLevels;
 
         public IOutpostStockLevelService outpostStockLevelService;
@@ -71,7 +78,7 @@ namespace IntegrationTests.SmsGateway_Integration_Test
 
             saveCommandSmsRequest = new SaveCommandSmsRequest() { ObjectMother = this };
             smsRequestService = new SmsRequestService(queryServiceOutpost, queryServiceProductGroup, queryServiceStockLevel, queryServiceSmsRequest,
-                saveCommandSmsRequest, outpostStockLevelService, saveCommandOutpostStockLevel);
+                saveCommandSmsRequest, outpostStockLevelService, saveCommandOutpostStockLevel, smsGatewayService);
         }
 
         public void SetUp_StubData()
@@ -93,7 +100,7 @@ namespace IntegrationTests.SmsGateway_Integration_Test
             productGroup.ReferenceCode = PRODUCT_GROUP_REFERENCE_CODE;
             session.Save(productGroup);
 
-            product = new Product { SMSReferenceCode = SMS_REFERENCE_CODE };
+            product = new Product { SMSReferenceCode = SMS_REFERENCE_CODE, Name = PRODUCT_NAME + " 0" };
             session.Save(product);
 
             stockLevel = new OutpostStockLevel { Product = product, StockLevel = 0, ProductGroup = productGroup, Outpost = outpost };
@@ -101,6 +108,31 @@ namespace IntegrationTests.SmsGateway_Integration_Test
             session.Save(stockLevel);
 
             stockLevels = new OutpostStockLevel[] { stockLevel }.ToList<OutpostStockLevel>();
+        }
+
+        public void Setup_ProductLevelRequest()
+        {
+            campaign = new Campaign
+            {
+                Name = CAMPAIGN_NAME,
+                StartDate = DateTime.Now,
+                EndDate = DateTime.Now.AddDays(7),
+                Opened = true,
+                Options = ConvertHelper.StrToByteArray((ConvertHelper.ConvertToJSON(new OptionsModel { Outposts = outpost.Id.ToString() })))
+            };
+            session.Save(campaign);
+
+            productLevelRequest = new ProductLevelRequest
+            {
+                Campaign = campaign,
+                ProductGroup = productGroup
+            };
+
+            ProductModel[] model = new ProductModel[] { 
+                new ProductModel { ProductItem = PRODUCT_NAME + " 0", Selected = true, SmsCode = SMS_REFERENCE_CODE },
+                new ProductModel { ProductItem = PRODUCT_NAME + " 1", Selected = false, SmsCode = "P" } };
+            productLevelRequest.StoreProducts<ProductModel[]>(model);
+            session.Save(productLevelRequest);
         }
 
         public void Delete_StubData()

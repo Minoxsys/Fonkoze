@@ -109,7 +109,6 @@
         modal.show();
     }
     function stopProductLevelRequest(recordData) {
-        console.log('stop recordData ->', recordData, recordData.Id);
         var url = '@Url.RouteUrl(CampaignManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "ProductLevelRequest", action = "StopProductLevelRequest" })';
         var params = {
             Id: recordData.Id

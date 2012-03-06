@@ -436,5 +436,39 @@ namespace Tests.Unit.Controllers.Areas.CampaignManagement.ProductLevelRequest_Te
 
             saveCampaign.Verify(call => call.Execute(It.Is<Campaign>(c => c.Opened == true)));
         }
+
+        internal CreateProductLevelRequestInput CreateWithEmptyScheduleInput()
+        {
+            productGroupId = Guid.NewGuid();
+            campaignId = Guid.NewGuid();
+            scheduleId = Guid.Empty;
+
+            var campaignsService = Mock.Get(controller.QueryCampaigns);
+            campaignsService.Setup(call => call.Load(campaignId)).Returns(MockCampaign(0));
+
+            var scheduleService = Mock.Get(controller.QuerySchedules);
+            scheduleService.Setup(call => call.Load(scheduleId)).Returns((Schedule)null);
+
+            return new CreateProductLevelRequestInput
+            {
+                ProductGroupId = productGroupId,
+                CampaignId = campaignId,
+                ScheduleId = scheduleId,
+                Products = new ProductModel[] {
+                    new ProductModel{
+                        Id = Guid.NewGuid(),
+                        ProductItem = "Orange",
+                        Selected= false,
+                        SmsCode = "O"
+                    } 
+                }
+            };
+        }
+
+        internal void VerifyProductLevelRequestMessagesDispatcherServiceExpectations()
+        {
+            var service = Mock.Get(controller.DispatcherService);
+            service.Verify(call => call.DispatchMessagesForProductLevelRequest(It.IsAny<ProductLevelRequest>()));
+        }
     }
 }

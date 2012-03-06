@@ -20,6 +20,7 @@ namespace IntegrationTests.SmsGateway_Integration_Test
         {
             objectMother.SetupSmsGatewayService_and_HttpServices();
             objectMother.SetUp_StubData();
+            objectMother.Setup_ProductLevelRequest();
         }
 
         [TearDown]

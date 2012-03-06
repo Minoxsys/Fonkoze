@@ -204,8 +204,6 @@
         geocoder.geocode({ 'address': place }, function (results, status) {
             if (status == google.maps.GeocoderStatus.OK) {
                 that.centerMap(results[0].geometry.location);
-            } else {
-                console.log(place + " was not found. Reason: " + status);
             }
         });
     }

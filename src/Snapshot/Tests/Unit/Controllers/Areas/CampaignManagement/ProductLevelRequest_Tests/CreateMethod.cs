@@ -32,5 +32,14 @@ namespace Tests.Unit.Controllers.Areas.CampaignManagement.ProductLevelRequest_Te
             _.VerifyCampaignStatusSavedOnCreate();
 
         }
+
+        [Test]
+        public void Runs_ProductLevelRequestMessagesDispatcherService_When_ScheduleId_Is_Guid_Empty()
+        {
+            var input = _.CreateWithEmptyScheduleInput();
+            _.controller.Create(input);
+
+            _.VerifyProductLevelRequestMessagesDispatcherServiceExpectations();
+        }
     }
 }
