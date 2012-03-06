@@ -11,7 +11,7 @@ namespace IntegrationTests.SmsGateway_Integration_Test
 {
     public class SendSmsMethod
     {
-        private const string GATEWAY_RESPONSE_REGEX = @"TestMode=1<br>MessageReceived=Please provide current stock level for product group Malaria using format MAL R0<br>Custom={0}+<br>MessageCount=1<br>From=xreplyx<br>CreditsAvailable=[\d, '.']+<br>MessageLength=\d+<br>NumberContacts=1<br>CreditsRequired=3<br>CreditsRemaining=[\d, '.']+<br>Testmode Active - Nothing Sent";
+        private const string GATEWAY_RESPONSE_REGEX = @"TestMode=1<br>MessageReceived=Please provide current stock level for product group Malaria using format MAL R0<br>Custom={0}+<br>MessageCount=1<br>From=xreplyx<br>CreditsAvailable=[\d, '.']+<br>MessageLength=\d+<br>NumberContacts=1<br>CreditsRequired=[\d, '.']+<br>CreditsRemaining=[\d, '.']+<br>Testmode Active - Nothing Sent";
 
         ObjectMother objectMother = new ObjectMother();
 
