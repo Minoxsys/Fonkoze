@@ -35,7 +35,7 @@
                     {
                         xtype: 'container',
                         id: 'SideBar',
-                        width: 210,
+                        width: 310,
                         layout: {
                             align: 'stretch',
                             type: 'vbox'
@@ -47,6 +47,9 @@
                                 toggleGroup: contentRes.maincontent.sidebar.group,
                                 enableToggle: true,
                                 text: 'Clients',
+                                margin: '45 100 0 0',
+                                height: 30,
+                                ui: 'snapshot-sidebar-btn',
                                 handler: function () {
                                     navigateTo(window.res.link.clientsOverview);
                                 }
@@ -57,6 +60,9 @@
                                 toggleGroup: contentRes.maincontent.sidebar.group,
                                 enableToggle: true,
                                 text: 'Users',
+                                height: 30,
+                                margin: '0 100 0 0',
+                                ui: 'snapshot-sidebar-btn',
                                 handler: function () {
                                     navigateTo(window.res.link.usersOverview);
                                 }
@@ -66,6 +72,9 @@
                                 id: contentRes.maincontent.sidebar.roles,
                                 toggleGroup: contentRes.maincontent.sidebar.group,
                                 text: 'Roles',
+                                height: 30,
+                                margin: '0 100 0 0',
+                                ui: 'snapshot-sidebar-btn',
                                 enableToggle: true,
                                 handler: function() {
                                     navigateTo(window.res.link.rolesOverview);

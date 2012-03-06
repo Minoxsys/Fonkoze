@@ -40,6 +40,7 @@
     window.res = {
         viewport: 'SnapshotViewport',
         link:{
+            dashboard:'@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "Home", action = "Index" })',
             administration:'@(Url.RouteUrl<CountryController>( x=>x.Overview() ,  OutpostManagementAreaRegistration.DEFAULT_ROUTE ))',
             regionOverview:'@(Url.RouteUrl<RegionController>( x => x.Overview() ,  OutpostManagementAreaRegistration.DEFAULT_ROUTE ))',
             district: '@(Url.RouteUrl<DistrictController>( x=>x.Overview() ,  OutpostManagementAreaRegistration.DEFAULT_ROUTE ))',
@@ -127,7 +128,10 @@
                                 toggleGroup:res.header.navigation.toggleGroup,
                                 enableToggle:true,
                                 pressed:true,
-                                text: 'Dashboard'
+                                text: 'Dashboard',
+                                 handler:function(){
+                                    navigateTo( res.link.dashboard ); 
+                                },
                             },
                             {
                                 xtype: 'button',
@@ -149,7 +153,7 @@
                                 id: res.header.navigation.outpostStockLevel,
                                 height: 70,
                                 padding: '0 0 0 10',
-                                width: 240,
+                                width: 180,
                                 icon:'@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Menu/OutpostProductLevel.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
                                 iconAlign: 'left',
                                 ui: 'snapshot-navigation-btn',
@@ -158,7 +162,7 @@
                                 handler:function(){
                                     navigateTo( res.link.outpostStockLevelCurrent ); 
                                 },
-                                text: 'Outpost Stock Level'
+                                text: 'Products'                                
                             },{
                                 xtype: 'button',
                                 id: res.header.navigation.alerts,

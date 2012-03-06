@@ -34,7 +34,7 @@
                     {
                         xtype: 'container',
                         id: 'SideBar',
-                        width: 210,
+                        width: 310,
                         layout: {
                             align: 'stretch',
                             type: 'vbox'
@@ -46,6 +46,9 @@
                                 toggleGroup: contentRes.maincontent.sidebar.group,
                                 enableToggle: true,
                                 text: 'Product Group',
+                                margin: '45 100 0 0',
+                                height: 30,
+                                ui: 'snapshot-sidebar-btn',
                                 handler: function () {
                                     navigateTo(window.res.link.productGroup);
                                 }
@@ -55,7 +58,10 @@
                                 id: contentRes.maincontent.sidebar.product,
                                 toggleGroup: contentRes.maincontent.sidebar.group,
                                 text: 'Product',
+                                height: 30,
                                 enableToggle: true,
+                                margin: '0 100 0 0',
+                                ui: 'snapshot-sidebar-btn',
                                 handler: function () {
                                     navigateTo(window.res.link.product);
                                 },
