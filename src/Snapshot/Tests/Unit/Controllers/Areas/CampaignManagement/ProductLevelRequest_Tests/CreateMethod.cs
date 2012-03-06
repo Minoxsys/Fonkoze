@@ -23,5 +23,14 @@ namespace Tests.Unit.Controllers.Areas.CampaignManagement.ProductLevelRequest_Te
 
             _.VerifyCreateExpectations();
         }
+
+        [Test]
+        public void Sets_TheCampaign_As_Open()
+        {
+            _.controller.Create(_.CreateInput());
+
+            _.VerifyCampaignStatusSavedOnCreate();
+
+        }
     }
 }

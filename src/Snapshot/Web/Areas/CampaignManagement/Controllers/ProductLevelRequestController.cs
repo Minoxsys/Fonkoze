@@ -33,6 +33,7 @@ namespace Web.Areas.CampaignManagement.Controllers
 
         public ISaveOrUpdateCommand<ProductLevelRequest> SaveProductLevelRequest { get; set; }
 
+        public ISaveOrUpdateCommand<Campaign> SaveCampaign { get; set; }
 
         public ActionResult Overview()
         {
@@ -59,6 +60,9 @@ namespace Web.Areas.CampaignManagement.Controllers
             productLevelRequest.StoreProducts<ProductModel[]>(createProductLevelRequestInput.Products);
 
             SaveProductLevelRequest.Execute(productLevelRequest);
+
+            campaign.Opened = true;
+            SaveCampaign.Execute(campaign);
 
             return Json(new JsonActionResponse
             {

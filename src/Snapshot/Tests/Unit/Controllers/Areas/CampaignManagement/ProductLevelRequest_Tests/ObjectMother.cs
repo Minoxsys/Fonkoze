@@ -192,6 +192,9 @@ namespace Tests.Unit.Controllers.Areas.CampaignManagement.ProductLevelRequest_Te
             campaignId = Guid.NewGuid();
             scheduleId = Guid.NewGuid();
 
+            var campaignsService = Mock.Get(controller.QueryCampaigns);
+            campaignsService.Setup(call => call.Load(campaignId)).Returns(MockCampaign(0));
+
             return new CreateProductLevelRequestInput
             {
                 ProductGroupId = productGroupId,
@@ -379,6 +382,8 @@ namespace Tests.Unit.Controllers.Areas.CampaignManagement.ProductLevelRequest_Te
             campaign.SetupGet(c => c.Name).Returns("Campaign " + i);
             campaign.SetupGet(c => c.StartDate).Returns(DateTime.UtcNow);
             campaign.SetupGet(c => c.EndDate).Returns(DateTime.UtcNow.AddDays(7));
+            
+            campaign.SetupAllProperties();
 
             return campaign.Object;
         }
@@ -424,5 +429,12 @@ namespace Tests.Unit.Controllers.Areas.CampaignManagement.ProductLevelRequest_Te
             queryProductLevelRequest.Verify(call => call.Load(It.IsAny<Guid>()));
         }
 
+
+        internal void VerifyCampaignStatusSavedOnCreate()
+        {
+            var saveCampaign = Mock.Get(controller.SaveCampaign);
+
+            saveCampaign.Verify(call => call.Execute(It.Is<Campaign>(c => c.Opened == true)));
+        }
     }
 }

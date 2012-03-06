@@ -11,6 +11,7 @@ namespace Migrations
         public override void Down()
         {
             Delete.RemoveClientForeignKey("RequestRecords");
+            Delete.Table("RequestRecords");
         }
 
         public override void Up()
