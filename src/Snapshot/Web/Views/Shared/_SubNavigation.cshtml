@@ -17,7 +17,7 @@
                 id: subNavRes.buttonTabs.id,
                 margin: 0,
                 padding: 0,
-                width: 1200,
+                width: 800,
                 layout: {
                     align: 'stretch',
                     padding: 0,
@@ -49,7 +49,7 @@
                                 height: 38,
                                 icon:'@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/SubMenu/LocationNotSelected.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
                                 iconAlign: 'left',
-                                margin: '10 7 0 150',
+                                margin: '10 7 0 20',
                                 padding: '0 0 0 10',
                                 text: 'Location Administration',
                                 ui: 'snapshot-submenu-btn',
@@ -132,7 +132,7 @@
                         items: [
                             {
                                 xtype: 'container',
-                                width: 380,
+                                width: 300,
                                 layout: {
                                     align: 'stretch',
                                     type: 'vbox'
@@ -172,7 +172,7 @@
                                 xtype: 'container',
                                 itemId: 'userPhoto',
                                 margin: '14, 0, 0, 0',
-                                width: 161,
+                                width: 80,
                                 items: [
                                     { 
                                         xtype: 'image',
