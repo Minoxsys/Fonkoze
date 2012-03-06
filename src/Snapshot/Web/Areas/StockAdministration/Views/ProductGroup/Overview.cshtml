@@ -66,7 +66,8 @@ Product Administration Product Groups: Overview
         window.feature.modal = Ext.define('Ext.feature.region.Modal', {
             extend: 'Ext.window.Window',
             modal:true,
-            height: 230,
+            ui: 'snapshot-popup-window',
+            height: 250,
             width: 390,
             layout: {
                 align: 'stretch',
@@ -159,9 +160,16 @@ Product Administration Product Groups: Overview
                             var winAdd = new window.feature.modal({
                                 title: 'Add New Product Group',
                                 buttons: [
-                                    { text: 'Cancel', handler:function(){ winAdd.close(); winAdd.destroy();} },
-                                    { text: 'Save',  handler:function(){
-
+                                    { text: 'Cancel',
+                                      margin: '10 10 20 0',
+                                      ui: 'snapshot-cancel-btn',
+                                      cls: 'x-add-button-gradient',
+                                      handler:function(){ winAdd.close(); winAdd.destroy();} },
+                                    { text: 'Save',
+                                      margin: '0 20 20 10',
+                                      ui: 'snapshot-add-btn',
+                                      cls: 'x-add-button-gradient',
+                                      handler:function(){
                                         var productGroupName = winAdd.down('#'+window.feature.formProductGroupNameId);
                                         var productGroupDescription = winAdd.down('#'+window.feature.formProductGroupDescriptionId);
                                         var productGroupReferenceCode = winAdd.down('#'+window.feature.formProductGroupReferenceCodeId);
@@ -224,6 +232,7 @@ Product Administration Product Groups: Overview
                 }]
             },{
                 xtype: 'gridpanel',
+                cls: 'white-border',
                 itemId: window.feature.gridProductGroupId,
                 store: window.feature.productGroupStore,
                 loadMask: true,
@@ -321,6 +330,7 @@ Product Administration Product Groups: Overview
                     displayInfo: true,
                     displayMsg: 'Displaying topics {0} - {1} of {2}',
                     emptyMsg: "No topics to display",
+                    ui: 'snapshot-pagination-toolbar'
                 })
             },{
                 xtype:'container',

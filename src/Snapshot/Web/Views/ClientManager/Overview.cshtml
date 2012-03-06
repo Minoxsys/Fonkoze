@@ -61,7 +61,8 @@ User Administration Clients: Overview
 
         window.feature.modal = Ext.define('Ext.feature.region.Modal', {
             extend: 'Ext.window.Window',
-            modal:true,
+            modal: true,
+            ui: 'snapshot-popup-window',
             height: 170,
             width: 390,
             layout: {
@@ -131,8 +132,16 @@ User Administration Clients: Overview
                             var winAdd = new window.feature.modal({
                                 title: 'Add New Client',
                                 buttons: [
-                                    { text: 'Cancel', handler:function(){ winAdd.close(); winAdd.destroy();} },
-                                    { text: 'Save',  handler:function(){
+                                    { text: 'Cancel',
+                                       margin: '10 10 20 0',
+                                       ui: 'snapshot-cancel-btn',
+                                       cls: 'x-add-button-gradient',
+                                     handler:function(){ winAdd.close(); winAdd.destroy();} },
+                                    { text: 'Save',
+                                      margin: '0 20 20 10',
+                                      ui: 'snapshot-add-btn',
+                                      cls: 'x-add-button-gradient', 
+                                      handler:function(){
                                         var clientName = winAdd.down('#'+window.feature.formClientNameId);
                                         var ok = IsValid(clientName);
 
@@ -184,6 +193,7 @@ User Administration Clients: Overview
                 }]
             },{
                 xtype: 'gridpanel',
+                cls: 'white-border',
                 store: window.feature.ClientsStore,
                 loadMask: true,
                 disableSelection: true,
@@ -266,6 +276,7 @@ User Administration Clients: Overview
                     displayInfo: true,
                     displayMsg: 'Displaying topics {0} - {1} of {2}',
                     emptyMsg: "No topics to display",
+                    ui: 'snapshot-pagination-toolbar'
                 })
             },{
                 xtype:'container',

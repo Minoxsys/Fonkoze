@@ -2707,7 +2707,7 @@ input, textarea, select {
   -ms-border-radius: 3px;
   -khtml-border-radius: 3px;
   border-radius: 3px;
-  padding: 2px 2px 2px 2px;
+  padding: 2px 2px 2px 20px;
   border-width: 1px 1px 1px 1px;
   border-style: solid;
   background-image: none;
@@ -2746,7 +2746,7 @@ input, textarea, select {
   zoom: 1; }
 /* line 200, ../resources/themes/stylesheets/ext4/default/mixins/_frame.scss */
 .x-nbr .x-btn-snapshot-sidebar-btn-small-mc {
-  padding: 0px 0px 0px 0px; }
+  padding: 0px 0px 0px 18px; }
 
 /* line 631, ../resources/themes/stylesheets/ext4/default/widgets/_button.scss */
 .x-btn-snapshot-sidebar-btn-small .x-btn-inner {

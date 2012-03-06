@@ -46,7 +46,8 @@
         window.feature.modalAddProductGroup = Ext.define('Ext.feature.productGroup.Modal', {
             extend: 'Ext.window.Window',
             modal: true,
-            height: 230,
+            ui: 'snapshot-popup-window',
+            height: 250,
             width: 390,
             layout: {
                 align: 'stretch',
@@ -122,7 +123,7 @@
             displayField: 'Name',
             fieldLabel: 'Product Group',
             valueField: 'Id',
-            margin: '0 0 0 30',
+            margin: '0 0 0 75',
             emptyText: _t('Selected product group'),
             editable: false,
             typeAhead: false,
@@ -199,8 +200,9 @@
         window.feature.modal = Ext.define('Ext.feature.product.AddModal', {
             extend: 'Ext.window.Window',
             title: 'Add new product',
-            height: 320,
+            height: 360,
             width: 690,
+            ui: 'snapshot-popup-window',
             modal: true,
             layout: {
                 align: 'stretch',
@@ -229,6 +231,7 @@
                                     displayField: 'Name',
                                     fieldLabel: 'Product Group',
                                     valueField: 'Id',
+                                    width: 300,
                                     emptyText: _t('Select Product group'),
                                     editable: false,
                                     typeAhead: false,
@@ -254,14 +257,23 @@
                                     handler: function () {                            
                                         var winAdd = new window.feature.modalAddProductGroup({
                                             title: 'Add New Product Group',
+
                                             buttons: [
                                                 {
-                                                    text: 'Cancel', handler:function(){
+                                                    text: 'Cancel', 
+                                                    margin: '10 10 20 0',
+                                                    ui: 'snapshot-cancel-btn',
+                                                    cls: 'x-add-button-gradient', 
+                                                    handler:function(){
                                                         winAdd.close();
                                                         winAdd.destroy();
                                                     }
                                                 },{
-                                                    text: 'Save',  handler:function(){
+                                                    text: 'Save',
+                                                    margin: '0 20 20 10',
+                                                    ui: 'snapshot-add-btn',
+                                                    cls: 'x-add-button-gradient', 
+                                                    handler:function(){
     
                                                         var productGroupName = winAdd.down('#' + window.feature.formProductGroupNameId);
                                                         var productGroupDescription = winAdd.down('#' + window.feature.formProductGroupDescriptionId);
@@ -354,13 +366,21 @@
     
                 me.buttons = [
                     {
-                        text: 'Cancel', handler: function () {
+                        text: 'Cancel', 
+                        margin: '10 10 20 0',
+                        ui: 'snapshot-cancel-btn',
+                        cls: 'x-add-button-gradient', 
+                        handler: function () {
                             me.close();
                             me.destroy();
                             window.feature.ProductGroupStore.load();
                         }
                     }, {
-                        text: 'Save', handler: function () {
+                        text: 'Save', 
+                        margin: '0 20 20 10',
+                        ui: 'snapshot-add-btn',
+                        cls: 'x-add-button-gradient', 
+                        handler: function () {
                             var productGroup = me.down('#' + window.feature.comboboxProductGroupsForModalId);
                             var productName = me.down('#' + window.feature.ProductNameId);
                             var productDescription = me.down('#' + window.feature.ProductDescriptionId);
@@ -450,6 +470,7 @@
             store: window.feature.store,
             disableSelection: true,
             loadMask: true,
+            cls: 'white-border',
             columns: [
                 {
                     text: "Products",
@@ -488,7 +509,7 @@
                             tooltip: _t('Edit this product'),
                             handler: function (grid, rowIndex, colIndex) {
                                 var record = grid.store.getAt(rowIndex);
-    
+            
                                 var modalForEdit = new window.feature.modal({
                                     recordName: record.get('Name'),
                                     recordUpperLimit: record.get('UpperLimit'),
@@ -547,7 +568,8 @@
                 store: window.feature.store,
                 displayInfo: true,
                 displayMsg: 'Displaying topics {0} - {1} of {2}',
-                emptyMsg: "No topics to display"
+                emptyMsg: "No topics to display",
+                ui: 'snapshot-pagination-toolbar'
             })
         });
 
@@ -578,7 +600,7 @@
                         align: 'stretch',
                         type: 'vbox'
                     },
-                    height:70,
+                    height: 130,
                     items: [
                         {
                             xtype: 'container',
