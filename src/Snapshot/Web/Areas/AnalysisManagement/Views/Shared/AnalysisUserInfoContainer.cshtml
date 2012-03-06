@@ -79,7 +79,12 @@
                                 text: 'Log Out (L)',
                                 margin: '0, 20, 0, 0',
                                 autoEl: {tag: 'a', href: '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "Account", action = "LogOff" })'}
-                            }]
+                            },{xtype: 'image',
+                                               src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Logout.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                                               margin: '-4 10 0 -15',
+                                               style: {float:'right'}
+                                           
+                                             }]
                         }]
                     },{
                         xtype: 'container',
