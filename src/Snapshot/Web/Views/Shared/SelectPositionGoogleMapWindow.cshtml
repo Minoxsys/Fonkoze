@@ -7,6 +7,7 @@
         extend: 'Ext.window.Window',
         title: 'Select location',
         layout: 'anchor',
+        ui: 'snapshot-popup-window',
         renderTo: Ext.getBody(),
         autoShow: false,
         width: 1000,
@@ -71,12 +72,18 @@
 
         that._selectButton = Ext.create('Ext.Button', {
             text: 'Select',
+            margin: '0 0 20 10',
+            ui: 'snapshot-add-btn',
+            cls: 'x-add-button-gradient',
             itemId:'select-googlemap-position-button-id',
             handler: that.selectLocationHandler
         });
 
         that._cancelButton = Ext.create('Ext.Button', {
             text: 'Cancel',
+            //margin: '10 10 20 0',
+            ui: 'snapshot-cancel-btn',
+            cls: 'x-add-button-gradient',
             handler: that.cancelHandler
         });
     }
@@ -86,6 +93,7 @@
 
         var googleMapPanelConfig = {
             anchor: '100% 97%',
+            margin: '0 0 30 0',
             setupGoogleMapEventsHandler: function (map) {
                 initGoogleMapEvents.apply(that, [map]);
             },
@@ -113,19 +121,19 @@
                         {
                             xtype: 'container',
                             height: 50,
-
+                            margin: '-20 0 0 0',
                             layout: {
                                 type: 'hbox',
                                 pack: 'end'
                             },
-                            height: 50,
                             defaults: {
                                 margin: '0 5'
                             },
                             items: [
                                 that._locationTextField,
-                                that._selectButton,
-                                that._cancelButton
+                                that._cancelButton,
+                                that._selectButton
+                                
                             ]
                         }
                  ]

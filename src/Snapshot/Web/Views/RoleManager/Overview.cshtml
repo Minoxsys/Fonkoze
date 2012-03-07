@@ -191,6 +191,8 @@ User Administration Roles: Overview
         window.feature.rolesAdministrationHeader = Ext.create('Ext.container.Container', {
             layout: 'hbox',
             anchor: '100% 5%',
+            height: 50,
+            margin: '0 0 0 50',
             items: [
                     {
                         xtype: 'container',
@@ -200,9 +202,9 @@ User Administration Roles: Overview
                             Ext.create('Ext.Img',
                             {
                                 src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/briefcase.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
-                                width: 35,
-                                height: 35,
-                                margin: '0 10 10 10'
+                                width: 30,
+                                height: 30
+                                
                             }),
                             {
                                 xtype: 'label',
@@ -228,6 +230,7 @@ User Administration Roles: Overview
                     },
                     {
                         xtype: 'container',
+                        height: 50,
                         layout: {
                             type: 'hbox',
                             pack: 'end'

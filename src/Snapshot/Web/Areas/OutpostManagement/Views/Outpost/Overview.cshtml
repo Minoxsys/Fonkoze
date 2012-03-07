@@ -578,7 +578,7 @@
 												},{
 													xtype:'button',
 													margin:'20 0 0 0',
-													text:'FIND ON MAP',
+													text:'Find On Map',
 						                            ui: 'snapshot-add-btn',
                                                     cls: 'x-add-button-gradient',
 													handler: function() {
@@ -669,14 +669,15 @@
 						},{
 							xtype:'container',
 							layout:'column',
+                            margin: '0 0 20 10',
 							items:[
 	
 								{
 									xtype:'button',
-									text: 'ADD NEW CONTACT METHOD',
+									text: 'Add New Contact Method',
                                     ui: 'snapshot-add-btn',
                                     cls: 'x-add-button-gradient',
-									margin:'20 10 50 10',
+									margin:'20 10 20 10',
 									handler: function(){
 										window.feature.rowEditor.cancelEdit();
 	
@@ -688,6 +689,7 @@
 										});
 	
 										me.contactsStore.insert(0, r);
+                                        var buttons = window.feature.rowEditor.buttons;
 										window.feature.rowEditor.startEdit(0, 0);
 									}
 	

@@ -46,7 +46,8 @@
 
        
         window.feature.rowEditor = Ext.create('Ext.grid.plugin.RowEditing',{ 
-            clicksToEdit:1
+            clicksToEdit:1,
+            errorSummary: false
         });
 
         window.feature.contactsGrid = Ext.define( 'snapshot-contactsGrid',{

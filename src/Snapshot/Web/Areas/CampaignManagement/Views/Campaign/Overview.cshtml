@@ -805,7 +805,9 @@ Campaign: Overview
 
         function SetLabelText(mee, textMessage){
             mee.down('#'+window.feature.leftGridTopLabel).setText(textMessage);
+             mee.down('#'+window.feature.leftGridTopLabel).addCls('combo-label');
             mee.down('#'+window.feature.rightGridTopLabel).setText('Selected ' +textMessage);
+             mee.down('#'+window.feature.rightGridTopLabel).addCls('combo-label');
         };
 
         function GetRightGridStoreIds(mee){

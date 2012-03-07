@@ -187,6 +187,7 @@ User Administration Roles: Overview
         window.feature.automaticScheduleHeader = Ext.create('Ext.container.Container', {
             layout: 'hbox',
             anchor: '100% 5%',
+            height: 50,
             items: [
                 {
                     xtype: 'container',
@@ -250,6 +251,7 @@ User Administration Roles: Overview
             store: window.feature.store,
             cls: "white-border",
             loadMask: true,
+            flex: 3,
             disableSelection: true,
             anchor: '100% 95%',
             autoScroll: true,
@@ -331,11 +333,17 @@ User Administration Roles: Overview
         window.feature.container = Ext.create('Ext.container.Container', {
             margin: '45 50 20 20',
             padding: '20 0 0 20',
-            height: 760,
             autoScroll: true,
             id: 'TopContainer',
-            layout: 'anchor',
-            items: [window.feature.automaticScheduleHeader, window.feature.grid]
+            layout: {
+                align: 'stretch',
+                type: 'vbox'
+            },
+            items: [window.feature.automaticScheduleHeader, window.feature.grid,
+                {
+                    xtype: 'container',
+                    height: 150
+                },]
         });
 
         var contentRes = window.res.content;
