@@ -63,7 +63,7 @@
                 },
                 'edit': function(editor, e) {
                     // commit the changes right after editing finished
-    
+                    
                     if (e.record.get('IsMainContact')){
                         e.store.each(function(record){
                             if (e.record.id !== record.id){
@@ -72,6 +72,12 @@
                             }  
                         });
                     }
+
+                    if (e.store.getCount() == 1){
+                        e.record.set('IsMainContact', true);
+                        e.record.commit();
+                    }
+
                     e.record.commit();
                     e.store.sync();
                 },

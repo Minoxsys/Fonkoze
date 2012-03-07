@@ -301,6 +301,8 @@
 			entityId: 'window-feature-hiddenfield-entityId',
 			coordinatesId:'window-feature-textfield-coordinates'
 		};
+
+
 	
 		window.feature.modal = Ext.define('Ext.feature.outpost.Modal', {
 			extend: 'Ext.window.Window',
@@ -423,7 +425,21 @@
 									errorsFound = true;
 								}
 							});
-	
+
+                            var msgAlert = Ext.Msg;
+                                msgAlert.ui = 'snapshot-popup-window';
+                                msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+
+                            if (me.contactsStore.getCount() == 0){
+                                msgAlert.alert("Error", "You need to provide at least one contact method!");
+                                errorsFound = true;
+                            }else{
+                                if (IsADefaultContactMethodSelected(me.contactsStore) == false){
+                                    msgAlert.alert("Error", "You need to provide at least one default contact method!");
+                                    errorsFound = true;
+                                }
+                            }
+
 							if (!errorsFound){
 	
 								var createAction = $.post(me.url, form.getValues());
@@ -946,6 +962,16 @@
 				}
 			]
 		});
+
+        function IsADefaultContactMethodSelected(store){
+            var ok = false;
+            store.each(function(record){
+                if (record.get('IsMainContact') == true){
+                    ok = true;
+                }  
+            });
+            return ok;
+        };
 	
 		var contentRes = window.res.content;
 		var mainContent = Ext.getCmp(contentRes.maincontent.id);
