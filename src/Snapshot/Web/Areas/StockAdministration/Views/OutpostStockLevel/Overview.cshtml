@@ -515,7 +515,7 @@ Outpost Stock Level Current
                     align: 'stretch',
                     type: 'vbox'
                 },
-                height: 160,
+                height: 150,
                 items: [
                 {
                     xtype: 'container',
@@ -529,7 +529,7 @@ Outpost Stock Level Current
                         html:'&nbsp;'
                     },{xtype: 'image',
                        src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/OutpostStockLevel/CurrentProductLevel.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
-                       margin: '0 10 0 10'
+                       margin: '0 20 0 10'
                       },{
                         xtype: 'label',
                         cls: 'x-title-label',
@@ -553,7 +553,7 @@ Outpost Stock Level Current
 							window.feature.comboBoxOutposts 
                         ,{ 
                             xtype: 'button',
-                            margin: '20 0 10 20',
+                            margin: '25 0 10 20',
                             text: 'View Product Stock Level',
                             ui: 'snapshot-add-btn',
                             cls: 'x-add-button-gradient',

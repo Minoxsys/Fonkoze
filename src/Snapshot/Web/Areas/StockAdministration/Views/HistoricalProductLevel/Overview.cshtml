@@ -455,7 +455,7 @@ Historical Product Level: Overview
                         html:'&nbsp;'
                     },{xtype: 'image',
                        src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/OutpostStockLevel/HistoricalProductLevel.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
-                       margin: '0 10 0 10'
+                       margin: '0 20 0 10'
                       },{
                         xtype: 'label',
                         cls: 'x-title-label',
@@ -598,7 +598,7 @@ Historical Product Level: Overview
 			                
                         },{ 
                             xtype: 'button',
-                            margin: '20 0 0 20',
+                            margin: '25 0 0 20',
                             text: 'View Product Stock Level',
                             ui: 'snapshot-add-btn',
 							cls: 'x-add-button-gradient',
@@ -614,6 +614,7 @@ Historical Product Level: Overview
 				    }]
 			},{
                 xtype: 'gridpanel',
+                cls: 'white-border',
                 store: window.feature.gridOutpostStore,
                 flex: 3,
                 loadMask: true,

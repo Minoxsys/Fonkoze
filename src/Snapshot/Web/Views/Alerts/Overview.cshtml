@@ -114,6 +114,7 @@ User Administration Clients: Overview
                 }]
             },{
                 xtype: 'gridpanel',
+                cls: 'white-border',
                 store: window.feature.alertsStore,
                 loadMask: true,
                 disableSelection: true,
@@ -146,6 +147,7 @@ User Administration Clients: Overview
                     displayInfo: true,
                     displayMsg: 'Displaying topics {0} - {1} of {2}',
                     emptyMsg: "No topics to display",
+                    ui: 'snapshot-pagination-toolbar'
                 })
             },{
                 xtype:'container',
