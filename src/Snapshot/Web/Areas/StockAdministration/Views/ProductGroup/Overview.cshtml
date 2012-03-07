@@ -186,7 +186,10 @@ Product Administration Product Groups: Overview
                                             var action = $.post(postToUrl, values);
                                             action.success(function(serverResponse){
                                                 if(serverResponse.Status === "Error"){
-                                                    Ext.Msg.alert(serverResponse.Status, serverResponse.Message);
+                                                    var msgAlert = Ext.Msg;
+                                                    msgAlert.ui = 'snapshot-popup-window';
+                                                    msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                                    msgAlert.alert(serverResponse.Status, serverResponse.Message);
                                                 }else{
                                                 winAdd.close();
                                                 winAdd.destroy();
@@ -264,15 +267,13 @@ Product Administration Product Groups: Overview
                                 title: Ext.String.format('Edit Product Group {0}', rec.get('Name')),
                                 buttons: [
                                 { text: 'Cancel',
-                                   margin: '0 0 10 20',
-                                   ui: 'snapshot-cancel-btn',
-								   cls: 'x-add-button-gradient',
-                                  handler:function(){ winEdit.close(); winEdit.destroy();} },
+                                  margin: '10 10 20 0',
+                                  ui: 'snapshot-cancel-btn',
+                                  cls: 'x-add-button-gradient', handler:function(){ winEdit.close(); winEdit.destroy();} },
                                 { text: 'Save',
-                                  margin: '0 0 10 20',
+                                  margin: '0 20 20 10',
                                   ui: 'snapshot-add-btn',
-								  cls: 'x-add-button-gradient',
-                                  handler:function(){
+                                  cls: 'x-add-button-gradient', handler:function(){
                                     var productGroupName = winEdit.down('#'+window.feature.formProductGroupNameId);
                                     var productGroupDescription = winEdit.down('#'+window.feature.formProductGroupDescriptionId);
                                     var productGroupReferenceCode = winEdit.down('#'+window.feature.formProductGroupReferenceCodeId);
@@ -290,7 +291,10 @@ Product Administration Product Groups: Overview
                                         var action = $.post(postToUrl, values);
                                         action.success(function(serverResponse){
                                             if(serverResponse.Status === "Error"){
-                                                Ext.Msg.alert(serverResponse.Status, serverResponse.Message);
+                                                var msgAlert = Ext.Msg;
+                                                msgAlert.ui = 'snapshot-popup-window';
+                                                msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                                msgAlert.alert(serverResponse.Status, serverResponse.Message);
                                             }else{
                                                 winEdit.close();
                                                 winEdit.destroy();
@@ -315,7 +319,12 @@ Product Administration Product Groups: Overview
                         action: 'Delete',
 					        handler: function(grid, rowIndex, colIndex) {
                                 var rec = grid.getStore().getAt(rowIndex);
-                                Ext.MessageBox.confirm('Warning', Ext.String.format('Are you sure you want to delete {0} ?', rec.get('Name')), function(btn)
+                                var msgConfirm = Ext.Msg;
+                                msgConfirm.ui = 'snapshot-popup-window';
+                                msgConfirm.msgButtons['no'].ui = 'snapshot-cancel-btn';
+                                msgConfirm.msgButtons['yes'].ui = 'snapshot-add-btn';
+                                msgConfirm.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                msgConfirm.confirm('Warning', Ext.String.format('Are you sure you want to delete {0} ?', rec.get('Name')), function(btn)
                                 {
                                     if (btn=='yes'){
                                         var values = { productGroupId: rec.get('Id') };
@@ -324,8 +333,10 @@ Product Administration Product Groups: Overview
 
                                         action.success(function(serverResponse){
                                             if(serverResponse.Status === "Error"){
-                                                Ext.Msg.alert(serverResponse.Status, serverResponse.Message);
-                                                }
+                                               var msgAlert = Ext.Msg;
+                                                msgAlert.ui = 'snapshot-popup-window';
+                                                msgAlert.alert(serverResponse.Status, serverResponse.Message);
+                                              }
                                             window.feature.productGroupStore.loadPage(1);
                                         });
                                     }

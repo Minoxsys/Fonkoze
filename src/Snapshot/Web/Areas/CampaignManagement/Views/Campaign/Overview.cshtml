@@ -316,7 +316,11 @@ Campaign: Overview
                                 stepNumber++;
                                 return;
                             }else{
-                                Ext.Msg.alert("Error", "You need to select at least one country");
+                               var msgAlert = Ext.Msg;
+                               msgAlert.ui = 'snapshot-popup-window';
+                               msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                               msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+                                msgAlert.alert("Error", "You need to select at least one country");
                             }
                         }
 
@@ -327,7 +331,11 @@ Campaign: Overview
                                 stepNumber++;
                                 return;
                             }else{
-                                Ext.Msg.alert("Error", "You need to select at least one region");
+                                var msgAlert = Ext.Msg;
+                               msgAlert.ui = 'snapshot-popup-window';
+                               msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                               msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+                                msgAlert.alert("Error", "You need to select at least one region");
                             }
                         }
 
@@ -338,7 +346,11 @@ Campaign: Overview
                                 stepNumber++;
                                 return;
                             }else{
-                                Ext.Msg.alert("Error", "You need to select at least one district");
+                                var msgAlert = Ext.Msg;
+                               msgAlert.ui = 'snapshot-popup-window';
+                               msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                               msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+                                msgAlert.alert("Error", "You need to select at least one district");
                             }
                         }
 
@@ -370,7 +382,11 @@ Campaign: Overview
                                 var action = $.post(postToUrl, values);
                                 action.success(function (serverResponse) {
                                     if (serverResponse.Status == "Error") {
-                                        Ext.Msg.alert(serverResponse.Status, serverResponse.Message);
+                                    var msgAlert = Ext.Msg;
+                                            msgAlert.ui = 'snapshot-popup-window';
+                                            msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                            msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+                                        msgAlert.alert(serverResponse.Status, serverResponse.Message);
                                     }
                                     else {
                                         gridsContainer.destroy();
@@ -384,7 +400,11 @@ Campaign: Overview
                                 stepNumber++;
                                 return;
                             }else{
-                                Ext.Msg.alert("Error", "You need to select at least one outpost");
+                            var msgAlert = Ext.Msg;
+                                            msgAlert.ui = 'snapshot-popup-window';
+                                            msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                            msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+                                msgAlert.alert("Error", "You need to select at least one outpost");
                             }
                         }
                     }
@@ -450,7 +470,11 @@ Campaign: Overview
                             var action = $.post(postToUrl, values);
                             action.success(function (serverResponse) {
                                 if (serverResponse.Status == "Error") {
-                                        Ext.Msg.alert(serverResponse.Status, serverResponse.Message);
+                                        var msgAlert = Ext.Msg;
+                                            msgAlert.ui = 'snapshot-popup-window';
+                                            msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                            msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+                                        msgAlert.alert(serverResponse.Status, serverResponse.Message);
                                 }
                                 else {
                                     firstContainer.destroy();
@@ -513,7 +537,11 @@ Campaign: Overview
                             SetCampaignValues(modalWindowEditCampaign, rec);
                             modalWindowEditCampaign.show();
                         }else{
-                            Ext.Msg.alert("Alert","This campaign is in process. It cannot be edited!");
+                           var msgAlert = Ext.Msg;
+                                            msgAlert.ui = 'snapshot-popup-window';
+                                            msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                            msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+                            msgAlert.alert("Alert","This campaign is in process. It cannot be edited!");
                         }
                     }
                 }, {

@@ -429,6 +429,7 @@
                             var msgAlert = Ext.Msg;
                                 msgAlert.ui = 'snapshot-popup-window';
                                 msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                msgAlert.msgButtons['ok'].margin = '10 10 20 0';
 
                             if (me.contactsStore.getCount() == 0){
                                 msgAlert.alert("Error", "You need to provide at least one contact method!");
@@ -925,8 +926,10 @@
                                          var msgConfirm = Ext.Msg;
                                          msgConfirm.ui = 'snapshot-popup-window';
                                          msgConfirm.msgButtons['no'].ui = 'snapshot-cancel-btn';
+                                         msgConfirm.msgButtons['no'].margin = '10 10 20 0';
                                          msgConfirm.msgButtons['yes'].ui = 'snapshot-add-btn';
                                          msgConfirm.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                         msgConfirm.msgButtons['ok'].margin = '10 10 20 0';
                                           msgConfirm.confirm(_t('Confirm deletion'), Ext.String.format(_t('Are you sure you want to delete outpost `{0}`'), rec.get('Name')), function (button) {
 											if (button === 'yes'){
 													var postToUrl = '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Outpost", action = "Delete" })';

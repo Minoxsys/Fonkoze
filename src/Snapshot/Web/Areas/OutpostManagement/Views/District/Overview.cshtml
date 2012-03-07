@@ -216,6 +216,7 @@ Districts: Overview
                                             var msgAlert = Ext.Msg;
                                             msgAlert.ui = 'snapshot-popup-window';
                                             msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                            msgAlert.msgButtons['ok'].margin = '10 10 20 0';
                                             msgAlert.alert(result.Status, result.Message);
                         }
                         else{
@@ -364,6 +365,7 @@ Districts: Overview
                                 var msgAlert = Ext.Msg;
                                             msgAlert.ui = 'snapshot-popup-window';
                                             msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                            msgAlert.msgButtons['ok'].margin = '10 10 20 0';
                                             msgAlert.alert(result.Status, result.Message);
                             }
                             else{
@@ -553,8 +555,10 @@ Districts: Overview
                         var msgConfirm = Ext.Msg;
                             msgConfirm.ui = 'snapshot-popup-window';
                             msgConfirm.msgButtons['no'].ui = 'snapshot-cancel-btn';
+                            msgConfirm.msgButtons['no'].margin = '10 10 20 0';
                             msgConfirm.msgButtons['yes'].ui = 'snapshot-add-btn';
                             msgConfirm.msgButtons['ok'].ui = 'snapshot-add-btn';
+                            msgConfirm.msgButtons['ok'].margin = '10 10 20 0';
                         msgConfirm.confirm('Confirm', 'Are you sure you want to delete the district?', function (button) {
 
                             var values = { guid: record.data.Id

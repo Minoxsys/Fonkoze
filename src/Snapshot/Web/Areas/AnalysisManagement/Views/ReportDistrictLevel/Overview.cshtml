@@ -82,6 +82,7 @@ Analysis
             id: window.feature.comboboxCountriesId,
             labelAlign: 'top',
             fieldLabel: 'Selected Country',
+            labelClsExtra:'combo-label',
             displayField: 'Name',
             valueField: 'Id',
             emptyText: _t('Country List'),
@@ -117,6 +118,7 @@ Analysis
             id: window.feature.comboboxRegionsId,
             labelAlign: 'top',
             fieldLabel: 'Selected Region',
+            labelClsExtra:'combo-label',
             displayField: 'Name',
             valueField: 'Id',
             margin: '0 0 0 20',
@@ -144,6 +146,7 @@ Analysis
             id: window.feature.comboboxDistrictsId,
             labelAlign: 'top',
             fieldLabel: 'Selected District',
+            labelClsExtra:'combo-label',
             displayField: 'Name',
             valueField: 'Id',
             margin: '0 0 0 20',
@@ -187,12 +190,14 @@ Analysis
                 text: 'Region / Product Group / Product',
                 flex: 2,
                 sortable: true,
+                menuDisabled:true,
                 dataIndex: 'Name'
             }, {
                 xtype: 'templatecolumn',
                 text: 'Product Level',
                 flex: 1,
                 sortable: true,
+                menuDisabled:true,
                 dataIndex: 'ProductLevelSum',
                 align: 'center',
                 tpl: Ext.create('Ext.XTemplate', '{ProductLevelSum:this.ProductLevelSum}', {

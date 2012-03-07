@@ -301,15 +301,25 @@ User Administration Roles: Overview
                                 icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/delete.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
                                 handler: function (grid, rowIndex, colIndex) {
                                     var rec = grid.getStore().getAt(rowIndex);
-
-                                    Ext.MessageBox.confirm('Warning', Ext.String.format('Are you sure you want to delete {0} ?', rec.get('Name')), function (btn) {
+                                    var msgConfirm = Ext.Msg;
+                                    msgConfirm.ui = 'snapshot-popup-window';
+                                    msgConfirm.msgButtons['no'].ui = 'snapshot-cancel-btn';
+                                    msgConfirm.msgButtons['no'].margin = '10 10 20 0';
+                                    msgConfirm.msgButtons['yes'].ui = 'snapshot-add-btn';
+                                    msgConfirm.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                    msgConfirm.msgButtons['ok'].margin = '10 10 20 0';
+                                    msgConfirm.confirm('Warning', Ext.String.format('Are you sure you want to delete {0} ?', rec.get('Name')), function (btn) {
                                         if (btn == 'yes') {
                                             var values = { roleId: rec.get('Id') };
                                             var postToUrl = '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "RoleManager", action = "Delete" })';
                                             var action = $.post(postToUrl, values);
 
                                             action.success(function (serverResponse) {
-                                                Ext.Msg.alert(serverResponse.Status, serverResponse.Message);
+                                                var msgAlert = Ext.Msg;
+                                                msgAlert.ui = 'snapshot-popup-window';
+                                                msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                                msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+                                                msgAlert.alert(serverResponse.Status, serverResponse.Message);
                                                 window.feature.store.load();
                                             });
                                         }
@@ -366,7 +376,11 @@ User Administration Roles: Overview
             }
 
             if (ok && permissions.length == 0) {
-                Ext.Msg.alert("Error", "You must select at least one permission!");
+                var msgAlert = Ext.Msg;
+                msgAlert.ui = 'snapshot-popup-window';
+                msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+                msgAlert.alert("Error", "You must select at least one permission!");
                 ok = false;
             }
 
@@ -448,7 +462,11 @@ User Administration Roles: Overview
             var action = $.post(postToUrl, role);
             action.success(function (serverResponse) {
                 if (serverResponse.Status === "Error") {
-                    Ext.Msg.alert(serverResponse.Status, serverResponse.Message);
+                    var msgAlert = Ext.Msg;
+                    msgAlert.ui = 'snapshot-popup-window';
+                    msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                    msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+                    msgAlert.alert(serverResponse.Status, serverResponse.Message);
                 } else {
                     window.feature.store.load();
                     window.feature.modal.hide();

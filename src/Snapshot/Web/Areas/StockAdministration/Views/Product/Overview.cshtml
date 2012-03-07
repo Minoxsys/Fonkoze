@@ -150,6 +150,12 @@
             productLowerLimit.markInvalid('Value of product lower limit should be less than value of product upper limit!');
             ok = false;
             }
+
+            if(productLowerLimit.getValue() === productUpperLimit.getValue()){
+            productLowerLimit.markInvalid('Value of product lower limit should not be equal with value of product upper limit!');
+            ok = false;
+            }
+
             if (productName.getValue() == '') {
                 productName.markInvalid('Field Product is required!');
                 productName.setValue(null);
@@ -290,12 +296,17 @@
                                                             var postToUrl = '@Url.RouteUrl(StockAdministrationAreaRegistration.DEFAULT_ROUTE, new { controller = "ProductGroup", action = "Create" })';
                                                             var action = $.post(postToUrl, values);
                                                             action.success(function(serverResponse){
-                                                            debugger;
+                                                            
                                                                 if(serverResponse.Status === "Error"){
-                                                                    Ext.Msg.alert(serverResponse.Status, serverResponse.Message);
-                                                                    return;
-                                                                }
-    
+                                                                    var msgAlert = Ext.Msg;
+                                                                    msgAlert.ui = 'snapshot-popup-window';
+                                                                    msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                                                    msgAlert.msgButtons['ok'].margin = '10 10 20 0',
+                                                                    msgAlert.alert(serverResponse.Status, serverResponse.Message);
+                                                                    
+                                                                }else{
+                                                                
+                                                                
                                                                 window.feature.ProductGroupStoreForModal.load();
                                                                 var comboboxProductGroupsForModal = me.down('#' + window.feature.comboboxProductGroupsForModalId);
     
@@ -304,6 +315,7 @@
                                                                 winAdd.close();
                                                                 winAdd.destroy();                                                
                                                                 window.feature.ProductGroupStore.load();
+                                                                }
     
                                                             });
     
@@ -410,11 +422,19 @@
                                 action.success(function (result) {
     
                                     if (result.CloseModal === false) {
-                                        Ext.Msg.alert(result.Status, result.Message);
+                                        var msgAlert = Ext.Msg;
+                                         msgAlert.ui = 'snapshot-popup-window';
+                                         msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                         msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+                                         msgAlert.alert(result.Status, result.Message);
                                     }
                                     else {
                                         if (result.Status === "Error"){
-                                            Ext.Msg.alert(result.Status, result.Message);
+                                            var msgAlert = Ext.Msg;
+                                            msgAlert.ui = 'snapshot-popup-window';
+                                            msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                            msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+                                            msgAlert.alert(result.Status, result.Message);
                                         }
                                         var selectedProductGroupInModal = me.down('#' + window.feature.comboboxProductGroupsForModalId).getValue();
                                         me.close();
@@ -479,30 +499,36 @@
                     anchor: '90%',
                     sortable: true,
                     flex: 1,
+                    menuDisabled: true,
                     renderer: addTooltip
                 }, {
                     text: "Product Groups",
                     dataIndex: 'ProductGroupName',
                     flex: 1,
+                    menuDisabled: true,
                     sortable: true
                 }, {
                     text: "SMS Code",
                     dataIndex: 'SMSReferenceCode',
                     flex: 1,
+                    menuDisabled: true,
                     sortable: false
                 }, {
                     text: "Lower Limit",
                     dataIndex: 'LowerLimit',
                     flex: 1,
+                    menuDisabled: true,
                     sortable: false
                 }, {
                     text: "Upper Limit",
                     dataIndex: 'UpperLimit',
                     flex: 1,
+                    menuDisabled: true,
                     sortable: false
                 }, {
                     xtype: 'actioncolumn',
                     text: 'Actions',
+                    menuDisabled:true,
                     flex:1,
                     items: [
                         {
@@ -528,8 +554,14 @@
                             handler: function (grid, rowIndex, colIndex) {
     
                                 var record = grid.store.getAt(rowIndex);
-    
-                                Ext.MessageBox.confirm('Confirm', 'Are you sure you want to delete the product?', function (button) {
+                                 var msgConfirm = Ext.Msg;
+                                 msgConfirm.ui = 'snapshot-popup-window';
+                                 msgConfirm.msgButtons['no'].ui = 'snapshot-cancel-btn';
+                                 msgConfirm.msgButtons['no'].margin = '10 10 20 0',
+                                 msgConfirm.msgButtons['yes'].ui = 'snapshot-add-btn';
+                                 msgConfirm.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                 msgConfirm.msgButtons['ok'].margin = '10 10 20 0',
+                                 msgConfirm.confirm('Confirm', 'Are you sure you want to delete the product?', function (button) {
     
                                     var values = {
                                         guid: record.data.Id
@@ -540,7 +572,9 @@
                                         var action = $.post(postToUrl, values);
                                         action.success(function (result) {
                                             if (result.Status === "Error"){
-                                                Ext.Msg.alert(result.Status, result.Message);
+                                                var msgAlert = Ext.Msg;
+                                                msgAlert.ui = 'snapshot-popup-window';
+                                                msgAlert.alert(result.Status, result.Message);
                                             }                                      
                                             var selectedProductGroupId = Ext.getCmp(window.feature.comboboxProductGroupsId).getValue();
     

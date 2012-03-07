@@ -434,7 +434,11 @@
             });
 
             if (!atLeastOneProductSelected) {
-                Ext.Msg.alert('No product selected', 'At least one product must be selected in order to create a product level request.');
+                var msgAlert = Ext.Msg;
+                msgAlert.ui = 'snapshot-popup-window';
+                msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+                msgAlert.alert('No product selected', 'At least one product must be selected in order to create a product level request.');
                 return;
             }
 
@@ -443,7 +447,11 @@
                 params.ScheduleId = record.get('Id');
             }
             else {
-                Ext.Msg.alert('No schedule selected', 'A schedule must be selected in order to create a product level request.');
+                var msgAlert = Ext.Msg;
+                msgAlert.ui = 'snapshot-popup-window';
+                msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+                msgAlert.alert('No schedule selected', 'A schedule must be selected in order to create a product level request.');
                 return;
             }
 

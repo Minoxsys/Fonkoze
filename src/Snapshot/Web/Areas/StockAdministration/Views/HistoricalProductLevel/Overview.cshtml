@@ -294,7 +294,11 @@ Historical Product Level: Overview
                                                 action.success(function(serverResponse){
                                                 if(serverResponse.Status === "Error")
                                                 {
-                                                    Ext.Msg.alert(serverResponse.Status, serverResponse.Message);
+                                                   var msgAlert = Ext.Msg;
+                                                                    msgAlert.ui = 'snapshot-popup-window';
+                                                                    msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                                                    msgAlert.msgButtons['ok'].margin = '10 10 20 0',
+                                                                    msgAlert.alert(serverResponse.Status, serverResponse.Message);
                                                 }
                                                 else
                                                 {                                                    

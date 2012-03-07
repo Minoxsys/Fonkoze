@@ -305,35 +305,42 @@ User Administration Users: Overview
                     header: 'First Name',
                     dataIndex: 'FirstName',
                     flex: 1,
+                    menuDisabled:true,
                     sortable: true
                 },{
                     header: 'Last Name',
                     dataIndex: 'LastName',
+                    menuDisabled:true,
                     flex: 1,
                     sortable: true
                 },{
                     header: 'Username',
                     dataIndex: 'UserName',
+                    menuDisabled:true,
                     flex: 1,
                     sortable: true
                 },{
                     header: 'Email',
                     dataIndex: 'Email',
+                    menuDisabled:true,
                     flex: 1,
                     sortable: true
                 },{
                     header: 'Role',
                     dataIndex: 'RoleName',
+                    menuDisabled:true,
                     flex: 1,
                     sortable: true
                 },{
                     header: 'Client',
                     dataIndex: 'ClientName',
+                    menuDisabled:true,
                     flex: 1,
                     sortable: true
                 },{
                     xtype: 'actioncolumn',
 			        text: 'Actions',
+                    menuDisabled:true,
                     flex: 1,
                     items: [{
                         icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/edit.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))', 
@@ -380,10 +387,14 @@ User Administration Users: Overview
                                         var action = $.post(postToUrl, values);
                                         action.success(function(serverResponse){
                                             if(serverResponse.Status === "Error"){
-                                            Ext.Msg.alert(serverResponse.Status, serverResponse.Message);}
+                                             var msgAlert = Ext.Msg;
+                                            msgAlert.ui = 'snapshot-popup-window';
+                                            msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                            msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+                                            msgAlert.alert(serverResponse.Status, serverResponse.Message);}else{
                                             winEdit.close();
                                             winEdit.destroy();
-                                            window.feature.UsersStore.loadPage(1); 
+                                            window.feature.UsersStore.loadPage(1); }
                                         });
                                     }
                                 }}
@@ -405,8 +416,14 @@ User Administration Users: Overview
                         icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/delete.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',  
                         handler: function(grid, rowIndex, colIndex) {
                             var rec = grid.getStore().getAt(rowIndex);
-
-                            Ext.MessageBox.confirm('Warning', Ext.String.format('Are you sure you want to delete {0} ?', rec.get('UserName')), function(btn)
+                            var msgConfirm = Ext.Msg;
+                            msgConfirm.ui = 'snapshot-popup-window';
+                            msgConfirm.msgButtons['no'].ui = 'snapshot-cancel-btn';
+                            msgConfirm.msgButtons['no'].margin = '10 10 20 0';
+                            msgConfirm.msgButtons['yes'].ui = 'snapshot-add-btn';
+                            msgConfirm.msgButtons['ok'].ui = 'snapshot-add-btn';
+                            msgConfirm.msgButtons['ok'].margin = '10 10 20 0';
+                            msgConfirm.confirm('Warning', Ext.String.format('Are you sure you want to delete {0} ?', rec.get('UserName')), function(btn)
                             {
                                 if (btn=='yes'){
                                     var values = { userId: rec.get('Id') };
@@ -415,7 +432,11 @@ User Administration Users: Overview
 
                                     action.success(function(serverResponse){
                                     if(serverResponse.Status === "Error"){
-                                        Ext.Msg.alert(serverResponse.Status, serverResponse.Message);}
+                                     var msgAlert = Ext.Msg;
+                                            msgAlert.ui = 'snapshot-popup-window';
+                                            msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                            msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+                                        msgAlert.alert(serverResponse.Status, serverResponse.Message);}
                                         window.feature.UsersStore.loadPage(1);
                                     });
                                 }

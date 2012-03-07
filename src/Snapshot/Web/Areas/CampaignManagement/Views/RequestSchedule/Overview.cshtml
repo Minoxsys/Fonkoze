@@ -304,8 +304,14 @@ User Administration Roles: Overview
                                 icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("img/delete.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
                                 handler: function (grid, rowIndex, colIndex) {
                                     var rec = grid.getStore().getAt(rowIndex);
-
-                                    Ext.MessageBox.confirm('Warning', Ext.String.format('Are you sure you want to delete {0} ?', rec.get('Name')), function (btn) {
+                                    var msgConfirm = Ext.Msg;
+                                    msgConfirm.ui = 'snapshot-popup-window';
+                                    msgConfirm.msgButtons['no'].ui = 'snapshot-cancel-btn';
+                                    msgConfirm.msgButtons['no'].margin = '10 10 20 0';
+                                    msgConfirm.msgButtons['yes'].ui = 'snapshot-add-btn';
+                                    msgConfirm.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                    msgConfirm.msgButtons['ok'].margin = '10 10 20 0';
+                                    msgConfirm.confirm('Warning', Ext.String.format('Are you sure you want to delete {0} ?', rec.get('Name')), function (btn) {
                                         if (btn == 'yes') {
                                             var values = { scheduleId: rec.get('Id') };
                                             var postToUrl = '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "RequestSchedule", action = "Delete" })';

@@ -21,7 +21,6 @@ namespace Web.Areas.StockAdministration.Controllers
         public ISaveOrUpdateCommand<ProductGroup> SaveOrUpdateProductGroup { get; set; }
         public IDeleteCommand<ProductGroup> DeleteCommand { get; set; }
         
-
         public IQueryService<User> QueryUsers { get; set; }
 
         public IQueryService<Client> QueryClients { get; set; }
@@ -34,6 +33,7 @@ namespace Web.Areas.StockAdministration.Controllers
         public class ProductGroupOutputModel : JsonActionResponse
         {
             public string ProductGroupId { get; set; }
+            
 
         }
         [HttpPost]
@@ -57,7 +57,8 @@ namespace Web.Areas.StockAdministration.Controllers
                     new ProductGroupOutputModel
                     {
                         Status = "Error",
-                        Message = string.Format("There is already a product group with this name: {0} ! Please insert a different name!", model.Name)
+                        Message = string.Format("There is already a product group with this name: {0} ! Please insert a different name!", model.Name),
+                        
                     });
             }
 
@@ -67,7 +68,8 @@ namespace Web.Areas.StockAdministration.Controllers
                     new ProductGroupOutputModel
                     {
                         Status = "Error",
-                        Message = string.Format("There is already a product group with this reference code: {0} ! Please insert a different reference code!", model.ReferenceCode)
+                        Message = string.Format("There is already a product group with this reference code: {0} ! Please insert a different reference code!", model.ReferenceCode),
+                        
                     });
             }
 
@@ -111,7 +113,8 @@ namespace Web.Areas.StockAdministration.Controllers
                     new ProductGroupOutputModel
                     {
                         Status = "Error",
-                        Message = string.Format("There is already a product group with this name: {0} ! Please insert a different name!", model.Name)
+                        Message = string.Format("There is already a product group with this name: {0} ! Please insert a different name!", model.Name),
+                        
                     });
 
             }
@@ -122,7 +125,8 @@ namespace Web.Areas.StockAdministration.Controllers
                     new ProductGroupOutputModel
                     {
                         Status = "Error",
-                        Message = string.Format("There is already a product group with this reference code: {0} ! Please insert a different reference code!", model.ReferenceCode)
+                        Message = string.Format("There is already a product group with this reference code: {0} ! Please insert a different reference code!", model.ReferenceCode),
+                        
                     });
             }
 
@@ -157,7 +161,7 @@ namespace Web.Areas.StockAdministration.Controllers
 
             var productGroup = QueryService.Load(productGroupId.Value);
             var productResults = QueryProduct.Query();
-
+           
             if (productResults != null)
             {
                 if (productGroup != null)
@@ -173,10 +177,11 @@ namespace Web.Areas.StockAdministration.Controllers
                         });
                     }
                 }
-
                 DeleteCommand.Execute(productGroup);
-            }
-       
+                
+            }           
+            
+
             return Json(
                 new JsonActionResponse
                 {

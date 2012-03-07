@@ -569,7 +569,12 @@ Outpost Stock Level Current
                                     window.feature.treegrid.getStore().proxy.extraParams.ProductGroupExpandedOnEdit = '';
                                     window.feature.treegrid.getRootNode().expand();
                                 }else{
-                                    Ext.Msg.alert("Alert", "Please select all option in order to see outpost stock level data!");
+                                    var msgAlert = Ext.Msg;
+                                     msgAlert.ui = 'snapshot-popup-window';
+                                     msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                     msgAlert.msgButtons['ok'].margin = '10 10 20 0',
+                                     msgAlert.alert("Alert", "Please select all option in order to see outpost stock level data!");
+                                    
                                 }
                             }
                         }]

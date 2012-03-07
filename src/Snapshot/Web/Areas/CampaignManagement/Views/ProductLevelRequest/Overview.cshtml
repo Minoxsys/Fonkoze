@@ -93,7 +93,11 @@
 
     function editProductLevelRequest(recordData) {
         if (!recordData.Editable) {
-            Ext.Msg.alert('Edit disabled', 'Edit is disabled because Campaign is already running');
+            var msgAlert = Ext.Msg;
+            msgAlert.ui = 'snapshot-popup-window';
+            msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+            msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+            msgAlert.alert('Edit disabled', 'Edit is disabled because Campaign is already running');
             return;
         }
         var modal = new window.feature.createProductLevelRequest({
