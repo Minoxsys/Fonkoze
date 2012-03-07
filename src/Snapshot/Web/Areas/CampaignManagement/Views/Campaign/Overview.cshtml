@@ -416,6 +416,9 @@ Campaign: Overview
 
                 me.buttons = [{
                     text: 'Cancel',
+                    margin: '25 10 0 10',
+                    ui: 'snapshot-cancel-btn',
+                    cls: 'x-add-button-gradient',
                     handler: function () {
                         firstContainer.destroy();
 
@@ -424,6 +427,9 @@ Campaign: Overview
                     }
                 }, {
                     text: 'Save',
+                    margin: '25 10 0 10',
+                    ui: 'snapshot-add-btn',
+                    cls: 'x-add-button-gradient',
                     handler: function () {
                          var name = me.down('#'+window.feature.formCampaignNameId);
                          var startDate =me.down('#'+window.feature.formCampaignStartDateId);
