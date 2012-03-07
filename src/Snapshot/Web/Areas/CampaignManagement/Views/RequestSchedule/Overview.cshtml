@@ -106,6 +106,7 @@ User Administration Roles: Overview
         window.feature.modal = Ext.create('Ext.window.Window', {
             title: 'Add New Schedule',
             modal: true,
+            ui: 'snapshot-popup-window',
             height: 250,
             width: 700,
             closeAction: 'hide',
@@ -170,9 +171,9 @@ User Administration Roles: Overview
                   cls: 'x-add-button-gradient',
 
                   handler: function () { window.feature.modal.hide(); } },
-                { text: 'SAVE',
+                { text: 'Save',
                   margin: '10 10 20 0',
-                  ui: 'snapshot-cancel-btn',
+                  ui: 'snapshot-add-btn',
                   cls: 'x-add-button-gradient',
                   handler: SaveSchedule }
             ]
@@ -189,13 +190,13 @@ User Administration Roles: Overview
                     items: [
                        { xtype: 'image',
                            src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/SubMenu/CampaignSelected.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
-                           margin: '0 10 10 10'
+                           margin: '0 10 20 10'
                        },
                         {
                             xtype: 'label',
                             cls: 'x-title-label',
                             text: 'Automatic Schedule',
-                            margin: '0 0 0 10'
+                            margin: '0 0 10 10'
                         },
                         {
                             xtype: 'button',
@@ -317,7 +318,7 @@ User Administration Roles: Overview
                 displayInfo: true,
                 displayMsg: 'Displaying topics {0} - {1} of {2}',
                 emptyMsg: "No topics to display",
-                ui: ''
+                ui: 'snapshot-pagination-toolbar'
             })
         });
 

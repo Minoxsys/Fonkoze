@@ -43,7 +43,7 @@
 	Ext.onReady(function () {
 
 		window.feature.models.ProductLevelRequest = Ext.define('ProductLevelRequestModel', {
-			extend: 'Ext.data.Model',
+		    extend: 'Ext.data.Model',
 			fields: [
 				{
 					name: 'id', type: 'string',
@@ -121,7 +121,8 @@
         window.feature.gridStore = new window.feature.stores.ProductLevelRequest();
 
 		window.feature.grid = Ext.create('Ext.grid.Panel', {
-			flex:1,
+		    flex: 1,
+            cls: 'white-border',
 			store:  window.feature.gridStore,
 			columns: [
 				{ header:'Campaign'    ,  dataIndex:'Campaign', flex:2     },
@@ -161,6 +162,7 @@
 				displayInfo: true,
 				displayMsg: 'Displaying product requests {0} - {1} of {2}',
 				emptyMsg: "No product requests to display",
+				ui: 'snapshot-pagination-toolbar'
 			})
 	
 		});
@@ -203,15 +205,22 @@
 					items:[
 						{
 							xtype:'container',
+                            margin: '0 0 0 30',
 							flex:1,
 							layout:'column',
 							items:[
 								{xtype: 'image',
-                                src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/Content/CreateProductLevelRequest.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
-                                 margin: '0 10 10 10'
-                                },{xtype:'label', html:'Product Level Requests'},
+                                 src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/Content/CreateProductLevelRequest.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                                 margin: '0 20 10 10',
+                                },
+                                {  xtype:'label',
+                                   cls: 'x-title-label',
+                                 html:'Product Level Requests'},
 								{
 									xtype:'button',
+                                    margin: '0 0 0 20',
+                                    ui: 'snapshot-add-btn',
+								    cls: 'x-add-button-gradient',
 									text:'Create Product Level Request',
 									handler:function(btn){
                                     showCreateProductLevelRequest();

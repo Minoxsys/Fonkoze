@@ -183,10 +183,11 @@
     window.feature.createProductLevelRequest = Ext.define('snapshot-Outpost-AssignProductsModalWindow', {
         extend: 'Ext.window.Window',
         modal: true,
+        ui: 'snapshot-popup-window',
+        cls: 'white-border',
         height: 600,
         width: 1200,
-        bodyPadding: 0,
-        bodyStyle: 'background-color:#fff',
+        bodyPadding: '20 10 10 10',
         layout: 'fit',
 
         initComponent: function () {
@@ -194,12 +195,20 @@
 
             me.buttons = [
                 {
-                    text: 'Cancel', handler: function () {
+                    text: 'Cancel',
+                    margin: '10 10 20 0',
+                    ui: 'snapshot-cancel-btn',
+                    cls: 'x-add-button-gradient',
+                    handler: function () {
                         me.close();
                         me.destroy();
                     }
                 }, {
-                    text: 'Save', handler: function () {
+                    text: 'Save',
+                    margin: '10 10 20 0',
+                    ui: 'snapshot-add-btn',
+                    cls: 'x-add-button-gradient',
+                    handler: function () {
                         me.onSave();
                     }
                 }
@@ -227,6 +236,7 @@
                                     xtype: 'combobox',
                                     itemId: 'campaign',
                                     fieldLabel: 'Campaign',
+                                    margin: '0 50 0 0',
                                     store: me.campaigns,
                                     emptyText: 'Campaign List',
                                     allowBlank: false,
@@ -237,6 +247,7 @@
                                 }, {
                                     xtype: 'combobox',
                                     itemId: 'productGroup',
+                                    width: 280,
                                     fieldLabel: 'Product Group',
                                     store: me.productGroupStore,
                                     emptyText: 'Product Group List',
@@ -254,6 +265,7 @@
                         }, {
                             xtype: 'gridpanel',
                             autoscroll: true,
+                            cls: 'white-border',
                             store: me.products,
                             columns: [
                                 {
@@ -283,6 +295,7 @@
                             html: _t('Please select a schedule')
                         }, {
                             xtype: 'gridpanel',
+                            cls: 'white-border',
                             itemId: 'schedules',
                             store: me.schedules,
                             autoscroll: true,
