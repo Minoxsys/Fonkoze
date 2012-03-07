@@ -132,7 +132,8 @@ namespace Web.Areas.CampaignManagement.Controllers
 
             schedule.Name = inputModel.Name;
             schedule.ScheduleBasis = ON_A_SCHEDULE_BASIS;
-            schedule.FrequencyType = inputModel.FrequencyType;
+            //schedule.FrequencyType = inputModel.FrequencyType;
+            schedule.FrequencyType = "Every " + inputModel.FrequencyValue + " day(s)";
             schedule.FrequencyValue = inputModel.FrequencyValue;
             schedule.StartOn = inputModel.StartOn;
 
@@ -202,7 +203,8 @@ namespace Web.Areas.CampaignManagement.Controllers
             {
                 Name = inputModel.Name,
                 ScheduleBasis = ON_A_SCHEDULE_BASIS,
-                FrequencyType = inputModel.FrequencyType,
+                //FrequencyType = inputModel.FrequencyType,
+                FrequencyType = "Every " + inputModel.FrequencyValue + " day(s)",
                 FrequencyValue = inputModel.FrequencyValue,
                 StartOn = inputModel.StartOn,
                 Client = _client
