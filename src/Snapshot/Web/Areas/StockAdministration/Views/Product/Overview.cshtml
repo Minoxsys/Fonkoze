@@ -578,7 +578,11 @@
     
             window.feature.store.proxy.extraParams.productGroupId = selectedProductGroupId;
             window.feature.store.loadPage(1);
-        }
+        };
+
+        window.feature.doSearch = new Ext.util.DelayedTask(function(){
+			window.feature.store.loadPage(1);
+		});  
     
         var contentRes = window.res.content;
         window.feature.ProductGroupStore.load();
@@ -659,39 +663,18 @@
                                             emptyText: 'Product Search',
                                             enableKeyEvents: true,
                                             listeners: {
-                                                specialkey: function (field, e) {
-                                                    if (e.getKey() == Ext.EventObject.ESC) {
-                                                        var selectedProductGroupId = Ext.getCmp(window.feature.comboboxProductGroupsId).getValue();
-    
-                                                        window.feature.store.proxy.extraParams.searchName = '';
-    
-                                                        Ext.getCmp(window.feature.searchTextFieldId).setValue('');
-                                                        if (selectedProductGroupId) {
-                                                            GetStoreWithProductsSpecificToProductGroupWith(selectedProductGroupId)
+                                                'keyup': {
+                                                    fn: function(key) {
+                                                        var selectedProductId = Ext.getCmp(window.feature.comboboxProductGroupsId).getValue();
+                                                        var searchByName = Ext.getCmp(window.feature.searchTextFieldId).getValue();
+                                                        window.feature.store.proxy.extraParams.searchName = searchByName;
+                                                        
+                                                        if (selectedProductId){
+                                                            window.feature.store.proxy.extraParams.productGroupId = selectedProductId;
                                                         }
-                                                        else {
-                                                            window.feature.store.loadPage(1);
-                                                        }
+                                                        
+                                                        window.feature.doSearch.delay(500);
                                                     }
-                                                },
-                                                keyup: function () {
-    
-                                                    var selectedProductId = Ext.getCmp(window.feature.comboboxProductGroupsId).getValue();
-                                                    var searchByName = Ext.getCmp(window.feature.searchTextFieldId).getValue();
-    
-                                                    window.feature.store.proxy.extraParams.searchName = searchByName;
-    
-                                                    clearTimeout(timeout);
-                                                    timeout = setTimeout(function () {
-    
-                                                        if (selectedProductId) {
-                                                            GetStoreWithProductsSpecificToProductGroupWith(selectedProductId)
-                                                        }
-                                                        else {
-                                                            window.feature.store.loadPage(1);
-                                                        }
-                                                    }, 1000);
-    
                                                 }
                                             }
                                         }
