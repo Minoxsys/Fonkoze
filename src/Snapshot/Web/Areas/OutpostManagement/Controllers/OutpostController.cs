@@ -26,6 +26,8 @@ namespace Web.Areas.OutpostManagement.Controllers
 		public IQueryService<User> QueryUsers { get; set; }
 		public IQueryService<Product> QueryProduct { get; set; }
 		public IQueryService<Contact> QueryContact { get; set; }
+        public IQueryService<OutpostStockLevel> QueryOutpostStockLevel { get; set; }
+        public IQueryService<OutpostHistoricalStockLevel> QueryOutpostHistoricalStockLevel { get; set; }
 
 		public ISaveOrUpdateCommand<Outpost> SaveOrUpdateCommand { get; set; }
 		public ISaveOrUpdateCommand<Contact> SaveOrUpdateCommandContact { get; set; }
@@ -74,6 +76,34 @@ namespace Web.Areas.OutpostManagement.Controllers
 		public JsonResult Delete(Guid outpostId)
 		{
 			var outpost = QueryService.Load(outpostId);
+
+            var currentOutpostStockLevel = QueryOutpostStockLevel.Query().Where(it => it.Outpost == outpost);
+            var historicalOutpostStockLevel = QueryOutpostHistoricalStockLevel.Query().Where(it => it.OutpostId == outpost.Id);
+
+            if (currentOutpostStockLevel.Count() > 0)
+            {
+                return Json(new JsonActionResponse
+                {
+                    Status = "Error",
+                    Message = string.Format("Outpost {0} has stock level available, so it can not be deleted!", outpost.Name)
+                });
+            }
+
+            if (historicalOutpostStockLevel.Count() > 0)
+            {
+                return Json(new JsonActionResponse
+                {
+                    Status = "Error",
+                    Message = string.Format("Outpost {0} has stock level history available, so it can not be deleted!", outpost.Name)
+                });
+            }
+
+            var contacts = QueryContact.Query().Where(it => it.Outpost == outpost);
+
+            foreach (var contact in contacts)
+            {
+                DeleteContactCommand.Execute(contact);
+            }
 
 			if (outpost != null)
 			{

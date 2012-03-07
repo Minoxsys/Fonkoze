@@ -13,6 +13,7 @@ namespace Persistence.Overrides
         public void Override(FluentNHibernate.Automapping.AutoMapping<Outpost> mapping)
         {
             mapping.HasMany(p => p.Contacts);
+            
         }
     }
 }

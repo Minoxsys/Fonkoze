@@ -53,7 +53,7 @@
             extend:  'Ext.grid.Panel', 
             selType: 'rowmodel',
             flex:1,
-    
+            cls: 'white-border',
             plugins:[
                 window.feature.rowEditor
             ],
@@ -86,24 +86,26 @@
                 {
                     header: _t('Contact Method'), dataIndex: 'ContactType',
                     flex:1,
-    
+                    menuDisabled: true,
                     editor: window.feature.editorRowCombo   
                 },{
                     header: _t('Mobile Number/Email'), dataIndex: 'ContactDetail',
                     flex:2,
+                    menuDisabled: true,
                     editor: {
                         xtype:'textfield',
                         allowBlank: false
                     }
                 },{
                     header: _t('Default'), dataIndex: 'IsMainContact',
-    
+                    menuDisabled:true,
                     editor: {
                         xtype:'checkbox'
                     }
     
                 }, {
                     xtype: 'actioncolumn',
+                    menuDisabled: true,
                     text: _t('Actions'),
                     items: [
                         {

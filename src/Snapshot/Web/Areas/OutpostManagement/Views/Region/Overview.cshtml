@@ -373,7 +373,8 @@ Outpost Management Regions: Overview
                                     msgConfirm.ui = 'snapshot-popup-window';
                                     msgConfirm.msgButtons['no'].ui = 'snapshot-cancel-btn';
                                     msgConfirm.msgButtons['yes'].ui = 'snapshot-add-btn';
-                                    msgConfirm.confirm('Warning', Ext.String.format('Are you sure you want to delete {0} ?', rec.get('Name')), function(btn)
+                                    msgConfirm.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                    msgConfirm.confirm('Warning', Ext.String.format('Are you sure you want to delete region {0} ?', rec.get('Name')), function(btn)
                                 {
                                     if (btn=='yes'){
                                         var values = { regionId: rec.get('Id') };

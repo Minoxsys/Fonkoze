@@ -118,6 +118,7 @@
         modal: true,
         height: 600,
         width: 1200,
+        ui: 'snapshot-popup-window',
         bodyPadding: 0,
         bodyStyle: 'background-color:#fff',
         layout: 'fit',
@@ -168,6 +169,7 @@
                         {
                             xtype: 'gridpanel',
                             flex:1,
+                            cls: 'white-border',
                             autoscroll:true,
                             store: me.outpostStockLevelStore,
     
@@ -176,26 +178,31 @@
                                     xtype: 'gridcolumn',
                                     dataIndex: 'Group',
                                     flex: 1,
+                                    menuDisabled: true,
                                     text: 'Group',
     
                                 }, {
                                     xtype: 'gridcolumn',
                                     dataIndex: 'ProductItem',
+                                    menuDisabled: true,
                                     text: 'Product Item',
                                     flex:1
                                 },{
                                     xtype: 'gridcolumn',
                                     sortable: false,
+                                    menuDisabled: true,
                                     dataIndex: 'SmsCode',
                                     text: 'SMS Code'
                                 },{
                                     xtype: 'gridcolumn',
                                     sortable: true,
+                                    menuDisabled:true,
                                     dataIndex: 'ProductLevel',
                                     text: 'Product Level'
                                 },{
                                     xtype: 'gridcolumn',
                                     sortable: true,
+                                    menuDisabled: true,
                                     dataIndex: 'Update',
                                     text: 'Update'
                                 }
@@ -216,9 +223,11 @@
                             items: [
                                 {
                                     xtype: 'label',
+                                    margin: '30 10 0 10',
                                     text: 'Outpost Name: ' + me.outpostName
                                 }, {
                                     xtype: 'combobox',
+                                    margin: '20 100 0 10',
                                     fieldLabel: 'Product Group',
                                     store: me.productGroupsStore,
                                     valueField:'Id',
@@ -239,21 +248,26 @@
                                 }, {
                                     xtype: 'gridpanel',
                                     flex: 1,
+                                    margin: '20 0 0 0',
+                                    cls: 'white-border',
                                     store: me.productsStore,
                                     columns: [
                                         {
                                             xtype: 'gridcolumn',
                                             dataIndex: 'Name',
                                             flex: 1,
+                                            menuDisabled:true,
                                             text: 'Products'
                                         }, {
                                             xtype: 'gridcolumn',
                                             sortable: false,
+                                            menuDisabled:true,
                                             dataIndex: 'SmsCode',
                                             text: 'SMS Code'
                                         }, {
                                             xtype: 'checkcolumn',
                                             sortable: false,
+                                            menuDisabled:true,
                                             dataIndex: 'Selected',
                                             text: 'Selected'
                                         }
@@ -268,8 +282,10 @@
                                     items:[
                                         {xtype:'container',height: 30, html:'&nbsp;',flex:1 },{
                                             xtype:'button',
-                                            margin:20,
                                             text:'Save',
+                                            margin: '0 20 20 10',
+                                            ui: 'snapshot-add-btn',
+                                            cls: 'x-add-button-gradient', 
                                             handler:function(){
                                                 var userSelection = [];
                                                 me.productsStore.each(function(record){

@@ -7,7 +7,7 @@ User Administration Roles: Overview
     Html.RenderPartial("_SubNavigation");
     Html.RenderPartial("_UserAdministrationSideBar");
 }
-<style type="text/css">
+@*<style type="text/css">
     .x-table-layout-cell 
     {
         text-align: left;
@@ -32,7 +32,7 @@ User Administration Roles: Overview
         width: 250px;
         margin-left: 30px;
     }
-</style>
+</style>*@
 <script type="text/javascript">
     Ext.onReady(function () {
         var administrationBtnId = window.res.header.navigation.administration;
@@ -201,7 +201,8 @@ User Administration Roles: Overview
                             {
                                 src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/briefcase.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
                                 width: 35,
-                                height: 35
+                                height: 35,
+                                margin: '0 10 10 10'
                             }),
                             {
                                 xtype: 'label',
@@ -263,24 +264,27 @@ User Administration Roles: Overview
             loadMask: true,
             cls: 'white-border',
             disableSelection: true,
-            anchor: '100% 95%',
+            flex: 3,
             autoScroll: true,
             columns: [
                     {
                         header: 'Role',
                         dataIndex: 'Name',
                         flex: 1,
+                        menuDisabled:true,
                         sortable: true
                     },
                     {
                         header: 'Number of Users',
                         dataIndex: 'NumberOfUsers',
                         flex: 1,
+                        menuDisabled:true,
                         sortable: false
                     },
                     {
                         xtype: 'actioncolumn',
                         text: 'Actions',
+                        menuDisabled: true,
                         flex: 1,
                         items: [
                             {
@@ -325,11 +329,17 @@ User Administration Roles: Overview
         window.feature.container = Ext.create('Ext.container.Container', {
             margin: '45 50 20 20',
             padding: '20 0 0 20',
-            height: 760,
             autoScroll: true,
             id: 'TopContainer',
-            layout: 'anchor',
-            items: [window.feature.rolesAdministrationHeader, window.feature.grid]
+            layout: {
+                align: 'stretch',
+                type: 'vbox'
+            },
+            items: [window.feature.rolesAdministrationHeader, window.feature.grid,
+                {
+                    xtype: 'container',
+                    height: 150
+                }, ]
         });
 
         var contentRes = window.res.content;

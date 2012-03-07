@@ -213,7 +213,10 @@ Districts: Overview
                         action.success(function (result) {
 
                         if(result.CloseModal === false){
-                        Ext.Msg.alert(result.Status, result.Message);
+                                            var msgAlert = Ext.Msg;
+                                            msgAlert.ui = 'snapshot-popup-window';
+                                            msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                            msgAlert.alert(result.Status, result.Message);
                         }
                         else{
                             var selectedCountryInModal = Ext.getCmp(window.feature.comboboxCountriesForModalId).getValue();
@@ -243,7 +246,7 @@ Districts: Overview
         window.feature.modalEdit = Ext.define('Ext.feature.district.ModalEdit', {
             extend: 'Ext.window.Window',
             title: 'Edit District',
-            height: 170,
+            height: 200,
             width: 390,
             modal: true,
             ui: 'snapshot-popup-window',
@@ -358,7 +361,10 @@ Districts: Overview
                         var action = $.post(postToUrl, values);
                         action.success(function (result) {
                              if(result.CloseModal === false){
-                                Ext.Msg.alert(result.Status, result.Message);
+                                var msgAlert = Ext.Msg;
+                                            msgAlert.ui = 'snapshot-popup-window';
+                                            msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                            msgAlert.alert(result.Status, result.Message);
                             }
                             else{
                             var selectedCountryInModal = Ext.getCmp(window.feature.comboboxCountriesForModalId).getValue();
@@ -544,7 +550,12 @@ Districts: Overview
                     handler: function (grid, rowIndex, colIndex) {
                         var record = grid.store.getAt(rowIndex);
 
-                        Ext.MessageBox.confirm('Confirm', 'Are you sure you want to delete the district?', function (button) {
+                        var msgConfirm = Ext.Msg;
+                            msgConfirm.ui = 'snapshot-popup-window';
+                            msgConfirm.msgButtons['no'].ui = 'snapshot-cancel-btn';
+                            msgConfirm.msgButtons['yes'].ui = 'snapshot-add-btn';
+                            msgConfirm.msgButtons['ok'].ui = 'snapshot-add-btn';
+                        msgConfirm.confirm('Confirm', 'Are you sure you want to delete the district?', function (button) {
 
                             var values = { guid: record.data.Id
                             };
@@ -554,8 +565,9 @@ Districts: Overview
                                 var action = $.post(postToUrl, values);
                                 action.success(function (result) {
                                     if (result.Status !== 'Success') {
-                                        var windowAlert = new Ext.window.MessageBox;
-                                        windowAlert.alert(result.Status, result.Message);
+                                        var msgAlert = Ext.Msg;
+                                            msgAlert.ui = 'snapshot-popup-window';
+                                            msgAlert.alert(result.Status, result.Message);
                                     }
                                     var selectedCountryId = Ext.getCmp(window.feature.comboboxCountriesId).getValue();
                                     var selectedRegionId = Ext.getCmp(window.feature.comboboxRegionsId).getValue();
