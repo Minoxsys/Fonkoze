@@ -7,7 +7,7 @@ User Administration Roles: Overview
     Html.RenderPartial("_SubNavigation");
     Html.RenderPartial("_UserAdministrationSideBar");
 }
-@*<style type="text/css">
+<style type="text/css">
     .x-table-layout-cell 
     {
         text-align: left;
@@ -32,7 +32,7 @@ User Administration Roles: Overview
         width: 250px;
         margin-left: 30px;
     }
-</style>*@
+</style>
 <script type="text/javascript">
     Ext.onReady(function () {
         var administrationBtnId = window.res.header.navigation.administration;
@@ -239,7 +239,7 @@ User Administration Roles: Overview
                         items: [{
                             xtype: 'textfield',
                             itemId: window.feature.searchRoleId,
-                            padding: '0 0 0 200',
+                            padding: '0 0 0 0',
                             width: 200,
                             frame: true,
                             emptyText: 'Role Search',

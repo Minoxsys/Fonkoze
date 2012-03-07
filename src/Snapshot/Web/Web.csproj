@@ -405,9 +405,11 @@
     <Content Include="Areas\CampaignManagement\Views\_ViewStart.cshtml" />
     <Content Include="Assets\css\button-template.css" />
     <Content Include="Assets\css\color-scheme.css" />
+    <Content Include="Assets\css\container-template.css" />
     <Content Include="Assets\css\ext-ie.css" />
     <Content Include="Assets\css\general-css.css" />
     <Content Include="Assets\css\global-values.css" />
+    <Content Include="Assets\css\panel-template.css" />
     <Content Include="Assets\resources\img\Administration\Content\ArrowDown.png" />
     <Content Include="Assets\resources\img\Administration\Content\ArrowUp.png" />
     <Content Include="Assets\resources\img\Administration\Content\CountryIcon.png" />

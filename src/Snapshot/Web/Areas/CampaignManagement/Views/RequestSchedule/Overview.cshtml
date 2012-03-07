@@ -192,6 +192,7 @@ User Administration Roles: Overview
                 {
                     xtype: 'container',
                     flex: 1,
+                    margin: '0 0 0 30',
                     layout: 'column',
                     items: [
                        { xtype: 'image',
@@ -228,8 +229,8 @@ User Administration Roles: Overview
                     items: [{
                         xtype: 'textfield',
                         itemId: window.feature.searchScheduleId,
-                        padding: '0 0 0 200',
-                        width: 200,
+                        padding: '0 0 0 0',
+                        width: 150,
                         frame: true,
                         emptyText: 'Schedule Search',
                         enableKeyEvents: true,
@@ -289,7 +290,7 @@ User Administration Roles: Overview
                     {
                         xtype: 'actioncolumn',
                         text: 'Actions',
-                        flex: 1,
+                        flex: 2,
                         items: [
                             {
                                 icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("img/edit.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
