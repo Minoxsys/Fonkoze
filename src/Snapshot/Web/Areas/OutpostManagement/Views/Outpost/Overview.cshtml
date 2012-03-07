@@ -570,9 +570,9 @@
 												},{
 													xtype:'button',
 													margin:'20 0 0 0',
-													text:'FIND ON MAP',
-						                                                        ui: 'snapshot-add-btn',
-                                                                                                        cls: 'x-add-button-gradient',
+													text:'Find On Map',
+						                            ui: 'snapshot-add-btn',
+                                                    cls: 'x-add-button-gradient',
 													handler: function() {
 														var coordinatesTextField = me.down('#' + window.feature.modalIds.coordinatesId);
 														var outpostNameTextField = me.down('#' + window.feature.modalIds.nameId);
@@ -665,10 +665,10 @@
 	
 								{
 									xtype:'button',
-									text: 'ADD NEW CONTACT METHOD',
+									text: 'Add New Contact Method',
                                     ui: 'snapshot-add-btn',
                                     cls: 'x-add-button-gradient',
-									margin:'20 10 10 10',
+									margin:'20 10 50 10',
 									handler: function(){
 										window.feature.rowEditor.cancelEdit();
 	
@@ -798,7 +798,7 @@
 								{
 									xtype: 'container',
 									height: 30,
-									margin: '0 0 0 75',
+									margin: '0 0 10 75',
 									html:'&nbsp;'
 								},
 								window.feature.comboBoxFilters.country,

@@ -164,8 +164,17 @@ User Administration Roles: Overview
                     }
             ],
             buttons: [
-                { text: 'CANCEL', handler: function () { window.feature.modal.hide(); } },
-                { text: 'SAVE', cls: 'x-add-button-gradient', handler: SaveSchedule }
+                { text: 'Cancel',
+                  margin: '10 10 20 0',
+                  ui: 'snapshot-cancel-btn',
+                  cls: 'x-add-button-gradient',
+
+                  handler: function () { window.feature.modal.hide(); } },
+                { text: 'SAVE',
+                  margin: '10 10 20 0',
+                  ui: 'snapshot-cancel-btn',
+                  cls: 'x-add-button-gradient',
+                  handler: SaveSchedule }
             ]
         });
 
@@ -184,12 +193,14 @@ User Administration Roles: Overview
                        },
                         {
                             xtype: 'label',
+                            cls: 'x-title-label',
                             text: 'Automatic Schedule',
                             margin: '0 0 0 10'
                         },
                         {
                             xtype: 'button',
                             text: 'Add a New Schedule',
+                            ui: 'snapshot-add-btn',
                             cls: 'x-add-button-gradient',
                             margin: '0 0 0 20',
                             handler: function () {
@@ -230,6 +241,7 @@ User Administration Roles: Overview
 
         window.feature.grid = Ext.create('Ext.grid.Panel', {
             store: window.feature.store,
+            cls: "white-border",
             loadMask: true,
             disableSelection: true,
             anchor: '100% 95%',
@@ -304,7 +316,8 @@ User Administration Roles: Overview
                 store: window.feature.store,
                 displayInfo: true,
                 displayMsg: 'Displaying topics {0} - {1} of {2}',
-                emptyMsg: "No topics to display"
+                emptyMsg: "No topics to display",
+                ui: ''
             })
         });
 
