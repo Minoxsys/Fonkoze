@@ -141,11 +141,13 @@ namespace Web.Areas.OutpostManagement.Controllers
         public JsonResult Index(DeleteContactIndex input)
         {
             LoadUserAndClient();
+
             var outpost = LoadOutpost(input.OutpostId);
 
             var contact = QueryContact.Load(input.Id.Value);
 
-            DeleteCommand.Execute(contact);
+            if (contact != null)
+                DeleteCommand.Execute(contact);
 
             return Json(new { success = true, message = "Contact has been removed" });
         }
