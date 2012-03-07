@@ -290,8 +290,9 @@
                                                             var postToUrl = '@Url.RouteUrl(StockAdministrationAreaRegistration.DEFAULT_ROUTE, new { controller = "ProductGroup", action = "Create" })';
                                                             var action = $.post(postToUrl, values);
                                                             action.success(function(serverResponse){
-                                                                if (serverResponse.Status === "Error"){
-                                                                    Ext.Msg.alert(result.Status, result.Message);
+                                                            debugger;
+                                                                if(serverResponse.Status === "Error"){
+                                                                    Ext.Msg.alert(serverResponse.Status, serverResponse.Message);
                                                                     return;
                                                                 }
     

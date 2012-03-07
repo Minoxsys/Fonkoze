@@ -61,6 +61,16 @@ namespace Web.Areas.StockAdministration.Controllers
                     });
             }
 
+            if (queryProductGroupValidation.Where(it => it.ReferenceCode == model.ReferenceCode).Count() > 0)
+            {
+                return Json(
+                    new ProductGroupOutputModel
+                    {
+                        Status = "Error",
+                        Message = string.Format("There is already a product group with this reference code: {0} ! Please insert a different reference code!", model.ReferenceCode)
+                    });
+            }
+
             CreateMappings();
 
             var productGroup = new ProductGroup();
@@ -104,6 +114,16 @@ namespace Web.Areas.StockAdministration.Controllers
                         Message = string.Format("There is already a product group with this name: {0} ! Please insert a different name!", model.Name)
                     });
 
+            }
+
+            if (queryProductGroupValidation.Where(it => it.ReferenceCode == model.ReferenceCode && it.Id != model.Id).Count() > 0)
+            {
+                return Json(
+                    new ProductGroupOutputModel
+                    {
+                        Status = "Error",
+                        Message = string.Format("There is already a product group with this reference code: {0} ! Please insert a different reference code!", model.ReferenceCode)
+                    });
             }
 
             CreateMappings();
