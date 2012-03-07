@@ -25,4 +25,30 @@
     $ui-body-font-size: $font_size-larger,
     $ui-body-font-weight: $font_weight-bold
 );
+
+@include extjs-panel-ui(
+    'snapshot-login-panel',
+
+    $ui-border-color: #b1b1b1,
+    $ui-border-radius: 3,
+    $ui-border-width: 1,
+
+    $ui-header-color: #000,
+    $ui-header-font-family: $global2-font-family,
+    $ui-header-font-size: $font_size-larger,
+    $ui-header-font-weight: $font_weight-bold,
+    $ui-header-border-color: #ffffff,
+    $ui-header-background-color: #ff0000,
+    $ui-header-background-gradient: color_stops(#cf7b7b 0%,#a95757 100%),
+    $ui-header-inner-border-color: transparent,
+
+    $ui-body-color: #ff0000,
+    $ui-body-border-color: transparent,
+    $ui-body-border-width: 0,
+    $ui-body-border-style: none,
+    $ui-body-background-color: transparent,
+    $ui-body-font-size: $font_size-larger,
+    $ui-body-font-weight: $font_weight-bold
+);
+
 @import 'footer-template.scss';

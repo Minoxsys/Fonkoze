@@ -107,7 +107,6 @@ Analysis
                      window.feature.treegrid.getStore().proxy.extraParams.CountryId = selectedCountryId;
                      window.feature.treegrid.getStore().proxy.extraParams.RegionId = '';
                      window.feature.treegrid.getRootNode().expand();
-                     
                   }
             }
         });
@@ -178,6 +177,7 @@ Analysis
 
         window.feature.treegrid = Ext.create('Ext.tree.Panel', {
             useArrows: true,
+            cls: 'white-border',
             rootVisible: false,
             flex: 3,
             height: 600,

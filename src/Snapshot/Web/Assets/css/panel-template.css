@@ -1559,7 +1559,32 @@ input, textarea, select {
 .x-html {
   /* Begin bidirectionality settings (do not change) */ }
   /* line 32, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/widgets/_html.scss */
-  .x-html html, .x-html address, .x-html blockquote, .x-html body, .x-html dd, .x-html div, .x-html dl, .x-html dt, .x-html fieldset, .x-html form, .x-html frame, .x-html frameset, .x-html h1, .x-html h2, .x-html h3, .x-html h4, .x-html h5, .x-html h6, .x-html noframes, .x-html ol, .x-html p, .x-html ul, .x-html center, .x-html dir, .x-html hr, .x-html menu, .x-html pre {
+  .x-html html,
+  .x-html address,
+  .x-html blockquote,
+  .x-html body,
+  .x-html dd,
+  .x-html div,
+  .x-html dl,
+  .x-html dt,
+  .x-html fieldset,
+  .x-html form,
+  .x-html frame, .x-html frameset,
+  .x-html h1,
+  .x-html h2,
+  .x-html h3,
+  .x-html h4,
+  .x-html h5,
+  .x-html h6,
+  .x-html noframes,
+  .x-html ol,
+  .x-html p,
+  .x-html ul,
+  .x-html center,
+  .x-html dir,
+  .x-html hr,
+  .x-html menu,
+  .x-html pre {
     display: block; }
   /* line 33, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/widgets/_html.scss */
   .x-html li {
@@ -1590,7 +1615,8 @@ input, textarea, select {
   .x-html colgroup {
     display: table-column-group; }
   /* line 43, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/widgets/_html.scss */
-  .x-html td, .x-html th {
+  .x-html td,
+  .x-html th {
     display: table-cell; }
   /* line 44, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/widgets/_html.scss */
   .x-html caption {
@@ -1618,7 +1644,16 @@ input, textarea, select {
     font-size: 1.17em;
     margin: .83em 0; }
   /* line 60, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/widgets/_html.scss */
-  .x-html h4, .x-html p, .x-html blockquote, .x-html ul, .x-html fieldset, .x-html form, .x-html ol, .x-html dl, .x-html dir, .x-html menu {
+  .x-html h4,
+  .x-html p,
+  .x-html blockquote,
+  .x-html ul,
+  .x-html fieldset,
+  .x-html form,
+  .x-html ol,
+  .x-html dl,
+  .x-html dir,
+  .x-html menu {
     margin: 1.12em 0; }
   /* line 61, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/widgets/_html.scss */
   .x-html h5 {
@@ -1629,29 +1664,49 @@ input, textarea, select {
     font-size: .75em;
     margin: 1.67em 0; }
   /* line 70, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/widgets/_html.scss */
-  .x-html h1, .x-html h2, .x-html h3, .x-html h4, .x-html h5, .x-html h6, .x-html b, .x-html strong {
+  .x-html h1,
+  .x-html h2,
+  .x-html h3,
+  .x-html h4,
+  .x-html h5,
+  .x-html h6,
+  .x-html b,
+  .x-html strong {
     font-weight: bolder; }
   /* line 71, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/widgets/_html.scss */
   .x-html blockquote {
     margin-left: 40px;
     margin-right: 40px; }
   /* line 76, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/widgets/_html.scss */
-  .x-html i, .x-html cite, .x-html em, .x-html var, .x-html address {
+  .x-html i,
+  .x-html cite,
+  .x-html em,
+  .x-html var,
+  .x-html address {
     font-style: italic; }
   /* line 81, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/widgets/_html.scss */
-  .x-html pre, .x-html tt, .x-html code, .x-html kbd, .x-html samp {
+  .x-html pre,
+  .x-html tt,
+  .x-html code,
+  .x-html kbd,
+  .x-html samp {
     font-family: monospace; }
   /* line 82, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/widgets/_html.scss */
   .x-html pre {
     white-space: pre; }
   /* line 86, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/widgets/_html.scss */
-  .x-html button, .x-html textarea, .x-html input, .x-html select {
+  .x-html button,
+  .x-html textarea,
+  .x-html input,
+  .x-html select {
     display: inline-block; }
   /* line 87, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/widgets/_html.scss */
   .x-html big {
     font-size: 1.17em; }
   /* line 90, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/widgets/_html.scss */
-  .x-html small, .x-html sub, .x-html sup {
+  .x-html small,
+  .x-html sub,
+  .x-html sup {
     font-size: .83em; }
   /* line 91, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/widgets/_html.scss */
   .x-html sub {
@@ -1663,19 +1718,28 @@ input, textarea, select {
   .x-html table {
     border-spacing: 2px; }
   /* line 96, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/widgets/_html.scss */
-  .x-html thead, .x-html tbody, .x-html tfoot {
+  .x-html thead,
+  .x-html tbody,
+  .x-html tfoot {
     vertical-align: middle; }
   /* line 98, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/widgets/_html.scss */
-  .x-html td, .x-html th {
+  .x-html td,
+  .x-html th {
     vertical-align: inherit; }
   /* line 101, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/widgets/_html.scss */
-  .x-html s, .x-html strike, .x-html del {
+  .x-html s,
+  .x-html strike,
+  .x-html del {
     text-decoration: line-through; }
   /* line 102, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/widgets/_html.scss */
   .x-html hr {
     border: 1px inset; }
   /* line 107, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/widgets/_html.scss */
-  .x-html ol, .x-html ul, .x-html dir, .x-html menu, .x-html dd {
+  .x-html ol,
+  .x-html ul,
+  .x-html dir,
+  .x-html menu,
+  .x-html dd {
     margin-left: 40px; }
   /* line 108, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/widgets/_html.scss */
   .x-html ul, .x-html menu, .x-html dir {
@@ -1684,11 +1748,15 @@ input, textarea, select {
   .x-html ol {
     list-style-type: decimal; }
   /* line 113, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/widgets/_html.scss */
-  .x-html ol ul, .x-html ul ol, .x-html ul ul, .x-html ol ol {
+  .x-html ol ul,
+  .x-html ul ol,
+  .x-html ul ul,
+  .x-html ol ol {
     margin-top: 0;
     margin-bottom: 0; }
   /* line 115, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/widgets/_html.scss */
-  .x-html u, .x-html ins {
+  .x-html u,
+  .x-html ins {
     text-decoration: underline; }
   /* line 116, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/widgets/_html.scss */
   .x-html br:before {
@@ -2420,4 +2488,794 @@ input, textarea, select {
 .x-panel-header-snapshot-grid-widget-panel-bottom-tc,
 .x-panel-header-snapshot-grid-widget-panel-bottom-mc,
 .x-panel-header-snapshot-grid-widget-panel-bottom-bc {
+  background-position: 0 bottom; }
+
+/* line 244, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/widgets/_panel.scss */
+.x-panel-snapshot-login-panel {
+  border-color: #b1b1b1; }
+
+/* line 249, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/widgets/_panel.scss */
+.x-panel-header-snapshot-login-panel {
+  font-size: 15px;
+  border-color: white;
+  border-width: 1px;
+  border-style: solid;
+  background-image: none;
+  background-color: red;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #cf7b7b), color-stop(100%, #a95757));
+  background-image: -webkit-linear-gradient(top, #cf7b7b 0%, #a95757 100%);
+  background-image: -moz-linear-gradient(top, #cf7b7b 0%, #a95757 100%);
+  background-image: -o-linear-gradient(top, #cf7b7b 0%, #a95757 100%);
+  background-image: -ms-linear-gradient(top, #cf7b7b 0%, #a95757 100%);
+  background-image: linear-gradient(top, #cf7b7b 0%, #a95757 100%);
+  -moz-box-shadow: transparent 0 1px 0px 0 inset;
+  -webkit-box-shadow: transparent 0 1px 0px 0 inset;
+  -o-box-shadow: transparent 0 1px 0px 0 inset;
+  box-shadow: transparent 0 1px 0px 0 inset; }
+
+/* line 273, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/widgets/_panel.scss */
+.x-nlg .x-panel-header-snapshot-login-panel-top {
+  background-image: url('../resources/themes/images/snapshot/panel-header/panel-header-snapshot-login-panel-top-bg.gif'); }
+
+/* line 277, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/widgets/_panel.scss */
+.x-nlg .x-panel-header-snapshot-login-panel-bottom {
+  background-image: url('../resources/themes/images/snapshot/panel-header/panel-header-snapshot-login-panel-bottom-bg.gif'); }
+
+/* line 281, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/widgets/_panel.scss */
+.x-nlg .x-panel-header-snapshot-login-panel-left {
+  background-image: url('../resources/themes/images/snapshot/panel-header/panel-header-snapshot-login-panel-left-bg.gif'); }
+
+/* line 285, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/widgets/_panel.scss */
+.x-nlg .x-panel-header-snapshot-login-panel-right {
+  background-image: url('../resources/themes/images/snapshot/panel-header/panel-header-snapshot-login-panel-right-bg.gif'); }
+
+/* line 292, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/widgets/_panel.scss */
+.x-panel-header-text-snapshot-login-panel {
+  color: black;
+  font-size: 15px;
+  font-weight: bold;
+  font-family: Lucida Sans Unicode, Arial, Verdana, Geneva, Helvetica, sans-serif;
+  line-height: 17px; }
+
+/* line 302, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/widgets/_panel.scss */
+.x-panel-body-snapshot-login-panel {
+  background: transparent;
+  border-color: transparent;
+  color: red;
+  font-size: 15px;
+  font-size: bold;
+  border-width: 0;
+  border-style: none; }
+
+/* line 317, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/widgets/_panel.scss */
+.x-panel-collapsed .x-window-header-snapshot-login-panel,
+.x-panel-collapsed .x-panel-header-snapshot-login-panel {
+  border-color: transparent; }
+
+/* line 322, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/widgets/_panel.scss */
+.x-panel-header-snapshot-login-panel-vertical {
+  border-color: transparent; }
+
+/* line 58, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/mixins/_frame.scss */
+.x-panel-snapshot-login-panel {
+  -moz-border-radius: 3;
+  -webkit-border-radius: 3;
+  -o-border-radius: 3;
+  -ms-border-radius: 3;
+  -khtml-border-radius: 3;
+  border-radius: 3;
+  padding: 4px 4px 4px 4px;
+  border-width: 1;
+  border-style: solid;
+  background-color: transparent; }
+
+/* line 91, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/mixins/_frame.scss */
+.x-nlg .x-panel-snapshot-login-panel-mc {
+  background-color: transparent; }
+
+/* line 104, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/mixins/_frame.scss */
+.x-nbr .x-panel-snapshot-login-panel {
+  padding: 0 !important;
+  border-width: 0 !important;
+  -moz-border-radius: 0px;
+  -webkit-border-radius: 0px;
+  -o-border-radius: 0px;
+  -ms-border-radius: 0px;
+  -khtml-border-radius: 0px;
+  border-radius: 0px;
+  background-color: transparent;
+  background-position: 1000303px 1000303px; }
+/* line 147, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/mixins/_frame.scss */
+.x-nbr .x-panel-snapshot-login-panel-tl,
+.x-nbr .x-panel-snapshot-login-panel-bl,
+.x-nbr .x-panel-snapshot-login-panel-tr,
+.x-nbr .x-panel-snapshot-login-panel-br,
+.x-nbr .x-panel-snapshot-login-panel-tc,
+.x-nbr .x-panel-snapshot-login-panel-bc,
+.x-nbr .x-panel-snapshot-login-panel-ml,
+.x-nbr .x-panel-snapshot-login-panel-mr {
+  zoom: 1; }
+/* line 168, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/mixins/_frame.scss */
+.x-nbr .x-panel-snapshot-login-panel-ml,
+.x-nbr .x-panel-snapshot-login-panel-mr {
+  zoom: 1; }
+/* line 200, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/mixins/_frame.scss */
+.x-nbr .x-panel-snapshot-login-panel-mc {
+  padding: 2px 2px 2px 2px; }
+
+/* line 58, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/mixins/_frame.scss */
+.x-panel-header-snapshot-login-panel-top {
+  -moz-border-radius-topleft: 3;
+  -webkit-border-top-left-radius: 3;
+  -o-border-top-left-radius: 3;
+  -ms-border-top-left-radius: 3;
+  -khtml-border-top-left-radius: 3;
+  border-top-left-radius: 3;
+  -moz-border-radius-topright: 3;
+  -webkit-border-top-right-radius: 3;
+  -o-border-top-right-radius: 3;
+  -ms-border-top-right-radius: 3;
+  -khtml-border-top-right-radius: 3;
+  border-top-right-radius: 3;
+  -moz-border-radius-bottomright: 0;
+  -webkit-border-bottom-right-radius: 0;
+  -o-border-bottom-right-radius: 0;
+  -ms-border-bottom-right-radius: 0;
+  -khtml-border-bottom-right-radius: 0;
+  border-bottom-right-radius: 0;
+  -moz-border-radius-bottomleft: 0;
+  -webkit-border-bottom-left-radius: 0;
+  -o-border-bottom-left-radius: 0;
+  -ms-border-bottom-left-radius: 0;
+  -khtml-border-bottom-left-radius: 0;
+  border-bottom-left-radius: 0;
+  padding: 3px 5px 4px 5px;
+  border-width: 1 1 0 1;
+  border-style: solid;
+  background-image: none;
+  background-color: red;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #cf7b7b), color-stop(100%, #a95757));
+  background-image: -webkit-linear-gradient(top, #cf7b7b 0%, #a95757 100%);
+  background-image: -moz-linear-gradient(top, #cf7b7b 0%, #a95757 100%);
+  background-image: -o-linear-gradient(top, #cf7b7b 0%, #a95757 100%);
+  background-image: -ms-linear-gradient(top, #cf7b7b 0%, #a95757 100%);
+  background-image: linear-gradient(top, #cf7b7b 0%, #a95757 100%); }
+
+/* line 91, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/mixins/_frame.scss */
+.x-nlg .x-panel-header-snapshot-login-panel-top-mc {
+  background-image: url('../resources/themes/images/snapshot/panel-header/panel-header-snapshot-login-panel-top-bg.gif');
+  background-color: red; }
+
+/* line 104, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/mixins/_frame.scss */
+.x-nbr .x-panel-header-snapshot-login-panel-top {
+  padding: 0 !important;
+  border-width: 0 !important;
+  -moz-border-radius: 0px;
+  -webkit-border-radius: 0px;
+  -o-border-radius: 0px;
+  -ms-border-radius: 0px;
+  -khtml-border-radius: 0px;
+  border-radius: 0px;
+  background-color: transparent;
+  background-position: 1000303px 1000000px; }
+/* line 147, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/mixins/_frame.scss */
+.x-nbr .x-panel-header-snapshot-login-panel-top-tl,
+.x-nbr .x-panel-header-snapshot-login-panel-top-bl,
+.x-nbr .x-panel-header-snapshot-login-panel-top-tr,
+.x-nbr .x-panel-header-snapshot-login-panel-top-br,
+.x-nbr .x-panel-header-snapshot-login-panel-top-tc,
+.x-nbr .x-panel-header-snapshot-login-panel-top-bc,
+.x-nbr .x-panel-header-snapshot-login-panel-top-ml,
+.x-nbr .x-panel-header-snapshot-login-panel-top-mr {
+  zoom: 1;
+  background-image: url('../resources/themes/images/snapshot/panel-header/panel-header-snapshot-login-panel-top-corners.gif'); }
+/* line 168, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/mixins/_frame.scss */
+.x-nbr .x-panel-header-snapshot-login-panel-top-ml,
+.x-nbr .x-panel-header-snapshot-login-panel-top-mr {
+  zoom: 1;
+  background-image: url('../resources/themes/images/snapshot/panel-header/panel-header-snapshot-login-panel-top-sides.gif');
+  background-position: 0 0; }
+/* line 200, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/mixins/_frame.scss */
+.x-nbr .x-panel-header-snapshot-login-panel-top-mc {
+  padding: 1px 3px 4px 3px; }
+
+/* line 58, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/mixins/_frame.scss */
+.x-panel-header-snapshot-login-panel-right {
+  -moz-border-radius-topleft: 0;
+  -webkit-border-top-left-radius: 0;
+  -o-border-top-left-radius: 0;
+  -ms-border-top-left-radius: 0;
+  -khtml-border-top-left-radius: 0;
+  border-top-left-radius: 0;
+  -moz-border-radius-topright: 3;
+  -webkit-border-top-right-radius: 3;
+  -o-border-top-right-radius: 3;
+  -ms-border-top-right-radius: 3;
+  -khtml-border-top-right-radius: 3;
+  border-top-right-radius: 3;
+  -moz-border-radius-bottomright: 3;
+  -webkit-border-bottom-right-radius: 3;
+  -o-border-bottom-right-radius: 3;
+  -ms-border-bottom-right-radius: 3;
+  -khtml-border-bottom-right-radius: 3;
+  border-bottom-right-radius: 3;
+  -moz-border-radius-bottomleft: 0;
+  -webkit-border-bottom-left-radius: 0;
+  -o-border-bottom-left-radius: 0;
+  -ms-border-bottom-left-radius: 0;
+  -khtml-border-bottom-left-radius: 0;
+  border-bottom-left-radius: 0;
+  padding: 5px 4px 5px 4px;
+  border-width: 1 1 1 0;
+  border-style: solid;
+  background-image: none;
+  background-color: red;
+  background-image: -webkit-gradient(linear, 100% 50%, 0% 50%, color-stop(0%, #cf7b7b), color-stop(100%, #a95757));
+  background-image: -webkit-linear-gradient(right, #cf7b7b 0%, #a95757 100%);
+  background-image: -moz-linear-gradient(right, #cf7b7b 0%, #a95757 100%);
+  background-image: -o-linear-gradient(right, #cf7b7b 0%, #a95757 100%);
+  background-image: -ms-linear-gradient(right, #cf7b7b 0%, #a95757 100%);
+  background-image: linear-gradient(right, #cf7b7b 0%, #a95757 100%); }
+
+/* line 91, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/mixins/_frame.scss */
+.x-nlg .x-panel-header-snapshot-login-panel-right-mc {
+  background-image: url('../resources/themes/images/snapshot/panel-header/panel-header-snapshot-login-panel-right-bg.gif');
+  background-color: red; }
+
+/* line 104, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/mixins/_frame.scss */
+.x-nbr .x-panel-header-snapshot-login-panel-right {
+  padding: 0 !important;
+  border-width: 0 !important;
+  -moz-border-radius: 0px;
+  -webkit-border-radius: 0px;
+  -o-border-radius: 0px;
+  -ms-border-radius: 0px;
+  -khtml-border-radius: 0px;
+  border-radius: 0px;
+  background-color: transparent;
+  background-position: 1000003px 1100300px; }
+/* line 147, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/mixins/_frame.scss */
+.x-nbr .x-panel-header-snapshot-login-panel-right-tl,
+.x-nbr .x-panel-header-snapshot-login-panel-right-bl,
+.x-nbr .x-panel-header-snapshot-login-panel-right-tr,
+.x-nbr .x-panel-header-snapshot-login-panel-right-br,
+.x-nbr .x-panel-header-snapshot-login-panel-right-tc,
+.x-nbr .x-panel-header-snapshot-login-panel-right-bc,
+.x-nbr .x-panel-header-snapshot-login-panel-right-ml,
+.x-nbr .x-panel-header-snapshot-login-panel-right-mr {
+  zoom: 1;
+  background-image: url('../resources/themes/images/snapshot/panel-header/panel-header-snapshot-login-panel-right-corners.gif'); }
+/* line 157, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/mixins/_frame.scss */
+.x-nbr .x-panel-header-snapshot-login-panel-right-tc,
+.x-nbr .x-panel-header-snapshot-login-panel-right-bc {
+  zoom: 1;
+  background-image: url('../resources/themes/images/snapshot/panel-header/panel-header-snapshot-login-panel-right-sides.gif');
+  background-position: 0 0;
+  background-repeat: repeat-x; }
+/* line 200, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/mixins/_frame.scss */
+.x-nbr .x-panel-header-snapshot-login-panel-right-mc {
+  padding: 3px 2px 3px 4px; }
+
+/* line 58, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/mixins/_frame.scss */
+.x-panel-header-snapshot-login-panel-bottom {
+  -moz-border-radius-topleft: 0;
+  -webkit-border-top-left-radius: 0;
+  -o-border-top-left-radius: 0;
+  -ms-border-top-left-radius: 0;
+  -khtml-border-top-left-radius: 0;
+  border-top-left-radius: 0;
+  -moz-border-radius-topright: 0;
+  -webkit-border-top-right-radius: 0;
+  -o-border-top-right-radius: 0;
+  -ms-border-top-right-radius: 0;
+  -khtml-border-top-right-radius: 0;
+  border-top-right-radius: 0;
+  -moz-border-radius-bottomright: 3;
+  -webkit-border-bottom-right-radius: 3;
+  -o-border-bottom-right-radius: 3;
+  -ms-border-bottom-right-radius: 3;
+  -khtml-border-bottom-right-radius: 3;
+  border-bottom-right-radius: 3;
+  -moz-border-radius-bottomleft: 3;
+  -webkit-border-bottom-left-radius: 3;
+  -o-border-bottom-left-radius: 3;
+  -ms-border-bottom-left-radius: 3;
+  -khtml-border-bottom-left-radius: 3;
+  border-bottom-left-radius: 3;
+  padding: 3px 5px 4px 5px;
+  border-width: 0 1 1 1;
+  border-style: solid;
+  background-image: none;
+  background-color: red;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #cf7b7b), color-stop(100%, #a95757));
+  background-image: -webkit-linear-gradient(top, #cf7b7b 0%, #a95757 100%);
+  background-image: -moz-linear-gradient(top, #cf7b7b 0%, #a95757 100%);
+  background-image: -o-linear-gradient(top, #cf7b7b 0%, #a95757 100%);
+  background-image: -ms-linear-gradient(top, #cf7b7b 0%, #a95757 100%);
+  background-image: linear-gradient(top, #cf7b7b 0%, #a95757 100%); }
+
+/* line 91, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/mixins/_frame.scss */
+.x-nlg .x-panel-header-snapshot-login-panel-bottom-mc {
+  background-image: url('../resources/themes/images/snapshot/panel-header/panel-header-snapshot-login-panel-bottom-bg.gif');
+  background-color: red; }
+
+/* line 104, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/mixins/_frame.scss */
+.x-nbr .x-panel-header-snapshot-login-panel-bottom {
+  padding: 0 !important;
+  border-width: 0 !important;
+  -moz-border-radius: 0px;
+  -webkit-border-radius: 0px;
+  -o-border-radius: 0px;
+  -ms-border-radius: 0px;
+  -khtml-border-radius: 0px;
+  border-radius: 0px;
+  background-color: transparent;
+  background-position: 1000000px 1000303px; }
+/* line 147, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/mixins/_frame.scss */
+.x-nbr .x-panel-header-snapshot-login-panel-bottom-tl,
+.x-nbr .x-panel-header-snapshot-login-panel-bottom-bl,
+.x-nbr .x-panel-header-snapshot-login-panel-bottom-tr,
+.x-nbr .x-panel-header-snapshot-login-panel-bottom-br,
+.x-nbr .x-panel-header-snapshot-login-panel-bottom-tc,
+.x-nbr .x-panel-header-snapshot-login-panel-bottom-bc,
+.x-nbr .x-panel-header-snapshot-login-panel-bottom-ml,
+.x-nbr .x-panel-header-snapshot-login-panel-bottom-mr {
+  zoom: 1;
+  background-image: url('../resources/themes/images/snapshot/panel-header/panel-header-snapshot-login-panel-bottom-corners.gif'); }
+/* line 168, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/mixins/_frame.scss */
+.x-nbr .x-panel-header-snapshot-login-panel-bottom-ml,
+.x-nbr .x-panel-header-snapshot-login-panel-bottom-mr {
+  zoom: 1;
+  background-image: url('../resources/themes/images/snapshot/panel-header/panel-header-snapshot-login-panel-bottom-sides.gif');
+  background-position: 0 0; }
+/* line 200, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/mixins/_frame.scss */
+.x-nbr .x-panel-header-snapshot-login-panel-bottom-mc {
+  padding: 3px 3px 2px 3px; }
+
+/* line 58, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/mixins/_frame.scss */
+.x-panel-header-snapshot-login-panel-left {
+  -moz-border-radius-topleft: 3;
+  -webkit-border-top-left-radius: 3;
+  -o-border-top-left-radius: 3;
+  -ms-border-top-left-radius: 3;
+  -khtml-border-top-left-radius: 3;
+  border-top-left-radius: 3;
+  -moz-border-radius-topright: 0;
+  -webkit-border-top-right-radius: 0;
+  -o-border-top-right-radius: 0;
+  -ms-border-top-right-radius: 0;
+  -khtml-border-top-right-radius: 0;
+  border-top-right-radius: 0;
+  -moz-border-radius-bottomright: 0;
+  -webkit-border-bottom-right-radius: 0;
+  -o-border-bottom-right-radius: 0;
+  -ms-border-bottom-right-radius: 0;
+  -khtml-border-bottom-right-radius: 0;
+  border-bottom-right-radius: 0;
+  -moz-border-radius-bottomleft: 3;
+  -webkit-border-bottom-left-radius: 3;
+  -o-border-bottom-left-radius: 3;
+  -ms-border-bottom-left-radius: 3;
+  -khtml-border-bottom-left-radius: 3;
+  border-bottom-left-radius: 3;
+  padding: 5px 4px 5px 4px;
+  border-width: 1 0 1 1;
+  border-style: solid;
+  background-image: none;
+  background-color: red;
+  background-image: -webkit-gradient(linear, 100% 50%, 0% 50%, color-stop(0%, #cf7b7b), color-stop(100%, #a95757));
+  background-image: -webkit-linear-gradient(right, #cf7b7b 0%, #a95757 100%);
+  background-image: -moz-linear-gradient(right, #cf7b7b 0%, #a95757 100%);
+  background-image: -o-linear-gradient(right, #cf7b7b 0%, #a95757 100%);
+  background-image: -ms-linear-gradient(right, #cf7b7b 0%, #a95757 100%);
+  background-image: linear-gradient(right, #cf7b7b 0%, #a95757 100%); }
+
+/* line 91, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/mixins/_frame.scss */
+.x-nlg .x-panel-header-snapshot-login-panel-left-mc {
+  background-image: url('../resources/themes/images/snapshot/panel-header/panel-header-snapshot-login-panel-left-bg.gif');
+  background-color: red; }
+
+/* line 104, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/mixins/_frame.scss */
+.x-nbr .x-panel-header-snapshot-login-panel-left {
+  padding: 0 !important;
+  border-width: 0 !important;
+  -moz-border-radius: 0px;
+  -webkit-border-radius: 0px;
+  -o-border-radius: 0px;
+  -ms-border-radius: 0px;
+  -khtml-border-radius: 0px;
+  border-radius: 0px;
+  background-color: transparent;
+  background-position: 1000300px 1100003px; }
+/* line 147, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/mixins/_frame.scss */
+.x-nbr .x-panel-header-snapshot-login-panel-left-tl,
+.x-nbr .x-panel-header-snapshot-login-panel-left-bl,
+.x-nbr .x-panel-header-snapshot-login-panel-left-tr,
+.x-nbr .x-panel-header-snapshot-login-panel-left-br,
+.x-nbr .x-panel-header-snapshot-login-panel-left-tc,
+.x-nbr .x-panel-header-snapshot-login-panel-left-bc,
+.x-nbr .x-panel-header-snapshot-login-panel-left-ml,
+.x-nbr .x-panel-header-snapshot-login-panel-left-mr {
+  zoom: 1;
+  background-image: url('../resources/themes/images/snapshot/panel-header/panel-header-snapshot-login-panel-left-corners.gif'); }
+/* line 157, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/mixins/_frame.scss */
+.x-nbr .x-panel-header-snapshot-login-panel-left-tc,
+.x-nbr .x-panel-header-snapshot-login-panel-left-bc {
+  zoom: 1;
+  background-image: url('../resources/themes/images/snapshot/panel-header/panel-header-snapshot-login-panel-left-sides.gif');
+  background-position: 0 0;
+  background-repeat: repeat-x; }
+/* line 200, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/mixins/_frame.scss */
+.x-nbr .x-panel-header-snapshot-login-panel-left-mc {
+  padding: 3px 4px 3px 2px; }
+
+/* line 353, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/widgets/_panel.scss */
+.x-panel-header-snapshot-login-panel-top {
+  -moz-box-shadow: transparent 0 1px 0px 0 inset, transparent -1px 0 0px 0 inset, transparent 1px 0 0px 0 inset;
+  -webkit-box-shadow: transparent 0 1px 0px 0 inset, transparent -1px 0 0px 0 inset, transparent 1px 0 0px 0 inset;
+  -o-box-shadow: transparent 0 1px 0px 0 inset, transparent -1px 0 0px 0 inset, transparent 1px 0 0px 0 inset;
+  box-shadow: transparent 0 1px 0px 0 inset, transparent -1px 0 0px 0 inset, transparent 1px 0 0px 0 inset; }
+
+/* line 357, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/widgets/_panel.scss */
+.x-panel-header-snapshot-login-panel-right {
+  -moz-box-shadow: transparent 0 1px 0px 0 inset, transparent 0 -1px 0px 0 inset, transparent -1px 0 0px 0 inset;
+  -webkit-box-shadow: transparent 0 1px 0px 0 inset, transparent 0 -1px 0px 0 inset, transparent -1px 0 0px 0 inset;
+  -o-box-shadow: transparent 0 1px 0px 0 inset, transparent 0 -1px 0px 0 inset, transparent -1px 0 0px 0 inset;
+  box-shadow: transparent 0 1px 0px 0 inset, transparent 0 -1px 0px 0 inset, transparent -1px 0 0px 0 inset; }
+
+/* line 361, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/widgets/_panel.scss */
+.x-panel-header-snapshot-login-panel-bottom {
+  -moz-box-shadow: transparent 0 -1px 0px 0 inset, transparent -1px 0 0px 0 inset, transparent 1px 0 0px 0 inset;
+  -webkit-box-shadow: transparent 0 -1px 0px 0 inset, transparent -1px 0 0px 0 inset, transparent 1px 0 0px 0 inset;
+  -o-box-shadow: transparent 0 -1px 0px 0 inset, transparent -1px 0 0px 0 inset, transparent 1px 0 0px 0 inset;
+  box-shadow: transparent 0 -1px 0px 0 inset, transparent -1px 0 0px 0 inset, transparent 1px 0 0px 0 inset; }
+
+/* line 365, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/widgets/_panel.scss */
+.x-panel-header-snapshot-login-panel-left {
+  -moz-box-shadow: transparent 0 1px 0px 0 inset, transparent 0 -1px 0px 0 inset, transparent 1px 0 0px 0 inset;
+  -webkit-box-shadow: transparent 0 1px 0px 0 inset, transparent 0 -1px 0px 0 inset, transparent 1px 0 0px 0 inset;
+  -o-box-shadow: transparent 0 1px 0px 0 inset, transparent 0 -1px 0px 0 inset, transparent 1px 0 0px 0 inset;
+  box-shadow: transparent 0 1px 0px 0 inset, transparent 0 -1px 0px 0 inset, transparent 1px 0 0px 0 inset; }
+
+/* line 409, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/widgets/_panel.scss */
+.x-panel .x-panel-header-snapshot-login-panel-top {
+  border-bottom-width: 1px !important; }
+
+/* line 413, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/widgets/_panel.scss */
+.x-panel .x-panel-header-snapshot-login-panel-right {
+  border-left-width: 1px !important; }
+
+/* line 417, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/widgets/_panel.scss */
+.x-panel .x-panel-header-snapshot-login-panel-bottom {
+  border-top-width: 1px !important; }
+
+/* line 421, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/widgets/_panel.scss */
+.x-panel .x-panel-header-snapshot-login-panel-left {
+  border-right-width: 1px !important; }
+
+/* line 425, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/widgets/_panel.scss */
+.x-panel-header-snapshot-login-panel-collapsed {
+  -moz-border-radius: 3;
+  -webkit-border-radius: 3;
+  -o-border-radius: 3;
+  -ms-border-radius: 3;
+  -khtml-border-radius: 3;
+  border-radius: 3; }
+
+/* line 58, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/mixins/_frame.scss */
+.x-panel-header-snapshot-login-panel-collapsed-top {
+  -moz-border-radius-topleft: 3;
+  -webkit-border-top-left-radius: 3;
+  -o-border-top-left-radius: 3;
+  -ms-border-top-left-radius: 3;
+  -khtml-border-top-left-radius: 3;
+  border-top-left-radius: 3;
+  -moz-border-radius-topright: 3;
+  -webkit-border-top-right-radius: 3;
+  -o-border-top-right-radius: 3;
+  -ms-border-top-right-radius: 3;
+  -khtml-border-top-right-radius: 3;
+  border-top-right-radius: 3;
+  -moz-border-radius-bottomright: 3;
+  -webkit-border-bottom-right-radius: 3;
+  -o-border-bottom-right-radius: 3;
+  -ms-border-bottom-right-radius: 3;
+  -khtml-border-bottom-right-radius: 3;
+  border-bottom-right-radius: 3;
+  -moz-border-radius-bottomleft: 3;
+  -webkit-border-bottom-left-radius: 3;
+  -o-border-bottom-left-radius: 3;
+  -ms-border-bottom-left-radius: 3;
+  -khtml-border-bottom-left-radius: 3;
+  border-bottom-left-radius: 3;
+  padding: 3px 5px 4px 5px;
+  border-width: 1;
+  border-style: solid;
+  background-image: none;
+  background-color: red;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #cf7b7b), color-stop(100%, #a95757));
+  background-image: -webkit-linear-gradient(top, #cf7b7b 0%, #a95757 100%);
+  background-image: -moz-linear-gradient(top, #cf7b7b 0%, #a95757 100%);
+  background-image: -o-linear-gradient(top, #cf7b7b 0%, #a95757 100%);
+  background-image: -ms-linear-gradient(top, #cf7b7b 0%, #a95757 100%);
+  background-image: linear-gradient(top, #cf7b7b 0%, #a95757 100%); }
+
+/* line 91, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/mixins/_frame.scss */
+.x-nlg .x-panel-header-snapshot-login-panel-collapsed-top-mc {
+  background-image: url('../resources/themes/images/snapshot/panel-header/panel-header-snapshot-login-panel-collapsed-top-bg.gif');
+  background-color: red; }
+
+/* line 104, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/mixins/_frame.scss */
+.x-nbr .x-panel-header-snapshot-login-panel-collapsed-top {
+  padding: 0 !important;
+  border-width: 0 !important;
+  -moz-border-radius: 0px;
+  -webkit-border-radius: 0px;
+  -o-border-radius: 0px;
+  -ms-border-radius: 0px;
+  -khtml-border-radius: 0px;
+  border-radius: 0px;
+  background-color: transparent;
+  background-position: 1000303px 1000303px; }
+/* line 147, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/mixins/_frame.scss */
+.x-nbr .x-panel-header-snapshot-login-panel-collapsed-top-tl,
+.x-nbr .x-panel-header-snapshot-login-panel-collapsed-top-bl,
+.x-nbr .x-panel-header-snapshot-login-panel-collapsed-top-tr,
+.x-nbr .x-panel-header-snapshot-login-panel-collapsed-top-br,
+.x-nbr .x-panel-header-snapshot-login-panel-collapsed-top-tc,
+.x-nbr .x-panel-header-snapshot-login-panel-collapsed-top-bc,
+.x-nbr .x-panel-header-snapshot-login-panel-collapsed-top-ml,
+.x-nbr .x-panel-header-snapshot-login-panel-collapsed-top-mr {
+  zoom: 1;
+  background-image: url('../resources/themes/images/snapshot/panel-header/panel-header-snapshot-login-panel-collapsed-top-corners.gif'); }
+/* line 168, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/mixins/_frame.scss */
+.x-nbr .x-panel-header-snapshot-login-panel-collapsed-top-ml,
+.x-nbr .x-panel-header-snapshot-login-panel-collapsed-top-mr {
+  zoom: 1;
+  background-image: url('../resources/themes/images/snapshot/panel-header/panel-header-snapshot-login-panel-collapsed-top-sides.gif');
+  background-position: 0 0; }
+/* line 200, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/mixins/_frame.scss */
+.x-nbr .x-panel-header-snapshot-login-panel-collapsed-top-mc {
+  padding: 1px 3px 2px 3px; }
+
+/* line 58, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/mixins/_frame.scss */
+.x-panel-header-snapshot-login-panel-collapsed-right {
+  -moz-border-radius-topleft: 3;
+  -webkit-border-top-left-radius: 3;
+  -o-border-top-left-radius: 3;
+  -ms-border-top-left-radius: 3;
+  -khtml-border-top-left-radius: 3;
+  border-top-left-radius: 3;
+  -moz-border-radius-topright: 3;
+  -webkit-border-top-right-radius: 3;
+  -o-border-top-right-radius: 3;
+  -ms-border-top-right-radius: 3;
+  -khtml-border-top-right-radius: 3;
+  border-top-right-radius: 3;
+  -moz-border-radius-bottomright: 3;
+  -webkit-border-bottom-right-radius: 3;
+  -o-border-bottom-right-radius: 3;
+  -ms-border-bottom-right-radius: 3;
+  -khtml-border-bottom-right-radius: 3;
+  border-bottom-right-radius: 3;
+  -moz-border-radius-bottomleft: 3;
+  -webkit-border-bottom-left-radius: 3;
+  -o-border-bottom-left-radius: 3;
+  -ms-border-bottom-left-radius: 3;
+  -khtml-border-bottom-left-radius: 3;
+  border-bottom-left-radius: 3;
+  padding: 3px 5px 4px 5px;
+  border-width: 1;
+  border-style: solid;
+  background-image: none;
+  background-color: red;
+  background-image: -webkit-gradient(linear, 100% 50%, 0% 50%, color-stop(0%, #cf7b7b), color-stop(100%, #a95757));
+  background-image: -webkit-linear-gradient(right, #cf7b7b 0%, #a95757 100%);
+  background-image: -moz-linear-gradient(right, #cf7b7b 0%, #a95757 100%);
+  background-image: -o-linear-gradient(right, #cf7b7b 0%, #a95757 100%);
+  background-image: -ms-linear-gradient(right, #cf7b7b 0%, #a95757 100%);
+  background-image: linear-gradient(right, #cf7b7b 0%, #a95757 100%); }
+
+/* line 91, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/mixins/_frame.scss */
+.x-nlg .x-panel-header-snapshot-login-panel-collapsed-right-mc {
+  background-image: url('../resources/themes/images/snapshot/panel-header/panel-header-snapshot-login-panel-collapsed-right-bg.gif');
+  background-color: red; }
+
+/* line 104, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/mixins/_frame.scss */
+.x-nbr .x-panel-header-snapshot-login-panel-collapsed-right {
+  padding: 0 !important;
+  border-width: 0 !important;
+  -moz-border-radius: 0px;
+  -webkit-border-radius: 0px;
+  -o-border-radius: 0px;
+  -ms-border-radius: 0px;
+  -khtml-border-radius: 0px;
+  border-radius: 0px;
+  background-color: transparent;
+  background-position: 1000303px 1100303px; }
+/* line 147, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/mixins/_frame.scss */
+.x-nbr .x-panel-header-snapshot-login-panel-collapsed-right-tl,
+.x-nbr .x-panel-header-snapshot-login-panel-collapsed-right-bl,
+.x-nbr .x-panel-header-snapshot-login-panel-collapsed-right-tr,
+.x-nbr .x-panel-header-snapshot-login-panel-collapsed-right-br,
+.x-nbr .x-panel-header-snapshot-login-panel-collapsed-right-tc,
+.x-nbr .x-panel-header-snapshot-login-panel-collapsed-right-bc,
+.x-nbr .x-panel-header-snapshot-login-panel-collapsed-right-ml,
+.x-nbr .x-panel-header-snapshot-login-panel-collapsed-right-mr {
+  zoom: 1;
+  background-image: url('../resources/themes/images/snapshot/panel-header/panel-header-snapshot-login-panel-collapsed-right-corners.gif'); }
+/* line 157, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/mixins/_frame.scss */
+.x-nbr .x-panel-header-snapshot-login-panel-collapsed-right-tc,
+.x-nbr .x-panel-header-snapshot-login-panel-collapsed-right-bc {
+  zoom: 1;
+  background-image: url('../resources/themes/images/snapshot/panel-header/panel-header-snapshot-login-panel-collapsed-right-sides.gif');
+  background-position: 0 0;
+  background-repeat: repeat-x; }
+/* line 200, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/mixins/_frame.scss */
+.x-nbr .x-panel-header-snapshot-login-panel-collapsed-right-mc {
+  padding: 1px 3px 2px 3px; }
+
+/* line 58, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/mixins/_frame.scss */
+.x-panel-header-snapshot-login-panel-collapsed-bottom {
+  -moz-border-radius-topleft: 3;
+  -webkit-border-top-left-radius: 3;
+  -o-border-top-left-radius: 3;
+  -ms-border-top-left-radius: 3;
+  -khtml-border-top-left-radius: 3;
+  border-top-left-radius: 3;
+  -moz-border-radius-topright: 3;
+  -webkit-border-top-right-radius: 3;
+  -o-border-top-right-radius: 3;
+  -ms-border-top-right-radius: 3;
+  -khtml-border-top-right-radius: 3;
+  border-top-right-radius: 3;
+  -moz-border-radius-bottomright: 3;
+  -webkit-border-bottom-right-radius: 3;
+  -o-border-bottom-right-radius: 3;
+  -ms-border-bottom-right-radius: 3;
+  -khtml-border-bottom-right-radius: 3;
+  border-bottom-right-radius: 3;
+  -moz-border-radius-bottomleft: 3;
+  -webkit-border-bottom-left-radius: 3;
+  -o-border-bottom-left-radius: 3;
+  -ms-border-bottom-left-radius: 3;
+  -khtml-border-bottom-left-radius: 3;
+  border-bottom-left-radius: 3;
+  padding: 3px 5px 4px 5px;
+  border-width: 1;
+  border-style: solid;
+  background-image: none;
+  background-color: red;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #cf7b7b), color-stop(100%, #a95757));
+  background-image: -webkit-linear-gradient(top, #cf7b7b 0%, #a95757 100%);
+  background-image: -moz-linear-gradient(top, #cf7b7b 0%, #a95757 100%);
+  background-image: -o-linear-gradient(top, #cf7b7b 0%, #a95757 100%);
+  background-image: -ms-linear-gradient(top, #cf7b7b 0%, #a95757 100%);
+  background-image: linear-gradient(top, #cf7b7b 0%, #a95757 100%); }
+
+/* line 91, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/mixins/_frame.scss */
+.x-nlg .x-panel-header-snapshot-login-panel-collapsed-bottom-mc {
+  background-image: url('../resources/themes/images/snapshot/panel-header/panel-header-snapshot-login-panel-collapsed-bottom-bg.gif');
+  background-color: red; }
+
+/* line 104, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/mixins/_frame.scss */
+.x-nbr .x-panel-header-snapshot-login-panel-collapsed-bottom {
+  padding: 0 !important;
+  border-width: 0 !important;
+  -moz-border-radius: 0px;
+  -webkit-border-radius: 0px;
+  -o-border-radius: 0px;
+  -ms-border-radius: 0px;
+  -khtml-border-radius: 0px;
+  border-radius: 0px;
+  background-color: transparent;
+  background-position: 1000303px 1000303px; }
+/* line 147, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/mixins/_frame.scss */
+.x-nbr .x-panel-header-snapshot-login-panel-collapsed-bottom-tl,
+.x-nbr .x-panel-header-snapshot-login-panel-collapsed-bottom-bl,
+.x-nbr .x-panel-header-snapshot-login-panel-collapsed-bottom-tr,
+.x-nbr .x-panel-header-snapshot-login-panel-collapsed-bottom-br,
+.x-nbr .x-panel-header-snapshot-login-panel-collapsed-bottom-tc,
+.x-nbr .x-panel-header-snapshot-login-panel-collapsed-bottom-bc,
+.x-nbr .x-panel-header-snapshot-login-panel-collapsed-bottom-ml,
+.x-nbr .x-panel-header-snapshot-login-panel-collapsed-bottom-mr {
+  zoom: 1;
+  background-image: url('../resources/themes/images/snapshot/panel-header/panel-header-snapshot-login-panel-collapsed-bottom-corners.gif'); }
+/* line 168, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/mixins/_frame.scss */
+.x-nbr .x-panel-header-snapshot-login-panel-collapsed-bottom-ml,
+.x-nbr .x-panel-header-snapshot-login-panel-collapsed-bottom-mr {
+  zoom: 1;
+  background-image: url('../resources/themes/images/snapshot/panel-header/panel-header-snapshot-login-panel-collapsed-bottom-sides.gif');
+  background-position: 0 0; }
+/* line 200, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/mixins/_frame.scss */
+.x-nbr .x-panel-header-snapshot-login-panel-collapsed-bottom-mc {
+  padding: 1px 3px 2px 3px; }
+
+/* line 58, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/mixins/_frame.scss */
+.x-panel-header-snapshot-login-panel-collapsed-left {
+  -moz-border-radius-topleft: 3;
+  -webkit-border-top-left-radius: 3;
+  -o-border-top-left-radius: 3;
+  -ms-border-top-left-radius: 3;
+  -khtml-border-top-left-radius: 3;
+  border-top-left-radius: 3;
+  -moz-border-radius-topright: 3;
+  -webkit-border-top-right-radius: 3;
+  -o-border-top-right-radius: 3;
+  -ms-border-top-right-radius: 3;
+  -khtml-border-top-right-radius: 3;
+  border-top-right-radius: 3;
+  -moz-border-radius-bottomright: 3;
+  -webkit-border-bottom-right-radius: 3;
+  -o-border-bottom-right-radius: 3;
+  -ms-border-bottom-right-radius: 3;
+  -khtml-border-bottom-right-radius: 3;
+  border-bottom-right-radius: 3;
+  -moz-border-radius-bottomleft: 3;
+  -webkit-border-bottom-left-radius: 3;
+  -o-border-bottom-left-radius: 3;
+  -ms-border-bottom-left-radius: 3;
+  -khtml-border-bottom-left-radius: 3;
+  border-bottom-left-radius: 3;
+  padding: 3px 5px 4px 5px;
+  border-width: 1;
+  border-style: solid;
+  background-image: none;
+  background-color: red;
+  background-image: -webkit-gradient(linear, 100% 50%, 0% 50%, color-stop(0%, #cf7b7b), color-stop(100%, #a95757));
+  background-image: -webkit-linear-gradient(right, #cf7b7b 0%, #a95757 100%);
+  background-image: -moz-linear-gradient(right, #cf7b7b 0%, #a95757 100%);
+  background-image: -o-linear-gradient(right, #cf7b7b 0%, #a95757 100%);
+  background-image: -ms-linear-gradient(right, #cf7b7b 0%, #a95757 100%);
+  background-image: linear-gradient(right, #cf7b7b 0%, #a95757 100%); }
+
+/* line 91, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/mixins/_frame.scss */
+.x-nlg .x-panel-header-snapshot-login-panel-collapsed-left-mc {
+  background-image: url('../resources/themes/images/snapshot/panel-header/panel-header-snapshot-login-panel-collapsed-left-bg.gif');
+  background-color: red; }
+
+/* line 104, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/mixins/_frame.scss */
+.x-nbr .x-panel-header-snapshot-login-panel-collapsed-left {
+  padding: 0 !important;
+  border-width: 0 !important;
+  -moz-border-radius: 0px;
+  -webkit-border-radius: 0px;
+  -o-border-radius: 0px;
+  -ms-border-radius: 0px;
+  -khtml-border-radius: 0px;
+  border-radius: 0px;
+  background-color: transparent;
+  background-position: 1000303px 1100303px; }
+/* line 147, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/mixins/_frame.scss */
+.x-nbr .x-panel-header-snapshot-login-panel-collapsed-left-tl,
+.x-nbr .x-panel-header-snapshot-login-panel-collapsed-left-bl,
+.x-nbr .x-panel-header-snapshot-login-panel-collapsed-left-tr,
+.x-nbr .x-panel-header-snapshot-login-panel-collapsed-left-br,
+.x-nbr .x-panel-header-snapshot-login-panel-collapsed-left-tc,
+.x-nbr .x-panel-header-snapshot-login-panel-collapsed-left-bc,
+.x-nbr .x-panel-header-snapshot-login-panel-collapsed-left-ml,
+.x-nbr .x-panel-header-snapshot-login-panel-collapsed-left-mr {
+  zoom: 1;
+  background-image: url('../resources/themes/images/snapshot/panel-header/panel-header-snapshot-login-panel-collapsed-left-corners.gif'); }
+/* line 157, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/mixins/_frame.scss */
+.x-nbr .x-panel-header-snapshot-login-panel-collapsed-left-tc,
+.x-nbr .x-panel-header-snapshot-login-panel-collapsed-left-bc {
+  zoom: 1;
+  background-image: url('../resources/themes/images/snapshot/panel-header/panel-header-snapshot-login-panel-collapsed-left-sides.gif');
+  background-position: 0 0;
+  background-repeat: repeat-x; }
+/* line 200, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/mixins/_frame.scss */
+.x-nbr .x-panel-header-snapshot-login-panel-collapsed-left-mc {
+  padding: 1px 3px 2px 3px; }
+
+/* line 438, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/widgets/_panel.scss */
+.x-panel-header-snapshot-login-panel-right-tc,
+.x-panel-header-snapshot-login-panel-right-mc,
+.x-panel-header-snapshot-login-panel-right-bc {
+  background-position: right 0; }
+
+/* line 444, D:/work/StockManagement/Stockmanagement/src/Snapshot/Web/Assets/resources/themes/stylesheets/ext4/default/widgets/_panel.scss */
+.x-panel-header-snapshot-login-panel-bottom-tc,
+.x-panel-header-snapshot-login-panel-bottom-mc,
+.x-panel-header-snapshot-login-panel-bottom-bc {
   background-position: 0 bottom; }
