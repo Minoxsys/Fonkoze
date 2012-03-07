@@ -78,8 +78,7 @@ namespace Web.BackgroundJobs
         private DateTime? GetLastExecuted(ProductLevelRequest productLevelRequest)
         {
             var existingRequests = queryExistingRequests.Query()
-                .Where(it => it.CampaignId == productLevelRequest.Campaign.Id)
-                .Where(it => it.ProductGroupId == productLevelRequest.ProductGroup.Id)
+                .Where(it => it.ProductLevelRequestId == productLevelRequest.Id)
                 .OrderByDescending(it => it.Created);
 
             if (existingRequests.Any())
@@ -104,6 +103,7 @@ namespace Web.BackgroundJobs
         private RequestRecord GenerateRequestInfos(ProductLevelRequest productLevelRequest)
         {
             RequestRecord executedCampaign = new RequestRecord();
+            executedCampaign.ProductLevelRequestId = productLevelRequest.Id;
             executedCampaign.CampaignId = productLevelRequest.Campaign.Id;
             executedCampaign.CampaignName = productLevelRequest.Campaign.Name;
             executedCampaign.Client = productLevelRequest.Client;

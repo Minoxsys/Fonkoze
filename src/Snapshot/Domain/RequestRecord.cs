@@ -19,5 +19,6 @@ namespace Domain
         public virtual string ProductGroupName { get; set; } 
 
         public virtual int ProductsNo { get; set; }
+        public virtual Guid ProductLevelRequestId { get; set; }
     }
 }

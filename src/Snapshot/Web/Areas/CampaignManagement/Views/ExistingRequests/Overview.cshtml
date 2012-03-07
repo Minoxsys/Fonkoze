@@ -81,7 +81,7 @@
                 reader: {
                     type: 'json',
                     totalProperty: 'TotalItems',
-                    root: 'ExistingRequests'
+                    root: 'ExitingRequests'
                 }
             }
     
@@ -131,10 +131,10 @@
             store:  window.feature.stores.grid,
             columns: [
                 { header:'Date'       ,  dataIndex:'Date'        },
-                { header:'Campaign Name'    ,  dataIndex:'Campaign', flex:1     },
-                { header:'Outpost Name'    ,  dataIndex:'Outpost', flex:1     },
-                { header:'Product Group',  dataIndex:'ProductGroup', flex:1 },
-                { header:'# of Products',  dataIndex:'ProductsNo'}
+                { header: 'Campaign Name', dataIndex: 'Campaign', flex: 1 },
+                { header: 'Outpost Name', dataIndex: 'Outpost', flex: 1 },
+                { header: 'Product Group', dataIndex: 'ProductGroup', flex: 1 },
+                { header: '# of Products', dataIndex: 'ProductsNo' }
             ],
             bbar: Ext.create('Ext.PagingToolbar', {
                 store: window.feature.stores.grid,
@@ -165,7 +165,7 @@
 
         Ext.apply(window.feature.stores.grid.getProxy().extraParams, {
            CampaignId: campaign.getValue(),
-           OutpostId: campaign.getValue(),
+           OutpostId: outpost.getValue(),
            From: from.getValue(),
            To: to.getValue()
         });

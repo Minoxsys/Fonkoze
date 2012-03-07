@@ -25,7 +25,8 @@ namespace Migrations
                 .WithColumn("CampaignName").AsString().Nullable()
                 .WithColumn("OutpostName").AsString().Nullable()
                 .WithColumn("ProductGroupName").AsString().Nullable()
-                .WithColumn("ProductsNo").AsInt32().WithDefaultValue(0);
+                .WithColumn("ProductsNo").AsInt32().WithDefaultValue(0)
+                .WithColumn("ProductLevelRequestId").AsGuid().Nullable();
 
             Create.AddClientForeignKey("RequestRecords");
         }
