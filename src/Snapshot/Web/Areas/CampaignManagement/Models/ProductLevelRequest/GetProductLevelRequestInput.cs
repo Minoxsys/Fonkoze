@@ -18,6 +18,6 @@ namespace Web.Areas.CampaignManagement.Models.ProductLevelRequest
         public string sort { get; set; }
         public string dir { get; set; }
 
-        public string search { get; set; }
+        public string searchValue { get; set; }
     }
 }

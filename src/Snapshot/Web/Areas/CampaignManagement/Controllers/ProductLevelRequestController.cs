@@ -106,9 +106,9 @@ namespace Web.Areas.CampaignManagement.Controllers
             LoadUserAndClient();
             var productLevelRequestData = QueryProductLevelRequests.Query().Where(c => c.Client == _client);
 
-            if (!string.IsNullOrWhiteSpace(input.search))
+            if (!string.IsNullOrWhiteSpace(input.searchValue))
             {
-                productLevelRequestData = productLevelRequestData.Where(c => c.Campaign.Name.Contains(input.search));
+                productLevelRequestData = productLevelRequestData.Where(c => c.Campaign.Name.Contains(input.searchValue));
             }
 
             var orderByColumnDirection = new Dictionary<string, Func<IQueryable<ProductLevelRequest>>>()

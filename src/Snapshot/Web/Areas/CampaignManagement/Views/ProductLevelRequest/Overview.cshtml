@@ -81,7 +81,8 @@
 					type: 'json',
                     totalProperty: 'TotalItems',
 					root: 'ProductLevelRequests'
-				}
+	            },
+                extraParams: { searchValue: '' },
 			}
 		
 		});
@@ -182,7 +183,11 @@
             gridStore: window.feature.gridStore
         });
         modal.show();
-    }
+    };
+
+    window.feature.doSearch = new Ext.util.DelayedTask(function () {
+        window.feature.grid.getStore().loadPage(1);
+    });
 
 </script>
 <script type="text/javascript">
@@ -244,7 +249,17 @@
 								{   xtype:'textfield',
 									emptyText: 'Campaign Search',
 									id:  window.feature.ids.searchInput,
-									width: 200
+									width: 200,
+                                    enableKeyEvents: true,
+                                    listeners: {
+                                        'keyup': {
+                                            fn: function (key) {
+                                                var searchValue = Ext.getCmp(window.feature.ids.searchInput).getValue();
+                                                window.feature.grid.getStore().proxy.extraParams.searchValue = searchValue;
+                                                window.feature.doSearch.delay(500);
+                                            }
+                                        }
+                                    }
 								}
 							]
 
