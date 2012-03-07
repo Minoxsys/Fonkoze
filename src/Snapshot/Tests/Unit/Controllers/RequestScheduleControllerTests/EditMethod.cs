@@ -33,7 +33,7 @@ namespace Tests.Unit.Controllers.RequestScheduleControllerTests
             objectMother.saveCommandSchedule.Expect(call => call.Execute(Arg<Schedule>.Matches(
                     s => s.Id == objectMother.scheduleForClientId &&
                         s.Name == ObjectMother.SCHEDULE_NAME &&
-                        s.FrequencyType == ObjectMother.FREQUENCY_TYPE &&
+                        s.FrequencyType == "Every " + ObjectMother.FREQUENCY_VALUE + " day(s)" &&
                         s.FrequencyValue == ObjectMother.FREQUENCY_VALUE &&
                         s.StartOn == ObjectMother.START_ON &&
                         s.Reminders.Count == 1
