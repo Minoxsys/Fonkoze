@@ -305,7 +305,8 @@
 		window.feature.modal = Ext.define('Ext.feature.outpost.Modal', {
 			extend: 'Ext.window.Window',
 			modal:true,
-			height: 600,
+            ui: 'snapshot-popup-window',
+			height: 650,
 			width: 1200,
 			bodyPadding:0,
 			bodyStyle: 'background-color:#fff',
@@ -388,7 +389,11 @@
 	
 				me.buttons= [
 					{
-						text: 'Cancel', handler:function(){
+						text: 'Cancel',
+                        margin: '10 10 20 0',
+                        ui: 'snapshot-cancel-btn',
+                        cls: 'x-add-button-gradient',
+                        handler:function(){
 							me.close();
 							me.destroy();
 
@@ -404,7 +409,11 @@
                             }
 						}
 					},{
-						text: 'Save', handler:function(){
+						text: 'Save',
+                        margin: '10 10 20 0',
+                        ui: 'snapshot-add-btn',
+                        cls: 'x-add-button-gradient',
+                        handler:function(){
 	
 							var errorsFound = false;
 							var form = me.down('form').getForm()
@@ -657,9 +666,9 @@
 								{
 									xtype:'button',
 									text: 'ADD NEW CONTACT METHOD',
-                                    ui: 'snapshot-button',
+                                    ui: 'snapshot-add-btn',
                                     cls: 'x-add-button-gradient',
-									margin:'20 10 0 10',
+									margin:'20 10 10 10',
 									handler: function(){
 										window.feature.rowEditor.cancelEdit();
 	
@@ -800,6 +809,7 @@
 					]
 				},{
 					xtype: 'gridpanel',
+                    cls: "white-border",
 					store: window.feature.outpostsStore,
 					disableSelection: true,
 					loadMask: true,

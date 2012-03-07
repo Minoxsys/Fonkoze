@@ -90,6 +90,7 @@ Campaign: Overview
 
         window.feature.leftGridStore = Ext.create('Ext.data.Store', {
             remoteSuport: true,
+            cls: 'white-border',
             fields: ['Id', 'Name', 'Selected'],
             proxy: {
                 type: 'ajax',
@@ -249,9 +250,10 @@ Campaign: Overview
         window.feature.modalCampaignManagement = Ext.define('Ext.feature.campaign.Modal', {
             extend: 'Ext.window.Window',
             title: 'Add New Campaign',
+            ui: 'snapshot-popup-window',
             modal: true,
             height: 400,
-            width: 800,
+            width: 700,
             layout: {
                 type: 'vbox',
                 align: 'stretch'
@@ -272,15 +274,20 @@ Campaign: Overview
 
                 me.buttons = [{
                     text: 'Cancel',
+                    margin: '10 10 20 0',
+                    ui: 'snapshot-cancel-btn',
+                    cls: 'x-add-button-gradient',
                     handler: function () {
                         firstContainer.destroy();
                         gridsContainer.destroy();
-
                         me.close();
                         me.destroy();
                     }
                 }, {
                     text: 'Next',
+                    margin: '0 20 20 10',
+                    ui: 'snapshot-add-btn',
+                    cls: 'x-add-button-gradient',
                     itemId: window.feature.nextButton,
                     handler: function () {
                         if (stepNumber == 1) {
@@ -389,9 +396,10 @@ Campaign: Overview
          window.feature.modalCampaignManagementClone = Ext.define('Ext.feature.campaign.Modal', {
             extend: 'Ext.window.Window',
             title: 'Clone Campaign',
+            ui: 'snapshot-popup-window',
             modal: true,
             height: 400,
-            width: 800,
+            width: 700,
             layout: {
                 type: 'vbox',
                 align: 'stretch'
@@ -459,6 +467,7 @@ Campaign: Overview
         window.feature.grid = Ext.create('Ext.grid.Panel', {
             store: window.feature.campaignStore,
             flex: 3,
+            cls: 'white-border',
             disableSelection: true,
             loadMask: true,
             columns: [{
@@ -518,7 +527,8 @@ Campaign: Overview
                 store: window.feature.campaignStore,
                 displayInfo: true,
                 displayMsg: 'Displaying topics {0} - {1} of {2}',
-                emptyMsg: "No topics to display"
+                emptyMsg: "No topics to display",
+                ui: 'snapshot-pagination-toolbar'
             })
         });
 
@@ -607,6 +617,7 @@ Campaign: Overview
                             itemId: window.feature.leftGridTopLabel,
                         },{
                             xtype: 'gridpanel',
+                            cls: 'white-border',
                             itemId: window.feature.leftGrid,
                             store: window.feature.leftGridStore,
                             columnLines: true,
@@ -646,6 +657,8 @@ Campaign: Overview
                                 margin: '0 0 5 0',
                                 width: 80,
                                 text: 'Add',
+                                ui: 'snapshot-add-btn',
+                                cls: 'x-add-button-gradient',
                                 handler: function () {
                                     var gridRight = me.down('#'+window.feature.rightGrid);
                                     var gridLeft = me.down('#'+window.feature.leftGrid);
@@ -669,6 +682,8 @@ Campaign: Overview
                                 xtype: 'button',
                                 width: 80,
                                 text: 'Remove',
+                                ui: 'snapshot-add-btn',
+                                cls: 'x-add-button-gradient',
                                 handler: function () {
                                     var rightGridStore = me.down('#'+window.feature.rightGrid).getStore();
                                     rightGridStore.each(function (record) {
@@ -692,10 +707,11 @@ Campaign: Overview
                             itemId: window.feature.rightGridTopLabel,
                         },{
                             xtype: 'gridpanel',
+                            cls: 'white-border',
                             itemId: window.feature.rightGrid,
                             store: window.feature.rightGridStore,
                             columnLines: true,
-                            margin: '0 0 10 0',
+                            margin: '0 10 10 0',
                             loadMask: true,
                             flex:3,
                             autoScroll:true,

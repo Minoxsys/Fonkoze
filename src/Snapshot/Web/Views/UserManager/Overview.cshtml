@@ -343,8 +343,16 @@ User Administration Users: Overview
                             var winEdit = new window.feature.modal({
                                 title: Ext.String.format('Edit User {0}', rec.get('UserName')),
                                 buttons: [
-                                { text: 'Cancel', handler:function(){ winEdit.close(); winEdit.destroy();} },
-                                { text: 'Save', handler:function(){
+                                { text: 'Cancel',
+                                  margin: '0 20 20 10',
+                                  ui: 'snapshot-CANCEL-btn',
+                                  cls: 'x-add-button-gradient',
+                                 handler:function(){ winEdit.close(); winEdit.destroy();} },
+                                { text: 'Save',
+                                  margin: '0 20 20 10',
+                                  ui: 'snapshot-add-btn',
+                                  cls: 'x-add-button-gradient',
+                                  handler:function(){
                                     var userFirstName = winEdit.down('#'+window.feature.formUserFirstNameId);
                                     var userLastName = winEdit.down('#'+window.feature.formUserLastNameId);
                                     var userUserName = winEdit.down('#'+window.feature.formUserUsernameId);
