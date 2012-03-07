@@ -130,19 +130,21 @@
             cls: 'white-border',
 			store:  window.feature.gridStore,
 			columns: [
-				{ header:'Campaign'    ,  dataIndex:'Campaign', flex:2     },
-				{ header:'Start Date'       ,  dataIndex:'StartDate'        },
-				{ header:'End Date'         ,  dataIndex:'EndDate'          },
+				{ header: 'Campaign',
+				  dataIndex: 'Campaign',
+                 },
+				{ header: 'Start Date',
+				    dataIndex: 'StartDate'
+                 },
+				{ header:'End Date',  dataIndex:'EndDate'          },
 				{ header:'Schedule'    ,  dataIndex:'ScheduleName'     },
 				{ header:'Frequency'        ,  dataIndex:'Frequency'         },
-				{ header:'Product Group',  dataIndex:'ProductGroup', flex:1 },
+				{ header:'Product Group',  dataIndex:'ProductGroup' },
 				{ header:'Stopped',  dataIndex:'IsStopped', xtype: 'templatecolumn', tpl: '<tpl if="IsStopped">Yes</tpl><tpl if="!IsStopped">No</tpl>'},
-				{ header:'Sms Codes',  dataIndex:'ProductSmsCodes', flex:2 },{
-					header:'Actions',  
+				{ header:'Sms Codes',  dataIndex:'ProductSmsCodes' },{
+					header:'Actions',
 					xtype: 'actioncolumn',
-                    width: 170,
 					items:[
-	
 						{
 							icon: '@Url.AssetUrl("/img/edit.png")',  
 							text: 'Edit',
