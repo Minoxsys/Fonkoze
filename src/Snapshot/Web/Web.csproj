@@ -259,6 +259,7 @@
     <Compile Include="Areas\StockAdministration\Models\Product\ProductIndexModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\Product\ProductIndexOutputModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\Product\ProductInputModel.cs" />
+    <Compile Include="BackgroundJobs\ExecutedCampaign.cs" />
     <Compile Include="Models\Shared\ToModalJsonActionResponse.cs" />
     <Compile Include="Areas\StockAdministration\Models\Product\ProductModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\Product\ProductOutputModel.cs" />
