@@ -9069,3 +9069,8 @@ textarea.x-form-invalid-field {
 /* line 180, ../sass/snapshot-theme.scss */
 .x-form-trigger-over.x-form-spinner-down {
   background-position: 0 -11px !important; }
+
+/* line 184, ../sass/snapshot-theme.scss */
+.dashboard-img {
+  margin: 0 20% !important;
+  left: 0 !important; }

@@ -19,9 +19,9 @@ Snapshot Application
         content.add({
             xtype: 'image',
             src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/dashboard_image.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
-            height: 700,
-            width:1100,
-            margin: '10 10 0 400'
+            cls: "dashboard-img",
+            width: 1140,
+            height: 390
         });
 
     });
