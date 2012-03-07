@@ -435,6 +435,7 @@
     <Content Include="Assets\resources\img\briefcase.png" />
     <Content Include="Assets\resources\img\checked.gif" />
     <Content Include="Assets\resources\img\copy.png" />
+    <Content Include="Assets\resources\img\dashboard_image.png" />
     <Content Include="Assets\resources\img\delete.png" />
     <Content Include="Assets\resources\img\edit.png" />
     <Content Include="Assets\js\ext-all-debug-w-comments.js" />
@@ -1023,6 +1024,7 @@
     <Content Include="Assets\resources\themes\images\snapshot\form\checkbox.gif" />
     <Content Include="Assets\resources\themes\images\snapshot\form\clear-trigger.gif" />
     <Content Include="Assets\resources\themes\images\snapshot\form\date-trigger.gif" />
+    <Content Include="Assets\resources\themes\images\snapshot\form\dropdown.png" />
     <Content Include="Assets\resources\themes\images\snapshot\form\error-tip-corners.gif" />
     <Content Include="Assets\resources\themes\images\snapshot\form\exclamation.gif" />
     <Content Include="Assets\resources\themes\images\snapshot\form\radio.gif" />
