@@ -128,7 +128,7 @@ User Administration Roles: Overview
                         align: 'strech'
                     },
                     items: [
-                        { xtype: 'textfield', id: window.feature.NameId, fieldLabel: 'Schedule Name', allowBlank: false, padding: '0 30 0 0'}
+                        { xtype: 'textfield', id: window.feature.NameId, fieldLabel: 'Schedule Name', allowBlank: false, padding: '0 30 0 0' }
                     ]
                 },
                     {
@@ -166,16 +166,21 @@ User Administration Roles: Overview
             ],
             buttons: [
                 { text: 'Cancel',
-                  margin: '10 10 20 0',
-                  ui: 'snapshot-cancel-btn',
-                  cls: 'x-add-button-gradient',
+                    margin: '10 10 20 0',
+                    ui: 'snapshot-cancel-btn',
+                    cls: 'x-add-button-gradient',
 
-                  handler: function () { window.feature.modal.hide(); } },
+                    handler: function () {
+                        window.feature.modal.hide();
+                        window.feature.scheduleToEdit = null; 
+                    }
+                },
                 { text: 'Save',
-                  margin: '10 10 20 0',
-                  ui: 'snapshot-add-btn',
-                  cls: 'x-add-button-gradient',
-                  handler: SaveSchedule }
+                    margin: '10 10 20 0',
+                    ui: 'snapshot-add-btn',
+                    cls: 'x-add-button-gradient',
+                    handler: SaveSchedule
+                }
             ]
         });
 
@@ -206,6 +211,7 @@ User Administration Roles: Overview
                             margin: '0 0 0 20',
                             handler: function () {
                                 InitModal();
+                                window.feature.scheduleToEdit = null; 
                                 window.feature.modal.show();
                             }
                         }
