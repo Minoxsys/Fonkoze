@@ -419,6 +419,14 @@
 	
 								var createAction = $.post(me.url, form.getValues());
 								createAction.success(function(serverResponse){
+                                    if(serverResponse.CloseModal ==false)
+                                    {
+                                        var msgAlert = Ext.Msg;
+                                        msgAlert.ui = 'snapshot-popup-window';
+                                        msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                        msgAlert.alert(serverResponse.Status, serverResponse.Message);
+                                        return;
+                                    }
 									window.feature.outpostsStore.loadPage(1);
 	
 									me.postContactsFromMemoryProxy(serverResponse.OutpostId);

@@ -206,6 +206,20 @@ namespace Web.Areas.OutpostManagement.Controllers
 		public JsonResult Create(CreateOutpostInputModel model)
 		{
 			LoadUserAndClient();
+
+            var queryoutpost = QueryService.Query().Where(p => p.Client == _client);
+            if (queryoutpost.Where(it => it.Name == model.Name && it.District.Id == model.DistrictId).Count() > 0)
+            {
+                return Json(
+                    new ToModalJsonActionResponse
+                    {
+                        Status = "Error",
+                        CloseModal = false,
+                        Message = string.Format("There is already an outpost with this name: {0} for this district! Please insert a different name!", model.Name)
+                    });
+
+            }
+
 			var outpost = new Outpost();
 			MapInputToOutpost(model, ref outpost);
 
@@ -223,6 +237,19 @@ namespace Web.Areas.OutpostManagement.Controllers
 		public JsonResult Edit(EditOutpostInputModel model)
 		{
 			LoadUserAndClient();
+
+            var queryoutpost = QueryService.Query().Where(p => p.Client == _client);
+            if (queryoutpost.Where(it => it.Name == model.Name && it.District.Id == model.DistrictId && it.Id != model.EntityId.Value).Count() > 0)
+            {
+                return Json(
+                    new ToModalJsonActionResponse
+                    {
+                        Status = "Error",
+                        CloseModal = false,
+                        Message = string.Format("There is already an outpost with this name: {0} for this district! Please insert a different name!", model.Name)
+                    });
+
+            }
 
 			var outpost = QueryService.Load(model.EntityId.Value);
 			MapInputToOutpost(model, ref outpost);

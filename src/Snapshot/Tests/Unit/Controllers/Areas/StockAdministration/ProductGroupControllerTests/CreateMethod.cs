@@ -63,9 +63,9 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration.ProductGroupControlle
             //Arrange
             ProductGroupInputModel productGroupInputModel = new ProductGroupInputModel()
             {
-                Name = objectMother.productGroup.Name + "a",
+                Name = "Hiv",
                 Description = objectMother.productGroup.Description,
-                ReferenceCode = objectMother.productGroup.ReferenceCode
+                ReferenceCode = "RRR"
             };
             objectMother.queryProductGroup.Expect(call => call.Query()).Return(new ProductGroup[] { objectMother.productGroup }.AsQueryable());
 
@@ -78,7 +78,7 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration.ProductGroupControlle
             var response = jsonResult.Data as JsonActionResponse;
             Assert.IsNotNull(response);
             Assert.That(response.Status, Is.EqualTo("Success"));
-            Assert.That(response.Message, Is.EqualTo("Product Group Malariaa has been saved."));
+            Assert.That(response.Message, Is.EqualTo("Product Group Hiv has been saved."));
         }
     }
 }
