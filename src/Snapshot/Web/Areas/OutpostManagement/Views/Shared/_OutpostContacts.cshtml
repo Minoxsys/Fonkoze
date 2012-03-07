@@ -112,9 +112,11 @@
                 }, {
                     xtype: 'actioncolumn',
                     menuDisabled: true,
+                    flex: 1,
                     text: _t('Actions'),
-                    items: [
-                        {
+                    items: [{
+                        icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/edit.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                    },{
                             icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/delete.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
                             action: 'Delete',
                             handler: function (grid, rowIndex, colIndex) {

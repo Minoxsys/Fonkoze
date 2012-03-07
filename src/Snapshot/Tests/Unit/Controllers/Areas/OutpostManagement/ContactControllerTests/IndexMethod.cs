@@ -74,6 +74,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.ContactControllerTests
         public void RemoveContactOnDelete()
         {
             var deleteModel = _.GetDeleteModel();
+            _.StubLoadContact(deleteModel);
 
             _.controller.Index(deleteModel);
 
