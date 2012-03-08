@@ -62,7 +62,7 @@ namespace Tests.Unit.Services.ProductLevelRequestMessagesDispatcherTests
             client = new Client();
             byUser = new User();
 
-            contact = new Contact { ContactType = "Mobile Number", IsMainContact = true, ContactDetail = "1234567890", Outpost = outpost };
+            contact = new Contact { ContactType = Contact.MOBILE_NUMBER_CONTACT_TYPE, IsMainContact = true, ContactDetail = "1234567890", Outpost = outpost };
 
             campaign = MockRepository.GeneratePartialMock<Campaign>();
             campaign.Stub(c => c.Id).Return(Guid.NewGuid());

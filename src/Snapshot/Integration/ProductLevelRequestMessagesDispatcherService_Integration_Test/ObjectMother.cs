@@ -57,8 +57,8 @@ namespace IntegrationTests.ProductLevelRequestMessagesDispatcherService_Integrat
         {
             session = SessionFactory.Instance.CreateSession();
 
-            contact1 = new Contact() { ContactType = "Mobile Number", ContactDetail = "1234567890", IsMainContact = true };
-            contact2 = new Contact() { ContactType = "E-mail", ContactDetail = "georgian.camarasan@evozon.com", IsMainContact = true };
+            contact1 = new Contact() { ContactType = Contact.MOBILE_NUMBER_CONTACT_TYPE, ContactDetail = "1234567890", IsMainContact = true };
+            contact2 = new Contact() { ContactType = Contact.EMAIL_CONTACT_TYPE, ContactDetail = "georgian.camarasan@evozon.com", IsMainContact = true };
 
             outpost1 = new Outpost();
             outpost1.Contacts = new Contact[] { contact1 }.ToList<Contact>();

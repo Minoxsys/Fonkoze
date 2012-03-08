@@ -47,7 +47,7 @@ namespace Migrations
                 .WithColumn("Credits").AsString(ConstraintUtility.NAME_LENGTH).Nullable()
                 .WithColumn("OutpostId").AsGuid().Nullable()
                 .WithColumn("ParseSucceeded").AsBoolean().Nullable()
-                .WithColumn("ParseErrorMessage").AsString(ConstraintUtility.NAME_LENGTH);
+                .WithColumn("ParseErrorMessage").AsString(ConstraintUtility.NAME_LENGTH).Nullable();
 
             Create.AddForeignKey("RawSmsReceiveds");
             Create.AddForeignKey("RawSmsReceiveds", "OutpostId", "Outposts");

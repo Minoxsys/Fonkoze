@@ -80,7 +80,7 @@ namespace Tests.Unit.Controllers.EmailRequestControllerTests
             contact.Stub(c => c.Id).Return(contactId);
             contact.IsMainContact = true;
             contact.Outpost = outpost;
-            contact.ContactType = "E-mail";
+            contact.ContactType = Contact.EMAIL_CONTACT_TYPE;
             contact.ContactDetail = "eu@yahoo.com";
 
             emailRequestId = Guid.NewGuid();

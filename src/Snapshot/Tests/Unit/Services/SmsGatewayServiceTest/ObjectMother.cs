@@ -21,7 +21,6 @@ namespace Tests.Unit.Services.SmsGatewayServiceTest
         public const string SMS_GATEWAY_TESTMODE = "1";
         public const string SMS_GATEWAY_DEBUG = "0";
 
-        public const string MOBILE_NUMBER = "Mobile Number";
         public const string SMS_MESSAGE_TEMPLATE = "Please provide current stock level for product group {0} using format\n{1} {2}";
         public const string PRODUCT_GROUP_NAME= "Malaria";
         public const string PRODUCT_GROUP_REFERENCE_CODE = "MAL";
@@ -86,7 +85,7 @@ namespace Tests.Unit.Services.SmsGatewayServiceTest
             rawSmsReceivedWithWrongNumber = new RawSmsReceived() { Sender = WRONG_NUMBER };
             rawSmsReceivedWithBadContent = new RawSmsReceived() { Content = "" };
 
-            contact = new Contact() { ContactType = MOBILE_NUMBER, ContactDetail = NUMBER, IsMainContact = true };
+            contact = new Contact() { ContactType = Contact.MOBILE_NUMBER_CONTACT_TYPE, ContactDetail = NUMBER, IsMainContact = true };
 
             outpostId = Guid.NewGuid();
             outpost = MockRepository.GeneratePartialMock<Outpost>();

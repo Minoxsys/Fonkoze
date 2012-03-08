@@ -83,7 +83,7 @@ namespace Web.Controllers
             Contact contact = queryResultContacts.FirstOrDefault();
 
             if (contact != null)
-                if (contact.ContactType == "E-mail")
+                if (contact.ContactType == Contact.EMAIL_CONTACT_TYPE)
                     return contact.ContactDetail;
 
             return null;

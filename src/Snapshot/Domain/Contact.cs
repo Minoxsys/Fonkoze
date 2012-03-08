@@ -13,7 +13,7 @@ namespace Domain
         public const string MOBILE_NUMBER_CONTACT_TYPE = "Phone";
 
         /// <summary>
-        /// Possible values: "Email", "Mobile Number"
+        /// Possible values: Contact.EMAIL_CONTACT_TYPE, Contact.MOBILE_NUMBER_CONTACT_TYPE
         /// </summary>
         public virtual string ContactType { get; set; }
         public virtual string ContactDetail { get; set; }
