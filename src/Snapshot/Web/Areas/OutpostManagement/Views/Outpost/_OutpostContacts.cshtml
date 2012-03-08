@@ -14,7 +14,7 @@
     
                 { name: 'ContactType', type: 'string' },
                 { name: 'ContactDetail', type: 'string' },
-                { name: 'IsMainContact', type: 'bool' },
+                { name: 'IsMainContact', type: 'boolean' },
                 { name: 'Id', type: 'string' }
             ]
         });
@@ -104,6 +104,9 @@
                         allowBlank: false
                     }
                 },{
+                    xtype: 'booleancolumn', 
+                    trueText: 'Yes',
+                    falseText: 'No', 
                     header: _t('Default'), dataIndex: 'IsMainContact',
                     menuDisabled:true,
                     editor: {
