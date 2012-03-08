@@ -62,7 +62,7 @@
                             xtype: 'label',
                             style:'text-align:right;',  
                             margin: '25, 20, 7, 0',
-                            text: 'Anothony Wolf (UNICEF)',
+							text: '@Html.Action("UserDetails", new { area=string.Empty,controller="Home" })',
                             cls: 'x-username-label' 
                         },{
                             xtype: 'container',
@@ -81,6 +81,7 @@
                                 xtype: 'label', 
                                 text: 'Log Out',
                                 margin: '0, 20, 0, 0',
+                                cls: 'x-userMenu-label',
                                 autoEl: {tag: 'a', href: '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "Account", action = "LogOff" })'}
                             },{xtype: 'image',
                                                src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Logout.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
