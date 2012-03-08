@@ -92,7 +92,7 @@ namespace IntegrationTests.SmsGateway_Integration_Test
 
             outpost = new Outpost();
             outpost.Name = OUTPOST_NAME;
-            outpost.Contacts = new Contact[] { new Contact() { ContactType = "Mobile Number", ContactDetail = "1234567890", IsMainContact = true } }.ToList<Contact>();
+            outpost.Contacts = new Contact[] { new Contact() { ContactType = Contact.MOBILE_NUMBER_CONTACT_TYPE, ContactDetail = "1234567890", IsMainContact = true } }.ToList<Contact>();
             session.Save(outpost);
 
             productGroup = new ProductGroup();
