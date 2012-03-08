@@ -407,9 +407,13 @@
     <Content Include="Assets\css\color-scheme.css" />
     <Content Include="Assets\css\container-template.css" />
     <Content Include="Assets\css\ext-ie.css" />
+    <Content Include="Assets\css\footer-template.css" />
     <Content Include="Assets\css\general-css.css" />
     <Content Include="Assets\css\global-values.css" />
+    <Content Include="Assets\css\header-template.css" />
     <Content Include="Assets\css\panel-template.css" />
+    <Content Include="Assets\css\toolbar-template.css" />
+    <Content Include="Assets\css\window-template.css" />
     <Content Include="Assets\resources\img\Administration\Content\ArrowDown.png" />
     <Content Include="Assets\resources\img\Administration\Content\ArrowUp.png" />
     <Content Include="Assets\resources\img\Administration\Content\CountryIcon.png" />
