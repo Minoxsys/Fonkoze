@@ -96,17 +96,17 @@ namespace Tests.Unit.Services.SmsRequestServiceTest
             outpost = MockRepository.GeneratePartialMock<Outpost>();
             outpost.Stub(c => c.Id).Return(outpostId);
             outpost.Name = OUTPOST_NAME;
-            outpost.Contacts = new Contact[] { new Contact() { ContactType = "Mobile Number", ContactDetail = PHONE_NUMBER, IsMainContact = true } }.ToList<Contact>();
+            outpost.Contacts = new Contact[] { new Contact() { ContactType = Contact.MOBILE_NUMBER_CONTACT_TYPE, ContactDetail = PHONE_NUMBER, IsMainContact = true } }.ToList<Contact>();
 
             outpostWithNoMainContact = MockRepository.GeneratePartialMock<Outpost>();
             outpostWithNoMainContact.Stub(c => c.Id).Return(outpostId);
             outpostWithNoMainContact.Name = OUTPOST_NAME;
-            outpostWithNoMainContact.Contacts = new Contact[] { new Contact() { ContactType = "Mobile Number", ContactDetail = PHONE_NUMBER, IsMainContact = false } }.ToList<Contact>();
+            outpostWithNoMainContact.Contacts = new Contact[] { new Contact() { ContactType = Contact.MOBILE_NUMBER_CONTACT_TYPE, ContactDetail = PHONE_NUMBER, IsMainContact = false } }.ToList<Contact>();
 
             outpostWithNoNumberContact = MockRepository.GeneratePartialMock<Outpost>();
             outpostWithNoNumberContact.Stub(c => c.Id).Return(outpostId);
             outpostWithNoNumberContact.Name = OUTPOST_NAME;
-            outpostWithNoNumberContact.Contacts = new Contact[] { new Contact() { ContactType = "Email", ContactDetail = "a@a.ro", IsMainContact = true } }.ToList<Contact>();
+            outpostWithNoNumberContact.Contacts = new Contact[] { new Contact() { ContactType = Contact.EMAIL_CONTACT_TYPE, ContactDetail = "a@a.ro", IsMainContact = true } }.ToList<Contact>();
 
             productGroup = MockRepository.GeneratePartialMock<ProductGroup>();
             productGroup.Stub(c => c.Id).Return(productGroupId);
@@ -188,7 +188,7 @@ namespace Tests.Unit.Services.SmsRequestServiceTest
             productLevelRequestMessageInput = new ProductLevelRequestMessageInput
             {
                 Client = client,
-                Contact = new Contact { ContactType = "Mobile Number", ContactDetail = PHONE_NUMBER },
+                Contact = new Contact { ContactType = Contact.MOBILE_NUMBER_CONTACT_TYPE, ContactDetail = PHONE_NUMBER },
                 Outpost = outpost,
                 ProductGroup = productGroup,
                 Products = new Product[] { product }.ToList()
@@ -206,7 +206,7 @@ namespace Tests.Unit.Services.SmsRequestServiceTest
             productLevelRequestMessageInputWithoutMobileNumber = new ProductLevelRequestMessageInput
             {
                 Client = client,
-                Contact = new Contact { ContactType = "E-mail", ContactDetail = "" },
+                Contact = new Contact { ContactType = Contact.EMAIL_CONTACT_TYPE, ContactDetail = "" },
                 Outpost = outpost,
                 ProductGroup = productGroup,
                 Products = new Product[] { product }.ToList()

@@ -86,7 +86,7 @@ namespace Tests.Unit.Services.EmailRequestServiceTests
             productLevelRequestMessageInput = new ProductLevelRequestMessageInput
             {
                 Client = client,
-                Contact = new Contact { ContactType = "E-mail", ContactDetail = E_MAIL },
+                Contact = new Contact { ContactType = Contact.EMAIL_CONTACT_TYPE, ContactDetail = E_MAIL },
                 Outpost = outpost,
                 ProductGroup = productGroup,
                 Products = new Product[] { product }.ToList()
@@ -104,7 +104,7 @@ namespace Tests.Unit.Services.EmailRequestServiceTests
             productLevelRequestMessageInputWithoutEmail = new ProductLevelRequestMessageInput
             {
                 Client = client,
-                Contact = new Contact { ContactType = "Mobile Number", ContactDetail = "" },
+                Contact = new Contact { ContactType = Contact.MOBILE_NUMBER_CONTACT_TYPE, ContactDetail = "" },
                 Outpost = outpost,
                 ProductGroup = productGroup,
                 Products = new Product[] { product }.ToList()

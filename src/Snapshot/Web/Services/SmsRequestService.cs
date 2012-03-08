@@ -183,7 +183,7 @@ namespace Web.Services
 
         private string GetNumberFromOutpost(Outpost outpost)
         {
-            Contact contact = outpost.Contacts.Where(c => c.IsMainContact && c.ContactType.Equals("Mobile Number")).FirstOrDefault();
+            Contact contact = outpost.Contacts.Where(c => c.IsMainContact && c.ContactType.Equals(Contact.MOBILE_NUMBER_CONTACT_TYPE)).FirstOrDefault();
             return contact != null ? contact.ContactDetail : string.Empty;
         }
 
