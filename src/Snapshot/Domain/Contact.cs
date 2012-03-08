@@ -9,9 +9,11 @@ namespace Domain
 {
     public class Contact : DomainEntity
     {
-        //public Guid Id { get; set; }
+        public const string EMAIL_CONTACT_TYPE = "Email";
+        public const string MOBILE_NUMBER_CONTACT_TYPE = "Phone";
+
         /// <summary>
-        /// Possible values: "E-mail", "Mobile Number"
+        /// Possible values: "Email", "Mobile Number"
         /// </summary>
         public virtual string ContactType { get; set; }
         public virtual string ContactDetail { get; set; }

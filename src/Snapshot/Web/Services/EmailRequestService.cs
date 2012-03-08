@@ -20,14 +20,21 @@ namespace Web.Services
         private const string _subject = "Stock Request";
         private const bool _isBodyHtml = true;
 
-        public ISaveOrUpdateCommand<EmailRequest> SaveOrUpdateCommand { get; set; }
-        public IURLService UrlService { get; set; }
+        private ISaveOrUpdateCommand<EmailRequest> saveOrUpdateCommand { get; set; }
+        private IURLService urlService { get; set; }
+        public IEmailService emailService { get; set; }
+        public EmailRequestService(ISaveOrUpdateCommand<EmailRequest> saveOrUpdateCommand, IURLService urlService, IEmailService emailService)
+        {
+            this.saveOrUpdateCommand = saveOrUpdateCommand;
+            this.urlService = urlService;
+            this.emailService = emailService;
+        }
 
-        public IEmailService EmailService { get; set; }
+
 
         public bool SendProductLevelRequestMessage(ProductLevelRequestMessageInput input)
         {
-            if ((input.Products.Count > 0) && input.Contact.ContactType.Equals("E-mail"))
+            if ((input.Products.Count > 0) && input.Contact.ContactType.Equals(Contact.EMAIL_CONTACT_TYPE))
             {
                 return SaveAndSendEmailRequest(input);
             }
@@ -41,9 +48,10 @@ namespace Web.Services
                 Date = DateTime.UtcNow,
                 OutpostId = input.Outpost.Id,
                 ProductGroupId = input.ProductGroup.Id,
+                Client = input.Client
             };
 
-            SaveOrUpdateCommand.Execute(emailRequestEntity);
+            saveOrUpdateCommand.Execute(emailRequestEntity);
             Guid EmailRequestId = emailRequestEntity.Id;
 
             EmailRequestModel model = new EmailRequestModel()
@@ -54,7 +62,7 @@ namespace Web.Services
 
             MailMessage message = CreateMailMessage(model, input.ProductGroup.Name, input.Contact.ContactDetail);
 
-            return EmailService.SendMail(message);
+            return emailService.SendMail(message);
         }
 
         private MailMessage CreateMailMessage(EmailRequestModel model, string productGroupName, string emailAddress)
@@ -78,11 +86,12 @@ namespace Web.Services
             string json = ConvertHelper.ConvertToJSON(model);
             string encodedData = ConvertHelper.EncodeTo64(json);
 
-            string url = UrlService.GetEmailLinkUrl(new EmailRequestController().Url, encodedData);
+            string url = urlService.GetEmailLinkUrl(encodedData);
             string link = "<a href='" + url + "'> link </a>";
             string body = "Please update the stock information for product group <b>" + productGroupName + "</b> at this " + link;
 
             return body;
         }
+
     }
 }

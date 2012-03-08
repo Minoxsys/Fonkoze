@@ -134,7 +134,7 @@ namespace Web.Controllers
             string json = ConvertToJSON(model);
             string encodedData = EncodeTo64(json);
 
-            string url = UrlService.GetEmailLinkUrl(this.Url, encodedData);
+            string url = UrlService.GetEmailLinkUrl(encodedData);
             string link = "<a href='" + url + "'> link </a>";
             string body = "Please update the stock information for product group <b>" + productGroupName + "</b> at this " + link;
 
@@ -153,9 +153,9 @@ namespace Web.Controllers
         }
 
         [Requires(Permissions = "Home.Index")]
-        public ActionResult Response(string Id)
+        public ActionResult Response(string id)
         {
-            string decodedData = DecodeFrom64(Id);
+            string decodedData = DecodeFrom64(id);
 
             System.Web.Script.Serialization.JavaScriptSerializer oSerializer = new System.Web.Script.Serialization.JavaScriptSerializer();
             EmailRequestModel model = oSerializer.Deserialize<EmailRequestModel>(decodedData);
@@ -168,7 +168,7 @@ namespace Web.Controllers
                 if (email != null)
                 {
                     Outpost outpost = QueryOutpost.Load(email.OutpostId);
-                    return RedirectToRoute(Web.Areas.StockAdministration.StockAdministrationAreaRegistration.DEFAULT_ROUTE, new RouteValueDictionary(new { controller = "OutpostStockLevel", action = "Overview", countryId = outpost.Country.Id.ToString(), regionId = outpost.Region.Id.ToString(), districtId = outpost.District.Id.ToString(), outpostId = outpost.Id.ToString(), CommingFromCurrentData = true }));
+                    return RedirectToRoute(Web.Areas.StockAdministration.StockAdministrationAreaRegistration.DEFAULT_ROUTE, new RouteValueDictionary(new { controller = "OutpostStockLevel", action = "Overview"}));
                 }
             }
 

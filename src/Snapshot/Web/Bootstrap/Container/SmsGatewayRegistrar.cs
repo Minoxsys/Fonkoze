@@ -12,6 +12,12 @@ namespace Web.Bootstrap.Container
         public static void Register(ContainerBuilder container)
         {
             container.RegisterType<SmsGatewayService>().As<ISmsGatewayService>();
+
+            container.RegisterType<ProductLevelRequestMessagesDispatcherService>().As<IProductLevelRequestMessagesDispatcherService>();
+
+            container.RegisterType<SmsRequestService>().As<IProductLevelRequestMessageSenderService>();
+
+            container.RegisterType<EmailRequestService>().As<IProductLevelRequestMessageSenderService>();
         }
     }
 }

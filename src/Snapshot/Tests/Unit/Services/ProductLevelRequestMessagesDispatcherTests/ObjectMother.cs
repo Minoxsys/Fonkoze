@@ -48,8 +48,8 @@ namespace Tests.Unit.Services.ProductLevelRequestMessagesDispatcherTests
             senderService = MockRepository.GenerateMock<IProductLevelRequestMessageSenderService>();
             saveOrUpdateRequestRecord = MockRepository.GenerateMock<ISaveOrUpdateCommand<RequestRecord>>();
 
-            dispatcherService = new ProductLevelRequestMessagesDispatcherService(queryServiceOutpost, queryServiceContact, queryServiceStockLevel, saveOrUpdateRequestRecord);
-            dispatcherService.AddMessageSenderService(senderService);
+            dispatcherService = new ProductLevelRequestMessagesDispatcherService(queryServiceOutpost, queryServiceContact, queryServiceStockLevel, 
+                saveOrUpdateRequestRecord, new List<IProductLevelRequestMessageSenderService> { senderService });
         }
 
         public void Setup_Stub_Data()

@@ -59,7 +59,7 @@ namespace Tests.Unit.Controllers.EmailRequestControllerTests
             )));
 
             objectMother.queryServiceProductGroup.Expect(call => call.Load(objectMother.productGroupId)).Return(objectMother.productGroup);
-            objectMother.urlService.Stub(call => call.GetEmailLinkUrl(Arg<UrlHelper>.Is.Anything, Arg<string>.Is.Anything)).Return("LINKURL");
+            objectMother.urlService.Stub(call => call.GetEmailLinkUrl(Arg<string>.Is.Anything)).Return("LINKURL");
 
             //Act
             var redirectResult = (RedirectToRouteResult)objectMother.controller.Create(model);

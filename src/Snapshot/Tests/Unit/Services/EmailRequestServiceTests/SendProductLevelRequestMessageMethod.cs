@@ -29,12 +29,11 @@ namespace Tests.Unit.Services.EmailRequestServiceTests
             _.saveOrUpdateCommandEmailRequest.Expect(it => it.Execute(Arg<EmailRequest>.Matches(
                 c => c.Date.ToShortDateString() == DateTime.UtcNow.ToShortDateString() &&
                     c.OutpostId == _.outpostId &&
-                    c.ProductGroupId == _.productGroup.Id
+                    c.ProductGroupId == _.productGroup.Id &&
+                    c.Client == _.client
                 )));
 
-            _.emailService.Expect(call => call.SendMail(Arg<MailMessage>.Matches(
-                m => true
-            ))).Return(true);
+            _.emailService.Expect(call => call.SendMail(Arg<MailMessage>.Is.Anything)).Return(true);
 
             // Act
             bool sent = _.emailRequestService.SendProductLevelRequestMessage(_.productLevelRequestMessageInput);

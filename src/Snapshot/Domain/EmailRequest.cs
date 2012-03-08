@@ -11,5 +11,6 @@ namespace Domain
         public virtual DateTime Date { get; set; }
         public virtual Guid OutpostId { get; set; }
         public virtual Guid ProductGroupId { get; set; }
+        public virtual Client Client { get; set; }
     }
 }

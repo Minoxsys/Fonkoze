@@ -34,7 +34,7 @@ namespace IntegrationTests.ProductLevelRequestMessagesDispatcherService_Integrat
             _.queryServiceOutpostStockLevel.Expect(call => call.Query()).Return(new OutpostStockLevel[] { _.outpostStockLevel1, _.outpostStockLevel2 }.AsQueryable());
             _.queryServiceOutpost.Expect(call => call.Load(_.outpost1.Id)).Return(_.outpost1);
             _.queryServiceOutpost.Expect(call => call.Load(_.outpost2.Id)).Return(_.outpost2);
-            _.urlService.Expect(call => call.GetEmailLinkUrl(Arg<System.Web.Mvc.UrlHelper>.Is.Anything, Arg<string>.Is.Anything)).Return("LINKURL");
+            _.urlService.Expect(call => call.GetEmailLinkUrl(Arg<string>.Is.Anything)).Return("LINKURL");
 
             // Act
             _.service.DispatchMessagesForProductLevelRequest(_.productLevelRequest);

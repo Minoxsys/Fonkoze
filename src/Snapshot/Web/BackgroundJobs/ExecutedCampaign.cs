@@ -49,8 +49,6 @@ namespace Web.BackgroundJobs
                 foreach (var productLevelRequest in needToBeExecuted)
                 {
                     dispatcherService.DispatchMessagesForProductLevelRequest(productLevelRequest);
-                    
-                    SaveLastExecutionFor(productLevelRequest);
                 }
 
             });

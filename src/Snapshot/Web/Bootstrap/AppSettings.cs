@@ -15,6 +15,8 @@ namespace Web.Bootstrap
 
         public static string SendMailFrom = ConfigurationManager.AppSettings["SendMail.From"];
 
+        public static string EmailResponseUrl = ConfigurationManager.AppSettings["EmailResponse.Url"];
+
         /// <summary>
         /// The URL of the SMS API used to post the SMS data.
         /// </summary>

@@ -8,6 +8,6 @@ namespace Web.Services.UrlService
 {
     public interface IURLService
     {
-        string GetEmailLinkUrl(UrlHelper helper, string data);
+        string GetEmailLinkUrl(string data);
     }
 }

@@ -18,12 +18,14 @@ namespace Web.Services
         private IProductFilter productFilter;
         private ISaveOrUpdateCommand<RequestRecord> saveOrUpdateRequestRecord;
 
-        public ProductLevelRequestMessagesDispatcherService(IQueryService<Outpost> queryServiceOutpost, IQueryService<Contact> queryServiceContact, IQueryService<OutpostStockLevel> QueryServiceStockLevel, ISaveOrUpdateCommand<RequestRecord> saveOrUpdateRequestRecord)
+        public ProductLevelRequestMessagesDispatcherService(IQueryService<Outpost> queryServiceOutpost, IQueryService<Contact> queryServiceContact,
+            IQueryService<OutpostStockLevel> QueryServiceStockLevel, ISaveOrUpdateCommand<RequestRecord> saveOrUpdateRequestRecord, IEnumerable<IProductLevelRequestMessageSenderService> senderServices)
         {
             this.queryServiceOutpost = queryServiceOutpost;
             this.queryServiceContact = queryServiceContact;
             this.queryServiceStockLevel = QueryServiceStockLevel;
             this.saveOrUpdateRequestRecord = saveOrUpdateRequestRecord;
+            this.senderServices = new List<IProductLevelRequestMessageSenderService>(senderServices);
         }
 
         public void AddMessageSenderService(IProductLevelRequestMessageSenderService service)

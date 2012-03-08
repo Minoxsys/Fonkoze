@@ -2123,7 +2123,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\StockAdministration\Views\Shared\_ProductAdministrationSideBar.cshtml" />
-    <Content Include="Areas\OutpostManagement\Views\Shared\_OutpostContacts.cshtml" />
+    <Content Include="Areas\OutpostManagement\Views\Outpost\_OutpostContacts.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Shared\_UserAdministrationSideBar.cshtml" />

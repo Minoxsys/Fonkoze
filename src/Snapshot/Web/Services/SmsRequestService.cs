@@ -105,7 +105,7 @@ namespace Web.Services
 
         public bool SendProductLevelRequestMessage(ProductLevelRequestMessageInput input)
         {
-            if ((input.Products.Count > 0) && input.Contact.ContactType.Equals("Mobile Number"))
+            if ((input.Products.Count > 0) && input.Contact.ContactType.Equals(Contact.MOBILE_NUMBER_CONTACT_TYPE))
             {
                 SmsRequest smsRequest = new SmsRequest();
 

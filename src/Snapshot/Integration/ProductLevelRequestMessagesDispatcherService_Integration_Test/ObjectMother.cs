@@ -137,21 +137,16 @@ namespace IntegrationTests.ProductLevelRequestMessagesDispatcherService_Integrat
             queryOutposts = MockRepository.GenerateMock<IQueryOutposts>();
             saveOrUpdateRequestRecord = MockRepository.GenerateMock<ISaveOrUpdateCommand<RequestRecord>>();
 
-            service = new ProductLevelRequestMessagesDispatcherService(queryServiceOutpost, queryServiceContact, queryServiceOutpostStockLevel, saveOrUpdateRequestRecord);
-            
-            service.AddMessageSenderService(new SmsRequestService(queryServiceOutpost, queryServiceProductGroup, queryServiceOutpostStockLevel,
+            IProductLevelRequestMessageSenderService smsRequestService = new SmsRequestService(queryServiceOutpost, queryServiceProductGroup, queryServiceOutpostStockLevel,
                 queryServiceSmsRequest, new SaveCommandSmsRequest(this), outpostStockLevelService, saveOrUpdateOutpostStockLevel,
-                new SmsGatewayService(new SmsGatewaySettingsService(), new HttpService(), queryOutposts, queryServiceContact)));
+                new SmsGatewayService(new SmsGatewaySettingsService(), new HttpService(), queryOutposts, queryServiceContact));
 
             urlService = MockRepository.GenerateMock<IURLService>();
 
-            EmailRequestService emailRequestService = new EmailRequestService();
-            emailRequestService.SaveOrUpdateCommand = new SaveCommandEmailRequest(this);
-            emailRequestService.UrlService = urlService;
+            EmailRequestService emailRequestService = new EmailRequestService(new SaveCommandEmailRequest(this), urlService, new EmailService());
 
-            emailRequestService.EmailService = new EmailService();
-
-            service.AddMessageSenderService(emailRequestService);
+            service = new ProductLevelRequestMessagesDispatcherService(queryServiceOutpost, queryServiceContact, queryServiceOutpostStockLevel,
+                saveOrUpdateRequestRecord, new List<IProductLevelRequestMessageSenderService> { smsRequestService, emailRequestService });
         }
 
         public void Delete_StubData()

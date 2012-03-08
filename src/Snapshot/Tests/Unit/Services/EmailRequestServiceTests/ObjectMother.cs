@@ -48,8 +48,6 @@ namespace Tests.Unit.Services.EmailRequestServiceTests
 
         public void Setup_EmailRequestService_and_MockServices()
         {
-            emailRequestService = new EmailRequestService();
-
             queryServiceEmailRequest = MockRepository.GenerateMock<IQueryService<EmailRequest>>();
             queryServiceOutpost = MockRepository.GenerateMock<IQueryService<Outpost>>();
             queryServiceProductGroup = MockRepository.GenerateMock<IQueryService<ProductGroup>>();
@@ -59,9 +57,8 @@ namespace Tests.Unit.Services.EmailRequestServiceTests
             urlService = MockRepository.GenerateMock<IURLService>();
             emailService = MockRepository.GenerateMock<IEmailService>();
 
-            emailRequestService.UrlService = urlService;
-            emailRequestService.EmailService = emailService;
-            emailRequestService.SaveOrUpdateCommand = saveOrUpdateCommandEmailRequest;
+
+            emailRequestService = new EmailRequestService(saveOrUpdateCommandEmailRequest, urlService, emailService);
         }
 
         public void SetUp_StubData()
