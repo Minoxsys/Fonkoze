@@ -26,6 +26,8 @@
     <![endif]-->
     <script src="@(Url.RouteUrl<JavascriptController>(req => req.Index("frameworks"), ScriptsRoutesRegistrar.JAVASCRIPT))"
         language="javascript" type="text/javascript"> </script>
+	<script src="@Url.AssetUrl("js/ext-all.js")"
+        language="javascript" type="text/javascript"> </script>
 </head>
 <body>
  <script type="text/javascript">
