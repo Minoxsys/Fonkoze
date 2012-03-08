@@ -197,7 +197,7 @@ namespace Web.Areas.CampaignManagement.Controllers
             {
                 if (products[i].Selected)
                 {
-                    string format = i == products.Length - 1 ? "{0}" : "{0}/";
+                    string format = "{0}/";
                     sb.AppendFormat(format, products[i].SmsCode);
                 }
             }
