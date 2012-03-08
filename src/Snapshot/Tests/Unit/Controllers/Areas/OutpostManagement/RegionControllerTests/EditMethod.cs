@@ -59,7 +59,6 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.RegionControllerTests
             {
                 Id = objectMother.region.Id,
                 Name = objectMother.region.Name,
-                Coordinates = objectMother.region.Coordinates,
                 CountryId = objectMother.region.Country.Id
             };
             objectMother.queryRegion.Expect(call => call.Query()).Return(new Region[] { objectMother.region2 }.AsQueryable());
@@ -80,11 +79,10 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.RegionControllerTests
             {
                 Id = objectMother.region.Id,
                 Name = objectMother.region.Name,
-                Coordinates = objectMother.region.Coordinates,
                 CountryId = objectMother.region.Country.Id
             };
             objectMother.queryCountry.Expect(call => call.Load(objectMother.countryId)).Return(objectMother.country);
-            objectMother.saveCommand.Expect(call => call.Execute(Arg<Region>.Matches(p => p.Name == objectMother.region.Name && p.Coordinates == objectMother.region.Coordinates)));
+            objectMother.saveCommand.Expect(call => call.Execute(Arg<Region>.Matches(p => p.Name == objectMother.region.Name)));
             objectMother.queryRegion.Expect(call => call.Query()).Return(new Region[]{}.AsQueryable());
             //Act
             var jsonResult = objectMother.controller.Edit(regionInputModel);

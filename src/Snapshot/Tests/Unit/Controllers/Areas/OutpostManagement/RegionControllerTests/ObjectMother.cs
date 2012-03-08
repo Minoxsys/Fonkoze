@@ -42,7 +42,6 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.RegionControllerTests
         private const string COUNTRY_NAME = "Romania";
         private const string REGION_NAME = "Transilvania";
         private const string REGION_NAME_NEW = "Ardeal";
-        private const string REGION_COORDINATES = "3 4";
         private const string DISTRICT_NAME = "Cluj";
         private const string CLIENT_NAME = "Ion";
         private const string USER_NAME = "IonPopescu";
@@ -92,7 +91,6 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.RegionControllerTests
             region = MockRepository.GeneratePartialMock<Region>();
             region.Stub(c => c.Id).Return(regionId);
             region.Name = REGION_NAME;
-            region.Coordinates = REGION_COORDINATES;
             region.Country = country;
             region.Client = client;
 
@@ -100,7 +98,6 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.RegionControllerTests
             region2 = MockRepository.GeneratePartialMock<Region>();
             region2.Stub(c => c.Id).Return(regionId2);
             region2.Name = REGION_NAME;
-            region2.Coordinates = REGION_COORDINATES;
             region2.Country = country;
             region2.Client = client;
 
@@ -146,7 +143,6 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.RegionControllerTests
                 regionPageList.Add(new Region
                 {
                     Name = "RegionName"+i,
-                    Coordinates = i + " " + REGION_COORDINATES,
                     Client = client,
                     Country = country
                 });

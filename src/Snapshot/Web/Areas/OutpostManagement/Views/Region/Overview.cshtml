@@ -35,12 +35,11 @@ Outpost Management Regions: Overview
         window.feature.formid = 'regionFormId';
         window.feature.formcomboboxid = 'formCountryComboBoxId';
         window.feature.formregionnameid = 'formRegionNameTextFieldId';
-        window.feature.formcoordonatesid = 'formRegionCoordonatesTextFieldId';
 
         window.feature.regionStore = Ext.create('Ext.data.Store', {
             pageSize: 50,
             remoteSuport: true,
-            fields: ['Id','Name', 'Coordinates', 'CountryId', 'NumberOfDistricts'],
+            fields: ['Id','Name', 'CountryId', 'NumberOfDistricts'],
             proxy: {
                 type: 'ajax',
                 url: '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Region", action = "GetRegions" })',
@@ -120,14 +119,7 @@ Outpost Management Regions: Overview
                         xtype: 'textfield',
                         itemId: window.feature.formregionnameid,
                         name: 'Name',
-                        fieldLabel: 'Region Name',
-      
-                    }, {
-                        xtype: 'textfield',
-                        itemId: window.feature.formcoordonatesid,
-                        name: 'Coordinates',
-                        fieldLabel: 'Coordinates',
-   
+                        fieldLabel: 'Region Name'
                     }]
                 });
 
@@ -195,14 +187,12 @@ Outpost Management Regions: Overview
                                            
                                             var regionName = winAdd.down('#'+window.feature.formregionnameid);
                                             var country = winAdd.down('#'+window.feature.formcomboboxid);
-                                            var regionCoordinates = winAdd.down('#'+window.feature.formcoordonatesid);
-                                            var ok = IsValid(country, regionName, regionCoordinates);
+                                            var ok = IsValid(country, regionName);
 
                                             if (ok == true){
                                                 var values = {
                                                     CountryId:  country.getValue(),
-                                                    Name:  regionName.getValue(),
-                                                    Coordinates:  regionCoordinates.getValue(),
+                                                    Name:  regionName.getValue()
                                                 };
                                                 
                                                 var postToUrl = '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Region", action = "Create" })';
@@ -291,16 +281,10 @@ Outpost Management Regions: Overview
 						    return true;
 					    }
                     },{
-                        text: "Coordinates",
-                        dataIndex: 'Coordinates',
-                        flex: 1,
-                        menuDisabled:true,
-                        sortable: true
-                    },{
                         xtype: 'actioncolumn',
 			            text: 'Actions',
                         menuDisabled:true,
-                        flex: 0.7,
+                        flex: 0.3,
                         items: [{
                             icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/edit.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',  
                             text: 'Edit',
@@ -323,16 +307,14 @@ Outpost Management Regions: Overview
 
                                             var regionName = winEdit.down('#'+window.feature.formregionnameid);
                                             var country = winEdit.down('#'+window.feature.formcomboboxid);
-                                            var regionCoordinates = winEdit.down('#'+window.feature.formcoordonatesid);
 
-                                            var ok = IsValid(country, regionName, regionCoordinates);
+                                            var ok = IsValid(country, regionName);
                                                    
                                             if (ok == true){
                                                     var values = {
                                                         Id: rec.get('Id'),
                                                         CountryId:  country.getValue(),
-                                                        Name:  regionName.getValue(),
-                                                        Coordinates:  regionCoordinates.getValue(),
+                                                        Name:  regionName.getValue()
                                                     };
                                                     var postToUrl = '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Region", action = "Edit" })';
                                                     var action = $.post(postToUrl, values);
@@ -362,7 +344,6 @@ Outpost Management Regions: Overview
 
                                 winEdit.down('#'+window.feature.formcomboboxid).setValue(rec.get('CountryId'));
                                 winEdit.down('#'+window.feature.formregionnameid).setValue(rec.get('Name'));
-                                winEdit.down('#'+window.feature.formcoordonatesid).setValue(rec.get('Coordinates'));
     
                                 winEdit.show();
                             }
@@ -414,7 +395,7 @@ Outpost Management Regions: Overview
             }]
     });
 
-        function IsValid(country, regionName, regionCoordinates){
+        function IsValid(country, regionName){
             var ok = true;
             if (regionName.getValue() == ''){
                 regionName.markInvalid('Field Name is required!');  
@@ -428,11 +409,6 @@ Outpost Management Regions: Overview
                 ok = false;
             }
 
-            if (regionCoordinates.getValue() == ''){
-                regionCoordinates.markInvalid('Field Coordinates is required!');  
-                regionCoordinates.setValue(null);
-                ok = false;
-            }
             return ok;
         };
 

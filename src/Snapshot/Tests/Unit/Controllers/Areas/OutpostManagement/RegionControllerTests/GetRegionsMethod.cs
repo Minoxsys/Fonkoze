@@ -78,39 +78,5 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.RegionControllerTests
             Assert.That(jsonData.Regions[0].CountryId, Is.EqualTo(objectMother.countryId));
 
         }
-
-        [Test]
-        public void Returns_Regions_For_Country_Order_ByCoordinates_ASC()
-        {
-            //Arrange
-            var indexModel = new RegionIndexModel
-            {
-                dir = "ASC",
-                limit = 50,
-                page = 1,
-                start = 0,
-                sort = "Coordinates",
-                countryId = objectMother.countryId.ToString()
-            };
-
-            var pageOfData = objectMother.PageOfRegionData(indexModel);
-            objectMother.queryRegion.Expect(call => call.Query()).Return(pageOfData);
-
-            //Act
-
-            var jsonResult = objectMother.controller.GetRegions(indexModel);
-
-            //Assert
-            objectMother.queryCountry.VerifyAllExpectations();
-
-            var jsonData = jsonResult.Data as RegionIndexOuputModel;
-
-            Assert.That(jsonData.Regions[0].Name, Is.EqualTo("RegionName0"));
-            Assert.That(jsonData.Regions[0].CountryId, Is.EqualTo(objectMother.countryId));
-
-        }
-
-
-
     }
 }

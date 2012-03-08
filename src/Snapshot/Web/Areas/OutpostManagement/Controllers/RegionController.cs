@@ -81,16 +81,6 @@ namespace Web.Areas.OutpostManagement.Controllers
  
             }
 
-            if (queryRegionValidation.Where(it => it.Coordinates == regionInputModel.Coordinates).Count() > 0)
-            {
-                return Json(
-                    new ToModalJsonActionResponse
-                    {
-                        Status = "Error",
-                        CloseModal = false,
-                        Message = string.Format("There is already a region with coordinates {0}! Please insert different coordinates!", regionInputModel.Coordinates)
-                    });
-            }
             Region region = new Region();
 
             CreateMapping();
@@ -149,18 +139,6 @@ namespace Web.Areas.OutpostManagement.Controllers
                         Message = string.Format("There is already a region with the name {0} for this country! Please insert a different name!", regionInputModel.Name)
                     });
 
-            }
-
-            
-            if (queryRegionValidation.Where(it => it.Coordinates == regionInputModel.Coordinates && it.Id != regionInputModel.Id).Count() > 0)
-            {
-                return Json(
-                    new ToModalJsonActionResponse
-                    {
-                        Status = "Error",
-                        CloseModal = false,
-                        Message = string.Format("There is already a region with coordinates {0}! Please insert different coordinates!", regionInputModel.Coordinates)
-                    });
             }
 
             Region region = new Region();
@@ -231,9 +209,7 @@ namespace Web.Areas.OutpostManagement.Controllers
             var orderByColumnDirection = new Dictionary<string, Func<IQueryable<Region>>>()
             {
                 { "Name-ASC", () => regionDataQuery.OrderBy(c => c.Name) },
-                { "Name-DESC", () => regionDataQuery.OrderByDescending(c => c.Name) },
-                { "Coordinates-ASC", () => regionDataQuery.OrderBy(c => c.Coordinates) },
-                { "Coordinates-DESC", () => regionDataQuery.OrderByDescending(c => c.Coordinates) },
+                { "Name-DESC", () => regionDataQuery.OrderByDescending(c => c.Name) }
             };
 
             regionDataQuery = orderByColumnDirection[String.Format("{0}-{1}", indexModel.sort, indexModel.dir)].Invoke();
@@ -258,7 +234,6 @@ namespace Web.Areas.OutpostManagement.Controllers
                                              {
                                                  Id = region.Id,
                                                  Name = region.Name,
-                                                 Coordinates = region.Coordinates,
                                                  CountryId = region.Country.Id,
                                              }).ToArray();
 
