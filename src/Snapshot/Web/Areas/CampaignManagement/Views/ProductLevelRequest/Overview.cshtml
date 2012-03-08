@@ -114,9 +114,7 @@
             Id: recordData.Id
         };
 
-        $.post(url, params);
-
-      
+        $.post(url, params);      
     }
 
 </script>
@@ -157,7 +155,7 @@
 							handler: function(grid, rowIndex, colIndex) {
 								var record = grid.store.getAt(rowIndex);
                                 stopProductLevelRequest(record.data);
-								
+								grid.store.loadPage(1);
 							}
 						}
 					]
