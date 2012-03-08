@@ -90,6 +90,7 @@
              items: [
                 {
                     xtype: 'container',
+                    scollable: true,
                     height: 160,
                     id: res.header.id,
                     itemId: '',
@@ -108,7 +109,7 @@
                             {
                                 xtype: 'container',
                                 height: 70,
-                                margin: '15 130 0 20',
+                                margin: '15 80 0 20',
                                 id: res.header.navigation.logo,
                                 padding: 0,
                                 width: 150,
@@ -120,15 +121,15 @@
                                 xtype: 'button',
                                 id: res.header.navigation.dashboard,
                                 height: 70,
-                                padding: '0 0 0 10',
-                                width: 170,
+                                padding: '0 0 0 0',
+                                width: 140,
                                 icon:'@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Menu/Dashboard.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
                                 iconAlign: 'left',
                                 ui: 'snapshot-navigation-btn',
                                 toggleGroup:res.header.navigation.toggleGroup,
                                 enableToggle:true,
                                 pressed:true,
-                                text: 'Dashboard',
+                                text: '&nbsp;&nbsp;&nbsp;&nbsp;Dashboard',
                                  handler:function(){
                                     navigateTo( res.link.dashboard ); 
                                 },
@@ -137,8 +138,8 @@
                                 xtype: 'button',
                                 id: res.header.navigation.administration,
                                 height: 70,
-                                padding: '0 0 0 15',
-                                width: 180,
+                                padding: '0 0 0 5',
+                                width: 170,
                                 icon:'@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Menu/Administration.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
                                 iconAlign: 'left',
                                 ui: 'snapshot-navigation-btn',
@@ -147,13 +148,13 @@
                                     navigateTo( res.link.administration ); 
                                 },
                                 enableToggle:true,
-                                text: 'Administration'
+                                text: '&nbsp;&nbsp;&nbsp;&nbsp;Administration'
                             },{
                                 xtype: 'button',
                                 id: res.header.navigation.outpostStockLevel,
                                 height: 70,
-                                padding: '0 0 0 10',
-                                width: 180,
+                                padding: '0 0 0 5',
+                                width: 135,
                                 icon:'@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Menu/OutpostProductLevel.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
                                 iconAlign: 'left',
                                 ui: 'snapshot-navigation-btn',
@@ -162,13 +163,13 @@
                                 handler:function(){
                                     navigateTo( res.link.outpostStockLevelCurrent ); 
                                 },
-                                text: 'Products'                                
+                                text: '&nbsp;&nbsp;&nbsp;&nbsp;Products'                                
                             },{
                                 xtype: 'button',
                                 id: res.header.navigation.alerts,
                                 height: 70,
-                                padding: '0 0 0 10',
-                                width: 140,
+                                padding: '0 0 0 5',
+                                width: 100,
                                 icon:'@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Menu/Alerts.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
                                 iconAlign: 'left',
                                 ui: 'snapshot-navigation-btn',
@@ -177,20 +178,20 @@
                                 handler:function(){
                                     navigateTo( res.link.alerts ); 
                                 },
-                                text: 'Alerts'
+                                text: '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Alerts'
                             },
                             {
                                 xtype: 'button',
                                 id: res.header.navigation.analysisAndReports,
                                 height: 70,
-                                padding: '0 0 0 10',
-                                width: 230,
+                                padding: '0 0 0 5',
+                                width: 215,
                                 icon:'@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Menu/Analysis.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
                                 iconAlign: 'left',
                                 ui: 'snapshot-navigation-btn',
                                 toggleGroup:res.header.navigation.toggleGroup,
                                 enableToggle:true,
-                                text: 'Analysis and Reports',
+                                text: '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Analysis and Reports',
                                 handler:function(){
                                     navigateTo( res.link.analysisAndReports ); 
                                 },
