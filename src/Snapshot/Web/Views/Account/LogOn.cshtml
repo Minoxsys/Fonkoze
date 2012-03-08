@@ -11,12 +11,19 @@
     Ext.onReady(function () {
         var viewport = Ext.getCmp(window.res.viewport);
 
-        viewport.add(
+        viewport.add({
+            xtype: 'image',
+            src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/LogoLogin.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+            cls: "login-img",
+            margin: '40 0 0 0',
+            width: 200,
+            height: 50
+            },
             {
                 xtype: 'form',
                 height: 180,
                 bodyPadding: 30,
-                margin: '150 0 0 0',
+                margin: '100 0 0 0',
                 width: 400,
                 ui: 'snapshot-login-panel',
                 padding: 0,
