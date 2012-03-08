@@ -5,24 +5,22 @@
 	Html.RenderPartial("_SubNavigation");
 	Html.RenderPartial("_CampaignManagementSideBar");
 }
-
 <script type="text/javascript">
-    Ext.onReady(function () {
-        var administrationBtnId = window.res.header.navigation.administration;
-        var administrationBtn = Ext.getCmp(administrationBtnId);
-        administrationBtn.toggle(true);
+	Ext.onReady(function () {
+		var administrationBtnId = window.res.header.navigation.administration;
+		var administrationBtn = Ext.getCmp(administrationBtnId);
+		administrationBtn.toggle(true);
 
-        var campaignAdministrationBtnId = window.res.header.subnavigation.buttonTabs.campaign;
-        var campaignAdministrationBtn = Ext.getCmp(campaignAdministrationBtnId);
-        campaignAdministrationBtn.toggle(true);
-        campaignAdministrationBtn.setIcon('@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/SubMenu/CampaignSelected.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))');
-       
-        var sidebarSelectionId = window.res.content.maincontent.sidebar.createProductLevelRequests;
-        var sidebarSelection = Ext.getCmp(sidebarSelectionId);
-        sidebarSelection.toggle(true);
-    });
+		var campaignAdministrationBtnId = window.res.header.subnavigation.buttonTabs.campaign;
+		var campaignAdministrationBtn = Ext.getCmp(campaignAdministrationBtnId);
+		campaignAdministrationBtn.toggle(true);
+		campaignAdministrationBtn.setIcon('@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/SubMenu/CampaignSelected.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))');
+
+		var sidebarSelectionId = window.res.content.maincontent.sidebar.createProductLevelRequests;
+		var sidebarSelection = Ext.getCmp(sidebarSelectionId);
+		sidebarSelection.toggle(true);
+	});
 </script>
-
 <script type="text/javascript">
 	window.feature = {};
 
@@ -32,18 +30,16 @@
 	window.feature.ids.grid = 'Create-Product-Level-Request-Grid';
 
 </script>
-
 @{
- Html.RenderPartial("_CreateProductLevelRequest");   
+	Html.RenderPartial("_CreateProductLevelRequest");   
 }
-
 <script type="text/javascript">
 	window.feature.models = {};
 	window.feature.stores = {};
 	Ext.onReady(function () {
 
 		window.feature.models.ProductLevelRequest = Ext.define('ProductLevelRequestModel', {
-		    extend: 'Ext.data.Model',
+			extend: 'Ext.data.Model',
 			fields: [
 				{
 					name: 'id', type: 'string',
@@ -52,7 +48,7 @@
 					}
 				},
 				{ name: 'Campaign'      , type: 'string' },
-                { name: 'Editable', type: 'bool' },
+				{ name: 'Editable', type: 'bool' },
 				{ name: 'StartDate'         , type: 'string' },
 				{ name: 'EndDate'           , type: 'string' },
 				{ name: 'ScheduleName'      , type: 'string' },
@@ -79,60 +75,60 @@
 				url: '@Url.RouteUrl(CampaignManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "ProductLevelRequest", action = "GetProductLevelRequests" })',
 				reader: {
 					type: 'json',
-                    totalProperty: 'TotalItems',
+					totalProperty: 'TotalItems',
 					root: 'ProductLevelRequests'
-	            },
-                extraParams: { searchValue: '' },
+				},
+				extraParams: { searchValue: '' },
 			}
 		
 		});
 
 	});
 </script>
-
 <script type="text/javascript">
 
-    function editProductLevelRequest(recordData) {
-        if (!recordData.Editable) {
-            var msgAlert = Ext.Msg;
-            msgAlert.ui = 'snapshot-popup-window';
-            msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
-            msgAlert.msgButtons['ok'].margin = '10 10 20 0';
-            msgAlert.alert('Edit disabled', 'Edit is disabled because Campaign is already running');
-            return;
-        }
-        var modal = new window.feature.createProductLevelRequest({
-        	title: 'Edit Product Level Request',
+	function editProductLevelRequest(recordData) {
+		if (!recordData.Editable) {
+			var msgAlert = Ext.Msg;
+			msgAlert.ui = 'snapshot-popup-window';
+			msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+			msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+			msgAlert.alert('Edit disabled', 'Edit is disabled because Campaign is already running');
+			return;
+		}
+		var modal = new window.feature.createProductLevelRequest({
+			title: 'Edit Product Level Request',
 			data: recordData,
-            gridStore: window.feature.gridStore
-        });
-        modal.show();
-    }
-    function stopProductLevelRequest(recordData) {
-        var url = '@Url.RouteUrl(CampaignManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "ProductLevelRequest", action = "StopProductLevelRequest" })';
-        var params = {
-            Id: recordData.Id
-        };
+			gridStore: window.feature.gridStore
+		});
+		modal.show();
+	}
+	function stopProductLevelRequest(recordData) {
+		var url = '@Url.RouteUrl(CampaignManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "ProductLevelRequest", action = "StopProductLevelRequest" })';
+		var params = {
+			Id: recordData.Id
+		};
 
-        $.post(url, params);      
-    }
+		$.post(url, params);
+	}
 
 </script>
 <script type="text/javascript">
 	Ext.onReady(function () {
-        window.feature.gridStore = new window.feature.stores.ProductLevelRequest();
+		window.feature.gridStore = new window.feature.stores.ProductLevelRequest();
 
 		window.feature.grid = Ext.create('Ext.grid.Panel', {
-		    flex: 1,
-            cls: 'white-border',
+			flex: 1,
+			cls: 'white-border',
 			store:  window.feature.gridStore,
 			columns: [
-				{ header: 'Campaign',
-				  dataIndex: 'Campaign',
-                 },
-				{ header: 'Start Date',
-				    dataIndex: 'StartDate'
-                 },
+				{
+					header: 'Campaign',
+					dataIndex: 'Campaign',
+				},{
+					header: 'Start Date',
+					dataIndex: 'StartDate'
+				},
 				{ header:'End Date',  dataIndex:'EndDate'  },
 				{ header:'Schedule'    ,  dataIndex:'ScheduleName'     },
 				{ header:'Frequency'        ,  dataIndex:'Frequency'       },
@@ -140,38 +136,41 @@
 				{ header:'Stopped',  dataIndex:'IsStopped', xtype: 'templatecolumn', tpl: '<tpl if="IsStopped">Yes</tpl><tpl if="!IsStopped">No</tpl>'},
 				{ header:'Sms Codes',  dataIndex:'ProductSmsCodes' },{
 					header:'Actions',
-                    width: 180,
+					width: 180,
 					xtype: 'actioncolumn',
 					items:[
 						{
 							icon: '@Url.AssetUrl("/img/edit.png")',  
 							text: 'Edit',
 							handler: function (grid, rowIndex, colIndex) {
-                            if(@(ViewBag.HasNoRightsToAdd) === true){
-                                            var msgAlert = Ext.Msg;
-                                            msgAlert.ui = 'snapshot-popup-window';
-                                            msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
-                                            msgAlert.msgButtons['ok'].margin = '10 10 20 0';
-                            msgAlert.alert("Alert","You have no rights for this action!");
-                            }else{
-								var record = grid.store.getAt(rowIndex);
-								editProductLevelRequest(_(record.data).clone());
-                                }
+								if (@(ViewBag.HasNoRightsToAdd) === true){
+									var msgAlert = Ext.Msg;
+									msgAlert.ui = 'snapshot-popup-window';
+									msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+									msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+									msgAlert.alert("Alert", "You have no rights for this action!");
+								}
+								else{
+									var record = grid.store.getAt(rowIndex);
+									editProductLevelRequest(_(record.data).clone());
+								}
 							}
 						},{
 							icon: '@Url.AssetUrl("img/stop.png")',  
 							text: 'Delete',
 							handler: function(grid, rowIndex, colIndex) {
-                                if(@(ViewBag.HasNoRightsToStop) === true){
-                                            var msgAlert = Ext.Msg;
-                                            msgAlert.ui = 'snapshot-popup-window';
-                                            msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
-                                            msgAlert.msgButtons['ok'].margin = '10 10 20 0';
-                                            msgAlert.alert("Alert","You have no rights for this action!");
-                            }else{
-								var record = grid.store.getAt(rowIndex);
-                                stopProductLevelRequest(record.data);
-								grid.store.loadPage(1);
+								if (@(ViewBag.HasNoRightsToStop) === true){
+									var msgAlert = Ext.Msg;
+									msgAlert.ui = 'snapshot-popup-window';
+									msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+									msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+									msgAlert.alert("Alert", "You have no rights for this action!");
+								}
+								else{
+									var record = grid.store.getAt(rowIndex);
+									stopProductLevelRequest(record.data);
+									grid.store.loadPage(1);
+								}
 							}
 						}
 					]
@@ -187,32 +186,32 @@
 	
 		});
 
-        window.feature.gridStore.loadPage(1);
+		window.feature.gridStore.loadPage(1);
 	});
 </script>
 <script type="text/javascript">
-
-    function showCreateProductLevelRequest() {
-        var modal = new window.feature.createProductLevelRequest({
-            title:' Create a New Product Level Request',
-            gridStore: window.feature.gridStore
-        });
-        modal.show();
-    };
-
-    window.feature.doSearch = new Ext.util.DelayedTask(function () {
-        window.feature.grid.getStore().loadPage(1);
-    });
-
+	
+	function showCreateProductLevelRequest() {
+		var modal = new window.feature.createProductLevelRequest({
+			title: ' Create a New Product Level Request',
+			gridStore: window.feature.gridStore
+		});
+		modal.show();
+	};
+	
+	window.feature.doSearch = new Ext.util.DelayedTask(function () {
+		window.feature.grid.getStore().loadPage(1);
+	});
+	
 </script>
 <script type="text/javascript">
 	Ext.onReady(function () {
 		var contentRes = window.res.content;
 		var mainContent = Ext.getCmp(contentRes.maincontent.id);
-
+	
 		var topContainer = Ext.create('Ext.container.Container', {
 			margin:'45 50 20 20',
-            padding:'20 0 0 20',
+			padding:'20 0 0 20',
 			autoScroll:true,
 			id:'TopContainer',
 			layout: {
@@ -229,32 +228,32 @@
 					items:[
 						{
 							xtype:'container',
-                            margin: '0 0 0 30',
-                            width: 500,
+							margin: '0 0 0 30',
+							width: 500,
 							flex:1,
 							layout:'column',
 							items:[
-								{xtype: 'image',
-                                 src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/Content/CreateProductLevelRequest.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
-                                 margin: '0 20 10 10',
-                                },
-                                {  xtype:'label',
-                                   cls: 'x-title-label',
-                                 html:'Product Level Requests'},
 								{
+									xtype: 'image',
+									src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/Content/CreateProductLevelRequest.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+									margin: '0 20 10 10',
+								},{
+									xtype:'label',
+									cls: 'x-title-label',
+									html:'Product Level Requests'
+								},{
 									xtype:'button',
-                                    margin: '0 0 0 20',
-                                    ui: 'snapshot-add-btn',
-								    cls: 'x-add-button-gradient',
-                                    disabled: @(ViewBag.HasNoRightsToAdd),
+									margin: '0 0 0 20',
+									ui: 'snapshot-add-btn',
+									cls: 'x-add-button-gradient',
+									disabled: @(ViewBag.HasNoRightsToAdd),
 									text:'Create Product Level Request',
 									handler:function(btn){
-                                    showCreateProductLevelRequest();
+										showCreateProductLevelRequest();
 									}
 								}
 							]
-						},
-						{
+						},{
 							xtype:'container',
 							flex:1,
 							layout:{
@@ -262,23 +261,24 @@
 								pack:'end'
 							},
 							items:[
-								{   xtype:'textfield',
+								{
+									xtype:'textfield',
 									emptyText: 'Campaign Search',
 									id:  window.feature.ids.searchInput,
 									width: 200,
-                                    enableKeyEvents: true,
-                                    listeners: {
-                                        'keyup': {
-                                            fn: function (key) {
-                                                var searchValue = Ext.getCmp(window.feature.ids.searchInput).getValue();
-                                                window.feature.grid.getStore().proxy.extraParams.searchValue = searchValue;
-                                                window.feature.doSearch.delay(500);
-                                            }
-                                        }
-                                    }
+									enableKeyEvents: true,
+									listeners: {
+										'keyup': {
+											fn: function (key) {
+												var searchValue = Ext.getCmp(window.feature.ids.searchInput).getValue();
+												window.feature.grid.getStore().proxy.extraParams.searchValue = searchValue;
+												window.feature.doSearch.delay(500);
+											}
+										}
+									}
 								}
 							]
-
+	
 						}
 					]
 				},
