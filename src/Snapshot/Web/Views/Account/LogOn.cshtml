@@ -50,13 +50,13 @@
                     {
                         xtype: 'textfield',
                         name: 'UserName',
-                        fieldLabel: '@Html.NameFor(m => m.UserName)',
+                        fieldLabel: 'Username',
                         anchor: '100%'
                     }, {
                         xtype: 'textfield',
                         inputType: 'password',
                         name: 'Password',
-                        fieldLabel: '@Html.NameFor(m => m.Password)',
+                        fieldLabel: 'Password',
                         listeners: {
                             specialkey: function (field, e) {
                                 if (e.getKey() == e.ENTER) {
