@@ -135,13 +135,13 @@
 				{ header: 'Start Date',
 				    dataIndex: 'StartDate'
                  },
-				{ header:'End Date',  dataIndex:'EndDate'          },
-				{ header:'Schedule'    ,  dataIndex:'ScheduleName'     },
-				{ header:'Frequency'        ,  dataIndex:'Frequency'         },
-				{ header:'Product Group',  dataIndex:'ProductGroup' },
-				{ header:'Stopped',  dataIndex:'IsStopped', xtype: 'templatecolumn', tpl: '<tpl if="IsStopped">Yes</tpl><tpl if="!IsStopped">No</tpl>'},
-				{ header:'Sms Codes',  dataIndex:'ProductSmsCodes' },{
-					header:'Actions',
+				{ header:'End Date',  dataIndex:'EndDate', flex: 1          },
+				{ header:'Schedule'    ,  dataIndex:'ScheduleName' , flex: 1    },
+				{ header:'Frequency'        ,  dataIndex:'Frequency' , flex: 1        },
+				{ header:'Product Group',  dataIndex:'ProductGroup', flex: 1 },
+				{ header:'Stopped',  dataIndex:'IsStopped', xtype: 'templatecolumn', tpl: '<tpl if="IsStopped">Yes</tpl><tpl if="!IsStopped">No</tpl>', flex: 1},
+				{ header:'Sms Codes',  dataIndex:'ProductSmsCodes', flex: 1 },{
+					header:'Actions',  flex: 1,
 					xtype: 'actioncolumn',
 					items:[
 						{
