@@ -212,6 +212,14 @@ Historical Product Level: Overview
             viewButton.disable();
         };
 
+        var tooltipText = 'Click on the product group to view the historical product level';
+        Ext.QuickTips.init();
+
+        function addTooltip(val, meta, rec, rowIdx, colIdx, ds){
+            meta.tdAttr = 'data-qtip="' + tooltipText +'"' ;
+            return val;
+        }; 
+
          window.feature.productGroupLevel = Ext.define('Ext.feature.region.Modal', {
             extend: 'Ext.window.Window',
             title: 'Product Group Level',
@@ -243,7 +251,8 @@ Historical Product Level: Overview
                             xtype: 'textfield',
                             readOnly: true,
                             fieldLabel: 'Product Group',
-                            itemId: window.feature.productGroupName
+                            itemId: window.feature.productGroupName,
+                           
                         }]
                     },{
                         xtype: 'gridpanel',
@@ -636,7 +645,8 @@ Historical Product Level: Overview
                     dataIndex: 'ProductGroupName',
                     menuDisabled:true,
                     flex: 1,
-                    sortable: true
+                    sortable: true,
+                    renderer: addTooltip,
                 },{
                     header: "SMS Response Date",
                     dataIndex: 'SMSResponseDate',
