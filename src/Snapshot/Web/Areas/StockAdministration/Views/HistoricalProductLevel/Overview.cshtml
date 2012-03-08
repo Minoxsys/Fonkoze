@@ -224,6 +224,7 @@ Historical Product Level: Overview
             extend: 'Ext.window.Window',
             title: 'Product Group Level',
             modal:true,
+            ui: 'snapshot-popup-window',
             height: 500,
             width: 950,
             layout: {
@@ -256,6 +257,7 @@ Historical Product Level: Overview
                         }]
                     },{
                         xtype: 'gridpanel',
+                        cls: 'white-border',
                         flex: 5,
                         loadMask: true,
                         autoScroll:true,
@@ -288,8 +290,16 @@ Historical Product Level: Overview
                             itemclick: function(view, record, item, index, e ) {
                                 var editView = new window.feature.editHistorical({
                                     buttons: [
-                                        { text: 'Cancel', handler:function(){ editView.close(); editView.destroy();} },
-                                        { text: 'Save', handler:function(){
+                                        { text: 'Cancel',
+                                         margin: '10 10 20 0',
+                                        ui: 'snapshot-cancel-btn',
+                                        cls: 'x-add-button-gradient',
+                                         handler:function(){ editView.close(); editView.destroy();} },
+                                        { text: 'Save',
+                                         margin: '10 10 20 0',
+                                        ui: 'snapshot-add-btn',
+                                        cls: 'x-add-button-gradient',
+                                         handler:function(){
 
                                             var stockLevel = editView.down('#'+window.feature.editProductStockLevel);
                                             if (stockLevel.getValue() == ''){
@@ -351,6 +361,7 @@ Historical Product Level: Overview
             extend: 'Ext.window.Window',
             title: 'Product Group Level',
             modal:true,
+            ui: 'snapshot-popup-window',
             height: 350,
             width: 950,
             layout: {
@@ -484,7 +495,6 @@ Historical Product Level: Overview
 						{
 							xtype: 'container',
 							height: 30,
-							width: 75,
 							html:'&nbsp;'
 						},{ 
                             xtype: 'combobox',
@@ -521,7 +531,6 @@ Historical Product Level: Overview
                             itemId: window.feature.regionComboboxId,
 			                store: window.feature.regionStore,
                             disabled: true,
-                            margin: '0 0 0 20',
                             labelAlign: 'top',
                             fieldLabel: 'Selected Region',
 			                displayField: 'Name',
@@ -553,7 +562,6 @@ Historical Product Level: Overview
                             itemId: window.feature.districtComboboxId,
 			                store: window.feature.districtStore,
                             disabled: true,
-                            margin: '0 0 0 20',
                             labelAlign: 'top',
                             fieldLabel: 'Selected District',
 			                displayField: 'Name',
@@ -585,7 +593,6 @@ Historical Product Level: Overview
                             itemId: window.feature.outpostComboboxId,
 			                store: window.feature.outpostStore,
                             disabled: true,
-                            margin: '0 0 0 20',
                             labelAlign: 'top',
                             labelClsExtra: 'combo-label',
                             fieldLabel: 'Selected Outpost',
@@ -611,7 +618,7 @@ Historical Product Level: Overview
 			                
                         },{ 
                             xtype: 'button',
-                            margin: '25 0 0 20',
+                            margin: '25 0 0 0',
                             text: 'View Product Stock Level',
                             ui: 'snapshot-add-btn',
 							cls: 'x-add-button-gradient',

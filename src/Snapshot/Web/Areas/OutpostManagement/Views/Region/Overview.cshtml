@@ -20,7 +20,7 @@ Outpost Management Regions: Overview
         var outpostAdministrationBtn = Ext.getCmp(outpostAdministrationBtnId);
         outpostAdministrationBtn.toggle(true);
         outpostAdministrationBtn.setIcon('@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/SubMenu/LocationSelected.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))');
-       
+
         var regionBtnId = window.res.content.maincontent.sidebar.region;
         var regionBtn = Ext.getCmp(regionBtnId);
         regionBtn.toggle(true);
@@ -324,7 +324,7 @@ Outpost Management Regions: Overview
                                                    var msgAlert = Ext.Msg;
                                                      msgAlert.ui = 'snapshot-popup-window';
                                                      msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
-                                                          msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+                                                     msgAlert.msgButtons['ok'].margin = '10 10 20 0';
                                                      msgAlert.alert(serverResponse.Status, serverResponse.Message);
                                                  }
                                                  else
@@ -355,10 +355,10 @@ Outpost Management Regions: Overview
                                     var msgConfirm = Ext.Msg;
                                     msgConfirm.ui = 'snapshot-popup-window';
                                     msgConfirm.msgButtons['no'].ui = 'snapshot-cancel-btn';
-                                         msgConfirm.msgButtons['no'].margin = '10 10 20 0';
+                                    msgConfirm.msgButtons['no'].margin = '10 10 20 0';
                                     msgConfirm.msgButtons['yes'].ui = 'snapshot-add-btn';
                                     msgConfirm.msgButtons['ok'].ui = 'snapshot-add-btn';
-                                         msgConfirm.msgButtons['ok'].margin = '10 10 20 0';
+                                    msgConfirm.msgButtons['ok'].margin = '10 10 20 0';
                                     msgConfirm.confirm('Warning', Ext.String.format('Are you sure you want to delete region {0} ?', rec.get('Name')), function(btn)
                                 {
                                     if (btn=='yes'){
@@ -371,7 +371,7 @@ Outpost Management Regions: Overview
                                             var msgAlert = Ext.Msg;
                                             msgAlert.ui = 'snapshot-popup-window';
                                             msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
-
+                                            msgAlert.msgButtons['ok'].margin = '10 10 20 0',
                                             msgAlert.alert(serverResponse.Status, serverResponse.Message);
                                             }
                                            window.feature.regionStore.loadPage(1);
