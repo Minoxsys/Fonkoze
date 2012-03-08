@@ -8,6 +8,7 @@ using Core.Persistence;
 using Core.Domain;
 using Web.Areas.AnalysisManagement.Models.ReportRegionLevel;
 using Web.Areas.AnalysisManagement.Models.ReportDistrictLevel;
+using Web.Security;
 
 namespace Web.Areas.AnalysisManagement.Controllers
 {
@@ -157,6 +158,7 @@ namespace Web.Areas.AnalysisManagement.Controllers
             return productNode;
         }
 
+        [Requires(Permissions = "Report.View")]
         public ActionResult Overview()
         {
             return View();

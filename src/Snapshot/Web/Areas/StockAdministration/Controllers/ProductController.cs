@@ -12,6 +12,8 @@ using Web.Areas.OutpostManagement.Models.District;
 using Web.Areas.OutpostManagement.Models.Client;
 using Core.Domain;
 using Web.Models.Shared;
+using Web.Security;
+using Core.Security;
 
 namespace Web.Areas.StockAdministration.Controllers
 {
@@ -35,11 +37,20 @@ namespace Web.Areas.StockAdministration.Controllers
         private Client _client;
         private User _user;
 
+        public IPermissionsService PermissionService { get; set; }
+
+        private const String PRODUCT_ADD_PERMISSION = "Product.Edit";
+        private const String PRODUCT_DELETE_PERMISSION = "Product.Delete";
+
         private const string TEMP_DATA_ERROR_HISTORY = "errorHistory";
         private const string TEMP_DATA_ERROR_CURRENT = "error";
 
+        [Requires(Permissions = "Product.View")]
         public ActionResult Overview()
         {
+            ViewBag.HasNoRightsToAdd = (PermissionService.HasPermissionAssigned(PRODUCT_ADD_PERMISSION, User.Identity.Name) == true) ? false.ToString().ToLowerInvariant() : true.ToString().ToLowerInvariant();
+            ViewBag.HasNoRightsToDelete = (PermissionService.HasPermissionAssigned(PRODUCT_DELETE_PERMISSION, User.Identity.Name) == true) ? false.ToString().ToLowerInvariant() : true.ToString().ToLowerInvariant();           
+
             return View();
         }
 

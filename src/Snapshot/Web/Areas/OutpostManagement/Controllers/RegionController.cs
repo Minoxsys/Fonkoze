@@ -14,6 +14,8 @@ using Core.Domain;
 using Web.Models.Shared;
 using NHibernate.Linq;
 using Web.Areas.StockAdministration.Models.Product;
+using Web.Security;
+using Core.Security;
 
 namespace Web.Areas.OutpostManagement.Controllers
 {
@@ -29,12 +31,21 @@ namespace Web.Areas.OutpostManagement.Controllers
         public ISaveOrUpdateCommand<Region> SaveOrUpdateCommand { get; set; }
         public IDeleteCommand<Region> DeleteCommand { get; set; }
 
+        public IPermissionsService PermissionService { get; set; }
+
+        private const String REGION_ADD_PERMISSION = "Region.Edit";
+        private const String REGION_DELETE_PERMISSION = "Region.Delete";
+
         private Client _client;
         private User _user;
 
         [HttpGet]
+        [Requires(Permissions = "Region.View")]
         public ActionResult Overview()
         {
+            ViewBag.HasNoRightsToAdd = (PermissionService.HasPermissionAssigned(REGION_ADD_PERMISSION, User.Identity.Name) == true) ? false.ToString().ToLowerInvariant() : true.ToString().ToLowerInvariant();
+            ViewBag.HasNoRightsToDelete = (PermissionService.HasPermissionAssigned(REGION_DELETE_PERMISSION, User.Identity.Name) == true) ? false.ToString().ToLowerInvariant() : true.ToString().ToLowerInvariant();           
+
             Guid? countryId = (Guid?)TempData["CountryId"];
 
             FromCountryModel model = new FromCountryModel();

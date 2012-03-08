@@ -530,6 +530,13 @@ Districts: Overview
                     icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/edit.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
                     tooltip: _t('Edit this district'),
                     handler: function (grid, rowIndex, colIndex) {
+                     if(@(ViewBag.HasNoRightsToAdd) === true){
+                                           var msgAlert = Ext.Msg;
+                                            msgAlert.ui = 'snapshot-popup-window';
+                                            msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                            msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+                                            msgAlert.alert("Alert","You have no rights for this action!");
+                            }else{
                         var record = grid.store.getAt(rowIndex);
                         
                         window.feature.countriesStore.load();
@@ -545,11 +552,18 @@ Districts: Overview
                         Ext.getCmp(window.feature.DistrictId).setValue(record.data.Id);
                         modalForEdit.show();
 
-                    }
+                    }}
                 },{
                     icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/delete.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
                     tooltip: _t('Remove this district'),
                     handler: function (grid, rowIndex, colIndex) {
+                     if(@(ViewBag.HasNoRightsToDelete) === true){
+                                           var msgAlert = Ext.Msg;
+                                            msgAlert.ui = 'snapshot-popup-window';
+                                            msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                            msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+                                            msgAlert.alert("Alert","You have no rights for this action!");
+                            }else{
                         var record = grid.store.getAt(rowIndex);
 
                         var msgConfirm = Ext.Msg;
@@ -592,7 +606,7 @@ Districts: Overview
 
                         });
 
-
+                        }
                     }
                 }
 
@@ -670,6 +684,7 @@ Districts: Overview
                                     ui: 'snapshot-add-btn',
                                     cls: 'x-add-button-gradient',
                                     margin: '0 0 0 20',
+                                    disabled: @(ViewBag.HasNoRightsToAdd),
                                     text: 'Add New District',
                                     handler: function () {
                                         var districtModal = new window.feature.modal();

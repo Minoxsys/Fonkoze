@@ -262,6 +262,13 @@
                             icon:'@(Url.RouteUrl<Web.Controllers.AssetsController>(_ => _.Shared("img/delete.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
                             tooltip: _t('Remove this area'),
                             handler: function(grid, rowIndex, colIndex){
+                                 if(@(ViewBag.HasNoRightsToDelete) === true){
+                                           var msgAlert = Ext.Msg;
+                                            msgAlert.ui = 'snapshot-popup-window';
+                                            msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                            msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+                                            msgAlert.alert("Alert","You have no rights for this action!");
+                            }else{
                                 var record = grid.store.getAt(rowIndex);
 
                                 var postToUrl = '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Country", action = "Delete" })';
@@ -277,7 +284,7 @@
                                     window.feature.paging.doRefresh();
                                     window.feature.refreshModalStore();
                                 });
-                            }
+                            }}
                         }
                     ]
                 }
@@ -327,6 +334,7 @@
                             margin: '0 0 0 20',
                             ui: 'snapshot-add-btn',
                             cls: 'x-add-button-gradient',
+                            disabled: @(ViewBag.HasNoRightsToAdd),
                             text: 'Add New Country',
                             handler:function(){
                                 var addCountryModal = new window.feature.modal();

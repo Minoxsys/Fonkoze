@@ -9,7 +9,9 @@ using Web.Areas.CampaignManagement.Models.ProductLevelRequest;
 using Web.Models.Shared;
 using System.Collections.Generic;
 using System.Text;
+using Web.Security;
 using Web.Services;
+using Core.Security;
 
 namespace Web.Areas.CampaignManagement.Controllers
 {
@@ -37,9 +39,17 @@ namespace Web.Areas.CampaignManagement.Controllers
         public ISaveOrUpdateCommand<Campaign> SaveCampaign { get; set; }
 
         public IProductLevelRequestMessagesDispatcherService DispatcherService { get; set; }
+        public IPermissionsService PermissionService { get; set; }
 
+        private const String PRODUCTLEVELREQUEST_ADD_PERMISSION = "ProductLevelRequest.Edit";
+        private const String PRODUCTLEVELREQUEST_STOP_PERMISSION = "ProductLevelRequest.Stop";
+
+        [Requires(Permissions = "ProductLevelRequest.View")]
         public ActionResult Overview()
         {
+            ViewBag.HasNoRightsToAdd = (PermissionService.HasPermissionAssigned(PRODUCTLEVELREQUEST_ADD_PERMISSION, User.Identity.Name) == true) ? false.ToString().ToLowerInvariant() : true.ToString().ToLowerInvariant();
+            ViewBag.HasNoRightsToStop = (PermissionService.HasPermissionAssigned(PRODUCTLEVELREQUEST_STOP_PERMISSION, User.Identity.Name) == true) ? false.ToString().ToLowerInvariant() : true.ToString().ToLowerInvariant();           
+
             return View();
         }
 

@@ -10,6 +10,9 @@ using Core.Persistence;
 using Core.Services;
 using Web.Security;
 using Web.Models.UserManager;
+using Core.Security;
+using Persistence.Security;
+using MvcContrib.TestHelper.Fakes;
 
 namespace Tests.Unit.Controllers.UserMangerControllerTests
 {
@@ -21,10 +24,13 @@ namespace Tests.Unit.Controllers.UserMangerControllerTests
         public IQueryService<Role> queryRole;
         public IQueryService<Client> queryClient;
 
+        public IQueryService<Permission> queryPermission;
+
         public ISaveOrUpdateCommand<User> saveCommand;
         public IDeleteCommand<User> deleteCommand;
 
         private ISecurePassword securePassword = new SecurePassword();
+        public IPermissionsService PermissionService;
 
         public User user;
         public Client client;
@@ -47,18 +53,21 @@ namespace Tests.Unit.Controllers.UserMangerControllerTests
             queryClient = MockRepository.GenerateMock<IQueryService<Client>>();
             saveCommand = MockRepository.GenerateMock<ISaveOrUpdateCommand<User>>();
             deleteCommand = MockRepository.GenerateMock<IDeleteCommand<User>>();
+            queryPermission = MockRepository.GenerateMock<IQueryService<Permission>>();
         }
 
         private void Setup_Controller()
         {
             controller = new UserManagerController();
-
+            FakeControllerContext.Builder.HttpContext.User = new FakePrincipal(new FakeIdentity("admin"), new string[] { });
+            FakeControllerContext.Initialize(controller);
+            PermissionService = new FunctionRightsService(queryPermission, queryUsers);
             controller.QueryClients = queryClient;
             controller.QueryRoles = queryRole;
             controller.QueryUsers = queryUsers;
             controller.SaveOrUpdateCommand = saveCommand;
             controller.DeleteCommand = deleteCommand;
-
+            controller.PermissionService = PermissionService;
             controller.SecurePassword = securePassword;
         }
 

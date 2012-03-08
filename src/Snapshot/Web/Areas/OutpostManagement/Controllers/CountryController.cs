@@ -10,6 +10,8 @@ using FluentNHibernate.Conventions;
 using Web.Areas.OutpostManagement.Models.Country;
 using Web.Models.Shared;
 using NHibernate.Linq;
+using Web.Security;
+using Core.Security;
 
 namespace Web.Areas.OutpostManagement.Controllers
 {
@@ -26,11 +28,20 @@ namespace Web.Areas.OutpostManagement.Controllers
 
         public IDeleteCommand<Country> DeleteCommand { get; set; }
 
+        public IPermissionsService PermissionService { get; set; }
+
+        private const String COUNTRY_ADD_PERMISSION = "Country.Edit";
+        private const String COUNTRY_DELETE_PERMISSION = "Country.Delete";
+
         private Client _client;
         private User _user;
 
+        [Requires(Permissions = "Country.View")]
         public ActionResult Overview()
         {
+            ViewBag.HasNoRightsToAdd = (PermissionService.HasPermissionAssigned(COUNTRY_ADD_PERMISSION, User.Identity.Name) == true) ? false.ToString().ToLowerInvariant() : true.ToString().ToLowerInvariant();
+            ViewBag.HasNoRightsToDelete = (PermissionService.HasPermissionAssigned(COUNTRY_DELETE_PERMISSION, User.Identity.Name) == true) ? false.ToString().ToLowerInvariant() : true.ToString().ToLowerInvariant();           
+
             CountryOverviewModel countryOverviewModel = new CountryOverviewModel();
 
             List<WorldCountryRecord> worldRecords = GetAvailableWorldRecords();

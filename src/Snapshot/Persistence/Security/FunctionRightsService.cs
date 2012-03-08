@@ -20,7 +20,7 @@ namespace Persistence.Security
 		IQueryService<Permission> queryFunctions;
 		IQueryService<User> queryEmployees;
 
-				
+        public FunctionRightsService() { }	
 		public FunctionRightsService( 
 				IQueryService<Permission> queryFunctions,
 				IQueryService<User> queryEmployees)

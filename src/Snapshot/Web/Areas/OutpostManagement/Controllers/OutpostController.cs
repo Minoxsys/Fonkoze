@@ -9,6 +9,8 @@ using Core.Persistence;
 using Domain;
 using Core.Domain;
 using Web.Models.Shared;
+using Web.Security;
+using Core.Security;
 
 namespace Web.Areas.OutpostManagement.Controllers
 {
@@ -41,14 +43,23 @@ namespace Web.Areas.OutpostManagement.Controllers
 
 		public OutpostOutputModel CreateOutpost { get; set; }
 
+        public IPermissionsService PermissionService { get; set; }
+
+        private const String OUTPOST_ADD_PERMISSION = "Outpost.Edit";
+        private const String OUTPOST_DELETE_PERMISSION = "Outpost.Delete";
+
 		private const string TEMPDATA_ERROR_KEY = "error";
 		private Core.Domain.User _user;
 		private Client _client;
 
 
         [HttpGet]
+        [Requires(Permissions = "Outpost.View")]
         public ActionResult Overview()
         {
+            ViewBag.HasNoRightsToAdd = (PermissionService.HasPermissionAssigned(OUTPOST_ADD_PERMISSION, User.Identity.Name) == true) ? false.ToString().ToLowerInvariant() : true.ToString().ToLowerInvariant();
+            ViewBag.HasNoRightsToDelete = (PermissionService.HasPermissionAssigned(OUTPOST_DELETE_PERMISSION, User.Identity.Name) == true) ? false.ToString().ToLowerInvariant() : true.ToString().ToLowerInvariant();           
+            
             Guid? districtId = (Guid?)TempData["FromDistrictsId"];
 
             OutpostOverviewModel model = new OutpostOverviewModel();

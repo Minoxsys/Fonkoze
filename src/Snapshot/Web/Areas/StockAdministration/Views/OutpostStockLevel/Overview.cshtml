@@ -474,6 +474,13 @@ Outpost Stock Level Current
                  items: [{ icon: '@Url.AssetUrl("img/edit.png")',
                     tooltip: _t('Edit product level'),
                     handler: function (grid, rowIndex, colIndex) {
+                    if(@(ViewBag.HasNoRightsToEdit) === true){
+                                           var msgAlert = Ext.Msg;
+                                            msgAlert.ui = 'snapshot-popup-window';
+                                            msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                            msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+                                            msgAlert.alert("Alert","You have no rights for this action!");
+                            }else{
                         var recordData = grid.store.getAt(rowIndex);
 
                         var ModalWindowForEdit = new window.feature.ModalWindowForEdit();
@@ -489,7 +496,7 @@ Outpost Stock Level Current
                         Ext.getCmp(window.feature.fieldProductLevelId).setValue(recordData.data.ProductLevel);
                         Ext.getCmp(window.feature.labelLastUpdateId).text = recordData.data.LastUpdate;
 
-                        ModalWindowForEdit.show();
+                        ModalWindowForEdit.show();}
                     },
                      getClass:function(value,metadata,record){
                         var leaf = record.data.leaf;

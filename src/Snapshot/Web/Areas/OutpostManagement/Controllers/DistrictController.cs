@@ -22,6 +22,7 @@ using Web.Areas.OutpostManagement.Models.Client;
 using Core.Domain;
 using Web.Models.Shared;
 using Web.Areas.StockAdministration.Models.Product;
+using Core.Security;
 
 namespace Web.Areas.OutpostManagement.Controllers
 {
@@ -45,13 +46,21 @@ namespace Web.Areas.OutpostManagement.Controllers
         public IQueryService<Client> LoadClient { get; set; }
 
         public IQueryService<User> QueryUsers { get; set; }
+        public IPermissionsService PermissionService { get; set; }
+
+        private const String DISTRICT_ADD_PERMISSION = "District.Edit";
+        private const String DISTRICT_DELETE_PERMISSION = "District.Delete";
 
         private Client _client;
         private User _user;
 
         [HttpGet]
+        [Requires(Permissions = "District.View")]
         public ActionResult Overview()
         {
+            ViewBag.HasNoRightsToAdd = (PermissionService.HasPermissionAssigned(DISTRICT_ADD_PERMISSION, User.Identity.Name) == true) ? false.ToString().ToLowerInvariant() : true.ToString().ToLowerInvariant();
+            ViewBag.HasNoRightsToDelete = (PermissionService.HasPermissionAssigned(DISTRICT_DELETE_PERMISSION, User.Identity.Name) == true) ? false.ToString().ToLowerInvariant() : true.ToString().ToLowerInvariant();           
+
             Guid? regionId = (Guid?)TempData["FromRegionsId"];
 
             FromRegionModel model = new FromRegionModel();

@@ -4,6 +4,7 @@ using System.Web.Mvc;
 using Domain;
 using Core.Persistence;
 using Web.Areas.CampaignManagement.Models.ExistingRequests;
+using Web.Security;
 
 namespace Web.Areas.CampaignManagement.Controllers
 {
@@ -21,8 +22,10 @@ namespace Web.Areas.CampaignManagement.Controllers
 
         public IQueryService<RequestRecord> QueryRequests { get; set; }
 
+        [Requires(Permissions = "ExistingRequest.View")]
         public ActionResult Overview()
         {
+
             return View();
         }
 

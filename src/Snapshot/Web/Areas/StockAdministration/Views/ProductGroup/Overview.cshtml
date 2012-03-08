@@ -155,6 +155,7 @@ Product Administration Product Groups: Overview
                         margin: '0 0 0 20',
                         ui: 'snapshot-add-btn',
                         cls: 'x-add-button-gradient',
+                        disabled: @(ViewBag.HasNoRightsToAdd),
                         text: 'Add New Product Group',
                         handler: function(){
                             var winAdd = new window.feature.modal({
@@ -261,6 +262,13 @@ Product Administration Product Groups: Overview
                         icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/edit.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))', 
                         action: 'Edit',
                         handler: function(grid, rowIndex, colIndex) {
+                        if(@(ViewBag.HasNoRightsToAdd) === true){
+                                           var msgAlert = Ext.Msg;
+                                            msgAlert.ui = 'snapshot-popup-window';
+                                            msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                            msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+                                            msgAlert.alert("Alert","You have no rights for this action!");
+                            }else{
                             var rec = grid.getStore().getAt(rowIndex);
 
                             var winEdit = new window.feature.modal({
@@ -313,11 +321,19 @@ Product Administration Product Groups: Overview
                             winEdit.down('#'+window.feature.formProductGroupReferenceCodeId).setValue(rec.get('ReferenceCode'));
 
                             winEdit.show();
+                            }
                         }
                     },{
                         icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/delete.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',     
                         action: 'Delete',
 					        handler: function(grid, rowIndex, colIndex) {
+                            if(@(ViewBag.HasNoRightsToDelete) === true){
+                                           var msgAlert = Ext.Msg;
+                                            msgAlert.ui = 'snapshot-popup-window';
+                                            msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                            msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+                                            msgAlert.alert("Alert","You have no rights for this action!");
+                            }else{
                                 var rec = grid.getStore().getAt(rowIndex);
                                 var msgConfirm = Ext.Msg;
                                 msgConfirm.ui = 'snapshot-popup-window';
@@ -341,6 +357,7 @@ Product Administration Product Groups: Overview
                                         });
                                     }
                                 });
+                                }
 					        }
                     }]
                 }],

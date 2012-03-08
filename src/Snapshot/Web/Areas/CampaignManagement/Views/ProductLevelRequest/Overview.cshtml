@@ -146,14 +146,29 @@
 						{
 							icon: '@Url.AssetUrl("/img/edit.png")',  
 							text: 'Edit',
-							handler: function(grid, rowIndex, colIndex) {
+							handler: function (grid, rowIndex, colIndex) {
+                            if(@(ViewBag.HasNoRightsToAdd) === true){
+                                            var msgAlert = Ext.Msg;
+                                            msgAlert.ui = 'snapshot-popup-window';
+                                            msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                            msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+                            msgAlert.alert("Alert","You have no rights for this action!");
+                            }else{
 								var record = grid.store.getAt(rowIndex);
 								editProductLevelRequest(_(record.data).clone());
+                                }
 							}
 						},{
 							icon: '@Url.AssetUrl("img/stop.png")',  
 							text: 'Delete',
 							handler: function(grid, rowIndex, colIndex) {
+                                if(@(ViewBag.HasNoRightsToStop) === true){
+                                            var msgAlert = Ext.Msg;
+                                            msgAlert.ui = 'snapshot-popup-window';
+                                            msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                            msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+                                            msgAlert.alert("Alert","You have no rights for this action!");
+                            }else{
 								var record = grid.store.getAt(rowIndex);
                                 stopProductLevelRequest(record.data);
 								grid.store.loadPage(1);
@@ -231,6 +246,7 @@
                                     margin: '0 0 0 20',
                                     ui: 'snapshot-add-btn',
 								    cls: 'x-add-button-gradient',
+                                    disabled: @(ViewBag.HasNoRightsToAdd),
 									text:'Create Product Level Request',
 									handler:function(btn){
                                     showCreateProductLevelRequest();

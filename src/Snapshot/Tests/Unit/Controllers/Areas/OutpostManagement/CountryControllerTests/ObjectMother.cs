@@ -9,6 +9,8 @@ using Core.Persistence;
 using Core.Domain;
 using MvcContrib.TestHelper.Fakes;
 using Web.Areas.OutpostManagement.Models.Country;
+using Core.Security;
+using Persistence.Security;
 
 namespace Tests.Unit.Controllers.Areas.OutpostManagement.CountryControllerTests
 {
@@ -20,8 +22,10 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.CountryControllerTests
         internal IQueryService<Country> queryCountry;
         internal IQueryService<Region> queryRegion;
         internal IQueryService<Client> loadClient;
-        internal IQueryService<User> queryUsers;
+        public  IQueryService<User> queryUsers;
         internal IQueryService<WorldCountryRecord> queryWorldCountryRecords;
+        public IPermissionsService PermissionService;
+        public IQueryService<Permission> queryPermission;
 
 
         internal Country fakeCountry;
@@ -62,7 +66,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.CountryControllerTests
 
             queryRegion = MockRepository.GenerateMock<IQueryService<Region>>();
             queryWorldCountryRecords = MockRepository.GenerateMock<IQueryService<WorldCountryRecord>>();
-
+            queryPermission = MockRepository.GenerateMock<IQueryService<Permission>>();
             queryRegion.Stub(m => m.Query()).Return(new Region[] { }.AsQueryable());
 
         }
@@ -73,10 +77,10 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.CountryControllerTests
 
             FakeControllerContext.Builder.HttpContext.User = new FakePrincipal(new FakeIdentity(FAKE_USERNAME), new string[] { });
             FakeControllerContext.Initialize(controller);
-
+            PermissionService = new FunctionRightsService(queryPermission, queryUsers);
             controller.SaveOrUpdateCommand = saveCommand;
             controller.DeleteCommand = deleteCommand;
-
+            controller.PermissionService = PermissionService;
             controller.QueryCountry = queryCountry;
             controller.QueryRegion = queryRegion;
             controller.QueryWorldCountryRecords = queryWorldCountryRecords;

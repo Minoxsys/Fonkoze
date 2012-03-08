@@ -73,12 +73,69 @@ User Administration Roles: Overview
         window.feature.outpostEditId = "Outpost.Edit";
         window.feature.outpostDeleteId = "Outpost.Delete";
 
+        window.feature.productGroupViewId = "ProductGroup.View";
+        window.feature.productGroupEditId = "ProductGroup.Edit";
+        window.feature.productGroupDeleteId = "ProductGroup.Delete";
+
+        window.feature.productViewId = "Product.View";
+        window.feature.productEditId = "Product.Edit";
+        window.feature.productDeleteId = "Product.Delete";
+
+        window.feature.campaignViewId = "Campaign.View";
+        window.feature.campaignEditId = "Campaign.Edit";
+        window.feature.campaignDuplicateId = "Campaign.Duplicate";
+
+        window.feature.automaticScheduleViewId = "AutomaticSchedule.View";
+        window.feature.automaticScheduleEditId = "AutomaticSchedule.Edit";
+        window.feature.automaticScheduleDeleteId = "AutomaticSchedule.Delete";
+
+        window.feature.productLevelRequestViewId = "ProductLevelRequest.View";
+        window.feature.productLevelRequestEditId = "ProductLevelRequest.Edit";
+        window.feature.productLevelRequestStopId = "ProductLevelRequest.Stop";
+
+        window.feature.existingRequestViewId = "ExistingRequest.View";
+
+        window.feature.clientViewId = "Client.View";
+        window.feature.clientEditId = "Client.Edit";
+        window.feature.clientDeleteId = "Client.Delete";
+
+        window.feature.userViewId = "User.View";
+        window.feature.userEditId = "User.Edit";
+        window.feature.userDeleteId = "User.Delete";
+
+        window.feature.roleViewId = "Role.View";
+        window.feature.roleEditId = "Role.Edit";
+        window.feature.roleDeleteId = "Role.Delete";
+
+        window.feature.currentOutpostStockLevelViewId = "CurrentOutpostStockLevel.View";
+        window.feature.currentOutpostStockLevelEditId = "CurrentOutpostStockLevel.Edit";
+
+        window.feature.historicalOutpostStockLevelViewId = "HistoricalOutpostStockLevel.View";
+        window.feature.historicalOutpostStockLevelEditId = "HistoricalOutpostStockLevel.Edit";
+
+        window.feature.alertViewId = "Alert.View";
+        window.feature.reportViewId = "Report.View";
+
+
         window.feature.checkBoxControls = [];
         window.feature.checkBoxControlIds = [
             window.feature.countryViewId, window.feature.countryEditId, window.feature.countryDeleteId,
             window.feature.regionViewId, window.feature.regionEditId, window.feature.regionDeleteId,
             window.feature.districtViewId, window.feature.districtEditId, window.feature.districtDeleteId,
-            window.feature.outpostViewId, window.feature.outpostEditId, window.feature.outpostDeleteId];
+            window.feature.outpostViewId, window.feature.outpostEditId, window.feature.outpostDeleteId,
+            window.feature.productGroupViewId, window.feature.productGroupEditId, window.feature.productGroupDeleteId,
+            window.feature.productViewId, window.feature.productEditId, window.feature.productDeleteId,
+            window.feature.campaignViewId, window.feature.campaignEditId, window.feature.campaignDuplicateId,
+            window.feature.automaticScheduleViewId, window.feature.automaticScheduleEditId, window.feature.automaticScheduleDeleteId,
+            window.feature.productLevelRequestViewId, window.feature.productLevelRequestEditId, window.feature.productLevelRequestStopId,
+            window.feature.clientViewId, window.feature.clientEditId, window.feature.clientDeleteId,
+            window.feature.userViewId, window.feature.userEditId, window.feature.userDeleteId,
+            window.feature.roleViewId, window.feature.roleEditId, window.feature.roleDeleteId,
+            window.feature.currentOutpostStockLevelViewId, window.feature.currentOutpostStockLevelEditId,
+            window.feature.historicalOutpostStockLevelViewId, window.feature.historicalOutpostStockLevelEditId,
+            window.feature.existingRequestViewId,
+            window.feature.alertViewId,
+            window.feature.reportViewId];
 
         window.feature.role = null;
 
@@ -118,7 +175,7 @@ User Administration Roles: Overview
             title: '',
             modal: true,
             ui: 'snapshot-popup-window',
-            height: 350,
+            height: 850,
             width: 400,
             closeAction: 'hide',
             resizable: false,
@@ -141,7 +198,7 @@ User Administration Roles: Overview
                             { xtype: 'label', text: 'Permissions' },
                             { xtype: 'label', text: 'View', componentCls: 'permissions-header' },
                             { xtype: 'label', text: 'Edit', componentCls: 'permissions-header' },
-                            { xtype: 'label', text: 'Delete', componentCls: 'permissions-header' },
+                            { xtype: 'label', text: 'Delete',  componentCls: 'permissions-header' },
                             { xtype: 'label', text: 'Country' },
                             { xtype: 'checkbox', id: window.feature.countryViewId },
                             { xtype: 'checkbox', id: window.feature.countryEditId },
@@ -157,33 +214,87 @@ User Administration Roles: Overview
                             { xtype: 'label', text: 'Outpost' },
                             { xtype: 'checkbox', id: window.feature.outpostViewId },
                             { xtype: 'checkbox', id: window.feature.outpostEditId },
-                            { xtype: 'checkbox', id: window.feature.outpostDeleteId }
+                            { xtype: 'checkbox', id: window.feature.outpostDeleteId },
+                            { xtype: 'label', text: 'Product Group' },
+                            { xtype: 'checkbox', id: window.feature.productGroupViewId },
+                            { xtype: 'checkbox', id: window.feature.productGroupEditId },
+                            { xtype: 'checkbox', id: window.feature.productGroupDeleteId },
+                            { xtype: 'label', text: 'Product' },
+                            { xtype: 'checkbox', id: window.feature.productViewId },
+                            { xtype: 'checkbox', id: window.feature.productEditId },
+                            { xtype: 'checkbox', id: window.feature.productDeleteId },
+                            { xtype: 'label', text: 'Campaign' },
+                            { xtype: 'checkbox', id: window.feature.campaignViewId },
+                            { xtype: 'checkbox', id: window.feature.campaignEditId },
+                            { xtype: 'checkbox', id: window.feature.campaignDuplicateId },
+                            { xtype: 'label', text: 'Automatic Schedules' },
+                            { xtype: 'checkbox', id: window.feature.automaticScheduleViewId },
+                            { xtype: 'checkbox', id: window.feature.automaticScheduleEditId },
+                            { xtype: 'checkbox', id: window.feature.automaticScheduleDeleteId },
+                            { xtype: 'label', text: 'Product Level Request' },
+                            { xtype: 'checkbox', id: window.feature.productLevelRequestViewId },
+                            { xtype: 'checkbox', id: window.feature.productLevelRequestEditId },
+                            { xtype: 'checkbox', id: window.feature.productLevelRequestStopId },                           
+                            { xtype: 'label', text: 'Clients' },
+                            { xtype: 'checkbox', id: window.feature.clientViewId },
+                            { xtype: 'checkbox', id: window.feature.clientEditId },
+                            { xtype: 'checkbox', id: window.feature.clientDeleteId },
+                            { xtype: 'label', text: 'Users' },
+                            { xtype: 'checkbox', id: window.feature.userViewId },
+                            { xtype: 'checkbox', id: window.feature.userEditId },
+                            { xtype: 'checkbox', id: window.feature.userDeleteId },
+                            { xtype: 'label', text: 'Roles' },
+                            { xtype: 'checkbox', id: window.feature.roleViewId },
+                            { xtype: 'checkbox', id: window.feature.roleEditId },
+                            { xtype: 'checkbox', id: window.feature.roleDeleteId },
+                            { xtype: 'label', text: 'Current Outpost Stock Level' },
+                            { xtype: 'checkbox', id: window.feature.currentOutpostStockLevelViewId },
+                            { xtype: 'checkbox', id: window.feature.currentOutpostStockLevelEditId },
+                            { xtype: 'container'},
+                            { xtype: 'label', text: 'Historical Outpost Stock Level' },
+                            { xtype: 'checkbox', id: window.feature.historicalOutpostStockLevelViewId },
+                            { xtype: 'checkbox', id: window.feature.historicalOutpostStockLevelEditId },
+                            { xtype: 'container' },
+                            { xtype: 'label', text: 'Existing Request' },
+                            { xtype: 'checkbox', id: window.feature.existingRequestViewId },
+                            { xtype: 'container' },
+                            { xtype: 'container' },
+                            { xtype: 'label', text: 'Alert' },
+                            { xtype: 'checkbox', id: window.feature.alertViewId },
+                            { xtype: 'container' },
+                            { xtype: 'container' },
+                            { xtype: 'label', text: 'Report' },
+                            { xtype: 'checkbox', id: window.feature.reportViewId },
+                            { xtype: 'container' },
+                            { xtype: 'container' },
+                            
                         ]
             }],
             buttons: [
                     { text: 'Cancel',
-                      margin: '10 10 20 0',
-                      ui: 'snapshot-cancel-btn',
-                      handler: function () { window.feature.modal.hide(); } },
+                        margin: '10 10 20 0',
+                        ui: 'snapshot-cancel-btn',
+                        handler: function () { window.feature.modal.hide(); }
+                    },
                     { text: 'Add',
-                      margin: '0 20 20 10',
-                      ui: 'snapshot-add-btn',
-                      cls: 'x-add-button-gradient',
-                      id: window.feature.saveButtonId, handler: function () {
-                        var roleNameTextBox = Ext.getCmp(window.feature.roleNameId);
-                        var roleDescriptionTextBox = Ext.getCmp(window.feature.roleDescriptionId);
-                        var permissions = GetSelectedPermissionsFromUi();
-                        var ok = isValid(roleNameTextBox, roleDescriptionTextBox, permissions);
-                        if (ok) {
-                            var role = {
-                                Id: window.feature.role != null ? window.feature.role.get('Id') : "",
-                                Name: roleNameTextBox.getValue(),
-                                Description: roleDescriptionTextBox.getValue(),
-                                PermissionNames: permissions
-                            };
-                            SaveRoleData(role);
+                        margin: '0 20 20 10',
+                        ui: 'snapshot-add-btn',
+                        cls: 'x-add-button-gradient',
+                        id: window.feature.saveButtonId, handler: function () {
+                            var roleNameTextBox = Ext.getCmp(window.feature.roleNameId);
+                            var roleDescriptionTextBox = Ext.getCmp(window.feature.roleDescriptionId);
+                            var permissions = GetSelectedPermissionsFromUi();
+                            var ok = isValid(roleNameTextBox, roleDescriptionTextBox, permissions);
+                            if (ok) {
+                                var role = {
+                                    Id: window.feature.role != null ? window.feature.role.get('Id') : "",
+                                    Name: roleNameTextBox.getValue(),
+                                    Description: roleDescriptionTextBox.getValue(),
+                                    PermissionNames: permissions
+                                };
+                                SaveRoleData(role);
+                            }
                         }
-                    } 
                     }
                 ]
         });
@@ -204,7 +315,7 @@ User Administration Roles: Overview
                                 src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/briefcase.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
                                 width: 30,
                                 height: 30
-                                
+
                             }),
                             {
                                 xtype: 'label',
@@ -216,6 +327,7 @@ User Administration Roles: Overview
                                 xtype: 'button',
                                 text: 'Add New Role',
                                 ui: 'snapshot-add-btn',
+                                disabled: @(ViewBag.HasNoRightsToAdd),
                                 cls: 'x-add-button-gradient',
                                 margin: '0 0 0 20',
                                 handler: function () {
@@ -256,11 +368,11 @@ User Administration Roles: Overview
                         }]
                     }
                 ]
-                });
+        });
 
-        window.feature.doSearch = new Ext.util.DelayedTask(function(){
-			                        window.feature.store.loadPage(1);
-                                });
+        window.feature.doSearch = new Ext.util.DelayedTask(function () {
+            window.feature.store.loadPage(1);
+        });
 
         window.feature.grid = Ext.create('Ext.grid.Panel', {
             store: window.feature.store,
@@ -274,14 +386,14 @@ User Administration Roles: Overview
                         header: 'Role',
                         dataIndex: 'Name',
                         flex: 1,
-                        menuDisabled:true,
+                        menuDisabled: true,
                         sortable: true
                     },
                     {
                         header: 'Number of Users',
                         dataIndex: 'NumberOfUsers',
                         flex: 1,
-                        menuDisabled:true,
+                        menuDisabled: true,
                         sortable: false
                     },
                     {
@@ -293,13 +405,28 @@ User Administration Roles: Overview
                             {
                                 icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/edit.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
                                 handler: function (grid, rowIndex, colIndex) {
+                                if(@(ViewBag.HasNoRightsToAdd) === true){
+                                           var msgAlert = Ext.Msg;
+                                            msgAlert.ui = 'snapshot-popup-window';
+                                            msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                            msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+                                            msgAlert.alert("Alert","You have no rights for this action!");
+                                }else{
                                     window.feature.role = grid.getStore().getAt(rowIndex);
                                     LoadUiRoleData(window.feature.role);
+                                    }
                                 }
                             },
                             {
                                 icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/delete.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
                                 handler: function (grid, rowIndex, colIndex) {
+                                if(@(ViewBag.HasNoRightsToDelete) === true){
+                                           var msgAlert = Ext.Msg;
+                                            msgAlert.ui = 'snapshot-popup-window';
+                                            msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                            msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+                                            msgAlert.alert("Alert","You have no rights for this action!");
+                            }else{
                                     var rec = grid.getStore().getAt(rowIndex);
                                     var msgConfirm = Ext.Msg;
                                     msgConfirm.ui = 'snapshot-popup-window';
@@ -315,16 +442,20 @@ User Administration Roles: Overview
                                             var action = $.post(postToUrl, values);
 
                                             action.success(function (serverResponse) {
-                                                var msgAlert = Ext.Msg;
-                                                msgAlert.ui = 'snapshot-popup-window';
-                                                msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
-                                                msgAlert.msgButtons['ok'].margin = '10 10 20 0';
-                                                msgAlert.alert(serverResponse.Status, serverResponse.Message);
+                                                if (serverResponse.Status === "Error") {
+                                                    var msgAlert = Ext.Msg;
+                                                    msgAlert.ui = 'snapshot-popup-window';
+                                                    msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                                    msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+                                                    msgAlert.alert(serverResponse.Status, serverResponse.Message);
+
+                                                }
                                                 window.feature.store.load();
                                             });
                                         }
 
                                     });
+                                    }
                                 }
                             }
                         ]

@@ -9,6 +9,8 @@ using Web.Areas.OutpostManagement.Models.Outpost;
 using Web.Areas.StockAdministration.Models.HistoricalProductLevel;
 using Web.Helpers;
 using Web.Models.Shared;
+using Core.Security;
+using Web.Security;
 
 namespace Web.Areas.StockAdministration.Controllers
 {
@@ -24,15 +26,20 @@ namespace Web.Areas.StockAdministration.Controllers
 
         public IQueryService<Client> QueryClients { get; set; }
         public IQueryService<User> QueryUsers { get; set; }
+        public IPermissionsService PermissionService { get; set; }
 
+        private const String HISTORICALOUTPOSTSTOCKLEVEL_EDIT_PERMISSION = "HistoricalOutpostStockLevel.Edit";
         private Client _client;
         private User _user;
 
         const string GUID_FOR_ALL_OPTION_ON_OUTPOST_LIST = "00000000-0000-0000-0000-000000000023";
 
-
+        [Requires(Permissions = "HistoricalOutpostStockLevel.View")]
         public ActionResult Overview()
         {
+            ViewBag.HasNoRightsToEdit = (PermissionService.HasPermissionAssigned(HISTORICALOUTPOSTSTOCKLEVEL_EDIT_PERMISSION, User.Identity.Name) == true) ? false.ToString().ToLowerInvariant() : true.ToString().ToLowerInvariant();
+           
+
             return View();
         }
 

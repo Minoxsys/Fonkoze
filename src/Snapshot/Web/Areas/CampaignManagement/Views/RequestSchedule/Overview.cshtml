@@ -208,6 +208,7 @@ User Administration Roles: Overview
                         {
                             xtype: 'button',
                             text: 'Add New Schedule',
+                            disabled: @(ViewBag.HasNoRightsToAdd),
                             ui: 'snapshot-add-btn',
                             cls: 'x-add-button-gradient',
                             margin: '0 0 0 20',
@@ -295,14 +296,28 @@ User Administration Roles: Overview
                             {
                                 icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("img/edit.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
                                 handler: function (grid, rowIndex, colIndex) {
+                                if(@(ViewBag.HasNoRightsToAdd) === true){
+                                         var msgAlert = Ext.Msg;
+                                            msgAlert.ui = 'snapshot-popup-window';
+                                            msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                            msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+                                             msgAlert.alert("Alert","You have no rights for this action!");
+                                }else{
                                     InitModal();
                                     LoadDataFromSchedule(grid.getStore().getAt(rowIndex));
                                     window.feature.modal.show();
-                                }
+                                }}
                             },
                             {
                                 icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("img/delete.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
                                 handler: function (grid, rowIndex, colIndex) {
+                                if(@(ViewBag.HasNoRightsToDelete) === true){
+                                        var msgAlert = Ext.Msg;
+                                            msgAlert.ui = 'snapshot-popup-window';
+                                            msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                            msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+                                     msgAlert.alert("Alert","You have no rights for this action!");
+                                }else{
                                     var rec = grid.getStore().getAt(rowIndex);
                                     var msgConfirm = Ext.Msg;
                                     msgConfirm.ui = 'snapshot-popup-window';
@@ -323,7 +338,7 @@ User Administration Roles: Overview
                                         }
 
                                     });
-                                }
+                                }}
                             }
                         ]
                     }

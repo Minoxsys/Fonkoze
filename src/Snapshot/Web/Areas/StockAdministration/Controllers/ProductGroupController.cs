@@ -8,6 +8,8 @@ using Web.Areas.StockAdministration.Models.ProductGroup;
 using AutoMapper;
 using Web.Models.Shared;
 using Core.Domain;
+using Web.Security;
+using Core.Security;
 
 
 namespace Web.Areas.StockAdministration.Controllers
@@ -25,8 +27,17 @@ namespace Web.Areas.StockAdministration.Controllers
 
         public IQueryService<Client> QueryClients { get; set; }
 
+        public IPermissionsService PermissionService { get; set; }
+
+        private const String PRODUCTGROUP_ADD_PERMISSION = "ProductGroup.Edit";
+        private const String PRODUCTGROUP_DELETE_PERMISSION = "ProductGroup.Delete";
+
+        [Requires(Permissions = "ProductGroup.View")]
         public ActionResult Overview()
         {
+            ViewBag.HasNoRightsToAdd = (PermissionService.HasPermissionAssigned(PRODUCTGROUP_ADD_PERMISSION, User.Identity.Name) == true) ? false.ToString().ToLowerInvariant() : true.ToString().ToLowerInvariant();
+            ViewBag.HasNoRightsToDelete = (PermissionService.HasPermissionAssigned(PRODUCTGROUP_DELETE_PERMISSION, User.Identity.Name) == true) ? false.ToString().ToLowerInvariant() : true.ToString().ToLowerInvariant();           
+
             return View();
         }
 

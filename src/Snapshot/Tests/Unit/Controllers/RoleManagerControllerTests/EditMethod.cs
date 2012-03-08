@@ -35,7 +35,7 @@ namespace Tests.Unit.Controllers.RoleManagerControllerTests
                     r => r.Id == objectMother.roleId &&
                     r.Name == ObjectMother.ROLE_NAME &&
                     r.Description == ObjectMother.ROLE_DESCRIPTION &&
-                    r.Functions.Count == 5
+                    r.Functions.Count == 6
                     )));
 
             //Act

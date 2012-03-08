@@ -9,6 +9,8 @@ using AutoMapper;
 using Web.Models.Shared;
 using Core.Persistence;
 using Core.Domain;
+using Web.Security;
+using Core.Security;
 
 namespace Web.Controllers
 {
@@ -20,9 +22,18 @@ namespace Web.Controllers
         public ISaveOrUpdateCommand<Client> SaveOrUpdateCommand { get; set; }
         public IDeleteCommand<Client> DeleteCommand { get; set; }
 
+        public IPermissionsService PermissionService { get; set; }
+
+        private const String CLIENT_ADD_PERMISSION = "Client.Edit";
+        private const String CLIENT_DELETE_PERMISSION = "Client.Delete";
+
         [HttpGet]
+        [Requires(Permissions = "Client.View")]
         public ViewResult Overview()
         {
+            ViewBag.HasNoRightsToAdd = (PermissionService.HasPermissionAssigned(CLIENT_ADD_PERMISSION, User.Identity.Name) == true) ? false.ToString().ToLowerInvariant() : true.ToString().ToLowerInvariant();
+            ViewBag.HasNoRightsToDelete = (PermissionService.HasPermissionAssigned(CLIENT_DELETE_PERMISSION, User.Identity.Name) == true) ? false.ToString().ToLowerInvariant() : true.ToString().ToLowerInvariant();           
+
             return View();
         }
 

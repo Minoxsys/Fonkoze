@@ -7,6 +7,7 @@ using Core.Persistence;
 using Domain;
 using Core.Domain;
 using Web.Models.Alerts;
+using Web.Security;
 
 namespace Web.Controllers
 {
@@ -20,6 +21,7 @@ namespace Web.Controllers
         private Client _client;
         private User _user;
 
+        [Requires(Permissions = "Alert.View")]
         public ActionResult Overview()
         {
             return View();

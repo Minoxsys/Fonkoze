@@ -7,6 +7,7 @@ using Domain;
 using Core.Persistence;
 using Core.Domain;
 using Web.Areas.AnalysisManagement.Models.ReportRegionLevel;
+using Web.Security;
 
 namespace Web.Areas.AnalysisManagement.Controllers
 {
@@ -85,7 +86,7 @@ namespace Web.Areas.AnalysisManagement.Controllers
                 TotalItems = regionList.Count
             }, JsonRequestBehavior.AllowGet);
 
-        }
+        }        
         public JsonResult GetReports(InputModel inputModel)
         {
             var reportRegionLevelTreeModel = new ReportRegionLevelTreeModel { Name = "root" };
@@ -158,6 +159,7 @@ namespace Web.Areas.AnalysisManagement.Controllers
             return leafNode;
         }
 
+        [Requires(Permissions = "Report.View")]
         public ActionResult Overview()
         {
             return View();

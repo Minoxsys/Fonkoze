@@ -9,6 +9,8 @@ using Core.Persistence;
 using Core.Domain;
 using Web.Models.Shared;
 using Web.Areas.OutpostManagement.Controllers;
+using Web.Security;
+using Core.Security;
 
 namespace Web.Areas.CampaignManagement.Controllers
 {
@@ -25,11 +27,20 @@ namespace Web.Areas.CampaignManagement.Controllers
         public IQueryService<Client> LoadClient { get; set; }
         public IQueryService<User> QueryUsers { get; set; }
 
+        public IPermissionsService PermissionService { get; set; }
+
         private Client _client;
         private User _user;
 
+        private const String CAMPAIGN_ADD_PERMISSION = "Campaign.Edit";
+        private const String CAMPAIGN_DUPLICATE_PERMISSION = "Campaign.Duplicate";
+
+        [Requires(Permissions = "Campaign.View")]
         public ActionResult Overview()
         {
+            ViewBag.HasNoRightsToAdd = (PermissionService.HasPermissionAssigned(CAMPAIGN_ADD_PERMISSION, User.Identity.Name) == true) ? false.ToString().ToLowerInvariant() : true.ToString().ToLowerInvariant();
+            ViewBag.HasNoRightsToDuplicate = (PermissionService.HasPermissionAssigned(CAMPAIGN_DUPLICATE_PERMISSION, User.Identity.Name) == true) ? false.ToString().ToLowerInvariant() : true.ToString().ToLowerInvariant();           
+
             return View();
         }
 

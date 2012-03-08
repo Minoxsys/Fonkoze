@@ -8,6 +8,8 @@ using Core.Persistence;
 using Domain;
 using Web.Areas.CampaignManagement.Models.RequestSchedule;
 using Core.Domain;
+using Web.Security;
+using Core.Security;
 
 namespace Web.Areas.CampaignManagement.Controllers
 {
@@ -27,8 +29,16 @@ namespace Web.Areas.CampaignManagement.Controllers
 
         public IDeleteCommand<RequestReminder> DeleteCommandRequestReminder { get; set; }
 
+        public IPermissionsService PermissionService { get; set; }
+        private const String AUTOMATICSCHEDULE_ADD_PERMISSION = "AutomaticSchedule.Edit";
+        private const String AUTOMATICSCHEDULE_DUPLICATE_PERMISSION = "AutomaticSchedule.Delete";
+
+        [Requires(Permissions = "AutomaticSchedule.View")]
         public ActionResult Overview()
         {
+            ViewBag.HasNoRightsToAdd = (PermissionService.HasPermissionAssigned(AUTOMATICSCHEDULE_ADD_PERMISSION, User.Identity.Name) == true) ? false.ToString().ToLowerInvariant() : true.ToString().ToLowerInvariant();
+            ViewBag.HasNoRightsToDelete = (PermissionService.HasPermissionAssigned(AUTOMATICSCHEDULE_DUPLICATE_PERMISSION, User.Identity.Name) == true) ? false.ToString().ToLowerInvariant() : true.ToString().ToLowerInvariant();           
+
             return View();
         }
 

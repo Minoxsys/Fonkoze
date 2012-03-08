@@ -288,6 +288,13 @@ Historical Product Level: Overview
                         }],
                         listeners: {
                             itemclick: function(view, record, item, index, e ) {
+                                if(@(ViewBag.HasNoRightsToEdit) === true){
+                                           var msgAlert = Ext.Msg;
+                                            msgAlert.ui = 'snapshot-popup-window';
+                                            msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                            msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+                                            msgAlert.alert("Alert","You have no rights for this action!");
+                            }else{
                                 var editView = new window.feature.editHistorical({
                                     buttons: [
                                         { text: 'Cancel',
@@ -347,7 +354,7 @@ Historical Product Level: Overview
                                 me.destroy();
 
                                 editView.show();
-                                
+                                }
                              }
                         }
                     }]

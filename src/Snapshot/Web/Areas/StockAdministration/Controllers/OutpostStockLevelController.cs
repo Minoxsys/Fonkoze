@@ -7,6 +7,8 @@ using Core.Persistence;
 using Domain;
 using Web.Areas.StockAdministration.Models.OutpostStockLevel;
 using Web.Models.Shared;
+using Core.Security;
+using Web.Security;
 
 namespace Web.Areas.StockAdministration.Controllers
 {
@@ -36,14 +38,21 @@ namespace Web.Areas.StockAdministration.Controllers
 
         public IQueryService<Client> QueryClients { get; set; }
 
-        private const string UPDATE_METHOD_SYSTEM = "System";
+        public IPermissionsService PermissionService { get; set; }
+
+        private const String CURRENTOUTPOSTSTOCKLEVEL_EDIT_PERMISSION = "CurrentOutpostStockLevel.Edit";
+
         private Client _client;
         private User _user;
 
         Guid GUID_FOR_ALL_OPTION_ON_OUTPOST_LIST = Guid.Parse("00000000-0000-0000-0000-000000000001");
 
+        [Requires(Permissions = "CurrentOutpostStockLevel.View")]
         public ActionResult Overview()
         {
+            ViewBag.HasNoRightsToEdit = (PermissionService.HasPermissionAssigned(CURRENTOUTPOSTSTOCKLEVEL_EDIT_PERMISSION, User.Identity.Name) == true) ? false.ToString().ToLowerInvariant() : true.ToString().ToLowerInvariant();
+           
+
             return View();
         }
 
@@ -201,7 +210,7 @@ namespace Web.Areas.StockAdministration.Controllers
 
             outpostStockLevel.PrevStockLevel = outpostStockLevel.StockLevel;
             outpostStockLevel.StockLevel = outpostStockLevelInput.StockLevel;
-            outpostStockLevel.UpdateMethod = UPDATE_METHOD_SYSTEM;
+            outpostStockLevel.UpdateMethod = OutpostStockLevel.MANUAL_UPDATE;
 
             SaveOrUpdateOutpostStockLevelHistorical.Execute(outpostHistoricalStockLevel);
             SaveOrUpdateOutpostStockLevel.Execute(outpostStockLevel);

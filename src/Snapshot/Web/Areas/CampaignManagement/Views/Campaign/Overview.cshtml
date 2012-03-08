@@ -63,6 +63,7 @@ Campaign: Overview
         window.feature.pressedButton = '';
         window.feature.initialStepNumber = 1;
         window.feature.campaignToEdit = null;
+        window.feature.addNewCampaignButtonId = "addCampaignButtonId";
 
         var campaign = {};
 
@@ -205,8 +206,10 @@ Campaign: Overview
                         xtype: 'button',
                         ui: 'snapshot-add-btn',
                         cls: 'x-add-button-gradient',
+                        disabled: @(ViewBag.HasNoRightsToAdd),
                         text: 'Add New Campaign',
                         margin: '0 0 0 20',
+                        id: window.feature.addNewCampaignButtonId,
                         handler: function () {
                             window.feature.pressedButton = 'Add';
                             var modalWindowAddCampaign = new window.feature.modalCampaignManagement();
@@ -246,8 +249,7 @@ Campaign: Overview
 			window.feature.campaignStore.loadPage(1);
 		});
 
-       
-        window.feature.modalCampaignManagement = Ext.define('Ext.feature.campaign.Modal', {
+       window.feature.modalCampaignManagement = Ext.define('Ext.feature.campaign.Modal', {
             extend: 'Ext.window.Window',
             title: 'Add New Campaign',
             ui: 'snapshot-popup-window',
@@ -528,6 +530,13 @@ Campaign: Overview
                     icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/edit.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
                     tooltip: _t('Edit this campaign'),
                     handler: function (grid, rowIndex, colIndex) {
+                        if(@(ViewBag.HasNoRightsToAdd) === true){
+                        var msgAlert = Ext.Msg;
+                                            msgAlert.ui = 'snapshot-popup-window';
+                                            msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                            msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+                            msgAlert.alert("Alert","You have no rights for this action!");
+                            }else{
                         window.feature.pressedButton = 'Edit';
                         var rec = grid.getStore().getAt(rowIndex);
                         
@@ -543,18 +552,25 @@ Campaign: Overview
                                             msgAlert.msgButtons['ok'].margin = '10 10 20 0';
                             msgAlert.alert("Alert","This campaign is in process. It cannot be edited!");
                         }
-                    }
+                    }}
                 }, {
                     icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/copy.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
                     tooltip: _t('Clone this campaign'),
                     handler: function (grid, rowIndex, colIndex) {
+                    if(@(ViewBag.HasNoRightsToDuplicate) === true){
+                         var msgAlert = Ext.Msg;
+                                            msgAlert.ui = 'snapshot-popup-window';
+                                            msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                            msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+                            msgAlert.alert("Alert","You have no rights for this action!");
+                    }else{
                         window.feature.pressedButton = 'Clone';
                         var rec = grid.getStore().getAt(rowIndex);
                         campaign.Id =  rec.get('Id');
 
                         var modalWindowClone = new window.feature.modalCampaignManagementClone();
                         modalWindowClone.show();
-                    }
+                    }}
                 }]
             }],
             bbar: Ext.create('Ext.PagingToolbar', {
@@ -929,6 +945,7 @@ Campaign: Overview
 
         mainContent.add(window.feature.container);
         window.feature.campaignStore.loadPage(1); 
+
 
     });
 </script>

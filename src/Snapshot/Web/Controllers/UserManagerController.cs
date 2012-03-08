@@ -11,6 +11,7 @@ using AutoMapper;
 using Core.Services;
 using Domain;
 using Web.Models.Shared;
+using Core.Security;
 
 namespace Web.Controllers
 {
@@ -25,9 +26,18 @@ namespace Web.Controllers
 
         public ISecurePassword SecurePassword { get; set; }
 
+        public IPermissionsService PermissionService { get; set; }
+
+        private const String USER_ADD_PERMISSION = "User.Edit";
+        private const String USER_DELETE_PERMISSION = "User.Delete";
+
         [HttpGet]
+        [Requires(Permissions = "User.View")]
         public ViewResult Overview()
         {
+            ViewBag.HasNoRightsToAdd = (PermissionService.HasPermissionAssigned(USER_ADD_PERMISSION, User.Identity.Name) == true) ? false.ToString().ToLowerInvariant() : true.ToString().ToLowerInvariant();
+            ViewBag.HasNoRightsToDelete = (PermissionService.HasPermissionAssigned(USER_DELETE_PERMISSION, User.Identity.Name) == true) ? false.ToString().ToLowerInvariant() : true.ToString().ToLowerInvariant();           
+
             return View();
         }
 

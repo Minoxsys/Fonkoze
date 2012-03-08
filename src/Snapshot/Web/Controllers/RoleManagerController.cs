@@ -14,6 +14,7 @@ using Web.Models.Shared;
 using NHibernate.Linq;
 using System.Text;
 using Persistence.Queries.Roles;
+using Core.Security;
 
 namespace Web.Controllers
 {
@@ -55,9 +56,18 @@ namespace Web.Controllers
             set;
         }
 
+        public IPermissionsService PermissionService { get; set; }
+
+        private const String ROLE_ADD_PERMISSION = "Role.Edit";
+        private const String ROLE_DELETE_PERMISSION = "Role.Delete";
+
         [HttpGet]
+        [Requires(Permissions = "Role.View")]
         public ViewResult Overview()
         {
+            ViewBag.HasNoRightsToAdd = (PermissionService.HasPermissionAssigned(ROLE_ADD_PERMISSION, User.Identity.Name) == true) ? false.ToString().ToLowerInvariant() : true.ToString().ToLowerInvariant();
+            ViewBag.HasNoRightsToDelete = (PermissionService.HasPermissionAssigned(ROLE_DELETE_PERMISSION, User.Identity.Name) == true) ? false.ToString().ToLowerInvariant() : true.ToString().ToLowerInvariant();           
+
             return View();
         }
 
@@ -108,6 +118,7 @@ namespace Web.Controllers
         }
 
         [HttpPost]
+        [Requires(Permissions = "Role.Edit")]
         public JsonResult Create(RoleManagerInputModel inputModel)
         {
             Role role = new Role();
@@ -196,7 +207,7 @@ namespace Web.Controllers
 
             var inputPermissionNames = inputModel.PermissionNames != null ? inputModel.PermissionNames.Split(';').ToList() : new List<string>();
             var permissions = QueryServicePermission.Query().Where(p => inputPermissionNames.Contains(p.Name)).ToList();
-
+            permissions.Add(QueryServicePermission.Query().Where(p=>p.Name == "Home.Index").FirstOrDefault());
             role = UpdatePermissionsForRole(role, permissions);
 
             SaveOrUpdate.Execute(role);

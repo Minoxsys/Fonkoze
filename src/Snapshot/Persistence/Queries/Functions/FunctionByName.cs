@@ -7,7 +7,7 @@ using Core.Persistence;
 
 namespace Persistence.Queries.Functions
 {
-	class FunctionByName : IDomainQuery<Permission>
+	public class FunctionByName : IDomainQuery<Permission>
 	{
 		string name;
 
