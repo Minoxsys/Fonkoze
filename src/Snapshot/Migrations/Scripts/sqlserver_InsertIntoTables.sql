@@ -121,67 +121,8 @@ INSERT INTO PermissionRoles
            ,'461e581b-e60b-4dfd-a5a8-88229f14379b')
 end
 
--- WorldCountryRecord
 GO
 
-if not exists(select [Name] from [WorldCountryRecords] where [Name]='Romania' )
-begin
-INSERT INTO WorldCountryRecords
-           (Name
-           ,Id
-           ,ISOCode
-		   ,PhonePrefix)
-     VALUES
-           ('Romania'
-           ,'9281D38F-25B8-493C-83AC-3F64E6FECB0C'
-           ,'RO'
-		   ,'0040')
-end
-GO
-if not exists(select [Name] from [WorldCountryRecords] where [Name]='United Kingdom' )
-begin
-INSERT INTO WorldCountryRecords
-           (Name
-           ,Id
-           ,ISOCode
-		   ,PhonePrefix)
-     VALUES
-           ('United Kingdom'
-           ,'87E504B5-6FB8-4F6C-9436-89C42EB5AEE1'
-           ,'UK'
-		   ,'0044')
-end
-GO
-if not exists(select [Name] from [WorldCountryRecords] where [Name]='Germany' )
-begin
-INSERT INTO WorldCountryRecords
-           (Name
-           ,Id
-           ,ISOCode
-		   ,PhonePrefix)
-     VALUES
-           ('Germany'
-           ,'1A842E3A-2606-4953-A41E-174D5A8F6D93'
-           ,'GB'
-		   ,'0049')
-end
-
-GO
-if not exists(select [Name] from [WorldCountryRecords] where [Name]='Netherlands' )
-begin
-INSERT INTO WorldCountryRecords
-           (Name
-           ,Id
-           ,ISOCode
-		   ,PhonePrefix)
-     VALUES
-           ('Netherlands'
-           ,'C3203A95-21A1-4601-A9CC-19C9A414D440'
-           ,'NL'
-		   ,'0031')
-end
-
-GO
 
 if not exists(select [Name] from Permissions where [Name]=N'Country.View')
 begin

@@ -52,7 +52,7 @@ namespace Web.Areas.OutpostManagement.Controllers
 
             var userSelectedCountries = this.QueryCountry.Query().Where(c => c.Client == _client).Select(c => c.Name).ToList();
 
-            var worldRecords = (from worldRec in this.QueryWorldCountryRecords.Query() where !userSelectedCountries.Contains(worldRec.Name) select worldRec).ToList();
+            var worldRecords = (from worldRec in this.QueryWorldCountryRecords.Query() where !userSelectedCountries.Contains(worldRec.Name) orderby worldRec.Name select worldRec ).ToList();
 
             return worldRecords;
         }

@@ -58,14 +58,14 @@ namespace Migrations
 				.WithCommonColumns()
 				.WithColumn("Name").AsString(ConstraintUtility.NAME_LENGTH)
 				.WithColumn("ISOCode").AsString(3)
-				.WithColumn("PhonePrefix").AsString(5);
+				.WithColumn("PhonePrefix").AsString(9);
 
 			Create.Table("Countries")
 				.WithCommonColumns()
 				.WithClientColumn()
 				.WithColumn("Name").AsString(ConstraintUtility.NAME_LENGTH)
 				.WithColumn("ISOCode").AsString(3)
-				.WithColumn("PhonePrefix").AsString(5);
+				.WithColumn("PhonePrefix").AsString(9);
 			Create.AddForeignKey("Countries");
 			Create.AddClientForeignKey("Countries");
 			

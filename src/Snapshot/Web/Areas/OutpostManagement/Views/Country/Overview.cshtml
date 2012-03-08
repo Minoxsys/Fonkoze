@@ -45,7 +45,7 @@
             padding: 20,
             type: 'vbox'
         },
-        title: 'My Window',
+        title: 'Add a new country',
         ui: 'snapshot-popup-window',
         fieldDefaults: {
             msgTarget: 'under'
@@ -65,7 +65,7 @@
                         displayField: 'Name',
                         valueField: 'Name',
                         store: window.feature.modalStore,
-                        editable: false
+                        editable: true,
                     },{
                         xtype: 'textfield',
                         itemId: window.feature.isocodeId,
