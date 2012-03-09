@@ -154,10 +154,17 @@ User Administration Clients: Overview
                                             var postToUrl = '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "ClientManager", action = "Create" })';
                                             var action = $.post(postToUrl, values);
                                             action.success(function(serverResponse){
-                                                
-                                                winAdd.close();
-                                                winAdd.destroy();
-                                                window.feature.ClientsStore.loadPage(1); 
+                                            if(serverResponse.Status === "Error"){
+                                                 var msgAlert = Ext.Msg;
+                                                msgAlert.ui = 'snapshot-popup-window';
+                                                msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                                msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+                                                msgAlert.alert(serverResponse.Status,serverResponse.Message);
+                                                }else{
+                                                 winAdd.close();
+                                                 winAdd.destroy();
+                                                 window.feature.ClientsStore.loadPage(1); 
+                                                }
                                             });
                                         }
                                     }}
@@ -259,7 +266,6 @@ User Administration Clients: Overview
                                             msgAlert.ui = 'snapshot-popup-window';
                                             msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
                                             msgAlert.msgButtons['ok'].margin = '10 10 20 0';
-                                            msgAlert.alert(result.Status, result.Message);
                                             msgAlert.alert(serverResponse.Status, serverResponse.Message);}else{
                                             winEdit.close();
                                             winEdit.destroy();

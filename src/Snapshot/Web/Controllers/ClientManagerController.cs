@@ -45,6 +45,19 @@ namespace Web.Controllers
 
             Mapper.Map(inputModel, client);
 
+            var existingClientsWithSameName = QueryClients.Query().Where(it => it.Name == inputModel.Name);
+
+            if (existingClientsWithSameName.Count() > 0)
+            {
+              return Json(
+               new JsonActionResponse
+               {
+                   Status = "Error",
+                   Message = String.Format("There already exist a client with name {0}. Please insert a different name!", inputModel.Name)
+               });
+ 
+            }
+
             SaveOrUpdateCommand.Execute(client);
 
             return Json(
@@ -67,6 +80,19 @@ namespace Web.Controllers
                        Status = "Error",
                        Message = "You must supply a clientId in order to edit the client."
                    });
+            }
+
+            var existingClientsWithSameName = QueryClients.Query().Where(it => it.Name == inputModel.Name && it.Id != inputModel.Id);
+
+            if (existingClientsWithSameName.Count() > 0)
+            {
+                return Json(
+                 new JsonActionResponse
+                 {
+                     Status = "Error",
+                     Message = String.Format("There already exist a client with name {0}. Please insert a different name!", inputModel.Name)
+                 });
+
             }
 
             var client = QueryClients.Load(inputModel.Id);

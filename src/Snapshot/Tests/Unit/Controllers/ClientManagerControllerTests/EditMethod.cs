@@ -48,6 +48,7 @@ namespace Tests.Unit.Controllers.ClientManagerControllerTests
             objectMother.saveCommand.Expect(call => call.Execute(Arg<Client>.Matches(p => p.Name == objectMother.client.Name &&
                                                                                           p.Id == objectMother.client.Id
                                                                                    )));
+            objectMother.queryClient.Expect(it => it.Query()).Return(new Client[] { }.AsQueryable());
             objectMother.queryClient.Expect(call => call.Load(objectMother.clientId)).Return(objectMother.client);
 
             //Act
@@ -60,6 +61,23 @@ namespace Tests.Unit.Controllers.ClientManagerControllerTests
             Assert.IsNotNull(response);
             Assert.That(response.Status, Is.EqualTo("Success"));
             Assert.That(response.Message, Is.EqualTo("Client Edgard has been saved."));
+        }
+
+        [Test]
+        public void Return_JSON_With_ErrorMessage_When_TryingTo_SaveClient_WithExistingName()
+        {
+            //Arrange
+            objectMother.queryClient.Expect(it => it.Query()).Return(new Client[] { objectMother.client }.AsQueryable());
+
+            //Act
+            var result = objectMother.controller.Edit(new ClientManagerModel { Id = Guid.NewGuid(), Name = objectMother.client.Name });
+
+            //Assert
+            var jsonResult = result.Data as JsonActionResponse;
+
+            Assert.AreEqual(jsonResult.Status, "Error");
+            Assert.AreEqual(jsonResult.Message, "There already exist a client with name Edgard. Please insert a different name!");
+
         }
     }
 }
