@@ -24,6 +24,8 @@ namespace Tests.Unit.Services.SmsRequestServiceTest
         public const int STOCK_LEVEL = 1;
         public const int RECEIVED_STOCK_LEVEL = 2;
         public const string PHONE_NUMBER = "1234567890";
+        public const string RECEIVED_PHONE_NUMBER = "34567890";
+        public const string WRONG_PHONE_NUMBER = "4321";
 
         public const string CAMPAIGN_NAME = "Campaign Name";
         public const string MESSAGE_NOT_DELIVERED = "Message not delivered";
@@ -117,13 +119,13 @@ namespace Tests.Unit.Services.SmsRequestServiceTest
 
             smsReceived = new SmsReceived() {
                 ProductGroupReferenceCode = PRODUCT_GROUP_REFERENCE_CODE,
-                Number = PHONE_NUMBER,
+                Number = RECEIVED_PHONE_NUMBER,
                 ReceivedStockLevels = new ReceivedStockLevel[] { 
                     new ReceivedStockLevel() { ProductSmsReference = stockLevels[0].Product.SMSReferenceCode, StockLevel = RECEIVED_STOCK_LEVEL } }.ToList()
                 };
 
             smsRequest = new SmsRequest() { OutpostId = outpostId, ProductGroupId = productGroupId, Number = PHONE_NUMBER, Created = DateTime.Now, ProductGroupReferenceCode = PRODUCT_GROUP_REFERENCE_CODE };
-            smsRequestWithDifferentPhoneNumber = new SmsRequest() { OutpostId = outpostId, ProductGroupId = productGroupId, Number = PHONE_NUMBER + "1", Created = DateTime.Now, ProductGroupReferenceCode = PRODUCT_GROUP_REFERENCE_CODE };
+            smsRequestWithDifferentPhoneNumber = new SmsRequest() { OutpostId = outpostId, ProductGroupId = productGroupId, Number = WRONG_PHONE_NUMBER, Created = DateTime.Now, ProductGroupReferenceCode = PRODUCT_GROUP_REFERENCE_CODE };
         }
 
         private List<OutpostStockLevel> GenerateListOfOutpostStockLevels()

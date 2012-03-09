@@ -90,6 +90,8 @@ namespace Web.Controllers
             rawSmsReceived.Content = content;
             rawSmsReceived.Credits = credits;
 
+            SaveCommandRawSmsReceived.Execute(rawSmsReceived);
+
             rawSmsReceived = SmsGatewayService.AssignOutpostToRawSmsReceivedBySenderNumber(rawSmsReceived);
 
             RawSmsReceivedParseResult parseResult = SmsGatewayService.ParseRawSmsReceived(rawSmsReceived);

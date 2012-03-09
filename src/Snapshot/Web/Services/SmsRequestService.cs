@@ -171,7 +171,7 @@ namespace Web.Services
         private List<OutpostStockLevel> GetOutpostStockLevelsByProductGroupReferenceAndPhoneNumber(string productGroupReferenceCode, string phoneNumber)
         {
             List<OutpostStockLevel> stockLevels = new List<OutpostStockLevel>();
-            SmsRequest smsRequest = queryServiceSmsRequest.Query().Where(r => r.ProductGroupReferenceCode == productGroupReferenceCode && r.Number == phoneNumber).OrderByDescending(r => r.Created).FirstOrDefault();
+            SmsRequest smsRequest = queryServiceSmsRequest.Query().Where(r => r.ProductGroupReferenceCode == productGroupReferenceCode && r.Number.Contains(phoneNumber)).OrderByDescending(r => r.Created).FirstOrDefault();
 
             if (smsRequest != null)
             {

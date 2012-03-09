@@ -25,6 +25,11 @@ namespace Tests.Unit.Controllers.SmsRequestControllerTest
         public void Assigns_Outpost_To_RawSmsReceived_And_Saves_Saves_The_SMS_AndParses_It_and_Updates_OutputStockLevels()
         {
             // Arrange
+            objectMother.saveCommandRawSmsReceived.Expect(call => call.Execute(Arg<RawSmsReceived>.Matches(
+                r => r.Content.Equals(ObjectMother.SMS_CONTENT) &&
+                    r.Credits.Equals(ObjectMother.CREDITS) &&
+                    r.Sender.Equals(ObjectMother.MOBILE_NUMBER)
+                )));
             objectMother.smsGatewayService.Expect(call => call.AssignOutpostToRawSmsReceivedBySenderNumber(Arg<RawSmsReceived>.Matches(
                 r => r.Content.Equals(ObjectMother.SMS_CONTENT) &&
                     r.Credits.Equals(ObjectMother.CREDITS) &&

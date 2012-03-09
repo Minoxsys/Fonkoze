@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="11_ExistingRequests.cs" />
     <Compile Include="12_InsertWorldCountryRecords.cs" />
+    <Compile Include="14_RemoveForeignKeyFromRawSmsReceivedsToOutposts.cs" />
     <Compile Include="2_OutpostAdministration.cs" />
     <Compile Include="1_BasicAuthenticationInfrastructure.cs" />
     <Compile Include="3_ProductAdministration.cs" />

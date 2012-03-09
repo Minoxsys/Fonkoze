@@ -28,7 +28,7 @@ namespace Tests.Unit.Services.SmsGatewayServiceTest
         public const string BAD_MESSAGE = "Looks good";
         public const string RECEIVED_MESSAGE = "Mal R1J2";
         public const string NUMBER = "1234567890";
-        public const string WRONG_NUMBER = "1234";
+        public const string WRONG_NUMBER = "4321";
 
         public Guid smsId;
         public Guid rawSmsReceivedId;

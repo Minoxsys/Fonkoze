@@ -45,7 +45,7 @@ namespace Web.Services
         {
             string number = rawSmsReceived.Sender;
             Contact contact = queryServiceContact.Query().Where(
-                c => c.ContactType.Equals(Contact.MOBILE_NUMBER_CONTACT_TYPE) && c.ContactDetail.Equals(number)).FirstOrDefault();
+                c => c.ContactType.Equals(Contact.MOBILE_NUMBER_CONTACT_TYPE) && c.ContactDetail.Contains(number)).FirstOrDefault();
             Outpost outpost = queryOutposts.GetAllContacts().Where(o => o.Contacts.Contains(contact)).FirstOrDefault();
             if (outpost != null)
             {
