@@ -78,9 +78,10 @@
                         e.record.set('IsMainContact', true);
                         e.record.commit();
                     }
-
+                    if(e.record.data.ContactDetail !== ""){
                     e.record.commit();
                     e.store.sync();
+                    }
                 },
                 'canceledit': function(editor,e){
                     if(e.record.data.ContactDetail === ""){
@@ -119,29 +120,32 @@
                     flex: 1,
                     text: _t('Actions'),
                     items: [{
-                        icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/edit.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                        icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/edit.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))'
                     },{
                             icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/delete.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
                             action: 'Delete',
                             handler: function (grid, rowIndex, colIndex) {
                                 var rec = grid.getStore().getAt(rowIndex);
-                                Ext.Msg.show({
-                                    title: _t('Confirm deletion'),
-                                    msg: Ext.String.format(_t('Are you sure you want to delete contact `{0}`'), rec.get('ContactDetail')),
-                                    buttons: Ext.Msg.YESNO,
-                                    icon: Ext.Msg.QUESTION,
-                                    fn: function (answer) {
-                                        if (answer === 'yes') {
+                                var msgConfirm = Ext.Msg;
+                                msgConfirm.ui = 'snapshot-popup-window';
+                                msgConfirm.msgButtons['no'].ui = 'snapshot-cancel-btn';
+                                msgConfirm.msgButtons['no'].margin = '10 10 20 0';
+                                msgConfirm.msgButtons['yes'].ui = 'snapshot-add-btn';
+                                msgConfirm.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                msgConfirm.msgButtons['ok'].margin = '10 10 20 0';
+                                 msgConfirm.confirm('Confirm', Ext.String.format(_t('Are you sure you want to delete contact `{0}`'), rec.get('ContactDetail')), function (button) {
+                                
+                                            if (button === 'yes') {
 
                                             grid.getStore().remove(rec);
                                             //                                        window.feature.contactsStore.sync();
     
                                         }
-                                    }
-                                });
+                                    });
+                                }
     
                             }
-                        }
+                        
                     ]
                 }
             ]

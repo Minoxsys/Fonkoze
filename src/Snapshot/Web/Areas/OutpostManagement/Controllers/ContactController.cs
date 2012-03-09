@@ -71,20 +71,25 @@ namespace Web.Areas.OutpostManagement.Controllers
             LoadUserAndClient();
             var outpost = LoadOutpost(input.OutpostId);
 
-            var contact = new Contact
-            {
-                Client = _client,
-                ByUser = _user,
-                Outpost = outpost,
-                ContactType = input.ContactType,
-                ContactDetail = input.ContactDetail,
-                IsMainContact = input.IsMainContact
-            };
+           
+                var contact = new Contact
+                {
+                    Client = _client,
+                    ByUser = _user,
+                    Outpost = outpost,
+                    ContactType = input.ContactType,
+                    ContactDetail = input.ContactDetail,
+                    IsMainContact = input.IsMainContact
+                };
 
-            SaveOrUpdateCommand.Execute(contact);
+                if (input.ContactDetail != null)
+                {
+                    SaveOrUpdateCommand.Execute(contact);
 
-            ChangeDetailMethodOnOutpostWhenIsMainContact(outpost, contact);
-
+                    ChangeDetailMethodOnOutpostWhenIsMainContact(outpost, contact);
+                }
+            
+           
             return Json(new { success = true, message = "New contact has been created", data = ToContactModel(contact) });
         }
 
