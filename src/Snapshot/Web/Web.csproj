@@ -13,7 +13,7 @@
     <RootNamespace>Web</RootNamespace>
     <AssemblyName>Web</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <MvcBuildViews>false</MvcBuildViews>
+    <MvcBuildViews>true</MvcBuildViews>
     <UseIISExpress>false</UseIISExpress>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -423,6 +423,7 @@
     <Content Include="Assets\css\panel-template.css" />
     <Content Include="Assets\css\toolbar-template.css" />
     <Content Include="Assets\css\window-template.css" />
+    <Content Include="Assets\js\ext-all.js" />
     <Content Include="Assets\js\underscore-min.js" />
     <Content Include="Assets\resources\img\Administration\Content\ArrowDown.png" />
     <Content Include="Assets\resources\img\Administration\Content\ArrowUp.png" />
@@ -470,7 +471,6 @@
     <Content Include="Assets\resources\img\stop.png" />
     <Content Include="Assets\resources\img\unchecked.gif" />
     <Content Include="Assets\resources\img\Users\user.png" />
-    <Content Include="Assets\resources\js\ext-all.js" />
     <Content Include="Assets\resources\themes\compass_init.rb" />
     <Content Include="Assets\resources\themes\images\access\boundlist\trigger-arrow.png" />
     <Content Include="Assets\resources\themes\images\access\box\corners-blue.gif" />
@@ -2094,7 +2094,9 @@
     <Content Include="config\css.config">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="config\scripts.config" />
+    <Content Include="config\scripts.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\OutpostManagement\Views\Web.config" />

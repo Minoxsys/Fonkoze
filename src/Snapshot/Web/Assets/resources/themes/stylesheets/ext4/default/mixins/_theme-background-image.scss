@@ -16,7 +16,7 @@
         }
         @else {
             @warn "@theme-background-image: Theme image not found: #{$exists_image}";
-			
+
             @if $include-missing-images {
                 @return theme-image($theme-name, $path, $without-url, $relative);
             }
