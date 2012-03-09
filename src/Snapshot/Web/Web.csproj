@@ -13,7 +13,7 @@
     <RootNamespace>Web</RootNamespace>
     <AssemblyName>Web</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <MvcBuildViews>true</MvcBuildViews>
+    <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>false</UseIISExpress>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -423,6 +423,7 @@
     <Content Include="Assets\css\panel-template.css" />
     <Content Include="Assets\css\toolbar-template.css" />
     <Content Include="Assets\css\window-template.css" />
+    <Content Include="Assets\js\underscore-min.js" />
     <Content Include="Assets\resources\img\Administration\Content\ArrowDown.png" />
     <Content Include="Assets\resources\img\Administration\Content\ArrowUp.png" />
     <Content Include="Assets\resources\img\Administration\Content\CountryIcon.png" />
@@ -455,7 +456,6 @@
     <Content Include="Assets\resources\img\edit.png" />
     <Content Include="Assets\js\ext-all-debug-w-comments.js" />
     <Content Include="Assets\js\jquery-1.7.1.min.js" />
-    <Content Include="Assets\js\underscore.js" />
     <Content Include="Assets\resources\img\Logo.png" />
     <Content Include="Assets\resources\img\LogoLogin.png" />
     <Content Include="Assets\resources\img\Logout.png" />
