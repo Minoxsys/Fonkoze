@@ -67,7 +67,7 @@ Product Administration Product Groups: Overview
             extend: 'Ext.window.Window',
             modal:true,
             ui: 'snapshot-popup-window',
-            height: 250,
+            height: 260,
             width: 390,
             layout: {
                 align: 'stretch',
@@ -84,13 +84,16 @@ Product Administration Product Groups: Overview
                         name: 'Name',
                         fieldLabel: 'Product Group Name',
                         anchor: '100%',
-                        itemId: window.feature.formProductGroupNameId
+                        itemId: window.feature.formProductGroupNameId,
                     },{
                         xtype: 'textfield',
+                        
                         name: 'ReferenceCode',
                         fieldLabel: 'Product Group Reference Code',
                         anchor: '100%',
-                        itemId: window.feature.formProductGroupReferenceCodeId
+                        itemId: window.feature.formProductGroupReferenceCodeId,
+                        regex: /^[A-Za-z]{3}$/,
+                        regexText:'You need to provide 3 letters!'
                     },{
                         xtype: 'textareafield',
                         name: 'Description',
@@ -397,6 +400,10 @@ Product Administration Product Groups: Overview
                     referenceCode.markInvalid('Imput length value must be 3!');  
                     ok = false;
                 }
+            }
+
+            if (!referenceCode.isValid()){
+                 ok = false;
             }
 
             return ok;
