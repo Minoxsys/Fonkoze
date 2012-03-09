@@ -115,7 +115,7 @@ namespace Web.Areas.AnalysisManagement.Controllers
         private ReportDistrictLevelTreeModel ToDistrictNode(IGrouping<District, OutpostStockLevel> districtGroup)
         {
             var districtNode = new ReportDistrictLevelTreeModel { Name = districtGroup.Key.Name, ProductLevelSum = "" };
-            districtNode.Name += " ( Outpost No: " + QueryOutpost.Query().Count(it => it.District.Id == districtGroup.Key.Id) + " ) ";
+            districtNode.Name += " ( Quantity of Outposts: " + QueryOutpost.Query().Count(it => it.District.Id == districtGroup.Key.Id) + " ) ";
 
             var groupByProductGroup = districtGroup.GroupBy(it => it.ProductGroup);
 

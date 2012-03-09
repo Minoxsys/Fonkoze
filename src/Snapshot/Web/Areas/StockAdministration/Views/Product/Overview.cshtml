@@ -163,13 +163,13 @@
             }
     
             if (productSMSCode.getValue() == '') {
-                productSMSCode.markInvalid('Field SMS Code is required!');
+                productSMSCode.markInvalid('Field Product Code is required!');
                 productSMSCode.setValue(null);
                 ok = false;
             }
 
              if (productSMSCode.getValue().length > 1) {
-                productSMSCode.markInvalid('Field SMS Code should have maximum one character!');
+                productSMSCode.markInvalid('Field Product Code should have maximum one character!');
                 ok = false;
             }
 
@@ -369,7 +369,7 @@
                         }, {
                             xtype: 'textfield',
                             name: 'SMSReferenceCode',
-                            fieldLabel: 'SMS Code',
+                            fieldLabel: 'Product Code',
                             allowBlank:false,
                             itemId: window.feature.ProductSMSReferecenceCodeId,
                             value: me.recordSMSReferenceCode,
@@ -514,7 +514,7 @@
                     menuDisabled: true,
                     sortable: true
                 }, {
-                    text: "SMS Code",
+                    text: "Product Code",
                     dataIndex: 'SMSReferenceCode',
                     flex: 1,
                     menuDisabled: true,

@@ -453,12 +453,16 @@
 	
 								var createAction = $.post(me.url, form.getValues());
 								createAction.success(function(serverResponse){
+                                    if(serverResponse.Status === "Error")
+                                    {
+                                        msgAlert.alert(serverResponse.Status, serverResponse.Message);
+                                    }else{
 									window.feature.outpostsStore.loadPage(1);
 	
 									me.postContactsFromMemoryProxy(serverResponse.OutpostId);
 	
 									me.close();
-									me.destroy();
+									me.destroy();}
 								});
 	
 							}

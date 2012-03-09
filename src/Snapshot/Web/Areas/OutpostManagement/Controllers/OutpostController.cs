@@ -261,6 +261,18 @@ namespace Web.Areas.OutpostManagement.Controllers
 
             }
 
+            if (queryoutpost.Where(it => it.Latitude == model.Coordinates).Count() > 0)
+            {
+                return Json(
+                    new ToModalJsonActionResponse
+                    {
+                        Status = "Error",
+                        CloseModal = false,
+                        Message = string.Format("There is already an outpost with this coordinates: {0}. Please choose different coordinates!", model.Coordinates)
+                    });
+ 
+            }
+            
 			var outpost = new Outpost();
 			MapInputToOutpost(model, ref outpost);
 
@@ -292,6 +304,17 @@ namespace Web.Areas.OutpostManagement.Controllers
 
             }
 
+            if (queryoutpost.Where(it => it.Latitude == model.Coordinates && it.Id != model.EntityId.Value).Count() > 0)
+            {
+                return Json(
+                    new ToModalJsonActionResponse
+                    {
+                        Status = "Error",
+                        CloseModal = false,
+                        Message = string.Format("There is already an outpost with this coordinates: {0}. Please choose different coordinates!", model.Coordinates)
+                    });
+
+            }
 			var outpost = QueryService.Load(model.EntityId.Value);
 			MapInputToOutpost(model, ref outpost);
 

@@ -120,7 +120,7 @@ namespace Web.Areas.AnalysisManagement.Controllers
         private ReportRegionLevelTreeModel ToRegionNode(IGrouping<Region, OutpostStockLevel> regionGroup)
         {
             var regionNode = new ReportRegionLevelTreeModel { Name = regionGroup.Key.Name, ProductLevelSum = "" };
-            regionNode.Name += " ( Outpost No:" + QueryOutpost.Query().Count(it => it.Region.Id == regionGroup.Key.Id) + " ) ";
+            regionNode.Name += " ( Quantity of Outposts:" + QueryOutpost.Query().Count(it => it.Region.Id == regionGroup.Key.Id) + " ) ";
 
             var groupByProductGroup = regionGroup.GroupBy(it => it.ProductGroup);
 
