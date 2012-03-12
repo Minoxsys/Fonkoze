@@ -158,8 +158,13 @@
 
         var validationOk = true;
         _([campaign, outpost, from, to]).each(function (field) {
-           validationOk = validationOk && field.validate(); 
-        });
+           validationOk = validationOk && field.validate();
+       });
+
+       if (to.getValue() != null && from.getValue() != null && from.getValue() >= to.getValue()) {
+           to.markInvalid('To date must be after From date!');
+           validationOk = false;
+       }
 
         if(!validationOk) return;
 
