@@ -166,7 +166,7 @@ namespace Web.Areas.CampaignManagement.Controllers
                     ScheduleName = (req.Schedule??nowSchedule).Name,
                     ProductSmsCodes = req.Products != null ? GetSmsCodesRepresentation(req) : string.Empty,
                     Frequency = (req.Schedule??nowSchedule).FrequencyType ?? "Now",
-                    Editable = req.Campaign.StartDate > DateTime.UtcNow
+                    Editable = req.Campaign.StartDate > DateTime.UtcNow && req.Schedule!=null
 
                 }).ToArray();
 

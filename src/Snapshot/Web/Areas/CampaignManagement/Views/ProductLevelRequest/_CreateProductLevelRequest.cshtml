@@ -189,9 +189,15 @@
         width: 1200,
         bodyPadding: '20 10 10 10',
         layout: 'fit',
-
+        disableSave: false,
+        editable:true,
         initComponent: function () {
             var me = this;
+
+
+            if (!me.editable) {
+                me.setTitle(_t('Edit is disabled because product level request is already on a running schedule'));
+            }
 
             me.buttons = [
                 {
@@ -205,6 +211,7 @@
                     }
                 }, {
                     text: 'Save',
+                    disabled: !me.editable,
                     margin: '10 10 20 0',
                     ui: 'snapshot-add-btn',
                     cls: 'x-add-button-gradient',
@@ -235,6 +242,7 @@
                                 {
                                     xtype: 'combobox',
                                     itemId: 'campaign',
+                                    disabled: !me.editable,
                                     fieldLabel: 'Campaign',
                                     margin: '0 50 0 0',
                                     store: me.campaigns,
@@ -247,6 +255,7 @@
                                 }, {
                                     xtype: 'combobox',
                                     itemId: 'productGroup',
+                                    disabled: !me.editable,
                                     width: 280,
                                     fieldLabel: 'Product Group',
                                     store: me.productGroupStore,
@@ -265,6 +274,7 @@
                         }, {
                             xtype: 'gridpanel',
                             autoscroll: true,
+                            disabled: !me.editable,
                             cls: 'white-border',
                             store: me.products,
                             columns: [
@@ -295,6 +305,7 @@
                             html: _t('Please select a schedule')
                         }, {
                             xtype: 'gridpanel',
+                            disabled: !me.editable,
                             cls: 'white-border',
                             itemId: 'schedules',
                             store: me.schedules,
@@ -369,7 +380,7 @@
             }
             me.schedules.on('load', function () {
 
-                    me.schedules.insert(0, [
+                me.schedules.insert(0, [
                     {
                         Id: '@Guid.Empty',
                         ScheduleName: 'Now',
@@ -402,6 +413,8 @@
         },
         onSave: function () {
             var me = this;
+
+            if (me.disableSave) return;
 
             var campaign = me.down('#campaign');
             var productGroup = me.down('#productGroup');
@@ -457,6 +470,9 @@
                 params.Id = me.data.Id;
                 url = '@Url.RouteUrl(CampaignManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "ProductLevelRequest", action = "Edit" })';
             }
+
+            me.disableSave = true;
+
             var action = $.ajax({
                 url: url,
                 type: 'POST',
@@ -468,6 +484,9 @@
             action.success(function () {
                 me.gridStore.loadPage(1);
                 me.destroy();
+            });
+            action.fail(function () {
+                me.disableSave = false;
             });
 
         }

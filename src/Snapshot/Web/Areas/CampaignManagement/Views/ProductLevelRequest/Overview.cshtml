@@ -88,18 +88,11 @@
 <script type="text/javascript">
 
 	function editProductLevelRequest(recordData) {
-		if (!recordData.Editable) {
-			var msgAlert = Ext.Msg;
-			msgAlert.ui = 'snapshot-popup-window';
-			msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
-			msgAlert.msgButtons['ok'].margin = '10 10 20 0';
-			msgAlert.alert('Edit disabled', 'Edit is disabled because Campaign is already running');
-			return;
-		}
 		var modal = new window.feature.createProductLevelRequest({
 			title: 'Edit Product Level Request',
 			data: recordData,
-			gridStore: window.feature.gridStore
+			gridStore: window.feature.gridStore,
+			editable: recordData.Editable
 		});
 		modal.show();
 	}
@@ -109,7 +102,14 @@
 			Id: recordData.Id
 		};
 
-		$.post(url, params);
+		var action = $.post(url, params);
+		action.success(function () {
+			var msgAlert = Ext.Msg;
+			msgAlert.ui = 'snapshot-popup-window';
+			msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+			msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+			msgAlert.alert('Stop request', 'Product level request is stopped.');
+		});
 	}
 
 </script>
@@ -124,15 +124,16 @@
 			columns: [
 				{
 					header: 'Campaign',
+                    flex:1,
 					dataIndex: 'Campaign'
 				},{
 					header: 'Start Date',
 					dataIndex: 'StartDate'
 				},
 				{ header:'End Date',  dataIndex:'EndDate'  },
-				{ header:'Schedule'    ,  dataIndex:'ScheduleName'     },
+				{ header:'Schedule'    ,  dataIndex:'ScheduleName', flex:1     },
 				{ header:'Frequency'        ,  dataIndex:'Frequency'       },
-				{ header:'Product Group',  dataIndex:'ProductGroup', width: 130 },
+				{ header:'Product Group',  dataIndex:'ProductGroup', flex: 1 },
 				{ header:'Stopped',  dataIndex:'IsStopped', xtype: 'templatecolumn', tpl: '<tpl if="IsStopped">Yes</tpl><tpl if="!IsStopped">No</tpl>'},
 				{ header:'Sms Codes',  dataIndex:'ProductSmsCodes' },{
 					header:'Actions',
