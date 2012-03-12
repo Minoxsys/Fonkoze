@@ -216,6 +216,13 @@
                 ui: 'snapshot-pagination-toolbar'
             });
 
+        Ext.QuickTips.init();
+
+        function addTooltip(val, meta, rec, rowIdx, colIdx, ds){
+            meta.tdAttr = 'data-qtip="' + "Click on country name in order to manage its regions" +'"' ;
+            return '<u>'+val+'</u>';
+        };  
+
         window.feature.grid = Ext.create('Ext.grid.Panel', {
             store: window.feature.store,
             disableSelection: true,
@@ -240,7 +247,8 @@
 							return false;
 						}
 						return true;
-					}
+					},
+                    renderer: addTooltip
                 },{
                     text: "Country Abbreviation",
                     menuDisabled:true,

@@ -492,6 +492,13 @@ Districts: Overview
             }]
         });
 
+        Ext.QuickTips.init();
+
+        function addTooltip(val, meta, rec, rowIdx, colIdx, ds){
+            meta.tdAttr = 'data-qtip="' + "Click on district name in order to manage its outposts" +'"' ;
+            return '<u>' + val + '</u>';
+        };  
+
         window.feature.grid = Ext.create('Ext.grid.Panel', {
             flex: 3,
             store: window.feature.store,
@@ -514,7 +521,8 @@ Districts: Overview
 						return false;
 					}
 					return true;
-				}
+				},
+                renderer: addTooltip
             }, {
                 text: "No of outposts",
                 dataIndex: 'OutpostNo',

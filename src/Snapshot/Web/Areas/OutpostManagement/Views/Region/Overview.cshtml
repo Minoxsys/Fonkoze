@@ -128,6 +128,13 @@ Outpost Management Regions: Overview
             
         });
 
+        Ext.QuickTips.init();
+
+        function addTooltip(val, meta, rec, rowIdx, colIdx, ds){
+            meta.tdAttr = 'data-qtip="' + "Click on region name in order to manage its districts" +'"' ;
+            return '<u>'+val+'</u>';
+        };  
+
         window.feature.container = Ext.create('Ext.container.Container', {
             margin:'45 50 20 20',
             padding:'20 0 0 20',
@@ -280,7 +287,8 @@ Outpost Management Regions: Overview
 							    return false;
 						    }
 						    return true;
-					    }
+					    },
+                        renderer: addTooltip
                     },{
                         xtype: 'actioncolumn',
 			            text: 'Actions',

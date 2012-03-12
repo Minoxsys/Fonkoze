@@ -291,13 +291,12 @@
 			window.feature.outpostsStore.loadPage(1);
 		});
 
-        var tooltipText = 'Click on the outpost name to assign a product group.';
         Ext.QuickTips.init();
 
         function addTooltip(val, meta, rec, rowIdx, colIdx, ds){
-            meta.tdAttr = 'data-qtip="' + tooltipText +'"' ;
-            return val;
-        }; 
+            meta.tdAttr = 'data-qtip="' + "Click on the outpost name to assign a product group" +'"' ;
+            return '<u>' + val + '</u>';
+        };  
 	
 		window.feature.modalIds={
 			countryId:'window-feature-combobox-country-id',
