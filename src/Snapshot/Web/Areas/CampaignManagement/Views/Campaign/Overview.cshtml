@@ -136,11 +136,6 @@ Campaign: Overview
             }]
         });
 
-        gridSelModels = Ext.define('MyApp.selModel', {
-             extend: 'Ext.selection.CheckboxModel',
-             checkOnly:true
-        }); 
-
         Ext.define('Ext.ux.CheckColumn', {
             extend: 'Ext.grid.column.Column',
             alias: 'widget.checkcolumn',
@@ -506,25 +501,30 @@ Campaign: Overview
                 text: "Campaign Name",
                 dataIndex: 'Name',
                 sortable: true,
+                menuDisabled:true,
                 flex: 1
             }, {
                 text: "Start Date",
                 dataIndex: 'StartDate',
                 sortable: true,
+                menuDisabled:true,
                 flex: 1
             }, {
                 text: "End Date",
                 dataIndex: 'EndDate',
                 sortable: true,
+                menuDisabled:true,
                 flex: 1
             }, {
                 text: "Creation Date",
                 dataIndex: 'CreationDate',
                 sortable: true,
+                menuDisabled:true,
                 flex: 1
             }, {
                 xtype: 'actioncolumn',
                 text: 'Actions',
+                menuDisabled:true,
                 flex: 1,
                 items: [{
                     icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/edit.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
