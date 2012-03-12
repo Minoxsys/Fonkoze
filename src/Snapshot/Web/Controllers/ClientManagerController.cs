@@ -159,7 +159,7 @@ namespace Web.Controllers
             var orderByColumnDirection = new Dictionary<string, Func<IQueryable<Client>>>()
             {
                 { "Name-ASC", () => clientsDataQuery.OrderBy(c => c.Name) },
-                { "Name-DESC", () => clientsDataQuery.OrderByDescending(c => c.Name) },
+                { "Name-DESC", () => clientsDataQuery.OrderByDescending(c => c.Name) }
                 
             };
 

@@ -95,7 +95,7 @@ namespace Web.Controllers
             {
                 Date = DateTime.UtcNow,
                 OutpostId = outpostId,
-                ProductGroupId = productGroupId,
+                ProductGroupId = productGroupId
             };
 
             SaveOrUpdateCommand.Execute(emailRequestEntity);

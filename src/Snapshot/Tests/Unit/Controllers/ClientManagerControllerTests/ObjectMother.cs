@@ -93,7 +93,7 @@ namespace Tests.Unit.Controllers.ClientManagerControllerTests
             {
                 clientPageList.Add(new Client
                 {
-                    Name = i + client.Name,
+                    Name = i + client.Name
                 });
             }
             return clientPageList.AsQueryable();

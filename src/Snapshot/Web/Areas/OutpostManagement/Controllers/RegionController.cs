@@ -248,7 +248,7 @@ namespace Web.Areas.OutpostManagement.Controllers
                                              {
                                                  Id = region.Id,
                                                  Name = region.Name,
-                                                 CountryId = region.Country.Id,
+                                                 CountryId = region.Country.Id
                                              }).ToArray();
 
 
@@ -286,7 +286,7 @@ namespace Web.Areas.OutpostManagement.Controllers
                                               select new CountryModel
                                               {
                                                   Id = country.Id,
-                                                  Name = country.Name,
+                                                  Name = country.Name
                                               }).ToArray();
 
 

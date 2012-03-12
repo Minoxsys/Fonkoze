@@ -46,7 +46,7 @@ namespace Web.Controllers
                 { "LowLevelStock-ASC", () => alertsDataQuery.OrderBy(c => c.LowLevelStock) },
                 { "LowLevelStock-DESC", () => alertsDataQuery.OrderByDescending(c => c.LowLevelStock) },
                 { "LastUpdate-ASC", () => alertsDataQuery.OrderBy(c => c.LastUpdate) },
-                { "LastUpdate-DESC", () => alertsDataQuery.OrderByDescending(c => c.LastUpdate) },
+                { "LastUpdate-DESC", () => alertsDataQuery.OrderByDescending(c => c.LastUpdate) }
             };
 
             alertsDataQuery = orderByColumnDirection[String.Format("{0}-{1}", indexModel.sort, indexModel.dir)].Invoke();

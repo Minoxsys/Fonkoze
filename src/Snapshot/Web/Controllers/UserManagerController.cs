@@ -163,7 +163,7 @@ namespace Web.Controllers
                                                 ClientName = GetClientName(user.ClientId),
                                                 RoleName = GetRoleName(user.RoleId),
                                                 ClientId = user.ClientId,
-                                                RoleId = user.RoleId,
+                                                RoleId = user.RoleId
                                             }).ToArray();
 
 
@@ -200,7 +200,7 @@ namespace Web.Controllers
                                              select new ReferenceModel
                                              {
                                                  Id = client.Id,
-                                                 Name = client.Name,
+                                                 Name = client.Name
                                              }).ToArray();
 
 
@@ -221,7 +221,7 @@ namespace Web.Controllers
                                            select new ReferenceModel
                                            {
                                                Id = role.Id,
-                                               Name = role.Name,
+                                               Name = role.Name
                                            }).ToArray();
 
 

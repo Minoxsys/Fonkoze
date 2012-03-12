@@ -110,7 +110,7 @@ namespace Web.Areas.OutpostManagement.Controllers
             var orderByColumnDirection = new Dictionary<string, Func<IQueryable<District>>>()
             {
                 { "Name-ASC", () => districts.OrderBy(it=>it.Name) },
-                { "Name-DESC", () => districts.OrderByDescending(c => c.Name) },               
+                { "Name-DESC", () => districts.OrderByDescending(c => c.Name) }               
             };
             int totalItems = 0;
 

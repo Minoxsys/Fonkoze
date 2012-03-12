@@ -43,7 +43,7 @@ namespace Tests.Unit.Controllers.ClientManagerControllerTests
             ClientManagerModel clientInputModel = new ClientManagerModel()
             {
                 Id = objectMother.client.Id,
-                Name = objectMother.client.Name,
+                Name = objectMother.client.Name
             };
             objectMother.saveCommand.Expect(call => call.Execute(Arg<Client>.Matches(p => p.Name == objectMother.client.Name &&
                                                                                           p.Id == objectMother.client.Id

@@ -68,7 +68,7 @@ namespace Web.Areas.StockAdministration.Controllers
                     new ProductGroupOutputModel
                     {
                         Status = "Error",
-                        Message = string.Format("There is already a product group with this name: {0} ! Please insert a different name!", model.Name),
+                        Message = string.Format("There is already a product group with this name: {0} ! Please insert a different name!", model.Name)
                         
                     });
             }
@@ -79,7 +79,7 @@ namespace Web.Areas.StockAdministration.Controllers
                     new ProductGroupOutputModel
                     {
                         Status = "Error",
-                        Message = string.Format("There is already a product group with this reference code: {0} ! Please insert a different reference code!", model.ReferenceCode),
+                        Message = string.Format("There is already a product group with this reference code: {0} ! Please insert a different reference code!", model.ReferenceCode)
                         
                     });
             }
@@ -124,7 +124,7 @@ namespace Web.Areas.StockAdministration.Controllers
                     new ProductGroupOutputModel
                     {
                         Status = "Error",
-                        Message = string.Format("There is already a product group with this name: {0} ! Please insert a different name!", model.Name),
+                        Message = string.Format("There is already a product group with this name: {0} ! Please insert a different name!", model.Name)
                         
                     });
 
@@ -136,7 +136,7 @@ namespace Web.Areas.StockAdministration.Controllers
                     new ProductGroupOutputModel
                     {
                         Status = "Error",
-                        Message = string.Format("There is already a product group with this reference code: {0} ! Please insert a different reference code!", model.ReferenceCode),
+                        Message = string.Format("There is already a product group with this reference code: {0} ! Please insert a different reference code!", model.ReferenceCode)
                         
                     });
             }
@@ -214,7 +214,7 @@ namespace Web.Areas.StockAdministration.Controllers
             var orderByColumnDirection = new Dictionary<string, Func<IQueryable<ProductGroup>>>()
             {
                 { "Name-ASC", () => productGroupDataQuery.OrderBy(c => c.Name) },
-                { "Name-DESC", () => productGroupDataQuery.OrderByDescending(c => c.Name) },
+                { "Name-DESC", () => productGroupDataQuery.OrderByDescending(c => c.Name) }
             };
 
             productGroupDataQuery = orderByColumnDirection[String.Format("{0}-{1}", indexModel.sort, indexModel.dir)].Invoke();

@@ -310,7 +310,7 @@ namespace Web.Areas.StockAdministration.Controllers
                         new JsonActionResponse
                         {
                             Status = "Error",
-                            Message = string.Format("The product {0} has stock level available, so it can not be deleted", product.Name),
+                            Message = string.Format("The product {0} has stock level available, so it can not be deleted", product.Name)
                         });
                 }
                 if (outpostStockLevelHystorical.Count > 0)
@@ -319,7 +319,7 @@ namespace Web.Areas.StockAdministration.Controllers
                         new JsonActionResponse
                         {
                             Status = "Error",
-                            Message = string.Format("The product {0} has stock level history available , so it can not be deleted", product.Name),
+                            Message = string.Format("The product {0} has stock level history available , so it can not be deleted", product.Name)
                         });
                 }
 
@@ -330,7 +330,7 @@ namespace Web.Areas.StockAdministration.Controllers
                 new JsonActionResponse
                 {
                     Status = "Success",
-                    Message = string.Format("The product {0} has been deleted!", product.Name),
+                    Message = string.Format("The product {0} has been deleted!", product.Name)
                 });
         }
     }

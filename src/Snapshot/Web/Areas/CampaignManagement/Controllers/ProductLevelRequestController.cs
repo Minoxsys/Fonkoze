@@ -144,7 +144,7 @@ namespace Web.Areas.CampaignManagement.Controllers
             {
                 Name = "Now",
                 FrequencyType = "Now",
-                FrequencyValue = 0,
+                FrequencyValue = 0
 
             };
 

@@ -350,7 +350,7 @@ namespace Web.Areas.CampaignManagement.Controllers
                                               {
                                                   Id = region.Id,
                                                   Name = region.Name,
-                                                  Selected = false,
+                                                  Selected = false
                                               }).ToArray();
 
             return Json(new ReferenceModelOutput
@@ -385,7 +385,7 @@ namespace Web.Areas.CampaignManagement.Controllers
                                               {
                                                   Id = region.Id,
                                                   Name = region.Name,
-                                                  Selected = false,
+                                                  Selected = false
                                               }).ToArray();
 
             return Json(new ReferenceModelOutput
@@ -420,7 +420,7 @@ namespace Web.Areas.CampaignManagement.Controllers
                                                {
                                                    Id = region.Id,
                                                    Name = region.Name,
-                                                   Selected = false,
+                                                   Selected = false
                                                }).ToArray();
 
             return Json(new ReferenceModelOutput
@@ -441,7 +441,7 @@ namespace Web.Areas.CampaignManagement.Controllers
                                               {
                                                   Id = country.Id,
                                                   Name = country.Name,
-                                                  Selected = false,
+                                                  Selected = false
                                               }).ToArray();
 
 
@@ -477,7 +477,7 @@ namespace Web.Areas.CampaignManagement.Controllers
                                               {
                                                   Id = region.Id,
                                                   Name = region.Name,
-                                                  Selected = false,
+                                                  Selected = false
                                               }).ToArray();
 
             return Json(new ReferenceModelOutput
@@ -512,7 +512,7 @@ namespace Web.Areas.CampaignManagement.Controllers
                                               {
                                                   Id = region.Id,
                                                   Name = region.Name,
-                                                  Selected = false,
+                                                  Selected = false
                                               }).ToArray();
 
             return Json(new ReferenceModelOutput
@@ -547,7 +547,7 @@ namespace Web.Areas.CampaignManagement.Controllers
                                               {
                                                   Id = region.Id,
                                                   Name = region.Name,
-                                                  Selected = false,
+                                                  Selected = false
                                               }).ToArray();
 
             return Json(new ReferenceModelOutput
@@ -582,7 +582,7 @@ namespace Web.Areas.CampaignManagement.Controllers
                                               {
                                                   Id = region.Id,
                                                   Name = region.Name,
-                                                  Selected = false,
+                                                  Selected = false
                                               }).ToArray();
 
             return Json(new ReferenceModelOutput

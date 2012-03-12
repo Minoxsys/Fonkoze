@@ -111,7 +111,7 @@ namespace Tests.Unit.Controllers.AlertsController_Tests
                     ProductGroupId = alert.ProductGroupId,
                     ProductGroupName = alert.ProductGroupName,
                     LastUpdate = DateTime.UtcNow.AddDays(-i),
-                    Client = alert.Client,
+                    Client = alert.Client
                 });
             }
             return alertsPageList.AsQueryable();
