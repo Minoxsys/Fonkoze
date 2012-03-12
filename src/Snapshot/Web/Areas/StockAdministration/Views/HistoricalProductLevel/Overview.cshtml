@@ -45,7 +45,7 @@ Historical Product Level: Overview
         window.feature.editOutpostName = 'Edit-Outpost-Name-Historical-Id';
 
         window.feature.countryStore = Ext.create('Ext.data.Store', {
-            remoteSuport: true,
+            remoteSort: true,
             fields: ['Id','Name'],
             proxy: {
                 type: 'ajax',
@@ -64,7 +64,7 @@ Historical Product Level: Overview
         });
 
          window.feature.regionStore = Ext.create('Ext.data.Store', {
-            remoteSuport: true,
+            remoteSort: true,
             fields: ['Id','Name'],
             proxy: {
                 type: 'ajax',
@@ -84,7 +84,7 @@ Historical Product Level: Overview
         });
 
         window.feature.districtStore = Ext.create('Ext.data.Store', {
-            remoteSuport: true,
+            remoteSort: true,
             fields: ['Id','Name'],
             proxy: {
                 type: 'ajax',
@@ -104,7 +104,7 @@ Historical Product Level: Overview
         });
 
         window.feature.outpostStore = Ext.create('Ext.data.Store', {
-            remoteSuport: true,
+            remoteSort: true,
             fields: ['Id','Name'],
             proxy: {
                 type: 'ajax',
@@ -124,7 +124,7 @@ Historical Product Level: Overview
         });
 
         window.feature.gridOutpostStore = Ext.create('Ext.data.Store', {
-            remoteSuport: true,
+            remoteSort: true,
             fields: ['Id', 'Name', 'ProductGroupId', 'ProductGroupName', 'SMSResponseDate', 'NumberOfProducts'],
             groupField: 'Name',
             proxy: {
@@ -133,6 +133,7 @@ Historical Product Level: Overview
                 reader: {
                     type: 'json',
                     root: 'Historical',
+                    
                     totalProperty: 'TotalItems'
                 },
                 extraParams: { 
@@ -141,6 +142,7 @@ Historical Product Level: Overview
                     districtId: '', 
                     outpostId: '' 
                 },
+                
                 simpleSortMode: true
             },
             sorters: [{
@@ -150,7 +152,7 @@ Historical Product Level: Overview
         });
 
         window.feature.productGroupLevels = Ext.create('Ext.data.Store', {
-            remoteSuport: true,
+            remoteSort: true,
             fields: ['Id', 'OutpostId', 'OutpostName', 'ProductGroupId', 'ProductGroupName', 'ProductId', 'ProductName', 'SMSReferenceCode', 'ProductStockLevel', 'LastUpdated', 'UpdateMethod', 'Description'],
             proxy: {
                 type: 'ajax',
@@ -650,8 +652,7 @@ Historical Product Level: Overview
                     id: 'group',
                     ftype: 'groupingsummary',
                     groupHeaderTpl: '{name}',
-                    hideGroupedHeader: true,
-                    remoteRoot: 'summaryData',
+                    hideGroupedHeader: true,                    
                     startCollapsed: true
                 }],
                 columns: [{
@@ -672,6 +673,7 @@ Historical Product Level: Overview
                     dataIndex: 'NumberOfProducts',
                     menuDisabled:true,
                     flex: 1,
+                    align: 'right',
                     sortable: true
                 }],
                 listeners: {

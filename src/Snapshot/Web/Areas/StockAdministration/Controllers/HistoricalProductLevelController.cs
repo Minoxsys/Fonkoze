@@ -89,7 +89,7 @@ namespace Web.Areas.StockAdministration.Controllers
                         var productGroup = QueryProductGroup.Load(historical.ProductGroupId);
                         model.ProductGroupId = historical.ProductGroupId;
                         model.ProductGroupName = historical.ProductGroupName;
-                        model.SMSResponseDate = DateFormatter.DateToShortString(historical.UpdateDate.Value);
+                        model.SMSResponseDate = historical.UpdateDate.Value.ToString("dd-MMM-yyyy hh:mm tt");
                         model.NumberOfProducts = GetNumberOfProductsFor(outpost.Id, productGroup.Id, historical.UpdateDate.Value);
 
                         if (ExistsIn(historicalGridList, model) == false)
