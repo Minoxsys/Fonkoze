@@ -78,7 +78,10 @@ namespace Web.Areas.OutpostManagement.Controllers
         public ActionResult FromDistricts(Guid? districtId)
         {
             if (districtId.HasValue)
+            {
+                TempData.Clear();
                 TempData.Add("FromDistrictsId", districtId.Value);
+            }
 
             return RedirectToAction("Overview", "Outpost");
         }

@@ -78,7 +78,10 @@ namespace Web.Areas.OutpostManagement.Controllers
         public ActionResult FromRegions(Guid? regionId)
         {
             if (regionId.HasValue)
+            {
+                TempData.Clear();
                 TempData.Add("FromRegionsId", regionId.Value);
+            }
 
             return RedirectToAction("Overview");
         }
