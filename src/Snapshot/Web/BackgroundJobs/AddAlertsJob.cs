@@ -1,28 +1,30 @@
 ﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using WebBackgrounder;
+using System.Linq;
+using System.Threading.Tasks;
 using Core.Persistence;
 using Domain;
-using System.Threading.Tasks;
 using Web.Models.Alerts;
+using WebBackgrounder;
 
 namespace Web.BackgroundJobs
 {
     public class AddAlertsJob : IJob
     {
-        private readonly ISaveOrUpdateCommand<Alert> saveOrUpdateCommand;
-        private readonly IQueryService<Alert> queryAlerts;
-        private readonly IQueryService<OutpostStockLevel> queryOutpostStockLevel;
-        private readonly IQueryService<Client> queryClients;
+        private readonly Func<ISaveOrUpdateCommand<Alert>> saveOrUpdateCommand;
+        private readonly Func<IQueryService<Alert>> queryAlerts;
+        private readonly Func<IQueryService<OutpostStockLevel>> queryOutpostStockLevel;
+        private readonly Func<IQueryService<Client>> queryClients;
 
         private const string JOB_NAME = "AddAlertsJob";
         public TimeSpan Interval { get { return TimeSpan.FromMinutes(1); } }
         public TimeSpan Timeout { get { return TimeSpan.FromSeconds(90); } }
         public string Name { get { return JOB_NAME; } }
 
-        public AddAlertsJob(ISaveOrUpdateCommand<Alert> saveOrUpdateCommand, IQueryService<Alert> queryAlerts, IQueryService<OutpostStockLevel> queryOutpostStockLevel, IQueryService<Client> queryClients)
+        public AddAlertsJob(Func<ISaveOrUpdateCommand<Alert>> saveOrUpdateCommand, Func<IQueryService<Alert>> queryAlerts,
+            Func<IQueryService<OutpostStockLevel>> queryOutpostStockLevel, Func<IQueryService<Client>> queryClients)
         {
             this.saveOrUpdateCommand = saveOrUpdateCommand;
             this.queryAlerts = queryAlerts;
@@ -34,7 +36,7 @@ namespace Web.BackgroundJobs
         {
             return new Task(() =>
             {
-                var foos = (from outpostStockLevel in queryOutpostStockLevel.Query().Where(it => it.Updated.Value >= DateTime.UtcNow.AddHours(-2) && it.Created != it.Updated)
+                var foos = (from outpostStockLevel in queryOutpostStockLevel().Query().Where(it => it.Updated.Value >= DateTime.UtcNow.AddHours(-2) && it.Created != it.Updated)
                             where outpostStockLevel.StockLevel <= outpostStockLevel.Product.LowerLimit
                             select new AlertOutputModel
                             {
@@ -57,7 +59,7 @@ namespace Web.BackgroundJobs
                     if (!ExistsAlert(f.OutpostStockLevelId, f.LastUpdated))
                     {
                         Alert alert = CreateAlert(f);
-                        saveOrUpdateCommand.Execute(alert);
+                        saveOrUpdateCommand().Execute(alert);
                     }
                 }
 
@@ -66,14 +68,14 @@ namespace Web.BackgroundJobs
 
         private bool ExistsAlert(Guid outpostStockLevelId, DateTime? lastUpdated)
         {
-            return queryAlerts.Query().Where(it => it.OutpostStockLevelId == outpostStockLevelId && it.Created >= lastUpdated).Any();
+            return queryAlerts().Query().Where(it => it.OutpostStockLevelId == outpostStockLevelId && it.Created >= lastUpdated).Any();
         }
 
         private Alert CreateAlert(AlertOutputModel f)
         {
             return new Alert()
             {
-                Client = queryClients.Load(f.ClientId),
+                Client = queryClients().Load(f.ClientId),
                 Contact = f.Contact,
                 LastUpdate = f.LastUpdated,
                 LowLevelStock = f.RefCode + " - " + f.StockLevel,

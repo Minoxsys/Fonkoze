@@ -10,10 +10,10 @@ namespace Web.BackgroundJobs
     public class EmptyJob : IJob
     {
         const string EMPTY_JOB_NAME = "EmptyJob";
-        private readonly IQueryService<WorkItem> queryWorkItems;
-        private readonly IDeleteCommand<WorkItem> deleteWorkItems;
+        private readonly Func<IQueryService<WorkItem>> queryWorkItems;
+        private readonly Func<IDeleteCommand<WorkItem>> deleteWorkItems;
 
-        public EmptyJob(IQueryService<WorkItem> queryWorkItems, IDeleteCommand<WorkItem> deleteWorkItems)
+        public EmptyJob(Func<IQueryService<WorkItem>> queryWorkItems, Func<IDeleteCommand<WorkItem>> deleteWorkItems)
         {
             this.queryWorkItems = queryWorkItems;
             this.deleteWorkItems = deleteWorkItems;
@@ -24,12 +24,12 @@ namespace Web.BackgroundJobs
             return new Task(() => {
 
                 var cutoffDate = DateTime.UtcNow.Subtract(TimeSpan.FromMinutes(15));
-                var oldItems = queryWorkItems.Query().Where(w => w.Completed != null && w.Completed < cutoffDate);
+                var oldItems = queryWorkItems().Query().Where(w => w.Completed != null && w.Completed < cutoffDate);
                 if (oldItems.Any())
                 {
                     foreach (var workItem in oldItems.ToList())
                     {
-                        deleteWorkItems.Execute(workItem);
+                        deleteWorkItems().Execute(workItem);
                     }
                 }
 
