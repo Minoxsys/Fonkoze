@@ -112,7 +112,7 @@
                 url: '@Url.RouteUrl(StockAdministrationAreaRegistration.DEFAULT_ROUTE, new { controller = "Product", action = "GetProductGroups" })',
                 reader: {
                     type: 'json',
-                    root: 'productGroups',
+                    root: 'productGroups'
                 }
             }
         });
@@ -295,7 +295,7 @@
                                                             var values = {
                                                                 Name:  productGroupName.getValue(),
                                                                 Description:  productGroupDescription.getValue(),
-                                                                ReferenceCode: productGroupReferenceCode.getValue(),
+                                                                ReferenceCode: productGroupReferenceCode.getValue()
                                                             };
     
                                                             var postToUrl = '@Url.RouteUrl(StockAdministrationAreaRegistration.DEFAULT_ROUTE, new { controller = "ProductGroup", action = "Create" })';
@@ -667,7 +667,7 @@
                             xtype: 'container',
                             flex: 1,
                             layout: {
-                                type: 'hbox',
+                                type: 'hbox'
                             },
                             items: [
                                 {
@@ -688,7 +688,7 @@
                                         },{
                                             xtype: 'label',
                                             cls: 'x-title-label',
-                                            text: 'Products',
+                                            text: 'Products'
                                         },{
                                             xtype: 'button',
                                             margin: '0 0 0 20',

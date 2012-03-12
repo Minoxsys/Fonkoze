@@ -84,7 +84,7 @@ Product Administration Product Groups: Overview
                         name: 'Name',
                         fieldLabel: 'Product Group Name',
                         anchor: '100%',
-                        itemId: window.feature.formProductGroupNameId,
+                        itemId: window.feature.formProductGroupNameId
                     },{
                         xtype: 'textfield',
                         
@@ -131,7 +131,7 @@ Product Administration Product Groups: Overview
             items: [{
                 xtype: 'container',
                 layout: {
-                    type: 'hbox',
+                    type: 'hbox'
                 },
                 height: 60,
                 items:[{
@@ -152,7 +152,7 @@ Product Administration Product Groups: Overview
                       },{
                         xtype: 'label',
                         cls: 'x-title-label',
-                        text: 'Product Group',
+                        text: 'Product Group'
                     },{
                         xtype: 'button',
                         margin: '0 0 0 20',
@@ -183,7 +183,7 @@ Product Administration Product Groups: Overview
                                             var values = {
                                                 Name:  productGroupName.getValue(),
                                                 Description:  productGroupDescription.getValue(),
-                                                ReferenceCode: productGroupReferenceCode.getValue(),
+                                                ReferenceCode: productGroupReferenceCode.getValue()
                                             };
 
                                             var postToUrl = '@Url.RouteUrl(StockAdministrationAreaRegistration.DEFAULT_ROUTE, new { controller = "ProductGroup", action = "Create" })';
@@ -252,7 +252,7 @@ Product Administration Product Groups: Overview
                     flex: 1,
                     menuDisabled: true,
                     sortable: true,
-                    renderer: addTooltip,
+                    renderer: addTooltip
                 },{
                     text: "Number of Products",
                     dataIndex: 'ProductsNo',
@@ -298,7 +298,7 @@ Product Administration Product Groups: Overview
                                             Id: rec.get('Id'),
                                             Name:  productGroupName.getValue(),
                                             Description:  productGroupDescription.getValue(),
-                                            ReferenceCode: productGroupReferenceCode.getValue(),
+                                            ReferenceCode: productGroupReferenceCode.getValue()
                                         };
 
                                         var postToUrl = '@Url.RouteUrl(StockAdministrationAreaRegistration.DEFAULT_ROUTE, new { controller = "ProductGroup", action = "Edit" })';

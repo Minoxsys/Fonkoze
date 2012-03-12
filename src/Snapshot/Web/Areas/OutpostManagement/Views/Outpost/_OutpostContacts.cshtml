@@ -22,14 +22,14 @@
         window.feature.contactsStore = Ext.define('snapshot-contactsStore', {
             extend: 'Ext.data.Store',
             model: window.feature.ContactModel,
-            autoSync: true,
+            autoSync: true
             
         });
         window.feature.detailTypeStore = Ext.create('Ext.data.Store',{
             fields: ['name'],
             data: [
                 { name: "@Domain.Contact.MOBILE_NUMBER_CONTACT_TYPE" },
-                { name: "@Domain.Contact.EMAIL_CONTACT_TYPE" },
+                { name: "@Domain.Contact.EMAIL_CONTACT_TYPE" }
             ]
         });
     

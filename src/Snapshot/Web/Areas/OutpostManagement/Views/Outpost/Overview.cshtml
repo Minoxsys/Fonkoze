@@ -370,7 +370,7 @@
 							url: '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Contact", action = "Index" })',
 							appendId: false,
 							extraParams: {
-								OutpostId: outpostId,
+								OutpostId: outpostId
 							},
 							id: 'ContactModelProxy',
 							reader: {
@@ -742,7 +742,7 @@
 							xtype: 'container',
 							flex: 1,
 							layout: {
-								type: 'hbox',
+								type: 'hbox'
 							},
 							items:[
 								{
@@ -763,7 +763,7 @@
                                         },{
 											xtype: 'label',
                                             cls: 'x-title-label',
-											text: 'Outpost Administration',
+											text: 'Outpost Administration'
 										},{
 											xtype: 'button',
 											margin: '0 0 0 20',
@@ -773,7 +773,7 @@
 											cls: 'x-add-button-gradient',
 											handler: function(){
 												var winAdd = new window.feature.modal({
-													url: '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Outpost", action = "Create" })',
+													url: '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Outpost", action = "Create" })'
 												});
 												winAdd.show();       
 											}
@@ -943,7 +943,7 @@
 													win.down('#' + modalIds.coordinatesId).setValue(rec.get('Coordinates'));
 												}
 											},
-											url: '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Outpost", action = "Edit" })',
+											url: '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Outpost", action = "Edit" })'
 										});
 	
 										winEdit.show();       

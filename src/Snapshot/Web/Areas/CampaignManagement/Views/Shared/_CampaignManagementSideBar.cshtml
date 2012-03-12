@@ -1,16 +1,16 @@
 ﻿@using Web.Areas.CampaignManagement.Models.ExistingRequests;
 <script type="text/javascript">
     window.res.content.maincontent = {
-    id: 'MainContent',
-    sidebar: {
-    id: 'SideBar',
-    group: 'SideBarGroup',
-    smsRequest: 'Sidebar-CampaignAdministration-SMSRequestSchedule-Button',
-    existingRequest: 'SideBar-CampaignAdministration-ExistingRequest-Button',
-    manageCampaigns: 'SideBar-CampaignAdministration-ManageCampaigns-Button',
-    automaticSchedules: 'SideBar-CampaignAdministration-AutomaticSchedules-Button',
-    createProductLevelRequests: 'SideBar-CampaignAdministration-CreateProductLevelRequests-Button'
-    }
+        id: 'MainContent',
+        sidebar: {
+            id: 'SideBar',
+            group: 'SideBarGroup',
+            smsRequest: 'Sidebar-CampaignAdministration-SMSRequestSchedule-Button',
+            existingRequest: 'SideBar-CampaignAdministration-ExistingRequest-Button',
+            manageCampaigns: 'SideBar-CampaignAdministration-ManageCampaigns-Button',
+            automaticSchedules: 'SideBar-CampaignAdministration-AutomaticSchedules-Button',
+            createProductLevelRequests: 'SideBar-CampaignAdministration-CreateProductLevelRequests-Button'
+        }
     };
 
     window.res.link.productLevelRequest = '@(Url.RouteUrl<ProductLevelRequestController>(x => x.Overview(), CampaignManagementAreaRegistration.DEFAULT_ROUTE))';
@@ -18,119 +18,113 @@
 
     Ext.onReady(function () {
 
-    var contentRes = window.res.content;
+        var contentRes = window.res.content;
 
-    var content = Ext.getCmp(contentRes.id);
+        var content = Ext.getCmp(contentRes.id);
 
-    content.add(
-    {
-    xtype: 'container',
-    layout: {
-    align: 'stretch',
-    type: 'hbox'
-    },
-    items: [
-    {
-    xtype: 'container',
-    id: contentRes.maincontent.id,
-    layout: {
-    align: 'stretch',
-    type: 'fit'
-    },
-    flex: 1
-    },
-    {
-    xtype: 'container',
-    id: 'SideBar',
-    width: 260,
-    layout: {
-    align: 'stretch',
-    type: 'vbox'
-    },
-    items: [
-    {
-    xtype: 'label',
-                                margin: '45 10 10 10',
-    text: 'Requests',
-                                cls: 'x-userMenu-label',
-    },
-    {
-    xtype: 'button',
-    id: window.res.content.maincontent.sidebar.existingRequest,
-    toggleGroup: contentRes.maincontent.sidebar.group,
-    enableToggle: true,
-    icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/arrow.gif"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
-    iconCls:'x-btn-text-icon',
-    text: 'Existing Requests',
-                                margin: '0 50 0 0',
-                                padding: '0 0 0 40',
-                                height: 30,
-                                ui: 'snapshot-sidebar-btn',
-    handler: function () {
-    navigateTo(window.res.link.existingRequests);
-    }
-    },
-    {
-    xtype: 'label',
-                                text: 'Management',
-                                margin: '0 50 10 10',
-                                cls: 'x-userMenu-label',
-    },
-    {
-    xtype: 'button',
-    id: contentRes.maincontent.sidebar.manageCampaigns,
-    toggleGroup: contentRes.maincontent.sidebar.group,
-    text: 'Manage Campaigns',
-    icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/arrow.gif"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
-    iconCls:'x-btn-text-icon',
-                                margin: '0 50 0 0',
-                                padding: '0 0 0 40',
-                                height: 30,
-                                ui: 'snapshot-sidebar-btn',
-    handler: function () {
-    navigateTo(window.res.link.campaignOverview);
-    },
-    enableToggle: true
-    },
-    {
-    xtype: 'button',
-    id: contentRes.maincontent.sidebar.automaticSchedules,
-    toggleGroup: contentRes.maincontent.sidebar.group,
-    text: 'Automatic Schedules',
-                                margin: '0 50 0 0',
-                                padding: '0 0 0 40',
-                                height: 30,
-                                ui: 'snapshot-sidebar-btn',
-    icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/arrow.gif"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
-    iconCls:'x-btn-text-icon',
-    handler: function () {
-    navigateTo(window.res.link.automaticSchedules);
-    },
-    enableToggle: true
-    },
-    {
-    xtype: 'button',
-    id: contentRes.maincontent.sidebar.createProductLevelRequests,
-    toggleGroup: contentRes.maincontent.sidebar.group,
-    text: 'Product Level Requests',
-                                margin: '0 50 0 0',
-                                padding: '0 0 0 40',
-                                height: 30,
-                                ui: 'snapshot-sidebar-btn',
-    icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/arrow.gif"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
-    iconCls:'x-btn-text-icon',
-    handler: function () {
-    navigateTo(window.res.link.productLevelRequest);
-    },
-    enableToggle: true
-    },
-    ]
-    }
-
-    ]
-
-    }
-    );
-
+        content.add(
+            {
+            xtype: 'container',
+            layout: {
+                    align: 'stretch',
+                    type: 'hbox'
+                },
+            items: [
+                    {
+                    xtype: 'container',
+                    id: contentRes.maincontent.id,
+                    layout: {
+                            align: 'stretch',
+                            type: 'fit'
+                        },
+                    flex: 1
+                },{
+                    xtype: 'container',
+                    id: 'SideBar',
+                    width: 260,
+                    layout: {
+                        align: 'stretch',
+                        type: 'vbox'
+                    },
+                    items: [
+                        {
+                            xtype: 'label',
+                            margin: '45 10 10 10',
+                            text: 'Requests',
+                            cls: 'x-userMenu-label'
+                        },{
+                            xtype: 'button',
+                            id: window.res.content.maincontent.sidebar.existingRequest,
+                            toggleGroup: contentRes.maincontent.sidebar.group,
+                            enableToggle: true,
+                            icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/arrow.gif"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                            iconCls:'x-btn-text-icon',
+                            text: 'Existing Requests',
+                            margin: '0 50 0 0',
+                            padding: '0 0 0 40',
+                            height: 30,
+                            ui: 'snapshot-sidebar-btn',
+                            handler: function () {
+                                navigateTo(window.res.link.existingRequests);
+                            }
+                        },{
+                            xtype: 'label',
+                            text: 'Management',
+                            margin: '0 50 10 10',
+                            cls: 'x-userMenu-label'
+                        },{
+                            xtype: 'button',
+                            id: contentRes.maincontent.sidebar.manageCampaigns,
+                            toggleGroup: contentRes.maincontent.sidebar.group,
+                            text: 'Manage Campaigns',
+                            icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/arrow.gif"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                            iconCls:'x-btn-text-icon',
+                            margin: '0 50 0 0',
+                            padding: '0 0 0 40',
+                            height: 30,
+                            ui: 'snapshot-sidebar-btn',
+                            handler: function () {
+                                navigateTo(window.res.link.campaignOverview);
+                            },
+                            enableToggle: true
+                        },{
+                            xtype: 'button',
+                            id: contentRes.maincontent.sidebar.automaticSchedules,
+                            toggleGroup: contentRes.maincontent.sidebar.group,
+                            text: 'Automatic Schedules',
+                            margin: '0 50 0 0',
+                            padding: '0 0 0 40',
+                            height: 30,
+                            ui: 'snapshot-sidebar-btn',
+                            icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/arrow.gif"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                            iconCls:'x-btn-text-icon',
+                            handler: function () {
+                                navigateTo(window.res.link.automaticSchedules);
+                            },
+                            enableToggle: true
+                        },{
+                            xtype: 'button',
+                            id: contentRes.maincontent.sidebar.createProductLevelRequests,
+                            toggleGroup: contentRes.maincontent.sidebar.group,
+                            text: 'Product Level Requests',
+                            margin: '0 50 0 0',
+                            padding: '0 0 0 40',
+                            height: 30,
+                            ui: 'snapshot-sidebar-btn',
+                            icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/arrow.gif"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                            iconCls:'x-btn-text-icon',
+                            handler: function () {
+                                navigateTo(window.res.link.productLevelRequest);
+                            },
+                            enableToggle: true
+                        }
+                    ]
+                }
+    
+                ]
+    
+        }
+            );
+    
     });
 </script>

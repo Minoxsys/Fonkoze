@@ -464,7 +464,7 @@ Campaign: Overview
                                     Id: campaign.Id,
                                     CampaignName: campaign.Name,
                                     StartDate: campaign.StartDate,
-                                    EndDate: campaign.EndDate,
+                                    EndDate: campaign.EndDate
                                 };
 
                             var postToUrl = '@Url.RouteUrl(CampaignManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Campaign", action = "Clone" })';
@@ -619,25 +619,25 @@ Campaign: Overview
                     xtype: 'textfield',
                     fieldLabel: 'Campaign Name',
                     allowBlank:false,
-                    itemId: window.feature.formCampaignNameId,
+                    itemId: window.feature.formCampaignNameId
                 },{
                     xtype: 'datefield',
                     margin: '20 0 0 0',
                     fieldLabel: 'Start Date',
                     format: 'd-M-Y',
                     allowBlank:false,
-                    itemId: window.feature.formCampaignStartDateId,
+                    itemId: window.feature.formCampaignStartDateId
                 },{
                     xtype: 'datefield',
                     margin: '20 0 0 0',
                     fieldLabel: 'End Date',
                     allowBlank:false,
                     format: 'd-M-Y',
-                    itemId: window.feature.formCampaignEndDateId,
+                    itemId: window.feature.formCampaignEndDateId
                 }] 
             },{
                 xtype: 'container',
-                flex: 1,
+                flex: 1
             }]
         });
 
@@ -664,7 +664,7 @@ Campaign: Overview
                         },
                         items: [{
                             xtype: 'label',
-                            itemId: window.feature.leftGridTopLabel,
+                            itemId: window.feature.leftGridTopLabel
                         },{
                             xtype: 'gridpanel',
                             cls: 'white-border',
@@ -700,7 +700,7 @@ Campaign: Overview
                             flex: 1,
                             layout: {
                                 type: 'vbox',
-                                pack: 'center',
+                                pack: 'center'
                             },
                             items: [{
                                 xtype: 'button',
@@ -718,7 +718,7 @@ Campaign: Overview
                                         if (record.dirty){
                                             var newValue = {
                                                 Id: record.get('Id'), 
-                                                Name: record.get('Name'),
+                                                Name: record.get('Name')
                                             };
                                             var contains = RightGridContains(me, newValue, gridRight);
                                             if (contains == false){
@@ -755,7 +755,7 @@ Campaign: Overview
                         },
                         items: [{
                             xtype: 'label',
-                            itemId: window.feature.rightGridTopLabel,
+                            itemId: window.feature.rightGridTopLabel
                         },{
                             xtype: 'gridpanel',
                             cls: 'white-border',

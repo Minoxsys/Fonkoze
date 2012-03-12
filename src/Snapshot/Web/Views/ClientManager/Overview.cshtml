@@ -100,7 +100,7 @@ User Administration Clients: Overview
             items: [{
                 xtype: 'container',
                 layout: {
-                    type: 'hbox',
+                    type: 'hbox'
                 },
                 height: 50,
                 items:[{
@@ -121,7 +121,7 @@ User Administration Clients: Overview
                       },{
                         xtype: 'label',
                         cls: 'x-title-label',
-                        text: 'Client Administration',
+                        text: 'Client Administration'
                     },{
                         xtype: 'button',
                         margin: '0 0 0 20',
@@ -255,7 +255,7 @@ User Administration Clients: Overview
                                     if (ok == true){
                                         var values = {
                                             Id: rec.get('Id'),
-                                            Name:  clientName.getValue(),
+                                            Name:  clientName.getValue()
                                         };
 
                                         var postToUrl = '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "ClientManager", action = "Edit" })';
@@ -320,7 +320,7 @@ User Administration Clients: Overview
                             });
                             }
 					    }  
-                    }],
+                    }]
                 }],
                 bbar: Ext.create('Ext.PagingToolbar', {
                     store: window.feature.ClientsStore,
