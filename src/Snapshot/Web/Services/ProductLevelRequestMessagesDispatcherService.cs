@@ -46,6 +46,9 @@ namespace Web.Services
             foreach (Guid outpostId in outpostIds)
             {
                 Contact contact = queryServiceContact.Query().Where(c => c.Outpost.Id == outpostId && c.IsMainContact).FirstOrDefault();
+
+                if (contact == null) continue;
+
                 List<Product> products = GetProductsForOutpostId(outpostId);
 
                 Outpost outpost = queryServiceOutpost.Load(outpostId);

@@ -34,6 +34,9 @@ namespace Web.Services
 
         public bool SendProductLevelRequestMessage(ProductLevelRequestMessageInput input)
         {
+            if (input.Products == null || input.Contact == null || input.Contact.ContactType == null)
+                return false;
+
             if ((input.Products.Count > 0) && input.Contact.ContactType.Equals(Contact.EMAIL_CONTACT_TYPE))
             {
                 return SaveAndSendEmailRequest(input);

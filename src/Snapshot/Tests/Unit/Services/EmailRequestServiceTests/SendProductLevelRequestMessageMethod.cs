@@ -71,5 +71,19 @@ namespace Tests.Unit.Services.EmailRequestServiceTests
             _.emailService.AssertWasNotCalled(call => call.SendMail(Arg<MailMessage>.Matches(r => true)));
             Assert.IsFalse(sent);
         }
+
+        [Test]
+        public void Given_An_ProductLevelRequestMessageInput_With_No_Contact_The_Method_Will_Generate_Nothing()
+        {
+            // Arrange
+
+            // Act
+            bool sent = _.emailRequestService.SendProductLevelRequestMessage(_.ProductLevelRequestMessageInputWithNullContact());
+
+            // Assert
+            _.saveOrUpdateCommandEmailRequest.AssertWasNotCalled(call => call.Execute(Arg<EmailRequest>.Matches(r => true)));
+            _.emailService.AssertWasNotCalled(call => call.SendMail(Arg<MailMessage>.Matches(r => true)));
+            Assert.IsFalse(sent);
+        }
     }
 }

@@ -110,5 +110,18 @@ namespace Tests.Unit.Services.EmailRequestServiceTests
                 Products = new Product[] { product }.ToList()
             };
         }
+
+        public ProductLevelRequestMessageInput ProductLevelRequestMessageInputWithNullContact()
+        {
+            return new ProductLevelRequestMessageInput
+            {
+                Client = client,
+                Contact = null,
+                Outpost = outpost,
+                ProductGroup = productGroup,
+                Products = new Product[] { product }.ToList()
+            };
+
+        }
     }
 }
