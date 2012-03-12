@@ -97,6 +97,13 @@
 	margin: 0 0 10px 0 !important;
 }
 
+.link-label {
+	font-family: $global-font-family;
+	font-weight: $font_weight-normal;
+	cursor: pointer !important;
+	color: #5095cd !important;
+}
+
 .dashboard-img {
 	position: absolute!important;
 	left: 50% !important;
