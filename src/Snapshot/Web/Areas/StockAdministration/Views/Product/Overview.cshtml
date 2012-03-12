@@ -345,6 +345,15 @@
                             anchor: '-10',
                             value: me.recordName
                         }, {
+                            xtype: 'textfield',
+                            name: 'SMSReferenceCode',
+                            fieldLabel: 'Product Code',
+                            allowBlank:false,
+                            itemId: window.feature.ProductSMSReferecenceCodeId,
+                            value: me.recordSMSReferenceCode,
+                            regex: /^[A-Za-z]{1}$/,
+                            regexText:'You need to provide 1 letter!'
+                        }, {
                             xtype: 'textarea',
                             name: 'Description',
                             fieldLabel: 'Description',
@@ -365,16 +374,7 @@
                             fieldLabel: 'Upper Limit',
                             itemId: window.feature.ProductUpperLimitId,
                             value: me.recordUpperLimit
-    
-                        }, {
-                            xtype: 'textfield',
-                            name: 'SMSReferenceCode',
-                            fieldLabel: 'Product Code',
-                            allowBlank:false,
-                            itemId: window.feature.ProductSMSReferecenceCodeId,
-                            value: me.recordSMSReferenceCode,
-                            regex: /^[A-Za-z]{1}$/,
-                            regexText:'You need to provide 1 letter!'
+
                         },{
                             xtype:'hiddenfield',
                             name: 'Id',
