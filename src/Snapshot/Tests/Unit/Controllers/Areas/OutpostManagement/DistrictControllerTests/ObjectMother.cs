@@ -10,6 +10,8 @@ using Domain;
 using Web.Areas.OutpostManagement.Models.District;
 using Core.Domain;
 using MvcContrib.TestHelper.Fakes;
+using Core.Security;
+using Persistence.Security;
 
 namespace Tests.Unit.Controllers.Areas.OutpostManagement.DistrictControllerTests
 {
@@ -31,6 +33,9 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.DistrictControllerTests
         public IQueryService<District> queryService;
         public IQueryDistrict queryDistrict;
         public IQueryService<User> queryUsers;
+        public IQueryService<Permission> queryPermission;
+
+        public IPermissionsService PermissionService;
 
         public District district;
         public Country country;
@@ -100,6 +105,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.DistrictControllerTests
 
             FakeControllerContext.Builder.HttpContext.User = new FakePrincipal(new FakeIdentity(USER_NAME), new string[] { });
             FakeControllerContext.Initialize(controller);
+            PermissionService = new FunctionRightsService(queryPermission, queryUsers);
 
             controller.SaveOrUpdateCommand = saveCommand;
             controller.DeleteCommand = deleteCommand;
@@ -109,6 +115,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.DistrictControllerTests
             controller.QueryDistrict = queryDistrict;
             controller.QueryService = queryService;
             controller.QueryCountry = queryCountry;
+            controller.PermissionService = PermissionService;
 
         }
 
@@ -122,6 +129,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.DistrictControllerTests
             queryClient = MockRepository.GenerateMock<IQueryService<Client>>();
             queryService = MockRepository.GenerateMock<IQueryService<District>>();
             queryCountry = MockRepository.GenerateMock<IQueryService<Country>>();
+            queryPermission = MockRepository.GenerateMock<IQueryService<Permission>>();
         }
         internal void StubUserAndItsClient()
         {

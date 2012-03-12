@@ -7,6 +7,7 @@ using Web.Areas.OutpostManagement.Models.Country;
 using Rhino.Mocks;
 using Persistence.Queries.Functions;
 using Core.Domain;
+using Persistence.Queries.Employees;
 
 namespace Tests.Unit.Controllers.Areas.OutpostManagement.CountryControllerTests
 {
@@ -24,12 +25,14 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.CountryControllerTests
         [Test]
         public void GetsTheCurrentUserAndItsClient()
         {
-            //objectMother.queryUsers.Expect(it => it.Query()).Return(new User[] { }.AsQueryable());
-            //objectMother.queryPermission.Expect(it => it.Query(Arg<FunctionByName>.Is.Anything)).Return(new Permission[] { }.AsQueryable());
-            //objectMother.QueryCountriesToReturnsEmptyResult();
-            //objectMother.QueryWorldCountryRecordsReturnsEmptyResult();
+            objectMother.queryUsers.Expect(bt => bt.Query(Arg<UserByUserName>.Is.Anything)).Return(new User[] { }.AsQueryable());
+            objectMother.queryPermission.Expect(it => it.Query(Arg<FunctionByName>.Is.Anything)).Return(new Permission[] { }.AsQueryable());
+            objectMother.queryPermission.Expect(it => it.Query(Arg<FunctionByName>.Is.Anything)).Return(new Permission[] { }.AsQueryable());
 
-            //objectMother.controller.Overview();
+            objectMother.QueryCountriesToReturnsEmptyResult();
+            objectMother.QueryWorldCountryRecordsReturnsEmptyResult();
+
+           objectMother.controller.Overview();
 
 
 
@@ -38,39 +41,46 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.CountryControllerTests
         [Test]
         public void Get_ReturnsTheViewModel_WithTheWorldCountriesLoaded()
         {
-           // objectMother.QueryCountriesToReturnsEmptyResult();
+            objectMother.queryUsers.Expect(bt => bt.Query(Arg<UserByUserName>.Is.Anything)).Return(new User[] { }.AsQueryable());
+            objectMother.queryPermission.Expect(it => it.Query(Arg<FunctionByName>.Is.Anything)).Return(new Permission[] { }.AsQueryable());
+            objectMother.queryPermission.Expect(it => it.Query(Arg<FunctionByName>.Is.Anything)).Return(new Permission[] { }.AsQueryable());
+            objectMother.QueryCountriesToReturnsEmptyResult();
 
-           // objectMother.queryWorldCountryRecords.Expect(call => call.Query()).Return( objectMother.WorldCountryRecords());
+            objectMother.queryWorldCountryRecords.Expect(call => call.Query()).Return( objectMother.WorldCountryRecords());
            // // Act
-           // var viewResult = (ViewResult)objectMother.controller.Overview();
+            var viewResult = (ViewResult)objectMother.controller.Overview();
 
            //// Assert
-           // objectMother.queryWorldCountryRecords.VerifyAllExpectations();
+            objectMother.queryWorldCountryRecords.VerifyAllExpectations();
 
-           // Assert.IsNotNull(viewResult.Model);
+            Assert.IsNotNull(viewResult.Model);
 
-           // Assert.AreEqual(ObjectMother.DEFAULT_VIEW_NAME, viewResult.ViewName);
+            Assert.AreEqual(ObjectMother.DEFAULT_VIEW_NAME, viewResult.ViewName);
         
         }
 
         [Test]
         public void Get_Returns_OnlyTheCountries_ThatDoNetBelong_ToTheUser_Currently()
         {
-            //var currentUserCountries = objectMother.CurrentUserCountries();
-            //var worldCountryRecord = objectMother.WorldCountryRecords();
+            var currentUserCountries = objectMother.CurrentUserCountries();
+            var worldCountryRecord = objectMother.WorldCountryRecords();
 
-            //objectMother.queryWorldCountryRecords.Expect(call => call.Query()).Return(worldCountryRecord);
-            //objectMother.queryCountry.Expect(call => call.Query()).Return(currentUserCountries);
+            objectMother.queryUsers.Expect(bt => bt.Query(Arg<UserByUserName>.Is.Anything)).Return(new User[] { }.AsQueryable());
+            objectMother.queryPermission.Expect(it => it.Query(Arg<FunctionByName>.Is.Anything)).Return(new Permission[] { }.AsQueryable());
+            objectMother.queryPermission.Expect(it => it.Query(Arg<FunctionByName>.Is.Anything)).Return(new Permission[] { }.AsQueryable());
 
-            //var viewResult = (ViewResult)objectMother.controller.Overview();
+            objectMother.queryWorldCountryRecords.Expect(call => call.Query()).Return(worldCountryRecord);
+            objectMother.queryCountry.Expect(call => call.Query()).Return(currentUserCountries);
 
-            //objectMother.queryCountry.VerifyAllExpectations();
+            var viewResult = (ViewResult)objectMother.controller.Overview();
 
-            //var model = viewResult.Model as CountryOverviewModel;
+            objectMother.queryCountry.VerifyAllExpectations();
 
-            //Assert.IsNotNull(model);
+            var model = viewResult.Model as CountryOverviewModel;
 
-            //Assert.That(model.WorldRecords, Is.EqualTo("[]"));
+            Assert.IsNotNull(model);
+
+            Assert.That(model.WorldRecords, Is.EqualTo("[]"));
         }
     }
 }

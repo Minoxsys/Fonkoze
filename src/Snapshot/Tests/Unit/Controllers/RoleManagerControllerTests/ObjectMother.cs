@@ -9,6 +9,9 @@ using Rhino.Mocks;
 using Web.Models.RoleManager;
 using Persistence.Queries.Roles;
 using Web.Models.Shared;
+using Core.Security;
+using Persistence.Security;
+using MvcContrib.TestHelper.Fakes;
 
 namespace Tests.Unit.Controllers.RoleManagerControllerTests
 {
@@ -25,6 +28,8 @@ namespace Tests.Unit.Controllers.RoleManagerControllerTests
         public IQueryService<Permission> queryServicePermission;
         public ISaveOrUpdateCommand<Role> saveCommandRole;
         public IDeleteCommand<Role> deleteCommandRole;
+        public IQueryService<Permission> queryPermission;
+
         public IQueryRole queryRole;
 
         public Guid roleId;
@@ -32,6 +37,13 @@ namespace Tests.Unit.Controllers.RoleManagerControllerTests
         public Guid roleId2;
         public Role role2;
 
+        public Guid permissionId;
+        public Permission permission;
+
+        public Guid userId;
+        public User user;
+
+        public IPermissionsService PermissionService;
         public IndexModel indexModel;
         public RoleManagerInputModel inputModel;
         public Permission[] permissions;
@@ -39,12 +51,20 @@ namespace Tests.Unit.Controllers.RoleManagerControllerTests
         public void Init_Controller_And_Mock_Services()
         {
             controller = new RoleManagerController();
+            FakeControllerContext.Builder.HttpContext.User = new FakePrincipal(new FakeIdentity("admin"), new string[] { });
+            FakeControllerContext.Initialize(controller);
+          
+
             queryServiceRole = MockRepository.GenerateMock<IQueryService<Role>>();
             queryServicePermission = MockRepository.GenerateMock<IQueryService<Permission>>();
             saveCommandRole = MockRepository.GenerateMock<ISaveOrUpdateCommand<Role>>();
             deleteCommandRole = MockRepository.GenerateMock<IDeleteCommand<Role>>();
             queryRole = MockRepository.GenerateMock<IQueryRole>();
             queryServiceUser = MockRepository.GenerateMock<IQueryService<User>>();
+            queryPermission = MockRepository.GenerateMock <IQueryService<Permission>>();
+
+            PermissionService = new FunctionRightsService(queryPermission, queryServiceUser);
+            controller.PermissionService = PermissionService;
 
             controller.QueryServiceRole = queryServiceRole;
             controller.SaveOrUpdate = saveCommandRole;
@@ -53,7 +73,13 @@ namespace Tests.Unit.Controllers.RoleManagerControllerTests
             controller.QueryRole = queryRole;
             controller.QueryServiceUsers = queryServiceUser;
         }
-
+        public void StubPermission()
+        {
+            permissionId = Guid.NewGuid();
+            permission = MockRepository.GeneratePartialMock<Permission>();
+            permission.Stub(it => it.Id).Return(permissionId);
+            permission.Roles = new List<Role> { role };
+        }
         public void Init_Stub_Data()
         {
             permissions = new Permission[] { 
@@ -77,6 +103,7 @@ namespace Tests.Unit.Controllers.RoleManagerControllerTests
             role2.Description = ROLE_DESCRIPTION;
             role2.Functions = permissions.ToList();
 
+            StubPermission();
 
             indexModel = new IndexModel()
             {

@@ -9,6 +9,8 @@ using Rhino.Mocks;
 using Web.Areas.StockAdministration.Models.ProductGroup;
 using Core.Domain;
 using MvcContrib.TestHelper.Fakes;
+using Core.Security;
+using Persistence.Security;
 
 namespace Tests.Unit.Controllers.Areas.StockAdministration.ProductGroupControllerTests
 {
@@ -25,6 +27,9 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration.ProductGroupControlle
         public IQueryService<User> queryUsers;
 
         public IQueryService<Client> queryClients;
+        public IQueryService<Permission> queryPermission;
+
+        public IPermissionsService PermissionService;
 
         public ProductGroup productGroup;
         public Product product;
@@ -76,6 +81,7 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration.ProductGroupControlle
 
             queryClients = MockRepository.GenerateMock<IQueryService<Client>>();
             queryUsers = MockRepository.GenerateMock<IQueryService<User>>();
+            queryPermission = MockRepository.GenerateMock<IQueryService<Permission>>();
         }
 
         private void Setup_Controller()
@@ -84,12 +90,13 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration.ProductGroupControlle
 
             FakeControllerContext.Builder.HttpContext.User = new FakePrincipal(new FakeIdentity(FAKE_USERNAME), new string[] { });
             FakeControllerContext.Initialize(controller);
+            PermissionService = new FunctionRightsService(queryPermission, queryUsers);
 
             controller.QueryService = queryProductGroup;
             controller.QueryProduct = queryProduct;
             controller.SaveOrUpdateProductGroup = saveCommand;
             controller.DeleteCommand = deleteCommand;
-
+            controller.PermissionService = PermissionService;
             controller.QueryClients = queryClients;
             controller.QueryUsers = queryUsers;
         }

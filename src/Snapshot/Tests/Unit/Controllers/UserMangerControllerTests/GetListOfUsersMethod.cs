@@ -59,7 +59,7 @@ namespace Tests.Unit.Controllers.UserMangerControllerTests
                 page = 1,
                 start = 0,
                 sort = "Email",
-                searchValue = "Ion"
+                searchValue = "admin"
             };
 
             var pageOfData = objectMother.PageOfUsersData(indexModel);
@@ -74,7 +74,7 @@ namespace Tests.Unit.Controllers.UserMangerControllerTests
 
             var jsonData = jsonResult.Data as UserIndexOutputModel;
 
-            Assert.That(jsonData.Users[0].UserName, Is.EqualTo("9Ion.Pop"));
+            Assert.That(jsonData.Users[0].UserName, Is.EqualTo("9admin"));
             Assert.That(jsonData.Users[0].Email, Is.EqualTo("9"+objectMother.user.Email));
 
         }

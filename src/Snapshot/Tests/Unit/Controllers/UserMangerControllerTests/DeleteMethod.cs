@@ -55,7 +55,7 @@ namespace Tests.Unit.Controllers.UserMangerControllerTests
             var response = jsonResult.Data as JsonActionResponse;
 
             Assert.That(response.Status, Is.EqualTo("Success"));
-            Assert.That(response.Message, Is.EqualTo("Username Ion.Pop was removed."));
+            Assert.That(response.Message, Is.EqualTo("Username admin was removed."));
         }
     }
 }

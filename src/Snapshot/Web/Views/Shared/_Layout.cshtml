@@ -154,7 +154,7 @@
                                 id: res.header.navigation.outpostStockLevel,
                                 height: 70,
                                 padding: '0 0 0 5',
-                                width: 135,
+                                width: 180,
                                 icon:'@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Menu/OutpostProductLevel.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
                                 iconAlign: 'left',
                                 ui: 'snapshot-navigation-btn',
@@ -163,7 +163,7 @@
                                 handler:function(){
                                     navigateTo( res.link.outpostStockLevelCurrent ); 
                                 },
-                                text: '&nbsp;&nbsp;&nbsp;&nbsp;Products'                                
+                                text: '&nbsp;&nbsp;&nbsp;&nbsp;Product status'                                
                             },{
                                 xtype: 'button',
                                 id: res.header.navigation.alerts,

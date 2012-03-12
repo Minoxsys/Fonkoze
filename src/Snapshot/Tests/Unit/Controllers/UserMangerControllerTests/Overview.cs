@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using Rhino.Mocks;
 using Core.Domain;
 using Persistence.Queries.Functions;
+using Persistence.Queries.Employees;
 namespace Tests.Unit.Controllers.UserMangerControllerTests
 {
     [TestFixture]
@@ -23,16 +24,19 @@ namespace Tests.Unit.Controllers.UserMangerControllerTests
         [Test]
         public void Returns_The_ViewModel()
         {
-            ////Arrange
-            //objectMother.queryUsers.Expect(it => it.Query()).Return(new User[] { }.AsQueryable());
-            //objectMother.queryPermission.Expect(it => it.Query(Arg<FunctionByName>.Is.Anything)).Return(new Permission[] { }.AsQueryable());
+            ////Arrange            
+            objectMother.queryPermission.Expect(it => it.Query(Arg<FunctionByName>.Is.Anything)).Return(new Permission[] {}.AsQueryable());
+            objectMother.queryPermission.Expect(it => it.Query(Arg<FunctionByName>.Is.Anything)).Return(new Permission[] { objectMother.permission }.AsQueryable());
+            objectMother.queryUsers.Expect(bt => bt.Query(Arg<UserByUserName>.Is.Anything)).Return(new User[] { }.AsQueryable());
+            objectMother.queryUsers.Expect(bt => bt.Query(Arg<UserByUserName>.Is.Anything)).Return(new User[] { objectMother.user }.AsQueryable());
+
 
             //// Act
-            //var viewResult = (ViewResult)objectMother.controller.Overview();
+            var viewResult = (ViewResult)objectMother.controller.Overview();
 
             //// Assert
-            //Assert.IsNull(viewResult.Model);
-            //Assert.AreEqual("", viewResult.ViewName);
+            Assert.IsNull(viewResult.Model);
+            Assert.AreEqual("", viewResult.ViewName);
         }
     }
 }

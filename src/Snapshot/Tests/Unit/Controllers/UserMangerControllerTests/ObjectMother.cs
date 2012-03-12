@@ -34,6 +34,8 @@ namespace Tests.Unit.Controllers.UserMangerControllerTests
 
         public User user;
         public Client client;
+        public Permission permission;
+        public Guid permissionId;
         public Role role;
         public Guid userId;
         public Guid clientId;
@@ -44,6 +46,7 @@ namespace Tests.Unit.Controllers.UserMangerControllerTests
             MockServices();
             Setup_Controller();
             SetUp_StubData();
+            StubPermission();
         }
 
         private void MockServices()
@@ -70,7 +73,15 @@ namespace Tests.Unit.Controllers.UserMangerControllerTests
             controller.PermissionService = PermissionService;
             controller.SecurePassword = securePassword;
         }
+        private void StubPermission()
+        {
+            permissionId = Guid.NewGuid();
+            permission = MockRepository.GeneratePartialMock<Permission>();
+            permission.Stub(c => c.Id).Return(permissionId);
+            permission.Roles = new List<Role>();
+            permission.Roles.Add(role);
 
+        }
         private void SetUp_StubData()
         {
             clientId = Guid.NewGuid();
@@ -82,6 +93,8 @@ namespace Tests.Unit.Controllers.UserMangerControllerTests
             role = MockRepository.GeneratePartialMock<Role>();
             role.Stub(c => c.Id).Return(roleId);
             role.Name = "PM";
+            
+            
 
             userId = Guid.NewGuid();
             user = MockRepository.GeneratePartialMock<User>();
@@ -90,7 +103,7 @@ namespace Tests.Unit.Controllers.UserMangerControllerTests
             user.FirstName = "Ion";
             user.LastName = "Pop";
             user.Password = "123asd";
-            user.UserName = "Ion.Pop";
+            user.UserName = "admin";
             user.ClientId = client.Id;
             user.RoleId = role.Id;
         }
