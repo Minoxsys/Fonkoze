@@ -8,6 +8,7 @@
     Html.RenderPartial("_UserAdministrationSideBar");
 }
 <style type="text/css">
+    /*
     .x-table-layout-cell 
     {
         text-align: left;
@@ -32,6 +33,7 @@
         width: 250px;
         margin-left: 30px;
     }
+    */
 </style>
 <script type="text/javascript">
     Ext.onReady(function () {
@@ -137,6 +139,13 @@
             window.feature.reportViewId
         ];
 
+        window.feature.viewLabelPadding = '0 0 0 10';
+        window.feature.editLabelPadding = '0 0 0 20';
+        window.feature.deleteLabelPadding = '0 0 0 20';
+        window.feature.viewPadding = '0 0 0 17';
+        window.feature.editPadding = '0 0 0 25';
+        window.feature.deletePadding = '0 0 0 31';
+
         window.feature.role = null;
 
         Ext.define('Ext.feature.roleReferenceModel', {
@@ -177,18 +186,18 @@
             title: '',
             modal: true,
             ui: 'snapshot-popup-window',
-            height: 850,
-            width: 400,
+            height: 560,
+            width: 360,
             closeAction: 'hide',
             resizable: false,
-            layout: {
-                type: 'fit',
-                align: 'strech'
+            layout: { 
+                type: 'vbox',
+                align: 'strechmax'
             },
-            items: [
-                {
+            items: [{
                     xtype: 'container',
                     margin: '10 20 10 20',
+                    flex: 1,
                     layout: {
                         type: 'table',
                         columns: 4
@@ -199,81 +208,79 @@
                         { xtype: 'label', text: 'Role Description' },
                         { xtype: 'textfield', colspan: 3, id: window.feature.roleDescriptionId, componentCls: 'role-name', allowBlank: false },
                         { xtype: 'label', text: 'Permissions' },
-                        { xtype: 'label', text: 'View', componentCls: 'permissions-header' },
-                        { xtype: 'label', text: 'Edit', componentCls: 'permissions-header' },
-                        { xtype: 'label', text: 'Delete',  componentCls: 'permissions-header' },
+                        { xtype: 'label', text: 'View', padding: window.feature.viewLabelPadding },
+                        { xtype: 'label', text: 'Edit', padding: window.feature.editLabelPadding },
+                        { xtype: 'label', text: 'Delete',  padding: window.feature.deleteLabelPadding},
                         { xtype: 'label', text: 'Country' },
-                        { xtype: 'checkbox', id: window.feature.countryViewId },
-                        { xtype: 'checkbox', id: window.feature.countryEditId },
-                        { xtype: 'checkbox', id: window.feature.countryDeleteId },
+                        { xtype: 'checkbox', id: window.feature.countryViewId, padding: window.feature.viewPadding },
+                        { xtype: 'checkbox', id: window.feature.countryEditId, padding: window.feature.editPadding },
+                        { xtype: 'checkbox', id: window.feature.countryDeleteId, padding: window.feature.deletePadding },
                         { xtype: 'label', text: 'Region' },
-                        { xtype: 'checkbox', id: window.feature.regionViewId },
-                        { xtype: 'checkbox', id: window.feature.regionEditId },
-                        { xtype: 'checkbox', id: window.feature.regionDeleteId },
+                        { xtype: 'checkbox', id: window.feature.regionViewId, padding: window.feature.viewPadding },
+                        { xtype: 'checkbox', id: window.feature.regionEditId, padding: window.feature.editPadding },
+                        { xtype: 'checkbox', id: window.feature.regionDeleteId, padding: window.feature.deletePadding },
                         { xtype: 'label', text: 'District' },
-                        { xtype: 'checkbox', id: window.feature.districtViewId },
-                        { xtype: 'checkbox', id: window.feature.districtEditId },
-                        { xtype: 'checkbox', id: window.feature.districtDeleteId },
+                        { xtype: 'checkbox', id: window.feature.districtViewId, padding: window.feature.viewPadding },
+                        { xtype: 'checkbox', id: window.feature.districtEditId, padding: window.feature.editPadding },
+                        { xtype: 'checkbox', id: window.feature.districtDeleteId, padding: window.feature.deletePadding },
                         { xtype: 'label', text: 'Outpost' },
-                        { xtype: 'checkbox', id: window.feature.outpostViewId },
-                        { xtype: 'checkbox', id: window.feature.outpostEditId },
-                        { xtype: 'checkbox', id: window.feature.outpostDeleteId },
+                        { xtype: 'checkbox', id: window.feature.outpostViewId, padding: window.feature.viewPadding },
+                        { xtype: 'checkbox', id: window.feature.outpostEditId, padding: window.feature.editPadding },
+                        { xtype: 'checkbox', id: window.feature.outpostDeleteId, padding: window.feature.deletePadding },
                         { xtype: 'label', text: 'Product Group' },
-                        { xtype: 'checkbox', id: window.feature.productGroupViewId },
-                        { xtype: 'checkbox', id: window.feature.productGroupEditId },
-                        { xtype: 'checkbox', id: window.feature.productGroupDeleteId },
+                        { xtype: 'checkbox', id: window.feature.productGroupViewId, padding: window.feature.viewPadding },
+                        { xtype: 'checkbox', id: window.feature.productGroupEditId, padding: window.feature.editPadding },
+                        { xtype: 'checkbox', id: window.feature.productGroupDeleteId, padding: window.feature.deletePadding },
                         { xtype: 'label', text: 'Product' },
-                        { xtype: 'checkbox', id: window.feature.productViewId },
-                        { xtype: 'checkbox', id: window.feature.productEditId },
-                        { xtype: 'checkbox', id: window.feature.productDeleteId },
+                        { xtype: 'checkbox', id: window.feature.productViewId, padding: window.feature.viewPadding },
+                        { xtype: 'checkbox', id: window.feature.productEditId, padding: window.feature.editPadding },
+                        { xtype: 'checkbox', id: window.feature.productDeleteId, padding: window.feature.deletePadding },
                         { xtype: 'label', text: 'Campaign' },
-                        { xtype: 'checkbox', id: window.feature.campaignViewId },
-                        { xtype: 'checkbox', id: window.feature.campaignEditId },
-                        { xtype: 'checkbox', id: window.feature.campaignDuplicateId },
+                        { xtype: 'checkbox', id: window.feature.campaignViewId, padding: window.feature.viewPadding },
+                        { xtype: 'checkbox', id: window.feature.campaignEditId, padding: window.feature.editPadding },
+                        { xtype: 'checkbox', id: window.feature.campaignDuplicateId, padding: window.feature.deletePadding },
                         { xtype: 'label', text: 'Automatic Schedules' },
-                        { xtype: 'checkbox', id: window.feature.automaticScheduleViewId },
-                        { xtype: 'checkbox', id: window.feature.automaticScheduleEditId },
-                        { xtype: 'checkbox', id: window.feature.automaticScheduleDeleteId },
+                        { xtype: 'checkbox', id: window.feature.automaticScheduleViewId, padding: window.feature.viewPadding },
+                        { xtype: 'checkbox', id: window.feature.automaticScheduleEditId, padding: window.feature.editPadding },
+                        { xtype: 'checkbox', id: window.feature.automaticScheduleDeleteId, padding: window.feature.deletePadding },
                         { xtype: 'label', text: 'Product Level Request' },
-                        { xtype: 'checkbox', id: window.feature.productLevelRequestViewId },
-                        { xtype: 'checkbox', id: window.feature.productLevelRequestEditId },
-                        { xtype: 'checkbox', id: window.feature.productLevelRequestStopId },                           
+                        { xtype: 'checkbox', id: window.feature.productLevelRequestViewId, padding: window.feature.viewPadding },
+                        { xtype: 'checkbox', id: window.feature.productLevelRequestEditId, padding: window.feature.editPadding },
+                        { xtype: 'checkbox', id: window.feature.productLevelRequestStopId, padding: window.feature.deletePadding },                           
                         { xtype: 'label', text: 'Clients' },
-                        { xtype: 'checkbox', id: window.feature.clientViewId },
-                        { xtype: 'checkbox', id: window.feature.clientEditId },
-                        { xtype: 'checkbox', id: window.feature.clientDeleteId },
+                        { xtype: 'checkbox', id: window.feature.clientViewId, padding: window.feature.viewPadding },
+                        { xtype: 'checkbox', id: window.feature.clientEditId, padding: window.feature.editPadding },
+                        { xtype: 'checkbox', id: window.feature.clientDeleteId, padding: window.feature.deletePadding },
                         { xtype: 'label', text: 'Users' },
-                        { xtype: 'checkbox', id: window.feature.userViewId },
-                        { xtype: 'checkbox', id: window.feature.userEditId },
-                        { xtype: 'checkbox', id: window.feature.userDeleteId },
+                        { xtype: 'checkbox', id: window.feature.userViewId, padding: window.feature.viewPadding },
+                        { xtype: 'checkbox', id: window.feature.userEditId, padding: window.feature.editPadding },
+                        { xtype: 'checkbox', id: window.feature.userDeleteId, padding: window.feature.deletePadding },
                         { xtype: 'label', text: 'Roles' },
-                        { xtype: 'checkbox', id: window.feature.roleViewId },
-                        { xtype: 'checkbox', id: window.feature.roleEditId },
-                        { xtype: 'checkbox', id: window.feature.roleDeleteId },
+                        { xtype: 'checkbox', id: window.feature.roleViewId, padding: window.feature.viewPadding },
+                        { xtype: 'checkbox', id: window.feature.roleEditId, padding: window.feature.editPadding },
+                        { xtype: 'checkbox', id: window.feature.roleDeleteId, padding: window.feature.deletePadding },
                         { xtype: 'label', text: 'Current Outpost Stock Level' },
-                        { xtype: 'checkbox', id: window.feature.currentOutpostStockLevelViewId },
-                        { xtype: 'checkbox', id: window.feature.currentOutpostStockLevelEditId },
+                        { xtype: 'checkbox', id: window.feature.currentOutpostStockLevelViewId, padding: window.feature.viewPadding },
+                        { xtype: 'checkbox', id: window.feature.currentOutpostStockLevelEditId, padding: window.feature.editPadding },
                         { xtype: 'container'},
                         { xtype: 'label', text: 'Historical Outpost Stock Level' },
-                        { xtype: 'checkbox', id: window.feature.historicalOutpostStockLevelViewId },
-                        { xtype: 'checkbox', id: window.feature.historicalOutpostStockLevelEditId },
+                        { xtype: 'checkbox', id: window.feature.historicalOutpostStockLevelViewId, padding: window.feature.viewPadding },
+                        { xtype: 'checkbox', id: window.feature.historicalOutpostStockLevelEditId, padding: window.feature.editPadding },
                         { xtype: 'container' },
                         { xtype: 'label', text: 'Existing Request' },
-                        { xtype: 'checkbox', id: window.feature.existingRequestViewId },
+                        { xtype: 'checkbox', id: window.feature.existingRequestViewId, padding: window.feature.viewPadding },
                         { xtype: 'container' },
                         { xtype: 'container' },
                         { xtype: 'label', text: 'Alert' },
-                        { xtype: 'checkbox', id: window.feature.alertViewId },
+                        { xtype: 'checkbox', id: window.feature.alertViewId, padding: window.feature.viewPadding },
                         { xtype: 'container' },
                         { xtype: 'container' },
                         { xtype: 'label', text: 'Report' },
-                        { xtype: 'checkbox', id: window.feature.reportViewId },
+                        { xtype: 'checkbox', id: window.feature.reportViewId, padding: window.feature.viewPadding },
                         { xtype: 'container' },
                         { xtype: 'container' }
-    
                     ]
-                }
-            ],
+            }],
             buttons: [
                 {
                     text: 'Cancel',
