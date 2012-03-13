@@ -382,7 +382,12 @@
 								writeAllFields: true,
 								encode: false
 							}
-						}
+						},
+                    listeners: {
+                    write: function(){
+                    window.feature.outpostsStore.loadPage(1);
+                    }
+                    }
 					}
 					); 
 	
@@ -456,7 +461,7 @@
                                     {
                                         msgAlert.alert(serverResponse.Status, serverResponse.Message);
                                     }else{
-									window.feature.outpostsStore.loadPage(1);
+									
 	
 									me.postContactsFromMemoryProxy(serverResponse.OutpostId);
 	
