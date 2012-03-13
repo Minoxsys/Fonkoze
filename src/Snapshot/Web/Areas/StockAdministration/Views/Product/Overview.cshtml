@@ -725,6 +725,17 @@
                                             emptyText: 'Product Search',
                                             enableKeyEvents: true,
                                             listeners: {
+                                                'specialkey': function (field, e) {
+                                                        var selectedProductId = Ext.getCmp(window.feature.comboboxProductGroupsId).getValue();
+                                                        Ext.getCmp(window.feature.searchTextFieldId).setValue('');
+                                                        window.feature.store.proxy.extraParams.searchName = '';
+                                                        
+                                                        if (selectedProductId){
+                                                            window.feature.store.proxy.extraParams.productGroupId = selectedProductId;
+                                                        }
+                                                        
+                                                        window.feature.doSearch.delay(500);
+                                                        },
                                                 'keyup': {
                                                     fn: function(key) {
                                                         var selectedProductId = Ext.getCmp(window.feature.comboboxProductGroupsId).getValue();

@@ -464,7 +464,7 @@
 									
 	
 									me.postContactsFromMemoryProxy(serverResponse.OutpostId);
-	
+	                                    window.feature.outpostsStore.loadPage(1);
 									me.close();
 									me.destroy();}
 								});
@@ -800,6 +800,19 @@
 											enableKeyEvents: true,
 											listeners: {
 												specialkey: function (field, e) {
+                                                if (e.getKey() == Ext.EventObject.ESC) {
+
+                                                    var extraParams = window.feature.outpostsStore.getProxy().extraParams;
+													var comboFilters = window.feature.comboBoxFilters;
+													extraParams.countryId = comboFilters.country.getValue(); 
+													extraParams.regionId = comboFilters.region.getValue(); 
+													extraParams.districtId = comboFilters.district.getValue(); 
+													extraParams.search = '';
+
+                                                    field.setValue('');
+
+													window.feature.doSearch.delay(500);
+                                                }
 												},
 												keyup: function (textField) {
 													var extraParams = window.feature.outpostsStore.getProxy().extraParams;

@@ -369,6 +369,13 @@
                             emptyText: 'Role Search',
                             enableKeyEvents: true,
                             listeners: {
+                                'specialkey': function (field, e) {
+                                        if (e.getKey() == Ext.EventObject.ESC) {
+                                            window.feature.container.down('#'+window.feature.searchRoleId).setValue('');;
+                                            window.feature.store.proxy.extraParams.searchValue = '';
+                                            window.feature.doSearch.delay(500);
+                                    }
+                                 },
                                 'keyup': {
                                     fn: function (key) {
                                         var searchValue = window.feature.container.down('#' + window.feature.searchRoleId).getValue();

@@ -283,6 +283,13 @@ User Administration Users: Overview
                         emptyText: 'User Search',
                         enableKeyEvents: true,
                         listeners: {
+                         'specialkey': function (field, e) {
+                                if (e.getKey() == Ext.EventObject.ESC) {
+                                    window.feature.container.down('#'+window.feature.searchUserName).setValue('');;
+                                    window.feature.UsersStore.proxy.extraParams.searchValue = '';
+                                    window.feature.doSearch.delay(500);
+                                    }
+                            },
                             'keyup': {
                                 fn: function(key) {
                                     var searchValue = window.feature.container.down('#'+window.feature.searchUserName).getValue();
