@@ -6,7 +6,7 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using Web.Bootstrap;
 
-namespace Web.Services.UrlService
+namespace Web.Services
 {
     public class URLService : IURLService
     {

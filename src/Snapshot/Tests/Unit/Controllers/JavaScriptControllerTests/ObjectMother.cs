@@ -2,27 +2,26 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Moq;
 using Web.Controllers;
 using Core.Services;
+using Moq;
 using System.Web;
 using Web.Services;
 
-namespace Tests.Unit.Controllers.CssControllerTests
+namespace Tests.Unit.Controllers.JavaScriptControllerTests
 {
     public class ObjectMother
     {
-        public ICssProviderService fakeCssProviderService;
+        IJavaScriptProviderService faKeJavaScriptProviderService;
         public IPathService fakePathService;
         public IETagService fakeETagService;
 
-        public CssController controller;
+        public JavascriptController controller;
 
-        public const string RELATIVEPATH = "~/Assets/css/";
-        public const string ABSOLUTEPATH = "D:\\Minoxsys\\Assets\\css";
-        public const string CSS_FOLDER = "~/Assets/css/";
-        public const string UNEXISTING_PATH = "/Eu/css";
-        public const string ETAG = "jasgu7et4wkgbwue6tqwakgfuyf6wt";
+        public const string JS_FOLDER = "~/Assets/js/";
+        public const string ABSOLUTEPATH = "D:\\Minoxsys\\Assets\\js";
+        public const string UNEXISTING_PATH = "/Eu/js/";
+        public const string ETAG = "ja63eugdw6tdyuw35qvsuq6rwfv36rfudv36fs2qi1svg";
         public const string SITE = "site";
 
         public void Init()
@@ -33,10 +32,10 @@ namespace Tests.Unit.Controllers.CssControllerTests
 
         private void Setup_Controller()
         {
-            controller = new CssController(fakeCssProviderService);
+            controller = new JavascriptController(faKeJavaScriptProviderService);
             FakeControllerContext.Initialize(controller);
 
-            Mock.Get(controller.HttpContext).Setup(it => it.Server.MapPath(CSS_FOLDER)).Returns(ABSOLUTEPATH);
+            Mock.Get(controller.HttpContext).Setup(it => it.Server.MapPath(JS_FOLDER)).Returns(ABSOLUTEPATH);
             Mock.Get(controller.Response).SetupAllProperties();
 
             controller.PathService = fakePathService;
@@ -45,7 +44,7 @@ namespace Tests.Unit.Controllers.CssControllerTests
 
         private void MockServices()
         {
-            fakeCssProviderService = Mock.Of<ICssProviderService>();
+            faKeJavaScriptProviderService = Mock.Of<IJavaScriptProviderService>();
             fakePathService = Mock.Of<IPathService>();
             fakeETagService = Mock.Of<IETagService>();
         }
@@ -56,7 +55,7 @@ namespace Tests.Unit.Controllers.CssControllerTests
             existsDirectory.Setup(c => c.Exists(UNEXISTING_PATH)).Returns(false);
         }
 
-        public void SetUpStubs_For_DirectoryExists_And_IdentificationBylEtag()
+        public void SetUpStubs_For_DirectoryExists_And_EtagIdentification()
         {
             var existsDirectory = Mock.Get(fakePathService);
             var getEtag = Mock.Get(fakeETagService);
@@ -67,8 +66,7 @@ namespace Tests.Unit.Controllers.CssControllerTests
             request.SetupGet(c => c.Headers).Returns(new System.Net.WebHeaderCollection { { "If-None-Match", ETAG } });
         }
 
-
-        public void SetUpStubs_For_DirectoryExists_IdentificationBylEtag_NotMatch_And_Unmodified()
+        public void SetUpStubs_For_DirectoryExists_UnmodifiedContent_And_EtagDontMatch()
         {
             var existsDirectory = Mock.Get(fakePathService);
             var request = Mock.Get(controller.Request);
@@ -81,14 +79,14 @@ namespace Tests.Unit.Controllers.CssControllerTests
 
         public void SetUpStubs_For_ReturningContentResult()
         {
-            var getCssService = Mock.Get(fakeCssProviderService);
+            var getJsService = Mock.Get(faKeJavaScriptProviderService);
             var existsDirectory = Mock.Get(fakePathService);
             var request = Mock.Get(controller.Request);
             var response = Mock.Get(controller.Response);
             var lastModified = Mock.Get(fakePathService);
             var responseCache = new Mock<HttpCachePolicyBase>();
-            
-            getCssService.Setup(c => c.GetCss(SITE)).Returns("abc");
+
+            getJsService.Setup(c => c.GetScript(SITE)).Returns("abc");
             existsDirectory.Setup(c => c.Exists(ABSOLUTEPATH)).Returns(true);
             request.SetupGet(c => c.Headers).Returns(new System.Net.WebHeaderCollection { { "If-Modified-Since", DateTime.UtcNow.AddDays(-2).ToString() } });
             lastModified.Setup(c => c.GetLastWriteTime(ABSOLUTEPATH)).Returns(DateTime.UtcNow);

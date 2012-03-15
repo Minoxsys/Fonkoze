@@ -5,9 +5,8 @@ using System.Text;
 using NUnit.Framework;
 using System.Web.Mvc;
 
-namespace Tests.Unit.Controllers.CssControllerTests
+namespace Tests.Unit.Controllers.JavaScriptControllerTests
 {
-    [TestFixture]
     public class IndexMethod
     {
         public ObjectMother objectMother = new ObjectMother();
@@ -20,7 +19,7 @@ namespace Tests.Unit.Controllers.CssControllerTests
         }
 
         [Test]
-        public void GetIndex_IfCssDirectoryDoesNotExist_Returns_StatusCode_404()
+        public void GetIndex_IfJavaScriptDirectoryDoesNotExist_Returns_StatusCode_404()
         {
             //Arrange
             objectMother.SetUpStubs_For_DirectoryDoesNotExist();
@@ -38,7 +37,7 @@ namespace Tests.Unit.Controllers.CssControllerTests
         public void GetIndex_IfETagHasNotBeenModified_Returns_StatusCode_304()
         {
             //Arrange
-            objectMother.SetUpStubs_For_DirectoryExists_And_IdentificationBylEtag();
+            objectMother.SetUpStubs_For_DirectoryExists_And_EtagIdentification();
 
             //Act
             var result = objectMother.controller.Index(SITE);
@@ -50,10 +49,10 @@ namespace Tests.Unit.Controllers.CssControllerTests
         }
 
         [Test]
-        public void GetIndex_IfContextHasNotBeenModified_Returns_StatusCode_304()
+        public void GetIndex_IfContentHasNotBeenModified_Returns_StatusCode_304()
         {
             //Arrange
-            objectMother.SetUpStubs_For_DirectoryExists_IdentificationBylEtag_NotMatch_And_Unmodified();
+            objectMother.SetUpStubs_For_DirectoryExists_UnmodifiedContent_And_EtagDontMatch();
 
             //Act
             var result = objectMother.controller.Index(SITE);
@@ -78,7 +77,7 @@ namespace Tests.Unit.Controllers.CssControllerTests
             var contentResult = (ContentResult)result;
             Assert.AreEqual("abc", contentResult.Content);
             Assert.AreEqual(Encoding.UTF8, contentResult.ContentEncoding);
-            Assert.AreEqual("text/css", contentResult.ContentType);
+            Assert.AreEqual("text/javascript", contentResult.ContentType);
         }
     }
 }

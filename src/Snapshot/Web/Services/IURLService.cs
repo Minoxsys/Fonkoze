@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace Web.Services.UrlService
+namespace Web.Services
 {
     public interface IURLService
     {

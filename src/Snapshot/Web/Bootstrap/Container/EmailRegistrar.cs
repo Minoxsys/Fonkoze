@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using Autofac;
-using Web.Services.EmailService;
+using Web.Services;
 
 namespace Web.Bootstrap.Container
 {

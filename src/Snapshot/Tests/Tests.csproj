@@ -191,6 +191,8 @@
     <Compile Include="Unit\Controllers\Areas\CampaignManagement\RequestScheduleController_Tests\EditMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\CampaignManagement\RequestScheduleController_Tests\GetListOfRequestSchedulesMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\CampaignManagement\RequestScheduleController_Tests\ObjectMother.cs" />
+    <Compile Include="Unit\Controllers\JavaScriptControllerTests\IndexMethod.cs" />
+    <Compile Include="Unit\Controllers\JavaScriptControllerTests\ObjectMother.cs" />
     <Compile Include="Unit\Controllers\RoleManagerControllerTests\CreateMethod.cs" />
     <Compile Include="Unit\Controllers\RoleManagerControllerTests\DeleteMethod.cs" />
     <Compile Include="Unit\Controllers\RoleManagerControllerTests\EditMethod.cs" />

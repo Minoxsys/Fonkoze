@@ -9,8 +9,7 @@ using System.IO;
 using System.Net;
 using Web.Bootstrap;
 using System.Security.Cryptography;
-using Web.Services.Paths;
-using Web.Services.Etag;
+using Web.Services;
 
 namespace Web.Controllers
 {

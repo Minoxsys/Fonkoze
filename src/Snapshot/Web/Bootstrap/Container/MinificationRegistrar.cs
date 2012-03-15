@@ -28,6 +28,7 @@ namespace Web.Bootstrap.Container
             container.RegisterType<CssConfigurationProviderService>().As < ICssProviderService>();//(CSS_COMPRESSION_SERVICE_NAME);
             container.RegisterType<JavaScriptConfigurationProviderService>().As<IJavaScriptProviderService>();//(JS_COMPRESSION_SERVICE_NAME);
 
+
         }
     }
 }

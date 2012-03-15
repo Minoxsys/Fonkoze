@@ -10,8 +10,6 @@ using Web.Areas.CampaignManagement.Models.Campaign;
 using Web.Areas.CampaignManagement.Models.ProductLevelRequest;
 using NHibernate;
 using Persistence.Queries.Outposts;
-using Web.Services.EmailService;
-using Web.Services.UrlService;
 
 namespace IntegrationTests.ProductLevelRequestMessagesDispatcherService_Integration_Test
 {

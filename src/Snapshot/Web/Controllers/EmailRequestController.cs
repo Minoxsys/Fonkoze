@@ -11,8 +11,7 @@ using Web.Security;
 using System.Text;
 using Web.Models.EmailRequest;
 using System.Web.Routing;
-using Web.Services.EmailService;
-using Web.Services.UrlService;
+using Web.Services;
 using Web.Bootstrap;
 
 namespace Web.Controllers

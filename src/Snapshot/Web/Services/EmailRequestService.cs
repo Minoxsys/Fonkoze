@@ -4,11 +4,9 @@ using System.Linq;
 using System.Web;
 using Web.Bootstrap;
 using Core.Persistence;
-using Web.Services.UrlService;
 using Domain;
 using Web.Models.EmailRequest;
 using System.Net.Mail;
-using Web.Services.EmailService;
 using Web.Helpers;
 using Web.Controllers;
 

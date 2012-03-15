@@ -2,22 +2,20 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using Web.Services.Paths;
+using Web.Services;
 using System.Text;
 using System.IO;
 using System.Security.Cryptography;
 
-namespace Web.Services.Etag
+namespace Web.Services
 {
     public class ETagService : IETagService
     {
-        public IPathService Path { get; set; }
-
         public string Generate(string absolutePath)
         {
             var stringBuilder = new StringBuilder();
 
-            string[] files = Path.GetDirectoryFiles(absolutePath);
+            string[] files = Directory.GetFiles(absolutePath);
 
             files.ToList().ForEach(file =>
             {

@@ -5,7 +5,7 @@ using System.Web;
 using System.Net.Mail;
 using Domain;
 
-namespace Web.Services.EmailService
+namespace Web.Services
 {
     public class EmailService : IEmailService
     {

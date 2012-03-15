@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Net.Mail;
 
-namespace Web.Services.EmailService
+namespace Web.Services
 {
     public interface IEmailService
     {

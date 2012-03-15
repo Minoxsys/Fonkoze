@@ -4,12 +4,11 @@ using System.Linq;
 using System.Web;
 using System.IO;
 
-namespace Web.Services.Paths
+namespace Web.Services
 {
     public interface IPathService
     {
         bool Exists(string absolutePath);
-        string[] GetDirectoryFiles(string absolutePath);
         DateTime GetLastWriteTime(string absolutePath);
     }
 }

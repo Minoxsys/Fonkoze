@@ -9,6 +9,7 @@ using System.IO;
 using System.Net;
 using System.Security.Cryptography;
 using Web.Bootstrap;
+using Web.Services;
 
 namespace Web.Controllers
 {
@@ -27,6 +28,8 @@ namespace Web.Controllers
         #region Fields
 
         private readonly IJavaScriptProviderService scriptProviderService;
+        public IPathService PathService {get; set;}
+        public IETagService ETagService {get; set;}
 
         #endregion
 
@@ -48,26 +51,17 @@ namespace Web.Controllers
         /// <returns></returns>
         public ActionResult Index(string group)
         {
-            string relativePath = JS_FOLDER;
-            string absolutePath = Server.MapPath(relativePath);
+            string absolutePath = Server.MapPath(JS_FOLDER);
 
-            if (!Directory.Exists(absolutePath))
+            if (!PathService.Exists(absolutePath))
             {
                 Response.StatusCode = (int)HttpStatusCode.NotFound;
                 Response.SuppressContent = true;
                 return new EmptyResult();
             }
-
-            // 304 (If-None-Match), a better test of uniqueness than modified date
-            string lEtag = GenerateETag(absolutePath);
-            if (BrowserIsRequestingFileIdentifiedBy(lEtag))
-            {
-                Response.StatusCode = (int)HttpStatusCode.NotModified;
-                Response.SuppressContent = true;
-                return new EmptyResult();
-            }
+                       
             // 304 (If-Last-Modified)
-            DateTime lLastModified = new DirectoryInfo(absolutePath).LastWriteTime;
+            DateTime lLastModified = PathService.GetLastWriteTime(absolutePath);
             if (BrowserIsRequestingFileUnmodifiedSince(lLastModified))
             {
                 Response.StatusCode = (int)HttpStatusCode.NotModified;
@@ -75,6 +69,14 @@ namespace Web.Controllers
                 return new EmptyResult();
             }
 
+            // 304 (If-None-Match), a better test of uniqueness than modified date
+            string lEtag = ETagService.Generate(absolutePath);
+            if (BrowserIsRequestingFileIdentifiedBy(lEtag))
+            {
+                Response.StatusCode = (int)HttpStatusCode.NotModified;
+                Response.SuppressContent = true;
+                return new EmptyResult();
+            }
             // 200 - OK
             AddCachingHeaders(lEtag, lLastModified, AppSettings.StaticFileHttpMaxAge);
 
@@ -142,31 +144,6 @@ namespace Web.Controllers
             }
 
             return fileDate.CompareTo(sinceDate) <= 0;
-        }
-
-        /// <summary>
-        /// Generates an ETag for the file by making a MD5 hash from the file content
-        /// </summary>
-        private static string GenerateETag(string absolutePath)
-        {
-            var stringBuilder = new StringBuilder();
-            Directory.GetFiles(absolutePath).ToList().ForEach(file =>
-                {
-                    using (var lFileStream = new FileStream(file, FileMode.Open, FileAccess.Read))
-                    {
-                        using (var lBinaryReader = new BinaryReader(lFileStream))
-                        {
-                            var cryptService = new MD5CryptoServiceProvider();
-                            byte[] hash = cryptService.ComputeHash(lBinaryReader.BaseStream);
-                            foreach (byte hex in hash)
-                            {
-                                stringBuilder.Append(hex.ToString("x2"));
-                            }
-
-                        }
-                    }
-                });
-            return stringBuilder.ToString();
         }
 
         private void AddCachingHeaders(string etag, DateTime lastModified, TimeSpan maxAge)

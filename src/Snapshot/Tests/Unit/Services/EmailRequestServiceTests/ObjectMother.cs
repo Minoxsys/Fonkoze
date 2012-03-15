@@ -6,9 +6,7 @@ using Domain;
 using Core.Persistence;
 using Rhino.Mocks;
 using System.Net.Mail;
-using Web.Services.EmailService;
 using Web.Controllers;
-using Web.Services.UrlService;
 using Web.Services;
 
 namespace Tests.Unit.Services.EmailRequestServiceTests
