@@ -180,6 +180,8 @@
     <Compile Include="Unit\Controllers\ClientManagerControllerTests\GetListOfClientsMethod.cs" />
     <Compile Include="Unit\Controllers\ClientManagerControllerTests\ObjectMother.cs" />
     <Compile Include="Unit\Controllers\ClientManagerControllerTests\Overview.cs" />
+    <Compile Include="Unit\Controllers\CssControllerTests\IndexMethod.cs" />
+    <Compile Include="Unit\Controllers\CssControllerTests\ObjectMother.cs" />
     <Compile Include="Unit\Controllers\EmailRequestControllerTests\CreateMethod.cs" />
     <Compile Include="Unit\Controllers\EmailRequestControllerTests\ObjectMother.cs" />
     <Compile Include="Unit\Controllers\EmailRequestControllerTests\ResponseMethod.cs" />

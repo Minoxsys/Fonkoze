@@ -260,6 +260,8 @@
     <Compile Include="Areas\StockAdministration\Models\Product\ProductIndexOutputModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\Product\ProductInputModel.cs" />
     <Compile Include="BackgroundJobs\ExecutedCampaign.cs" />
+    <Compile Include="Bootstrap\Container\DirectoryRegistrar.cs" />
+    <Compile Include="Bootstrap\Container\ETagRegistrar.cs" />
     <Compile Include="Helpers\ConvertHelper.cs" />
     <Compile Include="Models\Shared\ToModalJsonActionResponse.cs" />
     <Compile Include="Areas\StockAdministration\Models\Product\ProductModel.cs" />
@@ -377,9 +379,13 @@
     <Compile Include="Security\AuthenticateUser.cs" />
     <Compile Include="Security\RequiresAttribute.cs" />
     <Compile Include="Security\SecurePassword.cs" />
+    <Compile Include="Services\Paths\PathService.cs" />
+    <Compile Include="Services\Paths\IPathService.cs" />
     <Compile Include="Services\EmailRequestService.cs" />
     <Compile Include="Services\EmailService\EmailService.cs" />
     <Compile Include="Services\EmailService\IEmailService.cs" />
+    <Compile Include="Services\Etag\IETagService.cs" />
+    <Compile Include="Services\Etag\ETagService.cs" />
     <Compile Include="Services\FileService.cs" />
     <Compile Include="Services\HttpService.cs" />
     <Compile Include="Services\IHttpService.cs" />

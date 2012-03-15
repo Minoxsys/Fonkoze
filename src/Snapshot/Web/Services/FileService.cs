@@ -30,7 +30,7 @@ namespace Web.Services
         public DataTable GetDataTable(string filePath)
         {
             string file = Path.GetFileName(filePath);
-            string dir = Path.GetDirectoryName(filePath);
+            string dir = Path.GetFileName(filePath);
 
             //string connString = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + dir.Trim() + ";Extended Properties=\"Excel8.0;HDR=Yes;IMEX=1\";";
             string connString = "Driver={Microsoft Text Driver (*.txt; *.csv)}; Dbq=" + dir.Trim() + "; Extensions=asc,csv,tab,txt; HDR=Yes; Security Info=False";

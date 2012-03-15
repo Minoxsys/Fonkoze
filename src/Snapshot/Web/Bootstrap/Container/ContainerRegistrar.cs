@@ -44,6 +44,9 @@ namespace Web.Bootstrap.Container
 
             QueryOutpostsRegistrar.Register(container);
 
+            DirectoryRegistrar.Register(container);
+
+            ETagRegistrar.Register(container);
 
 
             container.RegisterSource(new AnyConcreteTypeNotAlreadyRegisteredSource(type =>
