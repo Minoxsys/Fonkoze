@@ -61,6 +61,7 @@
     <Compile Include="DeleteExtensions.cs" />
     <Compile Include="13_EmailRequest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="15_ProductLevelRequestDetail.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

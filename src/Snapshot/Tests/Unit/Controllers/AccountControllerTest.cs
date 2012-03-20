@@ -56,8 +56,7 @@ namespace UnitTests.Controllers
 			// Assert
 			Assert.IsInstanceOf<RedirectToRouteResult>(result);
 			RedirectToRouteResult redirectResult = (RedirectToRouteResult)result;
-			Assert.AreEqual("Home", redirectResult.RouteValues["controller"]);
-			Assert.AreEqual("Index", redirectResult.RouteValues["action"]);
+			Assert.AreEqual("LogOn", redirectResult.RouteValues["action"]);
 			Assert.IsTrue(((MockFormsAuthenticationService)controller.FormsService).SignOut_WasCalled);
 		}
 

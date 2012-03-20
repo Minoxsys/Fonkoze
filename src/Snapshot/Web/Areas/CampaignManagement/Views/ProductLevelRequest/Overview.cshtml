@@ -31,7 +31,8 @@
 
 </script>
 @{
-	Html.RenderPartial("_CreateProductLevelRequest");   
+	Html.RenderPartial("_CreateProductLevelRequest");
+    Html.RenderPartial("_ProductLevelDetail");   
 }
 <script type="text/javascript">
 	window.feature.models = {};
@@ -117,6 +118,12 @@
 	Ext.onReady(function () {
 		window.feature.gridStore = new window.feature.stores.ProductLevelRequest();
 
+        Ext.QuickTips.init();
+
+        function addTooltip(val, meta, rec, rowIdx, colIdx, ds){
+            meta.tdAttr = 'data-qtip="' + _t("Click to view details") +'"' ;
+            return '<u>'+val+'</u>';
+        };  
 		window.feature.grid = Ext.create('Ext.grid.Panel', {
 			flex: 1,
 			cls: 'white-border',
@@ -126,6 +133,19 @@
 					header: 'Campaign',
                     menuDisabled:true,
                     flex:1,
+                    renderer: addTooltip,
+                    processEvent: function (type, view, cell, recordIndex, cellIndex, e) {
+						if (type == 'click'){
+                            var rec = view.panel.store.getAt(recordIndex);
+                            var productDetailWindow = new window.feature.productLevelRequestDetail({
+                                productLevelRequestId:rec.get('Id')
+                            });
+                            productDetailWindow.show();
+                            
+							return false;
+						}
+						return true;
+					},
 					dataIndex: 'Campaign'
 				},{
 					header: 'Start Date',

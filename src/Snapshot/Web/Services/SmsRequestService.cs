@@ -15,7 +15,6 @@ namespace Web.Services
     {
         public const string MESSAGE_NOT_DELIVERED = "Message not delivered";
         public const string SMS_UPDATED_METHOD = "SMS";
-        private const string SMS_MESSAGE_TEMPLATE = "Please provide current stock level for product group {0} using format\n{1} {2}";
 
         private IQueryService<Outpost> queryServiceOutpost;
         private IQueryService<ProductGroup> queryServiceProductGroup;
@@ -27,11 +26,13 @@ namespace Web.Services
         private ISaveOrUpdateCommand<OutpostStockLevel> saveCommandOutpostStockLevel;
 
         public ISmsGatewayService smsGatewayService;
+        private FormattingStrategy formattingStrategy;
 
         public SmsRequestService(IQueryService<Outpost> queryServiceOutpost, IQueryService<ProductGroup> queryServiceProductGroup,
             IQueryService<OutpostStockLevel> queryServiceStockLevel, IQueryService<SmsRequest> queryServiceSmsRequest, 
             ISaveOrUpdateCommand<SmsRequest> saveCommandSmsRequest, IOutpostStockLevelService outpostStockLevelService, 
-            ISaveOrUpdateCommand<OutpostStockLevel> saveCommandOutpostStockLevel, ISmsGatewayService smsGatewayService)
+            ISaveOrUpdateCommand<OutpostStockLevel> saveCommandOutpostStockLevel, ISmsGatewayService smsGatewayService,
+            FormattingStrategy formattingStrategy)
         {
             this.queryServiceOutpost = queryServiceOutpost;
             this.queryServiceProductGroup = queryServiceProductGroup;
@@ -41,57 +42,9 @@ namespace Web.Services
             this.outpostStockLevelService = outpostStockLevelService;
             this.saveCommandOutpostStockLevel = saveCommandOutpostStockLevel;
             this.smsGatewayService = smsGatewayService;
+            this.formattingStrategy = formattingStrategy;
         }
 
-        public SmsRequest CreateSmsRequestUsingOutpostIdAndProductGroupIdForClient(Guid outpostId, Guid productGroupId, Client client)
-        {
-            Outpost outpost = queryServiceOutpost.Load(outpostId);
-            ProductGroup productGroup = queryServiceProductGroup.Load(productGroupId);
-
-            SmsRequest smsRequest = new SmsRequest();
-            string numbers = GetNumberFromOutpost(outpost);
-
-            if (!string.IsNullOrEmpty(numbers))
-            {
-                smsRequest.Client = client;
-                smsRequest.Number = numbers;
-                smsRequest.OutpostId = outpostId;
-                smsRequest.ProductGroupId = productGroupId;
-                smsRequest.ProductGroupReferenceCode = productGroup.ReferenceCode;
-
-                smsRequest.Message = MESSAGE_NOT_DELIVERED;
-                saveCommandSmsRequest.Execute(smsRequest);
-
-                smsRequest.Message = string.Format(SMS_MESSAGE_TEMPLATE, productGroup.Name, productGroup.ReferenceCode, GetProductReferenceCodesAndStockLevelsFromOutpostAndProductGroup(outpostId, productGroupId));
-                saveCommandSmsRequest.Execute(smsRequest);
-            }
-
-            return smsRequest;
-        }
-
-        private SmsRequest CreateSmsRequestUsingOutpostIProductGroupAndProductModelsForClient(Guid outpostId, ProductGroup productGroup, ProductModel[] productModels, Client client)
-        {
-            SmsRequest smsRequest = new SmsRequest();
-            Outpost outpost = queryServiceOutpost.Load(outpostId);
-            string numbers = GetNumberFromOutpost(outpost);
-
-            if (!string.IsNullOrEmpty(numbers))
-            {
-                smsRequest.Client = client;
-                smsRequest.Number = numbers;
-                smsRequest.OutpostId = outpostId;
-                smsRequest.ProductGroupId = productGroup.Id;
-                smsRequest.ProductGroupReferenceCode = productGroup.ReferenceCode;
-
-                smsRequest.Message = MESSAGE_NOT_DELIVERED;
-                saveCommandSmsRequest.Execute(smsRequest);
-
-                smsRequest.Message = string.Format(SMS_MESSAGE_TEMPLATE, productGroup.Name, productGroup.ReferenceCode, GetProductReferenceCodesAndStockLevelsFromOutpostAndProductGroupFilteredByProductModel(outpostId, productGroup.Id, productModels));
-                saveCommandSmsRequest.Execute(smsRequest);
-            }
-
-            return smsRequest;
-        }
 
         public void UpdateOutpostStockLevelsWithValuesReceivedBySms(SmsReceived smsReceived)
         {
@@ -105,7 +58,7 @@ namespace Web.Services
 
         public bool SendProductLevelRequestMessage(ProductLevelRequestMessageInput input)
         {
-            if ((input.Products.Count > 0) && input.Contact.ContactType.Equals(Contact.MOBILE_NUMBER_CONTACT_TYPE))
+            if ((input.Products.Count > 0) && input.Contact != null && input.Contact.ContactType.Equals(Contact.MOBILE_NUMBER_CONTACT_TYPE))
             {
                 SmsRequest smsRequest = new SmsRequest();
 
@@ -118,10 +71,7 @@ namespace Web.Services
                 smsRequest.Message = MESSAGE_NOT_DELIVERED;
                 saveCommandSmsRequest.Execute(smsRequest);
 
-                StringBuilder productReferenceCodes = new StringBuilder();
-                input.Products.ForEach(p => productReferenceCodes.Append(p.SMSReferenceCode + "0"));
-
-                smsRequest.Message = string.Format(SMS_MESSAGE_TEMPLATE, input.ProductGroup.Name, input.ProductGroup.ReferenceCode, productReferenceCodes);
+                smsRequest.Message = formattingStrategy.FormatSms(input);
                 saveCommandSmsRequest.Execute(smsRequest);
 
                 try
@@ -137,36 +87,6 @@ namespace Web.Services
             return false;
         }
 
-        private string GetProductReferenceCodesAndStockLevelsFromOutpostAndProductGroupFilteredByProductModel(Guid outpostId, Guid productGroupId, ProductModel[] productModels)
-        {
-            StringBuilder result = new StringBuilder();
-            var stockLevels = GetOutpostStockLevelsByOutpostAndProductGroup(outpostId, productGroupId);
-
-            List<string> productNames = new List<string>();
-
-            foreach (ProductModel productModel in productModels)
-            {
-                if (productModel.Selected)
-                {
-                    productNames.Add(productModel.ProductItem);
-                }
-            }
-
-            stockLevels.Where(s => productNames.Contains(s.Product.Name)).ToList().ForEach(stockLevelItem => result.Append(stockLevelItem.Product.SMSReferenceCode + "0"));
-
-            return result.ToString();
-        }
-
-        private OptionsModel ConvertFromJson(string json)
-        {
-            System.Web.Script.Serialization.JavaScriptSerializer serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
-            return serializer.Deserialize<OptionsModel>(json);
-        }
-
-        private string ByteArrayToStr(byte[] bites)
-        {
-            return System.Text.Encoding.UTF8.GetString(bites);
-        }
 
         private List<OutpostStockLevel> GetOutpostStockLevelsByProductGroupReferenceAndPhoneNumber(string productGroupReferenceCode, string phoneNumber)
         {
@@ -181,20 +101,6 @@ namespace Web.Services
             return stockLevels;
         }
 
-        private string GetNumberFromOutpost(Outpost outpost)
-        {
-            Contact contact = outpost.Contacts.Where(c => c.IsMainContact && c.ContactType.Equals(Contact.MOBILE_NUMBER_CONTACT_TYPE)).FirstOrDefault();
-            return contact != null ? contact.ContactDetail : string.Empty;
-        }
-
-        private string GetProductReferenceCodesAndStockLevelsFromOutpostAndProductGroup(Guid outpostId, Guid productGroupId)
-        {
-            StringBuilder result = new StringBuilder();
-            var stockLevels = GetOutpostStockLevelsByOutpostAndProductGroup(outpostId, productGroupId);
-            stockLevels.ForEach(stockLevelItem => result.Append(stockLevelItem.Product.SMSReferenceCode + "0"));
-
-            return result.ToString();
-        }
 
         private List<OutpostStockLevel> GetOutpostStockLevelsByOutpostAndProductGroup(Guid outpostId, Guid productGroupId)
         {

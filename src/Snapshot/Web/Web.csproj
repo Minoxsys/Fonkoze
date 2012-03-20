@@ -149,6 +149,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Areas\CampaignManagement\Controllers\ExistingRequestsController.cs" />
+    <Compile Include="Areas\CampaignManagement\Models\ProductLevelRequest\GetProductLevelRequestDetailsModel.cs" />
+    <Compile Include="Areas\CampaignManagement\Models\ProductLevelRequest\ProductLevelDetailModel.cs" />
     <Compile Include="Areas\CampaignManagement\Models\ExistingRequests\GetExistingRequestModel.cs" />
     <Compile Include="Areas\CampaignManagement\Models\ExistingRequests\GetExistingRequestsInput.cs" />
     <Compile Include="Areas\CampaignManagement\Models\ExistingRequests\GetExistingRequestsOutput.cs" />
@@ -379,6 +381,8 @@
     <Compile Include="Security\AuthenticateUser.cs" />
     <Compile Include="Security\RequiresAttribute.cs" />
     <Compile Include="Security\SecurePassword.cs" />
+    <Compile Include="Services\FormattingStrategy.cs" />
+    <Compile Include="Services\GenerateProductLevelDetailsCommand.cs" />
     <Compile Include="Services\PathService.cs" />
     <Compile Include="Services\IPathService.cs" />
     <Compile Include="Services\EmailRequestService.cs" />
@@ -392,11 +396,11 @@
     <Compile Include="Services\IImportService.cs" />
     <Compile Include="Services\IProductLevelRequestMessageSenderService.cs" />
     <Compile Include="Services\IOutpostStockLevelService.cs" />
-    <Compile Include="Services\IProductFilter.cs" />
     <Compile Include="Services\IProductLevelRequestMessagesDispatcherService.cs" />
     <Compile Include="Services\ISmsGatewayService.cs" />
     <Compile Include="Services\ISmsGatewaySettingsService.cs" />
     <Compile Include="Services\ISmsRequestService.cs" />
+    <Compile Include="Services\ProcessProductLevelRequestStrategy.cs" />
     <Compile Include="Services\ProductLevelRequestMessagesDispatcherService.cs" />
     <Compile Include="Services\ProductLevelRequestMessageInput.cs" />
     <Compile Include="Services\OutpostStockLevelService.cs" />
@@ -408,6 +412,7 @@
     <Compile Include="Services\SmsReceived.cs" />
     <Compile Include="Services\SmsRequestService.cs" />
     <Compile Include="Services\IURLService.cs" />
+    <Compile Include="Services\StoreProductLevelRequestDetailService.cs" />
     <Compile Include="Services\URLService.cs" />
     <Compile Include="Validation\Account\MembershipStatusCodeConverter.cs" />
     <Compile Include="Validation\Account\PropertiesMustMatchAttribute.cs" />
@@ -2157,6 +2162,7 @@
     <Content Include="Areas\AnalysisManagement\Views\ReportDistrictLevel\Overview.cshtml" />
     <Content Include="Areas\CampaignManagement\Views\Shared\_CampaignManagementSideBar.cshtml" />
     <Content Include="Areas\CampaignManagement\Views\ExistingRequests\Overview.cshtml" />
+    <Content Include="Areas\CampaignManagement\Views\ProductLevelRequest\_ProductLevelDetail.cshtml" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\core\_core.scss" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\core\_reset.scss" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\layout\_layout.scss" />

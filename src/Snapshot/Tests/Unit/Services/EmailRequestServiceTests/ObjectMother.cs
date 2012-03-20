@@ -56,7 +56,7 @@ namespace Tests.Unit.Services.EmailRequestServiceTests
             emailService = MockRepository.GenerateMock<IEmailService>();
 
 
-            emailRequestService = new EmailRequestService(saveOrUpdateCommandEmailRequest, urlService, emailService);
+            emailRequestService = new EmailRequestService(saveOrUpdateCommandEmailRequest, urlService, emailService, new FormattingStrategy());
         }
 
         public void SetUp_StubData()

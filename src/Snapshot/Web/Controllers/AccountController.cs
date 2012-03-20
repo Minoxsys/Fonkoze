@@ -95,34 +95,6 @@ namespace Web.Controllers
 			return View(model);
 		}
 
-		private bool AllowDemo(string username)
-		{
-			if (username == "admin")
-			{
-				return true;
-			}
-			return false;
-	
-		}
-
-		private void CreateUserIfNotFound( string userName )
-		{
-			var user = QueryUser.Query(new UserByUserName(userName)).SingleOrDefault();
-
-			if (user == default(User))
-			{
-				/// this is just a stub at this time, 
-				/// the real workflow should involve
-				/// someone from ITSupport or HR.
-				SaveUser.Execute(new User
-				{
-					UserName = userName
-
-				});			
-			
-			}
-			
-		}
 
 		// **************************************
 		// URL: /Account/LogOff
@@ -132,7 +104,7 @@ namespace Web.Controllers
 		{
 			FormsService.SignOut();
 
-			return RedirectToAction("Index", "Home", "Default");
+            return RedirectToAction("LogOn");
 		}
 
 		

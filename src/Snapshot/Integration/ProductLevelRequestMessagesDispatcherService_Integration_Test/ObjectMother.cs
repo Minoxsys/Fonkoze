@@ -137,13 +137,16 @@ namespace IntegrationTests.ProductLevelRequestMessagesDispatcherService_Integrat
 
             IProductLevelRequestMessageSenderService smsRequestService = new SmsRequestService(queryServiceOutpost, queryServiceProductGroup, queryServiceOutpostStockLevel,
                 queryServiceSmsRequest, new SaveCommandSmsRequest(this), outpostStockLevelService, saveOrUpdateOutpostStockLevel,
-                new SmsGatewayService(new SmsGatewaySettingsService(), new HttpService(), queryOutposts, queryServiceContact));
+                new SmsGatewayService(new SmsGatewaySettingsService(), new HttpService(), queryOutposts, queryServiceContact),
+                new FormattingStrategy());
 
             urlService = MockRepository.GenerateMock<IURLService>();
 
-            EmailRequestService emailRequestService = new EmailRequestService(new SaveCommandEmailRequest(this), urlService, new EmailService());
+            EmailRequestService emailRequestService = new EmailRequestService(new SaveCommandEmailRequest(this), urlService, new EmailService(), new FormattingStrategy());
 
-            service = new ProductLevelRequestMessagesDispatcherService(queryServiceOutpost, queryServiceContact, queryServiceOutpostStockLevel,
+            service = new ProductLevelRequestMessagesDispatcherService(
+                new ProcessProductLevelRequestStrategy(queryServiceContact, queryServiceOutpostStockLevel, queryServiceOutpost),
+
                 saveOrUpdateRequestRecord, new List<IProductLevelRequestMessageSenderService> { smsRequestService, emailRequestService });
         }
 

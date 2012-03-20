@@ -23,5 +23,13 @@ namespace Tests.Unit.Controllers.Areas.CampaignManagement.ProductLevelRequest_Te
 
             _.VerifyEditExpectations(input);
         }
+
+        [Test]
+        public void Generates_ProductLevelRequestDetails()
+        {
+
+            _.controller.Edit(_.EditInput());
+            _.VerifyProductLevelRequestDetailsGenerated();
+        }
     }
 }

@@ -58,30 +58,7 @@ namespace Web.Controllers
             return View(model);
         }
 
-        [HttpPost]
-        public ActionResult Create(SmsRequestCreateModel model)
-        {
-            LoadUserAndClient();
-
-            if (!ModelState.IsValid)
-                return View("Create", model);
-
-            if (model.Outpost.Id.Equals(Guid.Empty) || model.ProductGroup.Id.Equals(Guid.Empty))
-            {
-                return RedirectToAction("Create", model);
-            }
-
-            SmsRequest smsRequest = SmsRequestService.CreateSmsRequestUsingOutpostIdAndProductGroupIdForClient(model.Outpost.Id, model.ProductGroup.Id, _client);
-
-            if (smsRequest.Id.Equals(Guid.Empty))
-            {
-                return RedirectToAction("Index", "Home");
-            }
-            
-            string result = SmsGatewayService.SendSmsRequest(smsRequest);
-
-            return RedirectToAction("Overview", "SmsRequest");
-        }
+   
 
         public ActionResult ReceiveSms(string sender, string content, string inNumber, string email, string credits)
         {

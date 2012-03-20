@@ -184,7 +184,6 @@
         extend: 'Ext.window.Window',
         modal: true,
         ui: 'snapshot-popup-window',
-        cls: 'white-border',
         height: 600,
         width: 1200,
         bodyPadding: '20 10 10 10',
@@ -229,6 +228,7 @@
             me.items = [
                 {
                     xtype: 'panel',
+                    cls: 'white-border',
                     layout: {
                         type: 'vbox',
                         align: 'stretch'
@@ -281,10 +281,12 @@
                                 {
                                     header: 'Product Item',
                                     dataIndex: 'ProductItem',
+                                    menuDisabled:true,
                                     flex: 1
                                 }, {
                                     header: 'SMS Code',
                                     dataIndex: 'SmsCode',
+                                    menuDisabled:true,
                                     flex: 1
                                 }, {
                                     xtype: 'checkcolumn',
@@ -295,6 +297,7 @@
                                         }
                                     },
                                     header: 'Selected',
+                                    menuDisabled:true,
                                     dataIndex: 'Selected'
                                 }
                             ],
@@ -314,19 +317,24 @@
                                 {
                                     header: 'Schedule',
                                     dataIndex: 'ScheduleName',
+                                    menuDisabled:true,
                                     flex: 1
                                 }, {
                                     header: 'Basis',
+                                    menuDisabled:true,
                                     dataIndex: 'Basis'
                                 }, {
                                     header: 'Frequency',
+                                    menuDisabled:true,
                                     dataIndex: 'Frequency'
                                 }, {
                                     header: 'Reminders',
                                     flex: 1,
+                                    menuDisabled:true,
                                     dataIndex: 'RemindersDisplay'
                                 }, {
                                     xtype: 'checkcolumn',
+                                    menuDisabled:true,
                                     listeners: {
                                         'checkchange': function (column, rowIndex, value) {
                                             if (value) {

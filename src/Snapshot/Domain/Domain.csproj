@@ -51,6 +51,7 @@
     <Compile Include="OutpostStockLevel.cs" />
     <Compile Include="OutpostHistoricalStockLevel.cs" />
     <Compile Include="ProductLevelRequest.cs" />
+    <Compile Include="ProductLevelRequestDetail.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RawSmsReceived.cs" />
     <Compile Include="Region.cs" />

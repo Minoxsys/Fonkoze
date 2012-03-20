@@ -81,7 +81,8 @@ namespace Tests.Unit.Services.SmsRequestServiceTest
             outpostStockLevelService = new OutpostStockLevelService(saveCommandOutpostHistoricalStockLevel);
 
             smsRequestService = new SmsRequestService(queryServiceOutpost, queryServiceProductGroup, queryServiceStockLevel, queryServiceSmsRequest,
-                saveCommandSmsRequest, outpostStockLevelService, saveCommandOutpostStockLevel, smsGatewayService);
+                saveCommandSmsRequest, outpostStockLevelService, saveCommandOutpostStockLevel, smsGatewayService,
+                new FormattingStrategy());
         }
 
         public void Setup_Stub_Data()
@@ -213,6 +214,30 @@ namespace Tests.Unit.Services.SmsRequestServiceTest
                 ProductGroup = productGroup,
                 Products = new Product[] { product }.ToList()
             };
+        }
+
+        internal ProductLevelRequestMessageInput ProductLevelRequestMessageInputWithoutContact()
+        {
+            Product product = MockRepository.GeneratePartialMock<Product>();
+            product.Stub(p => p.Id).Return(productId);
+            product.SMSReferenceCode = SMS_REFERENCE_CODE;
+            product.Name = PRODUCT_NAME;
+            product.ProductGroup = productGroup;
+
+            var input = new ProductLevelRequestMessageInput
+            {
+                Client = client,
+
+                Contact = null,
+
+                Outpost = outpost,
+                ProductGroup = productGroup,
+                Products = new Product[] {
+                   product
+                }.ToList()
+            };
+
+            return input;
         }
     }
 }

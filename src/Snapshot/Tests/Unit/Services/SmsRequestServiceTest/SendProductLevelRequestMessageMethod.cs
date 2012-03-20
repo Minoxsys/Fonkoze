@@ -90,5 +90,20 @@ namespace Tests.Unit.Services.SmsRequestServiceTest
             _.smsGatewayService.AssertWasNotCalled(call => call.SendSmsRequest(Arg<SmsRequest>.Is.Anything));
             Assert.IsFalse(sent);
         }
+
+        [Test]
+        public void Given_An_ProductLevelRequestMessageInput_With_No_Contact_The_Method_Will_Generate_Nothing()
+        {
+
+            // Arrange
+
+            // Act
+            var sent = _.smsRequestService.SendProductLevelRequestMessage(_.ProductLevelRequestMessageInputWithoutContact());
+
+            // Assert
+            _.saveCommandSmsRequest.AssertWasNotCalled(call => call.Execute(Arg<SmsRequest>.Is.Anything));
+            _.smsGatewayService.AssertWasNotCalled(call => call.SendSmsRequest(Arg<SmsRequest>.Is.Anything));
+            Assert.IsFalse(sent);
+        }
     }
 }

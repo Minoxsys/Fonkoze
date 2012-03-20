@@ -18,14 +18,18 @@ namespace Web.Services
         private const string _subject = "Stock Request";
         private const bool _isBodyHtml = true;
 
-        private ISaveOrUpdateCommand<EmailRequest> saveOrUpdateCommand { get; set; }
-        private IURLService urlService { get; set; }
-        public IEmailService emailService { get; set; }
-        public EmailRequestService(ISaveOrUpdateCommand<EmailRequest> saveOrUpdateCommand, IURLService urlService, IEmailService emailService)
+        private ISaveOrUpdateCommand<EmailRequest> saveOrUpdateCommand;
+        private IURLService urlService;
+        public IEmailService emailService;
+        private FormattingStrategy formattingStrategy;
+
+        public EmailRequestService(ISaveOrUpdateCommand<EmailRequest> saveOrUpdateCommand, IURLService urlService, IEmailService emailService,
+            FormattingStrategy formattingStrategy)
         {
             this.saveOrUpdateCommand = saveOrUpdateCommand;
             this.urlService = urlService;
             this.emailService = emailService;
+            this.formattingStrategy = formattingStrategy;
         }
 
 
@@ -89,10 +93,11 @@ namespace Web.Services
 
             string url = urlService.GetEmailLinkUrl(encodedData);
             string link = "<a href='" + url + "'> link </a>";
-            string body = "Please update the stock information for product group <b>" + productGroupName + "</b> at this " + link;
+            string body = formattingStrategy.FormatEmail(productGroupName, link);
 
             return body;
         }
+
 
     }
 }

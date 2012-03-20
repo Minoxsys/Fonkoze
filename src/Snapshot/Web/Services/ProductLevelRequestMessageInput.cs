@@ -15,5 +15,7 @@ namespace Web.Services
         public Client Client { get; set; }
         public User ByUser { get; set; }
         public List<Product> Products { get; set; }
+
+        public ProductLevelRequest ProductLevelRequest { get; set; }
     }
 }

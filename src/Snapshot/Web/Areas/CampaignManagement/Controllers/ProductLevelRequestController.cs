@@ -1,17 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Web.Mvc;
-using Core.Services;
-using Domain;
-using Core.Persistence;
 using Core.Domain;
+using Core.Persistence;
+using Core.Security;
+using Domain;
 using Web.Areas.CampaignManagement.Models.ProductLevelRequest;
 using Web.Models.Shared;
-using System.Collections.Generic;
-using System.Text;
 using Web.Security;
 using Web.Services;
-using Core.Security;
 
 namespace Web.Areas.CampaignManagement.Controllers
 {
@@ -34,12 +33,16 @@ namespace Web.Areas.CampaignManagement.Controllers
 
         public IQueryService<ProductLevelRequest> QueryProductLevelRequests { get; set; }
 
+        public IQueryService<ProductLevelRequestDetail> QueryProductLevelRequestDetails { get; set; }
+
         public ISaveOrUpdateCommand<ProductLevelRequest> SaveProductLevelRequest { get; set; }
 
         public ISaveOrUpdateCommand<Campaign> SaveCampaign { get; set; }
 
         public IProductLevelRequestMessagesDispatcherService DispatcherService { get; set; }
         public IPermissionsService PermissionService { get; set; }
+
+        public GenerateProductLevelDetailsCommand GenerateProductLevelRequestDetails { get; set; }
 
         private const String PRODUCTLEVELREQUEST_ADD_PERMISSION = "ProductLevelRequest.Edit";
         private const String PRODUCTLEVELREQUEST_STOP_PERMISSION = "ProductLevelRequest.Stop";
@@ -82,6 +85,8 @@ namespace Web.Areas.CampaignManagement.Controllers
                 DispatcherService.DispatchMessagesForProductLevelRequest(productLevelRequest);
             }
 
+            GenerateProductLevelRequestDetails.Execute(productLevelRequest);
+
             return Json(new JsonActionResponse
             {
                 Status="Success",
@@ -109,6 +114,7 @@ namespace Web.Areas.CampaignManagement.Controllers
 			productLevelRequest.StoreProducts<ProductModel[]>(editProductLevelRequestInput.Products);
 
 			SaveProductLevelRequest.Execute(productLevelRequest);
+            GenerateProductLevelRequestDetails.Execute(productLevelRequest);
 
 			return Json(new JsonActionResponse
 			{
@@ -300,6 +306,35 @@ namespace Web.Areas.CampaignManagement.Controllers
             this._client = LoadClient.Load(clientId);
         }
 
+
+        public JsonResult GetProductLevelRequestDetails(Guid? productLevelRequestId)
+        {
+            var results = QueryProductLevelRequestDetails.Query().Where(p => p.ProductLevelRequestId == productLevelRequestId.Value).Select(it=>
+               new ProductLevelDetailModel
+               {
+                   OutpostName=it.OutpostName,
+                   ProductGroupName = it.ProductGroupName,
+                   Method = it.Method,
+                   RequestMessage= it.RequestMessage,
+                   Updated = it.Updated.Value.ToString("dd-MMM-yyyy HH:mm:ss")
+                   
+               }
+                ).ToArray();
+
+            return Json(new GetProductLevelRequestDetailsModel{ ProductLevelRequestDetails = results }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        [Requires(Permissions="ProductLevelRequest.View")]
+        public EmptyResult RecalculateProductLevelRequestDetails(Guid? productLevelRequestId)
+        {
+
+            var productLevelRequest = QueryProductLevelRequests.Load(productLevelRequestId.Value);
+
+            GenerateProductLevelRequestDetails.Execute(productLevelRequest);
+
+            return new EmptyResult();
+        }
 
 
     }

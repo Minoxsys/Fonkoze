@@ -82,8 +82,6 @@
   <ItemGroup>
     <Compile Include="ProductLevelRequestMessagesDispatcherService_Integration_Test\ObjectMother.cs" />
     <Compile Include="ProductLevelRequestMessagesDispatcherService_Integration_Test\SendProductLevelRequestMessageMethod.cs" />
-    <Compile Include="SmsGateway_Integration_Test\ObjectMother.cs" />
-    <Compile Include="SmsGateway_Integration_Test\SendSmsMethod.cs" />
     <Compile Include="When_Loading_A_Country_It_ShouldAlsoBring_TheRegionNo_InOneQuery.cs" />
     <Compile Include="When_Retrieving_TheAssigned_Products_For_ProductGroup_On_OutpostStockLevel.cs" />
     <Compile Include="When_WeWantToPersiste_An_OutpostStockLevel.cs" />

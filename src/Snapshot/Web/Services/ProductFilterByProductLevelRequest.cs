@@ -8,7 +8,7 @@ using Web.Areas.CampaignManagement.Models.ProductLevelRequest;
 
 namespace Web.Services
 {
-    public class ProductFilterByProductLevelRequest : IProductFilter
+    public class ProductFilterByProductLevelRequest
     {
         private List<ProductModel> productModels;
         private ProductLevelRequest productLevelRequest;
@@ -21,7 +21,7 @@ namespace Web.Services
 
         public bool CheckProduct(Product product)
         {
-            var foundObject = (ProductModel)productModels.Where(p => p.Selected && p.ProductItem.Equals(product.Name)).FirstOrDefault();
+            var foundObject = productModels.Where(p => p.Selected && p.ProductItem.Equals(product.Name)).FirstOrDefault();
 
             return foundObject != null;
         }

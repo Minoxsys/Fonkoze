@@ -11,8 +11,6 @@ namespace Migrations
     {
         public override void Down()
         {
-            Delete.RemoveForeignKey("EmailRequests", "ProductGroupId", "ProductGroups");
-            Delete.RemoveForeignKey("EmailRequests", "OutpostId", "Outposts");
             Delete.RemoveForeignKey("EmailRequests");
             Delete.RemoveClientForeignKey("EmailRequests");
 
@@ -30,8 +28,6 @@ namespace Migrations
 
             Create.AddClientForeignKey("EmailRequests");
             Create.AddForeignKey("EmailRequests");
-            Create.AddForeignKey("EmailRequests", "OutpostId", "Outposts");
-            Create.AddForeignKey("EmailRequests", "ProductGroupId", "ProductGroups");
         }
     }
 }
