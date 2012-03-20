@@ -36,14 +36,9 @@ namespace Web.Bootstrap.Container
             
             container.RegisterGeneric( typeof(NHibernateQueryService<>)).As(typeof(IQueryService<>));
 
-            container.RegisterType<NHibernateQueryRegion>().As<IQueryRegion>();
-
-            container.RegisterType<NHibernateQueryDistrict>().As<IQueryDistrict>();
-
-            container.RegisterType<NHibernateQueryProduct>().As<IQueryProduct>();
-
-            container.RegisterType<NHibernateQueryRole>().As<IQueryRole>();
-            
+            container.RegisterAssemblyTypes(typeof(NHibernateQueryRegion).Assembly)
+                .Where(t => t.Name.StartsWith("NHibernateQuery"))
+                .AsImplementedInterfaces();
         }
     }
 }

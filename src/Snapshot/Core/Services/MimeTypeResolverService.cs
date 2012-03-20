@@ -11,7 +11,7 @@ namespace Core.Services
 	/// <summary>
 	/// This service provides the mime type of a file based on the file extension provided
 	/// </summary>
-    public class MimeTypeResolverService
+    public class MimeTypeResolverService : IMimeTypeResolverService
 	{
 		#region Private Members
 

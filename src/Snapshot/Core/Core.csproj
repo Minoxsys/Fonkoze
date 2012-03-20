@@ -77,12 +77,14 @@
     <Compile Include="Services\IJavaScriptCompression.cs" />
     <Compile Include="Services\IJavaScriptProviderService.cs" />
     <Compile Include="Services\IMembershipService.cs" />
+    <Compile Include="Services\IMimeTypeResolverService.cs" />
     <Compile Include="Services\Implementations\CssConfigurationProviderService.cs" />
     <Compile Include="Services\Implementations\JavaScriptConfigurationProviderService.cs" />
     <Compile Include="Services\Implementations\MicrosoftJavascriptMinifierCompressionService.cs" />
     <Compile Include="Services\Implementations\MicrosoftMinifierCssCompresionService.cs" />
     <Compile Include="Services\IScriptCompressionService.cs" />
     <Compile Include="Services\ISecurePassword.cs" />
+    <Compile Include="Services\IWebApplicationFileService.cs" />
     <Compile Include="Services\MimeTypeResolverService.cs" />
     <Compile Include="Services\WebApplicationFileService.cs" />
   </ItemGroup>

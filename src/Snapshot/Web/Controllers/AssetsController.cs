@@ -26,8 +26,8 @@ namespace Web.Controllers
 		private const string SHARED_FOLDER = "~/Assets/resources/";
 		#endregion
 
-		
-		public MimeTypeResolverService MimeTypes
+
+        public IMimeTypeResolverService MimeTypes
 		{
 			get;
 			set;

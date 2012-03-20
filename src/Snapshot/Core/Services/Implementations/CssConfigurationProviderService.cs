@@ -14,12 +14,12 @@ namespace Core.Services.Implementations
     public class CssConfigurationProviderService : ICssProviderService
     {
         private readonly ICssScriptCompressionService _ScriptCompressionService;
-		private readonly WebApplicationFileService _FileService;
+		private readonly IWebApplicationFileService _FileService;
 
         private const string SCRIPT_SECTION_NAME = "cssConfiguration";
 
         public CssConfigurationProviderService(ICssScriptCompressionService scriptCompressionService,
-			WebApplicationFileService fileService)
+			IWebApplicationFileService fileService)
         {
             _ScriptCompressionService = scriptCompressionService;
 			_FileService = fileService;

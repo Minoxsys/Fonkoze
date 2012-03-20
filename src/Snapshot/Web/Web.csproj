@@ -262,8 +262,7 @@
     <Compile Include="Areas\StockAdministration\Models\Product\ProductIndexOutputModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\Product\ProductInputModel.cs" />
     <Compile Include="BackgroundJobs\ExecutedCampaign.cs" />
-    <Compile Include="Bootstrap\Container\DirectoryRegistrar.cs" />
-    <Compile Include="Bootstrap\Container\ETagRegistrar.cs" />
+    <Compile Include="Bootstrap\Container\ServicesConventionsRegistrar.cs" />
     <Compile Include="Helpers\ConvertHelper.cs" />
     <Compile Include="Models\Shared\ToModalJsonActionResponse.cs" />
     <Compile Include="Areas\StockAdministration\Models\Product\ProductModel.cs" />
@@ -273,15 +272,6 @@
     <Compile Include="Areas\StockAdministration\StockAdministrationAreaRegistration.cs" />
     <Compile Include="BackgroundJobs\AddAlertsJob.cs" />
     <Compile Include="BackgroundJobs\EmptyJob.cs" />
-    <Compile Include="Bootstrap\Container\EmailRegistrar.cs" />
-    <Compile Include="Bootstrap\Container\FileRegistrar.cs" />
-    <Compile Include="Bootstrap\Container\HttpServiceRegistrar.cs" />
-    <Compile Include="Bootstrap\Container\OutpostStockLevelServiceRegistrar.cs" />
-    <Compile Include="Bootstrap\Container\QueryOutpostsRegistrar.cs" />
-    <Compile Include="Bootstrap\Container\SmsGatewayRegistrar.cs" />
-    <Compile Include="Bootstrap\Container\SmsGatewaySettingsRegistrar.cs" />
-    <Compile Include="Bootstrap\Container\SmsRequestRegistrar.cs" />
-    <Compile Include="Bootstrap\Container\URLRegistrar.cs" />
     <Compile Include="Controllers\AlertsController.cs" />
     <Compile Include="Controllers\ClientManagerController.cs" />
     <Compile Include="Controllers\EmailRequestController.cs" />
@@ -296,9 +286,7 @@
     <Compile Include="Bootstrap\Container\AuthRegistrar.cs" />
     <Compile Include="Bootstrap\Container\ContainerRegistrar.cs" />
     <Compile Include="Bootstrap\Container\IUnityContainerAccesor.cs" />
-    <Compile Include="Bootstrap\Container\MinificationRegistrar.cs" />
     <Compile Include="Bootstrap\Container\PersistenceRegistrar.cs" />
-    <Compile Include="Bootstrap\Container\SecurityRegistrar.cs" />
     <Compile Include="Bootstrap\Converters\DateTimeToStringTypeConverter.cs" />
     <Compile Include="Bootstrap\Converters\NullableDateTimeToStringTypeConverter.cs" />
     <Compile Include="Bootstrap\Converters\NullableDoubleToStringTypeConverter.cs" />

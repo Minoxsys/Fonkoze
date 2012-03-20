@@ -14,13 +14,13 @@ namespace Core.Services.Implementations
 	/// </summary>
     public class JavaScriptConfigurationProviderService:IJavaScriptProviderService
     {
-		private readonly WebApplicationFileService webApplicationFileService;
+		private readonly IWebApplicationFileService webApplicationFileService;
         private readonly IJavaScriptCompressionService _scriptCompressionService;
         private const string SCRIPT_SECTION_NAME = "scriptsConfiguration";
 
         public JavaScriptConfigurationProviderService(
             IJavaScriptCompressionService scriptCompressionService,
-			WebApplicationFileService webApplicationFileService)
+			IWebApplicationFileService webApplicationFileService)
         {
             _scriptCompressionService = scriptCompressionService;
 			this.webApplicationFileService = webApplicationFileService;

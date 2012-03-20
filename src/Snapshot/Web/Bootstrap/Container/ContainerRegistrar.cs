@@ -18,36 +18,11 @@ namespace Web.Bootstrap.Container
         {
             AutoWireControllerProperties(container);
 
-            MinificationRegistrar.RegisterWith(container);
-
             AuthRegistrar.Register(container);
 
             PersistenceRegistrar.Register(container);
 
-            SecurityRegistrar.Register(container);
-
-            FileRegistrar.Register(container);
-
-            EmailRegistrar.Register(container);
-
-            URLRegistrar.Register(container);
-
-            SmsGatewayRegistrar.Register(container);
-
-            SmsRequestRegistrar.Register(container);
-
-            SmsGatewaySettingsRegistrar.Register(container);
-
-            HttpServiceRegistrar.Register(container);
-
-            OutpostStockLevelServiceRegistrar.Register(container);
-
-            QueryOutpostsRegistrar.Register(container);
-
-            DirectoryRegistrar.Register(container);
-
-            ETagRegistrar.Register(container);
-
+            ServicesConventionsRegistrar.Register(container);
 
             container.RegisterSource(new AnyConcreteTypeNotAlreadyRegisteredSource(type =>
                     type.Assembly.FullName.StartsWith("Web")

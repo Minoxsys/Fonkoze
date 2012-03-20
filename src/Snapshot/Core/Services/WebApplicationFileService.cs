@@ -6,7 +6,7 @@ using System.IO;
 
 namespace Core.Services
 {
-	public class WebApplicationFileService
+	public class WebApplicationFileService : IWebApplicationFileService
 	{
 		public virtual FileInfo RetrieveFromPartialPath( string filePath )
 		{
