@@ -422,6 +422,8 @@
         onSave: function () {
             var me = this;
 
+            var msgAlert = Ext.Msg;
+
             if (me.disableSave) return;
 
             var campaign = me.down('#campaign');
@@ -452,7 +454,6 @@
             });
 
             if (!atLeastOneProductSelected) {
-                var msgAlert = Ext.Msg;
                 msgAlert.ui = 'snapshot-popup-window';
                 msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
                 msgAlert.msgButtons['ok'].margin = '10 10 20 0';
@@ -465,7 +466,6 @@
                 params.ScheduleId = record.get('Id');
             }
             else {
-                var msgAlert = Ext.Msg;
                 msgAlert.ui = 'snapshot-popup-window';
                 msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
                 msgAlert.msgButtons['ok'].margin = '10 10 20 0';

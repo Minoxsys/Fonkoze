@@ -41,7 +41,7 @@ namespace Web
             InitializeContainer();
 
             jobManager = CreateJobWorkersManager();
-            //jobManager.Start();
+            jobManager.Start();
 
             AreaRegistration.RegisterAllAreas();
 
