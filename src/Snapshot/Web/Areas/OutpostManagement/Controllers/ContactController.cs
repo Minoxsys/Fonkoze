@@ -122,7 +122,8 @@ namespace Web.Areas.OutpostManagement.Controllers
             LoadUserAndClient();
             var outpost = LoadOutpost(input.OutpostId);
 
-            var contact = QueryContact.Load(input.Id.Value);
+            var contact = QueryContact.Load(input.Id.Value) ?? new Contact();
+            
 
             contact.Client = _client;
             contact.ByUser = _user;

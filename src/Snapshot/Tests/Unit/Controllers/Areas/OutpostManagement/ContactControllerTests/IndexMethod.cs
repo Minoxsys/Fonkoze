@@ -71,6 +71,18 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.ContactControllerTests
         }
 
         [Test]
+        public void Put_CreatesNewContact_WhenIdIsEmpty_AndContactLoadReturnsNull()
+        {
+            var putModel = _.GetPutModel_WithEmptyId();
+            _.StubLoadOutpost(putModel.ContactDetail);
+          
+            _.controller.Index(putModel);
+
+            _.VerifySaveCommandCalledWithDataFrom(putModel);
+            _.VerifyUpdateOutpostCommandCalledWithDataFrom(putModel);
+ 
+        }
+        [Test]
         public void RemoveContactOnDelete()
         {
             var deleteModel = _.GetDeleteModel();

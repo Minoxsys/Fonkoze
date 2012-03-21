@@ -125,6 +125,20 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.ContactControllerTests
             loadOutpost.Setup(l => l.Load(outpostId)).Returns(outpostFake.Object);
         }
 
+        internal ContactController.PutContactIndex GetPutModel_WithEmptyId()
+        {
+            var model = new ContactController.PutContactIndex()
+            {
+                IsMainContact = true,
+                OutpostId = outpostId,
+                Id = Guid.Empty,
+                ContactDetail = "Phone",
+                ContactType = "077 055 044"
+            };
+
+            return model;
+ 
+        }
         internal ContactController.PutContactIndex GetPutModel()
         {
             var model = new ContactController.PutContactIndex()
@@ -174,10 +188,11 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.ContactControllerTests
 
             Mock.Get(contactFake.Object.Outpost).Setup(o => o.Id).Returns(outpostId);
 
-            var loadOutpost = Mock.Get(this.controller.QueryContact);
+            var loadContact = Mock.Get(this.controller.QueryContact);
 
-            loadOutpost.Setup(l => l.Load(contact.Id.Value)).Returns(contactFake.Object);
+            loadContact.Setup(l => l.Load(contact.Id.Value)).Returns(contactFake.Object);
         }
+
 
         internal void VerifyDeleteCommandExecuted()
         {
