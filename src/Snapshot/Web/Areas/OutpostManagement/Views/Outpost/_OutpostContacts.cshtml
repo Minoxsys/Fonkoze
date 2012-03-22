@@ -79,8 +79,7 @@
                         e.record.commit();
                     }
                     if(e.record.data.ContactDetail !== ""){
-                    e.record.commit();
-                    e.store.sync();
+                        e.record.commit();
                     }
                 },
                 'canceledit': function(editor,e){
@@ -138,7 +137,6 @@
                                             if (button === 'yes') {
 
                                             grid.getStore().remove(rec);
-                                            //                                        window.feature.contactsStore.sync();
     
                                         }
                                     });
