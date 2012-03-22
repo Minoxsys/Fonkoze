@@ -79,7 +79,7 @@ namespace Web.Services
 
             if (input.Products == null || input.Products.Count == 0)
             {
-                return "No products assigned to this outpost";
+                return "No product(s) for this outpost matched those assigned to this product level request";
             }
 
             switch (input.Contact.ContactType)
