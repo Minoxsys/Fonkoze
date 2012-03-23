@@ -377,7 +377,6 @@
                             }
                     }));
                     me.contactsStore.on('write',function(){
-                    console.log('on write');
                           window.feature.outpostsStore.loadPage(1);
                     });
                     me.contactsStore.sync();
