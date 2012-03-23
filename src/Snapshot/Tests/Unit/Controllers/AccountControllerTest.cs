@@ -1,22 +1,16 @@
 ﻿using System;
+using System.Linq;
 using System.Security.Principal;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
-using System.Web.Security;
+using Core.Domain;
+using Core.Persistence;
+using Core.Services;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Rhino.Mocks.Constraints;
-using Rhino.Mocks.Expectations;
-using System.Collections.Generic;
-using System.Linq;
-using Core.Persistence;
-using Tests.Unit.Controllers;
-using Core.Domain;
 using Web.Controllers;
 using Web.Models.Account;
-using Core.Services;
-using Persistence.Queries.Employees;
 using Web.Security;
 
 namespace UnitTests.Controllers

@@ -22,7 +22,7 @@
         window.feature.contactsStore = Ext.define('snapshot-contactsStore', {
             extend: 'Ext.data.Store',
             model: window.feature.ContactModel,
-            autoSync: true
+            autoSync: false
             
         });
         window.feature.detailTypeStore = Ext.create('Ext.data.Store',{
@@ -46,7 +46,7 @@
 
        
         window.feature.rowEditor = Ext.create('Ext.grid.plugin.RowEditing',{ 
-            clicksToEdit:1,
+            clicksToEdit:2,
             errorSummary: false
         });
 
@@ -63,28 +63,24 @@
                     grid.ownerCt.doLayout(); 
                 },
                 'edit': function(editor, e) {
-                    // commit the changes right after editing finished
                     
+                    // set IsMainContact to false on all other records
                     if (e.record.get('IsMainContact')){
                         e.store.each(function(record){
                             if (e.record.id !== record.id){
                                 record.set('IsMainContact', false);
-                                record.commit();
                             }  
                         });
                     }
 
+                    // set this as the MainContact if there are no others
                     if (e.store.getCount() == 1){
                         e.record.set('IsMainContact', true);
-                        e.record.commit();
-                    }
-                    if(e.record.data.ContactDetail !== ""){
-                        e.record.commit();
                     }
                 },
                 'canceledit': function(editor,e){
                     if(e.record.data.ContactDetail === ""){
-                    e.grid.store.remove(e.record);           
+                        e.grid.store.remove(e.record);           
                     }         
                 }
 
@@ -119,7 +115,12 @@
                     flex: 1,
                     text: _t('Actions'),
                     items: [{
-                        icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/edit.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))'
+                        icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/edit.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+
+                            handler: function (grid, rowIndex, colIndex) {
+                                var rec = grid.getStore().getAt(rowIndex);
+                                window.feature.rowEditor.startEdit(rec, 0);
+                            }
                     },{
                             icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/delete.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
                             action: 'Delete',
@@ -134,7 +135,7 @@
                                 msgConfirm.msgButtons['ok'].margin = '10 10 20 0';
                                  msgConfirm.confirm('Confirm', Ext.String.format(_t('Are you sure you want to delete contact `{0}`'), rec.get('ContactDetail')), function (button) {
                                 
-                                            if (button === 'yes') {
+                                        if (button === 'yes') {
 
                                             grid.getStore().remove(rec);
     

@@ -29,7 +29,6 @@ namespace Web.Areas.OutpostManagement.Controllers
 
         public IDeleteCommand<Contact> DeleteCommand { get; set; }
 
-
         public class GetContactIndex
         {
             public Guid? OutpostId { get; set; }
@@ -52,7 +51,7 @@ namespace Web.Areas.OutpostManagement.Controllers
                                           ContactType = c.ContactType,
                                           Id = c.Id
                                       });
-           return Json(contactsModelArray, JsonRequestBehavior.AllowGet);
+            return Json(contactsModelArray, JsonRequestBehavior.AllowGet);
         }
 
         private Outpost LoadOutpost(Guid? outpostId)
@@ -71,31 +70,30 @@ namespace Web.Areas.OutpostManagement.Controllers
             LoadUserAndClient();
             var outpost = LoadOutpost(input.OutpostId);
 
-           
-                var contact = new Contact
-                {
-                    Client = _client,
-                    ByUser = _user,
-                    Outpost = outpost,
-                    ContactType = input.ContactType,
-                    ContactDetail = input.ContactDetail,
-                    IsMainContact = input.IsMainContact
-                };
+            var contact = new Contact
+            {
+                Client = _client,
+                ByUser = _user,
+                Outpost = outpost,
+                ContactType = input.ContactType,
+                ContactDetail = input.ContactDetail,
+                IsMainContact = input.IsMainContact
+            };
 
-                if (input.ContactDetail != null)
-                {
-                    SaveOrUpdateCommand.Execute(contact);
+            if (input.ContactDetail != null)
+            {
+                SaveOrUpdateCommand.Execute(contact);
 
-                    ChangeDetailMethodOnOutpostWhenIsMainContact(outpost, contact);
-                }
+                ChangeDetailMethodOnOutpostWhenIsMainContact(outpost, contact);
+            }
             
-           
             return Json(new { success = true, message = "New contact has been created", data = ToContactModel(contact) });
         }
 
         private void ChangeDetailMethodOnOutpostWhenIsMainContact(Outpost outpost, Contact contact)
         {
-            if (!contact.IsMainContact) return;
+            if (!contact.IsMainContact)
+                return;
             outpost.DetailMethod = contact.ContactDetail;
             UpdateOutpost.Execute(outpost);
         }
@@ -122,9 +120,8 @@ namespace Web.Areas.OutpostManagement.Controllers
             LoadUserAndClient();
             var outpost = LoadOutpost(input.OutpostId);
 
-            var contact = QueryContact.Load(input.Id.Value) ?? new Contact();
-            
-
+            var contact = QueryContact.Load(input.Id.Value);
+          
             contact.Client = _client;
             contact.ByUser = _user;
             contact.Outpost = outpost;
@@ -136,7 +133,7 @@ namespace Web.Areas.OutpostManagement.Controllers
             SaveOrUpdateCommand.Execute(contact);
             ChangeDetailMethodOnOutpostWhenIsMainContact(outpost, contact);
 
-            return Json(new { success = true, message = "Contact has been updated", data = ToContactModel(contact) } );
+            return Json(new { success = true, message = "Contact has been updated", data = ToContactModel(contact) });
         }
 
         public class DeleteContactIndex : ContactModel
@@ -172,6 +169,5 @@ namespace Web.Areas.OutpostManagement.Controllers
 
             this._client = LoadClient.Load(clientId);
         }
-
     }
 }
