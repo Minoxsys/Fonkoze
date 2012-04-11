@@ -250,7 +250,7 @@ Analysis: Product level information at district level
             return dataStore;
         };
 
-        window.feature.doSearch = new Ext.util.DelayedTask(function () {
+        window.feature.execute = new Ext.util.DelayedTask(function () {
             GenerateStoreStructure();
             var dataChart2 = GenerateData();
             var storeChart2 = new Ext.data.SimpleStore({
@@ -374,7 +374,7 @@ Analysis: Product level information at district level
 
                         window.feature.ProductsStore.load();
 
-                        window.feature.doSearch.delay(200);
+                        window.feature.execute.delay(300);
                     }
                 }
             },

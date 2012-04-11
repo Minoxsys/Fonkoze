@@ -198,7 +198,7 @@ Analysis: Product level information at region level
             }
         });
 
-        window.feature.doSearch = new Ext.util.DelayedTask(function(){
+        window.feature.execute = new Ext.util.DelayedTask(function(){
 			GenerateStoreStructure();
             var myData = GenerateData();
 
@@ -275,7 +275,7 @@ Analysis: Product level information at region level
                         window.feature.MatrixStore.proxy.extraParams.productGroupId = rec.get('Id');
                         window.feature.MatrixStore.load();
 
-                        window.feature.doSearch.delay(200);
+                        window.feature.execute.delay(500);
                     }
                 }
             },
