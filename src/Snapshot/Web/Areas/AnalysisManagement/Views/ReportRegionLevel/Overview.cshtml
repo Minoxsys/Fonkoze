@@ -217,6 +217,7 @@ Analysis: Product level information at region level
                 xtype: 'chart',
                 animate: true,
                 shadow: true,
+                autoScroll: true,	
                 style: 'background:#fff',
                 flex:1,
                 store: st,
@@ -260,12 +261,12 @@ Analysis: Product level information at region level
             cls: 'white-border',
             rootVisible: false,
             flex: 3,
-            height: 600,
             scroll: 'vertical',
             root: {},
             store: window.feature.treeStore,
             multiSelect: true,
-            singleExpand: false,
+            autoScroll:true,	
+            singleExpand: false, 
             listeners: {
                 itemclick: function (view, rec, item, index, eventObj) {
                     if (!rec.get('leaf') && rec.get('Name').indexOf('Quantity of Outposts:') == -1) {
@@ -359,7 +360,11 @@ Analysis: Product level information at region level
 							window.feature.comboBoxRegions
                         ]
                 }]
-                }, window.feature.treegrid]
+                }, window.feature.treegrid, 
+                {
+                    xtype:'container',
+                    height: 150
+                }]
             }, {
                 xtype: 'container',
                 flex: 1,

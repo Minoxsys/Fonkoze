@@ -280,6 +280,7 @@ Analysis: Product level information at district level
                 flex: 2,
                 animate: true,
                 shadow: true,
+                autoScroll: true,	
                 store: storeChart1,
                 style: 'background:#fff',
                 axes: [{
@@ -335,6 +336,7 @@ Analysis: Product level information at district level
                 animate: true,
                 store: storeChart2,
                 shadow: true,
+                autoScroll: true,	
                 legend: {
                     position: 'right'
                 },
@@ -360,11 +362,11 @@ Analysis: Product level information at district level
             cls: 'white-border',
             rootVisible: false,
             flex: 3,
-            height: 600,
             scroll: 'vertical',
             root: {},
             store: window.feature.treeStore,
             multiSelect: true,
+            autoScroll: true,	
             singleExpand: false,
             listeners: {
                 itemclick: function (view, rec, item, index, eventObj) {
@@ -459,7 +461,11 @@ Analysis: Product level information at district level
                             window.feature.comboboxDistricts
                         ]
                 }]
-                }, window.feature.treegrid]
+                }, window.feature.treegrid,
+                {
+                    xtype: 'container',
+                    height: 150
+                }]
             }, {
                 xtype: 'container',
                 flex: 1,
