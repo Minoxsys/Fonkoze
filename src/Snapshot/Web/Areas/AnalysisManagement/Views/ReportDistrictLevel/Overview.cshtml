@@ -1,11 +1,16 @@
-﻿@section page_title{
-Analysis
-}
+﻿@using Domain
+@using Microsoft.Web.Mvc;
 @using Web.Areas.AnalysisManagement;
-@{
-    Html.RenderPartial("ReportMainContent");
-    Html.RenderPartial("AnalysisUserInfoContainer");
+
+@section page_title{
+Analysis: Product level information at district level
 }
+
+@{
+    Html.RenderPartial("_AlertsSubNavigation");
+    Html.RenderPartial("_EmptySideBar");
+}
+
 <script type="text/javascript">
 
     Ext.onReady(function () {
@@ -51,13 +56,14 @@ Analysis
                 }
             },
             listeners: {
-            datachanged: function(){
-                 var regionIdAll = this.data.items[0].data.Id;
-                 window.feature.comboBoxRegions.setValue(regionIdAll);
-            }}
-        });       
+                datachanged: function () {
+                    var regionIdAll = this.data.items[0].data.Id;
+                    window.feature.comboBoxRegions.setValue(regionIdAll);
+                }
+            }
+        });
 
-         window.feature.DistrictStore = Ext.create('Ext.data.Store', {
+        window.feature.DistrictStore = Ext.create('Ext.data.Store', {
             fields: ['Name', 'Id'],
             proxy: {
                 type: 'ajax',
@@ -70,11 +76,12 @@ Analysis
                 }
             },
             listeners: {
-            datachanged: function(){
-                 var districtIdAll = this.data.items[0].data.Id;
-                 window.feature.comboboxDistricts.setValue(districtIdAll);
-            }}
-        });       
+                datachanged: function () {
+                    var districtIdAll = this.data.items[0].data.Id;
+                    window.feature.comboboxDistricts.setValue(districtIdAll);
+                }
+            }
+        });
 
         window.feature.comboBoxCountries = Ext.create('Ext.form.ComboBox', {
             store: window.feature.CountryStore,
@@ -82,7 +89,7 @@ Analysis
             id: window.feature.comboboxCountriesId,
             labelAlign: 'top',
             fieldLabel: 'Selected Country',
-            labelClsExtra:'combo-label',
+            labelClsExtra: 'combo-label',
             displayField: 'Name',
             valueField: 'Id',
             emptyText: _t('Country List'),
@@ -92,22 +99,22 @@ Analysis
                     window.feature.comboBoxRegions.setValue(null);
                     window.feature.comboboxDistricts.setValue(null);
 
-                    window.feature.treegrid.getStore().proxy.extraParams.CountryId ='';
+                    window.feature.treegrid.getStore().proxy.extraParams.CountryId = '';
                     window.feature.treegrid.getStore().proxy.extraParams.RegionId = '';
                     window.feature.treegrid.getStore().proxy.extraParams.DistrictId = '';
 
                     window.feature.treegrid.setRootNode(null);
                     window.feature.RegionStore.load({
-                                           params: { CountryId: selectedCountryId }
-                                       });
-                     window.feature.DistrictStore.load({
-                                           params: { CountryId: selectedCountryId, RegionId: '' }
-                                           });
-                                          
-                     window.feature.treegrid.getStore().proxy.extraParams.CountryId = selectedCountryId;
-                     window.feature.treegrid.getStore().proxy.extraParams.RegionId = '';
-                     window.feature.treegrid.getRootNode().expand();
-                  }
+                        params: { CountryId: selectedCountryId }
+                    });
+                    window.feature.DistrictStore.load({
+                        params: { CountryId: selectedCountryId, RegionId: '' }
+                    });
+
+                    window.feature.treegrid.getStore().proxy.extraParams.CountryId = selectedCountryId;
+                    window.feature.treegrid.getStore().proxy.extraParams.RegionId = '';
+                    window.feature.treegrid.getRootNode().expand();
+                }
             }
         });
 
@@ -117,51 +124,51 @@ Analysis
             id: window.feature.comboboxRegionsId,
             labelAlign: 'top',
             fieldLabel: 'Selected Region',
-            labelClsExtra:'combo-label',
+            labelClsExtra: 'combo-label',
             displayField: 'Name',
             valueField: 'Id',
             margin: '0 0 0 20',
             emptyText: _t('Region List'),
             listeners: {
                 select: function (combo, record, index) {
-                 var selectedRegionId = record[0].data.Id;
-                 var selectedCountryId = Ext.getCmp(window.feature.comboboxCountriesId).getValue();
-                 window.feature.comboboxDistricts.setValue(null);
-                 window.feature.treegrid.getStore().proxy.extraParams.DistrictId = '';
+                    var selectedRegionId = record[0].data.Id;
+                    var selectedCountryId = Ext.getCmp(window.feature.comboboxCountriesId).getValue();
+                    window.feature.comboboxDistricts.setValue(null);
+                    window.feature.treegrid.getStore().proxy.extraParams.DistrictId = '';
 
-                 window.feature.DistrictStore.load({
-                                           params: { CountryId: selectedCountryId, RegionId: selectedRegionId }
-                                           });
-                 window.feature.treegrid.setRootNode(null);
-                 window.feature.treegrid.getStore().proxy.extraParams.RegionId = selectedRegionId;
-                 window.feature.treegrid.getRootNode().expand();
+                    window.feature.DistrictStore.load({
+                        params: { CountryId: selectedCountryId, RegionId: selectedRegionId }
+                    });
+                    window.feature.treegrid.setRootNode(null);
+                    window.feature.treegrid.getStore().proxy.extraParams.RegionId = selectedRegionId;
+                    window.feature.treegrid.getRootNode().expand();
                 }
             }
         });
 
-         window.feature.comboboxDistricts = Ext.create('Ext.form.ComboBox', {
+        window.feature.comboboxDistricts = Ext.create('Ext.form.ComboBox', {
             store: window.feature.DistrictStore,
             queryMode: 'local',
             id: window.feature.comboboxDistrictsId,
             labelAlign: 'top',
             fieldLabel: 'Selected District',
-            labelClsExtra:'combo-label',
+            labelClsExtra: 'combo-label',
             displayField: 'Name',
             valueField: 'Id',
             margin: '0 0 0 20',
             emptyText: _t('District List'),
             listeners: {
                 select: function (combo, record, index) {
-                 var selectedDistrictId = record[0].data.Id;
-                 window.feature.treegrid.setRootNode(null);
-                 window.feature.treegrid.getStore().proxy.extraParams.DistrictId = selectedDistrictId;
-                 window.feature.treegrid.getRootNode().expand();
+                    var selectedDistrictId = record[0].data.Id;
+                    window.feature.treegrid.setRootNode(null);
+                    window.feature.treegrid.getStore().proxy.extraParams.DistrictId = selectedDistrictId;
+                    window.feature.treegrid.getRootNode().expand();
                 }
             }
         });
         Ext.define('ReportDistrictLevel', {
             extend: 'Ext.data.Model',
-            fields: ['Name','ProductLevelSum','leaf']
+            fields: ['Name', 'ProductLevelSum', 'Id', 'ParentId', 'leaf']
         });
 
         window.feature.treeStore = Ext.create('Ext.data.TreeStore', {
@@ -171,8 +178,181 @@ Analysis
             proxy: {
                 type: 'ajax',
                 url: '@Url.RouteUrl(AnalysisManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "ReportDistrictLevel", action = "GetReports" })',
-                extraParams: { CountryId: '', RegionId: '', DistrictId: ''}
+                extraParams: { CountryId: '', RegionId: '', DistrictId: '' }
             }
+        });
+
+        window.feature.ProductsStore = Ext.create('Ext.data.Store', {
+            remoteSuport: true,
+            fields: [
+                { name: 'ProductName' },
+                { name: 'StockLevel', type: 'int' }
+            ],
+            proxy: {
+                type: 'ajax',
+                url: '@Url.RouteUrl(AnalysisManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "ReportDistrictLevel", action = "GetProductsForChart" })',
+                reader: {
+                    type: 'json',
+                    root: 'Products',
+                    totalProperty: 'TotalItems'
+                },
+                simpleSortMode: true,
+                extraParams: { productGroupId: '', districtId: '' }
+            },
+            sorters: [{
+                property: 'Name',
+                direction: 'ASC'
+            }]
+        });
+
+        var productFields = [];
+        var storeFields = [];
+        var dataStore = [];
+        var chartSeries = [];
+
+        function GenerateStoreStructure() {
+            storeFields = [];
+            productFields = [];
+            chartSeries = [];
+
+            storeFields.push({ name: 'Day' });
+
+            window.feature.ProductsStore.each(function (record) {
+                productFields.push(record.get('ProductName'));
+                storeFields.push({ name: record.get('ProductName'), type: 'int' });
+                chartSeries.push({ type: 'line', xField: 'Day', yField: record.get('ProductName'), highlight: { size: 7, radius: 7 }, axis: 'left', smooth: true, markerConfig: { type: 'circle', size: 5, radius: 4, 'stroke-width': 0} });
+            });
+        };
+
+        function GenerateData() {
+            dataStore = [];
+            var fieldNo = window.feature.ProductsStore.count();
+
+            var i = 0;
+            var row = [];
+            while (i < 21) {
+                if (i % fieldNo == 0) {
+                    row = [];
+                    row.push(Ext.String.format("{0}", i));
+                }
+
+                var stock = Math.floor(Math.random() * 10);
+                row.push(stock);
+
+                if (i % fieldNo == 0) {
+                    if (row.length > 0) {
+                        dataStore.push(row);
+                    }
+                }
+                i++;
+            }
+
+            return dataStore;
+        };
+
+        window.feature.doSearch = new Ext.util.DelayedTask(function () {
+            GenerateStoreStructure();
+            var dataChart2 = GenerateData();
+            var storeChart2 = new Ext.data.SimpleStore({
+                fields: storeFields
+            });
+            storeChart2.loadData(dataChart2);
+
+            var storeChart1 = new Ext.data.SimpleStore({
+                fields: [
+                    { name: 'ProductName' },
+                    { name: 'StockLevel', type: 'int' }
+                ]
+            });
+
+            var dataChart1 = window.feature.ProductsStore.getRange();
+
+            storeChart1.loadData(dataChart1);
+
+
+            var cont = Ext.getCmp('DivChartContainer');
+            var chart1 = Ext.getCmp('chart1DistrictLevel');
+            cont.remove(chart1);
+
+            cont.add({
+                id: 'chart1DistrictLevel',
+                xtype: 'chart',
+                flex: 2,
+                animate: true,
+                shadow: true,
+                store: storeChart1,
+                style: 'background:#fff',
+                axes: [{
+                    type: 'Numeric',
+                    position: 'bottom',
+                    fields: ['StockLevel'],
+                    title: 'Current Stock Level',
+                    grid: true,
+                    minimum: 0
+                }, {
+                    type: 'Category',
+                    position: 'left',
+                    fields: ['ProductName'],
+                    title: 'Products'
+                }],
+                series: [{
+                    type: 'bar',
+                    axis: 'bottom',
+                    highlight: true,
+                    tips: {
+                        trackMouse: true,
+                        width: 140,
+                        height: 28,
+                        renderer: function (storeItem, item) {
+                            this.setTitle(storeItem.get('ProductName') + ': ' + storeItem.get('StockLevel') + '');
+                        }
+                    },
+                    xField: ['ProductName'],
+                    yField: ['StockLevel'],
+                    renderer: function (sprite, record, attr, index, store) {
+                        var fieldValue = Math.random() * 20 + 10;
+                        var value = (record.get('StockLevel') >> 0) % 5;
+                        var color = ['rgb(215, 70, 121)',
+                                         'rgb(54, 153, 201)',
+                                         'rgb(146, 6, 157)',
+                                         'rgb(49, 149, 0)',
+                                         'rgb(249, 153, 0)'][value];
+                        return Ext.apply(attr, {
+                            fill: color
+                        });
+                    }
+                }]
+            });
+
+            var chart2 = Ext.getCmp('chart2DistrictLevel');
+            cont.remove(chart2);
+
+            cont.add({
+                id: 'chart2DistrictLevel',
+                xtype: 'chart',
+                flex: 2,
+                style: 'background:#fff',
+                animate: true,
+                store: storeChart2,
+                shadow: true,
+                legend: {
+                    position: 'right'
+                },
+                axes: [{
+                    type: 'Numeric',
+                    minimum: 0,
+                    position: 'left',
+                    fields: productFields,
+                    title: 'Historical Stock Level',
+                    minorTickSteps: 1
+                }, {
+                    type: 'Numeric',
+                    position: 'bottom',
+                    fields: ['Day'],
+                    title: 'Day of the Month'
+                }],
+                series: chartSeries
+            });
         });
 
         window.feature.treegrid = Ext.create('Ext.tree.Panel', {
@@ -186,19 +366,31 @@ Analysis
             store: window.feature.treeStore,
             multiSelect: true,
             singleExpand: false,
+            listeners: {
+                itemclick: function (view, rec, item, index, eventObj) {
+                    if (!rec.get('leaf') && rec.get('Name').indexOf('Quantity of Outposts:') == -1) {
+                        window.feature.ProductsStore.proxy.extraParams.productGroupId = rec.get('Id');
+                        window.feature.ProductsStore.proxy.extraParams.districtId = rec.get('ParentId');
+
+                        window.feature.ProductsStore.load();
+
+                        window.feature.doSearch.delay(200);
+                    }
+                }
+            },
             columns: [{
                 xtype: 'treecolumn',
                 text: 'Region / Product Group / Product',
                 flex: 2,
                 sortable: true,
-                menuDisabled:true,
+                menuDisabled: true,
                 dataIndex: 'Name'
             }, {
                 xtype: 'templatecolumn',
                 text: 'Product Level',
                 flex: 1,
                 sortable: true,
-                menuDisabled:true,
+                menuDisabled: true,
                 dataIndex: 'ProductLevelSum',
                 align: 'center',
                 tpl: Ext.create('Ext.XTemplate', '{ProductLevelSum:this.ProductLevelSum}', {
@@ -209,29 +401,30 @@ Analysis
             }]
         });
 
-         window.feature.CountryStore.load();
-
-        var contentRes = window.res.content;
-
-        var mainContent = Ext.getCmp(contentRes.maincontent.id);
-        mainContent.add({
-            xtype: 'container',
-            margin:'45 50 20 20',
-            padding:'20 0 0 20',
+        window.feature.container = Ext.create('Ext.container.Container', {
+            margin: '45 50 20 20',
+            padding: '20 0 0 20',
             autoScroll: true,
             id: 'TopContainer',
             layout: {
                 align: 'stretch',
-                type: 'vbox'
+                type: 'hbox'
             },
             items: [{
                 xtype: 'container',
+                flex: 1,
                 layout: {
                     align: 'stretch',
                     type: 'vbox'
                 },
-                height: 150,
-                items: [
+                items: [{
+                    xtype: 'container',
+                    layout: {
+                        align: 'stretch',
+                        type: 'vbox'
+                    },
+                    height: 150,
+                    items: [
                 {
                     xtype: 'container',
                     flex: 1,
@@ -242,32 +435,59 @@ Analysis
                         xtype: 'container',
                         height: 30,
                         width: 30,
-                        html:'&nbsp;'
-                    },{
+                        html: '&nbsp;'
+                    }, {
                         xtype: 'label',
                         cls: 'x-title-label',
                         text: 'Product level information at district level'
                     }]
-                    },{
-						xtype: 'container',
-                        flex: 1,
-						layout: {
-							type: 'column'
-						},
-						items: [
+                }, {
+                    xtype: 'container',
+                    flex: 1,
+                    layout: {
+                        type: 'column'
+                    },
+                    items: [
 						{
-							xtype: 'container',
-							height: 30,
-							width: 30,
-							html:'&nbsp;'
-						}, 
-                            window.feature.comboBoxCountries, 
+						    xtype: 'container',
+						    height: 30,
+						    width: 30,
+						    html: '&nbsp;'
+						},
+                            window.feature.comboBoxCountries,
 							window.feature.comboBoxRegions,
-                            window.feature.comboboxDistricts							
+                            window.feature.comboboxDistricts
                         ]
-				    }]
-			}, window.feature.treegrid]
+                }]
+                }, window.feature.treegrid]
+            }, {
+                xtype: 'container',
+                flex: 1,
+                layout: {
+                    align: 'stretch',
+                    type: 'vbox'
+                },
+                items: [{
+                    xtype: 'container',
+                    id: 'DivChartContainer',
+                    flex: 2,
+                    layout: {
+                        align: 'stretch',
+                        type: 'vbox'
+                    },
+                    items: []
+                }, {
+                    xtype: 'container',
+                    flex: 1
+                }]
+            }]
         });
+
+        var contentRes = window.res.content;
+        var mainContent = Ext.getCmp(contentRes.maincontent.id);
+
+        mainContent.add(window.feature.container);
+        window.feature.CountryStore.load();
 
     });
 </script>

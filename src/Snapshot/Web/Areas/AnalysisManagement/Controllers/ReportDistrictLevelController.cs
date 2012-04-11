@@ -78,8 +78,6 @@ namespace Web.Areas.AnalysisManagement.Controllers
         {
             LoadUserAndClient();
 
-            var reportDistrictLevelTreeModel = new ReportDistrictLevelTreeModel();
-
             var reportDistrictLevel = QueryOutpostStockLevel.Query().Where(it => it.Client.Id == _client.Id).ToList();
 
             if ((inputModel.DistrictId != ID_ALL_OPTION_FOR_DISTRICTS) && (inputModel.DistrictId != Guid.Empty))
@@ -101,51 +99,57 @@ namespace Web.Areas.AnalysisManagement.Controllers
                 }
             }
 
+            var reportDistrictLevelTreeModel = GetReportRegionTreeModel(reportDistrictLevel); 
+            return Json(reportDistrictLevelTreeModel, JsonRequestBehavior.AllowGet);
+        }
+
+        private ReportDistrictLevelTreeModel GetReportRegionTreeModel(List<OutpostStockLevel> reportDistrictLevel)
+        {
+            var reportDistrictLevelTreeModel = new ReportDistrictLevelTreeModel();
             var reportDistrictLevelGroupByDistrict = reportDistrictLevel.GroupBy(it => it.Outpost.District);
 
             foreach (var districtGroup in reportDistrictLevelGroupByDistrict)
             {
                 var districtNode = ToDistrictNode(districtGroup);
-                reportDistrictLevelTreeModel.children.Add(districtNode);                
+                reportDistrictLevelTreeModel.children.Add(districtNode);
             }
-
-            return Json(reportDistrictLevelTreeModel, JsonRequestBehavior.AllowGet);
+            return reportDistrictLevelTreeModel;
         }
 
         private ReportDistrictLevelTreeModel ToDistrictNode(IGrouping<District, OutpostStockLevel> districtGroup)
         {
-            var districtNode = new ReportDistrictLevelTreeModel { Name = districtGroup.Key.Name, ProductLevelSum = "" };
+            var districtNode = new ReportDistrictLevelTreeModel { Name = districtGroup.Key.Name, ProductLevelSum = "", Id = districtGroup.Key.Id };
             districtNode.Name += " ( Quantity of Outposts: " + QueryOutpost.Query().Count(it => it.District.Id == districtGroup.Key.Id) + " ) ";
 
             var groupByProductGroup = districtGroup.GroupBy(it => it.ProductGroup);
 
             foreach (var productGroupItem in groupByProductGroup)
             {
-                var productGroupNode = ToProductGroupNode(productGroupItem);
+                var productGroupNode = ToProductGroupNode(productGroupItem, districtGroup.Key.Id);
                 districtNode.children.Add(productGroupNode);
 
             }
             return districtNode;
         }
 
-        private static ReportDistrictLevelTreeModel ToProductGroupNode(IGrouping<ProductGroup, OutpostStockLevel> productGroupItem)
+        private static ReportDistrictLevelTreeModel ToProductGroupNode(IGrouping<ProductGroup, OutpostStockLevel> productGroupItem, Guid parentId)
         {
-            var productGroupNode = new ReportDistrictLevelTreeModel { Name = productGroupItem.Key.Name, ProductLevelSum = "" };
+            var productGroupNode = new ReportDistrictLevelTreeModel { Name = productGroupItem.Key.Name, ProductLevelSum = "", Id = productGroupItem.Key.Id, ParentId = parentId };
 
             var groupByProduct = productGroupItem.GroupBy(it => it.Product);
 
             foreach (var product in groupByProduct)
             {
-                var productNode = ToProductNode(product);
+                var productNode = ToProductNode(product, productGroupItem.Key.Id);
 
                 productGroupNode.children.Add(productNode);
             }
             return productGroupNode;
         }
 
-        private static ReportDistrictLevelTreeModel ToProductNode(IGrouping<Product, OutpostStockLevel> product)
+        private static ReportDistrictLevelTreeModel ToProductNode(IGrouping<Product, OutpostStockLevel> product, Guid parentId)
         {
-            var productNode = new ReportDistrictLevelTreeModel { Name = product.Key.Name, ProductLevelSum = "" };
+            var productNode = new ReportDistrictLevelTreeModel { Name = product.Key.Name, ProductLevelSum = "", Id = product.Key.Id, ParentId = parentId };
 
             int productLevelSum = 0;
 
@@ -162,6 +166,45 @@ namespace Web.Areas.AnalysisManagement.Controllers
         public ActionResult Overview()
         {
             return View();
+        }
+
+        public JsonResult GetProductsForChart(Guid? productGroupId, Guid? districtId) 
+        {
+            List<ProductsChartModel> listOfProducts = new List<ProductsChartModel>();
+
+            if (!productGroupId.HasValue || !districtId.HasValue)
+                return Json(new ProductsForChartOutputModel
+                {
+                    Products = listOfProducts.ToArray(),
+                    TotalItems = 0
+                }, JsonRequestBehavior.AllowGet);
+
+            listOfProducts = GetProductsAssociatedTo(productGroupId.Value, districtId.Value);
+            
+            return Json(new ProductsForChartOutputModel
+            {
+                Products = listOfProducts.ToArray(),
+                TotalItems = listOfProducts.Count()
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        private List<ProductsChartModel> GetProductsAssociatedTo(Guid productGroupId, Guid districtId)
+        {
+            LoadUserAndClient();
+            List<ProductsChartModel> listOfProducts = new List<ProductsChartModel>();
+
+            var reportDistrictLevel = QueryOutpostStockLevel.Query().Where(it => it.Client.Id == _client.Id).ToList();
+            var reportDistrictLevelTreeModel = GetReportRegionTreeModel(reportDistrictLevel);
+
+            var district = reportDistrictLevelTreeModel.children.Find(it => it.Id == districtId);
+            var pg = district.children.Find(it => it.Id == productGroupId);
+            foreach (var product in pg.children)
+            {
+                ProductsChartModel model = new ProductsChartModel() { ProductName = product.Name, StockLevel = product.ProductLevelSum };
+                listOfProducts.Add(model);
+            }
+
+            return listOfProducts;
         }
 
     }

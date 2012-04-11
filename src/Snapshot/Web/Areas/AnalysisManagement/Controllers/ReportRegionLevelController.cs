@@ -8,6 +8,7 @@ using Core.Persistence;
 using Core.Domain;
 using Web.Areas.AnalysisManagement.Models.ReportRegionLevel;
 using Web.Security;
+using Web.Models.UserManager;
 
 namespace Web.Areas.AnalysisManagement.Controllers
 {
@@ -17,6 +18,7 @@ namespace Web.Areas.AnalysisManagement.Controllers
         public IQueryService<Region> QueryRegion { get; set; }
         public IQueryService<User> QueryUsers { get; set; }
         public IQueryService<Client> QueryClients { get; set; }
+        public IQueryService<ProductGroup> QueryProductGroup { get; set; }
 
         public IQueryService<OutpostStockLevel> QueryOutpostStockLevel { get; set; }
         public IQueryService<Outpost> QueryOutpost { get; set; }
@@ -86,10 +88,11 @@ namespace Web.Areas.AnalysisManagement.Controllers
                 TotalItems = regionList.Count
             }, JsonRequestBehavior.AllowGet);
 
-        }        
+        }    
+    
         public JsonResult GetReports(InputModel inputModel)
         {
-            var reportRegionLevelTreeModel = new ReportRegionLevelTreeModel { Name = "root" };
+            
             LoadUserAndClient();
 
             var reportRegionLevel = QueryOutpostStockLevel.Query().Where(it => it.Client.Id == _client.Id).ToList();
@@ -106,6 +109,13 @@ namespace Web.Areas.AnalysisManagement.Controllers
                 }
             }
 
+            var reportRegionLevelTreeModel = GetReportRegionTreeModel(reportRegionLevel);
+            return Json(reportRegionLevelTreeModel, JsonRequestBehavior.AllowGet);
+        }
+
+        private ReportRegionLevelTreeModel GetReportRegionTreeModel(List<OutpostStockLevel> reportRegionLevel)
+        {
+            var reportRegionLevelTreeModel = new ReportRegionLevelTreeModel { Name = "root" };
             var reportRegionLevelGroupByRegion = reportRegionLevel.GroupBy(it => it.Outpost.Region);
 
             foreach (var regionGroup in reportRegionLevelGroupByRegion)
@@ -113,14 +123,14 @@ namespace Web.Areas.AnalysisManagement.Controllers
                 var regionNode = ToRegionNode(regionGroup);
                 reportRegionLevelTreeModel.children.Add(regionNode);
             }
-
-            return Json(reportRegionLevelTreeModel, JsonRequestBehavior.AllowGet);
+            return reportRegionLevelTreeModel;
         }
 
         private ReportRegionLevelTreeModel ToRegionNode(IGrouping<Region, OutpostStockLevel> regionGroup)
         {
             var regionNode = new ReportRegionLevelTreeModel { Name = regionGroup.Key.Name, ProductLevelSum = "" };
             regionNode.Name += " ( Quantity of Outposts:" + QueryOutpost.Query().Count(it => it.Region.Id == regionGroup.Key.Id) + " ) ";
+            regionNode.Id = regionGroup.Key.Id;
 
             var groupByProductGroup = regionGroup.GroupBy(it => it.ProductGroup);
 
@@ -134,7 +144,7 @@ namespace Web.Areas.AnalysisManagement.Controllers
 
         private static ReportRegionLevelTreeModel ToProductGroupNode(IGrouping<ProductGroup, OutpostStockLevel> productGroup)
         {
-            var productGroupNode = new ReportRegionLevelTreeModel { Name = productGroup.Key.Name, ProductLevelSum = "" };
+            var productGroupNode = new ReportRegionLevelTreeModel { Name = productGroup.Key.Name, ProductLevelSum = "", Id = productGroup.Key.Id };
 
             var groupByProductOnProductGroup = productGroup.GroupBy(it => it.Product);
 
@@ -142,13 +152,14 @@ namespace Web.Areas.AnalysisManagement.Controllers
             {
                 var leafNode = ToProductNode(item);
                 productGroupNode.children.Add(leafNode);
+                
             }
             return productGroupNode;
         }
 
         private static ReportRegionLevelTreeModel ToProductNode(IGrouping<Product, OutpostStockLevel> item)
         {
-            var leafNode = new ReportRegionLevelTreeModel { Name = item.Key.Name };
+            var leafNode = new ReportRegionLevelTreeModel { Name = item.Key.Name, Id = item.Key.Id };
             int productLevelSum = 0;
             foreach (var product in item)
             {
@@ -165,5 +176,98 @@ namespace Web.Areas.AnalysisManagement.Controllers
             return View();
         }
 
+        [HttpGet]
+        public JsonResult GetProducts(Guid? productGroupId)
+        {
+            List<ReferenceModel> listOfProducts = new List<ReferenceModel>();
+
+            if (!productGroupId.HasValue)
+                return Json(new ProductsReferenceOutputModel
+                {
+                    Products = listOfProducts.ToArray(),
+                    TotalItems = 0
+                }, JsonRequestBehavior.AllowGet);
+
+            listOfProducts = GetAllProductsFor(productGroupId.Value);
+
+            return Json(new ProductsReferenceOutputModel
+            {
+                Products = listOfProducts.ToArray(),
+                TotalItems = listOfProducts.Count()
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        public List<ReferenceModel> GetAllProductsFor(Guid productGroupId)
+        {
+            LoadUserAndClient();
+
+            List<ReferenceModel> allProducts = new List<ReferenceModel>();
+
+            var productsStockLevel = QueryOutpostStockLevel.Query()
+                    .Where(it => it.Client.Id == _client.Id)
+                    .Where(it => it.ProductGroup.Id == productGroupId);
+
+            foreach (var product in productsStockLevel)
+            {
+                ReferenceModel model = new ReferenceModel() { Name = product.Product.Name, Id = product.Product.Id };
+                if (!allProducts.Exists(it => it.Name == model.Name && it.Id == model.Id))
+                    allProducts.Add(model);
+            }
+
+            return allProducts;
+        }
+
+        [HttpGet]
+        public JsonResult GetChartData(Guid? productGroupId)
+        {
+            List<ChartInputModel> chartData = new List<ChartInputModel>();
+            if (!productGroupId.HasValue)
+            {
+                return Json(new ChartReferenceOutputModel
+                {
+                    Products = chartData.ToArray(),
+                    TotalItems = 0
+                }, JsonRequestBehavior.AllowGet);
+            }
+            List<ReferenceModel> allProductsForGroup = GetAllProductsFor(productGroupId.Value);
+            chartData = CreateChartDataFrom(allProductsForGroup, productGroupId.Value);
+
+            return Json(new ChartReferenceOutputModel
+            {
+                Products = chartData.ToArray(),
+                TotalItems = chartData.Count()
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        public List<ChartInputModel> CreateChartDataFrom(List<ReferenceModel> allProducts, Guid productGroupId)
+        {
+            List<ChartInputModel> charData = new List<ChartInputModel>();
+            LoadUserAndClient();
+
+            var reportRegionLevel = QueryOutpostStockLevel.Query().Where(it => it.Client.Id == _client.Id).ToList();
+            var reportRegionLevelTreeModel = GetReportRegionTreeModel(reportRegionLevel);
+
+            foreach (var region in reportRegionLevelTreeModel.children)
+            {
+                foreach (var product in allProducts)
+                {
+                    ChartInputModel model = new ChartInputModel();
+                    model.RegionName = region.Name.Substring(0,  region.Name.IndexOf(" ( Quantity of Outposts:"));
+                    model.ProductName = product.Name;
+                    var pg = region.children.Find(it => it.Id == productGroupId);
+                    if (pg != null)
+                    {
+                        var prod = pg.children.Find(it => it.Id == product.Id);
+                        if (prod != null)
+                            model.StockLevelSum = Int32.Parse(prod.ProductLevelSum);
+                        else model.StockLevelSum = 0;
+
+                        charData.Add(model);
+                    }
+                }
+            }
+
+            return charData;
+        }
     }
 }

@@ -42,7 +42,7 @@ namespace Tests.Unit.Controllers.Areas.AnalysisManagement.ReportRegionLevelContr
         const String COUNTRY_NAME = "country";
         const String OUTPOST_NAME = "outpost";
         const String PRODUCT_GROUP_NAME = "productGroup";
-        const String PRODUCT_NAME = " product ";
+        const String PRODUCT_NAME = "product";
 
         const string USER_NAME = "admin";
         const string NAME_ALL_OPTION = "All";

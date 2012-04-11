@@ -148,6 +148,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Areas\AnalysisManagement\Models\ReportDistrictLevel\ProductsChartModel.cs" />
+    <Compile Include="Areas\AnalysisManagement\Models\ReportDistrictLevel\ProductsForChartOutputModel.cs" />
+    <Compile Include="Areas\AnalysisManagement\Models\ReportRegionLevel\ChartInputModel.cs" />
+    <Compile Include="Areas\AnalysisManagement\Models\ReportRegionLevel\ChartReferenceOutputModel.cs" />
+    <Compile Include="Areas\AnalysisManagement\Models\ReportRegionLevel\ProductsReferenceOutputModel.cs" />
     <Compile Include="Areas\CampaignManagement\Controllers\ExistingRequestsController.cs" />
     <Compile Include="Areas\CampaignManagement\Models\ProductLevelRequest\GetProductLevelRequestDetailsModel.cs" />
     <Compile Include="Areas\CampaignManagement\Models\ProductLevelRequest\ProductLevelDetailModel.cs" />

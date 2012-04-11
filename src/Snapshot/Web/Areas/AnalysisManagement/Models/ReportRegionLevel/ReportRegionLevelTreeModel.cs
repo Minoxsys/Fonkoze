@@ -9,6 +9,7 @@ namespace Web.Areas.AnalysisManagement.Models.ReportRegionLevel
     {
         public String Name { get; set; }
         public String ProductLevelSum { get; set; }
+        public Guid Id { get; set; }
 
         public bool leaf { get; set; }
         public bool expanded { get; set; }

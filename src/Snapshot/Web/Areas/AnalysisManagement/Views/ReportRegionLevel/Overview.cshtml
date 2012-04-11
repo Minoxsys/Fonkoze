@@ -1,21 +1,25 @@
-﻿@section page_title{
-Analysis
-}
+﻿@using Domain
+@using Microsoft.Web.Mvc;
 @using Web.Areas.AnalysisManagement;
-@{
-    Html.RenderPartial("ReportMainContent");
-    Html.RenderPartial("AnalysisUserInfoContainer");
+
+@section page_title{
+Analysis: Product level information at region level
 }
+
+@{
+    Html.RenderPartial("_AlertsSubNavigation");
+    Html.RenderPartial("_EmptySideBar");
+}
+
 <script type="text/javascript">
-
     Ext.onReady(function () {
-
         var analysisBtnId = window.res.header.navigation.analysisAndReports;
         var analysisBtn = Ext.getCmp(analysisBtnId);
         analysisBtn.toggle(true);
-    });
 
+    });
 </script>
+
 
 <script type="text/javascript">
     Ext.onReady(function () {
@@ -51,18 +55,19 @@ Analysis
                 }
             },
             listeners: {
-            datachanged: function(){
-                 var regionIdAll = this.data.items[0].data.Id;
-                 window.feature.comboBoxRegions.setValue(regionIdAll);
-            }}
-        });       
+                datachanged: function () {
+                    var regionIdAll = this.data.items[0].data.Id;
+                    window.feature.comboBoxRegions.setValue(regionIdAll);
+                }
+            }
+        });
 
         window.feature.comboBoxCountries = Ext.create('Ext.form.ComboBox', {
             store: window.feature.CountryStore,
             queryMode: 'local',
             id: window.feature.comboboxCountriesId,
             labelAlign: 'top',
-            labelClsExtra:'combo-label',
+            labelClsExtra: 'combo-label',
             fieldLabel: 'Selected Country',
             displayField: 'Name',
             valueField: 'Id',
@@ -73,13 +78,13 @@ Analysis
                     window.feature.comboBoxRegions.setValue(null);
                     window.feature.treegrid.setRootNode(null);
                     window.feature.RegionStore.load({
-                                           params: { CountryId: selectedCountryId }
-                                       });                     
-                     window.feature.treegrid.getStore().proxy.extraParams.CountryId = selectedCountryId;
-                     window.feature.treegrid.getStore().proxy.extraParams.RegionId = '';
-                     window.feature.treegrid.getRootNode().expand();
-                     
-                  }
+                        params: { CountryId: selectedCountryId }
+                    });
+                    window.feature.treegrid.getStore().proxy.extraParams.CountryId = selectedCountryId;
+                    window.feature.treegrid.getStore().proxy.extraParams.RegionId = '';
+                    window.feature.treegrid.getRootNode().expand();
+
+                }
             }
         });
 
@@ -88,7 +93,7 @@ Analysis
             queryMode: 'local',
             id: window.feature.comboboxRegionsId,
             labelAlign: 'top',
-            labelClsExtra:'combo-label',
+            labelClsExtra: 'combo-label',
             fieldLabel: 'Selected Region',
             displayField: 'Name',
             valueField: 'Id',
@@ -96,16 +101,16 @@ Analysis
             emptyText: _t('Region List'),
             listeners: {
                 select: function (combo, record, index) {
-                 var selectedRegionId = record[0].data.Id;
-                 window.feature.treegrid.setRootNode(null);
-                 window.feature.treegrid.getStore().proxy.extraParams.RegionId = selectedRegionId;
-                 window.feature.treegrid.getRootNode().expand();
+                    var selectedRegionId = record[0].data.Id;
+                    window.feature.treegrid.setRootNode(null);
+                    window.feature.treegrid.getStore().proxy.extraParams.RegionId = selectedRegionId;
+                    window.feature.treegrid.getRootNode().expand();
                 }
             }
         });
         Ext.define('ReportRegionLevel', {
             extend: 'Ext.data.Model',
-            fields: ['Name','ProductLevelSum','leaf']
+            fields: ['Id', 'Name', 'ProductLevelSum', 'leaf']
         });
 
         window.feature.treeStore = Ext.create('Ext.data.TreeStore', {
@@ -119,6 +124,137 @@ Analysis
             }
         });
 
+   
+        var productFields = [];
+        var storeFields = [];   
+        var dataStore = [];  
+
+        function GenerateStoreStructure(){
+            storeFields = [];
+            productFields = [];
+            storeFields.push({name: 'RegionName'});
+
+            window.feature.ProductsStore.each(function (record) {
+                productFields.push(record.get('Name'));
+                storeFields.push({name: record.get('Name'), type: 'int'});
+            });
+        };
+
+        function GenerateData(){
+            dataStore = [];
+            var fieldNo = window.feature.ProductsStore.count();
+            var rowNo = window.feature.MatrixStore.count();
+
+            var i = 0;
+            var row = [];
+            while (i < rowNo)
+            {
+                if (i % fieldNo == 0){
+                    row = [];
+                    row.push(window.feature.MatrixStore.getAt(i).get('RegionName'));
+                }
+
+                var stock = window.feature.MatrixStore.getAt(i).get('StockLevelSum');
+                row.push(stock);
+
+                 if (i % fieldNo == 0){
+                    if (row.length > 0){
+                       dataStore.push(row); 
+                    }
+                }
+                i++;
+            }
+
+            return dataStore;
+        };
+
+        window.feature.MatrixStore = Ext.create('Ext.data.Store', {
+            fields: ['RegionName', 'ProductName', 'StockLevelSum'],
+            proxy: {
+                type: 'ajax',
+                url: '@Url.RouteUrl(AnalysisManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "ReportRegionLevel", action = "GetChartData" })',
+               reader: {
+                    type: 'json',
+                    root: 'Products',
+                    totalProperty: 'TotalItems'
+                },
+                extraParams: { productGroupId: '' },
+                simpleSortMode: true
+            }
+        });
+
+        window.feature.ProductsStore = Ext.create('Ext.data.Store', {
+            fields: ['Name', 'Id'],
+            proxy: {
+                type: 'ajax',
+                url: '@Url.RouteUrl(AnalysisManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "ReportRegionLevel", action = "GetProducts" })',
+               reader: {
+                    type: 'json',
+                    root: 'Products',
+                    totalProperty: 'TotalItems'
+                },
+                extraParams: { productGroupId: '' },
+                simpleSortMode: true
+            }
+        });
+
+        window.feature.doSearch = new Ext.util.DelayedTask(function(){
+			GenerateStoreStructure();
+            var myData = GenerateData();
+
+            var st = new Ext.data.SimpleStore({
+                fields: storeFields
+            });
+
+            st.loadData(myData);
+
+            var cont = Ext.getCmp('DivChartContainer');
+            var charttt = Ext.getCmp('chartIdRemove');
+            cont.remove(charttt);
+
+            cont.add({
+                id: 'chartIdRemove',
+                xtype: 'chart',
+                animate: true,
+                shadow: true,
+                style: 'background:#fff',
+                flex:1,
+                store: st,
+                axes: [{
+                    type: 'Category',
+                    position: 'left',
+                    fields: ["RegionName"],
+                    title: 'Regions'
+                }, {
+                    type: 'Numeric',
+                    position: 'bottom',
+                    fields: productFields,
+                    title: 'Current Stock Level',
+                    grid: true,
+                    minimum: 0,
+                }],
+                series: [{
+                    type: 'bar',
+                    axis: 'bottom',
+                    highlight: true,
+                    tips: {
+                        trackMouse: true,
+                        width: 140,
+                        height: 28,
+                        renderer: function(storeItem, item) {
+                            this.setTitle(String('Stock level: ' + item.value[1] + '') );
+                        }
+                    },
+                        xField: "RegionName",
+                        yField: productFields
+                    }],
+                legend: {
+                    position: 'right'
+                }
+            });
+		});      
+
+
         window.feature.treegrid = Ext.create('Ext.tree.Panel', {
             useArrows: true,
             cls: 'white-border',
@@ -130,19 +266,32 @@ Analysis
             store: window.feature.treeStore,
             multiSelect: true,
             singleExpand: false,
+            listeners: {
+                itemclick: function (view, rec, item, index, eventObj) {
+                    if (!rec.get('leaf') && rec.get('Name').indexOf('Quantity of Outposts:') == -1) {
+
+                        window.feature.ProductsStore.proxy.extraParams.productGroupId = rec.get('Id');
+                        window.feature.ProductsStore.load();
+                        window.feature.MatrixStore.proxy.extraParams.productGroupId = rec.get('Id');
+                        window.feature.MatrixStore.load();
+
+                        window.feature.doSearch.delay(200);
+                    }
+                }
+            },
             columns: [{
                 xtype: 'treecolumn',
                 text: 'Region / Product Group / Product',
                 flex: 2,
                 sortable: true,
-                menuDisabled:true,
+                menuDisabled: true,
                 dataIndex: 'Name'
             }, {
                 xtype: 'templatecolumn',
                 text: 'Product Level',
                 flex: 1,
                 sortable: true,
-                menuDisabled:true,
+                menuDisabled: true,
                 dataIndex: 'ProductLevelSum',
                 align: 'center',
                 tpl: Ext.create('Ext.XTemplate', '{ProductLevelSum:this.ProductLevelSum}', {
@@ -153,29 +302,30 @@ Analysis
             }]
         });
 
-         window.feature.CountryStore.load();
-
-        var contentRes = window.res.content;
-
-        var mainContent = Ext.getCmp(contentRes.maincontent.id);
-        mainContent.add({
-            xtype: 'container',
-            margin:'45 50 20 20',
-            padding:'20 0 0 20',
+        window.feature.container = Ext.create('Ext.container.Container', {
+            margin: '45 50 20 20',
+            padding: '20 0 0 20',
             autoScroll: true,
             id: 'TopContainer',
             layout: {
                 align: 'stretch',
-                type: 'vbox'
+                type: 'hbox'
             },
             items: [{
                 xtype: 'container',
+                flex: 1,
                 layout: {
                     align: 'stretch',
                     type: 'vbox'
                 },
-                height:150,
-                items: [
+                items: [{
+                    xtype: 'container',
+                    layout: {
+                        align: 'stretch',
+                        type: 'vbox'
+                    },
+                    height: 150,
+                    items: [
                 {
                     xtype: 'container',
                     flex: 1,
@@ -186,31 +336,58 @@ Analysis
                         xtype: 'container',
                         height: 30,
                         width: 30,
-                        html:'&nbsp;'
-                    },{
+                        html: '&nbsp;'
+                    }, {
                         xtype: 'label',
                         cls: 'x-title-label',
                         text: 'Product level information at region level'
                     }]
-                    },{
-						xtype: 'container',
-                        flex: 1,
-						layout: {
-							type: 'column'
-						},
-						items: [
+                }, {
+                    xtype: 'container',
+                    flex: 1,
+                    layout: {
+                        type: 'column'
+                    },
+                    items: [
 						{
-							xtype: 'container',
-							height: 30,
-							width: 30,
-							html:'&nbsp;'
-						}, 
-                            window.feature.comboBoxCountries, 
-							window.feature.comboBoxRegions							
+						    xtype: 'container',
+						    height: 30,
+						    width: 30,
+						    html: '&nbsp;'
+						},
+                            window.feature.comboBoxCountries,
+							window.feature.comboBoxRegions
                         ]
-				    }]
-			}, window.feature.treegrid]
+                }]
+                }, window.feature.treegrid]
+            }, {
+                xtype: 'container',
+                flex: 1,
+                layout: {
+                    align: 'stretch',
+                    type: 'vbox'
+                },
+                items: [{
+                    xtype: 'container',
+                    id: 'DivChartContainer',
+                    flex: 2,
+                    layout: {
+                        align: 'stretch',
+                        type: 'vbox'
+                    },
+                    items: []
+                },{
+                        xtype: 'container',
+                        flex: 1
+                    }]
+            }]
         });
 
+
+        var contentRes = window.res.content;
+        var mainContent = Ext.getCmp(contentRes.maincontent.id);
+
+        mainContent.add(window.feature.container);
+        window.feature.CountryStore.load();
     });
 </script>
