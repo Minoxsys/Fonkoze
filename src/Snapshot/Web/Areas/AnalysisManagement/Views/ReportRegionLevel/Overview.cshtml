@@ -216,10 +216,12 @@ Analysis: Product level information at region level
                 id: 'chartIdRemove',
                 xtype: 'chart',
                 animate: true,
-                shadow: true,
-                autoScroll: true,	
+                shadow: true,	
                 style: 'background:#fff',
-                flex:1,
+                minHeight: 300,
+                maxHeight: 500,
+                flex: 1,
+                //autoScroll: true,
                 store: st,
                 axes: [{
                     type: 'Category',
@@ -360,11 +362,8 @@ Analysis: Product level information at region level
 							window.feature.comboBoxRegions
                         ]
                 }]
-                }, window.feature.treegrid, 
-                {
-                    xtype:'container',
-                    height: 150
-                }]
+                }, window.feature.treegrid
+                ]
             }, {
                 xtype: 'container',
                 flex: 1,
@@ -372,6 +371,7 @@ Analysis: Product level information at region level
                     align: 'stretch',
                     type: 'vbox'
                 },
+                padding: '0 0 0 20',
                 items: [{
                     xtype: 'container',
                     id: 'DivChartContainer',
@@ -380,11 +380,9 @@ Analysis: Product level information at region level
                         align: 'stretch',
                         type: 'vbox'
                     },
+                    autoScroll: true,
                     items: []
-                },{
-                        xtype: 'container',
-                        flex: 1
-                    }]
+                }]
             }]
         });
 

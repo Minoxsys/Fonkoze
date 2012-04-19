@@ -250,6 +250,11 @@ Analysis: Product level information at district level
             return dataStore;
         };
 
+        var colors = [  'rgb(45, 117, 226)',     'rgb(154, 205, 50)',     'rgb(212, 40, 40)',     
+                        'rgb(255, 165, 0)',      'rgb(255, 215, 0)',      'rgb(208, 32, 144)',    
+                        'rgb(64, 224, 208)',     'rgb(190, 190, 190)'
+                      ];
+
         window.feature.execute = new Ext.util.DelayedTask(function () {
             GenerateStoreStructure();
             var dataChart2 = GenerateData();
@@ -277,12 +282,13 @@ Analysis: Product level information at district level
             cont.add({
                 id: 'chart1DistrictLevel',
                 xtype: 'chart',
-                flex: 2,
+                flex: 1,
+                minHeight: 300,
                 animate: true,
                 shadow: true,
-                autoScroll: true,	
+                //autoScroll: true,	
                 store: storeChart1,
-                style: 'background:#fff',
+                style: 'background:#fff', 
                 axes: [{
                     type: 'Numeric',
                     position: 'bottom',
@@ -310,18 +316,11 @@ Analysis: Product level information at district level
                     },
                     xField: ['ProductName'],
                     yField: ['StockLevel'],
-                    renderer: function (sprite, record, attr, index, store) {
-                        var fieldValue = Math.random() * 20 + 10;
-                        var value = (record.get('StockLevel') >> 0) % 5;
-                        var color = ['rgb(215, 70, 121)',
-                                         'rgb(54, 153, 201)',
-                                         'rgb(146, 6, 157)',
-                                         'rgb(49, 149, 0)',
-                                         'rgb(249, 153, 0)'][value];
-                        return Ext.apply(attr, {
-                            fill: color
-                        });
-                    }
+                    renderer: function(sprite, storeItem, barAttr, i, store) {
+                        barAttr.fill = colors[i%8];
+                        return barAttr;
+                    },
+
                 }]
             });
 
@@ -331,14 +330,18 @@ Analysis: Product level information at district level
             cont.add({
                 id: 'chart2DistrictLevel',
                 xtype: 'chart',
-                flex: 2,
+                flex: 1,
+                minHeight: 300,
+                margin: '25 0 0 0',
                 style: 'background:#fff',
                 animate: true,
                 store: storeChart2,
                 shadow: true,
-                autoScroll: true,	
+                //autoScroll: true,	
                 legend: {
-                    position: 'right'
+                    position: 'right',
+                    padding: 5,
+                    itemSpacing: 1
                 },
                 axes: [{
                     type: 'Numeric',
@@ -461,11 +464,8 @@ Analysis: Product level information at district level
                             window.feature.comboboxDistricts
                         ]
                 }]
-                }, window.feature.treegrid,
-                {
-                    xtype: 'container',
-                    height: 150
-                }]
+                }, window.feature.treegrid
+                ]
             }, {
                 xtype: 'container',
                 flex: 1,
@@ -473,6 +473,7 @@ Analysis: Product level information at district level
                     align: 'stretch',
                     type: 'vbox'
                 },
+                padding: '0 0 0 20',
                 items: [{
                     xtype: 'container',
                     id: 'DivChartContainer',
@@ -481,10 +482,8 @@ Analysis: Product level information at district level
                         align: 'stretch',
                         type: 'vbox'
                     },
+                    autoScroll: true,	
                     items: []
-                }, {
-                    xtype: 'container',
-                    flex: 1
                 }]
             }]
         });

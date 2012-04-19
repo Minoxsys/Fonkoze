@@ -127,6 +127,7 @@
 		window.feature.grid = Ext.create('Ext.grid.Panel', {
 			flex: 1,
 			cls: 'white-border',
+            autoScroll:true,
 			store:  window.feature.gridStore,
 			columns: [
 				{
@@ -235,8 +236,7 @@
 	
 		var topContainer = Ext.create('Ext.container.Container', {
 			margin:'45 50 20 20',
-			padding:'20 0 0 20',
-			autoScroll:true,
+			padding:'20 20 0 20',
 			id:'TopContainer',
 			layout: {
 				align: 'stretch',
@@ -306,11 +306,7 @@
 						}
 					]
 				},
-				window.feature.grid,{
-					xtype: 'container',
-					html:'&nbsp;',
-					height: 150
-				}
+				window.feature.grid
 			]
 		});
 	
