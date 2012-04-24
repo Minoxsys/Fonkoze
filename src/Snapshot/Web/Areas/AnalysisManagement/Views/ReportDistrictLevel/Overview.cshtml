@@ -209,18 +209,32 @@ Analysis: Product level information at district level
         var storeFields = [];
         var dataStore = [];
         var chartSeries = [];
+        var colors = [  'rgb(45, 117, 226)',     'rgb(154, 205, 50)',     'rgb(212, 40, 40)',     'rgb(255, 165, 0)',      'rgb(255, 215, 0)',      'rgb(208, 32, 144)',    
+                        'rgb(64, 224, 208)',     'rgb(190, 190, 190)',    'rgb(139, 69, 19)',     'rgb(250, 128, 114)',    'rgb(148, 0, 211)',      'rgb( 28, 134, 238)',   
+                        'rgb(255, 64, 64 )',     'rgb(255, 130, 71)',     'rgb(0, 100, 0)',       'rgb(238, 18, 137)' ,    'rgb(202, 255, 112)',     'rgb(142, 35, 35)',      
+                        'rgb(255, 218, 185)',    'rgb(32, 178, 170)',
+                      ];
 
         function GenerateStoreStructure() {
             storeFields = [];
             productFields = [];
             chartSeries = [];
-
+            var i =0;
             storeFields.push({ name: 'Day' });
 
             window.feature.ProductsStore.each(function (record) {
                 productFields.push(record.get('ProductName'));
                 storeFields.push({ name: record.get('ProductName'), type: 'int' });
-                chartSeries.push({ type: 'line', xField: 'Day', yField: record.get('ProductName'), highlight: { size: 7, radius: 7 }, axis: 'left', smooth: true, markerConfig: { type: 'circle', size: 5, radius: 4, 'stroke-width': 0} });
+                chartSeries.push({ 
+                    type: 'line', 
+                    xField: 'Day', 
+                    yField: record.get('ProductName'), 
+                    highlight: { size: 7, radius: 7 }, 
+                    axis: 'left', smooth: true, 
+                    markerConfig: { type: 'circle', size: 5, radius: 4, 'stroke-width': 0, fill: colors[i % colors.length], stroke: colors[i % colors.length]},
+                    style: { fill: colors[i % colors.length], stroke: colors[i % colors.length], 'stroke-width': 2, opacity: 1 },
+                });
+                i = i+1;
             });
         };
 
@@ -230,7 +244,7 @@ Analysis: Product level information at district level
 
             var i = 0;
             var row = [];
-            while (i < 21) {
+            while (i < 30) {
                 if (i % fieldNo == 0) {
                     row = [];
                     row.push(Ext.String.format("{0}", i));
@@ -249,11 +263,6 @@ Analysis: Product level information at district level
 
             return dataStore;
         };
-
-        var colors = [  'rgb(45, 117, 226)',     'rgb(154, 205, 50)',     'rgb(212, 40, 40)',     
-                        'rgb(255, 165, 0)',      'rgb(255, 215, 0)',      'rgb(208, 32, 144)',    
-                        'rgb(64, 224, 208)',     'rgb(190, 190, 190)'
-                      ];
 
         window.feature.execute = new Ext.util.DelayedTask(function () {
             GenerateStoreStructure();
@@ -286,7 +295,6 @@ Analysis: Product level information at district level
                 minHeight: 300,
                 animate: true,
                 shadow: true,
-                //autoScroll: true,	
                 store: storeChart1,
                 style: 'background:#fff', 
                 axes: [{
@@ -317,11 +325,11 @@ Analysis: Product level information at district level
                     xField: ['ProductName'],
                     yField: ['StockLevel'],
                     renderer: function(sprite, storeItem, barAttr, i, store) {
-                        barAttr.fill = colors[i%8];
+                        barAttr.fill = colors[i % colors.length];
                         return barAttr;
                     },
-
                 }]
+                
             });
 
             var chart2 = Ext.getCmp('chart2DistrictLevel');
@@ -337,7 +345,6 @@ Analysis: Product level information at district level
                 animate: true,
                 store: storeChart2,
                 shadow: true,
-                //autoScroll: true,	
                 legend: {
                     position: 'right',
                     padding: 5,
@@ -356,7 +363,12 @@ Analysis: Product level information at district level
                     fields: ['Day'],
                     title: 'Day of the Month'
                 }],
-                series: chartSeries
+                series: chartSeries,
+                legend: {
+                    position: 'right',
+                    height: 300
+
+                }
             });
         });
 
