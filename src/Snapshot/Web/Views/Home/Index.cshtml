@@ -17,11 +17,23 @@ Snapshot Application
         var content = Ext.getCmp(window.res.content.id);
 
         content.add({
-            xtype: 'image',
-            src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/dashboard_image.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
-            cls: "dashboard-img",
-            width: 1140,
-            height: 390
+            xtype: 'container',
+            layout: {
+                type: 'vbox',
+                align: 'center'
+            },
+
+            items: [{
+                xtype: 'image',
+                src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/dashboard_image.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                width: 1140,
+                height: 390
+            }, {
+                xtype: 'image',
+                src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/charts.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                height: 350,
+                margin: '20 0 0 0'
+            }]
         });
 
     });
