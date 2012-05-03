@@ -12,7 +12,6 @@ using NUnit.Framework;
 using Persistence.Conventions;
 using FluentNHibernate.Cfg;
 using System.IO;
-using System.Data.SqlServerCe;
 using NHibernate.Tool.hbm2ddl;
 
 namespace IntegrationTests
