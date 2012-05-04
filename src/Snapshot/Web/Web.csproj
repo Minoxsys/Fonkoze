@@ -452,6 +452,7 @@
     <Content Include="Assets\css\snapshot-theme.css" />
     <Content Include="Assets\resources\img\briefcase.png" />
     <Content Include="Assets\resources\img\charts.png" />
+    <Content Include="Assets\resources\img\charts2.png" />
     <Content Include="Assets\resources\img\checked.gif" />
     <Content Include="Assets\resources\img\copy.png" />
     <Content Include="Assets\resources\img\dashboard_image.png" />
