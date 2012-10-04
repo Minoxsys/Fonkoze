@@ -49,7 +49,7 @@
                                 height: 38,
                                 icon:'@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/SubMenu/LocationNotSelected.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
                                 iconAlign: 'left',
-                                margin: '10 7 0 20',
+                                margin: '0 7 0 20',
                                 padding: '0 0 0 10',
                                 text: 'Location Administration',
                                 ui: 'snapshot-submenu-btn',
@@ -63,7 +63,7 @@
                                 id: subNavRes.buttonTabs.product,
                                 toggleGroup: subNavRes.buttonTabs.group,
                                 enableToggle: true,
-                                margin: '10 7 0 0',
+                                margin: '0 7 0 0',
                                 padding: '0 0 0 10',
                                 height: 38,
                                 icon:'@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/SubMenu/ProductNotSelected.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
@@ -81,7 +81,7 @@
                                 toggleGroup: subNavRes.buttonTabs.group,
                                 enableToggle: true,
                                 height: 38,
-                                margin: '10 7 0 0',
+                                margin: '0 7 0 0',
                                 padding: '0 0 0 10',
                                 icon:'@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/SubMenu/CampaignNotSelected.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
                                 iconAlign: 'left',
@@ -98,7 +98,7 @@
                                 toggleGroup: subNavRes.buttonTabs.group,
                                 enableToggle: true,
                                 height: 38,
-                                margin: '10 7 0 0',
+                                margin: '0 7 0 0',
                                 padding: '0 0 0 10',
                                 icon:'@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/SubMenu/UserNotSelected.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
                                 iconAlign: 'left',
@@ -115,7 +115,7 @@
             },{
                 xtype: 'container',
                 id: 'userInfo',
-                flex: 2,
+                flex: 1,
                 layout: {
                     align: 'stretch',
                     type: 'vbox'
@@ -141,7 +141,7 @@
                                     {
                                         xtype: 'label',
                                         style:'text-align:right;',  
-                                        margin: '25, 20, 7, 0',
+                                        margin: '15, 20, 5, 0',
                                         text: '@Html.Action("UserDetails", new { area=string.Empty,controller="Home" })',
                                         cls: 'x-username-label' 
                                     },{
@@ -154,54 +154,54 @@
                                                 cls: 'x-userMenu-label',
                                                 text: 'Help',
                                                 listeners: {
-                                    render: function (c) {
-                                        c.getEl().addCls('pseudolink');
+                                                    render: function (c) {
+                                                        c.getEl().addCls('pseudolink');
                                                 
-                                        c.getEl().on('click', function () {
-                                            var win=Ext.create('Ext.window.Window', {
-                                                title: 'Help',
-                                                width: 400,
-                                                height: 320,
-                                                modal: true,
-                                                ui: 'snapshot-popup-window',
-                                                buttons: [
-                                                    {    
-                                                        text: 'Ok',
-                                                        margin: '10 10 20 0',
-                                                        ui: 'snapshot-add-btn',
-                                                        cls: 'x-add-button-gradient',
-                                                        handler: function () { win.close(); }
-                                                    },
-                                                ],
+                                                        c.getEl().on('click', function () {
+                                                            var win=Ext.create('Ext.window.Window', {
+                                                                title: 'Help',
+                                                                width: 400,
+                                                                height: 320,
+                                                                modal: true,
+                                                                ui: 'snapshot-popup-window',
+                                                                buttons: [
+                                                                    {    
+                                                                        text: 'Ok',
+                                                                        margin: '10 10 20 0',
+                                                                        ui: 'snapshot-add-btn',
+                                                                        cls: 'x-add-button-gradient',
+                                                                        handler: function () { win.close(); }
+                                                                    },
+                                                                ],
 
-                                                layout: {
-                                                    padding: 10,
-                                                    type: 'fit'
-                                                },
-                                                items: [{
-                                                    xtype:'container',
-                                                    padding:'10',
-                                                    html: "<p>Support and help for all web users where any functionality"+
-                                                        " related to the system and solution is unavailable shall be processed"+
-                                                        " by email request.</p><br/> <p>Support is available from 08:00-18:00 GMT,"+
-                                                        " (Monday to Friday except public holidays).</p><br/><p>Please contact us at"+
-                                                        " <a href='mailto:support@minoxsys.com' style='font-weight:bold; color:black'>"+
-                                                        "support@minoxsys.com</a><br/>Acknowledgement shall be received within one (1) "+
-                                                        "business hour from receipt of report and resolution target is five (5) days for"+
-                                                        " 95% of incidents.</p>",
-                                                    style: {
-                                                        'text-align':'justify',
-                                                        'color':'#222',
-                                                        'line-height':'1.5',
-                                                    }
-                                                }],
+                                                                layout: {
+                                                                    padding: 10,
+                                                                    type: 'fit'
+                                                                },
+                                                                items: [{
+                                                                    xtype:'container',
+                                                                    padding:'10',
+                                                                    html: "<p>Support and help for all web users where any functionality"+
+                                                                        " related to the system and solution is unavailable shall be processed"+
+                                                                        " by email request.</p><br/> <p>Support is available from 08:00-18:00 GMT,"+
+                                                                        " (Monday to Friday except public holidays).</p><br/><p>Please contact us at"+
+                                                                        " <a href='mailto:support@minoxsys.com' style='font-weight:bold; color:black'>"+
+                                                                        "support@minoxsys.com</a><br/>Acknowledgement shall be received within one (1) "+
+                                                                        "business hour from receipt of report and resolution target is five (5) days for"+
+                                                                        " 95% of incidents.</p>",
+                                                                    style: {
+                                                                        'text-align':'justify',
+                                                                        'color':'#222',
+                                                                        'line-height':'1.5',
+                                                                    }
+                                                                }],
                                                         
-                                            });
-                                            win.show();
-                                        });
+                                                            });
+                                                            win.show();
+                                                        });
 
-                                    }
-                                }
+                                                    }
+                                                }
                                             },{
                                                 xtype: 'label', 
                                                 margin: '0 20 0 0',
@@ -226,7 +226,7 @@
                             },{
                                 xtype: 'container',
                                 itemId: 'userPhoto',
-                                margin: '14, 0, 0, 0',
+                                margin: '2, 0, 0, 0',
                                 width: 80,
                                 items: [
                                     { 
