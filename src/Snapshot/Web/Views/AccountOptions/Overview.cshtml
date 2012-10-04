@@ -1,0 +1,299 @@
+﻿@using Domain
+@using Microsoft.Web.Mvc;
+@model Web.Models.AccountOptions.UserModel
+
+@section page_title{
+Account Options: Overview
+}
+
+@{
+    Html.RenderPartial("_EmptySubNavigation");
+    Html.RenderPartial("_EmptySideBar");
+}
+
+
+<script type="text/javascript">
+    Ext.onReady(function () {
+        window.feature = {};
+        window.feature.formFirstName = 'Form-Account-Options-First-Name';
+        window.feature.formLastName = 'Form-Account-Options-Last-Name';
+        window.feature.formEmail = 'Form-Account-Options-Email';
+        window.feature.currentPassword = 'Form-Account-Options-Current-Password';
+        window.feature.newPassword = 'Form-Account-Options-New-Password';
+        window.feature.retypedPassword = 'Form-Account-Options-Retyped-Password';
+
+        window.feature.modal = Ext.define('Ext.feature.region.Modal', {
+            extend: 'Ext.window.Window',
+            modal: true,
+            ui: 'snapshot-popup-window',
+            height: 240,
+            width: 390,
+            layout: {
+                align: 'stretch',
+                padding: 10,
+                type: 'vbox'
+            },
+
+            initComponent: function () {
+                var me = this;
+                Ext.applyIf(me, {
+                    items: [{
+                        xtype: 'textfield',
+                        name: 'CurrentPassword',
+                        fieldLabel: 'Current Password',
+                        inputType: 'password',
+                        width: 400,
+                        itemId: window.feature.currentPassword
+                    }, {
+                        xtype: 'textfield',
+                        name: 'NewPassword',
+                        fieldLabel: 'New Password',
+                        inputType: 'password',
+                        margin: '10 0 0 0',
+                        width: 400,
+                        itemId: window.feature.newPassword
+                    }, {
+                        xtype: 'textfield',
+                        name: 'RetypedPassword',
+                        fieldLabel: 'Re-type New Password',
+                        inputType: 'password',
+                        margin: '10 0 0 0',
+                        width: 400,
+                        itemId: window.feature.retypedPassword
+                    }]
+                });
+
+                me.callParent(arguments);
+            }
+        });
+
+        window.feature.container = Ext.create('Ext.container.Container', {
+            margin: '15 25 15 15',
+            padding: '20 20 0 20',
+            id: 'TopContainer',
+            layout: {
+                align: 'stretch',
+                type: 'vbox'
+            },
+            items: [{
+                xtype: 'container',
+                layout: {
+                    type: 'hbox'
+                },
+                height: 50,
+                items: [{
+                    xtype: 'container',
+                    flex: 1,
+                    layout: {
+                        type: 'column'
+                    },
+                    height: 50,
+                    items: [{
+                        xtype: 'container',
+                        height: 30,
+                        width: 30,
+                        html: '&nbsp;'
+                    }, { xtype: 'image',
+                        src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/Content/Users.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                        margin: '0 10 10 10'
+                    }, {
+                        xtype: 'label',
+                        cls: 'x-title-label',
+                        text: 'Account Options'
+                    }, {
+                    }, {
+                        xtype: 'button',
+                        margin: '0 0 0 20',
+                        text: 'Change Password',
+                        ui: 'snapshot-add-btn',
+                        cls: 'x-add-button-gradient',
+                        handler: function () {
+                            var winChangePassword = new window.feature.modal({
+                                title: 'Change Password',
+                                buttons: [
+                                    { text: 'Cancel',
+                                        margin: '10 10 20 0',
+                                        ui: 'snapshot-cancel-btn',
+                                        cls: 'x-add-button-gradient',
+                                        handler: function () { winChangePassword.close(); winChangePassword.destroy(); }
+                                    },
+                                    { text: 'Save',
+                                        margin: '0 20 20 10',
+                                        ui: 'snapshot-add-btn',
+                                        cls: 'x-add-button-gradient',
+                                        handler: function () {
+                                            var currentPassword = winChangePassword.down('#' + window.feature.currentPassword);
+                                            var newPassword = winChangePassword.down('#' + window.feature.newPassword);
+                                            var retypedPassword = winChangePassword.down('#' + window.feature.retypedPassword);
+
+                                            var ok = IsValidPassword(currentPassword, newPassword, retypedPassword);
+
+                                            if (ok == true) {
+                                                var values = {
+                                                    CurrentPassword: currentPassword.getValue(),
+                                                    NewPassword: newPassword.getValue()
+                                                };
+
+                                                var postToUrl = '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "AccountOptions", action = "SavePassword" })';
+                                                var action = $.post(postToUrl, values);
+                                                action.success(function (serverResponse) {
+                                                    if (serverResponse.Status == 'Success') {
+                                                        winChangePassword.close(); winChangePassword.destroy();
+                                                    } else {
+                                                        currentPassword.markInvalid('Current Password is invalid!');
+                                                    }
+                                                    var msgAlert = Ext.Msg;
+                                                    msgAlert.ui = 'snapshot-popup-window';
+                                                    msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                                    msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+                                                    msgAlert.alert(serverResponse.Status, serverResponse.Message);
+                                                });
+                                            }
+                                        }
+                                    }
+                                ]
+                            });
+                            winChangePassword.show();
+                        }
+                    }]
+                }]
+            }, {
+                xtype: 'container',
+                flex: 1,
+                layout: {
+                    type: 'vbox'
+                },
+                items: [{
+                    xtype: 'textfield',
+                    name: 'FirstName',
+                    fieldLabel: 'First Name',
+                    margin: '30 0 0 30',
+                    width: 400,
+                    itemId: window.feature.formFirstName
+                }, {
+                    xtype: 'textfield',
+                    name: 'LastName',
+                    fieldLabel: 'Last Name',
+                    margin: '10 0 0 30',
+                    width: 400,
+                    itemId: window.feature.formLastName
+                }, {
+                    xtype: 'textfield',
+                    name: 'Email',
+                    fieldLabel: 'Email',
+                    margin: '10 0 0 30',
+                    width: 400,
+                    itemId: window.feature.formEmail
+                }, {
+                    xtype: 'container',
+                    width: 430,
+                    layout: {
+                        type: 'hbox',
+                        pack: 'end'
+                    },
+                    items: [{
+                        xtype: 'button',
+                        text: 'Cancel',
+                        margin: '10 10 0 0',
+                        ui: 'snapshot-cancel-btn',
+                        handler: function () {
+                            window.location.href = '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "Home", action = "Index" })';
+                        }
+                    }, {
+                        xtype: 'button',
+                        margin: '10 0 0 0',
+                        text: 'Save',
+                        ui: 'snapshot-add-btn',
+                        cls: 'x-add-button-gradient',
+                        handler: function () {
+                            var userFirstName = window.feature.container.down('#' + window.feature.formFirstName);
+                            var userLastName = window.feature.container.down('#' + window.feature.formLastName);
+                            var userEmail = window.feature.container.down('#' + window.feature.formEmail);
+
+                            var ok = IsValid(userFirstName, userLastName, userEmail);
+
+                            if (ok == true) {
+                                var values = {
+                                    FirstName: userFirstName.getValue(),
+                                    LastName: userLastName.getValue(),
+                                    Email: userEmail.getValue()
+                                };
+
+                                var postToUrl = '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "AccountOptions", action = "SaveProfileInformation" })';
+                                var action = $.post(postToUrl, values);
+                                action.success(function (serverResponse) {
+                                    var msgAlert = Ext.Msg;
+                                    msgAlert.ui = 'snapshot-popup-window';
+                                    msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                    msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+                                    msgAlert.alert(serverResponse.Status, serverResponse.Message);
+                                });
+                            }
+                        }
+                    }]
+                }]
+            }]
+        });
+
+        function IsValid(userFirstName, userLastName, userEmail) {
+            var ok = true;
+            if (userFirstName.getValue() == '') {
+                userFirstName.markInvalid('Field First Name is required!');
+                userFirstName.setValue(null);
+                ok = false;
+            }
+
+            if (userLastName.getValue() == '') {
+                userLastName.markInvalid('Field Last Name is required!');
+                userLastName.setValue(null);
+                ok = false;
+            }
+
+            if (userEmail.getValue() == null) {
+                userEmail.markInvalid('Field Email is required!');
+                userEmail.setValue(null);
+                ok = false;
+            }
+
+            return ok;
+        }
+
+        function IsValidPassword(currentPassword, newPassword, retypedPassword) {
+            var ok = true;
+            if (currentPassword.getValue() == '') {
+                currentPassword.markInvalid('Field Current Password is required!');
+                currentPassword.setValue(null);
+                ok = false;
+            }
+
+            if (newPassword.getValue() == '') {
+                newPassword.markInvalid('Field New Password is required!');
+                newPassword.setValue(null);
+                ok = false;
+            }
+
+            if (retypedPassword.getValue() == null) {
+                retypedPassword.markInvalid('Field Re-typed Password is required!');
+                retypedPassword.setValue(null);
+                ok = false;
+            }
+
+            if (retypedPassword.getValue() != newPassword.getValue()) {
+                retypedPassword.markInvalid('The passwords you entered do not match!');
+                ok = false;
+            }
+
+            return ok;
+        }
+
+        var contentRes = window.res.content;
+        var mainContent = Ext.getCmp(contentRes.maincontent.id);
+
+        mainContent.add(window.feature.container);
+        window.feature.container.down('#' + window.feature.formFirstName).setValue('@Model.FirstName');
+        window.feature.container.down('#' + window.feature.formLastName).setValue('@Model.LastName');
+        window.feature.container.down('#' + window.feature.formEmail).setValue('@Model.Email');
+
+    });
+
+</script>
