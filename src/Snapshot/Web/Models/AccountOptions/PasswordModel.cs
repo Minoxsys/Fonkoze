@@ -6,7 +6,7 @@ using System.Web;
 
 namespace Web.Models.AccountOptions
 {
-    public class PasswordModal
+    public class PasswordModel
     {
         public string CurrentPassword { get; set; }
         public string NewPassword { get; set; }

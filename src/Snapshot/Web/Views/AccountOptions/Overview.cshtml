@@ -7,7 +7,7 @@ Account Options: Overview
 }
 
 @{
-    Html.RenderPartial("_EmptySubNavigation");
+    Html.RenderPartial("_AlertsSubNavigation");
     Html.RenderPartial("_EmptySideBar");
 }
 
@@ -68,8 +68,8 @@ Account Options: Overview
         });
 
         window.feature.container = Ext.create('Ext.container.Container', {
-            margin: '15 25 15 15',
-            padding: '20 20 0 20',
+            margin: '15 15 15 15',
+            padding: '20 0 0 20',
             id: 'TopContainer',
             layout: {
                 align: 'stretch',
@@ -100,7 +100,6 @@ Account Options: Overview
                         xtype: 'label',
                         cls: 'x-title-label',
                         text: 'Account Options'
-                    }, {
                     }, {
                         xtype: 'button',
                         margin: '0 0 0 20',
@@ -195,6 +194,7 @@ Account Options: Overview
                         xtype: 'button',
                         text: 'Cancel',
                         margin: '10 10 0 0',
+                        width: 70,
                         ui: 'snapshot-cancel-btn',
                         handler: function () {
                             window.location.href = '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "Home", action = "Index" })';
@@ -202,6 +202,7 @@ Account Options: Overview
                     }, {
                         xtype: 'button',
                         margin: '10 0 0 0',
+                        width: 70,
                         text: 'Save',
                         ui: 'snapshot-add-btn',
                         cls: 'x-add-button-gradient',

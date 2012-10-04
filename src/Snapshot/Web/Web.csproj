@@ -265,7 +265,10 @@
     <Compile Include="Areas\StockAdministration\Models\Product\ProductInputModel.cs" />
     <Compile Include="BackgroundJobs\ExecutedCampaign.cs" />
     <Compile Include="Bootstrap\Container\ServicesConventionsRegistrar.cs" />
+    <Compile Include="Controllers\AccountOptionsController.cs" />
     <Compile Include="Helpers\ConvertHelper.cs" />
+    <Compile Include="Models\AccountOptions\PasswordModel.cs" />
+    <Compile Include="Models\AccountOptions\UserModel.cs" />
     <Compile Include="Models\Shared\ToModalJsonActionResponse.cs" />
     <Compile Include="Areas\StockAdministration\Models\Product\ProductModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\Product\ProductOutputModel.cs" />
@@ -2177,6 +2180,7 @@
     <None Include="Assets\sass\panel-template.scss" />
     <None Include="ClassDiagram1.cd" />
     <Content Include="Views\Shared\_EmptySideBar.cshtml" />
+    <Content Include="Views\AccountOptions\Overview.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\mixins\_color-by-background.scss" />
