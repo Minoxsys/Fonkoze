@@ -195,16 +195,24 @@
                 align: 'stretch',
                 type: 'vbox'
             },
-            items: [
-                {
-                    xtype: 'label',
-                    cls: 'x-title-label',
-                    height: 50,
-                    margin: '0 0 0 10',
-                    html: 'Existing Requests'
+            items: [{
+                    xtype: 'container',
+                    height: 45,
+                    layout: 'column',
+                    items: [{
+                        xtype: 'image',
+                        src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/SubMenu/CampaignSelected.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                        margin: '0 10 0 10'
+                   }, {
+                        xtype: 'label',
+                        cls: 'x-title-label',
+                        height: 45,
+                        margin: '0 0 0 10',
+                        html: 'Existing Requests'
+                    }]
                 }, {
                     xtype: 'container',
-                    height: 70,
+                    height: 65,
                     layout: 'column',
                     items: [
                         {

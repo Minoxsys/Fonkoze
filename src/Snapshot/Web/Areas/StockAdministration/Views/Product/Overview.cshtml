@@ -123,7 +123,7 @@
             displayField: 'Name',
             fieldLabel: 'Product Group',
             valueField: 'Id',
-            margin: '0 0 0 75',
+            labelAlign: 'top',
             emptyText: _t('Selected product group'),
             editable: false,
             typeAhead: false,
@@ -652,7 +652,7 @@
         mainContent.add({
             xtype: 'container',
             margin: '15 15 15 15',
-            padding: '20 20 0 20',
+            padding: '20 0 0 20',
             autoScroll:true,
             id:'TopContainer',
             layout: {
@@ -666,11 +666,11 @@
                         align: 'stretch',
                         type: 'vbox'
                     },
-                    height: 130,
+                    height: 110,
                     items: [
                         {
                             xtype: 'container',
-                            flex: 1,
+                            height: 45,
                             layout: {
                                 type: 'hbox'
                             },
@@ -756,14 +756,15 @@
                             ]
                         },{
                             xtype: 'container',
-                            flex: 1,
+                            height: 65,
                             layout: {
                                 type: 'column'
                             },
                             items: [{
 									xtype: 'container',
-									height: 30,
-									html:'&nbsp;'
+							        height: 30,
+							        width: 65,
+							        html:'&nbsp;'
 								},
                                 window.feature.comboBoxProductGroups
                             ]
