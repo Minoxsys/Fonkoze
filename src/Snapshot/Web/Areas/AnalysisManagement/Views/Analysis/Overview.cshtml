@@ -8,8 +8,8 @@ Analysis
 
 
 @{
-    Html.RenderPartial("AnalysisMainContent");
-    Html.RenderPartial("AnalysisUserInfoContainer");
+    Html.RenderPartial("_EmptySubNavigation");
+    Html.RenderPartial("_EmptySideBar");
 }
 <script type="text/javascript">
 
@@ -27,129 +27,148 @@ Analysis
 
         window.feature = {};
 
-        var contentRes = window.res.content;
-
-        var mainContent = Ext.getCmp(contentRes.maincontent.id);
-        mainContent.add({
-            xtype: 'container',
-            margin: '15 15 15 15',
-            padding: '20 0 0 20',
-            autoScroll: true,
+        window.feature.container = Ext.create('Ext.container.Container', {
+            margin: '15 25 15 15',
+            padding: '20 20 20 20',
             id: 'TopContainer',
             layout: {
                 align: 'stretch',
-                type: 'vbox'
+                type: 'hbox'
             },
+            autoScroll: true,
             items: [{
-                xtype: 'fieldset',
+                xtype: 'container',
                 width: 1200,
-                defaults: { anchor: '100%' },
-                layout: 'vbox',
-                items: [{ xtype: 'container',
-                    align: 'center',
+                height: 550,
+                autoScroll: true,
+                layout: {
+                    align: 'stretch',
+                    type: 'vbox'
+                },
+                items: [{
+                    xtype: 'container',
+                    height: 110,
                     layout: {
-                        type: 'vbox'
+                        align: 'stretch',
+                        type: 'hbox'
                     },
-                    items: [{ xtype: 'container',
-                        //align: 'center',
+                    items: [{
+                        xtype: 'container',
+                        width: 550,
                         layout: {
-                            type: 'hbox'
+                            type: 'table',
+                            columns: 2
                         },
-                        items: [{ xtype: 'container',
-                            //align: 'center',
-                            layout: {
-                                type: 'hbox'
-                            },
-                            items: [{xtype: 'image',
-                                src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Analysis/StockLevelRegion.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
-                                margin: '60 0 0 40'
-                            }, { xtype: 'container',
-                                layout: {
-                                    type: 'vbox'
-                                },
-                                items: [{ xtype: 'box',
-                                    autoEl: { tag: 'a', cls: 'blue-label', href: '@(Url.RouteUrl<ReportRegionLevelController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))', html: 'Product level information at region level' },
-                                    margin: '70 30 10 80'
-                                   }, { xtype: 'label',
-                                    margin: '0 0 10 80',
-                                    text: 'This report will show you the latest data of products level at the region level'
-                                }]
-                            }]
-                        }, { xtype: 'container',
-                            //align: 'center',
-                            layout: {
-                                type: 'hbox'
-                            },
-                            items: [{ xtype: 'image',
-                                src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Analysis/StockLevelDistrict.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
-                                margin: '60 0 0 40'
-                            }, { xtype: 'container',
-                                width: 600,
-                                layout: {
-                                    type: 'vbox'
-                                },
-                                items: [{ xtype: 'box',
-                                    margin: '70 30 10 80',
-                                    autoEl: { tag: 'a', cls: 'blue-label', href: '@(Url.RouteUrl<ReportDistrictLevelController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))', html: 'Product level information at district level' }
-                                }, { xtype: 'label',
-                                    margin: '0 0 10 80',
-                                    text: 'This report will show you the latest data of products level at the district level'
-                                }]
-                            }]
+                        defaults: {
+                            tdAttrs: { valign: 'top'}  
+                        },
+                        items: [{
+                            xtype: 'image',
+                            autoEl: { html: "<a href='@(Url.RouteUrl<ReportRegionLevelController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))'><img height='60' src = '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Analysis/StockLevelRegion.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))'/></a>" },
+                            margin: '0 20 0 20',
+                            height: 110,
+                            rowspan: 2
+                        }, {
+                            xtype: 'label',   
+                            tdAttrs: {height: 25, valign: 'top'},     
+                            autoEl: { tag: 'a', cls: 'blue-label analysis-label', href: '@(Url.RouteUrl<ReportRegionLevelController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))', html: 'Product level information at region level' }
+                        }, {
+                            xtype: 'label',
+                            tdAttrs: { valign: 'top' },     
+                            text: 'This report will show you the latest data of products level at the region level'    
                         }]
-                    }, { xtype: 'container',
-                        //align: 'center',
+                    }, {
+                        xtype: 'container',
+                        width: 550,
                         layout: {
-                            type: 'hbox'
+                            type: 'table',
+                            columns: 2,
                         },
-                        items: [{ xtype: 'container',
-                            //align: 'center',
-                            layout: {
-                                type: 'hbox'
-                            },
-                            items: [{ xtype: 'image',
-                                src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Analysis/ActivityReport.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
-                                margin: '60 0 0 40'
-                            }, { xtype: 'container',
-                                width:400,
-                                layout: {
-                                    type: 'vbox'
-                                },
-                                items: [{ xtype: 'box',
-                                    margin: '70 0 10 80',
-                                    autoEl: { tag: 'a', cls: 'blue-label', href: '', html: 'Activity report for an outpost' }
-                                 }, { xtype: 'label',
-                                    margin: '0 0 10 80',
-                                    text: 'Report description'
-                                }]
-                            }]
-                        }, { xtype: 'container',
-                            //align: 'center',
-                            layout: {
-                                type: 'hbox'
-                            },
-                            items: [{ xtype: 'image',
-                                src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Analysis/OutpostList.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
-                                margin: '60 0 0 140'
-                            }, { xtype: 'container',
-                                layout: {
-                                    type: 'vbox'
-                                },
-                                items: [{ xtype: 'box',
-                                    margin: '70 0 10 90',
-                                    autoEl: { tag: 'a', cls: 'blue-label', href: '', html: 'Outpost list with excess levels of a stock item' }
-                                    }, { xtype: 'label',
-                                    margin: '0 0 10 90',
-                                    text: 'Report description'
-                                }]
-                            }]
+                        defaults: {
+                            tdAttrs: { valign: 'top'}  
+                        },
+                        items: [{
+                            xtype: 'image',
+                            autoEl: { html: "<a href='@(Url.RouteUrl<ReportDistrictLevelController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))'><img height='60' src = '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Analysis/StockLevelDistrict.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))'/></a>" },
+                            margin: '0 20 0 20',
+                            height: 110,
+                            rowspan: 2
+                        }, {
+                            xtype: 'label',
+                            tdAttrs: {height: 25, valign: 'top'},  
+                            autoEl: { tag: 'a', cls: 'blue-label analysis-label', href: '@(Url.RouteUrl<ReportDistrictLevelController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))', html: 'Product level information at district level' }
+                                    
+                        }, {
+                            xtype: 'label',
+                            tdAttrs: { valign: 'top' },     
+                            text: 'This report will show you the latest data of products level at the district level'  
                         }]
                     }]
-
+                }, {
+                    xtype: 'container',
+                    height: 110,
+                    layout: {
+                        align: 'top',
+                        type: 'hbox'
+                    },
+                    items: [{
+                        xtype: 'container',
+                        width: 550,
+                        layout: {
+                            type: 'table',
+                            columns: 2,
+                        },
+                        defaults: {
+                            tdAttrs: { valign: 'top'}  
+                        },
+                        items: [{
+                            xtype: 'image',
+                            autoEl: { html: "<a href=''><img height='60' src = '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Analysis/ActivityReport.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))'/></a>" },
+                            margin: '0 20 0 20',
+                            height: 110,
+                            rowspan: 2
+                        }, {
+                            xtype: 'label',
+                            tdAttrs: {height: 25, valign: 'top'},  
+                            autoEl: { tag: 'a', cls: 'blue-label analysis-label', href: '', html: 'Activity report for an outpost' }     
+                        }, {
+                            xtype: 'label',
+                            tdAttrs: { valign: 'top' } , 
+                            text: 'Report description'
+                        }]
+                    }, {
+                        xtype: 'container',
+                        width: 550,
+                        layout: {
+                            type: 'table',
+                            columns: 2
+                        },
+                        defaults: {
+                            tdAttrs: { valign: 'top'}  
+                        },
+                        items: [{
+                            xtype: 'image',
+                            autoEl: { html: "<a href=''><img height='60' src = '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Analysis/OutpostList.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))'/></a>" },
+                            margin: '0 20 0 20',
+                            height: 110,
+                            rowspan: 2
+                        }, {
+                            xtype: 'label',
+                            tdAttrs: {height: 25, valign: 'top'},     
+                            autoEl: { tag: 'a', cls: 'blue-label analysis-label', href: '', html: 'Outpost list with excess levels of a stock item' }    
+                        }, {
+                            xtype: 'label',
+                            text: 'Report description',
+                            tdAttrs: { valign: 'top' },     
+                        }]
+                    }]
                 }]
             }]
         });
 
+        var contentRes = window.res.content;
+        var mainContent = Ext.getCmp(contentRes.maincontent.id);
 
+        mainContent.add(window.feature.container);
     });
 </script>
