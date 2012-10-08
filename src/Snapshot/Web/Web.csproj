@@ -471,6 +471,8 @@
     <Content Include="Assets\resources\img\Menu\Analysis.png" />
     <Content Include="Assets\resources\img\Menu\Dashboard.png" />
     <Content Include="Assets\resources\img\Menu\OutpostProductLevel.png" />
+    <Content Include="Assets\resources\img\OldLogo.png" />
+    <Content Include="Assets\resources\img\OldLogoLogin.png" />
     <Content Include="Assets\resources\img\open.png" />
     <Content Include="Assets\resources\img\OutpostStockLevel\HistoricalProductLevel.png" />
     <Content Include="Assets\resources\img\OutpostStockLevel\CurrentProductLevel.png" />
