@@ -453,7 +453,6 @@
     <Content Include="Assets\resources\img\Analysis\StockLevelRegion.png" />
     <Content Include="Assets\resources\img\arrow.gif" />
     <Content Include="Assets\css\snapshot-theme.css" />
-    <Content Include="Assets\resources\img\asd.png" />
     <Content Include="Assets\resources\img\briefcase.png" />
     <Content Include="Assets\resources\img\charts.png" />
     <Content Include="Assets\resources\img\charts2.png" />
