@@ -61,7 +61,7 @@
                         items: [{
                             xtype: 'label',
                             style:'text-align:right;',  
-                            margin: '15, 20, 5, 0',
+                            margin: '3, 20, 3, 0',
 							text: '@Html.Action("UserDetails", new { area=string.Empty,controller="Home" })',
                             cls: 'x-username-label'  
                         },{
@@ -69,7 +69,7 @@
                             style:'text-align:right;', 
                             items: [{
                                 xtype: 'label', 
-                                margin: '0, 20, 0, 0',
+                                margin: '0, 10, 0, 0',
                                 cls: 'x-userMenu-label',
                                 text: 'Help',
                                 listeners: {
@@ -123,7 +123,7 @@
                                 }
                             },{
                                 xtype: 'label', 
-                                margin: '0, 20, 0, 0',
+                                margin: '0, 10, 0, 0',
                                 cls: 'x-userMenu-label',
                                 text: ' · Account Options ·',
                                 autoEl: { tag: 'a', href: '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "AccountOptions", action = "Overview" })' }
@@ -140,15 +140,6 @@
                                 style: {float:'none'}
                                            
                                 }]
-                        }]
-                    },{
-                        xtype: 'container',
-                        margin: '2, 0, 0, 0',
-                        itemId: 'userPhoto',
-                        width: 80,
-                        items: [{ 
-                            xtype: 'image',
-                            src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(_ => _.Shared("img/Users/user.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))'
                         }]
                     }]
                 }]
