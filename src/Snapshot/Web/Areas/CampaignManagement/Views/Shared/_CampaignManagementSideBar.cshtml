@@ -29,8 +29,7 @@
                     align: 'stretch',
                     type: 'hbox'
                 },
-            items: [
-                    {
+            items: [{
                     xtype: 'container',
                     id: contentRes.maincontent.id,
                     layout: {
@@ -41,7 +40,7 @@
                 },{
                     xtype: 'container',
                     id: 'SideBar',
-                    width: 260,
+                    width: 230,
                     layout: {
                         align: 'stretch',
                         type: 'vbox'
@@ -60,8 +59,8 @@
                             icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/arrow.gif"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
                             iconCls:'x-btn-text-icon',
                             text: 'Existing Requests',
-                            margin: '0 50 0 0',
-                            padding: '0 0 0 40',
+                            margin: '0 20 0 0',
+                            padding: '0 0 0 20',
                             height: 30,
                             ui: 'snapshot-sidebar-btn',
                             handler: function () {
@@ -79,8 +78,8 @@
                             text: 'Manage Campaigns',
                             icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/arrow.gif"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
                             iconCls:'x-btn-text-icon',
-                            margin: '0 50 0 0',
-                            padding: '0 0 0 40',
+                            margin: '0 20 0 0',
+                            padding: '0 0 0 20',
                             height: 30,
                             ui: 'snapshot-sidebar-btn',
                             handler: function () {
@@ -92,8 +91,8 @@
                             id: contentRes.maincontent.sidebar.automaticSchedules,
                             toggleGroup: contentRes.maincontent.sidebar.group,
                             text: 'Automatic Schedules',
-                            margin: '0 50 0 0',
-                            padding: '0 0 0 40',
+                            margin: '0 20 0 0',
+                            padding: '0 0 0 20',
                             height: 30,
                             ui: 'snapshot-sidebar-btn',
                             icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/arrow.gif"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
@@ -107,8 +106,8 @@
                             id: contentRes.maincontent.sidebar.createProductLevelRequests,
                             toggleGroup: contentRes.maincontent.sidebar.group,
                             text: 'Product Level Requests',
-                            margin: '0 50 0 0',
-                            padding: '0 0 0 40',
+                            margin: '0 20 0 0',
+                            padding: '0 0 0 20',
                             height: 30,
                             ui: 'snapshot-sidebar-btn',
                             icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/arrow.gif"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',

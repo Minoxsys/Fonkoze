@@ -61,7 +61,7 @@
                         items: [{
                             xtype: 'label',
                             style:'text-align:right;',  
-                            margin: '3, 20, 3, 0',
+                            margin: '3, 10, 3, 0',
 							text: '@Html.Action("UserDetails", new { area=string.Empty,controller="Home" })',
                             cls: 'x-username-label' 
                         },{
@@ -125,7 +125,7 @@
                                 xtype: 'label', 
                                 margin: '0, 10, 0, 0',
                                 cls: 'x-userMenu-label',
-                                text: ' · Account Options ·',
+                                text: '· Account Options ·',
                                 autoEl: { tag: 'a', href: '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "AccountOptions", action = "Overview" })' }
                             },{
                                 xtype: 'label', 

@@ -846,6 +846,7 @@
                             text: "Outpost Name",
                             dataIndex: 'Name',
                             flex: 1,
+                            minWidth: 150,
                             menuDisabled: true,
                             sortable: true,
                             renderer: addTooltip,
@@ -878,11 +879,13 @@
                             dataIndex: 'ContactMethod',
                             menuDisabled:true,
                             flex: 1,
+                            minWidth: 150,
                             sortable: false
                         },{
                             text: "Coordinates",
                             dataIndex: 'Coordinates',
                             flex: 1,
+                            minWidth: 200,
                             menuDisabled: true,
                             sortable: false
                         },{
@@ -893,12 +896,14 @@
                             text: "Is Warehouse",
                             dataIndex: 'IsWarehouse',
                             flex: 1,
+                            minWidth: 100,
                             menuDisabled:true,
                             sortable: false
                         },{
                             text: "Warehouse name",
                             dataIndex: 'WarehouseName',
                             flex: 1,
+                            minWidth: 150,
                             align:'center',
                             menuDisabled:true,
                             sortable: false
@@ -907,6 +912,7 @@
                             text: 'Actions',
                             menuDisabled: true,
                             flex: 1.3,
+                            minWidth: 150,
                             items: [
                                 {
                                     icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/edit.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',  
