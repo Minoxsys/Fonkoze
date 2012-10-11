@@ -311,44 +311,50 @@ User Administration Users: Overview
                 columns: [{
                     header: 'First Name',
                     dataIndex: 'FirstName',
-                    flex: 1,
+                    flex: 0.7,
+                    minWidth: 70,
                     menuDisabled:true,
                     sortable: true
                 },{
                     header: 'Last Name',
                     dataIndex: 'LastName',
                     menuDisabled:true,
-                    flex: 1,
+                    flex: 0.7,
+                    minWidth: 70,
                     sortable: true
                 },{
                     header: 'Username',
                     dataIndex: 'UserName',
                     menuDisabled:true,
                     flex: 1,
+                    minWidth: 100,
                     sortable: true
                 },{
                     header: 'Email',
                     dataIndex: 'Email',
                     menuDisabled:true,
-                    flex: 1,
+                    flex: 0.7,
+                    minWidth: 70,
                     sortable: true
                 },{
                     header: 'Role',
                     dataIndex: 'RoleName',
                     menuDisabled:true,
-                    flex: 1,
+                    flex: 0.8,
+                    minWidth: 80,
                     sortable: true
                 },{
                     header: 'Client',
                     dataIndex: 'ClientName',
                     menuDisabled:true,
                     flex: 1,
+                    minWidth: 100,
                     sortable: true
                 },{
                     xtype: 'actioncolumn',
 			        text: 'Actions',
                     menuDisabled:true,
-                    flex: 1.7,
+                    flex: 1.5,
                     minWidth: 150,
                     items: [{
                         icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/edit.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))', 

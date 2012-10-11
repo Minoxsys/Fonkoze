@@ -130,13 +130,39 @@
             cls: 'white-border',
             autoScroll: true,
             store:  window.feature.stores.grid,
-            columns: [
-                { header:'Date'       ,  dataIndex:'Date', menuDisabled:true        },
-                { header: 'Campaign Name', dataIndex: 'Campaign', flex: 1, menuDisabled:true },
-                { header: 'Outpost Name', dataIndex: 'Outpost', flex: 1, menuDisabled: true },
-                { header: 'Product Group', dataIndex: 'ProductGroup', flex: 1, menuDisabled: true },
-                { header: '# of Products', dataIndex: 'ProductsNo', menuDisabled:true }
-            ],
+            columns: [{
+                header: 'Date',
+                dataIndex: 'Date',
+                flex: 1,
+                minWidth: 110,
+                menuDisabled: true        
+            }, {
+                header: 'Campaign Name',
+                dataIndex: 'Campaign',
+                flex: 1,
+                minWidth: 100,
+                menuDisabled: true
+            }, {
+                header: 'Outpost Name',
+                dataIndex: 'Outpost',
+                flex: 1,
+                minWidth: 100,
+                menuDisabled: true
+            }, {
+                header: 'Product Group',
+                dataIndex: 'ProductGroup',
+                flex: 0.8,
+                minWidth: 80,
+                align: 'center',
+                menuDisabled: true
+            }, {
+                header: '# of Products',
+                dataIndex: 'ProductsNo',
+                flex: 0.8,
+                minWidth: 80,
+                align: 'center',
+                menuDisabled: true 
+            }],
             bbar: Ext.create('Ext.PagingToolbar', {
                 store: window.feature.stores.grid,
                 displayInfo: true,

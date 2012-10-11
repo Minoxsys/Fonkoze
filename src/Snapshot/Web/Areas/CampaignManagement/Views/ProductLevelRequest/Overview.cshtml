@@ -134,6 +134,7 @@
 					header: 'Campaign',
                     menuDisabled:true,
                     flex:1,
+                    minWidth: 100,
                     renderer: addTooltip,
                     processEvent: function (type, view, cell, recordIndex, cellIndex, e) {
 						if (type == 'click'){
@@ -151,14 +152,51 @@
 				},{
 					header: 'Start Date',
                     menuDisabled:true,
+                    flex:1.2,
+                    minWidth: 120,
 					dataIndex: 'StartDate'
-				},
-				{ header:'End Date',        menuDisabled:true,  dataIndex:'EndDate'  },
-				{ header:'Schedule',        menuDisabled:true,  dataIndex:'ScheduleName', flex:1     },
-				{ header:'Frequency',       menuDisabled:true,  dataIndex:'Frequency'       },
-				{ header:'Product Group',   menuDisabled:true,  dataIndex:'ProductGroup', flex: 1 },
-				{ header:'Stopped',         menuDisabled:true,  dataIndex:'IsStopped', xtype: 'templatecolumn', tpl: '<tpl if="IsStopped">Yes</tpl><tpl if="!IsStopped">No</tpl>'},
-				{ header:'Sms Codes',       menuDisabled:true,  dataIndex:'ProductSmsCodes' },{
+				}, { 
+                    header:'End Date',        
+                    menuDisabled:true,  
+                    flex:1.2,
+                    minWidth: 120,
+                    dataIndex:'EndDate'  
+                }, { 
+                    header:'Schedule',        
+                    menuDisabled:true,  
+                    dataIndex:'ScheduleName', 
+                    flex:0.9,
+                    minWidth: 90,
+                }, { 
+                    header:'Frequency',       
+                    menuDisabled:true,  
+                    flex:1.2,
+                    minWidth: 120,
+                    dataIndex:'Frequency'       
+                }, { 
+                    header:'Product Group',   
+                    menuDisabled:true,  
+                    dataIndex:'ProductGroup', 
+                    align: 'center',
+                    flex: 1,
+                    minWidth: 100
+                }, { 
+                    header:'Stopped',         
+                    menuDisabled:true,  
+                    dataIndex:'IsStopped', 
+                    xtype: 'templatecolumn', 
+                    flex: 0.7,
+                    minWidth: 70,
+                    align: 'center',
+                    tpl: '<tpl if="IsStopped">Yes</tpl><tpl if="!IsStopped">No</tpl>'
+                }, { 
+                    header:'Sms Codes',       
+                    menuDisabled:true,  
+                    dataIndex:'ProductSmsCodes',
+                    flex: 0.7,
+                    minWidth: 70,
+                    align: 'center'
+                },{
 					header:'Actions',
                     menuDisabled:true,
 					width: 150,

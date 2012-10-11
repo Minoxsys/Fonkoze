@@ -124,27 +124,33 @@ User Administration Clients: Overview
                     header: 'Outpost Name',
                     dataIndex: 'OutpostName',
                     flex: 1,
-                    menuDisabled:true,
+                    minWidth: 100,
+                    menuDisabled: true,
                     sortable: true
                 },{
                     header: 'Contact',
                     dataIndex: 'Contact',
-                    menuDisabled:true,
+                    menuDisabled: true,
+                    minWidth: 80,
                     flex: 1
                 },{
                     header: 'Product Group',
                     dataIndex: 'ProductGroupName',
-                    menuDisabled:true,
+                    menuDisabled: true,
+                    minWidth: 80,
+                    align: 'center',
                     flex: 1
                 },{
                     header: 'Low Product Level',
                     dataIndex: 'LowLevelStock',
-                    menuDisabled:true,
+                    menuDisabled: true,
+                    minWidth: 80,
                     flex: 1
                 },{
                     header: 'Last Update',
                     menuDisabled:true,
                     dataIndex: 'LastUpdate',
+                    minWidth: 100,
                     flex: 1
                 }],
                 bbar: Ext.create('Ext.PagingToolbar', {
