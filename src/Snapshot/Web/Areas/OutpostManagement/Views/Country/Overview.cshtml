@@ -170,12 +170,12 @@
         var administrationBtnId = window.res.header.navigation.administration;
         var administrationBtn = Ext.getCmp(administrationBtnId);
         administrationBtn.toggle(true);
-
-        var outpostAdministrationBtnId = window.res.header.subnavigation.buttonTabs.outpost;
-        var outpostAdministrationBtn = Ext.getCmp(outpostAdministrationBtnId);
-        outpostAdministrationBtn.toggle(true);
-        outpostAdministrationBtn.setIcon('@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/SubMenu/LocationSelected.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))');
-        
+        if(typeof(window.res.header.subnavigation.buttonTabs.outpost)!= 'undefined'){
+            var outpostAdministrationBtnId = window.res.header.subnavigation.buttonTabs.outpost;
+            var outpostAdministrationBtn = Ext.getCmp(outpostAdministrationBtnId);
+            outpostAdministrationBtn.toggle(true);
+            outpostAdministrationBtn.setIcon('@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/SubMenu/LocationSelected.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))');
+        }
         var btnId = window.res.content.maincontent.sidebar.country;
         var btn = Ext.getCmp(btnId);
         btn.toggle(true);
