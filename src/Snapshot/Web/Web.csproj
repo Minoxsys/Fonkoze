@@ -1071,9 +1071,6 @@
     <Content Include="Assets\resources\themes\images\snapshot\grid\col-move-bottom.gif" />
     <Content Include="Assets\resources\themes\images\snapshot\grid\col-move-top.gif" />
     <Content Include="Assets\resources\themes\images\snapshot\grid\column-header-bg.gif" />
-    <Content Include="Assets\resources\themes\images\snapshot\grid\column-header-bg.png" />
-    <Content Include="Assets\resources\themes\images\snapshot\grid\column-header-over-bg.gif" />
-    <Content Include="Assets\resources\themes\images\snapshot\grid\column-header-over-bg.png" />
     <Content Include="Assets\resources\themes\images\snapshot\grid\columns.gif" />
     <Content Include="Assets\resources\themes\images\snapshot\grid\dd-insert-arrow-left.gif" />
     <Content Include="Assets\resources\themes\images\snapshot\grid\dd-insert-arrow-left.png" />
