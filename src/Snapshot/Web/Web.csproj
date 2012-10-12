@@ -1144,6 +1144,7 @@
     <Content Include="Assets\resources\themes\images\snapshot\menu\menu-parent.gif" />
     <Content Include="Assets\resources\themes\images\snapshot\menu\menu.gif" />
     <Content Include="Assets\resources\themes\images\snapshot\menu\unchecked.gif" />
+    <Content Include="Assets\resources\themes\images\snapshot\nav\nav-snapshot-gradient-bg.gif" />
     <Content Include="Assets\resources\themes\images\snapshot\panel-header\panel-header-default-bottom-bg.gif" />
     <Content Include="Assets\resources\themes\images\snapshot\panel-header\panel-header-default-framed-bottom-bg.gif" />
     <Content Include="Assets\resources\themes\images\snapshot\panel-header\panel-header-default-framed-bottom-corners.gif" />
