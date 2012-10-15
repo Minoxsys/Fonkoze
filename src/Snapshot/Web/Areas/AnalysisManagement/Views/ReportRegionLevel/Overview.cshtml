@@ -7,8 +7,8 @@ Analysis: Product level information at region level
 }
 
 @{
-    Html.RenderPartial("_AlertsSubNavigation");
-    Html.RenderPartial("_EmptySideBar");
+    Html.RenderPartial("_EmptySubNavigation");
+    Html.RenderPartial("_AnalysisSideBar");
 }
 
 <script type="text/javascript">
@@ -17,6 +17,9 @@ Analysis: Product level information at region level
         var analysisBtn = Ext.getCmp(analysisBtnId);
         analysisBtn.toggle(true);
 
+        var reportBtnId = window.res.content.maincontent.sidebar.reportregionlevel;
+        var reportBtn = Ext.getCmp(reportBtnId);
+        reportBtn.toggle(true);
     });
 </script>
 

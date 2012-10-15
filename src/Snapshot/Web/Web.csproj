@@ -2159,6 +2159,7 @@
     <Content Include="Areas\CampaignManagement\Views\Shared\_CampaignManagementSideBar.cshtml" />
     <Content Include="Areas\CampaignManagement\Views\ExistingRequests\Overview.cshtml" />
     <Content Include="Areas\CampaignManagement\Views\ProductLevelRequest\_ProductLevelDetail.cshtml" />
+    <Content Include="Areas\AnalysisManagement\Views\Shared\_AnalysisSideBar.cshtml" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\core\_core.scss" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\core\_reset.scss" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\layout\_layout.scss" />
@@ -2166,10 +2167,7 @@
     <Content Include="Areas\AnalysisManagement\Views\Web.config" />
     <Content Include="Areas\AnalysisManagement\Views\Analysis\Overview.cshtml" />
     <Content Include="Areas\AnalysisManagement\Views\_ViewStart.cshtml" />
-    <Content Include="Areas\AnalysisManagement\Views\Shared\AnalysisMainContent.cshtml" />
     <Content Include="Areas\AnalysisManagement\Views\ReportRegionLevel\Overview.cshtml" />
-    <Content Include="Areas\AnalysisManagement\Views\Shared\ReportMainContent.cshtml" />
-    <Content Include="Areas\AnalysisManagement\Views\Shared\AnalysisUserInfoContainer.cshtml" />
     <None Include="Assets\resources\themes\stylesheets\ext4\default\core\_core.scss" />
     <None Include="Assets\resources\themes\stylesheets\ext4\default\core\_reset.scss" />
     <None Include="Assets\resources\themes\stylesheets\ext4\default\layout\_layout.scss" />
@@ -2417,7 +2415,6 @@
     <None Include="Assets\sass\header-template.scss" />
     <None Include="Assets\sass\snapshot-theme.scss" />
     <Content Include="Views\Alerts\Overview.cshtml" />
-    <Content Include="Views\Shared\_AlertsSubNavigation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\CampaignManagement\Views\RequestSchedule\Overview.cshtml" />
