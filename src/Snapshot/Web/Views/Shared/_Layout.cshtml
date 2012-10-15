@@ -86,143 +86,148 @@
             renderTo:Ext.getBody(),
                 margin: '0 auto',
                 padding: '0',
-            layout: {
-                align: 'stretch',
-                type: 'vbox'
-            },
-             items: [
-                {
+                layout: 'fit',
+                items: [{
                     xtype: 'container',
-                    scollable: true,
-                    height: 120,
-                    id: res.header.id,
-                    itemId: '',
-                    layout: {
-                        align: 'stretch',
-                        type: 'vbox'
-                    },
-                    items: [
-                        {
-                            xtype: 'container',
-                            height: 70,
-                            id: res.header.navigation.id,
-                            cls: 'x-add-navigation-gradient',
-                            layout:'column',
-                            items:[
-                            {
-                                xtype: 'container',
-                                height: 70,
-                                margin: '15 60 0 20',
-                                id: res.header.navigation.logo,
-                                padding: 0,
-                                width: 200,
-                                items:[{ xtype: 'image',
-                                        src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Logo.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))'
-                                }]
-                            },
-                            {
-                                xtype: 'button',
-                                id: res.header.navigation.dashboard,
-                                height: 70,
-                                padding: '0 0 0 0',
-                                width: 135,
-                                icon:'@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Menu/Dashboard.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
-                                iconAlign: 'left',
-                                ui: 'snapshot-navigation-btn',
-                                toggleGroup:res.header.navigation.toggleGroup,
-                                enableToggle:true,
-                                pressed:true,
-                                text: '&nbsp;&nbsp;&nbsp;&nbsp;Dashboard',
-                                 handler:function(){
-                                    navigateTo( res.link.dashboard ); 
-                                }
-                            },
-                            {
-                                xtype: 'button',
-                                id: res.header.navigation.administration,
-                                height: 70,
-                                padding: '0 0 0 5',
-                                width: 170,
-                                icon:'@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Menu/Administration.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
-                                iconAlign: 'left',
-                                ui: 'snapshot-navigation-btn',
-                                toggleGroup:res.header.navigation.toggleGroup,
-                                handler:function(){
-                                    navigateTo( res.link.administration ); 
-                                },
-                                enableToggle:true,
-                                text: '&nbsp;&nbsp;&nbsp;&nbsp;Administration'
-                            },{
-                                xtype: 'button',
-                                id: res.header.navigation.outpostStockLevel,
-                                height: 70,
-                                padding: '0 0 0 5',
-                                width: 180,
-                                icon:'@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Menu/OutpostProductLevel.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
-                                iconAlign: 'left',
-                                ui: 'snapshot-navigation-btn',
-                                toggleGroup:res.header.navigation.toggleGroup,
-                                enableToggle:true,
-                                handler:function(){
-                                    navigateTo( res.link.outpostStockLevelCurrent ); 
-                                },
-                                text: '&nbsp;&nbsp;&nbsp;&nbsp;Product status'                                
-                            },{
-                                xtype: 'button',
-                                id: res.header.navigation.alerts,
-                                height: 70,
-                                padding: '0 0 0 5',
-                                width: 100,
-                                icon:'@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Menu/Alerts.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
-                                iconAlign: 'left',
-                                ui: 'snapshot-navigation-btn',
-                                toggleGroup:res.header.navigation.toggleGroup,
-                                enableToggle:true,
-                                handler:function(){
-                                    navigateTo( res.link.alerts ); 
-                                },
-                                text: '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Alerts'
-                            },
-                            {
-                                xtype: 'button',
-                                id: res.header.navigation.analysisAndReports,
-                                height: 70,
-                                padding: '0 0 0 5',
-                                width: 215,
-                                icon:'@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Menu/Analysis.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
-                                iconAlign: 'left',
-                                ui: 'snapshot-navigation-btn',
-                                toggleGroup:res.header.navigation.toggleGroup,
-                                enableToggle:true,
-                                text: '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Analysis and Reports',
-                                handler:function(){
-                                    navigateTo( res.link.analysisAndReports ); 
-                                }
-                            }] 
-                        },
-                        {
-                            xtype: 'container',
-                            id: res.header.subnavigation.id,
-                            height: 50,
-                             layout: {
-                                align: 'stretch',
-                                type: 'hbox'
-                            }
-                        }
-                    ]
-                },
-                {
-                    xtype: 'container',
-                    id: res.content.id,
                     layout: {
                         type: 'fit'
                     },
-                    flex: 1
-                }
-            ]
+                    scrollable: true,
+                    autoScroll: true,
+                    items: [{
+                        xtype: 'container',
+                        flex: 1,
+                        layout: {
+                            align: 'stretch',
+                            type: 'vbox'
+                        },
+                        minWidth: 1400,
+                        minHeight: 700,
+                        items: [{
+                            xtype: 'container',
+                            scollable: true,
+                            height: 120,
+                            id: res.header.id,
+                            itemId: '',
+                            layout: {
+                                align: 'stretch',
+                                type: 'vbox'
+                            },
+                            items: [{
+                                xtype: 'container',
+                                height: 70,
+                                id: res.header.navigation.id,
+                                cls: 'x-add-navigation-gradient',
+                                layout:'column',
+                                items:[{
+                                    xtype: 'container',
+                                    height: 70,
+                                    margin: '15 60 0 20',
+                                    id: res.header.navigation.logo,
+                                    padding: 0,
+                                    width: 200,
+                                    items: [{ 
+                                        xtype: 'image',
+                                        src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Logo.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))'
+                                    }]
+                                },{
+                                    xtype: 'button',
+                                    id: res.header.navigation.dashboard,
+                                    height: 70,
+                                    padding: '0 0 0 0',
+                                    width: 135,
+                                    icon:'@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Menu/Dashboard.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                                    iconAlign: 'left',
+                                    ui: 'snapshot-navigation-btn',
+                                    toggleGroup:res.header.navigation.toggleGroup,
+                                    enableToggle:true,
+                                    pressed:true,
+                                    text: '&nbsp;&nbsp;&nbsp;&nbsp;Dashboard',
+                                        handler:function(){
+                                        navigateTo( res.link.dashboard ); 
+                                    }
+                                },{
+                                    xtype: 'button',
+                                    id: res.header.navigation.administration,
+                                    height: 70,
+                                    padding: '0 0 0 5',
+                                    width: 170,
+                                    icon:'@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Menu/Administration.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                                    iconAlign: 'left',
+                                    ui: 'snapshot-navigation-btn',
+                                    toggleGroup:res.header.navigation.toggleGroup,
+                                    handler:function(){
+                                        navigateTo( res.link.administration ); 
+                                    },
+                                    enableToggle:true,
+                                    text: '&nbsp;&nbsp;&nbsp;&nbsp;Administration'
+                                },{
+                                    xtype: 'button',
+                                    id: res.header.navigation.outpostStockLevel,
+                                    height: 70,
+                                    padding: '0 0 0 5',
+                                    width: 180,
+                                    icon:'@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Menu/OutpostProductLevel.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                                    iconAlign: 'left',
+                                    ui: 'snapshot-navigation-btn',
+                                    toggleGroup:res.header.navigation.toggleGroup,
+                                    enableToggle:true,
+                                    handler:function(){
+                                        navigateTo( res.link.outpostStockLevelCurrent ); 
+                                    },
+                                    text: '&nbsp;&nbsp;&nbsp;&nbsp;Product status'                                
+                                },{
+                                    xtype: 'button',
+                                    id: res.header.navigation.alerts,
+                                    height: 70,
+                                    padding: '0 0 0 5',
+                                    width: 100,
+                                    icon:'@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Menu/Alerts.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                                    iconAlign: 'left',
+                                    ui: 'snapshot-navigation-btn',
+                                    toggleGroup:res.header.navigation.toggleGroup,
+                                    enableToggle:true,
+                                    handler:function(){
+                                        navigateTo( res.link.alerts ); 
+                                    },
+                                    text: '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Alerts'
+                                },{
+                                    xtype: 'button',
+                                    id: res.header.navigation.analysisAndReports,
+                                    height: 70,
+                                    padding: '0 0 0 5',
+                                    width: 215,
+                                    icon:'@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Menu/Analysis.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                                    iconAlign: 'left',
+                                    ui: 'snapshot-navigation-btn',
+                                    toggleGroup:res.header.navigation.toggleGroup,
+                                    enableToggle:true,
+                                    text: '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Analysis and Reports',
+                                    handler:function(){
+                                        navigateTo( res.link.analysisAndReports ); 
+                                    }
+                                }] 
+                            },{
+                                xtype: 'container',
+                                id: res.header.subnavigation.id,
+                                height: 50,
+                                    layout: {
+                                    align: 'stretch',
+                                    type: 'hbox'
+                                }
+                            }]
+                        },{
+                            xtype: 'container',
+                            id: res.content.id,
+                            layout: {
+                                type: 'fit'
+                            },
+                            flex: 1
+                        }]
+                    }]
+                }]
+            });
         });
-
-    });
 
     </script>
 
