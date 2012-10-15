@@ -26,7 +26,7 @@
                 items: [
                     {
                         xtype: 'container',
-                        height: 15,
+                        height: 5,
                         items: [{ 
                             xtype: 'label', 
                             html: '&nbsp;' 
@@ -44,7 +44,7 @@
                                 toggleGroup: subNavRes.buttonTabs.group,
                                 enableToggle: true,
                                 pressed: true,
-                                height: 38,
+                                height: 35,
                                 icon:'@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/SubMenu/LocationNotSelected.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
                                 iconAlign: 'left',
                                 margin: '0 7 0 20',
@@ -63,7 +63,7 @@
                                 enableToggle: true,
                                 margin: '0 7 0 0',
                                 padding: '0 0 0 10',
-                                height: 38,
+                                height: 35,
                                 icon:'@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/SubMenu/ProductNotSelected.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
                                 iconAlign: 'left',
                                 text: 'Product Administration',
@@ -78,7 +78,7 @@
                                 id: subNavRes.buttonTabs.campaign,
                                 toggleGroup: subNavRes.buttonTabs.group,
                                 enableToggle: true,
-                                height: 38,
+                                height: 35,
                                 margin: '0 7 0 0',
                                 padding: '0 0 0 10',
                                 icon:'@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/SubMenu/CampaignNotSelected.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
@@ -95,7 +95,7 @@
                                 id: subNavRes.buttonTabs.user,
                                 toggleGroup: subNavRes.buttonTabs.group,
                                 enableToggle: true,
-                                height: 38,
+                                height: 35,
                                 margin: '0 7 0 0',
                                 padding: '0 0 0 10',
                                 icon:'@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/SubMenu/UserNotSelected.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
@@ -109,120 +109,7 @@
                             }                       
                         ]
                     }
-                ]
-            },{
-                xtype: 'container',
-                id: 'userInfo',
-                flex: 1,
-                layout: {
-                    align: 'stretch',
-                    type: 'vbox'
-                },
-                items: [
-                    {
-                        xtype: 'container',
-                        flex: 1,
-                        layout: {
-                            align: 'stretch',
-                            pack: 'end',
-                            type: 'hbox'
-                        },
-                        items: [
-                            {
-                                xtype: 'container',
-                                width: 300,
-                                layout: {
-                                    align: 'stretch',
-                                    type: 'vbox'
-                                },
-                                items: [
-                                    {
-                                        xtype: 'label',
-                                        style:'text-align:right;',  
-                                        margin: '3, 20, 3, 0',
-                                        text: '@Html.Action("UserDetails", new { area=string.Empty,controller="Home" })',
-                                        cls: 'x-username-label' 
-                                    },{
-                                        xtype: 'container',
-                                        style:'text-align:right;', 
-                                        items: [
-                                            {
-                                                xtype: 'label', 
-                                                margin: '0 10 0 0',
-                                                cls: 'x-userMenu-label',
-                                                text: 'Help',
-                                                listeners: {
-                                                    render: function (c) {
-                                                        c.getEl().addCls('pseudolink');
-                                                
-                                                        c.getEl().on('click', function () {
-                                                            var win=Ext.create('Ext.window.Window', {
-                                                                title: 'Help',
-                                                                width: 400,
-                                                                height: 320,
-                                                                modal: true,
-                                                                ui: 'snapshot-popup-window',
-                                                                buttons: [
-                                                                    {    
-                                                                        text: 'Ok',
-                                                                        margin: '10 10 20 0',
-                                                                        ui: 'snapshot-add-btn',
-                                                                        cls: 'x-add-button-gradient',
-                                                                        handler: function () { win.close(); }
-                                                                    },
-                                                                ],
-
-                                                                layout: {
-                                                                    padding: 10,
-                                                                    type: 'fit'
-                                                                },
-                                                                items: [{
-                                                                    xtype:'container',
-                                                                    padding:'10',
-                                                                    html: "<p>Support and help for all web users where any functionality"+
-                                                                        " related to the system and solution is unavailable shall be processed"+
-                                                                        " by email request.</p><br/> <p>Support is available from 08:00-18:00 GMT,"+
-                                                                        " (Monday to Friday except public holidays).</p><br/><p>Please contact us at"+
-                                                                        " <a href='mailto:support@minoxsys.com' style='font-weight:bold; color:black'>"+
-                                                                        "support@minoxsys.com</a><br/>Acknowledgement shall be received within one (1) "+
-                                                                        "business hour from receipt of report and resolution target is five (5) days for"+
-                                                                        " 95% of incidents.</p>",
-                                                                    style: {
-                                                                        'text-align':'justify',
-                                                                        'color':'#222',
-                                                                        'line-height':'1.5'
-                                                                    }
-                                                                }]
-                                                        
-                                                            });
-                                                            win.show();
-                                                        });
-
-                                                    }
-                                                }
-                                            },{
-                                                xtype: 'label', 
-                                                margin: '0 10 0 0',
-                                                cls: 'x-userMenu-label',
-                                                text: '· Account Options ·',
-                                                autoEl: { tag: 'a', href: '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "AccountOptions", action = "Overview" })' }
-                                            },{
-                                                xtype: 'label', 
-                                                text: 'Log Out',
-                                                margin: '0 20 0 0',
-                                                cls: 'x-userMenu-label',
-                                                autoEl: {tag: 'a', href: '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "Account", action = "LogOff" })'}
-                                            },{xtype: 'image',
-                                               src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Logout.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
-                                              margin: '-4 10 0 -15',
-                                               style: {float:'none'}
-                                           
-                                             }
-                                        ]
-                                    }
-                                ]
-                            }]
-                    }]
+                ]                
             }]);
                         
         subnav.ownerCt.doLayout();
