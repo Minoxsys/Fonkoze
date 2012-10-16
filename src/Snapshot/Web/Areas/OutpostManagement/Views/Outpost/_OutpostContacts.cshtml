@@ -77,11 +77,17 @@
                     if (e.store.getCount() == 1){
                         e.record.set('IsMainContact', true);
                     }
+
+                    Ext.getCmp('SaveButtonOutpost').enable();
+                    Ext.getCmp('CancelButtonOutpost').enable();
                 },
                 'canceledit': function(editor,e){
                     if(e.record.data.ContactDetail === ""){
-                        e.grid.store.remove(e.record);           
-                    }         
+                        e.grid.store.remove(e.record);
+                    }
+
+                    Ext.getCmp('SaveButtonOutpost').enable();
+                    Ext.getCmp('CancelButtonOutpost').enable();  
                 }
 
             },
@@ -117,10 +123,13 @@
                     items: [{
                         icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/edit.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
 
-                            handler: function (grid, rowIndex, colIndex) {
-                                var rec = grid.getStore().getAt(rowIndex);
-                                window.feature.rowEditor.startEdit(rec, 0);
-                            }
+                        handler: function (grid, rowIndex, colIndex) {
+                            Ext.getCmp('SaveButtonOutpost').disable();
+                            Ext.getCmp('CancelButtonOutpost').disable();
+
+                            var rec = grid.getStore().getAt(rowIndex);
+                            window.feature.rowEditor.startEdit(rec, 0);
+                        }
                     },{
                             icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/delete.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
                             action: 'Delete',
