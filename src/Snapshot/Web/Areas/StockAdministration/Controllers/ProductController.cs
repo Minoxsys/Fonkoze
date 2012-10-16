@@ -49,9 +49,28 @@ namespace Web.Areas.StockAdministration.Controllers
         public ActionResult Overview()
         {
             ViewBag.HasNoRightsToAdd = (PermissionService.HasPermissionAssigned(PRODUCT_ADD_PERMISSION, User.Identity.Name) == true) ? false.ToString().ToLowerInvariant() : true.ToString().ToLowerInvariant();
-            ViewBag.HasNoRightsToDelete = (PermissionService.HasPermissionAssigned(PRODUCT_DELETE_PERMISSION, User.Identity.Name) == true) ? false.ToString().ToLowerInvariant() : true.ToString().ToLowerInvariant();           
+            ViewBag.HasNoRightsToDelete = (PermissionService.HasPermissionAssigned(PRODUCT_DELETE_PERMISSION, User.Identity.Name) == true) ? false.ToString().ToLowerInvariant() : true.ToString().ToLowerInvariant();
 
-            return View();
+            Guid? productGroupId = (Guid?)TempData["ProductGroupId"];
+
+            FromProductGroupModel model = new FromProductGroupModel();
+            if (productGroupId.HasValue)
+                model.ProductGroupId = productGroupId.Value;
+
+            return View("Overview", model);
+
+        }
+
+        [HttpGet]
+        public ActionResult FromProductGroup(Guid? productGroupId)
+        {
+            if (productGroupId.HasValue)
+            {
+                TempData.Clear();
+                TempData.Add("ProductGroupId", productGroupId.Value);
+            }
+
+            return RedirectToAction("Overview", "Product");
         }
 
         private void LoadUserAndClient()

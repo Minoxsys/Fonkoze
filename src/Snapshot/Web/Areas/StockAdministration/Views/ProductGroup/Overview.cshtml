@@ -252,6 +252,16 @@ Product Administration Product Groups: Overview
                     flex: 1,
                     menuDisabled: true,
                     sortable: true,
+                    processEvent: function (type, view, cell, recordIndex, cellIndex, e) {
+						if (type == 'click'){
+                            var rec = view.panel.store.getAt(recordIndex);
+	                        var link = '@Url.RouteUrl(StockAdministrationAreaRegistration.DEFAULT_ROUTE, new { controller = "Product", action = "FromProductGroup" })';
+                            link = link + "/?productGroupId=" + rec.get('Id');
+                            navigateTo(link);
+							return false;
+						}
+						return true;
+					},
                     renderer: addTooltip
                 },{
                     text: "Number of Products",

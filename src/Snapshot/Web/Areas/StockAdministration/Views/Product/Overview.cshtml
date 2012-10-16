@@ -1,6 +1,7 @@
-﻿@model Web.Areas.StockAdministration.Models.Product.ProductOverviewModel
-@using Microsoft.Web.Mvc;
-@using Web.Areas.OutpostManagement.HtmlHelpers;
+﻿@using Microsoft.Web.Mvc
+@using Web.Areas.OutpostManagement.HtmlHelpers
+@model Web.Areas.StockAdministration.Models.Product.FromProductGroupModel
+       
 @section page_title{
     Product Item: Overview
 }
@@ -650,12 +651,8 @@
 			window.feature.store.loadPage(1);
 		});  
     
-        var contentRes = window.res.content;
-        window.feature.ProductGroupStore.load();
-    
-        var mainContent = Ext.getCmp(contentRes.maincontent.id);
-        mainContent.add({
-            xtype: 'container',
+
+        window.feature.container = Ext.create('Ext.container.Container', {
             margin: '15 15 15 15',
             padding: '20 0 0 20',
             autoScroll:true,
@@ -779,6 +776,18 @@
                 window.feature.grid
             ]
         });
+
+        var contentRes = window.res.content;
+        var mainContent = Ext.getCmp(contentRes.maincontent.id);
+        mainContent.add(window.feature.container);
+
+        if ('@Model.ProductGroupId' != '@Guid.Empty')
+        {
+            window.feature.store.proxy.extraParams.productGroupId = '@Model.ProductGroupId';
+            window.feature.ProductGroupStore.load();
+            window.feature.container.down('#'+window.feature.comboboxProductGroupsId).setValue('@Model.ProductGroupId');
+
+        }
     
         window.feature.store.loadPage(1);
     });

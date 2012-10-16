@@ -171,6 +171,7 @@
     <Compile Include="Unit\Controllers\Areas\StockAdministration\ProductControllerTests\CreateMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\StockAdministration\ProductControllerTests\DeleteMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\StockAdministration\ProductControllerTests\EditMethod.cs" />
+    <Compile Include="Unit\Controllers\Areas\StockAdministration\ProductControllerTests\FromProductGroupMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\StockAdministration\ProductControllerTests\GetProductsMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\StockAdministration\ProductControllerTests\ObjectMother.cs" />
     <Compile Include="Unit\Controllers\Areas\StockAdministration\ProductGroupControllerTests\CreateMethod.cs" />

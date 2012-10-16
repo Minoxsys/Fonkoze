@@ -258,6 +258,7 @@
     <Compile Include="Areas\StockAdministration\Models\ProductGroup\ProductGroupInputModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\ProductGroup\ProductGroupModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\ProductGroup\ProductGroupOverviewModel.cs" />
+    <Compile Include="Areas\StockAdministration\Models\Product\FromProductGroupModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\Product\PartialViewModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\Product\ProductGroupModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\Product\ProductIndexModel.cs" />
