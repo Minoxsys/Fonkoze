@@ -470,7 +470,7 @@
                             items:[{
                                 xtype:'form',
                                 frame:false,
-                                minWidth: 820,
+                                minWidth: 800,
                                 flex: 1,
                                 bodyBorder:false,
                                 border:false,
@@ -584,7 +584,7 @@
                                         width: 200,
                                         itemId: window.feature.modalIds.isWarehouseId,
                                         name: 'IsWarehouse',
-                                        fieldLabel: 'Is warehouse',
+                                        fieldLabel: 'Is Outpost a Warehouse?',
                                         editable:false,
                                         displayField: 'Text',
                                         valueField: 'Value',
@@ -605,7 +605,7 @@
                                         width: 200,
                                         itemId: window.feature.modalIds.warehouseId,
                                         name: 'WarehouseId',
-                                        fieldLabel: 'Warehouse',
+                                        fieldLabel: 'Nearest Warehouse Location',
                                         disabled:false,
                                         emptyText: 'Select Warehouse', 
                                         displayField: 'Name',
@@ -902,7 +902,7 @@
                                 }
                             }
                         },{
-                            text: "Contact method",
+                            text: "Contact Method",
                             dataIndex: 'ContactMethod',
                             menuDisabled:true,
                             flex: 1,
@@ -927,7 +927,7 @@
                             menuDisabled:true,
                             sortable: false
                         },{
-                            text: "Warehouse name",
+                            text: "Warehouse Name",
                             dataIndex: 'WarehouseName',
                             flex: 1,
                             minWidth: 150,
