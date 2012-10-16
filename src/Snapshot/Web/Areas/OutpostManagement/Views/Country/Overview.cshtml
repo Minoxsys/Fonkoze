@@ -318,41 +318,38 @@
                 align: 'stretch',
                 type: 'vbox'
             },
-            items: [
-                {
-                    xtype: 'container',
-                    layout: {
-                        type: 'column'
-                        
-                    },
-                    height: 50,
-                    items: [
-                        {
-                            xtype: 'container',
-                            height: 30,
-                            width: 30,
-                            html:'&nbsp;'
-                        },{xtype: 'image',
-                           src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/Content/pinIcon.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
-                           margin: '0 10 10 10'
-                        },{
-                            xtype: 'label',
-                            cls: 'x-title-label',
-                            text: 'Country Administration'
-                        },{
-                            xtype: 'button',
-                            margin: '0 0 0 20',
-                            ui: 'snapshot-add-btn',
-                            cls: 'x-add-button-gradient',
-                            disabled: @(ViewBag.HasNoRightsToAdd),
-                            text: 'Add New Country',
-                            handler:function(){
-                                var addCountryModal = new window.feature.modal();
-                                addCountryModal.show();
-                            }
-                        }
-                    ]
+            items: [{
+                xtype: 'container',
+                layout: {
+                    type: 'column'
                 },
+                height: 50,
+                items: [{
+                    xtype: 'container',
+                    height: 30,
+                    width: 30,
+                    html:'&nbsp;'
+                },{
+                    xtype: 'image',
+                    src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/Content/pinIcon.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                    margin: '0 10 10 0'
+                },{
+                    xtype: 'label',
+                    cls: 'x-title-label',
+                    text: 'Country Administration'
+                },{
+                    xtype: 'button',
+                    margin: '0 0 0 20',
+                    ui: 'snapshot-add-btn',
+                    cls: 'x-add-button-gradient',
+                    disabled: @(ViewBag.HasNoRightsToAdd),
+                    text: 'Add New Country',
+                    handler:function(){
+                        var addCountryModal = new window.feature.modal();
+                        addCountryModal.show();
+                    }
+                }]
+            },
                 window.feature.grid
             ]
         });

@@ -191,32 +191,33 @@
                 {
                     xtype: 'container',
                     flex: 2,
-                    margin: '0 0 0 30',
                     layout: 'column',
-                    items: [
-                        {
-                            xtype: 'image',
-                            src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/SubMenu/CampaignSelected.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
-                            margin: '0 10 20 10'
-                        },{
-                            xtype: 'label',
-                            cls: 'x-title-label',
-                            text: 'Automatic Schedule',
-                            margin: '0 0 10 10'
-                        },{
-                            xtype: 'button',
-                            text: 'Add New Schedule',
-                            disabled: @(ViewBag.HasNoRightsToAdd),
-                            ui: 'snapshot-add-btn',
-                            cls: 'x-add-button-gradient',
-                            margin: '0 0 0 20',
-                            handler: function () {
-                                InitModal();
-                                window.feature.scheduleToEdit = null; 
-                                window.feature.modal.show();
-                            }
+                    items: [{
+                        xtype: 'container',
+                        height: 30,
+                        width: 30,
+                        html:'&nbsp;'
+                    }, {
+                        xtype: 'image',
+                        src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/SubMenu/CampaignSelected.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                        margin: '0 10 10 0'
+                    },{
+                        xtype: 'label',
+                        cls: 'x-title-label',
+                        text: 'Automatic Schedule'
+                    },{
+                        xtype: 'button',
+                        text: 'Add New Schedule',
+                        disabled: @(ViewBag.HasNoRightsToAdd),
+                        ui: 'snapshot-add-btn',
+                        cls: 'x-add-button-gradient',
+                        margin: '0 0 0 20',
+                        handler: function () {
+                            InitModal();
+                            window.feature.scheduleToEdit = null; 
+                            window.feature.modal.show();
                         }
-                    ]
+                    }]
                 },{
                     xtype: 'container',
                     layout: {

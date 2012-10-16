@@ -466,8 +466,7 @@ Historical Product Level: Overview
                 align: 'stretch',
                 type: 'vbox'
             },
-            items: [
-            {
+            items: [{
                 xtype: 'container',
                 layout: {
                     align: 'stretch',
@@ -477,7 +476,7 @@ Historical Product Level: Overview
                 items: [
                 {
                     xtype: 'container',
-                    height: 45,
+                    height: 50,
                     layout: {
                         type: 'column'
                     },
@@ -486,10 +485,11 @@ Historical Product Level: Overview
                         height: 30,
                         width: 30,
                         html:'&nbsp;'
-                    },{xtype: 'image',
-                       src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/OutpostStockLevel/HistoricalProductLevel.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
-                       margin: '0 20 0 10'
-                      },{
+                    },{
+                        xtype: 'image',
+                        src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/OutpostStockLevel/HistoricalProductLevel.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                        margin: '0 10 10 0'
+                    },{
                         xtype: 'label',
                         cls: 'x-title-label',
                         text: 'Historical Product Status'
@@ -497,15 +497,11 @@ Historical Product Level: Overview
                     },{
 						xtype: 'container',
                         height: 65,
+                        margin: '0 0 0 30',
 						layout: {
 							type: 'column'
 						},
-						items: [
-						{
-							xtype: 'container',
-							height: 20,
-							html:'&nbsp;'
-						},{ 
+						items: [{
                             xtype: 'combobox',
                             itemId: window.feature.countryComboboxId,
 			                store: window.feature.countryStore,

@@ -48,18 +48,17 @@
     Ext.onReady(function () {
         window.feature.models.ExistingRequest = Ext.define('ExistingRequestModel', {
             extend: 'Ext.data.Model',
-            fields: [
-                {
-                    name: 'id', type: 'string',
-                    convert: function (value, record) {
-                        return record.get('Id');
-                    }
-                },
-                { name: 'Campaign', type: 'string' },
-                { name: 'Outpost', type: 'string' },
-                { name: 'Date', type: 'string' },
-                { name: 'ProductGroup', type: 'string' },
-                { name: 'ProductsNo', type: 'string' }
+            fields: [{
+                name: 'id', type: 'string',
+                convert: function (value, record) {
+                    return record.get('Id');
+                }
+            },
+            { name: 'Campaign', type: 'string' },
+            { name: 'Outpost', type: 'string' },
+            { name: 'Date', type: 'string' },
+            { name: 'ProductGroup', type: 'string' },
+            { name: 'ProductsNo', type: 'string' }
     
             ]
         });
@@ -223,90 +222,81 @@
             },
             items: [{
                     xtype: 'container',
-                    height: 45,
+                    height: 50,
                     layout: 'column',
                     items: [{
+                        xtype: 'container',
+                        height: 30,
+                        width: 30,
+                        html:'&nbsp;'
+                    }, {
                         xtype: 'image',
                         src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/SubMenu/CampaignSelected.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
-                        margin: '0 10 0 10'
+                        margin: '0 10 10 0'
                    }, {
                         xtype: 'label',
                         cls: 'x-title-label',
-                        height: 45,
-                        margin: '0 0 0 10',
                         html: 'Existing Requests'
                     }]
                 }, {
                     xtype: 'container',
                     height: 65,
+                    margin: '0 0 0 30',
                     layout: 'column',
-                    items: [
-                        {
-                            xtype: 'combobox',
-                            margin: '0 10 0 10',
-                            id: window.feature.ids.campaign,
-                            labelAlign: 'top',
-                            fieldLabel: 'Campaign',
-                            labelClsExtra: 'combo-label',
-                            store: window.feature.stores.campaign,
-                            emptyText: 'Campaign List',
-                            allowBlank: false,
-                            valueField: 'Id',
-                            displayField: 'Name',
-                            listeners: {
-                                'select': function (cmb) {
-                                    window.feature.stores.outposts.getProxy().extraParams.CampaignId = cmb.getValue();
-                                    window.feature.stores.outposts.load();
-                                }
-                            }
-
-                        },
-
-                        {
-                            xtype: 'combobox',
-                            margin: '0 10 0 10',
-                            id: window.feature.ids.outpost,
-                            labelAlign: 'top',
-                            fieldLabel: 'Outpost',
-                            labelClsExtra: 'combo-label',
-                            store: window.feature.stores.outposts,
-                            emptyText: 'Campaign Outposts List',
-                            queryMode: 'local',
-                            allowBlank: false,
-                            valueField: 'Id',
-                            displayField: 'Name'
-                        },
-                        {
-                            xtype: 'datefield',
-                            margin: '0 10 0 10',
-                            id: window.feature.ids.from,
-                            labelAlign: 'top',
-                            allowBlank: false,
-                            fieldLabel: 'From',
-                            labelClsExtra: 'combo-label'
-                        },
-
-                        {
-                            xtype: 'datefield',
-                            margin: '0 10 0 10',
-                            id: window.feature.ids.to,
-                            labelAlign: 'top',
-                            allowBlank: false,
-                            fieldLabel: 'To',
-                            labelClsExtra: 'combo-label'
-
-                        },
-                        {
-                            xtype: 'button',
-                            margin: '25 10 0 10',
-                            text: 'View Requests',
-                            ui: 'snapshot-add-btn',
-                            cls: 'x-add-button-gradient',
-                            handler: function (btn) {
-                                viewResults();
+                    items: [{
+                        xtype: 'combobox',
+                        id: window.feature.ids.campaign,
+                        labelAlign: 'top',
+                        fieldLabel: 'Campaign',
+                        labelClsExtra: 'combo-label',
+                        store: window.feature.stores.campaign,
+                        emptyText: 'Campaign List',
+                        allowBlank: false,
+                        valueField: 'Id',
+                        displayField: 'Name',
+                        listeners: {
+                            'select': function (cmb) {
+                                window.feature.stores.outposts.getProxy().extraParams.CampaignId = cmb.getValue();
+                                window.feature.stores.outposts.load();
                             }
                         }
-                    ]
+                    }, {
+                        xtype: 'combobox',
+                        id: window.feature.ids.outpost,
+                        labelAlign: 'top',
+                        fieldLabel: 'Outpost',
+                        labelClsExtra: 'combo-label',
+                        store: window.feature.stores.outposts,
+                        emptyText: 'Campaign Outposts List',
+                        queryMode: 'local',
+                        allowBlank: false,
+                        valueField: 'Id',
+                        displayField: 'Name'
+                    }, {
+                        xtype: 'datefield',
+                        id: window.feature.ids.from,
+                        labelAlign: 'top',
+                        allowBlank: false,
+                        fieldLabel: 'From',
+                        labelClsExtra: 'combo-label'
+                    }, {
+                        xtype: 'datefield',
+                        id: window.feature.ids.to,
+                        labelAlign: 'top',
+                        allowBlank: false,
+                        fieldLabel: 'To',
+                        labelClsExtra: 'combo-label'
+
+                    }, {
+                        xtype: 'button',
+                        margin: '25 0 0 10',
+                        text: 'View Requests',
+                        ui: 'snapshot-add-btn',
+                        cls: 'x-add-button-gradient',
+                        handler: function (btn) {
+                            viewResults();
+                        }
+                    }]
                 },
                 window.feature.grid
             ]

@@ -661,120 +661,108 @@
                 align: 'stretch',
                 type: 'vbox'
             },
-            items: [
-                {
+            items: [{
+                xtype: 'container',
+                layout: {
+                    align: 'stretch',
+                    type: 'vbox'
+                },
+                height: 110,
+                items: [{
                     xtype: 'container',
                     layout: {
-                        align: 'stretch',
-                        type: 'vbox'
+                        type: 'hbox'
                     },
-                    height: 110,
-                    items: [
-                        {
+                    height: 55,
+                    items: [{
+                        xtype: 'container',
+                        layout: {
+                            type: 'column'
+                        },
+                        flex: 1,
+                        items: [{
                             xtype: 'container',
-                            height: 45,
-                            layout: {
-                                type: 'hbox'
-                            },
-                            items: [
-                                {
-                                    xtype: 'container',
-                                    flex: 1,
-                                    layout: {
-                                        type: 'column'
-                                    },
-                                    items: [
-                                        {
-                                            xtype: 'container',
-                                            height: 30,
-                                            width: 30,
-                                            html:'&nbsp;'
-                                        },{xtype: 'image',
-                                          src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/SubMenu/ProductSelected.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
-                                          margin: '0 10 10 10'
-                                        },{
-                                            xtype: 'label',
-                                            cls: 'x-title-label',
-                                            text: 'Products'
-                                        },{
-                                            xtype: 'button',
-                                            margin: '0 0 0 20',
-                                            ui: 'snapshot-add-btn',
-                                            cls: 'x-add-button-gradient',
-                                            disabled: @(ViewBag.HasNoRightsToAdd),
-                                            text: 'Add New Product',
-                                            handler: function () {
-                                                var productModal = new window.feature.modal({
-                                                    recordProductGroupId: window.feature.comboBoxProductGroups.getValue()
-                                                });
-                                                productModal.show();
-                                            }
-                                        }
-                                    ]
-                                },{
-                                    xtype: 'container',
-                                    flex: 1,
-                                    layout: {
-                                        type: 'hbox',
-                                        pack:'end'
-                                    },
-                                    items: [
-                                        {
-                                            xtype: 'textfield',
-                                            id: window.feature.searchTextFieldId,
-                                            width: 200,
-                                            frame: true,
-                                            emptyText: 'Product Search',
-                                            enableKeyEvents: true,
-                                            listeners: {
-                                                'specialkey': function (field, e) {
-                                                        var selectedProductId = Ext.getCmp(window.feature.comboboxProductGroupsId).getValue();
-                                                        Ext.getCmp(window.feature.searchTextFieldId).setValue('');
-                                                        window.feature.store.proxy.extraParams.searchName = '';
-                                                        
-                                                        if (selectedProductId){
-                                                            window.feature.store.proxy.extraParams.productGroupId = selectedProductId;
-                                                        }
-                                                        
-                                                        window.feature.doSearch.delay(500);
-                                                        },
-                                                'keyup': {
-                                                    fn: function(key) {
-                                                        var selectedProductId = Ext.getCmp(window.feature.comboboxProductGroupsId).getValue();
-                                                        var searchByName = Ext.getCmp(window.feature.searchTextFieldId).getValue();
-                                                        window.feature.store.proxy.extraParams.searchName = searchByName;
-                                                        
-                                                        if (selectedProductId){
-                                                            window.feature.store.proxy.extraParams.productGroupId = selectedProductId;
-                                                        }
-                                                        
-                                                        window.feature.doSearch.delay(500);
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    ]
-                                }
-                            ]
+                            height: 30,
+                            width: 30,
+                            html:'&nbsp;'
                         },{
-                            xtype: 'container',
-                            height: 65,
-                            layout: {
-                                type: 'column'
-                            },
-                            items: [{
-									xtype: 'container',
-							        height: 30,
-							        width: 65,
-							        html:'&nbsp;'
-								},
-                                window.feature.comboBoxProductGroups
-                            ]
-                        }
-                    ]
+                            xtype: 'image',
+                            src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/SubMenu/ProductSelected.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                            margin: '0 10 10 0'
+                        },{
+                            xtype: 'label',
+                            cls: 'x-title-label',
+                            text: 'Products'
+                        },{
+                            xtype: 'button',
+                            margin: '0 0 0 20',
+                            ui: 'snapshot-add-btn',
+                            cls: 'x-add-button-gradient',
+                            disabled: @(ViewBag.HasNoRightsToAdd),
+                            text: 'Add New Product',
+                            handler: function () {
+                                var productModal = new window.feature.modal({
+                                    recordProductGroupId: window.feature.comboBoxProductGroups.getValue()
+                                });
+                                productModal.show();
+                            }
+                        }]
+                    }, {
+                        xtype: 'container',
+                        flex: 1,
+                        layout: {
+                            type: 'hbox',
+                            pack:'end'
+                        },
+                        items: [{
+                            xtype: 'textfield',
+                            id: window.feature.searchTextFieldId,
+                            width: 200,
+                            frame: true,
+                            emptyText: 'Product Search',
+                            enableKeyEvents: true,
+                            listeners: {
+                                'specialkey': function (field, e) {
+                                        var selectedProductId = Ext.getCmp(window.feature.comboboxProductGroupsId).getValue();
+                                        Ext.getCmp(window.feature.searchTextFieldId).setValue('');
+                                        window.feature.store.proxy.extraParams.searchName = '';
+                                                        
+                                        if (selectedProductId){
+                                            window.feature.store.proxy.extraParams.productGroupId = selectedProductId;
+                                        }
+                                                        
+                                        window.feature.doSearch.delay(500);
+                                        },
+                                'keyup': {
+                                    fn: function(key) {
+                                        var selectedProductId = Ext.getCmp(window.feature.comboboxProductGroupsId).getValue();
+                                        var searchByName = Ext.getCmp(window.feature.searchTextFieldId).getValue();
+                                        window.feature.store.proxy.extraParams.searchName = searchByName;
+                                                        
+                                        if (selectedProductId){
+                                            window.feature.store.proxy.extraParams.productGroupId = selectedProductId;
+                                        }
+                                                        
+                                        window.feature.doSearch.delay(500);
+                                    }
+                                }
+                            }
+                        }]
+                    }]
+            },{
+                xtype: 'container',
+                height: 65,
+                margin: '0 0 0 30',
+                layout: {
+                    type: 'column'
                 },
-                window.feature.grid
-            ]
+                items: [
+                    window.feature.comboBoxProductGroups
+                ]
+            }]
+        },
+            window.feature.grid
+        ]
         });
 
         var contentRes = window.res.content;

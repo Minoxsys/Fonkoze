@@ -234,7 +234,6 @@
             xtype: 'combobox',
             itemId: window.feature.regionOverviewComboId,
             store: window.feature.regionsStore,
-            margin: '0 0 0 20',
             queryMode:'local',
             displayField: 'Name',
             labelAlign: 'top',
@@ -252,7 +251,6 @@
             xtype: 'combobox',
             itemId: window.feature.districtOverviewComboId,
             store: window.feature.districtsStore,
-            margin: '0 0 0 20',
             queryMode:'local',
             displayField: 'Name',
             labelAlign: 'top',
@@ -747,7 +745,7 @@
                     items: [
                         {
                             xtype: 'container',
-                            height: 45,
+                            height: 50,
                             layout: {
                                 type: 'hbox'
                             },
@@ -767,7 +765,7 @@
                                         },{
                                             xtype: 'image',
                                             src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/Content/outpost.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
-                                            margin: '0 10 10 10'
+                                            margin: '0 10 10 0'
                                         },{
                                             xtype: 'label',
                                             cls: 'x-title-label',
@@ -839,16 +837,11 @@
                         },{
                             xtype: 'container',
                             height: 65,
+                            margin: '0 0 0 30',
                             layout: {
                                 type: 'column'
                             },
                             items: [
-                                {
-                                    xtype: 'container',
-                                    height: 30,
-                                    margin: '0 0 0 75',
-                                    html:'&nbsp;'
-                                },
                                 window.feature.comboBoxFilters.country,
                                 window.feature.comboBoxFilters.region,
                                 window.feature.comboBoxFilters.district							

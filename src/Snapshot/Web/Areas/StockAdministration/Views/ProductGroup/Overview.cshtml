@@ -133,23 +133,23 @@ Product Administration Product Groups: Overview
                 layout: {
                     type: 'hbox'
                 },
-                height: 60,
+                height: 50,
                 items:[{
                     xtype: 'container',
                     flex: 1,
                     layout: {
                         type: 'column'
                     },
-                    height:70,
                     items: [{
                         xtype: 'container',
                         height: 30,
                         width: 30,
                         html:'&nbsp;'
-                    },{xtype: 'image',
+                    },{
+                        xtype: 'image',
                        src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/SubMenu/ProductSelected.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
-                       margin: '0 10 10 10'
-                      },{
+                       margin: '0 10 10 0'
+                    },{
                         xtype: 'label',
                         cls: 'x-title-label',
                         text: 'Product Group'

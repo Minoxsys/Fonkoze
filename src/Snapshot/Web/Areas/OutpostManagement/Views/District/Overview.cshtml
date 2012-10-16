@@ -429,7 +429,6 @@ Districts: Overview
             labelClsExtra: 'combo-label',
             fieldLabel: 'Selected Country',
             valueField: 'Id',
-            margin: '0 0 0 30',
             emptyText: _t('Selected country'),
             listeners: {
                 select: function (combo, record, index) {
@@ -454,7 +453,6 @@ Districts: Overview
             labelClsExtra: 'combo-label',
             fieldLabel: 'Selected Region',
             id: window.feature.comboboxRegionsId,
-            margin: '0 0 0 20',
             emptyText: _t('Selected region'),
             listeners: {
                 select: function (combo, record, index) {
@@ -666,7 +664,7 @@ Districts: Overview
 					height: 110,
 					items: [{
 							xtype: 'container',
-							height: 45,
+							height: 50,
                             layout: {
                                 type: 'hbox'
                             },
@@ -681,9 +679,10 @@ Districts: Overview
 									height: 30,
 									width: 30,
 									html:'&nbsp;'
-								},{xtype: 'image',
-                                src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/Content/pinIcon.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
-                                margin: '0 10 10 10'
+								},{
+                                    xtype: 'image',
+                                    src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/Content/pinIcon.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                                    margin: '0 10 10 0'
                                 },{
 									xtype: 'label',
                                     cls: 'x-title-label',

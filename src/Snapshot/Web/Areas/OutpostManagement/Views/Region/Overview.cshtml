@@ -154,7 +154,7 @@ Outpost Management Regions: Overview
                     items: [
                     {
                         xtype: 'container',
-                        height: 45,
+                        height: 50,
                         layout: {
                             type: 'column'
                         },
@@ -163,9 +163,10 @@ Outpost Management Regions: Overview
                             height: 30,
                             width: 30,
                             html:'&nbsp;'
-                        },{xtype: 'image',
+                        },{
+                            xtype: 'image',
                            src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/Content/pinIcon.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
-                           margin: '0 10 10 10'
+                           margin: '0 10 10 0'
                         },{
                             xtype: 'label',
                             cls: 'x-title-label',
@@ -231,38 +232,33 @@ Outpost Management Regions: Overview
                             }
                         }]
                      },{
-						    xtype: 'container',
-                            height: 65,
-						    layout: {
-							    type: 'column'
-						    },
-						    items: [
-						    {
-							    xtype: 'container',
-							    height: 30,
-							    width: 65,
-							    html:'&nbsp;'
-						    },{ 
-                                xtype: 'combobox',
-                                itemId: window.feature.overviewcomboboxid,
-			                    store: window.feature.countryStore,
-			                    displayField: 'Name',
-			                    valueField:'Id',
-			                    emptyText: 'Selected Country',
-                                labelAlign: 'top',
-                                labelClsExtra: 'combo-label',
-                                fieldLabel: 'Selected Country', 
-			                    editable: false,
-                                typeAhead: false,
-			                    listeners:{
-				                    'select': function(combo, record){
-					                    window.feature.container.down('#'+window.feature.overviewcomboboxid).setValue(combo.getValue());
-                                        window.feature.regionStore.proxy.extraParams.countryId = combo.getValue();
-                                        window.feature.regionStore.loadPage(1);
-				                    }
-			                    } 
-                            }]
-					    }]
+						xtype: 'container',
+                        height: 65,
+                        margin: '0 0 0 30',
+						layout: {
+							type: 'column'
+						},
+						items: [{
+                            xtype: 'combobox',
+                            itemId: window.feature.overviewcomboboxid,
+			                store: window.feature.countryStore,
+			                displayField: 'Name',
+			                valueField:'Id',
+			                emptyText: 'Selected Country',
+                            labelAlign: 'top',
+                            labelClsExtra: 'combo-label',
+                            fieldLabel: 'Selected Country', 
+			                editable: false,
+                            typeAhead: false,
+			                listeners:{
+				                'select': function(combo, record){
+					                window.feature.container.down('#'+window.feature.overviewcomboboxid).setValue(combo.getValue());
+                                    window.feature.regionStore.proxy.extraParams.countryId = combo.getValue();
+                                    window.feature.regionStore.loadPage(1);
+				                }
+			                } 
+                        }]
+					}]
 				},{
                     xtype: 'gridpanel',
                     store: window.feature.regionStore,

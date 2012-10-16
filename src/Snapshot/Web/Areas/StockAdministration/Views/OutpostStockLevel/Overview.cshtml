@@ -537,68 +537,65 @@ Outpost Stock Level Current
                     type: 'vbox'
                 },
                 height: 110,
-                items: [
-                {
+                items: [{
                     xtype: 'container',
-                    height: 45,
+                    height: 50,
                     layout: {
                         type: 'column'
                     },
                     items: [{
                         xtype: 'container',
-                        width: 20,
+                        height: 30,
+                        width: 30,
                         html:'&nbsp;'
-                    },{xtype: 'image',
-                       src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/OutpostStockLevel/CurrentProductLevel.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
-                       margin: '0 20 0 10'
-                      },{
+                    },{
+                        xtype: 'image',
+                        src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/OutpostStockLevel/CurrentProductLevel.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                        margin: '0 10 10 0'
+                    },{
                         xtype: 'label',
                         cls: 'x-title-label',
                         text: 'Current Product Status'
-
                     }]
-                    },{
-						xtype: 'container',
-                        height: 65,
-						layout: {
-							type: 'column'
-						},
-						items: [
-						{
-							xtype: 'container',
-							html:'&nbsp;'
-						}, 
-                            window.feature.comboBoxCountries, 
-							window.feature.comboBoxRegions,
-							window.feature.comboBoxDistricts,
-							window.feature.comboBoxOutposts 
-                        ,{ 
-                            xtype: 'button',
-                            margin: '25 0 10 0',
-                            text: 'View Product Status',
-                            ui: 'snapshot-add-btn',
-                            cls: 'x-add-button-gradient',
-                            handler: function () {
-                                var selectedOutpostId = window.feature.comboBoxOutposts.getValue();
-                                var selectedDistrictId = window.feature.comboBoxDistricts.getValue();
+                },{
+					xtype: 'container',
+                    height: 65,
+                    margin: '0 0 0 30',
+					layout: {
+						type: 'column'
+					},
+					items: [
+                        window.feature.comboBoxCountries, 
+						window.feature.comboBoxRegions,
+						window.feature.comboBoxDistricts,
+						window.feature.comboBoxOutposts 
+                    ,{ 
+                        xtype: 'button',
+                        margin: '25 0 10 0',
+                        text: 'View Product Status',
+                        ui: 'snapshot-add-btn',
+                        cls: 'x-add-button-gradient',
+                        handler: function () {
+                            var selectedOutpostId = window.feature.comboBoxOutposts.getValue();
+                            var selectedDistrictId = window.feature.comboBoxDistricts.getValue();
                                 
-                                window.feature.treeStore.setRootNode(null);        
-                                if(selectedOutpostId !==null){
-                                    window.feature.treegrid.getStore().proxy.extraParams.OutpostId = selectedOutpostId;
-                                    window.feature.treegrid.getStore().proxy.extraParams.DistrictId = selectedDistrictId;
-                                    window.feature.treegrid.getStore().proxy.extraParams.ProductGroupExpandedOnEdit = '';
-                                    window.feature.treegrid.getRootNode().expand();
-                                }else{
-                                    var msgAlert = Ext.Msg;
-                                     msgAlert.ui = 'snapshot-popup-window';
-                                     msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
-                                     msgAlert.msgButtons['ok'].margin = '10 10 20 0',
-                                     msgAlert.alert("Alert", "Please select all option in order to see outpost stock level data!");
+                            window.feature.treeStore.setRootNode(null);        
+                            if(selectedOutpostId !==null){
+                                window.feature.treegrid.getStore().proxy.extraParams.OutpostId = selectedOutpostId;
+                                window.feature.treegrid.getStore().proxy.extraParams.DistrictId = selectedDistrictId;
+                                window.feature.treegrid.getStore().proxy.extraParams.ProductGroupExpandedOnEdit = '';
+                                window.feature.treegrid.getRootNode().expand();
+                            }else{
+                                var msgAlert = Ext.Msg;
+                                    msgAlert.ui = 'snapshot-popup-window';
+                                    msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                    msgAlert.msgButtons['ok'].margin = '10 10 20 0',
+                                    msgAlert.alert("Alert", "Please select all option in order to see outpost stock level data!");
                                     
-                                }
                             }
-                        }]
-				    }]
+                        }
+                    }]
+				}]
 			},
 				window.feature.treegrid
             ]

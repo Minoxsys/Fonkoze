@@ -289,40 +289,39 @@
             layout: 'hbox',
             anchor: '100% 5%',
             height: 50,
-            margin: '0 0 0 50',
             items: [
                 {
                     xtype: 'container',
                     flex: 1,
                     layout: 'column',
-                    items: [
-                        Ext.create('Ext.Img',
-                                   {
-                            src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/briefcase.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
-                            width: 30,
-                            height: 30
-    
-                        }),{
-                            xtype: 'label',
-                            cls: 'x-title-label',
-                            text: 'Roles Administration',
-                            margin: '0 0 0 10'
-                        },{
-                            xtype: 'button',
-                            text: 'Add New Role',
-                            ui: 'snapshot-add-btn',
-                            disabled: @(ViewBag.HasNoRightsToAdd),
-                            cls: 'x-add-button-gradient',
-                            margin: '0 0 0 20',
-                            handler: function () {
-                                window.feature.role = null;
-                                InitUiRoleData();
-                                window.feature.modal.setTitle('Add a New Role');
-                                Ext.getCmp(window.feature.saveButtonId).setText('ADD');
-                                window.feature.modal.show();
-                            }
+                    items: [{
+                        xtype: 'container',
+                        height: 30,
+                        width: 30,
+                        html:'&nbsp;'
+                    }, {
+                        xtype: 'image',
+                        src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/Content/Users.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                        margin: '0 10 10 0'
+                    }, {
+                        xtype: 'label',
+                        cls: 'x-title-label',
+                        text: 'Roles Administration'
+                    },{
+                        xtype: 'button',
+                        text: 'Add New Role',
+                        ui: 'snapshot-add-btn',
+                        disabled: @(ViewBag.HasNoRightsToAdd),
+                        cls: 'x-add-button-gradient',
+                        margin: '0 0 0 20',
+                        handler: function () {
+                            window.feature.role = null;
+                            InitUiRoleData();
+                            window.feature.modal.setTitle('Add a New Role');
+                            Ext.getCmp(window.feature.saveButtonId).setText('ADD');
+                            window.feature.modal.show();
                         }
-                    ]
+                    }]
                 },{
                     xtype: 'container',
                     height: 50,

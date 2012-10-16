@@ -280,8 +280,7 @@
 				align: 'stretch',
 				type: 'vbox'
 			},
-			items:[
-				{
+			items:[{
 					xtype: 'container',
 					layout: {
 						type: 'hbox'
@@ -290,31 +289,32 @@
 					items:[
 						{
 							xtype:'container',
-							margin: '0 0 0 30',
-							width: 500,
 							flex:1,
 							layout:'column',
-							items:[
-								{
-									xtype: 'image',
-									src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/Content/CreateProductLevelRequest.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
-									margin: '0 20 10 10'
-								},{
-									xtype:'label',
-									cls: 'x-title-label',
-									html:'Product Level Requests'
-								},{
-									xtype:'button',
-									margin: '0 0 0 20',
-									ui: 'snapshot-add-btn',
-									cls: 'x-add-button-gradient',
-									disabled: @(ViewBag.HasNoRightsToAdd),
-									text:'Create Product Level Request',
-									handler:function(btn){
-										showCreateProductLevelRequest();
-									}
+							items:[{
+                                xtype: 'container',
+                                height: 30,
+                                width: 30,
+                                html:'&nbsp;'
+                            }, {
+								xtype: 'image',
+								src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/Content/CreateProductLevelRequest.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+								margin: '0 10 10 0'
+							},{
+								xtype:'label',
+								cls: 'x-title-label',
+								html:'Product Level Requests'
+							},{
+								xtype:'button',
+								margin: '0 0 0 20',
+								ui: 'snapshot-add-btn',
+								cls: 'x-add-button-gradient',
+								disabled: @(ViewBag.HasNoRightsToAdd),
+								text:'Create Product Level Request',
+								handler:function(btn){
+									showCreateProductLevelRequest();
 								}
-							]
+							}]
 						},{
 							xtype:'container',
 							flex:1,
