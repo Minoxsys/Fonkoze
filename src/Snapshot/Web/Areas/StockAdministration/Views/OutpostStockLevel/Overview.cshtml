@@ -473,10 +473,12 @@ Outpost Stock Level Current
 
                     }
                 })
-            }, { xtype: 'actioncolumn',
+            }, { 
+                xtype: 'actioncolumn',
                  text: 'Actions',
                  menuDisabled: true,
-                 flex:1,
+                 flex: 1,
+                 maxWidth: 170,
                  minWidth: 150,
                  items: [{ icon: '@Url.AssetUrl("img/edit.png")',
                     tooltip: _t('Edit product level'),

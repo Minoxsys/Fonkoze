@@ -532,8 +532,9 @@ Districts: Overview
                 xtype: 'actioncolumn',
                 text: 'Actions',
                 menuDisabled:true,
+                flex: 1,
+                maxWidth: 170,
                 minWidth: 150,
-                flex: 0.7,
                 items: [{
                     icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/edit.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
                     tooltip: _t('Edit this district'),

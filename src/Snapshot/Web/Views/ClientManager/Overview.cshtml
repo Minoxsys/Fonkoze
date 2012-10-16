@@ -229,7 +229,8 @@ User Administration Clients: Overview
                     xtype: 'actioncolumn',
 			        text: 'Actions',
                     menuDisabled:true,
-                    flex: 0.5,
+                    flex: 1,
+                    maxWidth: 170,
                     minWidth: 150,
                     items: [{
                         icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/edit.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))', 

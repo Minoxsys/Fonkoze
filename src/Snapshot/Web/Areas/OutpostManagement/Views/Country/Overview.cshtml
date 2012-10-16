@@ -267,6 +267,9 @@
                     xtype: 'actioncolumn',
                     menuDisabled:true,
                     text: 'Actions',
+                    flex: 1,
+                    maxWidth: 170,
+                    minWidth: 150,
                     items: [
                         {
                             icon:'@(Url.RouteUrl<Web.Controllers.AssetsController>(_ => _.Shared("img/delete.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
