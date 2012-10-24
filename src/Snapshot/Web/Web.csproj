@@ -145,6 +145,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Areas\AnalysisManagement\Controllers\LocationReportController.cs" />
+    <Compile Include="Areas\AnalysisManagement\Models\LocationReport\FilterModel.cs" />
+    <Compile Include="Areas\AnalysisManagement\Models\LocationReport\MarkerIndexOutputModel.cs" />
+    <Compile Include="Areas\AnalysisManagement\Models\LocationReport\MarkerModel.cs" />
     <Compile Include="Areas\AnalysisManagement\Models\ReportDistrictLevel\ProductsChartModel.cs" />
     <Compile Include="Areas\AnalysisManagement\Models\ReportDistrictLevel\ProductsForChartOutputModel.cs" />
     <Compile Include="Areas\AnalysisManagement\Models\ReportRegionLevel\ChartInputModel.cs" />
@@ -450,6 +454,7 @@
     <Content Include="Assets\resources\img\Alerts\Checked.png" />
     <Content Include="Assets\resources\img\Alerts\Star.png" />
     <Content Include="Assets\resources\img\Analysis\ActivityReport.png" />
+    <Content Include="Assets\resources\img\Analysis\LocationReport.png" />
     <Content Include="Assets\resources\img\Analysis\OutpostList.png" />
     <Content Include="Assets\resources\img\Analysis\StockLevelDistrict.png" />
     <Content Include="Assets\resources\img\Analysis\StockLevelRegion.png" />
@@ -481,6 +486,7 @@
     <Content Include="Assets\resources\img\stop.png" />
     <Content Include="Assets\resources\img\unchecked.gif" />
     <Content Include="Assets\resources\img\Users\user.png" />
+    <Content Include="Assets\resources\markerwithlabel.js" />
     <Content Include="Assets\resources\themes\compass_init.rb" />
     <Content Include="Assets\resources\themes\images\access\boundlist\trigger-arrow.png" />
     <Content Include="Assets\resources\themes\images\access\box\corners-blue.gif" />
@@ -2161,6 +2167,7 @@
     <Content Include="Areas\CampaignManagement\Views\ExistingRequests\Overview.cshtml" />
     <Content Include="Areas\CampaignManagement\Views\ProductLevelRequest\_ProductLevelDetail.cshtml" />
     <Content Include="Areas\AnalysisManagement\Views\Shared\_AnalysisSideBar.cshtml" />
+    <Content Include="Areas\AnalysisManagement\Views\LocationReport\Overview.cshtml" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\core\_core.scss" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\core\_reset.scss" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\layout\_layout.scss" />

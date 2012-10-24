@@ -38,7 +38,7 @@ Analysis
             items: [{
                 xtype: 'container',
                 width: 1200,
-                height: 250,
+                height: 300,
                 
                 layout: {
                     align: 'stretch',
@@ -160,6 +160,50 @@ Analysis
                             text: 'Report description',
                             tdAttrs: { valign: 'top' }     
                         }]
+                    }]
+                }, {
+                    xtype: 'container',
+                    height: 110,
+                    layout: {
+                        align: 'top',
+                        type: 'hbox'
+                    },
+                    items: [{
+                        xtype: 'container',
+                        width: 550,
+                        layout: {
+                            type: 'table',
+                            columns: 2
+                        },
+                        defaults: {
+                            tdAttrs: { valign: 'top'}  
+                        },
+                        items: [{
+                            xtype: 'image',
+                            autoEl: { html: "<a href='@(Url.RouteUrl<LocationReportController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))'><img height='60' src = '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Analysis/LocationReport.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))'/></a>" },
+                            margin: '0 20 0 20',
+                            height: 110,
+                            rowspan: 2
+                        }, {
+                            xtype: 'label',
+                            tdAttrs: {height: 25, valign: 'top'},  
+                            autoEl: { tag: 'a', cls: 'blue-label analysis-label', href: '@(Url.RouteUrl<LocationReportController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))', html: 'Location Report' }
+                                    
+                        }, {
+                            xtype: 'label',
+                            tdAttrs: { valign: 'top' },     
+                            text: 'This report will show stock levels for different outposts.'  
+                        }]
+                    }, {
+                        xtype: 'container',
+                        width: 550,
+                        layout: {
+                            type: 'table',
+                            columns: 2
+                        },
+                        defaults: {
+                            tdAttrs: { valign: 'top'}  
+                        }
                     }]
                 }]
             }]

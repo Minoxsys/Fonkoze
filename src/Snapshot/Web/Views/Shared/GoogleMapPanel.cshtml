@@ -1,5 +1,6 @@
-﻿<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
-<script src="" type="text/javascript"></script>
+﻿@using Web.Bootstrap.Routes;
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
+<script src="@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/markerwithlabel.js"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))" type="text/javascript"></script>
 <script type="text/javascript">
     Ext.define('Ext.feature.GoogleMapPanel', {
         extend: 'Ext.panel.Panel',
