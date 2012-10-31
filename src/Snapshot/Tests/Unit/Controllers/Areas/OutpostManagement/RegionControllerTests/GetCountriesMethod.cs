@@ -40,7 +40,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.RegionControllerTests
             var jsonData = jsonResult.Data as CountryIndexOutputModel;
             Assert.IsNotNull(jsonData);
 
-            Assert.AreEqual(currentUserCountries.Count(), jsonData.TotalItems);           
+            Assert.AreEqual(2, jsonData.TotalItems);           
         }
     }
 }

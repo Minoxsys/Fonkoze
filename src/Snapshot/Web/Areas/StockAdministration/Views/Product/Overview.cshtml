@@ -141,9 +141,9 @@
         function IsValid(productGroup, productName, productSMSCode,productLowerLimit, productUpperLimit) {
     
             var ok = true;
-            if (productGroup.getValue() == '') {
-                productGroup.markInvalid('Field Product Group is required!');
+            if (productGroup.getValue() == null || productGroup.getValue() == '@Guid.Empty') {
                 productGroup.setValue(null);
+                productGroup.markInvalid('Field Product Group is required!');
                 ok = false;
             }
             
@@ -769,6 +769,7 @@
         var contentRes = window.res.content;
         var mainContent = Ext.getCmp(contentRes.maincontent.id);
         mainContent.add(window.feature.container);
+        window.feature.ProductGroupStore.load();
 
         if ('@Model.ProductGroupId' != '@Guid.Empty')
         {

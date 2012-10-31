@@ -179,9 +179,7 @@
                 country:function(combo, record){
                     window.feature.resetRegionDependencies();
     
-                    window.feature.outpostsStore.getProxy().extraParams = {
-                        countryId: combo.getValue()
-                    };
+                    window.feature.outpostsStore.getProxy().extraParams.countryId = combo.getValue();
                     window.feature.outpostsStore.loadPage(1);
     
                     window.feature.regionsStore.load({
@@ -193,9 +191,7 @@
                 region:function(combo, record){
                     window.feature.resetDistrictDependencies();
     
-                    window.feature.outpostsStore.getProxy().extraParams = {
-                        regionId: combo.getValue()
-                    };
+                    window.feature.outpostsStore.getProxy().extraParams.regionId = combo.getValue();
                     window.feature.outpostsStore.loadPage(1);
     
                     window.feature.districtsStore.load({
@@ -205,9 +201,7 @@
                     });
                 },
                 district:function(combo, record){
-                    window.feature.outpostsStore.getProxy().extraParams = {
-                        districtId: combo.getValue()
-                    };
+                    window.feature.outpostsStore.getProxy().extraParams.districtId = combo.getValue();
                     window.feature.outpostsStore.loadPage(1);
                 }
             }
@@ -415,6 +409,28 @@
                                     errorsFound = true;
                                 }
                             });
+
+                            var country = me.down("#" + window.feature.modalIds.countryId);
+                            var region = me.down("#" + window.feature.modalIds.regionId);
+                            var district = me.down("#" + window.feature.modalIds.districtId);
+
+                            if (country.getValue() == null || country.getValue() == '@Guid.Empty'){
+                                country.setValue(null);
+                                country.markInvalid('Field Country is required!');
+                                errorsFound = true;
+                            }
+                            if (region.getValue() == null || region.getValue() == '@Guid.Empty'){
+                                region.setValue(null);
+                                region.markInvalid('Field Region is required!');
+                                errorsFound = true;
+                            }
+
+                            if (district.getValue() == null || district.getValue() == '@Guid.Empty'){
+                                district.setValue(null);
+                                district.markInvalid('Field District is required!');
+                                errorsFound = true;
+                            }
+
     
                             var msgAlert = Ext.Msg;
                             msgAlert.ui = 'snapshot-popup-window';

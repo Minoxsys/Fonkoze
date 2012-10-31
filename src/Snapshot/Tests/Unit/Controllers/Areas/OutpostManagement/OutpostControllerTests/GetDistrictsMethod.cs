@@ -41,24 +41,6 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.OutpostControllerTests
 		}
 
 		[Test]
-		public void ReturnsEmptyArray_WhenEmptyRegionId_IsSupplied()
-		{
-			var viewResult = _.controller.GetDistricts(Guid.Empty) as JsonResult;
-			var model = viewResult.Data as GetDistrictsOutputModel;
-
-			Assert.IsEmpty(model.Districts);
-		}
-
-		[Test]
-		public void ReturnsEmptyArray_WhenNullRegionId_IsSupplied()
-		{
-			var viewResult = _.controller.GetDistricts(null) as JsonResult;
-			var model = viewResult.Data as GetDistrictsOutputModel;
-
-			Assert.IsEmpty(model.Districts);
-		}
-
-		[Test]
 		public void ReturnsDistrictsArray_WhenValidRegionId_IsSupplied()
 		{
 			var returnedDistricts = _.ExpectDistrictsToBeQueriedForRegionId();
@@ -67,9 +49,9 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.OutpostControllerTests
 			var model = viewResult.Data as GetDistrictsOutputModel;
 
 			_.VerifyThatDistrictsHaveBeenQueried();
-			Assert.AreEqual( returnedDistricts.Count(),  model.Districts.Count());
-			Assert.AreEqual(returnedDistricts[0].Id, model.Districts[0].Id);
-			Assert.AreEqual(returnedDistricts[0].Name, model.Districts[0].Name);
+			Assert.AreEqual(3,  model.Districts.Count());
+			Assert.AreEqual(returnedDistricts[0].Id, model.Districts[1].Id);
+			Assert.AreEqual(returnedDistricts[0].Name, model.Districts[1].Name);
 		}
 	}
 }

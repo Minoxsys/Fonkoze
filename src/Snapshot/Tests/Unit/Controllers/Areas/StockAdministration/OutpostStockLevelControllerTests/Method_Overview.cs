@@ -28,7 +28,9 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration.OutpostStockLevelCont
         {
             var overviewModel = new OverviewInputModel() {
                 OutpostId = Guid.Parse(objectMother.GUID_FOR_ALL_OPTION_ON_OUTPOST_LIST),
-                DistrictId = objectMother.district.Id
+                DistrictId = objectMother.district.Id,
+                RegionId = objectMother.region.Id,
+                CountryId = objectMother.country.Id
             };
 
             objectMother.queryOutpost.Expect(it => it.Query()).Return(objectMother.outposts.AsQueryable());
@@ -60,10 +62,13 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration.OutpostStockLevelCont
             var overviewModel = new OverviewInputModel()
             {
                 OutpostId = objectMother.outposts[0].Id,
-                DistrictId = objectMother.district.Id
+                DistrictId = objectMother.district.Id,
+                RegionId = objectMother.region.Id,
+                CountryId = objectMother.country.Id
             };
 
             objectMother.queryOutpostStockLevel.Expect(it => it.Query()).Return(objectMother.outpostStockLevels.Where(it=>it.Outpost.Id == objectMother.outposts[0].Id).AsQueryable());
+            objectMother.queryOutpost.Expect(it => it.Query()).Return(objectMother.outposts.AsQueryable());
             objectMother.queryOutpost.Expect(it => it.Load(objectMother.outposts[0].Id)).Return(objectMother.outposts[0]);
             foreach (var productGroup in objectMother.productGroups)
             {

@@ -120,7 +120,7 @@
         fields: ['Id', 'Name'],
         proxy: {
             type: 'ajax',
-            url: '@Url.RouteUrl(StockAdministrationAreaRegistration.DEFAULT_ROUTE, new { controller = "Product", action = "GetProductGroups" })',
+            url: '@Url.RouteUrl(CampaignManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "ProductLevelRequest", action = "GetProductGroups" })',
             reader: {
                 type: 'json',
                 root: 'productGroups'

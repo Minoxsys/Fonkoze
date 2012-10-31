@@ -5,6 +5,8 @@ using Domain;
 using Core.Persistence;
 using Web.Areas.CampaignManagement.Models.ExistingRequests;
 using Web.Security;
+using System.Collections.Generic;
+using Web.Areas.CampaignManagement.Models.ProductLevelRequest;
 
 namespace Web.Areas.CampaignManagement.Controllers
 {
@@ -32,30 +34,62 @@ namespace Web.Areas.CampaignManagement.Controllers
         public JsonResult GetOutposts(GetOutpostsInput input)
         {
             LoadUserAndClient();
-            var campaign = QueryCampaign.Load(input.CampaignId.Value);
-            var options = campaign.RestoreOptions<Web.Areas.CampaignManagement.Models.Campaign.OptionsModel>();
 
-            Guid[] outpostIds = new Guid[]{};
-            if (options != null)
+            List<GetOutpostsOutput> outpostResult = new List<GetOutpostsOutput>();
+            GetOutpostsOutput allModel = new GetOutpostsOutput { Id = Guid.Empty, Name = " All" };
+            outpostResult.Add(allModel);
+
+            if (input.CampaignId.HasValue && input.CampaignId != Guid.Empty)
             {
-                outpostIds = options.Outposts.Split(',').Where(x=>!string.IsNullOrWhiteSpace(x)).Select(it=>new Guid(it)).ToArray();
+                var outposts = QueryOutposts.Query().Where(c => c.Client == _client);
+                var campaign = QueryCampaign.Load(input.CampaignId.Value);
+                var options = campaign.RestoreOptions<Web.Areas.CampaignManagement.Models.Campaign.OptionsModel>();
+
+                Guid[] outpostIds = new Guid[] { };
+                if (options != null)
+                {
+                    outpostIds = options.Outposts.Split(',').Where(x => !string.IsNullOrWhiteSpace(x)).Select(it => new Guid(it)).ToArray();
+                }
+
+                if (outpostIds.Count() == 0)
+                    return Json(null, JsonRequestBehavior.AllowGet);
+
+                outposts = outposts.Where(c => outpostIds.Contains(c.Id));
+
+                foreach (var outpost in outposts.ToList())
+                {
+                    var model = new GetOutpostsOutput
+                    {
+                        Id = outpost.Id,
+                        Name = outpost.Name
+                    };
+                    outpostResult.Add(model);
+                }
+            }
+            return Json(outpostResult.ToArray(), JsonRequestBehavior.AllowGet);
+           
+        }
+
+        public JsonResult GetCampaigns()
+        {
+            LoadUserAndClient();
+            var campaignsDataQry = QueryCampaign.Query().Where(p => p.Client == _client);
+            List<CampaignModel> campaigns = new List<CampaignModel>();
+            CampaignModel allModel = new CampaignModel { Id = Guid.Empty.ToString(), Name = " All" };
+            campaigns.Add(allModel);
+
+            foreach (var campaign in campaignsDataQry)
+            {
+                var model = new CampaignModel
+                {
+                    Id = campaign.Id.ToString(),
+                    Name = campaign.Name
+                };
+                campaigns.Add(model);
             }
 
-            if(outpostIds.Count() == 0)
-                return Json(null, JsonRequestBehavior.AllowGet);
 
-            var outposts = QueryOutposts.Query().Where(c=>c.Client == _client);
-            outposts = outposts.Where(c=>outpostIds.Contains(c.Id));
-
-            var outpostResult = outposts.ToList().Select(it => new GetOutpostsOutput
-            {
-                Id= it.Id,
-                Name = it.Name
-
-            }).ToArray();
-
-            return Json(outpostResult, JsonRequestBehavior.AllowGet);
-           
+            return Json(campaigns.ToArray(), JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult GetExistingRequests(GetExistingRequestsInput input)
@@ -65,12 +99,12 @@ namespace Web.Areas.CampaignManagement.Controllers
             var requestsData = QueryRequests.Query().Where(req => req.Client == _client);
 
 
-            if (input.CampaignId.HasValue)
+            if (input.CampaignId.HasValue && input.CampaignId != Guid.Empty)
             {
                 requestsData = requestsData.Where(req => req.CampaignId == input.CampaignId.Value);
             }
 
-            if (input.OutpostId.HasValue)
+            if (input.OutpostId.HasValue && input.OutpostId != Guid.Empty)
             {
                 requestsData = requestsData.Where(req => req.OutpostId == input.OutpostId.Value);
             }

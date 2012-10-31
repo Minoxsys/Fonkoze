@@ -218,7 +218,7 @@ namespace Web.Areas.OutpostManagement.Controllers
             LoadUserAndClient();
 
             var pageSize = indexModel.limit.Value;
-            var regionDataQuery = this.QueryService.Query();
+            var regionDataQuery = this.QueryService.Query().Where(it => it.Client.Id == this._client.Id);
 
             var orderByColumnDirection = new Dictionary<string, Func<IQueryable<Region>>>()
             {
@@ -227,15 +227,16 @@ namespace Web.Areas.OutpostManagement.Controllers
             };
 
             regionDataQuery = orderByColumnDirection[String.Format("{0}-{1}", indexModel.sort, indexModel.dir)].Invoke();
-
+            
+                    
             if (!string.IsNullOrEmpty(indexModel.countryId))
             {
                 Guid id = new Guid(indexModel.countryId);
-                regionDataQuery = regionDataQuery
-                    .Where(it => it.Country.Id == id);
+                if (id != Guid.Empty)
+                    regionDataQuery = regionDataQuery.Where(it => it.Country.Id == id);
             }
-                regionDataQuery = regionDataQuery
-                    .Where(it => it.Client.Id == this._client.Id);
+                
+
 
             var totalItems = regionDataQuery.Count();
 
@@ -280,20 +281,21 @@ namespace Web.Areas.OutpostManagement.Controllers
         {
             LoadUserAndClient();
             var countries = QueryCountry.Query().Where(it => it.Client.Id == this._client.Id);
-            int totalItems = countries.Count();
+            var countryModelListProjection = new List<CountryModel>();
 
-            var countryModelListProjection = (from country in countries.ToList()
-                                              select new CountryModel
-                                              {
-                                                  Id = country.Id,
-                                                  Name = country.Name
-                                              }).ToArray();
+            CountryModel allModel = new CountryModel {Id = Guid.Empty, Name = " All"};
+            countryModelListProjection.Add(allModel);
 
+            foreach (var country in countries.ToList())
+            {
+                CountryModel model = new CountryModel { Id = country.Id, Name = country.Name };
+                countryModelListProjection.Add(model);
+            }
 
             return Json(new CountryIndexOutputModel
             {
-                Countries = countryModelListProjection,
-                TotalItems = totalItems
+                Countries = countryModelListProjection.ToArray(),
+                TotalItems = countryModelListProjection.Count()
             }, JsonRequestBehavior.AllowGet);
         }
 

@@ -64,10 +64,14 @@ namespace Web.Areas.StockAdministration.Controllers
             var outposts = QueryOutpost.Query()
                     .Where(it => it.Client.Id == this._client.Id);
 
+            if (countryId.HasValue && countryId != Guid.Empty)
+                outposts = outposts.Where(it => it.Country.Id == countryId);
+            if (regionId.HasValue && regionId != Guid.Empty)
+                outposts = outposts.Where(it => it.Region.Id == regionId);
+            if (districtId.HasValue && districtId != Guid.Empty)
+                outposts = outposts.Where(it => it.District.Id == districtId);
             if (outpostId.HasValue && outpostId.ToString() != GUID_FOR_ALL_OPTION_ON_OUTPOST_LIST)
                 outposts = outposts.Where(it => it.Id == outpostId);
-            else
-                outposts = outposts.Where(it => it.District.Id == districtId);
 
             return outposts.ToList();
         }
@@ -215,7 +219,7 @@ namespace Web.Areas.StockAdministration.Controllers
             int totalItems = outposts.Count();
 
             var outpostModelListProjection = new List<GetOutpostsOutputModel.OutpostModel>();
-            outpostModelListProjection.Add(new GetOutpostsOutputModel.OutpostModel() { Id = GUID_FOR_ALL_OPTION_ON_OUTPOST_LIST, Name = "ALL" });
+            outpostModelListProjection.Add(new GetOutpostsOutputModel.OutpostModel() { Id = GUID_FOR_ALL_OPTION_ON_OUTPOST_LIST, Name = " All" });
 
             foreach (var outpost in outposts.ToList())
             {

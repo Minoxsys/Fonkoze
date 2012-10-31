@@ -11,6 +11,7 @@ using Web.Areas.CampaignManagement.Models.ProductLevelRequest;
 using Web.Models.Shared;
 using Web.Security;
 using Web.Services;
+using Web.Areas.StockAdministration.Models.ProductGroup;
 
 namespace Web.Areas.CampaignManagement.Controllers
 {
@@ -243,12 +244,12 @@ namespace Web.Areas.CampaignManagement.Controllers
         public JsonResult GetProducts(GetProductsInput input)
         {
             LoadUserAndClient();
-            if (input.ProductGroupId.HasValue == false)
-            {
-                throw new ArgumentNullException("No product group id specified");
-            }
+            var productsDataQry = QueryProducts.Query().Where(p => p.Client == _client);
 
-            var productsDataQry = QueryProducts.Query().Where(p => p.Client == _client && p.ProductGroup.Id == input.ProductGroupId.Value).ToList();
+            if (input.ProductGroupId.HasValue && input.ProductGroupId.Value != Guid.Empty)
+            {
+                productsDataQry = productsDataQry.Where(it => it.ProductGroup.Id == input.ProductGroupId.Value);
+            }
 
             var products = productsDataQry.Select(product =>
                 new ProductModel
@@ -267,18 +268,21 @@ namespace Web.Areas.CampaignManagement.Controllers
         public JsonResult GetCampaigns()
         {
             LoadUserAndClient();
-            var campaignsDataQry = QueryCampaigns.Query().Where(p => p.Client == _client).ToList();
+            var campaignsDataQry = QueryCampaigns.Query().Where(p => p.Client == _client);
+            List<CampaignModel> campaigns = new List<CampaignModel>();
 
-            var campaigns = campaignsDataQry.Select(campaign =>
-                new CampaignModel
+            foreach (var campaign in campaignsDataQry)
+            {
+                var model = new CampaignModel
                 {
                     Id = campaign.Id.ToString(),
                     Name = campaign.Name
+                };
+                campaigns.Add(model);
+            }
 
-                }).ToArray();
 
-
-            return Json(campaigns, JsonRequestBehavior.AllowGet);
+            return Json(campaigns.ToArray(), JsonRequestBehavior.AllowGet);
         }
 
         public void StopProductLevelRequest(StopProductLevelRequestInput stopProductLevelRequestInput)
@@ -289,6 +293,28 @@ namespace Web.Areas.CampaignManagement.Controllers
 
             SaveProductLevelRequest.Execute(productLevelRequest);
 
+        }
+
+        public JsonResult GetProductGroups()
+        {
+            LoadUserAndClient();
+
+            var productGroups = LoadProductGroup.Query().Where(p => p.Client == _client).ToList();
+            var productGroupModelList = new List<ProductGroupModel>();
+
+            foreach (var productGroup in productGroups)
+            {
+                var productGroupModel = new ProductGroupModel();
+                productGroupModel.Id = productGroup.Id;
+                productGroupModel.Name = productGroup.Name;
+                productGroupModelList.Add(productGroupModel);
+            }
+
+            return Json(new
+            {
+                productGroups = productGroupModelList.ToArray(),
+                TotalItems = productGroupModelList.Count
+            }, JsonRequestBehavior.AllowGet);
         }
 
         private void LoadUserAndClient()

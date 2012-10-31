@@ -580,11 +580,15 @@ Outpost Stock Level Current
                         handler: function () {
                             var selectedOutpostId = window.feature.comboBoxOutposts.getValue();
                             var selectedDistrictId = window.feature.comboBoxDistricts.getValue();
+                            var selectedRegionId = window.feature.comboBoxRegions.getValue();
+                            var selectedCountryId = window.feature.comboBoxCountries.getValue();
                                 
                             window.feature.treeStore.setRootNode(null);        
                             if(selectedOutpostId !==null){
                                 window.feature.treegrid.getStore().proxy.extraParams.OutpostId = selectedOutpostId;
                                 window.feature.treegrid.getStore().proxy.extraParams.DistrictId = selectedDistrictId;
+                                window.feature.treegrid.getStore().proxy.extraParams.RegionId = selectedRegionId;
+                                window.feature.treegrid.getStore().proxy.extraParams.CountryId = selectedCountryId;
                                 window.feature.treegrid.getStore().proxy.extraParams.ProductGroupExpandedOnEdit = '';
                                 window.feature.treegrid.getRootNode().expand();
                             }else{

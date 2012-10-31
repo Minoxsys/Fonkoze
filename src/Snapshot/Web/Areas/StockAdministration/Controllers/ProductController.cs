@@ -94,6 +94,8 @@ namespace Web.Areas.StockAdministration.Controllers
 
             var productGroups = QueryProductGroup.Query().Where(p => p.Client == _client).ToList();
             var productGroupModelList = new List<ProductGroupModel>();
+            ProductGroupModel allModel = new ProductGroupModel { Id=Guid.Empty, Name=" All"};
+            productGroupModelList.Add(allModel);
 
             foreach (var productGroup in productGroups)
             {
@@ -105,7 +107,7 @@ namespace Web.Areas.StockAdministration.Controllers
 
             return Json(new
             {
-                productGroups = productGroupModelList,
+                productGroups = productGroupModelList.ToArray(),
                 TotalItems = productGroupModelList.Count
             }, JsonRequestBehavior.AllowGet);
         }
@@ -117,7 +119,7 @@ namespace Web.Areas.StockAdministration.Controllers
             var products = QueryService.Query()
                                        .Where(p => p.Client == _client);
 
-            if (indexModel.ProductGroupId != null)
+            if (indexModel.ProductGroupId != null && indexModel.ProductGroupId != Guid.Empty)
             {
                 products = products.Where(it => it.ProductGroup.Id == indexModel.ProductGroupId.Value);
             }

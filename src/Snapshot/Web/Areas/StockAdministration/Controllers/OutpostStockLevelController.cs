@@ -77,6 +77,8 @@ namespace Web.Areas.StockAdministration.Controllers
 
             var countries = QueryCountry.Query().Where(it => it.Client.Id == _client.Id);
             var countriesList = new List<EntityModel>();
+            var allModel = new EntityModel { Id = Guid.Empty, Name = " All" };
+            countriesList.Add(allModel);
 
             foreach (var country in countries)
             {
@@ -99,13 +101,17 @@ namespace Web.Areas.StockAdministration.Controllers
 
             LoadUserAndClient();
 
+            var queryOutpost = QueryOutpost.Query().Where(it => it.Client.Id == _client.Id);
+            if (input.CountryId != null && input.CountryId != Guid.Empty)
+                queryOutpost = queryOutpost.Where(it => it.Country.Id == input.CountryId);
+            if (input.RegionId != null && input.RegionId != Guid.Empty)
+                queryOutpost = queryOutpost.Where(it => it.Region.Id == input.RegionId);
+            if (input.DistrictId != null && input.DistrictId != Guid.Empty)
+                queryOutpost = queryOutpost.Where(it => it.District.Id == input.DistrictId);
+
             if (input.OutpostId.Equals(GUID_FOR_ALL_OPTION_ON_OUTPOST_LIST))
             {
-                var outpostsThatHaveDistrictId = QueryOutpost.Query()
-                                                             .Where(it => it.District.Id == input.DistrictId)
-                                                             .ToList();
-
-                foreach (var outpost in outpostsThatHaveDistrictId)
+                foreach (var outpost in queryOutpost.ToList())
                 {
                     var treeModel = ToOutpostNode(input, outpost);
                     outpostStockLevelCurrentTreeModel.children.Add(treeModel);                   
@@ -251,8 +257,10 @@ namespace Web.Areas.StockAdministration.Controllers
 
             var regions = new List<Region>();
             var regionList = new List<EntityModel>();
+            var allModel = new EntityModel { Id = Guid.Empty, Name = " All"};
+            regionList.Add(allModel);
 
-            if (countryId != null)
+            if (countryId != null && countryId.Value != Guid.Empty)
             {
                 regions = QueryRegion.Query().Where(it => it.Country.Id == countryId.Value && it.Client.Id == _client.Id).ToList();
             }
@@ -277,8 +285,10 @@ namespace Web.Areas.StockAdministration.Controllers
 
             var districts = new List<District>();
             var districtList = new List<EntityModel>();
+            var allModel = new EntityModel { Id = Guid.Empty, Name = " All" };
+            districtList.Add(allModel);
 
-            if (regionId != null)
+            if (regionId != null && regionId.Value != Guid.Empty)
             {
                 districts = QueryDistrict.Query().Where(it => it.Region.Id == regionId.Value && it.Client.Id == _client.Id).ToList();
             }
@@ -309,7 +319,7 @@ namespace Web.Areas.StockAdministration.Controllers
             modelForAllOption.Name = "All";
             outpostList.Add(modelForAllOption);
 
-            if (districtId != null)
+            if (districtId != null && districtId.Value != Guid.Empty)
             {
                 outposts = QueryOutpost.Query().Where(it => it.District.Id == districtId.Value && it.Client.Id == _client.Id).ToList();
             }

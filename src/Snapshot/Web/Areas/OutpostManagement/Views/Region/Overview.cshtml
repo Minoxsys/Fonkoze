@@ -422,9 +422,9 @@ Outpost Management Regions: Overview
                 ok = false;
             }
 
-            if (country.getValue() == null){
-                country.markInvalid('Field Country is required!');  
+            if (country.getValue() == null || country.getValue() == '@Guid.Empty'){
                 country.setValue(null);
+                country.markInvalid('Field Country is required!');  
                 ok = false;
             }
 

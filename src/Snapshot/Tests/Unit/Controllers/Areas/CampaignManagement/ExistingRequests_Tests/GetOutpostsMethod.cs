@@ -50,7 +50,7 @@ namespace Tests.Unit.Controllers.Areas.CampaignManagement.ExistingRequests_Tests
             var input = _.OutpostInput();
             var output = _.controller.GetOutposts(input);
 
-            Assert.AreEqual(_.outposts.Count, (output.Data as GetOutpostsOutput[]).Length);
+            Assert.AreEqual(_.outposts.Count+1, (output.Data as GetOutpostsOutput[]).Length);
         }
 
         [Test]

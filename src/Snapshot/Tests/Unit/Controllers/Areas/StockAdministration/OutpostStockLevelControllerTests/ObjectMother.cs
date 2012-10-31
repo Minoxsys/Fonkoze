@@ -162,6 +162,7 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration.OutpostStockLevelCont
                 outpost.Country = country;
                 outpost.Region = region;
                 outpost.District = district;
+                outpost.Client = client;
 
                 outposts.Add(outpost);
 

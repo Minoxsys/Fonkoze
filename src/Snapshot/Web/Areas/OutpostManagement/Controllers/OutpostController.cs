@@ -139,17 +139,17 @@ namespace Web.Areas.OutpostManagement.Controllers
 			var outpostsQueryData = QueryService.Query().
 			Where(c => c.Client == this._client);
 
-			if (input.countryId.HasValue)
+			if (input.countryId.HasValue && input.countryId.Value != Guid.Empty)
 			{
 				outpostsQueryData = outpostsQueryData.Where(o => o.Country.Id == input.countryId.Value);
 			}
 
-			if (input.regionId.HasValue)
+			if (input.regionId.HasValue && input.regionId.Value != Guid.Empty)
 			{
 				outpostsQueryData = outpostsQueryData.Where(o => o.Region.Id == input.regionId.Value);
 			}
 
-			if (input.districtId.HasValue)
+			if (input.districtId.HasValue && input.districtId.Value != Guid.Empty)
 			{
 				outpostsQueryData = outpostsQueryData.Where(o => o.District.Id == input.districtId.Value);
 			}
@@ -194,20 +194,25 @@ namespace Web.Areas.OutpostManagement.Controllers
 		public JsonResult GetDistricts(Guid? regionId)
 		{
 			LoadUserAndClient();
-			var model = new GetDistrictsOutputModel();
 
-			if (regionId.HasValue && regionId.Value != Guid.Empty)
-			{
-				model.Districts = this.QueryDistrict.Query().Where(m => m.Region.Id == regionId &&
-																		m.Client == _client).
-				Select(district => new GetDistrictsOutputModel.DistrictModel
-				{
-					Id = district.Id,
-					Name = district.Name
-				}).ToArray();
-			}
+            List<GetDistrictsOutputModel.DistrictModel> districts = new List<GetDistrictsOutputModel.DistrictModel>();
+            var allModel = new GetDistrictsOutputModel.DistrictModel { Id = Guid.Empty, Name = " All" };
+            districts.Add(allModel);
 
-			return Json(model, JsonRequestBehavior.AllowGet);
+            if (regionId.HasValue && regionId.Value != Guid.Empty)
+            {
+                var queryDistricts = this.QueryDistrict.Query().Where(m => m.Region.Id == regionId && m.Client == _client);
+                foreach (var district in queryDistricts)
+                {
+                    var model = new GetDistrictsOutputModel.DistrictModel { Id = district.Id, Name = district.Name };
+                    districts.Add(model);
+                }
+            }
+
+            return Json(new GetDistrictsOutputModel
+            {
+                Districts = districts.ToArray()
+            }, JsonRequestBehavior.AllowGet);
 		}
 
 		public JsonResult GetWarehouses()

@@ -97,10 +97,10 @@ namespace Web.Areas.OutpostManagement.Controllers
             if (indexModel.Limit != null)
                 pageSize = indexModel.Limit.Value;
 
-            if (indexModel.CountryId != null)
+            if (indexModel.CountryId != null && indexModel.CountryId.Value != Guid.Empty)
                 districts = districts.Where(it => it.Region.Country.Id == indexModel.CountryId.Value);
 
-            if (indexModel.RegionId != null)
+            if (indexModel.RegionId != null && indexModel.RegionId.Value != Guid.Empty)
                 districts =  districts.Where(it => it.Region.Id == indexModel.RegionId); 
 
             if (indexModel.SearchName != null)
@@ -178,6 +178,8 @@ namespace Web.Areas.OutpostManagement.Controllers
 
             var countries = QueryCountry.Query().Where(it => it.Client == _client).ToList();
             var countryModelList = new List<CountryModel>();
+            CountryModel allModel = new CountryModel { Id = Guid.Empty, Name = " All"};
+            countryModelList.Add(allModel);
 
             foreach (var country in countries)
             {
@@ -200,12 +202,15 @@ namespace Web.Areas.OutpostManagement.Controllers
         {
             LoadUserAndClient();
 
+            var regions = QueryRegion.Query().Where(it => it.Client.Id == _client.Id);
+
             var regionModelList = new List<RegionModel>();
-            var regions = new List<Region>();
+            RegionModel allModel = new RegionModel { Id = Guid.Empty, Name = " All"};
+            regionModelList.Add(allModel);
 
             if (countryId != null)
             {
-                regions = QueryRegion.Query().Where(it => it.Country.Id == countryId.Value && it.Client == _client).ToList();
+                regions = regions.Where(it => it.Country.Id == countryId.Value);
 
                 foreach (var region in regions)
                 {
@@ -218,7 +223,7 @@ namespace Web.Areas.OutpostManagement.Controllers
             }
             return Json(new
             {
-                regions = regionModelList,
+                regions = regionModelList.ToArray(),
                 TotalItems = regionModelList.Count
             }, JsonRequestBehavior.AllowGet);
 

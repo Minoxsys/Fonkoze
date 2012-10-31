@@ -91,7 +91,7 @@
             fields: ['Id', 'Name'],
             proxy: {
                 type: 'ajax',
-                url: '@Url.RouteUrl(CampaignManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "ProductLevelRequest", action = "GetCampaigns" })',
+                url: '@Url.RouteUrl(CampaignManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "ExistingRequests", action = "GetCampaigns" })',
                 reader: {
                     type: 'json'
                 }
