@@ -200,13 +200,13 @@
                                         id: res.header.navigation.analysisAndReports,
                                         height: 70,
                                         padding: '0 0 0 5',
-                                        width: 215,
+                                        width: 120,
                                         icon:'@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Menu/Analysis.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
                                         iconAlign: 'left',
                                         ui: 'snapshot-navigation-btn',
                                         toggleGroup:res.header.navigation.toggleGroup,
                                         enableToggle:true,
-                                        text: '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Analysis and Reports',
+                                        text: '&nbsp;&nbsp;&nbsp;&nbsp;Reports',
                                         handler:function(){
                                             navigateTo( res.link.analysisAndReports );
                                         }
