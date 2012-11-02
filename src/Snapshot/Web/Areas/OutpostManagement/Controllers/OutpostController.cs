@@ -336,6 +336,20 @@ namespace Web.Areas.OutpostManagement.Controllers
 			});
 		}
 
+        public ActionResult CountryPrefix(Guid? countryId)
+        {
+            LoadUserAndClient();
+            string prefix = "";
+
+            if (countryId.HasValue)
+            {
+                var country = QueryCountry.Load(countryId.Value);
+                if (country != null)
+                    prefix = country.PhonePrefix;
+            }
+            return Json(new JsonActionResponse() { Message = prefix});
+        }
+
 		private void MapInputToOutpost(CreateOutpostInputModel model, ref Outpost outpost)
 		{
 			outpost. Name = model.Name;

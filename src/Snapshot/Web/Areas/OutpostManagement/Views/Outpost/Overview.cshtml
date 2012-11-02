@@ -510,6 +510,7 @@
                                         xtype: 'combobox',
                                         width: 200,
                                         itemId: window.feature.modalIds.countryId,
+                                        id: 'Country-Modal-Id-For-Getting-Prefix',
                                         name: 'CountryId',
                                         fieldLabel: 'Country',
                                         emptyText: 'Select Country', 
@@ -530,6 +531,19 @@
                                                 me.down('#' + window.feature.modalIds.districtId).setValue(null);
                                                 me.down('#' + window.feature.modalIds.regionId).setValue(null);
                                                 window.feature.on.select.country(combo, record);
+
+                                                var contactMethodValue = Ext.getCmp('Editor-ComboBox-Contact-Detail').getValue();
+                                                if ( contactMethodValue == 'Phone')
+                                                {
+                                                    var countryModalId = combo.getValue();
+                                                    var prefix = "";
+                                                    var getFromUrl = '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Outpost", action = "CountryPrefix" })';
+                                                    var action = $.post(getFromUrl, { countryId: countryModalId });
+                                                    action.success(function (response) {
+                                                        prefix = response.Message;
+                                                        Ext.getCmp('EmailIdContactMethod').setValue(prefix);
+                                                    });
+                                                }
                                             }
                                         } 
                                     },{
