@@ -1,0 +1,46 @@
+﻿<script type="text/javascript">
+    window.res.content.maincontent = {
+        id: 'MainContent',
+        sidebar: {
+            id: 'SideBar',
+            group: 'SideBarGroup'
+        }
+    };
+    Ext.onReady(function () {
+
+        var contentRes = window.res.content;
+
+        var content = Ext.getCmp(contentRes.id);
+
+        content.add(
+            {
+                xtype: 'container',
+                layout: {
+                    align: 'stretch',
+                    type: 'hbox'
+                },
+                items: [
+                     {
+                         xtype: 'container',
+                         id: contentRes.maincontent.id,
+                         layout: {
+                             align: 'stretch',
+                             type: 'fit'
+                         },
+                         flex: 1
+                     },
+                    {
+                        xtype: 'container',
+                        id: 'SideBar',
+                        width: 210
+
+
+                    }
+
+                ]
+
+            }
+        );
+
+    });
+</script>

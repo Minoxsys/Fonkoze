@@ -1,0 +1,369 @@
+﻿@using Web.Areas.OutpostManagement.Models.Country
+@model CountryOverviewModel
+@section page_title{
+    Outpost Management Countries: Overview
+}
+@{
+    Html.RenderPartial("_SubNavigation");
+    Html.RenderPartial("_OutpostAdministrationSideBar");
+}
+<script type="text/javascript">
+    window.feature = {};
+    window.feature.modalStore = Ext.create('Ext.data.Store', {
+        fields:[
+            "Name","Id", "ISOCode", "PhonePrefix"
+        ],
+
+
+        data:@Html.Raw(Model.WorldRecords),
+
+        
+        autoload:false
+    });
+
+    window.feature.refreshModalStore = function(){
+        var url = '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Country", action = "WorldRecords" })';
+
+        var action = $.get(url);
+        action.success(function(serverResponse){
+            window.feature.modalStore.loadData(serverResponse);
+        });
+    }
+
+    window.feature.comboboxId = 'countryComboBoxId';
+    window.feature.isocodeId = 'isocodeid';
+    window.feature.phoneprefixId = 'phoneprefix';
+
+    
+    window.feature.modal = Ext.define('Ext.feature.country.Modal', {
+        extend: 'Ext.window.Window',
+        modal:true,
+        height: 240,
+        width: 390,
+        layout: {
+            align: 'stretch',
+            padding: 20,
+            type: 'vbox'
+        },
+        title: 'Add a new country',
+        ui: 'snapshot-popup-window',
+        fieldDefaults: {
+            msgTarget: 'under'
+        },
+        initComponent: function () {
+            var me = this;
+
+            Ext.applyIf(me, {
+                items: [
+                    {
+                        xtype: 'combobox',
+                        itemId: window.feature.comboboxId,
+                        name: 'Country.Id',
+                        fieldLabel: 'Select a country',
+                        margin: '0 0 20 0',
+                        queryMode: 'local',
+                        displayField: 'Name',
+                        valueField: 'Name',
+                        store: window.feature.modalStore,
+                        editable: true
+                    },{
+                        xtype: 'textfield',
+                        itemId: window.feature.isocodeId,
+                        name:'Country.Abbreviation',
+                        margin: '0 0 20 0',
+                        readOnly:true,
+                        fieldLabel: 'Abbreviation'
+    
+                    },{
+                        xtype: 'textfield',
+                        itemId: window.feature.phoneprefixId,
+                        name:'Country.PhonePrefix',
+                        margin: '0 0 20 0',
+                        readOnly:true,
+                        fieldLabel: 'Phone Prefix'
+                    }
+                ]
+            });
+            me.listeners = {
+                afterrender:function(){
+                    var combobox = me.down('combobox');
+                    combobox.on('select', function(cmb, records){
+    
+                        var selectedRecord = _(records).first();
+                        if (selectedRecord){
+                            me.down('#' + window.feature.isocodeId).setValue(selectedRecord.get('ISOCode'));
+                            me.down('#' + window.feature.phoneprefixId).setValue(selectedRecord.get('PhonePrefix'));
+    
+                        }
+
+                    });
+
+                }
+
+            };
+
+            me.buttons=[
+                { 
+                    text: 'Cancel',
+                    margin: '10 10 20 0',
+                    ui: 'snapshot-cancel-btn',
+                    cls: 'x-add-button-gradient',
+                    handler:function(){
+                        me.close();
+                        me.destroy();
+                    } 
+                },
+                {
+                    text: 'Save',
+                    margin: '0 20 20 10',
+                    ui: 'snapshot-add-btn',
+                    cls: 'x-add-button-gradient', 
+                    handler:function(){
+                        var countryNameComboBox = me.down('#' + window.feature.comboboxId);
+                        var countryIsoCodeTextField = me.down('#' + window.feature.isocodeId);
+                        var countryPhonePrefixTextField = me.down('#' + window.feature.phoneprefixId);
+                        
+                        var ok = isValid(countryNameComboBox);
+
+                        if (ok)
+                        {
+                            var values = {
+                                Name: countryNameComboBox.getValue(),
+                                ISOCode:  countryIsoCodeTextField.getValue(),
+                                PhonePrefix:  countryPhonePrefixTextField.getValue()
+                            };
+
+                            var postToUrl = '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Country", action = "Create" })';
+                            var action = $.post(postToUrl, values);
+                            action.success(function(){
+                                me.close();
+                                me.destroy();
+                                window.feature.store.loadPage(1);
+                                window.feature.refreshModalStore();
+                            });
+                        }
+                    }
+                }
+            ]
+    
+            me.callParent(arguments);
+        }
+    });
+
+    function isValid(countryNameComboBox)
+    {
+        var ok = true;
+        var countryNameValue = countryNameComboBox.getValue();
+        if ((countryNameValue == null) || ($.trim(countryNameValue) == "")){
+                countryNameComboBox.markInvalid('Field Country is required!');  
+                countryNameComboBox.setValue(null);
+                ok = false;
+            }
+
+        return ok;
+    }
+
+</script>
+<script type="text/javascript">
+    Ext.onReady(function () {
+
+        var administrationBtnId = window.res.header.navigation.administration;
+        var administrationBtn = Ext.getCmp(administrationBtnId);
+        administrationBtn.toggle(true);
+        if(typeof(window.res.header.subnavigation.buttonTabs.outpost)!= 'undefined'){
+            var outpostAdministrationBtnId = window.res.header.subnavigation.buttonTabs.outpost;
+            var outpostAdministrationBtn = Ext.getCmp(outpostAdministrationBtnId);
+            outpostAdministrationBtn.toggle(true);
+            outpostAdministrationBtn.setIcon('@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/SubMenu/LocationSelected.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))');
+        }
+        var btnId = window.res.content.maincontent.sidebar.country;
+        var btn = Ext.getCmp(btnId);
+        btn.toggle(true);
+
+    });
+</script>
+<script type="text/javascript">
+    Ext.onReady(function(){
+        window.feature.store = Ext.create('Ext.data.Store', {
+            pageSize: 50,
+            remoteSort: true,
+            fields:[
+                'Id','Name', 'ISOCode', 'PhonePrefix'
+            ],
+            proxy: {
+                type: 'ajax',
+                url: '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Country", action = "Index" })',
+                reader: {
+                    type:'json',
+                    root: 'Countries',
+                    totalProperty: 'TotalItems'
+                },
+                // sends single sort as multi parameter
+                simpleSortMode: true
+            },
+            sorters: [
+                {
+                    property: 'Name',
+                    direction: 'DESC'
+                }
+            ]
+        });
+        window.feature.paging = Ext.create('Ext.PagingToolbar', {
+                store: window.feature.store,
+                displayInfo: true,
+                displayMsg: 'Displaying topics {0} - {1} of {2}',
+                emptyMsg: "No topics to display",
+                ui: 'snapshot-pagination-toolbar'
+            });
+
+        Ext.QuickTips.init();
+
+        function addTooltip(val, meta, rec, rowIdx, colIdx, ds){
+            meta.tdAttr = 'data-qtip="' + "Click on country name in order to manage its regions" +'"' ;
+            return '<u>'+val+'</u>';
+        };  
+
+        window.feature.grid = Ext.create('Ext.grid.Panel', {
+            store: window.feature.store,
+            disableSelection: true,
+            loadMask: true,
+            cls: 'white-border',
+            flex:3,
+            autoScroll:true,	
+            // grid columns
+            columns:[
+                {
+                    text: "Name",
+                    menuDisabled:true,
+                    dataIndex: 'Name',
+                    flex: 1,
+                    sortable: true,
+                    processEvent: function (type, view, cell, recordIndex, cellIndex, e) {
+						if (type == 'click'){
+                            var rec = view.panel.store.getAt(recordIndex);
+	                        var link = '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Region", action = "FromCountries" })';
+                            link = link + "/?countryId=" + rec.get('Id');
+                            navigateTo(link);
+							return false;
+						}
+						return true;
+					},
+                    renderer: addTooltip
+                },{
+                    text: "Country Abbreviation",
+                    menuDisabled:true,
+                    dataIndex: 'ISOCode',
+                    align: 'center',
+                    sortable: true,
+                    flex: 1
+                },{
+                    text: "Phone Prefix",
+                    menuDisabled:true,
+                    align: 'center',
+                    dataIndex: 'PhonePrefix',
+                    sortable: true,
+                    flex: 1
+                },{
+                    xtype: 'actioncolumn',
+                    menuDisabled:true,
+                    text: 'Actions',
+                    flex: 1,
+                    maxWidth: 170,
+                    minWidth: 150,
+                    items: [
+                        {
+                            icon:'@(Url.RouteUrl<Web.Controllers.AssetsController>(_ => _.Shared("img/delete.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                            tooltip: _t('Remove this area'),
+                            handler: function(grid, rowIndex, colIndex){
+                                 if(@(ViewBag.HasNoRightsToDelete) === true){
+                                           var msgAlert = Ext.Msg;
+                                            msgAlert.ui = 'snapshot-popup-window';
+                                            msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                            msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+                                            msgAlert.alert("Alert","You have no rights for this action!");
+                            }else{
+                                var record = grid.store.getAt(rowIndex);
+
+                                var postToUrl = '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Country", action = "Delete" })';
+
+                                var action = $.post(postToUrl, { countryId: record.data.Id});
+                                action.success(function(serverResponse){
+                                    var msgAlert = Ext.Msg;
+                                    msgAlert.ui = 'snapshot-popup-window';
+                                    msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                    msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+                                    msgAlert.alert(serverResponse.Status, serverResponse.Message);
+
+                                    window.feature.paging.doRefresh();
+                                    window.feature.refreshModalStore();
+                                });
+                            }}
+                        }
+                    ]
+                }
+
+            
+            ],
+            //         paging bar on the bottom
+            bbar: window.feature.paging
+        });
+
+        var contentRes = window.res.content;
+        var mainContent = Ext.getCmp(contentRes.maincontent.id);
+
+        mainContent.add({
+            xtype: 'container',
+            id:'TopContainer',
+            autoScroll:true,
+            margin: '15 15 15 15',
+            padding: '20 0 0 20',
+            layout: {
+                align: 'stretch',
+                type: 'vbox'
+            },
+            items: [{
+                xtype: 'container',
+                layout: {
+                    type: 'column'
+                },
+                height: 50,
+                items: [{
+                    xtype: 'container',
+                    height: 30,
+                    width: 30,
+                    html:'&nbsp;'
+                },{
+                    xtype: 'image',
+                    src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/Content/pinIcon.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                    margin: '0 10 10 0'
+                },{
+                    xtype: 'label',
+                    cls: 'x-title-label',
+                    text: 'Country Administration'
+                },{
+                    xtype: 'button',
+                    margin: '0 0 0 20',
+                    ui: 'snapshot-add-btn',
+                    cls: 'x-add-button-gradient',
+                    disabled: @(ViewBag.HasNoRightsToAdd),
+                    text: 'Add New Country',
+                    handler:function(){
+                        var addCountryModal = new window.feature.modal();
+                        addCountryModal.show();
+                    }
+                }]
+            },
+                window.feature.grid
+            ]
+        });
+
+        function navigateTo(endpoint){
+            var loc = window.location;
+
+            window.location.href = loc.protocol + '//' +  loc.host + endpoint;
+        };
+    
+        window.feature.store.loadPage(1);
+    });
+    </script>
+    

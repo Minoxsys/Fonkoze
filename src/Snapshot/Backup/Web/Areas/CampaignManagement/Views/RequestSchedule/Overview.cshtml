@@ -1,0 +1,527 @@
+﻿@using Domain
+@using Microsoft.Web.Mvc;
+@section page_title{
+    User Administration Roles: Overview
+}
+@{
+    Html.RenderPartial("_SubNavigation");
+    Html.RenderPartial("_CampaignManagementSideBar");
+}
+<script type="text/javascript">
+    Ext.onReady(function () {
+        var administrationBtnId = window.res.header.navigation.administration;
+        var administrationBtn = Ext.getCmp(administrationBtnId);
+        administrationBtn.toggle(true);
+
+        var campaignAdministrationBtnId = window.res.header.subnavigation.buttonTabs.campaign;
+        var campaignAdministrationBtn = Ext.getCmp(campaignAdministrationBtnId);
+        campaignAdministrationBtn.toggle(true);
+        campaignAdministrationBtn.setIcon('@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/SubMenu/CampaignSelected.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))');
+       
+        var automaticSchedulesBtnId = window.res.content.maincontent.sidebar.automaticSchedules;
+        var automaticSchedulesBtn = Ext.getCmp(automaticSchedulesBtnId);
+        automaticSchedulesBtn.toggle(true);
+    });
+</script>
+<script type="text/javascript">
+    Ext.onReady(function () {
+        window.feature = {};
+        window.feature.searchScheduleId = 'Search-Schedule-Id';
+        window.feature.NameId = 'Schedule-Name-Id';
+        window.feature.recurEveryId = 'Recur-Every-Id';
+        window.feature.firstReminderId = 'First-Reminder-Id';
+
+        window.feature.frequencyContainerId = 'Frequency-Container-Id';
+        window.feature.recurrencyContainerId = 'Recurrency-Container-Id';
+
+        window.feature.validateFrequency = true;
+
+        window.feature.scheduleToEdit = null;
+
+        Ext.define('Ext.feature.Schedule', {
+            extend: 'Ext.data.Model',
+            fields: [
+                { name: 'Id', type: 'string' },
+                { name: 'Name', type: 'string' },
+                { name: 'Basis', type: 'string' },
+                { name: 'FrequencyType', type: 'string' },
+                { name: 'FrequencyValue', type: 'string' },
+                { name: 'Reminders' },{
+                    name: 'RemindersForDisplay',
+                    type: 'string',
+                    convert: function (value, record) {
+                        var result = [];
+                        var i;
+                        var reminders = record.get('Reminders');
+                        if (reminders.length > 0) {
+                            for (i = 0; i < reminders.length; i++) {
+                                var periodType = reminders[i].PeriodType == 'Hourly' ? 'Hour' : 'Day';
+                                var periodValue = reminders[i].PeriodValue;
+    
+                                if (periodValue > 1) {
+                                    periodType += 's';
+                                }
+    
+                                var postfixes = ['', 'st', 'nd', 'rd'];
+                                var index = i + 1;
+                                var indexStr = index + (index < 4 ? postfixes[index] : 'th');
+    
+                                result[i] = Ext.String.format('{0} {1} {2} later', indexStr, periodValue, periodType);
+                            }
+                            return result.join('&nbsp;&nbsp;&nbsp;');
+                        }
+                        else {
+                            return '-';
+                        }
+                    }
+                },
+                { name: 'CreationDate', type: 'string' }
+            ]
+        });
+    
+        window.feature.store = Ext.create('Ext.data.Store', {
+            model: 'Ext.feature.Schedule',
+            pageSize: 25,
+            autoLoad: true,
+            proxy: {
+                type: 'ajax',
+                url: '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "RequestSchedule", action = "GetListOfRequestSchedules" })',
+                reader: {
+                    type: 'json',
+                    root: 'RequestSchedules',
+                    totalProperty: 'TotalItems'
+                },
+                extraParams: { searchValue: '' },
+                simpleSortMode: true
+            },
+            remoteSort: true,
+            sorters: [
+                {
+                    property: 'Name',
+                    direction: 'ASC'
+                }
+            ]
+        });
+
+        window.feature.modal = Ext.create('Ext.window.Window', {
+            title: 'Add New Schedule',
+            modal: true,
+            ui: 'snapshot-popup-window',
+            height: 250,
+            width: 700,
+            closeAction: 'hide',
+            resizable: false,
+            renderTo: Ext.getBody(),
+            autoRender: false,
+            autoShow: false,
+            layout: {
+                type: 'vbox',
+                align: 'strech'
+            },
+            items: [
+                {
+                    xtype: 'container',
+                    padding: '20',
+                    flex: 1,
+                    layout: {
+                        type: 'hbox',
+                        align: 'strech'
+                    },
+                    items: [
+                        { xtype: 'textfield', id: window.feature.NameId, fieldLabel: 'Schedule Name', allowBlank: false, padding: '0 30 0 0' }
+                    ]
+                },{
+                    xtype: 'container',
+                    id: window.feature.frequencyContainerId,
+                    padding: '20',
+                    layout: {
+                        type: 'hbox',
+                        align: 'strech'
+                    },
+                    flex: 1,
+                    items: [
+                        { xtype: 'label', text: 'Please select a frequency:' },
+                        { xtype: 'label', text: 'Recur every', padding: '0 0 0 20' },
+                        { xtype: 'textfield', id: window.feature.recurEveryId, padding: '0 0 0 10', width: 30 },
+                        { xtype: 'label', text: 'days', padding: '0 0 0 10' }
+                    ]
+                },{
+                    xtype: 'container',
+                    id: window.feature.recurrencyContainerId,
+                    padding: '20',
+                    flex: 1,
+                    layout: {
+                        type: 'hbox',
+                        align: 'strech'
+                    },
+                    items: [
+                        { xtype: 'label', text: 'Please select a reminder:' },
+                        { xtype: 'label', text: 'Reminder ', padding: '0 0 0 20' },
+                        { xtype: 'textfield', id: window.feature.firstReminderId, padding: '0 0 0 10', width: 30 },
+                        { xtype: 'label', text: 'days later', padding: '0 0 0 10' }
+                    ]
+                }
+            ],
+            buttons: [
+                {
+                    text: 'Cancel',
+                    margin: '10 10 20 0',
+                    ui: 'snapshot-cancel-btn',
+                    cls: 'x-add-button-gradient',
+    
+                    handler: function () {
+                        window.feature.modal.hide();
+                        window.feature.scheduleToEdit = null; 
+                    }
+                },{
+                    text: 'Save',
+                    margin: '10 10 20 0',
+                    ui: 'snapshot-add-btn',
+                    cls: 'x-add-button-gradient',
+                    handler: SaveSchedule
+                }
+            ]
+        });
+    
+        window.feature.automaticScheduleHeader = Ext.create('Ext.container.Container', {
+            layout: 'hbox',
+            anchor: '100% 5%',
+            height: 50,
+            items: [
+                {
+                    xtype: 'container',
+                    flex: 2,
+                    layout: 'column',
+                    items: [{
+                        xtype: 'container',
+                        height: 30,
+                        width: 30,
+                        html:'&nbsp;'
+                    }, {
+                        xtype: 'image',
+                        src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/SubMenu/CampaignSelected.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                        margin: '0 10 10 0'
+                    },{
+                        xtype: 'label',
+                        cls: 'x-title-label',
+                        text: 'Automatic Schedule'
+                    },{
+                        xtype: 'button',
+                        text: 'Add New Schedule',
+                        disabled: @(ViewBag.HasNoRightsToAdd),
+                        ui: 'snapshot-add-btn',
+                        cls: 'x-add-button-gradient',
+                        margin: '0 0 0 20',
+                        handler: function () {
+                            InitModal();
+                            window.feature.scheduleToEdit = null; 
+                            window.feature.modal.show();
+                        }
+                    }]
+                },{
+                    xtype: 'container',
+                    layout: {
+                        type: 'hbox',
+                        pack: 'end'
+                    },
+                    flex: 1,
+                    items: [
+                        {
+                            xtype: 'textfield',
+                            itemId: window.feature.searchScheduleId,
+                            padding: '0 0 0 0',
+                            width: 150,
+                            frame: true,
+                            emptyText: 'Schedule Search',
+                            enableKeyEvents: true,
+                            listeners: {
+                                'keyup': {
+                                    fn: function (key) {
+                                        var searchValue = window.feature.container.down('#' + window.feature.searchScheduleId).getValue();
+                                        window.feature.store.proxy.extraParams.searchValue = searchValue;
+                                        window.feature.store.loadPage(1);
+                                    }
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        });
+    
+        window.feature.grid = Ext.create('Ext.grid.Panel', {
+            store: window.feature.store,
+            cls: "white-border",
+            loadMask: true,
+            flex: 3,
+            disableSelection: true,
+            anchor: '100% 95%',
+            autoScroll: true,
+            columns: [
+                {
+                    header: 'Schedule Name',
+                    dataIndex: 'Name',
+                    flex: 3,
+                    minWidth: 150,
+                    menuDisabled:true,
+                    sortable: true
+                },{
+                    header: 'Basis',
+                    dataIndex: 'Basis',
+                    flex: 2,
+                    minWidth: 120,
+                    menuDisabled:true,
+                    sortable: true
+                },{
+                    header: 'Frequency',
+                    dataIndex: 'FrequencyType',
+                    flex: 2,
+                    minWidth: 120,
+                    menuDisabled:true,
+                    sortable: true
+                },{
+                    header: 'Reminders',
+                    dataIndex: 'RemindersForDisplay',
+                    flex: 2,
+                    minWidth: 120,
+                    menuDisabled:true,
+                    sortable: false
+                },{
+                    header: 'Creation Date',
+                    dataIndex: 'CreationDate',
+                    flex: 2,
+                    minWidth: 120,
+                    menuDisabled:true,
+                    sortable: true
+                },{
+                    xtype: 'actioncolumn',
+                    text: 'Actions',
+                    menuDisabled:true,
+                    flex: 1,
+                    maxWidth: 170,
+                    minWidth: 150,
+                    items: [
+                        {
+                            icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("img/edit.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                            handler: function (grid, rowIndex, colIndex) {
+                                if (@(ViewBag.HasNoRightsToAdd) === true){
+                                    var msgAlert = Ext.Msg;
+                                    msgAlert.ui = 'snapshot-popup-window';
+                                    msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                    msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+                                    msgAlert.alert("Alert", "You have no rights for this action!");
+                                }
+                                else{
+                                    InitModal();
+                                    LoadDataFromSchedule(grid.getStore().getAt(rowIndex));
+                                    window.feature.modal.show();
+                                }
+                            }
+                        },{
+                            icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("img/delete.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                            handler: function (grid, rowIndex, colIndex) {
+                                if (@(ViewBag.HasNoRightsToDelete) === true){
+                                    var msgAlert = Ext.Msg;
+                                    msgAlert.ui = 'snapshot-popup-window';
+                                    msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                    msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+                                    msgAlert.alert("Alert", "You have no rights for this action!");
+                                }
+                                else{
+                                    var rec = grid.getStore().getAt(rowIndex);
+                                    var msgConfirm = Ext.Msg;
+                                    msgConfirm.ui = 'snapshot-popup-window';
+                                    msgConfirm.msgButtons['no'].ui = 'snapshot-cancel-btn';
+                                    msgConfirm.msgButtons['no'].margin = '10 10 20 0';
+                                    msgConfirm.msgButtons['yes'].ui = 'snapshot-add-btn';
+                                    msgConfirm.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                    msgConfirm.msgButtons['ok'].margin = '10 10 20 0';
+                                    msgConfirm.confirm('Warning', Ext.String.format('Are you sure you want to delete {0} ?', rec.get('Name')), function (btn) {
+                                        if (btn == 'yes') {
+                                            var values = { scheduleId: rec.get('Id') };
+                                            var postToUrl = '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "RequestSchedule", action = "Delete" })';
+                                            var action = $.post(postToUrl, values);
+    
+                                            action.success(function (serverResponse) {
+                                                window.feature.store.load();
+                                            });
+                                        }
+    
+                                    });
+                                }
+                            }
+                        }
+                    ]
+                }
+            ],
+            bbar: Ext.create('Ext.PagingToolbar', {
+                store: window.feature.store,
+                displayInfo: true,
+                displayMsg: 'Displaying topics {0} - {1} of {2}',
+                emptyMsg: "No topics to display",
+                ui: 'snapshot-pagination-toolbar'
+            })
+        });
+    
+        window.feature.container = Ext.create('Ext.container.Container', {
+            margin: '15 15 15 15',
+            padding: '20 0 0 20',
+            autoScroll: true,
+            id: 'TopContainer',
+            layout: {
+                align: 'stretch',
+                type: 'vbox'
+            },
+            items: [
+                window.feature.automaticScheduleHeader, window.feature.grid
+            ]
+        });
+    
+        var contentRes = window.res.content;
+        var mainContent = Ext.getCmp(contentRes.maincontent.id);
+    
+        mainContent.add(window.feature.container);
+
+        function InitModal() {
+            Ext.getCmp(window.feature.NameId).setValue('');
+            Ext.getCmp(window.feature.recurEveryId).setValue('');
+            Ext.getCmp(window.feature.firstReminderId).setValue('');
+        }
+    
+        function SaveSchedule() {
+            var Name = Ext.getCmp(window.feature.NameId);
+            var recurEvery = Ext.getCmp(window.feature.recurEveryId);
+            var firstReminder = Ext.getCmp(window.feature.firstReminderId);
+    
+            var ok = isValid(Name, recurEvery, firstReminder);
+
+            if (ok) {
+                VerifyNameIsAvailable(Name, recurEvery, firstReminder, function (Name, recurEvery, firstReminder) {
+    
+                    var requestSchedule = {};
+                    var postToUrl;
+                    if (window.feature.scheduleToEdit != null) {
+                        requestSchedule.id = window.feature.scheduleToEdit.get('Id');
+                        postToUrl = '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "RequestSchedule", action = "Edit" })';
+                    }
+                    else {
+                        postToUrl = '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "RequestSchedule", action = "Create" })';
+                    }
+                    window.feature.modal.hide();
+    
+                    requestSchedule.Name = Name.getValue();
+                    if (window.feature.validateFrequency) {
+                        requestSchedule.FrequencyType = 'Daily';
+                        requestSchedule.FrequencyValue = recurEvery.getValue();
+                    }
+                    requestSchedule.Reminders = [];
+                    var reminder = {};
+                    if (window.feature.validateFrequency) {
+                        requestSchedule.Reminders.push({ PeriodType: 'Daily', PeriodValue: firstReminder.getValue() });
+                    }
+    
+                    var action = $.ajax({
+                        type: 'POST',
+                        url: postToUrl,
+                        contentType: 'application/json; charset=UTF-8',
+                        data: Ext.encode(requestSchedule),
+                        dataType: "json"
+                    });
+    
+                    action.success(function (serverResponse) {
+                        window.feature.store.load();
+                        window.feature.scheduleToEdit = null;
+                    });
+                });
+            }
+        }
+    
+        function isValid(Name, recurEvery, firstReminder) {
+            var ok = true;
+    
+            var validateFrequency = window.feature.validateFrequency;
+
+            if (Name.getValue() == null || $.trim(Name.getValue()) == '') {
+                Name.markInvalid('Field Schedule Name is required!');
+                Name.setValue('');
+                ok = false;
+            }
+    
+            if (validateFrequency) {
+                if (recurEvery.getValue() == null || $.trim(recurEvery.getValue()) == '') {
+                    recurEvery.markInvalid('The recurrence field is required!');
+                    recurEvery.setValue('');
+                    ok = false;
+                }
+    
+                if (firstReminder.getValue() == null || $.trim(firstReminder.getValue()) == '') {
+                    firstReminder.markInvalid('Field \"First reminder # days later\" is required!');
+                    firstReminder.setValue('');
+                    ok = false;
+                }
+    
+                if (isNaN(recurEvery.getValue())) {
+                    recurEvery.markInvalid('Field \"Recur every # days\" needs to be a numeric value!');
+                    ok = false;
+                }
+    
+                if (isNaN(firstReminder.getValue())) {
+                    firstReminder.markInvalid('Field \"First reminder # days later\" needs to be a numeric value!');
+                    ok = false;
+                }
+    
+                if (ok) {
+                    var recurEveryValue = parseInt(recurEvery.getValue(), 10);
+                    var firstReminderValue = parseInt(firstReminder.getValue(), 10);
+    
+                    if (firstReminderValue >= recurEveryValue) {
+                        firstReminder.markInvalid('The reminder must be earlier then the next recurrence!');
+                        ok = false;
+                    }
+                }
+            }
+    
+            return ok;
+        }
+    
+        function VerifyNameIsAvailable(Name, recurEvery, firstReminder, onSuccessHandler) {
+            var needToAskServer = window.feature.scheduleToEdit == null || window.feature.scheduleToEdit.get('Name') != Name.getValue();
+    
+            if (!needToAskServer) {
+                onSuccessHandler(Name, recurEvery, firstReminder);
+            }
+            else {
+                var getFromUrl = '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "RequestSchedule", action = "DoesScheduleExist" })';
+                var action = $.post(getFromUrl, { Name: Name.getValue() });
+                action.success(function (response) {
+                    if (response.Status == 'NotFound') {
+                        onSuccessHandler(Name, recurEvery, firstReminder);
+                    }
+                    else {
+                        Name.markInvalid('This schedule name is not available!');
+                    }
+                });
+            }
+        }
+
+        function LoadDataFromSchedule(schedule) {
+            var nameTextBox = Ext.getCmp(window.feature.NameId);
+            var recurEveryTextBox = Ext.getCmp(window.feature.recurEveryId);
+            var firstReminderTextBox = Ext.getCmp(window.feature.firstReminderId);
+
+            var name = schedule.get('Name');
+            var frequencyValue = schedule.get('FrequencyValue');
+            var firstReminder = schedule.get('Reminders').length > 0 ? schedule.get('Reminders')[0].PeriodValue : null;
+
+            nameTextBox.setValue(name);
+            if (frequencyValue != null) {
+                recurEveryTextBox.setValue(frequencyValue);
+            }
+            if (firstReminder != null) {
+                firstReminderTextBox.setValue(firstReminder);
+            }
+            window.feature.scheduleToEdit = schedule;
+        }
+
+    });
+</script>

@@ -1,0 +1,111 @@
+﻿@using Web.Areas.AnalysisManagement.Controllers;
+@using Web.Areas.AnalysisManagement;
+
+<script type="text/javascript" />
+    window.res.content.maincontent = {
+        id: 'MainContent',
+        sidebar: {
+            id: 'SideBar',
+            group: 'SideBarGroup',
+            reportregionlevel: 'Sidebar-AnalysisAdministration-Report-Region-Level-Button',
+            reportdistrictlevel: 'Sidebar-AnalysisAdministration-Report-District-Level-Button',
+            activityreport: 'Sidebar-AnalysisAdministration-Activity-Report-Button',
+            excesslevels: 'Sidebar-AnalysisAdministration-Excess-Levels-Report-Button',
+            locationreport: 'Sidebar-AnalysisAdministration-Location-Report-Button'
+        }
+    };
+
+    window.res.link.reportregionlevel = '@(Url.RouteUrl<ReportRegionLevelController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))';
+    window.res.link.reportdistrictlevel = '@(Url.RouteUrl<ReportDistrictLevelController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))';
+    window.res.link.locationreport = '@(Url.RouteUrl<LocationReportController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))';
+   
+    Ext.onReady(function () {
+
+        var contentRes = window.res.content;
+
+        var content = Ext.getCmp(contentRes.id);
+
+        content.add({
+            xtype: 'container',
+            layout: {
+                align: 'stretch',
+                type: 'hbox'
+            },
+            items: [{
+                xtype: 'container',
+                id: contentRes.maincontent.id,
+                layout: {
+                    align: 'stretch',
+                    type: 'fit'
+                },
+                flex: 1
+            }, {
+                xtype: 'container',
+                id: 'SideBar',
+                width: 230,
+                layout: {
+                    align: 'stretch',
+                    type: 'vbox'
+                },
+                items: [{
+                    xtype: 'button',
+                    id: contentRes.maincontent.sidebar.reportregionlevel,
+                    toggleGroup: contentRes.maincontent.sidebar.group,
+                    enableToggle: true,
+                    text: 'Product level information at <br/> region level',
+                    height: 45,
+                    margin: '45 20 0 0',
+                    ui: 'snapshot-sidebar-btn',
+                    handler: function () {
+                        navigateTo(window.res.link.reportregionlevel);
+                    }
+                }, {
+                    xtype: 'button',
+                    id: contentRes.maincontent.sidebar.reportdistrictlevel,
+                    toggleGroup: contentRes.maincontent.sidebar.group,
+                    text: 'Product level information at <br/> district level',
+                    height: 45,
+                    margin: '0 20 0 0',
+                    ui: 'snapshot-sidebar-btn',
+                    handler: function () {
+                        navigateTo(window.res.link.reportdistrictlevel);
+                    },
+                    enableToggle: true
+                }, {
+                    xtype: 'button',
+                    id: contentRes.maincontent.sidebar.activityreport,
+                    toggleGroup: contentRes.maincontent.sidebar.group,
+                    text: 'Activity report for an outpost',
+                    height: 45,
+                    margin: '0 20 0 0',
+                    ui: 'snapshot-sidebar-btn',
+                    enableToggle: true
+                }, {
+                    xtype: 'button',
+                    id: window.res.content.maincontent.sidebar.excesslevels,
+                    toggleGroup: contentRes.maincontent.sidebar.group,
+                    enableToggle: true,
+                    height: 45,
+                    margin: '0 20 0 0',
+                    text: 'Outpost list with excess levels <br /> of a stock item',
+                    ui: 'snapshot-sidebar-btn'
+                }, {
+                    xtype: 'button',
+                    id: window.res.content.maincontent.sidebar.locationreport,
+                    toggleGroup: contentRes.maincontent.sidebar.group,
+                    enableToggle: true,
+                    height: 45,
+                    margin: '0 20 0 0',
+                    text: 'Location Report',
+                    ui: 'snapshot-sidebar-btn',
+                    handler: function () {
+                        navigateTo(window.res.link.locationreport);
+                    },
+                    
+                }]
+            }]
+
+        });
+
+    });
+</script>

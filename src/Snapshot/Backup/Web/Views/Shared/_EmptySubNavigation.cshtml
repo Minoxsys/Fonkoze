@@ -1,0 +1,43 @@
+﻿
+<script type="text/javascript">
+     window.res.header.subnavigation.buttonTabs = {
+        id: 'ButtonTabs'
+    };
+
+
+    Ext.onReady(function () {
+        var subNavRes = window.res.header.subnavigation;
+        var subnav = Ext.getCmp(subNavRes.id);
+
+        subnav.add([{
+            xtype: 'container',
+            id: subNavRes.buttonTabs.id,
+            margin: 0,
+            padding: 0,
+            width: 500,
+            layout: {
+                align: 'stretch',
+                padding: 0,
+                type: 'vbox'
+            },
+            items: [{
+                xtype: 'container',
+                flex: 1,
+                items: [{
+                    xtype: 'label',
+                    html: '&nbsp;' 
+                }]
+            },{
+                xtype: 'container',
+                layout: {
+                    type: 'column'
+                },
+                flex: 1,
+                items: []
+            }]
+        }]);
+                        
+        subnav.ownerCt.doLayout();
+
+    });
+</script>

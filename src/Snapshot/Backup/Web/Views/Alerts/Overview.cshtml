@@ -1,0 +1,176 @@
+﻿@using Domain
+@using Microsoft.Web.Mvc;
+
+@section page_title{
+User Administration Clients: Overview
+}
+
+@{
+    Html.RenderPartial("_EmptySubNavigation");
+    Html.RenderPartial("_EmptySideBar");
+}
+
+<script type="text/javascript">
+    Ext.onReady(function () {
+        var administrationBtnId = window.res.header.navigation.alerts;
+        var administrationBtn = Ext.getCmp(administrationBtnId);
+        administrationBtn.toggle(true);
+
+    });
+</script>
+
+
+<script type="text/javascript">
+    Ext.onReady(function () {
+        window.feature = {};
+        window.feature.searchAlerts = 'Search-OutpostName-ALerts-Name-Id';
+
+        window.feature.alertsStore = Ext.create('Ext.data.Store', {
+            pageSize: 50,
+            remoteSuport: true,
+            fields: ['Id', 'OutpostId', 'OutpostName', 'ProductGroupId', 'ProductGroupName', 'LowLevelStock', 'LastUpdate', 'Contact'],
+            proxy: {
+                type: 'ajax',
+                url: '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "Alerts", action = "GetAlerts" })',
+                reader: {
+                    type: 'json',
+                    root: 'Alerts',
+                    totalProperty: 'TotalItems'
+                },
+                extraParams: { searchValue: '' },
+                simpleSortMode: true
+            },
+            remoteSort: true,
+            sorters: [{
+                property: 'OutpostName',
+                direction: 'ASC'
+            }]
+        });
+
+        window.feature.doSearch = new Ext.util.DelayedTask(function(){
+			window.feature.alertsStore.loadPage(1);
+		});
+
+        window.feature.container = Ext.create('Ext.container.Container', {
+            margin: '15 15 15 15',
+            padding: '20 20 0 20',
+            autoScroll: true,
+            id: 'TopContainer',
+            layout: {
+                align: 'stretch',
+                type: 'vbox'
+            },
+            items: [{
+                xtype: 'container',
+                layout: {
+                    type: 'hbox'
+                },
+                height: 50,
+                items:[{
+                    xtype: 'container',
+                    flex: 1,
+                    layout: {
+                        type: 'column'
+                    },
+                    height:50,
+                    items: [{
+                        xtype: 'container',
+                        height: 30,
+                        width: 30,
+                        html:'&nbsp;'
+                    }, {
+                        xtype: 'image',
+                        src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Alerts/AlertsAdministration.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                        margin: '0 10 10 0'
+                    },{
+                        xtype: 'label',
+                        cls: 'x-title-label',
+                        text: 'Products Alerts'
+                    }]
+                },{
+                    xtype: 'container',
+                    flex: 1,
+                    layout: {
+                        type: 'hbox',
+                        pack:'end'
+                    },
+                    height:50,
+                    items: [{
+                        xtype: 'textfield',
+                        id: window.feature.searchAlerts,
+                        width: 200,
+                        frame: true,
+                        emptyText: 'Outpost Search',
+                        enableKeyEvents: true,
+                        listeners: {
+                            'keyup': {
+                                fn: function(key) {
+                                    var searchValue = window.feature.container.down('#'+window.feature.searchAlerts).getValue();
+                                    window.feature.alertsStore.proxy.extraParams.searchValue = searchValue;
+                                    window.feature.doSearch.delay(500);
+                                }
+                            }
+                        }
+                    }]
+                }]
+            },{
+                xtype: 'gridpanel',
+                cls: 'white-border',
+                store: window.feature.alertsStore,
+                loadMask: true,
+                disableSelection: true,
+                flex:3,
+                autoScroll:true,
+                columns: [{
+                    header: 'Outpost Name',
+                    dataIndex: 'OutpostName',
+                    flex: 1,
+                    minWidth: 100,
+                    menuDisabled: true,
+                    sortable: true
+                },{
+                    header: 'Contact',
+                    dataIndex: 'Contact',
+                    menuDisabled: true,
+                    minWidth: 80,
+                    flex: 1
+                },{
+                    header: 'Product Group',
+                    dataIndex: 'ProductGroupName',
+                    menuDisabled: true,
+                    minWidth: 80,
+                    align: 'center',
+                    flex: 1
+                },{
+                    header: 'Product Level',
+                    dataIndex: 'LowLevelStock',
+                    menuDisabled: true,
+                    minWidth: 80,
+                    flex: 1
+                },{
+                    header: 'Last Update',
+                    menuDisabled:true,
+                    dataIndex: 'LastUpdate',
+                    minWidth: 100,
+                    flex: 1
+                }],
+                bbar: Ext.create('Ext.PagingToolbar', {
+                    store: window.feature.alertsStore,
+                    displayInfo: true,
+                    displayMsg: 'Displaying topics {0} - {1} of {2}',
+                    emptyMsg: "No topics to display",
+                    ui: 'snapshot-pagination-toolbar'
+                })
+            }]
+        });
+
+
+        var contentRes = window.res.content;
+        var mainContent = Ext.getCmp(contentRes.maincontent.id);
+
+        mainContent.add(window.feature.container);
+        window.feature.alertsStore.loadPage(1); 
+
+    });
+
+</script>

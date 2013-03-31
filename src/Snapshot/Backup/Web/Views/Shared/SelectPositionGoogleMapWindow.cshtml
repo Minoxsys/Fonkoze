@@ -1,0 +1,210 @@
+﻿@{
+    Html.RenderPartial("GoogleMapPanel");
+}
+
+<script type="text/javascript">
+    Ext.define('Ext.feature.GoogleMapWindow', {
+        extend: 'Ext.window.Window',
+        title: 'Select location',
+        layout: 'anchor',
+        ui: 'snapshot-popup-window',
+        renderTo: Ext.getBody(),
+        autoShow: false,
+        width: 1000,
+        height: 700,
+        getMap: function () {
+            return this.googleMapPanel.getMap();
+        },
+        initComponent: function () {
+            initPositionDetails.apply(this);
+            initGoogleMapPanel.apply(this);
+            initSelectionControls.apply(this);
+            initWindowComponents.apply(this);
+
+            this.callParent();
+        },
+        getSelectedPosition: function () {
+            return this._locationTextField.getValue();
+        },
+        setMarker: function (marker) {
+            setMarker.apply(this, [marker]);
+        },
+        centerMap: function (position) {
+            centerMap.apply(this, [position]);
+        },
+        centerOnPlace: function (place) {
+            centerOnPlace.apply(this, [place]);
+        },
+        getSelectButton:function(){
+            var me = this;
+            return me.down('#select-googlemap-position-button-id');
+        }
+    });
+
+    function initPositionDetails() {
+        var positionConfig = {
+            outpostName: ''
+        };
+
+        Ext.applyIf(this, positionConfig);
+    }
+
+    function initSelectionControls() {
+        var that = this;
+        var selectControlsConfig = {
+            locationLabel: 'Location',
+            selectLocationHandler: function (location) {
+                that.close();
+            },
+            cancelHandler: function () {
+                that.close();
+            }
+        };
+
+        Ext.applyIf(that, selectControlsConfig);
+
+        that._locationTextField = Ext.create('Ext.form.field.Text', {
+            name: that.locationLabel,
+            width: 300,
+            value: that.centerPosition,
+            readOnly: true
+        });
+
+        that._selectButton = Ext.create('Ext.Button', {
+            text: 'Select',
+            margin: '0 0 20 10',
+            ui: 'snapshot-add-btn',
+            cls: 'x-add-button-gradient',
+            itemId:'select-googlemap-position-button-id',
+            handler: that.selectLocationHandler
+        });
+
+        that._cancelButton = Ext.create('Ext.Button', {
+            text: 'Cancel',
+            //margin: '10 10 20 0',
+            ui: 'snapshot-cancel-btn',
+            cls: 'x-add-button-gradient',
+            handler: that.cancelHandler
+        });
+    }
+
+    function initGoogleMapPanel() {
+        var that = this;
+
+        var googleMapPanelConfig = {
+            anchor: '100% 97%',
+            margin: '0 0 30 0',
+            setupGoogleMapEventsHandler: function (map) {
+                initGoogleMapEvents.apply(that, [map]);
+            },
+            markerEndDragHandler: function (marker, event) {
+                markerEndDragHandler.apply(that, [marker, event]);
+            }
+        };
+
+        if (that.centerPosition !== undefined) {
+            googleMapPanelConfig.centerPosition = that.centerPosition;
+        }
+
+        if (that.zoom !== undefined) {
+            googleMapPanelConfig.zoom = that.zoom;
+        }
+
+        that.googleMapPanel = Ext.create('Ext.feature.GoogleMapPanel', googleMapPanelConfig );
+    }
+
+    function initWindowComponents() {
+        var that = this;
+
+        var containerConfigs = {
+            items: [that.googleMapPanel,
+                        {
+                            xtype: 'container',
+                            height: 50,
+                            margin: '-20 0 0 0',
+                            layout: {
+                                type: 'hbox',
+                                pack: 'end'
+                            },
+                            defaults: {
+                                margin: '0 5'
+                            },
+                            items: [
+                                that._locationTextField,
+                                that._cancelButton,
+                                that._selectButton
+                                
+                            ]
+                        }
+                 ]
+        };
+
+        Ext.applyIf(that, containerConfigs);
+    }
+
+    function initGoogleMapEvents(map) {
+        var that = this;
+
+        google.maps.event.addListener(map, 'click', function (event) {
+            var position = event.latLng;
+            var map = that.getMap();
+            var panel = that.googleMapPanel;
+            var markers = panel.getMarkers();
+
+            if (markers.length === 0) {
+                panel.addMarker({
+                    position: position,
+                    title: that.outpostName,
+                    draggable: true
+                });
+            } else {
+                var marker = markers[0];
+                marker.setPosition(position);
+            }
+
+            that._locationTextField.setValue(position);
+        });
+    }
+
+    function markerEndDragHandler(marker, event) {
+        this._locationTextField.setValue(marker.getPosition());
+    }
+
+    function setMarker(markerOptions) {
+        var that = this;
+
+        Ext.applyIf(markerOptions, {
+            draggable: true
+        });
+
+        var map = that.getMap();
+        var panel = that.googleMapPanel;
+        var markers = panel.getMarkers();
+        var marker;
+
+        if (markers.length === 0) {
+            marker = panel.addMarker(markerOptions);
+        } else {
+            marker = markers[0];
+            marker.setOptions(markerOptions);
+        }
+
+        that.centerMap(marker.getPosition());
+
+        that._locationTextField.setValue(marker.getPosition());
+    }
+
+    function centerMap(position) {
+        this.getMap().setCenter(position);
+    }
+
+    function centerOnPlace(place) {
+        var that = this;
+        var geocoder = new google.maps.Geocoder();
+        geocoder.geocode({ 'address': place }, function (results, status) {
+            if (status == google.maps.GeocoderStatus.OK) {
+                that.centerMap(results[0].geometry.location);
+            }
+        });
+    }
+</script>

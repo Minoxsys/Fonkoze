@@ -1,0 +1,361 @@
+﻿@using Domain
+@using Microsoft.Web.Mvc;
+
+@section page_title{
+User Administration Clients: Overview
+}
+
+@{
+    Html.RenderPartial("_SubNavigation");
+    Html.RenderPartial("_UserAdministrationSideBar");
+}
+
+<script type="text/javascript">
+    Ext.onReady(function () {
+        var administrationBtnId = window.res.header.navigation.administration;
+        var administrationBtn = Ext.getCmp(administrationBtnId);
+        administrationBtn.toggle(true);
+
+        var userAdministrationBtnId = window.res.header.subnavigation.buttonTabs.user;
+        var userAdministrationBtn = Ext.getCmp(userAdministrationBtnId);
+        userAdministrationBtn.toggle(true);
+        userAdministrationBtn.setIcon('@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/SubMenu/UserSelected.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))');
+       
+        var clientsGroupBtnId = window.res.content.maincontent.sidebar.clients;
+        var clientsGroupBtn = Ext.getCmp(clientsGroupBtnId);
+        clientsGroupBtn.toggle(true);
+    });
+</script>
+
+<script type="text/javascript">
+    Ext.onReady(function () {
+        window.feature = {};
+        window.feature.formClientNameId = 'Form-Client-Name';
+        window.feature.searchClientName = 'Search-Client-Name-Id';
+
+        window.feature.ClientsStore = Ext.create('Ext.data.Store', {
+            pageSize: 50,
+            remoteSuport: true,
+            fields: ['Id', 'Name', 'NoOfUsers'],
+            proxy: {
+                type: 'ajax',
+                url: '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "ClientManager", action = "GetListOfClients" })',
+                reader: {
+                    type: 'json',
+                    root: 'Clients',
+                    totalProperty: 'TotalItems'
+                },
+                extraParams: { searchValue: '' },
+                simpleSortMode: true
+            },
+            remoteSort: true,
+            sorters: [{
+                property: 'Name',
+                direction: 'ASC'
+            }]
+        });
+
+        window.feature.doSearch = new Ext.util.DelayedTask(function(){
+		    window.feature.ClientsStore.loadPage(1);
+        });
+
+        window.feature.modal = Ext.define('Ext.feature.region.Modal', {
+            extend: 'Ext.window.Window',
+            modal: true,
+            ui: 'snapshot-popup-window',
+            height: 170,
+            width: 390,
+            layout: {
+                align: 'stretch',
+                padding: 10,
+                type: 'vbox'
+            },
+
+            initComponent: function () {
+                var me = this;
+
+                Ext.applyIf(me, {
+                    items: [{
+                        xtype: 'textfield',
+                        name: 'Name',
+                        fieldLabel: 'Client Name',
+                        anchor: '100%',
+                        itemId: window.feature.formClientNameId
+                    }]
+                });
+
+                 me.callParent(arguments);
+            }
+        });
+
+        window.feature.container = Ext.create('Ext.container.Container', {
+            margin: '15 15 15 15',
+            padding: '20 20 0 20',
+            id: 'TopContainer',
+            layout: {
+                align: 'stretch',
+                type: 'vbox'
+            },
+            items: [{
+                xtype: 'container',
+                layout: {
+                    type: 'hbox'
+                },
+                height: 50,
+                items:[{
+                    xtype: 'container',
+                    flex: 2,
+                    layout: {
+                        type: 'column'
+                    },
+                    items: [{
+                        xtype: 'container',
+                        height: 30,
+                        width: 30,
+                        html:'&nbsp;'
+                    },{
+                        xtype: 'image',
+                        src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/Content/Users.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                        margin: '0 10 10 0'
+                    },{
+                        xtype: 'label',
+                        cls: 'x-title-label',
+                        text: 'Client Administration'
+                    },{
+                        xtype: 'button',
+                        margin: '0 0 0 20',
+                        ui: 'snapshot-add-btn',
+                        cls: 'x-add-button-gradient',
+                        text: 'Add New Client',
+                        disabled: @(ViewBag.HasNoRightsToAdd),
+                        handler: function(){
+                            var winAdd = new window.feature.modal({
+                                title: 'Add New Client',
+                                buttons: [
+                                    { text: 'Cancel',
+                                       margin: '10 10 20 0',
+                                       ui: 'snapshot-cancel-btn',
+                                       cls: 'x-add-button-gradient',
+                                     handler:function(){ winAdd.close(); winAdd.destroy();} },
+                                    { text: 'Save',
+                                      margin: '0 20 20 10',
+                                      ui: 'snapshot-add-btn',
+                                      cls: 'x-add-button-gradient', 
+                                      handler:function(){
+                                        var clientName = winAdd.down('#'+window.feature.formClientNameId);
+                                        var ok = IsValid(clientName);
+
+                                        if (ok == true){
+                                            var values = {
+                                                Name:  clientName.getValue()
+                                            };
+
+                                            var postToUrl = '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "ClientManager", action = "Create" })';
+                                            var action = $.post(postToUrl, values);
+                                            action.success(function(serverResponse){
+                                            if(serverResponse.Status === "Error"){
+                                                 var msgAlert = Ext.Msg;
+                                                msgAlert.ui = 'snapshot-popup-window';
+                                                msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                                msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+                                                msgAlert.alert(serverResponse.Status,serverResponse.Message);
+                                                }else{
+                                                 winAdd.close();
+                                                 winAdd.destroy();
+                                                 window.feature.ClientsStore.loadPage(1); 
+                                                }
+                                            });
+                                        }
+                                    }}
+                                ]
+                            });
+                            winAdd.show();
+                        }
+                    }]
+                },{
+                    xtype: 'container',
+                    flex: 1,
+                    layout: {
+                        type: 'hbox',
+                        pack:'end'
+                    },
+                    height:50,
+                    items: [{
+                        xtype: 'textfield',
+                        itemId: window.feature.searchClientName,
+                        width: 200,
+                        frame: true,
+                        emptyText: 'Client Search',
+                        enableKeyEvents: true,
+                        listeners: {
+                        'specialkey': function (field, e) {
+                        if (e.getKey() == Ext.EventObject.ESC) {
+                                    window.feature.container.down('#'+window.feature.searchClientName).setValue('');;
+                                    window.feature.ClientsStore.proxy.extraParams.searchValue = '';
+                                    window.feature.doSearch.delay(500);
+                                    }
+                        },
+                            'keyup': {
+                                fn: function(key) {
+                                    var searchValue = window.feature.container.down('#'+window.feature.searchClientName).getValue();
+                                    window.feature.ClientsStore.proxy.extraParams.searchValue = searchValue;
+                                    window.feature.doSearch.delay(500);
+                                }
+                            }
+                        }
+                    }]
+                }]
+            },{
+                xtype: 'gridpanel',
+                cls: 'white-border',
+                store: window.feature.ClientsStore,
+                loadMask: true,
+                disableSelection: true,
+                flex:3,
+                autoScroll:true,
+                columns: [{
+                    header: 'Client Name',
+                    dataIndex: 'Name',
+                    flex: 1,
+                    menuDisabled:true,
+                    sortable: true
+                },{
+                    header: 'Number Of Users',
+                    dataIndex: 'NoOfUsers',
+                    menuDisabled:true,
+                    flex: 1,
+                    sortable: true
+                },{
+                    xtype: 'actioncolumn',
+			        text: 'Actions',
+                    menuDisabled:true,
+                    flex: 1,
+                    maxWidth: 170,
+                    minWidth: 150,
+                    items: [{
+                        icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/edit.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))', 
+                        handler: function(grid, rowIndex, colIndex) {
+                         if(@(ViewBag.HasNoRightsToAdd) === true){
+                                           var msgAlert = Ext.Msg;
+                                            msgAlert.ui = 'snapshot-popup-window';
+                                            msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                            msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+                                            msgAlert.alert("Alert","You have no rights for this action!");
+                            }else{
+                            var rec = grid.getStore().getAt(rowIndex);
+
+                            var winEdit = new window.feature.modal({
+                                title: Ext.String.format('Edit Client {0}', rec.get('Name')),
+                                buttons: [
+                                { text: 'Cancel',
+                                   margin: '0 20 20 10',
+                                  ui: 'snapshot-cancel-btn',
+                                  cls: 'x-add-button-gradient',
+                                 handler:function(){ winEdit.close(); winEdit.destroy();} },
+                                { text: 'Save',
+                                  margin: '0 20 20 10',
+                                  ui: 'snapshot-add-btn',
+                                  cls: 'x-add-button-gradient',
+                                  handler:function(){
+                                    var clientName = winEdit.down('#'+window.feature.formClientNameId);
+                                    var ok = IsValid(clientName);
+
+                                    if (ok == true){
+                                        var values = {
+                                            Id: rec.get('Id'),
+                                            Name:  clientName.getValue()
+                                        };
+
+                                        var postToUrl = '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "ClientManager", action = "Edit" })';
+                                        var action = $.post(postToUrl, values);
+                                        action.success(function(serverResponse){
+                                            if(serverResponse.Status === "Error"){
+                                            var msgAlert = Ext.Msg;
+                                            msgAlert.ui = 'snapshot-popup-window';
+                                            msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                            msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+                                            msgAlert.alert(serverResponse.Status, serverResponse.Message);}else{
+                                            winEdit.close();
+                                            winEdit.destroy();
+                                            window.feature.ClientsStore.loadPage(1); }
+                                        });
+                                    }
+                                }}
+                                ]
+                            });
+                            winEdit.down('#'+window.feature.formClientNameId).setValue(rec.get('Name'));
+                            winEdit.show();
+                            }
+                        }
+                    },{
+                        icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/delete.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',  
+                        handler: function(grid, rowIndex, colIndex) {
+                         if(@(ViewBag.HasNoRightsToDelete) === true){
+                                           var msgAlert = Ext.Msg;
+                                            msgAlert.ui = 'snapshot-popup-window';
+                                            msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                            msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+                                            msgAlert.alert("Alert","You have no rights for this action!");
+                            }else{
+                            var rec = grid.getStore().getAt(rowIndex);
+
+                            var msgConfirm = Ext.Msg;
+                            msgConfirm.ui = 'snapshot-popup-window';
+                            msgConfirm.msgButtons['no'].ui = 'snapshot-cancel-btn';
+                            msgConfirm.msgButtons['no'].margin = '10 10 20 0';
+                            msgConfirm.msgButtons['yes'].ui = 'snapshot-add-btn';
+                            msgConfirm.msgButtons['ok'].ui = 'snapshot-add-btn';
+                            msgConfirm.msgButtons['ok'].margin = '10 10 20 0';
+                            msgConfirm.confirm('Warning', Ext.String.format('Are you sure you want to delete {0} ?', rec.get('Name')), function(btn)
+                            {
+                                if (btn=='yes'){
+                                    var values = { clientId: rec.get('Id') };
+                                    var postToUrl = '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "ClientManager", action = "Delete" })';
+                                    var action = $.post(postToUrl, values);
+
+                                    action.success(function(serverResponse){
+                                    if(serverResponse.Status === "Error"){
+                                    var msgAlert = Ext.Msg;
+                                            msgAlert.ui = 'snapshot-popup-window';
+                                            msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                            msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+                                           
+                                        msgAlert.alert(serverResponse.Status, serverResponse.Message);}
+                                        window.feature.ClientsStore.loadPage(1);
+                                    });
+                                }
+
+                            });
+                            }
+					    }  
+                    }]
+                }],
+                bbar: Ext.create('Ext.PagingToolbar', {
+                    store: window.feature.ClientsStore,
+                    displayInfo: true,
+                    displayMsg: 'Displaying topics {0} - {1} of {2}',
+                    emptyMsg: "No topics to display",
+                    ui: 'snapshot-pagination-toolbar'
+                })
+            }]
+        });
+
+        function IsValid(name){
+            var ok = true;
+            if (name.getValue() == ''){
+                name.markInvalid('Field Username is required!');  
+                name.setValue(null);
+                ok = false;
+            }
+            return ok;
+        }
+
+        var contentRes = window.res.content;
+        var mainContent = Ext.getCmp(contentRes.maincontent.id);
+
+        mainContent.add(window.feature.container);
+        window.feature.ClientsStore.loadPage(1);
+
+    });
+
+</script>

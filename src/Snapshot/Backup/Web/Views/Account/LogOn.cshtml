@@ -1,0 +1,79 @@
+﻿@using Web.Bootstrap.Routes;
+@model Web.Models.Account.LogOnModel
+@{
+    Layout = "~/Views/Shared/_LoginLayout.cshtml";
+}
+@section page_title{
+    Log On
+}
+<script type="text/javascript">
+
+    Ext.onReady(function () {
+        var viewport = Ext.getCmp(window.res.viewport);
+
+        viewport.add({
+            xtype: 'image',
+            src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/LogoLogin.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+            margin: '60 0 0 0',
+            width: 351,
+            height: 60
+            },
+            {
+                xtype: 'form',
+                height: 180,
+                bodyPadding: 30,
+                margin: '40 0 0 0',
+                width: 400,
+                ui: 'snapshot-login-panel',
+                padding: 0,
+                url: '@Url.RouteUrl(DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "Account", action = "LogOn" })', //window.location.pathname,
+                standardSubmit: true,
+                buttons: [
+                    {
+                        text: 'Submit',
+                        ui: 'snapshot-add-btn',
+                        cls: 'x-add-button-gradient',
+                        margin: '20 30 0 0',
+                        formBind: true, //only enabled once the form is valid
+                        disabled: true,
+                        handler: function () {
+                            var form = this.up('form').getForm();
+                            if (form.isValid()) {
+                                form.submit({
+                                    success: function (form, action) {
+                                        Ext.Msg.alert('Success', action.result.msg);
+                                    },
+                                    failure: function (form, action) {
+                                        Ext.Msg.alert('Failed', action.result.msg);
+                                    }
+                                });
+                            }
+                        }
+                    }
+                ],
+
+                items: [
+                    {
+                        xtype: 'textfield',
+                        name: 'UserName',
+                        fieldLabel: 'Username',
+                        anchor: '100%'
+                    }, {
+                        xtype: 'textfield',
+                        inputType: 'password',
+                        name: 'Password',
+                        fieldLabel: 'Password',
+                        listeners: {
+                            specialkey: function (field, e) {
+                                if (e.getKey() == e.ENTER) {
+                                    var form = field.up('form').getForm();
+                                    form.submit();
+                                }
+                            }
+                        },
+                        anchor: '100%'
+                    }
+                ]
+            });
+    });    
+</script>

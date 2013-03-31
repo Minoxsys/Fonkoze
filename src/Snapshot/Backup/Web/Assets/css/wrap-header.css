@@ -1,0 +1,4 @@
+﻿.x-column-header-inner .x-column-header-text {white-space: normal}
+.x-column-header-inner {line-height: normal;min-height: 25px;padding: 3px !important;}
+.analysis-label {font-size: 18px; text-decoration: none;}
+.pseudolink:hover {cursor:pointer}

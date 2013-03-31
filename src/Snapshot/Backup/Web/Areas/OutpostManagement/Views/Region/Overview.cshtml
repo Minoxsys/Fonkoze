@@ -1,0 +1,452 @@
+﻿@using Web.Areas.OutpostManagement.HtmlHelpers
+@using Web.Areas.OutpostManagement.Models.Region
+@model FromCountryModel
+
+@section page_title{
+Outpost Management Regions: Overview
+}
+@{
+    Html.RenderPartial("_SubNavigation");
+    Html.RenderPartial("_OutpostAdministrationSideBar");
+}
+
+<script type="text/javascript">
+    Ext.onReady(function () {
+        var administrationBtnId = window.res.header.navigation.administration;
+        var administrationBtn = Ext.getCmp(administrationBtnId);
+        administrationBtn.toggle(true);
+        if(typeof(window.res.header.subnavigation.buttonTabs.outpost)!= 'undefined'){
+            var outpostAdministrationBtnId = window.res.header.subnavigation.buttonTabs.outpost;
+            var outpostAdministrationBtn = Ext.getCmp(outpostAdministrationBtnId);
+            outpostAdministrationBtn.toggle(true);
+            outpostAdministrationBtn.setIcon('@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/SubMenu/LocationSelected.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))');
+        }
+        var regionBtnId = window.res.content.maincontent.sidebar.region;
+        var regionBtn = Ext.getCmp(regionBtnId);
+        regionBtn.toggle(true);
+    });
+</script>
+
+<script type="text/javascript">
+    Ext.onReady(function () {
+        window.feature = {};
+
+        window.feature.overviewcomboboxid = 'overviewCountryComboBoxId';
+        window.feature.formid = 'regionFormId';
+        window.feature.formcomboboxid = 'formCountryComboBoxId';
+        window.feature.formregionnameid = 'formRegionNameTextFieldId';
+
+        window.feature.regionStore = Ext.create('Ext.data.Store', {
+            pageSize: 50,
+            remoteSuport: true,
+            fields: ['Id','Name', 'CountryId', 'NumberOfDistricts'],
+            proxy: {
+                type: 'ajax',
+                url: '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Region", action = "GetRegions" })',
+                reader: {
+                    type: 'json',
+                    root: 'Regions',
+                    totalProperty: 'TotalItems'
+                },
+                extraParams: { countryId: '' },
+                simpleSortMode: true
+            },
+            remoteSort: true,
+            sorters: [{
+                property: 'Name',
+                direction: 'ASC'
+            }]
+        });
+
+        window.feature.countryStore = Ext.create('Ext.data.Store', {
+            remoteSuport: true,
+            fields: ['Id','Name'],
+            proxy: {
+                type: 'ajax',
+                url: '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Region", action = "GetCountries" })',
+                reader: {
+                    type: 'json',
+                    root: 'Countries',
+                    totalProperty: 'TotalItems'
+                },
+                simpleSortMode: true
+            },
+            sorters: [{
+                property: 'Name',
+                direction: 'ASC'
+            }]
+        });
+
+        window.feature.modal = Ext.define('Ext.feature.region.Modal', {
+            extend: 'Ext.window.Window',
+            modal:true,
+            height: 200,
+            width: 390,
+            layout: {
+                align: 'stretch',
+                padding: 10,
+                type: 'vbox'
+            },
+            ui: 'snapshot-popup-window',
+            fieldDefaults: {
+            msgTarget: 'under'
+            },
+            initComponent: function () {
+                var me = this;
+                var overviewComboboxValue = window.feature.container.down('#'+window.feature.overviewcomboboxid).getValue(); 
+
+                Ext.applyIf(me, {
+                    items: [{
+                        xtype: 'combobox',
+                        itemId: window.feature.formcomboboxid,
+                        name: 'CountryId',
+                        fieldLabel: 'Country',
+                        emptyText: 'Select Country', 
+                        displayField: 'Name',
+                        valueField: 'Id',
+                        store: window.feature.countryStore,
+                        editable: false,
+                        typeAhead: false,
+                        value: overviewComboboxValue,
+                        listeners:{
+				            'select': function(combo, record){
+					            window.feature.container.down('#'+window.feature.overviewcomboboxid).setValue(combo.getValue());
+                                window.feature.regionStore.proxy.extraParams.countryId = combo.getValue();
+                                window.feature.regionStore.loadPage(1);
+				            }
+			            } 
+                    }, {
+                        xtype: 'textfield',
+                        itemId: window.feature.formregionnameid,
+                        name: 'Name',
+                        fieldLabel: 'Region Name'
+                    }]
+                });
+
+                me.callParent(arguments);
+            }
+            
+        });
+
+        Ext.QuickTips.init();
+
+        function addTooltip(val, meta, rec, rowIdx, colIdx, ds){
+            meta.tdAttr = 'data-qtip="' + "Click on region name in order to manage its districts" +'"' ;
+            return '<u>'+val+'</u>';
+        };  
+
+        window.feature.container = Ext.create('Ext.container.Container', {
+            margin: '15 15 15 15',
+            padding: '20 20 0 20',
+            id:'TopContainer',
+            layout: {
+                align: 'stretch',
+                type: 'vbox'
+            },
+            items: [
+                {
+                    xtype: 'container',
+                    layout: {
+                        align: 'stretch',
+                        type: 'vbox'
+                    },
+                    height: 110,
+                    items: [
+                    {
+                        xtype: 'container',
+                        height: 50,
+                        layout: {
+                            type: 'column'
+                        },
+                        items: [{
+                            xtype: 'container',
+                            height: 30,
+                            width: 30,
+                            html:'&nbsp;'
+                        },{
+                            xtype: 'image',
+                           src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/Content/pinIcon.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                           margin: '0 10 10 0'
+                        },{
+                            xtype: 'label',
+                            cls: 'x-title-label',
+                            text: 'Region Administration'
+                        },{
+                            xtype: 'button',
+                            margin: '0 0 0 20',
+                            text: 'Add New Region',
+                            disabled: @(ViewBag.HasNoRightsToAdd),
+                            ui: 'snapshot-add-btn',
+                            cls: 'x-add-button-gradient',
+                            handler: function(){
+                                var winAdd = new window.feature.modal({
+                                    title: 'Add New Region',
+                                    buttons: [
+                                        { text: 'Cancel',
+                                        margin: '10 10 20 0',
+                                        ui: 'snapshot-cancel-btn',
+                                        cls: 'x-add-button-gradient',
+                                        handler:function(){ winAdd.close(); winAdd.destroy();} },
+                                        { text: 'Save',
+                                        margin: '0 20 20 10',
+                                        ui: 'snapshot-add-btn',
+                                        cls: 'x-add-button-gradient',
+                                        handler:function(){
+                                           
+                                            var regionName = winAdd.down('#'+window.feature.formregionnameid);
+                                            var country = winAdd.down('#'+window.feature.formcomboboxid);
+                                            var ok = IsValid(country, regionName);
+
+                                            if (ok == true){
+                                                var values = {
+                                                    CountryId:  country.getValue(),
+                                                    Name:  regionName.getValue()
+                                                };
+                                                
+                                                var postToUrl = '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Region", action = "Create" })';
+                                                var action = $.post(postToUrl, values);
+                                                action.success(function(serverResponse){
+                                                 if(serverResponse.CloseModal ==false)
+                                                 {
+                                                   var msgAlert = Ext.Msg;
+                                                    msgAlert.ui = 'snapshot-popup-window';
+                                                    msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                                    msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+                                                    msgAlert.alert(serverResponse.Status, serverResponse.Message);
+                                                 }
+                                                 else
+                                                 {                                                    
+                                                    winAdd.close();
+                                                    winAdd.destroy();
+
+                                                    var combovalue = window.feature.container.down('#'+window.feature.overviewcomboboxid).getValue();  
+                                                    window.feature.regionStore.proxy.extraParams.countryId = combovalue;
+                                                    window.feature.regionStore.loadPage(1); 
+                                                 }
+                                                });
+                                            }
+                                        }  
+                                    }]
+                                });
+                                winAdd.show();       
+                            }
+                        }]
+                     },{
+						xtype: 'container',
+                        height: 65,
+                        margin: '0 0 0 30',
+						layout: {
+							type: 'column'
+						},
+						items: [{
+                            xtype: 'combobox',
+                            itemId: window.feature.overviewcomboboxid,
+			                store: window.feature.countryStore,
+			                displayField: 'Name',
+			                valueField:'Id',
+			                emptyText: 'Selected Country',
+                            labelAlign: 'top',
+                            labelClsExtra: 'combo-label',
+                            fieldLabel: 'Selected Country', 
+			                editable: false,
+                            typeAhead: false,
+			                listeners:{
+				                'select': function(combo, record){
+					                window.feature.container.down('#'+window.feature.overviewcomboboxid).setValue(combo.getValue());
+                                    window.feature.regionStore.proxy.extraParams.countryId = combo.getValue();
+                                    window.feature.regionStore.loadPage(1);
+				                }
+			                } 
+                        }]
+					}]
+				},{
+                    xtype: 'gridpanel',
+                    store: window.feature.regionStore,
+                    disableSelection: true,
+                    loadMask: true,
+                    flex:3,
+                    cls: 'white-border',
+                    autoScroll:true,
+                    columns: [{
+                        text: "Name",
+                        dataIndex: 'Name',
+                        flex: 1,
+                        menuDisabled:true,
+                        sortable: true,
+                        processEvent: function (type, view, cell, recordIndex, cellIndex, e) {
+						    if (type == 'click'){
+                                var rec = view.panel.store.getAt(recordIndex);
+	                            var link = '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "District", action = "FromRegions" })';
+                                link = link + "/?regionId=" + rec.get('Id');
+                                navigateTo(link);
+							    return false;
+						    }
+						    return true;
+					    },
+                        renderer: addTooltip
+                    },{
+                        xtype: 'actioncolumn',
+			            text: 'Actions',
+                        menuDisabled:true,
+                        flex: 1,
+                        maxWidth: 170,
+                        minWidth: 150,
+                        items: [{
+                            icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/edit.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',  
+                            text: 'Edit',
+                            handler: function(grid, rowIndex, colIndex) {
+                            if(@(ViewBag.HasNoRightsToAdd) === true){
+                                           var msgAlert = Ext.Msg;
+                                            msgAlert.ui = 'snapshot-popup-window';
+                                            msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                            msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+                                            msgAlert.alert("Alert","You have no rights for this action!");
+                            }else{
+                                var rec = grid.getStore().getAt(rowIndex);
+
+                                var winEdit = new window.feature.modal({
+                                    title: Ext.String.format('Edit Region'),
+                                    buttons: [
+                                        { text: 'Cancel',
+                                        margin: '10 10 20 0',
+                                        ui: 'snapshot-cancel-btn',
+                                        cls: 'x-add-button-gradient',
+                                        handler:function(){ winEdit.close(); winEdit.destroy();} },
+                                        { text: 'Save',
+                                        margin: '0 20 20 10',
+                                        ui: 'snapshot-add-btn',
+                                        cls: 'x-add-button-gradient',
+                                        handler:function(){
+
+                                            var regionName = winEdit.down('#'+window.feature.formregionnameid);
+                                            var country = winEdit.down('#'+window.feature.formcomboboxid);
+
+                                            var ok = IsValid(country, regionName);
+                                                   
+                                            if (ok == true){
+                                                    var values = {
+                                                        Id: rec.get('Id'),
+                                                        CountryId:  country.getValue(),
+                                                        Name:  regionName.getValue()
+                                                    };
+                                                    var postToUrl = '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Region", action = "Edit" })';
+                                                    var action = $.post(postToUrl, values);
+                                                    action.success(function(serverResponse){
+                                                    if(serverResponse.CloseModal ==false)
+                                                 {
+                                                   var msgAlert = Ext.Msg;
+                                                     msgAlert.ui = 'snapshot-popup-window';
+                                                     msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                                     msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+                                                     msgAlert.alert(serverResponse.Status, serverResponse.Message);
+                                                 }
+                                                 else
+                                                 {   
+                                                        
+                                                        winEdit.close();
+                                                        winEdit.destroy();
+                                                        window.feature.regionStore.loadPage(1);
+                                                  }
+                                                    });
+                                            }
+                                        }
+                                                          
+                                    }]
+                                });
+                                window.feature.countryStore.load();
+
+                                winEdit.down('#'+window.feature.formcomboboxid).setValue(rec.get('CountryId'));
+                                winEdit.down('#'+window.feature.formregionnameid).setValue(rec.get('Name'));
+    
+                                winEdit.show();
+                                }
+                            }
+					    },{    
+					        icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/delete.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',  
+					        action: 'Delete',
+					        handler: function(grid, rowIndex, colIndex) {
+                            if(@(ViewBag.HasNoRightsToDelete) === true){
+                                           var msgAlert = Ext.Msg;
+                                            msgAlert.ui = 'snapshot-popup-window';
+                                            msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                            msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+                                            msgAlert.alert("Alert","You have no rights for this action!");
+                            }else{
+                                var rec = grid.getStore().getAt(rowIndex);
+                                    var msgConfirm = Ext.Msg;
+                                    msgConfirm.ui = 'snapshot-popup-window';
+                                    msgConfirm.msgButtons['no'].ui = 'snapshot-cancel-btn';
+                                    msgConfirm.msgButtons['no'].margin = '10 10 20 0';
+                                    msgConfirm.msgButtons['yes'].ui = 'snapshot-add-btn';
+                                    msgConfirm.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                    msgConfirm.msgButtons['ok'].margin = '10 10 20 0';
+                                    msgConfirm.confirm('Warning', Ext.String.format('Are you sure you want to delete region {0} ?', rec.get('Name')), function(btn)
+                                {
+                                    if (btn=='yes'){
+                                        var values = { regionId: rec.get('Id') };
+                                        var postToUrl = '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Region", action = "Delete" })';
+                                        var action = $.post(postToUrl, values);
+
+                                        action.success(function(serverResponse){
+                                            if(serverResponse.Status == "Error"){
+                                            var msgAlert = Ext.Msg;
+                                            msgAlert.ui = 'snapshot-popup-window';
+                                            msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                            msgAlert.msgButtons['ok'].margin = '10 10 20 0',
+                                            msgAlert.alert(serverResponse.Status, serverResponse.Message);
+                                            }
+                                           window.feature.regionStore.loadPage(1);
+                                        });
+                                    }
+
+                                });
+                                }
+					        }
+				        }]
+                    }],
+                    bbar: Ext.create('Ext.PagingToolbar', {
+                        store: window.feature.regionStore,
+                        displayInfo: true,
+                        displayMsg: 'Displaying topics {0} - {1} of {2}',
+                        emptyMsg: "No topics to display",
+                        ui: 'snapshot-pagination-toolbar'
+                    })
+            }]
+    });
+
+        function IsValid(country, regionName){
+            var ok = true;
+            if (regionName.getValue() == ''){
+                regionName.markInvalid('Field Name is required!');  
+                regionName.setValue(null);
+                ok = false;
+            }
+
+            if (country.getValue() == null || country.getValue() == '@Guid.Empty'){
+                country.setValue(null);
+                country.markInvalid('Field Country is required!');  
+                ok = false;
+            }
+
+            return ok;
+        };
+
+        function navigateTo(endpoint){
+            var loc = window.location;
+            window.location.href = loc.protocol + '//' +  loc.host + endpoint;
+        };
+        
+        var contentRes = window.res.content;
+        var mainContent = Ext.getCmp(contentRes.maincontent.id);
+        mainContent.add(window.feature.container);
+
+        if ('@Model.CountryId' != '@Guid.Empty')
+        {
+            window.feature.regionStore.proxy.extraParams.countryId = '@Model.CountryId';
+            window.feature.countryStore.load();
+            window.feature.container.down('#'+window.feature.overviewcomboboxid).setValue('@Model.CountryId');
+
+        }
+        window.feature.regionStore.loadPage(1);
+    });
+</script>

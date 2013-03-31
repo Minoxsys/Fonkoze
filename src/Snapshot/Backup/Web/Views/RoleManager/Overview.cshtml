@@ -1,0 +1,603 @@
+﻿@using Domain
+@using Microsoft.Web.Mvc;
+@section page_title{
+    User Administration Roles: Overview
+}
+@{
+    Html.RenderPartial("_SubNavigation");
+    Html.RenderPartial("_UserAdministrationSideBar");
+}
+<script type="text/javascript">
+    Ext.onReady(function () {
+        var administrationBtnId = window.res.header.navigation.administration;
+        var administrationBtn = Ext.getCmp(administrationBtnId);
+        administrationBtn.toggle(true);
+       
+        var userAdministrationBtnId = window.res.header.subnavigation.buttonTabs.user;
+        var userAdministrationBtn = Ext.getCmp(userAdministrationBtnId);
+        userAdministrationBtn.toggle(true);
+        userAdministrationBtn.setIcon('@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/SubMenu/UserSelected.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))');
+
+        var rolesGroupBtnId = window.res.content.maincontent.sidebar.roles;
+        var rolesGroupBtn = Ext.getCmp(rolesGroupBtnId);
+        rolesGroupBtn.toggle(true);
+    });
+</script>
+<script type="text/javascript">
+    Ext.onReady(function () {
+        window.feature = {};
+        window.feature.searchRoleId = 'Search-Role-Id';
+        window.feature.roleNameId = 'Role-Name-Id';
+        window.feature.roleDescriptionId = 'Role-Description-Id';
+        window.feature.saveButtonId = 'Save-Button-Id';
+
+        window.feature.countryViewId = 'Country.View';
+        window.feature.countryEditId = 'Country.Edit';
+        window.feature.countryDeleteId = 'Country.Delete';
+
+        window.feature.regionViewId = "Region.View";
+        window.feature.regionEditId = "Region.Edit";
+        window.feature.regionDeleteId = "Region.Delete";
+
+        window.feature.districtViewId = "District.View";
+        window.feature.districtEditId = "District.Edit";
+        window.feature.districtDeleteId = "District.Delete";
+
+        window.feature.outpostViewId = "Outpost.View";
+        window.feature.outpostEditId = "Outpost.Edit";
+        window.feature.outpostDeleteId = "Outpost.Delete";
+
+        window.feature.productGroupViewId = "ProductGroup.View";
+        window.feature.productGroupEditId = "ProductGroup.Edit";
+        window.feature.productGroupDeleteId = "ProductGroup.Delete";
+
+        window.feature.productViewId = "Product.View";
+        window.feature.productEditId = "Product.Edit";
+        window.feature.productDeleteId = "Product.Delete";
+
+        window.feature.campaignViewId = "Campaign.View";
+        window.feature.campaignEditId = "Campaign.Edit";
+        window.feature.campaignDuplicateId = "Campaign.Duplicate";
+
+        window.feature.automaticScheduleViewId = "AutomaticSchedule.View";
+        window.feature.automaticScheduleEditId = "AutomaticSchedule.Edit";
+        window.feature.automaticScheduleDeleteId = "AutomaticSchedule.Delete";
+
+        window.feature.productLevelRequestViewId = "ProductLevelRequest.View";
+        window.feature.productLevelRequestEditId = "ProductLevelRequest.Edit";
+        window.feature.productLevelRequestStopId = "ProductLevelRequest.Stop";
+
+        window.feature.existingRequestViewId = "ExistingRequest.View";
+
+        window.feature.clientViewId = "Client.View";
+        window.feature.clientEditId = "Client.Edit";
+        window.feature.clientDeleteId = "Client.Delete";
+
+        window.feature.userViewId = "User.View";
+        window.feature.userEditId = "User.Edit";
+        window.feature.userDeleteId = "User.Delete";
+
+        window.feature.roleViewId = "Role.View";
+        window.feature.roleEditId = "Role.Edit";
+        window.feature.roleDeleteId = "Role.Delete";
+
+        window.feature.currentOutpostStockLevelViewId = "CurrentOutpostStockLevel.View";
+        window.feature.currentOutpostStockLevelEditId = "CurrentOutpostStockLevel.Edit";
+
+        window.feature.historicalOutpostStockLevelViewId = "HistoricalOutpostStockLevel.View";
+        window.feature.historicalOutpostStockLevelEditId = "HistoricalOutpostStockLevel.Edit";
+
+        window.feature.alertViewId = "Alert.View";
+        window.feature.reportViewId = "Report.View";
+
+        window.feature.checkBoxControls = [];
+        window.feature.checkBoxControlIds = [
+            window.feature.countryViewId, window.feature.countryEditId, window.feature.countryDeleteId,
+            window.feature.regionViewId, window.feature.regionEditId, window.feature.regionDeleteId,
+            window.feature.districtViewId, window.feature.districtEditId, window.feature.districtDeleteId,
+            window.feature.outpostViewId, window.feature.outpostEditId, window.feature.outpostDeleteId,
+            window.feature.productGroupViewId, window.feature.productGroupEditId, window.feature.productGroupDeleteId,
+            window.feature.productViewId, window.feature.productEditId, window.feature.productDeleteId,
+            window.feature.campaignViewId, window.feature.campaignEditId, window.feature.campaignDuplicateId,
+            window.feature.automaticScheduleViewId, window.feature.automaticScheduleEditId, window.feature.automaticScheduleDeleteId,
+            window.feature.productLevelRequestViewId, window.feature.productLevelRequestEditId, window.feature.productLevelRequestStopId,
+            window.feature.clientViewId, window.feature.clientEditId, window.feature.clientDeleteId,
+            window.feature.userViewId, window.feature.userEditId, window.feature.userDeleteId,
+            window.feature.roleViewId, window.feature.roleEditId, window.feature.roleDeleteId,
+            window.feature.currentOutpostStockLevelViewId, window.feature.currentOutpostStockLevelEditId,
+            window.feature.historicalOutpostStockLevelViewId, window.feature.historicalOutpostStockLevelEditId,
+            window.feature.existingRequestViewId,
+            window.feature.alertViewId,
+            window.feature.reportViewId
+        ];
+
+        window.feature.viewLabelPadding = '0 0 0 10';
+        window.feature.editLabelPadding = '0 0 0 20';
+        window.feature.deleteLabelPadding = '0 0 0 20';
+        window.feature.viewPadding = '0 0 0 17';
+        window.feature.editPadding = '0 0 0 25';
+        window.feature.deletePadding = '0 0 0 31';
+
+        window.feature.role = null;
+
+        Ext.define('Ext.feature.roleReferenceModel', {
+            extend: 'Ext.data.Model',
+            fields: [
+                { name: 'Id', type: 'string' },
+                { name: 'Name', type: 'string' },
+                { name: 'Description', type: 'string' },
+                { name: 'NumberOfUsers', type: 'int' }
+            ]
+        });
+
+        window.feature.store = Ext.create('Ext.data.Store', {
+            model: 'Ext.feature.roleReferenceModel',
+            pageSize: 25,
+            autoLoad: true,
+            proxy: {
+                type: 'ajax',
+                url: '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "RoleManager", action = "GetListOfRoles" })',
+                reader: {
+                    type: 'json',
+                    root: 'Roles',
+                    totalProperty: 'TotalItems'
+                },
+                extraParams: { searchValue: '' },
+                simpleSortMode: true
+            },
+            remoteSort: true,
+            sorters: [
+                {
+                    property: 'Name',
+                    direction: 'ASC'
+                }
+            ]
+        });
+    
+        window.feature.modal = Ext.create('Ext.window.Window', {
+            title: '',
+            modal: true,
+            ui: 'snapshot-popup-window',
+            height: 600,
+            width: 360,
+            closeAction: 'hide',
+            resizable: false,
+            layout: { 
+                type: 'vbox',
+                align: 'strechmax'
+            },
+            items: [{
+                    xtype: 'container',
+                    margin: '10 20 10 20',
+                    flex: 1,
+                    layout: {
+                        type: 'table',
+                        columns: 4
+                    },
+                    items: [
+                        { xtype: 'label', text: 'Role' },
+                        { xtype: 'textfield', colspan: 3, id: window.feature.roleNameId, componentCls: 'role-name', allowBlank: false },
+                        { xtype: 'label', text: 'Role Description' },
+                        { xtype: 'textfield', colspan: 3, id: window.feature.roleDescriptionId, componentCls: 'role-name', allowBlank: false },
+                        { xtype: 'label', text: 'Permissions' },
+                        { xtype: 'label', text: 'View', padding: window.feature.viewLabelPadding },
+                        { xtype: 'label', text: 'Edit', padding: window.feature.editLabelPadding },
+                        { xtype: 'label', text: 'Delete',  padding: window.feature.deleteLabelPadding},
+                        { xtype: 'label', text: 'Country' },
+                        { xtype: 'checkbox', id: window.feature.countryViewId, padding: window.feature.viewPadding },
+                        { xtype: 'checkbox', id: window.feature.countryEditId, padding: window.feature.editPadding },
+                        { xtype: 'checkbox', id: window.feature.countryDeleteId, padding: window.feature.deletePadding },
+                        { xtype: 'label', text: 'Region' },
+                        { xtype: 'checkbox', id: window.feature.regionViewId, padding: window.feature.viewPadding },
+                        { xtype: 'checkbox', id: window.feature.regionEditId, padding: window.feature.editPadding },
+                        { xtype: 'checkbox', id: window.feature.regionDeleteId, padding: window.feature.deletePadding },
+                        { xtype: 'label', text: 'District' },
+                        { xtype: 'checkbox', id: window.feature.districtViewId, padding: window.feature.viewPadding },
+                        { xtype: 'checkbox', id: window.feature.districtEditId, padding: window.feature.editPadding },
+                        { xtype: 'checkbox', id: window.feature.districtDeleteId, padding: window.feature.deletePadding },
+                        { xtype: 'label', text: 'Outpost' },
+                        { xtype: 'checkbox', id: window.feature.outpostViewId, padding: window.feature.viewPadding },
+                        { xtype: 'checkbox', id: window.feature.outpostEditId, padding: window.feature.editPadding },
+                        { xtype: 'checkbox', id: window.feature.outpostDeleteId, padding: window.feature.deletePadding },
+                        { xtype: 'label', text: 'Product Group' },
+                        { xtype: 'checkbox', id: window.feature.productGroupViewId, padding: window.feature.viewPadding },
+                        { xtype: 'checkbox', id: window.feature.productGroupEditId, padding: window.feature.editPadding },
+                        { xtype: 'checkbox', id: window.feature.productGroupDeleteId, padding: window.feature.deletePadding },
+                        { xtype: 'label', text: 'Product' },
+                        { xtype: 'checkbox', id: window.feature.productViewId, padding: window.feature.viewPadding },
+                        { xtype: 'checkbox', id: window.feature.productEditId, padding: window.feature.editPadding },
+                        { xtype: 'checkbox', id: window.feature.productDeleteId, padding: window.feature.deletePadding },
+                        { xtype: 'label', text: 'Campaign' },
+                        { xtype: 'checkbox', id: window.feature.campaignViewId, padding: window.feature.viewPadding },
+                        { xtype: 'checkbox', id: window.feature.campaignEditId, padding: window.feature.editPadding },
+                        { xtype: 'checkbox', id: window.feature.campaignDuplicateId, padding: window.feature.deletePadding },
+                        { xtype: 'label', text: 'Automatic Schedules' },
+                        { xtype: 'checkbox', id: window.feature.automaticScheduleViewId, padding: window.feature.viewPadding },
+                        { xtype: 'checkbox', id: window.feature.automaticScheduleEditId, padding: window.feature.editPadding },
+                        { xtype: 'checkbox', id: window.feature.automaticScheduleDeleteId, padding: window.feature.deletePadding },
+                        { xtype: 'label', text: 'Product Level Request' },
+                        { xtype: 'checkbox', id: window.feature.productLevelRequestViewId, padding: window.feature.viewPadding },
+                        { xtype: 'checkbox', id: window.feature.productLevelRequestEditId, padding: window.feature.editPadding },
+                        { xtype: 'checkbox', id: window.feature.productLevelRequestStopId, padding: window.feature.deletePadding },                           
+                        { xtype: 'label', text: 'Clients' },
+                        { xtype: 'checkbox', id: window.feature.clientViewId, padding: window.feature.viewPadding },
+                        { xtype: 'checkbox', id: window.feature.clientEditId, padding: window.feature.editPadding },
+                        { xtype: 'checkbox', id: window.feature.clientDeleteId, padding: window.feature.deletePadding },
+                        { xtype: 'label', text: 'Users' },
+                        { xtype: 'checkbox', id: window.feature.userViewId, padding: window.feature.viewPadding },
+                        { xtype: 'checkbox', id: window.feature.userEditId, padding: window.feature.editPadding },
+                        { xtype: 'checkbox', id: window.feature.userDeleteId, padding: window.feature.deletePadding },
+                        { xtype: 'label', text: 'Roles' },
+                        { xtype: 'checkbox', id: window.feature.roleViewId, padding: window.feature.viewPadding },
+                        { xtype: 'checkbox', id: window.feature.roleEditId, padding: window.feature.editPadding },
+                        { xtype: 'checkbox', id: window.feature.roleDeleteId, padding: window.feature.deletePadding },
+                        { xtype: 'label', text: 'Current Outpost Stock Level' },
+                        { xtype: 'checkbox', id: window.feature.currentOutpostStockLevelViewId, padding: window.feature.viewPadding },
+                        { xtype: 'checkbox', id: window.feature.currentOutpostStockLevelEditId, padding: window.feature.editPadding },
+                        { xtype: 'container'},
+                        { xtype: 'label', text: 'Historical Outpost Stock Level' },
+                        { xtype: 'checkbox', id: window.feature.historicalOutpostStockLevelViewId, padding: window.feature.viewPadding },
+                        { xtype: 'checkbox', id: window.feature.historicalOutpostStockLevelEditId, padding: window.feature.editPadding },
+                        { xtype: 'container' },
+                        { xtype: 'label', text: 'Existing Request' },
+                        { xtype: 'checkbox', id: window.feature.existingRequestViewId, padding: window.feature.viewPadding },
+                        { xtype: 'container' },
+                        { xtype: 'container' },
+                        { xtype: 'label', text: 'Alert' },
+                        { xtype: 'checkbox', id: window.feature.alertViewId, padding: window.feature.viewPadding },
+                        { xtype: 'container' },
+                        { xtype: 'container' },
+                        { xtype: 'label', text: 'Report' },
+                        { xtype: 'checkbox', id: window.feature.reportViewId, padding: window.feature.viewPadding },
+                        { xtype: 'container' },
+                        { xtype: 'container' }
+                    ]
+            }],
+            buttons: [
+                {
+                    text: 'Cancel',
+                    margin: '10 10 20 0',
+                    ui: 'snapshot-cancel-btn',
+                    handler: function () {
+                        window.feature.modal.hide();
+                    }
+                },{
+                    text: 'Add',
+                    margin: '0 20 20 10',
+                    ui: 'snapshot-add-btn',
+                    cls: 'x-add-button-gradient',
+                    id: window.feature.saveButtonId, handler: function () {
+                        var roleNameTextBox = Ext.getCmp(window.feature.roleNameId);
+                        var roleDescriptionTextBox = Ext.getCmp(window.feature.roleDescriptionId);
+                        var permissions = GetSelectedPermissionsFromUi();
+                        var ok = isValid(roleNameTextBox, roleDescriptionTextBox, permissions);
+                        if (ok) {
+                            var role = {
+                                Id: window.feature.role != null ? window.feature.role.get('Id') : "",
+                                Name: roleNameTextBox.getValue(),
+                                Description: roleDescriptionTextBox.getValue(),
+                                PermissionNames: permissions
+                            };
+                            SaveRoleData(role);
+                        }
+                    }
+                }
+            ]
+        });
+    
+        window.feature.rolesAdministrationHeader = Ext.create('Ext.container.Container', {
+            layout: 'hbox',
+            anchor: '100% 5%',
+            height: 50,
+            items: [
+                {
+                    xtype: 'container',
+                    flex: 1,
+                    layout: 'column',
+                    items: [{
+                        xtype: 'container',
+                        height: 30,
+                        width: 30,
+                        html:'&nbsp;'
+                    }, {
+                        xtype: 'image',
+                        src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/Content/Users.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                        margin: '0 10 10 0'
+                    }, {
+                        xtype: 'label',
+                        cls: 'x-title-label',
+                        text: 'Roles Administration'
+                    },{
+                        xtype: 'button',
+                        text: 'Add New Role',
+                        ui: 'snapshot-add-btn',
+                        disabled: @(ViewBag.HasNoRightsToAdd),
+                        cls: 'x-add-button-gradient',
+                        margin: '0 0 0 20',
+                        handler: function () {
+                            window.feature.role = null;
+                            InitUiRoleData();
+                            window.feature.modal.setTitle('Add a New Role');
+                            Ext.getCmp(window.feature.saveButtonId).setText('ADD');
+                            window.feature.modal.show();
+                        }
+                    }]
+                },{
+                    xtype: 'container',
+                    height: 50,
+                    layout: {
+                        type: 'hbox',
+                        pack: 'end'
+                    },
+                    flrex: 1,
+                    items: [
+                        {
+                            xtype: 'textfield',
+                            itemId: window.feature.searchRoleId,
+                            padding: '0 0 0 0',
+                            width: 200,
+                            frame: true,
+                            emptyText: 'Role Search',
+                            enableKeyEvents: true,
+                            listeners: {
+                                'specialkey': function (field, e) {
+                                        if (e.getKey() == Ext.EventObject.ESC) {
+                                            window.feature.container.down('#'+window.feature.searchRoleId).setValue('');;
+                                            window.feature.store.proxy.extraParams.searchValue = '';
+                                            window.feature.doSearch.delay(500);
+                                    }
+                                 },
+                                'keyup': {
+                                    fn: function (key) {
+                                        var searchValue = window.feature.container.down('#' + window.feature.searchRoleId).getValue();
+                                        window.feature.store.proxy.extraParams.searchValue = searchValue;
+                                        window.feature.doSearch.delay(500);
+                                    }
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        });
+    
+        window.feature.doSearch = new Ext.util.DelayedTask(function () {
+            window.feature.store.loadPage(1);
+        });
+    
+        window.feature.grid = Ext.create('Ext.grid.Panel', {
+            store: window.feature.store,
+            loadMask: true,
+            cls: 'white-border',
+            disableSelection: true,
+            flex: 3,
+            autoScroll: true,
+            columns: [
+                {
+                    header: 'Role',
+                    dataIndex: 'Name',
+                    flex: 1,
+                    menuDisabled: true,
+                    sortable: true
+                },{
+                    header: 'Number of Users',
+                    dataIndex: 'NumberOfUsers',
+                    flex: 1,
+                    menuDisabled: true,
+                    sortable: false
+                },{
+                    xtype: 'actioncolumn',
+                    text: 'Actions',
+                    menuDisabled: true,
+                    flex: 1,
+                    maxWidth: 170,
+                    minWidth: 150,
+                    items: [
+                        {
+                            icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/edit.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                            handler: function (grid, rowIndex, colIndex) {
+                                if (@(ViewBag.HasNoRightsToAdd) === true){
+                                    var msgAlert = Ext.Msg;
+                                    msgAlert.ui = 'snapshot-popup-window';
+                                    msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                    msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+                                    msgAlert.alert("Alert", "You have no rights for this action!");
+                                }
+                                else{
+                                    window.feature.role = grid.getStore().getAt(rowIndex);
+                                    LoadUiRoleData(window.feature.role);
+                                }
+                            }
+                        },{
+                            icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/delete.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                            handler: function (grid, rowIndex, colIndex) {
+                                if (@(ViewBag.HasNoRightsToDelete) === true){
+                                    var msgAlert = Ext.Msg;
+                                    msgAlert.ui = 'snapshot-popup-window';
+                                    msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                    msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+                                    msgAlert.alert("Alert", "You have no rights for this action!");
+                                }
+                                else{
+                                    var rec = grid.getStore().getAt(rowIndex);
+                                    var msgConfirm = Ext.Msg;
+                                    msgConfirm.ui = 'snapshot-popup-window';
+                                    msgConfirm.msgButtons['no'].ui = 'snapshot-cancel-btn';
+                                    msgConfirm.msgButtons['no'].margin = '10 10 20 0';
+                                    msgConfirm.msgButtons['yes'].ui = 'snapshot-add-btn';
+                                    msgConfirm.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                    msgConfirm.msgButtons['ok'].margin = '10 10 20 0';
+                                    msgConfirm.confirm('Warning', Ext.String.format('Are you sure you want to delete {0} ?', rec.get('Name')), function (btn) {
+                                        if (btn == 'yes') {
+                                            var values = { roleId: rec.get('Id') };
+                                            var postToUrl = '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "RoleManager", action = "Delete" })';
+                                            var action = $.post(postToUrl, values);
+    
+                                            action.success(function (serverResponse) {
+                                                if (serverResponse.Status === "Error") {
+                                                    var msgAlert = Ext.Msg;
+                                                    msgAlert.ui = 'snapshot-popup-window';
+                                                    msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                                    msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+                                                    msgAlert.alert(serverResponse.Status, serverResponse.Message);
+
+                                                }
+                                                window.feature.store.load();
+                                            });
+                                        }
+    
+                                    });
+                                }
+                            }
+                        }
+                    ]
+                }
+            ],
+            bbar: Ext.create('Ext.PagingToolbar', {
+                store: window.feature.store,
+                displayInfo: true,
+                ui: 'snapshot-pagination-toolbar',
+                displayMsg: 'Displaying topics {0} - {1} of {2}',
+                emptyMsg: "No topics to display"
+            })
+        });
+    
+        window.feature.container = Ext.create('Ext.container.Container', {
+            margin: '15 15 15 15',
+            padding: '20 20 0 20',
+            id: 'TopContainer',
+            layout: {
+                align: 'stretch',
+                type: 'vbox'
+            },
+            items: [
+                window.feature.rolesAdministrationHeader, window.feature.grid
+            ]
+        });
+    
+        var contentRes = window.res.content;
+        var mainContent = Ext.getCmp(contentRes.maincontent.id);
+    
+        mainContent.add(window.feature.container);
+    
+        function isValid(roleNameTextBox, roleDescriptionTextBox, permissions) {
+            var ok = true;
+
+            if (roleNameTextBox.getValue() == null || $.trim(roleNameTextBox.getValue()) == '') {
+                roleNameTextBox.markInvalid('Field Role is required!');
+                roleNameTextBox.setValue('');
+                ok = false;
+            }
+
+            if (roleDescriptionTextBox.getValue() == null || $.trim(roleDescriptionTextBox.getValue()) == '') {
+                roleDescriptionTextBox.markInvalid('Field Role Description is required!');
+                roleDescriptionTextBox.setValue('');
+                ok = false;
+            }
+    
+            if (ok && permissions.length == 0) {
+                var msgAlert = Ext.Msg;
+                msgAlert.ui = 'snapshot-popup-window';
+                msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+                msgAlert.alert("Error", "You must select at least one permission!");
+                ok = false;
+            }
+    
+            return ok;
+        }
+    
+        function InitUiRoleData() {
+            SetupUiForRole();
+        }
+    
+        function LoadUiRoleData(role) {
+            SetupUiForRole();
+            Ext.getCmp(window.feature.roleNameId).setValue(role.get('Name'));
+            Ext.getCmp(window.feature.roleDescriptionId).setValue(role.get('Description'));
+            GetPermissionsForRoleFromServer(role, UpdateUiWithRoleData);
+            window.feature.modal.setTitle('Edit Role');
+            Ext.getCmp(window.feature.saveButtonId).setText('SAVE');
+            window.feature.modal.show();
+        }
+
+        function UpdateUiWithRoleData(permissions) {
+            _.each(permissions, function (permission) {
+                Ext.getCmp(permission).setValue(true);
+            });
+        }
+    
+        function SetupUiForRole() {
+            Ext.getCmp(window.feature.roleNameId).reset();
+            Ext.getCmp(window.feature.roleDescriptionId).reset();
+            _.each(GetCheckboxControlsFromUi(), function (item) {
+                item.setValue(false);
+            });
+        }
+    
+        function GetSelectedPermissionsFromUi() {
+            var items = GetCheckboxControlsFromUi();
+            var permissions = [];
+            var i;
+            for (i = 0; i < items.length; i++) {
+                if (items[i].getValue()) {
+                    permissions.push(items[i].getId());
+                }
+            }
+    
+            return permissions.join(';');
+        }
+    
+        function GetCheckboxControlsFromUi() {
+            if (window.feature.checkBoxControls.length == 0) {
+                var i;
+                for (i = 0; i < window.feature.checkBoxControlIds.length; i++) {
+                    window.feature.checkBoxControls.push(Ext.getCmp(window.feature.checkBoxControlIds[i]));
+                }
+            }
+    
+            return window.feature.checkBoxControls;
+        }
+    
+        function SaveRoleData(role) {
+            if (role.Id == "") {
+                AddRole(role);
+            }
+            else {
+                UpdateRole(role);
+            }
+        }
+    
+        function AddRole(role) {
+            SendRoleDataToServer(role, "Create");
+        }
+    
+        function UpdateRole(role) {
+            SendRoleDataToServer(role, "Edit");
+        }
+    
+        function SendRoleDataToServer(role, actionName) {
+            var postToUrl = '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "RoleManager", action = "actionName" })';
+            postToUrl = postToUrl.replace("actionName", actionName);
+            var action = $.post(postToUrl, role);
+            action.success(function (serverResponse) {
+                if (serverResponse.Status === "Error") {
+                    var msgAlert = Ext.Msg;
+                    msgAlert.ui = 'snapshot-popup-window';
+                    msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                    msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+                    msgAlert.alert(serverResponse.Status, serverResponse.Message);
+                }
+                else {
+                    window.feature.store.load();
+                    window.feature.modal.hide();
+                }
+            });
+        }
+
+        function GetPermissionsForRoleFromServer(role, sucessHandler) {
+            var getFromUrl = '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "RoleManager", action = "GetPermissionsForRole" })';
+            $.get(getFromUrl, { roleId: role.get('Id') }, sucessHandler);
+        }
+    });
+    </script>

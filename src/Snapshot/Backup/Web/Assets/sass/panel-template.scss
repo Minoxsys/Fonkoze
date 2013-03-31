@@ -1,0 +1,29 @@
+@import 'header-template.scss';
+
+//DASHBOARD WIDGET PANELS
+@include extjs-panel-ui(
+    'snapshot-grid-widget-panel',
+
+    $ui-border-color: #ffffff,
+    $ui-border-radius: 0,
+    $ui-border-width: 0,
+
+    $ui-header-color: transparent,
+    $ui-header-font-family: $global2-font-family,
+    $ui-header-font-size: $font_size-larger,
+    $ui-header-font-weight: $font_weight-bold,
+    $ui-header-border-color: #ffffff,
+    $ui-header-background-color: transparent,
+    $ui-header-background-gradient: color_stops(#cf7b7b 0%,#a95757 100%),
+    $ui-header-inner-border-color: transparent,
+
+    $ui-body-color: #ffffff,
+    $ui-body-border-color: transparent,
+    $ui-body-border-width: 0,
+    $ui-body-border-style: none,
+    $ui-body-background-color: transparent,
+    $ui-body-font-size: $font_size-larger,
+    $ui-body-font-weight: $font_weight-bold
+);
+
+@import 'footer-template.scss';

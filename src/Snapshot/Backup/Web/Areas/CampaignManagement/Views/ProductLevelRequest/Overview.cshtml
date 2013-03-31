@@ -1,0 +1,355 @@
+﻿@section page_title{
+	Campaign Administration: Product Level Requests
+}
+@{
+	Html.RenderPartial("_SubNavigation");
+	Html.RenderPartial("_CampaignManagementSideBar");
+}
+<script type="text/javascript">
+	Ext.onReady(function () {
+		var administrationBtnId = window.res.header.navigation.administration;
+		var administrationBtn = Ext.getCmp(administrationBtnId);
+		administrationBtn.toggle(true);
+
+		var campaignAdministrationBtnId = window.res.header.subnavigation.buttonTabs.campaign;
+		var campaignAdministrationBtn = Ext.getCmp(campaignAdministrationBtnId);
+		campaignAdministrationBtn.toggle(true);
+		campaignAdministrationBtn.setIcon('@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/SubMenu/CampaignSelected.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))');
+
+		var sidebarSelectionId = window.res.content.maincontent.sidebar.createProductLevelRequests;
+		var sidebarSelection = Ext.getCmp(sidebarSelectionId);
+		sidebarSelection.toggle(true);
+	});
+</script>
+<script type="text/javascript">
+	window.feature = {};
+
+	window.feature.ids = {};
+	window.feature.ids.btnAdd = 'Create-Product-Level-Request-Button';
+	window.feature.ids.searchInput = 'Search-By-Campaign-Name';
+	window.feature.ids.grid = 'Create-Product-Level-Request-Grid';
+
+</script>
+@{
+	Html.RenderPartial("_CreateProductLevelRequest");
+    Html.RenderPartial("_ProductLevelDetail");   
+}
+<script type="text/javascript">
+	window.feature.models = {};
+	window.feature.stores = {};
+	Ext.onReady(function () {
+
+		window.feature.models.ProductLevelRequest = Ext.define('ProductLevelRequestModel', {
+			extend: 'Ext.data.Model',
+			fields: [
+				{
+					name: 'id', type: 'string',
+					convert: function (value, record) {
+						return record.get('Id');
+					}
+				},
+				{ name: 'Campaign'      , type: 'string' },
+				{ name: 'Editable', type: 'bool' },
+				{ name: 'StartDate'         , type: 'string' },
+				{ name: 'EndDate'           , type: 'string' },
+				{ name: 'ScheduleName'      , type: 'string' },
+				{ name: 'Frequency', type: 'string' },
+				{ name: 'ProductGroup'  , type: 'string' },
+				{ name: 'ProductSmsCodes'  , type: 'string' },
+				{ name: 'Id', type: 'string' },
+				{ name: 'CampaignId', type: 'string' },
+				{ name: 'ProductGroupId', type: 'string' },
+				{ name: 'ScheduleId', type: 'string' },
+				{ name: 'IsStopped', type: 'bool' },
+				{ name: 'ProductIds', type: 'array' }
+
+			]
+		});
+
+		window.feature.stores.ProductLevelRequest = Ext.define('ProductLevelRequestStore', {
+
+			extend: 'Ext.data.Store',
+			model: window.feature.models.ProductLevelRequest,
+
+			proxy: {
+				type: 'ajax',
+				url: '@Url.RouteUrl(CampaignManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "ProductLevelRequest", action = "GetProductLevelRequests" })',
+				reader: {
+					type: 'json',
+					totalProperty: 'TotalItems',
+					root: 'ProductLevelRequests'
+				},
+				extraParams: { searchValue: '' }
+			}
+		
+		});
+
+	});
+</script>
+<script type="text/javascript">
+
+	function editProductLevelRequest(recordData) {
+		var modal = new window.feature.createProductLevelRequest({
+			title: 'Edit Product Level Request',
+			data: recordData,
+			gridStore: window.feature.gridStore,
+			editable: recordData.Editable
+		});
+		modal.show();
+	}
+	function stopProductLevelRequest(recordData) {
+		var url = '@Url.RouteUrl(CampaignManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "ProductLevelRequest", action = "StopProductLevelRequest" })';
+		var params = {
+			Id: recordData.Id
+		};
+
+		var action = $.post(url, params);
+		action.success(function () {
+			var msgAlert = Ext.Msg;
+			msgAlert.ui = 'snapshot-popup-window';
+			msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+			msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+			msgAlert.alert('Stop request', 'Product level request is stopped.');
+		});
+	}
+
+</script>
+<script type="text/javascript">
+	Ext.onReady(function () {
+		window.feature.gridStore = new window.feature.stores.ProductLevelRequest();
+
+        Ext.QuickTips.init();
+
+        function addTooltip(val, meta, rec, rowIdx, colIdx, ds){
+            meta.tdAttr = 'data-qtip="' + _t("Click to view details") +'"' ;
+            return '<u>'+val+'</u>';
+        };  
+		window.feature.grid = Ext.create('Ext.grid.Panel', {
+			flex: 1,
+			cls: 'white-border',
+            autoScroll:true,
+			store:  window.feature.gridStore,
+			columns: [
+				{
+					header: 'Campaign',
+                    menuDisabled:true,
+                    flex:1,
+                    minWidth: 100,
+                    renderer: addTooltip,
+                    processEvent: function (type, view, cell, recordIndex, cellIndex, e) {
+						if (type == 'click'){
+                            var rec = view.panel.store.getAt(recordIndex);
+                            var productDetailWindow = new window.feature.productLevelRequestDetail({
+                                productLevelRequestId:rec.get('Id')
+                            });
+                            productDetailWindow.show();
+                            
+							return false;
+						}
+						return true;
+					},
+					dataIndex: 'Campaign'
+				},{
+					header: 'Start Date',
+                    menuDisabled:true,
+                    flex:1.2,
+                    minWidth: 120,
+					dataIndex: 'StartDate'
+				}, { 
+                    header:'End Date',        
+                    menuDisabled:true,  
+                    flex:1.2,
+                    minWidth: 120,
+                    dataIndex:'EndDate'  
+                }, { 
+                    header:'Schedule',        
+                    menuDisabled:true,  
+                    dataIndex:'ScheduleName', 
+                    flex:0.9,
+                    minWidth: 90,
+                }, { 
+                    header:'Frequency',       
+                    menuDisabled:true,  
+                    flex:1.2,
+                    minWidth: 120,
+                    dataIndex:'Frequency'       
+                }, { 
+                    header:'Product Group',   
+                    menuDisabled:true,  
+                    dataIndex:'ProductGroup', 
+                    align: 'center',
+                    flex: 1,
+                    minWidth: 100
+                }, { 
+                    header:'Stopped',         
+                    menuDisabled:true,  
+                    dataIndex:'IsStopped', 
+                    xtype: 'templatecolumn', 
+                    flex: 0.7,
+                    minWidth: 70,
+                    align: 'center',
+                    tpl: '<tpl if="IsStopped">Yes</tpl><tpl if="!IsStopped">No</tpl>'
+                }, { 
+                    header:'Sms Codes',       
+                    menuDisabled:true,  
+                    dataIndex:'ProductSmsCodes',
+                    flex: 0.7,
+                    minWidth: 70,
+                    align: 'center'
+                },{
+					header:'Actions',
+                    menuDisabled:true,
+					flex: 1,
+                    maxWidth: 170,
+                    minWidth: 150,
+					xtype: 'actioncolumn',
+					items:[
+						{
+							icon: '@Url.AssetUrl("/img/edit.png")',  
+							text: 'Edit',
+							handler: function (grid, rowIndex, colIndex) {
+								if (@(ViewBag.HasNoRightsToAdd) === true){
+									var msgAlert = Ext.Msg;
+									msgAlert.ui = 'snapshot-popup-window';
+									msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+									msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+									msgAlert.alert("Alert", "You have no rights for this action!");
+								}
+								else{
+									var record = grid.store.getAt(rowIndex);
+									editProductLevelRequest(_(record.data).clone());
+								}
+							}
+						},{
+							icon: '@Url.AssetUrl("img/stop.png")',  
+							text: 'Delete',
+							handler: function(grid, rowIndex, colIndex) {
+								if (@(ViewBag.HasNoRightsToStop) === true){
+									var msgAlert = Ext.Msg;
+									msgAlert.ui = 'snapshot-popup-window';
+									msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+									msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+									msgAlert.alert("Alert", "You have no rights for this action!");
+								}
+								else{
+									var record = grid.store.getAt(rowIndex);
+									stopProductLevelRequest(record.data);
+									grid.store.loadPage(1);
+								}
+							}
+						}
+					]
+				},
+			],
+			bbar: Ext.create('Ext.PagingToolbar', {
+				store: window.feature.gridStore,
+				displayInfo: true,
+				displayMsg: 'Displaying product requests {0} - {1} of {2}',
+				emptyMsg: "No product requests to display",
+				ui: 'snapshot-pagination-toolbar'
+			})
+	
+		});
+
+		window.feature.gridStore.loadPage(1);
+	});
+</script>
+<script type="text/javascript">
+	
+	function showCreateProductLevelRequest() {
+		var modal = new window.feature.createProductLevelRequest({
+			title: ' Create a New Product Level Request',
+			gridStore: window.feature.gridStore
+		});
+		modal.show();
+	};
+	
+	window.feature.doSearch = new Ext.util.DelayedTask(function () {
+		window.feature.grid.getStore().loadPage(1);
+	});
+	
+</script>
+<script type="text/javascript">
+	Ext.onReady(function () {
+		var contentRes = window.res.content;
+		var mainContent = Ext.getCmp(contentRes.maincontent.id);
+	
+		var topContainer = Ext.create('Ext.container.Container', {
+			margin: '15 15 15 15',
+			padding: '20 20 0 20',
+			id:'TopContainer',
+			layout: {
+				align: 'stretch',
+				type: 'vbox'
+			},
+			items:[{
+					xtype: 'container',
+					layout: {
+						type: 'hbox'
+					},
+					height: 50,
+					items:[
+						{
+							xtype:'container',
+							flex:1,
+							layout:'column',
+							items:[{
+                                xtype: 'container',
+                                height: 30,
+                                width: 30,
+                                html:'&nbsp;'
+                            }, {
+								xtype: 'image',
+								src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/Content/CreateProductLevelRequest.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+								margin: '0 10 10 0'
+							},{
+								xtype:'label',
+								cls: 'x-title-label',
+								html:'Product Level Requests'
+							},{
+								xtype:'button',
+								margin: '0 0 0 20',
+								ui: 'snapshot-add-btn',
+								cls: 'x-add-button-gradient',
+								disabled: @(ViewBag.HasNoRightsToAdd),
+								text:'Create Product Level Request',
+								handler:function(btn){
+									showCreateProductLevelRequest();
+								}
+							}]
+						},{
+							xtype:'container',
+							flex:1,
+							layout:{
+								type:'hbox',
+								pack:'end'
+							},
+							items:[
+								{
+									xtype:'textfield',
+									emptyText: 'Campaign Search',
+									id:  window.feature.ids.searchInput,
+									width: 200,
+									enableKeyEvents: true,
+									listeners: {
+										'keyup': {
+											fn: function (key) {
+												var searchValue = Ext.getCmp(window.feature.ids.searchInput).getValue();
+												window.feature.grid.getStore().proxy.extraParams.searchValue = searchValue;
+												window.feature.doSearch.delay(500);
+											}
+										}
+									}
+								}
+							]
+	
+						}
+					]
+				},
+				window.feature.grid
+			]
+		});
+	
+		mainContent.add(topContainer);
+	});
+</script>

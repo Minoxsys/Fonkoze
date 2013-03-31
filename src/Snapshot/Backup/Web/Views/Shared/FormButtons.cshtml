@@ -1,0 +1,9 @@
+﻿<hr />
+<div class="form_buttons">
+    @Html.SubmitButton("submit-form", "Save", new
+               {
+                   @class = "sexybutton sexysimple sexyteal"
+               }) <span>or </span>
+         <a class="cancel" href="@(Url.RouteUrl<HomeController>(it => it.Index(),Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE))">
+                   Cancel</a>
+</div>

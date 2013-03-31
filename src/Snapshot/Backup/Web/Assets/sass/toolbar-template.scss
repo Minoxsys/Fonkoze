@@ -1,0 +1,13 @@
+@import 'header-template.scss';
+
+//TRANSPARENT TOOLBAR
+@include extjs-toolbar-ui(
+    'snapshot-pagination-toolbar',
+
+    $background-color: #f4f4f4,
+    $background-gradient: #f4f4f4,
+
+    $border-color: red
+);
+
+@import 'footer-template.scss';

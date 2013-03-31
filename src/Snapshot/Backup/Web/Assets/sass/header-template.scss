@@ -1,0 +1,89 @@
+$theme-name: 'snapshot';
+
+$global-font-family: Arial, Lucida Sans Unicode, Verdana, Geneva, Helvetica, sans-serif;
+$global2-font-family: Lucida Sans Unicode, Arial, Verdana, Geneva, Helvetica, sans-serif;
+
+$font_size-normal-13: 13px;
+$font_size-larger: 15px;
+
+$font_weight-bold: bold;
+
+$include-default: false;
+$include-missing-images: true;
+
+//GRID COMPONENT STYLES
+$grid-cell-font: $font_weight-bold  $font_size-larger $global-font-family;
+
+$grid-cell-inner-padding: 27px;
+
+$grid-row-cell-line-height: 25px;
+
+$grid-cell-with-col-lines-border-color: #fff;
+$grid-grouped-header-background-color: #bcc1c4;
+$grid-grouped-header-border-color: transparent;
+$grid-grouped-header-border-style: solid;
+$grid-grouped-header-border-width: 0;
+
+$grid-grouped-title-color: #ffffff;
+$grid-grouped-title-font: $font_weight-bold $font_size-normal-13 $global-font-family;
+
+$grid-header-background-color: #bcc1c4;
+$grid-header-background-gradient: color_stops(#cf7b7b 0%,#a95757 100%);
+$grid-header-color: #FFFFFF;
+$grid-header-over-background-color: #bcc1c4;
+$grid-header-over-background-gradient: color_stops(#cf7b7b 0%,#a95757 100%);
+$grid-header-over-border-color: transparent;
+$grid-header-padding: 11px;
+//$grid-header-trigger-width:
+
+$grid-row-body-font: normal $font_size-normal-13 $global2-font-family;
+$grid-row-body-padding: 0px;
+$grid-row-cell-alt-background: #f5f5f5;
+
+$grid-row-cell-border-color: #fff;
+$grid-row-cell-border-style: solid;
+$grid-row-cell-border-width: 0;
+
+$grid-row-cell-color: #666666;
+$grid-row-cell-focus-background-color: #e7edf4;
+
+$grid-row-cell-focus-border-color: #fff;
+$grid-row-cell-font: normal $font_size-normal-13 $global2-font-family;
+
+$grid-row-cell-over-border-color: #fff;
+$grid-row-cell-selected-background-color: #e7edf4;
+$grid-row-cell-selected-border-color: #fff;
+$grid-row-cell-selected-border-style: solid;
+
+//$grid-row-editor-background-color:
+$grid-row-editor-border: 0;
+$grid-row-editor-border-color: #fff;
+$grid-row-editor-font: normal $font_size-normal-13 $global2-font-family;
+
+$grid-row-padding: 12px;
+$grid-row-wrap-border-color: #fff;
+$grid-row-wrap-border-style: solid;
+$grid-row-wrap-border-width: 0;
+
+@import 'compass';
+@import 'ext4/default/all';
+
+$font_weight-normal: normal;
+$font_weight-bold: bold;
+
+$font_size-normal: 12px;
+$font_size-large: 18px;
+$font_size-largest: 22px;
+
+$bluish-font-color: #4f5e6a;
+$black-font-color: #000000;
+
+$cancel-button-border-color: #757575;
+
+$add-button-border-color: #4979a2;
+$default-button-color: #fff;
+
+$navigation-btn-border-color: #93afc7;
+$pagination-btn-border-color: #2e3c49;
+
+$grey-background-color: #efefef;

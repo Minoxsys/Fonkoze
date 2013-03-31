@@ -1,0 +1,110 @@
+﻿<script type="text/javascript">
+    window.res.content.maincontent = {
+        id: 'MainContent',
+        sidebar: {
+            id: 'SideBar',
+            group: 'SideBarGroup',
+            country: 'Sidebar-OutpostAdministration-Country-Button',
+            region: 'Sidebar-OutpostAdministration-Region-Button',
+            district: 'Sidebar-OutpostAdministration-District-Button',
+            outpost: 'Sidebar-OutpostAdministration-Outpost-Button'
+        }
+    };
+
+    window.res.link.country = '@(Url.RouteUrl<CountryController>( x=>x.Overview() ,  OutpostManagementAreaRegistration.DEFAULT_ROUTE ))';
+    window.res.link.district = '@(Url.RouteUrl<DistrictController>( x=>x.Overview() ,  OutpostManagementAreaRegistration.DEFAULT_ROUTE ))';
+    window.res.link.outpost = '@(Url.RouteUrl<OutpostController>( x=>x.Overview() ,  OutpostManagementAreaRegistration.DEFAULT_ROUTE ))';
+    Ext.onReady(function () {
+
+        var contentRes = window.res.content;
+
+        var content = Ext.getCmp(contentRes.id);
+
+        content.add(
+            {
+                xtype: 'container',
+                layout: {
+                    align: 'stretch',
+                    type: 'hbox'
+                },
+                items: [
+                     {
+                         xtype: 'container',
+                         id: contentRes.maincontent.id,
+                         layout: {
+                             align: 'stretch',
+                             type: 'fit'
+                         },
+                         flex: 1
+                     },
+                    {
+                        xtype: 'container',
+                        id: 'SideBar',
+                        width: 230,
+                        layout: {
+                            align: 'stretch',
+                            type: 'vbox'
+                        },
+                        items: [
+                            {
+                                xtype: 'button',
+                                id: contentRes.maincontent.sidebar.country,
+                                toggleGroup: contentRes.maincontent.sidebar.group,
+                                enableToggle: true,
+                                text: 'Country',
+                                height: 30,
+                                margin: '45 20 0 0',
+                                ui: 'snapshot-sidebar-btn',
+                                handler: function () {
+                                    navigateTo(window.res.link.country);
+                                }
+                            },
+                            {
+                                xtype: 'button',
+                                id: contentRes.maincontent.sidebar.region,
+                                toggleGroup: contentRes.maincontent.sidebar.group,
+                                text: 'Region',
+                                height: 30,
+                                margin: '0 20 0 0',
+                                ui: 'snapshot-sidebar-btn',
+                                handler: function () {
+                                    navigateTo(window.res.link.regionOverview);
+                                },
+                                enableToggle: true
+                            },
+                            {
+                                xtype: 'button',
+                                id: window.res.content.maincontent.sidebar.district,
+                                toggleGroup: contentRes.maincontent.sidebar.group,
+                                enableToggle: true,
+                                height: 30,
+                                margin: '0 20 0 0',
+                                text: 'District',
+                                ui: 'snapshot-sidebar-btn',
+                                handler: function () {
+                                    navigateTo(window.res.link.district);
+                                }
+                            },
+                            {
+                                xtype: 'button',
+                                id: contentRes.maincontent.sidebar.outpost,
+                                toggleGroup: contentRes.maincontent.sidebar.group,
+                                enableToggle: true,
+                                height: 30,
+                                text: 'Outpost',
+                                margin: '0 20 0 0',
+                                ui: 'snapshot-sidebar-btn',
+                                handler: function () {
+                                    navigateTo(window.res.link.outpost);
+                                }
+                            }
+                        ]
+                    }
+
+                ]
+
+            }
+        );
+
+    });
+</script>
