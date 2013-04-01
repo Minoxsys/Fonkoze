@@ -152,7 +152,7 @@ namespace Web.Controllers
         }
 
         [Requires(Permissions = "Home.Index")]
-        public ActionResult Response(string id)
+        public new ActionResult Response(string id)
         {
             string decodedData = DecodeFrom64(id);
 

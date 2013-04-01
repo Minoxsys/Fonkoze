@@ -15,10 +15,10 @@ namespace Tests.Unit.Services.StoreProductLevelRequestDetailTests
         AutoMock autoMock;
         public StoreProductLevelRequestDetailService service;
 
-        private User _user;
-        private Client _client;
-        private ProductGroup _productGroup;
-        private Outpost _outpost;
+        //private User _user;
+        //private Client _client;
+        //private ProductGroup _productGroup;
+        //private Outpost _outpost;
         private ProductLevelRequestMessageInput _input;
 
         private IDeleteCommand<ProductLevelRequestDetail> deleteCommand;
