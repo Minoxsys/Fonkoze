@@ -25,16 +25,12 @@ IF "%2" == "dev" (
 		)))
 
 IF %param1Ok% == 1 (
-pause
 	IF %param2Ok% == 1 (
-	pause
 		%WINDIR%\Microsoft.NET\Framework\v4.0.30319\msbuild "..\..\..\..\..\MigrationsMSBuild\%2\%1.msbuild"
 	) ELSE ( 
-	pause
 		GOTO ERROR_PARAM2
 	)
 ) ELSE (
-pause
 	GOTO ERROR_PARAM1
 )
 
