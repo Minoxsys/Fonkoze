@@ -1,6 +1,6 @@
 ﻿
 @section page_title{
-Outpost Stock Level Current
+Seller Stock Level Current
 }
 @{
     Html.RenderPartial("_OutpostStockLevelSubNavigation");
@@ -180,14 +180,14 @@ Outpost Stock Level Current
             queryMode: 'local',
             id: window.feature.comboboxOutpostsId,
             labelAlign: 'top',
-            fieldLabel: 'Selected Outpost',
+            fieldLabel: 'Selected Seller',
             displayField: 'Name',
             labelClsExtra: 'combo-label',
             valueField: 'Id',
             disabled: true,
             editable: false,
             typeAhead: false,
-            emptyText: _t('Outpost List')
+            emptyText: _t('Seller List')
 
         });
         window.feature.fieldOutpostNameId = 'fieldOutpostNAmeId';

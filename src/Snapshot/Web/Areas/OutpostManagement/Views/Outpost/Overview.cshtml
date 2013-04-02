@@ -285,7 +285,7 @@
         Ext.QuickTips.init();
     
         function addTooltip(val, meta, rec, rowIdx, colIdx, ds){
-            meta.tdAttr = 'data-qtip="' + "Click on the outpost name to assign a product group" + '"' ;
+            meta.tdAttr = 'data-qtip="' + "Click on the seller name to assign a product group" + '"' ;
             return '<u>' + val + '</u>';
         };  
     
@@ -599,7 +599,7 @@
                                         itemId: window.feature.modalIds.nameId,
                                         name: 'Name',
                                         allowBlank:false,
-                                        fieldLabel: 'Outpost Name'
+                                        fieldLabel: 'Seller Name'
                                     }]
                                 }, {
                                     xtype: 'container',
@@ -799,11 +799,11 @@
                                         },{
                                             xtype: 'label',
                                             cls: 'x-title-label',
-                                            text: 'Outpost Administration'
+                                            text: 'Seller Administration'
                                         },{
                                             xtype: 'button',
                                             margin: '0 0 0 20',
-                                            text: 'Add New Outpost',
+                                            text: 'Add New Seller',
                                             disabled: @(ViewBag.HasNoRightsToAdd),
                                             ui: 'snapshot-add-btn',
                                             cls: 'x-add-button-gradient',
@@ -831,7 +831,7 @@
                                             id: window.feature.searchTextFieldId,
                                             width: 200,
                                             frame: true,
-                                            emptyText: 'Outpost Search',
+                                            emptyText: 'Seller Search',
                                             enableKeyEvents: true,
                                             listeners: {
                                                 specialkey: function (field, e) {
@@ -893,7 +893,7 @@
                     },
                     columns: [
                         {
-                            text: "Outpost Name",
+                            text: "Seller Name",
                             dataIndex: 'Name',
                             flex: 1,
                             minWidth: 150,
