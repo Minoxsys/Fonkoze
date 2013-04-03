@@ -9,5 +9,6 @@ namespace Web.Services
     public interface IHttpService
     {
         String Post(String url, String data);
+        string Post(string data);
     }
 }

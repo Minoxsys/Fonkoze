@@ -1,4 +1,6 @@
-﻿@using Web.Areas.OutpostManagement;
+﻿@using Web.Areas.MessagesManagement
+@using Web.Areas.MessagesManagement.Controllers
+@using Web.Areas.OutpostManagement;
 @using Web.Areas.OutpostManagement.Controllers;
 @using Web.Areas.StockAdministration.Controllers;
 @using Web.Areas.CampaignManagement.Controllers;
@@ -56,7 +58,11 @@
             campaignOverview: '@(Url.RouteUrl<CampaignController>(x=>x.Overview(),CampaignManagementAreaRegistration.DEFAULT_ROUTE))',
             alerts: '@(Url.RouteUrl<AlertsController>(x => x.Overview(), Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE))',
             automaticSchedules: '@(Url.RouteUrl<RequestScheduleController>(x=>x.Overview(),CampaignManagementAreaRegistration.DEFAULT_ROUTE))',
-            analysisAndReports: '@(Url.RouteUrl<AnalysisController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))'
+            analysisAndReports: '@(Url.RouteUrl<AnalysisController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))',
+            
+            seller: '@(Url.RouteUrl<SellerController>(x=>x.Overview(), MessagesManagementAreaRegistration.DefaultRoute))',
+            warehouse: '@(Url.RouteUrl<WarehouseController>(x=>x.Overview(), MessagesManagementAreaRegistration.DefaultRoute))',
+            sentMessage: '@(Url.RouteUrl<SentMessagesController>(x=>x.Overview(), MessagesManagementAreaRegistration.DefaultRoute))'
         },
         header:{
             id:'Header',
@@ -68,6 +74,7 @@
                 administration: 'Administration',
                 outpostStockLevel: 'OutpostStockLevel',
                 alerts: 'Alerts',
+                messages: 'Messages',
                 analysisAndReports:'AnalysisAndReports'
 
             },
@@ -121,7 +128,7 @@
                                 },
                                 items: [{
                                     xtype: 'container',
-                                    width: 1100,
+                                    width: 1300,
                                     layout:'column',
                                     items:[{
                                         xtype: 'container',
@@ -195,6 +202,21 @@
                                             navigateTo( res.link.alerts ); 
                                         },
                                         text: '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Alerts'
+                                    },{
+                                        xtype: 'button',
+                                        id: res.header.navigation.messages,
+                                        height: 70,
+                                        padding: '0 0 0 5',
+                                        width: 130,
+                                        icon:'@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Menu/Alerts.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                                        iconAlign: 'left',
+                                        ui: 'snapshot-navigation-btn',
+                                        toggleGroup:res.header.navigation.toggleGroup,
+                                        enableToggle:true,
+                                        handler:function(){
+                                            navigateTo( res.link.seller ); 
+                                        },
+                                        text: '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Messages'
                                     },{
                                         xtype: 'button',
                                         id: res.header.navigation.analysisAndReports,

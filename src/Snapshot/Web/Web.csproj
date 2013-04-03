@@ -205,6 +205,16 @@
     <Compile Include="Areas\CampaignManagement\Models\Campaign\LocationEntityModel.cs" />
     <Compile Include="Areas\CampaignManagement\Models\ProductLevelRequest\StopProductLevelRequestInput.cs" />
     <Compile Include="Areas\CampaignManagement\Models\RequestSchedule\RequestScheduleInputModel.cs" />
+    <Compile Include="Areas\MessagesManagement\Controllers\WarehouseController.cs" />
+    <Compile Include="Areas\MessagesManagement\Controllers\SellerController.cs" />
+    <Compile Include="Areas\MessagesManagement\Controllers\SentMessagesController.cs" />
+    <Compile Include="Areas\MessagesManagement\MessagesManagementAreaRegistration.cs" />
+    <Compile Include="Areas\MessagesManagement\Models\Messages\MessageIndexOuputModel.cs" />
+    <Compile Include="Areas\MessagesManagement\Models\Messages\MessageModel.cs" />
+    <Compile Include="Areas\MessagesManagement\Models\Messages\MessagesIndexModel.cs" />
+    <Compile Include="Areas\MessagesManagement\Models\SentMessages\SentMessageIndexOuputModel.cs" />
+    <Compile Include="Areas\MessagesManagement\Models\SentMessages\SentMessageModel.cs" />
+    <Compile Include="Areas\MessagesManagement\Models\SentMessages\SentMessagesIndexModel.cs" />
     <Compile Include="Areas\OutpostManagement\Controllers\AssignProductGroupController.cs" />
     <Compile Include="Areas\OutpostManagement\Controllers\ContactController.cs" />
     <Compile Include="Areas\OutpostManagement\Controllers\CountryController.cs" />
@@ -280,6 +290,7 @@
     <Compile Include="BackgroundJobs\ExecutedCampaign.cs" />
     <Compile Include="Bootstrap\Container\ServicesConventionsRegistrar.cs" />
     <Compile Include="Controllers\AccountOptionsController.cs" />
+    <Compile Include="Controllers\SendMessageController.cs" />
     <Compile Include="Helpers\ConvertHelper.cs" />
     <Compile Include="Models\AccountOptions\PasswordModel.cs" />
     <Compile Include="Models\AccountOptions\UserModel.cs" />
@@ -390,6 +401,8 @@
     <Compile Include="Security\SecurePassword.cs" />
     <Compile Include="Services\FormattingStrategy.cs" />
     <Compile Include="Services\GenerateProductLevelDetailsCommand.cs" />
+    <Compile Include="Services\IRawSmsMeesageQueryHelpersService.cs" />
+    <Compile Include="Services\ISendEmailService.cs" />
     <Compile Include="Services\PathService.cs" />
     <Compile Include="Services\IPathService.cs" />
     <Compile Include="Services\EmailRequestService.cs" />
@@ -412,8 +425,10 @@
     <Compile Include="Services\ProductLevelRequestMessageInput.cs" />
     <Compile Include="Services\OutpostStockLevelService.cs" />
     <Compile Include="Services\ProductFilterByProductLevelRequest.cs" />
+    <Compile Include="Services\RawSmsMeesageQueryHelpersService.cs" />
     <Compile Include="Services\RawSmsReceivedParseResult.cs" />
     <Compile Include="Services\ReceivedStockLevel.cs" />
+    <Compile Include="Services\SendEmailService.cs" />
     <Compile Include="Services\SmsGatewayService.cs" />
     <Compile Include="Services\SmsGatewaySettingsService.cs" />
     <Compile Include="Services\SmsReceived.cs" />
@@ -2176,6 +2191,12 @@
     <Content Include="Areas\CampaignManagement\Views\ProductLevelRequest\_ProductLevelDetail.cshtml" />
     <Content Include="Areas\AnalysisManagement\Views\Shared\_AnalysisSideBar.cshtml" />
     <Content Include="Areas\AnalysisManagement\Views\LocationReport\Overview.cshtml" />
+    <Content Include="Areas\MessagesManagement\Views\Web.config" />
+    <Content Include="Areas\MessagesManagement\Views\Shared\_MessagesSideBar.cshtml" />
+    <Content Include="Areas\MessagesManagement\Views\Seller\Overview.cshtml" />
+    <Content Include="Areas\MessagesManagement\Views\SentMessages\Overview.cshtml" />
+    <Content Include="Areas\MessagesManagement\Views\Warehouse\Overview.cshtml" />
+    <Content Include="Areas\MessagesManagement\Views\_ViewStart.cshtml" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\core\_core.scss" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\core\_reset.scss" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\layout\_layout.scss" />
@@ -2197,6 +2218,7 @@
     <Content Include="Views\Shared\_EmptySideBar.cshtml" />
     <Content Include="Views\AccountOptions\Overview.cshtml" />
     <Content Include="Views\Shared\_EmptySubNavigation.cshtml" />
+    <Content Include="Views\SendMessage\Overview.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\mixins\_color-by-background.scss" />

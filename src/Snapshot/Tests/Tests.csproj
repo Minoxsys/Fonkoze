@@ -130,6 +130,10 @@
     <Compile Include="Unit\Controllers\Areas\CampaignManagement\CampaignController_Tests\GetRightGridStoreMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\CampaignManagement\CampaignController_Tests\ObjectMother.cs" />
     <Compile Include="Unit\Controllers\Areas\CampaignManagement\ProductLevelRequest_Tests\StopProductLevelRequestMethod.cs" />
+    <Compile Include="Unit\Controllers\Areas\MessagesManagement\SellerControllerTests\GetMessagesFromSellerMethod.cs" />
+    <Compile Include="Unit\Controllers\Areas\MessagesManagement\SellerControllerTests\ObjectMother.cs" />
+    <Compile Include="Unit\Controllers\Areas\MessagesManagement\SentMessagesControllerTests\GetSentMessagesMethod.cs" />
+    <Compile Include="Unit\Controllers\Areas\MessagesManagement\SentMessagesControllerTests\ObjectMother.cs" />
     <Compile Include="Unit\Controllers\Areas\OutpostManagement\AssignProductGroupController_Tests\GetOutpostStockLevels_Method.cs" />
     <Compile Include="Unit\Controllers\Areas\OutpostManagement\AssignProductGroupController_Tests\GetProducts_Method.cs" />
     <Compile Include="Unit\Controllers\Areas\OutpostManagement\AssignProductGroupController_Tests\ModifyProductAssignments_Method.cs" />
@@ -262,6 +266,7 @@
     <Compile Include="Utils\MoqRegistrationHandler.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Unit\Controllers\Areas\MessagesManagement\WarehouseControllerTests\" />
     <Folder Include="Unit\Routes\Areas\" />
   </ItemGroup>
   <ItemGroup>

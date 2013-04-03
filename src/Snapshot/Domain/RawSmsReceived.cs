@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Core.Domain;
+﻿using Core.Domain;
+using Domain.Enums;
+using System;
 
 namespace Domain
 {
@@ -14,5 +12,7 @@ namespace Domain
         public virtual Guid OutpostId { get; set; }
         public virtual bool ParseSucceeded { get; set; }
         public virtual string ParseErrorMessage { get; set; }
+        public virtual DateTime ReceivedDate { get; set; }
+        public virtual OutpostType OutpostType { get; set; }
     }
 }

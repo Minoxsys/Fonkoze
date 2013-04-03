@@ -1,0 +1,380 @@
+﻿@using Domain
+@using Microsoft.Web.Mvc;
+
+@section page_title{
+Send message
+}
+
+@{
+    Html.RenderPartial("_SubNavigation");
+    Html.RenderPartial("_EmptySideBar");
+}
+
+<script type="text/javascript">
+    Ext.onReady(function () {
+        window.feature = {};
+        window.feature.phoneNumber = 'Send-message-phone-number';
+        window.feature.message = 'Send-message-the-message';
+        window.feature.gateway = 'Send-message-gateway';
+        window.feature.emailmessage = 'Send-Email-Message';
+        window.feature.subject = 'Send-Email-Subject';
+        window.feature.cc = 'Send-Email-CC';
+        window.feature.to = 'Send-Email-To';
+
+        window.feature.fileStore = Ext.create('Ext.data.Store', {
+            fields: ['Name', 'Size'],
+            proxy: {
+                type: 'ajax',
+                url: '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "SendMessage", action = "GetBackupFileList" })',
+                reader: {
+                    type: 'json',
+                    root: 'Files',
+                    totalProperty: 'TotalItems'
+                },
+                simpleSortMode: true
+            },
+            remoteSort: true,
+            sorters: [{
+                property: 'FileName',
+                direction: 'ASC'
+            }]
+        });
+
+        window.feature.container = Ext.create('Ext.container.Container', {
+            margin: '15 15 15 15',
+            padding: '20 20 0 20',
+            id: 'TopContainer',
+            layout: {
+                align: 'stretch',
+                type: 'vbox'
+            },
+            items: [{
+                xtype: 'container',
+                layout: {
+                    type: 'hbox'
+                },
+                flex: 1,
+                items: [{
+                    xtype: 'container',
+                    layout: {
+                        type: 'vbox'
+                    },
+                    flex: 1,
+                    items: [{
+                        xtype: 'textfield',
+                        name: 'phoneNumber',
+                        fieldLabel: 'Phone number',
+                        anchor: '100%',
+                        width: 400,
+                        itemId: window.feature.phoneNumber
+                    }, {
+                        xtype: 'textfield',
+                        name: 'message',
+                        fieldLabel: 'Message',
+                        anchor: '100%',
+                        width: 400,
+                        itemId: window.feature.message
+                    }, {
+                        xtype: 'textfield',
+                        name: 'gateway',
+                        fieldLabel: 'Gateway',
+                        anchor: '100%',
+                        width: 400,
+                        itemId: window.feature.gateway
+                    }, {
+                        xtype: 'button',
+                        margin: '0 0 0 20',
+                        ui: 'snapshot-add-btn',
+                        cls: 'x-add-button-gradient',
+                        text: 'Send message',
+                        handler: function () {
+                            var phoneNumber = window.feature.container.down('#' + window.feature.phoneNumber).getValue();
+                            var message = window.feature.container.down('#' + window.feature.message).getValue();
+                            var gateway = window.feature.container.down('#' + window.feature.gateway).getValue();
+
+                            var values = {
+                                phoneNumber: phoneNumber,
+                                message: message,
+                                gateway: gateway
+                            };
+                            var postToUrl = '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "SendMessage", action = "Send" })';
+                            var action = $.post(postToUrl, values);
+
+                            action.success(function (serverResponse) {
+                                var msgAlert = Ext.Msg;
+                                msgAlert.ui = 'snapshot-popup-window';
+                                msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+
+                                msgAlert.alert(serverResponse.Status, serverResponse.Message);
+                            });
+                        }
+                    }]
+                }, {
+                    xtype: 'container',
+                    layout: {
+                        type: 'vbox'
+                    },
+                    flex: 1,
+                    items: [{
+                        xtype: 'textfield',
+                        name: 'to',
+                        fieldLabel: 'To',
+                        anchor: '100%',
+                        width: 400,
+                        itemId: window.feature.to
+                    }, {
+                        xtype: 'textfield',
+                        name: 'CC',
+                        fieldLabel: 'CC',
+                        anchor: '100%',
+                        width: 400,
+                        itemId: window.feature.cc
+                    }, {
+                        xtype: 'textfield',
+                        name: 'subject',
+                        fieldLabel: 'Subject',
+                        anchor: '100%',
+                        width: 400,
+                        itemId: window.feature.subject
+                    }, {
+                    }, {
+                        xtype: 'textarea',
+                        name: 'message',
+                        fieldLabel: 'Message',
+                        anchor: '100%',
+                        width: 400,
+                        itemId: window.feature.emailmessage
+                    }, {
+                        xtype: 'button',
+                        margin: '0 0 0 20',
+                        ui: 'snapshot-add-btn',
+                        cls: 'x-add-button-gradient',
+                        text: 'Send Email',
+                        handler: function () {
+                            var emailmessage = window.feature.container.down('#' + window.feature.emailmessage).getValue();
+                            var subject = window.feature.container.down('#' + window.feature.subject).getValue();
+                            var to = window.feature.container.down('#' + window.feature.to).getValue();
+                            var cc = window.feature.container.down('#' + window.feature.cc).getValue();
+
+                            var values = {
+                                Message: emailmessage,
+                                Subject: subject,
+                                TO: to,
+                                CC: cc 
+                            };
+                            var postToUrl = '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "SendMessage", action = "SendEmail" })';
+                            var action = $.post(postToUrl, values);
+
+                            action.success(function (serverResponse) {
+                                var msgAlert = Ext.Msg;
+                                msgAlert.ui = 'snapshot-popup-window';
+                                msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+
+                                msgAlert.alert(serverResponse.Status, serverResponse.Message);
+                            });
+                        }
+                    }]
+                }]
+            }, {
+                xtype: 'container',
+                layout: {
+                    align: 'stretch',
+                    type: 'hbox'
+                },
+                flex: 1,
+                items: [{
+                    xtype: 'container',
+                    flex: 1,
+                    layout: {
+                        align: 'stretch',
+                        type: 'vbox'
+                    },
+                    items: [{
+                        xtype: 'container',
+                        flex: 1,
+                        layout: 'column',
+                        items: [{
+                            xtype: 'button',
+                            margin: '0 0 0 20',
+                            ui: 'snapshot-add-btn',
+                            cls: 'x-add-button-gradient',
+                            text: 'DB Backup',
+                            handler: function () {
+                                var values = { message: "" };
+                                var postToUrl = '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "SendMessage", action = "DBBackup" })';
+                                var action = $.post(postToUrl, values);
+
+                                action.success(function (serverResponse) {
+                                    var msgAlert = Ext.Msg;
+                                    msgAlert.ui = 'snapshot-popup-window';
+                                    msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                    msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+
+                                    msgAlert.alert(serverResponse.Status, serverResponse.Message);
+
+                                    window.feature.fileStore.load();
+                                });
+                            }
+                        }, {
+                            xtype: 'button',
+                            margin: '0 0 0 20',
+                            ui: 'snapshot-add-btn',
+                            cls: 'x-add-button-gradient',
+                            text: 'Create Directories',
+                            handler: function () {
+                                var values = { message: "" };
+                                var postToUrl = '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "SendMessage", action = "CreateFolders" })';
+                                var action = $.post(postToUrl, values);
+
+                                action.success(function (serverResponse) {
+                                    var msgAlert = Ext.Msg;
+                                    msgAlert.ui = 'snapshot-popup-window';
+                                    msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                    msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+
+                                    msgAlert.alert(serverResponse.Status, serverResponse.Message);
+
+                                    window.feature.fileStore.load();
+                                });
+                            }
+                        }]
+                    }, {
+                        xtype: 'gridpanel',
+                        cls: 'white-border',
+                        store: window.feature.fileStore,
+                        loadMask: true,
+                        disableSelection: true,
+                        flex: 5,
+                        layout: 'fit',
+                        autoScroll: true,
+                        columns: [{
+                            header: "File Name",
+                            dataIndex: 'Name',
+                            minWidth: 250,
+                            flex: 2,
+                            menuDisabled: true,
+                            sortable: true
+                        }, {
+                            header: "File Size (bytes)",
+                            dataIndex: 'Size',
+                            minWidth: 120,
+                            flex: 1,
+                            menuDisabled: true,
+                            sortable: true
+                        }, {
+                            xtype: 'actioncolumn',
+                            text: 'Actions',
+                            minWidth: 100,
+                            flex: 1,
+                            menuDisabled: true,
+                            items: [{
+                                icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/restore.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                                action: 'Restore',
+                                handler: function (grid, rowIndex, colIndex) {
+                                    var rec = grid.getStore().getAt(rowIndex);
+
+                                    var msgConfirm = Ext.Msg;
+                                    msgConfirm.ui = 'snapshot-popup-window';
+                                    msgConfirm.msgButtons['no'].ui = 'snapshot-cancel-btn';
+                                    msgConfirm.msgButtons['no'].margin = '10 10 20 0';
+                                    msgConfirm.msgButtons['yes'].ui = 'snapshot-add-btn';
+                                    msgConfirm.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                    msgConfirm.msgButtons['ok'].margin = '10 10 20 0';
+                                    msgConfirm.confirm('Warning', Ext.String.format('Restore file {0} ?', rec.get('Name')), function (btn) {
+                                        if (btn == 'yes') {
+                                            var values = { fileName: rec.get('Name') };
+                                            var postToUrl = '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "SendMessage", action = "RestoreDB" })';
+                                            var action = $.post(postToUrl, values);
+
+                                            action.success(function (serverResponse) {
+
+                                                var msgAlert = Ext.Msg;
+                                                msgAlert.ui = 'snapshot-popup-window';
+                                                msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                                msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+
+                                                msgAlert.alert(serverResponse.Status, serverResponse.Message);
+                                            });
+                                        }
+
+                                    });
+                                }
+                            }, {
+                                icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/delete.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                                action: 'Delete',
+                                handler: function (grid, rowIndex, colIndex) {
+                                    var rec = grid.getStore().getAt(rowIndex);
+
+                                    var msgConfirm = Ext.Msg;
+                                    msgConfirm.ui = 'snapshot-popup-window';
+                                    msgConfirm.msgButtons['no'].ui = 'snapshot-cancel-btn';
+                                    msgConfirm.msgButtons['no'].margin = '10 10 20 0';
+                                    msgConfirm.msgButtons['yes'].ui = 'snapshot-add-btn';
+                                    msgConfirm.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                    msgConfirm.msgButtons['ok'].margin = '10 10 20 0';
+                                    msgConfirm.confirm('Warning', Ext.String.format('Delete file {0} ?', rec.get('Name')), function (btn) {
+                                        if (btn == 'yes') {
+                                            var values = { fileName: rec.get('Name') };
+                                            var postToUrl = '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "SendMessage", action = "DeleteFile" })';
+                                            var action = $.post(postToUrl, values);
+
+                                            action.success(function (serverResponse) {
+
+                                                var msgAlert = Ext.Msg;
+                                                msgAlert.ui = 'snapshot-popup-window';
+                                                msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                                msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+
+                                                msgAlert.alert(serverResponse.Status, serverResponse.Message);
+
+                                                window.feature.fileStore.load();
+                                            });
+                                        }
+
+                                    });
+                                }
+                            }]
+                        }]
+                    }]
+                }, {
+                    xtype: 'container',
+                    layout: {
+                        align: 'stretch',
+                        type: 'vbox'
+                    },
+                    flex: 1,
+                    items: [{
+                        xtype: 'button',
+                        margin: '0 0 0 20',
+                        ui: 'snapshot-add-btn',
+                        cls: 'x-add-button-gradient',
+                        text: 'DB Backup',
+                        handler: function () {
+                            var values = { message: "ABF230487F S1" };
+                            var postToUrl = '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "SendMessage", action = "DBBackup" })';
+                            var action = $.post(postToUrl, values);
+
+                            action.success(function (serverResponse) {
+                                var msgAlert = Ext.Msg;
+                                msgAlert.ui = 'snapshot-popup-window';
+                                msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+
+                                msgAlert.alert(serverResponse.Status, serverResponse.Message);
+                            });
+                        }
+                    }]
+                }]
+            }]
+        });
+
+        var contentRes = window.res.content;
+        var mainContent = Ext.getCmp(contentRes.maincontent.id);
+
+        mainContent.add(window.feature.container);
+        window.feature.fileStore.load();
+    });
+
+    </script>    

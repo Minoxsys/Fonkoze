@@ -577,7 +577,17 @@ INSERT INTO PermissionRoles
 end
 GO
 
+if not exists(select [Permission_FK], [Role_FK] from [PermissionRoles] where [Permission_FK]='5521bcdc-bf90-417a-a419-b9879646fe0e' and [Role_FK] ='461e581b-e60b-4dfd-a5a8-88229f14379b')
+begin
+INSERT INTO PermissionRoles
+           (Permission_FK
+           ,Role_FK)
+     VALUES
+           ('5521bcdc-bf90-417a-a419-b9879646fe0e'
+           ,'461e581b-e60b-4dfd-a5a8-88229f14379b')
+end
 
+GO
 if not exists(select [Name] from Permissions where [Name]=N'Country.View')
 begin
 INSERT INTO [Permissions]
@@ -1331,6 +1341,24 @@ INSERT INTO [Permissions]
            (
 			'7E508FF1-D448-4151-9C8B-906AF73505F5'
 			,'Report.View'
+			,GETDATE()
+           )
+end
+GO
+
+if not exists(select [Name] from Permissions where [Name]=N'Messages.View')
+begin
+
+
+INSERT INTO [Permissions]
+           ([Id]
+           ,[Name]
+           ,[Created]
+           )
+     VALUES
+           (
+			'5521bcdc-bf90-417a-a419-b9879646fe0e'
+			,'Messages.View'
 			,GETDATE()
            )
 end

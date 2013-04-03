@@ -47,6 +47,7 @@
     <Compile Include="Country.cs" />
     <Compile Include="District.cs" />
     <Compile Include="EmailRequest.cs" />
+    <Compile Include="Enums\OutpostType.cs" />
     <Compile Include="Outpost.cs" />
     <Compile Include="OutpostStockLevel.cs" />
     <Compile Include="OutpostHistoricalStockLevel.cs" />
@@ -58,6 +59,7 @@
     <Compile Include="ProductGroup.cs" />
     <Compile Include="Product.cs" />
     <Compile Include="RequestRecord.cs" />
+    <Compile Include="SentSms.cs" />
     <Compile Include="WorkItem.cs" />
     <Compile Include="RequestReminder.cs" />
     <Compile Include="Schedule.cs" />

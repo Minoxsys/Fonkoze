@@ -41,13 +41,16 @@ namespace Migrations
             Create.AddForeignKey("SmsRequests", "ProductGroupId", "ProductGroups");
 
             Create.Table("RawSmsReceiveds")
-                .WithCommonColumns()
-                .WithColumn("Sender").AsString(ConstraintUtility.NAME_LENGTH)
-                .WithColumn("Content").AsString(ConstraintUtility.NAME_LENGTH)
-                .WithColumn("Credits").AsString(ConstraintUtility.NAME_LENGTH).Nullable()
-                .WithColumn("OutpostId").AsGuid().Nullable()
-                .WithColumn("ParseSucceeded").AsBoolean().Nullable()
-                .WithColumn("ParseErrorMessage").AsString(ConstraintUtility.NAME_LENGTH).Nullable();
+                  .WithCommonColumns()
+                  .WithColumn("Sender").AsString(ConstraintUtility.NAME_LENGTH)
+                  .WithColumn("Content").AsString(ConstraintUtility.NAME_LENGTH)
+                  .WithColumn("Credits").AsString(ConstraintUtility.NAME_LENGTH).Nullable()
+                  .WithColumn("OutpostId").AsGuid().Nullable()
+                  .WithColumn("ParseSucceeded").AsBoolean().Nullable()
+                  .WithColumn("ParseErrorMessage").AsString(ConstraintUtility.NAME_LENGTH).Nullable()
+                  .WithColumn("OutpostType").AsString().Nullable()
+                  .WithColumn("ReceivedDate").AsDateTime().Nullable();
+                
 
             Create.AddForeignKey("RawSmsReceiveds");
             Create.AddForeignKey("RawSmsReceiveds", "OutpostId", "Outposts");
