@@ -27,6 +27,7 @@ IF "%2" == "dev" (
 IF %param1Ok% == 1 (
 	IF %param2Ok% == 1 (
 		%WINDIR%\Microsoft.NET\Framework\v4.0.30319\msbuild "..\..\..\..\..\MigrationsMSBuild\%2\%1.msbuild"
+		GOTO END
 	) ELSE ( 
 		GOTO ERROR_PARAM2
 	)
