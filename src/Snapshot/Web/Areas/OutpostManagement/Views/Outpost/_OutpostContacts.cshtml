@@ -88,11 +88,13 @@
                         });
                     }
 
+                    
                     // set this as the MainContact if there are no others
                     if (e.store.getCount() == 1) {
                         e.record.set('IsMainContact', true);
                     }
 
+                    
                     Ext.getCmp('SaveButtonOutpost').enable();
                     Ext.getCmp('CancelButtonOutpost').enable();
                 },
@@ -101,7 +103,9 @@
                         e.grid.store.remove(e.record);
                     }
 
-                    Ext.getCmp('SaveButtonOutpost').enable();
+                    if (e.store.data.items.length > 0)
+                       Ext.getCmp('SaveButtonOutpost').enable();
+                   
                     Ext.getCmp('CancelButtonOutpost').enable();
                 }
 
@@ -124,7 +128,7 @@
                 xtype: 'booleancolumn',
                 trueText: 'Yes',
                 falseText: 'No',
-                header: _t('Default'), dataIndex: 'IsMainContact',
+                header: _t('Active'), dataIndex: 'IsMainContact',
                 menuDisabled: true,
                 editor: {
                     xtype: 'checkbox'
@@ -162,6 +166,7 @@
                             if (button === 'yes') {
 
                                 grid.getStore().remove(rec);
+                                
 
                             }
                         });

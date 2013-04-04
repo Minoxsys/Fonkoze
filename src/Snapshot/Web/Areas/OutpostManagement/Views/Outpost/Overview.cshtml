@@ -399,6 +399,7 @@
                         ui: 'snapshot-add-btn',
                         cls: 'x-add-button-gradient',
                         id: 'SaveButtonOutpost',
+                        disabled:true,
                         handler:function(){
     
                             var errorsFound = false;
@@ -443,7 +444,7 @@
                             }
                             else{
                                 if (IsADefaultContactMethodSelected(me.contactsStore) == false){
-                                    msgAlert.alert("Error", "You need to provide at least one default contact method!");
+                                    msgAlert.alert("Error", "You need to provide at least one active contact method!");
                                     errorsFound = true;
                                 }
                             }
@@ -612,7 +613,7 @@
                                         width: 200,
                                         itemId: window.feature.modalIds.isWarehouseId,
                                         name: 'IsWarehouse',
-                                        fieldLabel: 'Is Outpost a Warehouse?',
+                                        fieldLabel: 'Is Seller a Warehouse?',
                                         editable:false,
                                         displayField: 'Text',
                                         valueField: 'Value',
@@ -737,7 +738,6 @@
                                         'ContactType': '@Domain.Contact.EMAIL_CONTACT_TYPE', 
                                         'ContactDetail': null,
                                         'IsMainContact': false,
-                                        'IsActive' : false
                                     });
     
                                     me.contactsStore.insert(0, r);
@@ -1002,6 +1002,7 @@
                                                         win.down('#' + modalIds.isWarehouseId).setValue(rec.get('IsWarehouse') ? 'true' : 'false');
                                                         win.down('#' + modalIds.nameId).setValue(rec.get('Name'));
                                                         win.down('#' + modalIds.coordinatesId).setValue(rec.get('Coordinates'));
+                                                        Ext.getCmp('SaveButtonOutpost').enable();
                                                     }
                                                 },
                                                 url: '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Outpost", action = "Edit" })'
