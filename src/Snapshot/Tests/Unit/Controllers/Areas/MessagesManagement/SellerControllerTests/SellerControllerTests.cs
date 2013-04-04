@@ -1,0 +1,56 @@
+﻿using System.Web.Mvc;
+using Domain.Enums;
+using Moq;
+using NUnit.Framework;
+using Web.Areas.MessagesManagement.Controllers;
+using Web.Areas.MessagesManagement.Models.Messages;
+using Web.Services;
+using Tests.Utils;
+
+namespace Tests.Unit.Controllers.Areas.MessagesManagement.SellerControllerTests
+{
+    [TestFixture]
+    public class SellerControllerTests
+    {
+        private SellerController _sut;
+        private Mock<IRawSmsMeesageQueryHelpersService> _rawSmsMeesageQueryHelpersServiceMock;
+
+
+        [SetUp]
+        public void PerTestSetup()
+        {
+            _rawSmsMeesageQueryHelpersServiceMock = new Mock<IRawSmsMeesageQueryHelpersService>();
+            _sut = new SellerController {SmsQueryService = _rawSmsMeesageQueryHelpersServiceMock.Object};
+        }
+
+        [Test]
+        public void Overview_ReturnsTheViewCalledOverview()
+        {
+            var viewResult = _sut.Overview() as ViewResult;
+
+            Assert.NotNull(viewResult);
+            Assert.That(viewResult.ViewName, Is.EqualTo("Overview"));
+        }
+
+        [Test]
+        public void GetMessagesFromSeller_DelegatesQueryToHelperService_WithSellerSpecificParameter()
+        {
+            var inputModel = new MessagesIndexModel();
+
+            _sut.GetMessagesFromSeller(inputModel);
+
+            _rawSmsMeesageQueryHelpersServiceMock.Verify(service => service.GetMessagesFromOutpost(inputModel, OutpostType.Seller));
+        }
+
+        [Test]
+        public void GetMessagesFromSeller_ReturnsAsJsonTheOutputFromTheHelperService()
+        {
+            _rawSmsMeesageQueryHelpersServiceMock.Setup(service => service.GetMessagesFromOutpost(It.IsAny<MessagesIndexModel>(), OutpostType.Seller))
+                                                 .Returns(new MessageIndexOuputModel {TotalItems = 1});
+
+            var result = _sut.GetMessagesFromSeller(new MessagesIndexModel());
+
+            Assert.That(result.GetValueFromJsonResultForModel<MessageIndexOuputModel, int>(m => m.TotalItems), Is.EqualTo(1));
+        }
+    }
+}
