@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Core.Domain;
+﻿using Core.Domain;
+using Domain.Enums;
+using System;
 
 namespace Domain
 {
@@ -17,5 +15,6 @@ namespace Domain
         public virtual DateTime? LastUpdate { get; set; }
         public virtual Guid OutpostStockLevelId { get; set; }
         public virtual Client Client { get; set; }
+        public virtual AlertType AlertType { get; set; }
     }
 }

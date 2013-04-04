@@ -45,6 +45,7 @@ namespace Tests.Unit.Controllers.SmsRequestControllerTest
         public IQueryService<Outpost> queryServiceOutpost;
         public IQueryService<ProductGroup> queryServiceProductGroup;
         public ISaveOrUpdateCommand<RawSmsReceived> saveCommandRawSmsReceived;
+        public ISaveOrUpdateCommand<Alert> saveAlertCmd;
 
         public ISmsRequestService smsRequestService;
         public ISmsGatewayService smsGatewayService;
@@ -65,6 +66,7 @@ namespace Tests.Unit.Controllers.SmsRequestControllerTest
             smsGatewayService = MockRepository.GenerateMock<ISmsGatewayService>();
 
             saveCommandRawSmsReceived = MockRepository.GenerateMock<ISaveOrUpdateCommand<RawSmsReceived>>();
+            saveAlertCmd = MockRepository.GenerateMock<ISaveOrUpdateCommand<Alert>>();
 
             FakeControllerContext.Builder.HttpContext.User = new FakePrincipal(new FakeIdentity(USERNAME), new string[] { });
             FakeControllerContext.Initialize(controller);
@@ -76,6 +78,7 @@ namespace Tests.Unit.Controllers.SmsRequestControllerTest
             controller.SmsRequestService = smsRequestService;
             controller.SmsGatewayService = smsGatewayService;
             controller.SaveCommandRawSmsReceived = saveCommandRawSmsReceived;
+            controller.SaveAlertCmd = saveAlertCmd;
         }
 
         public void SetUp_StubData()

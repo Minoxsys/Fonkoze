@@ -86,6 +86,8 @@ namespace Tests.Unit.Controllers.SmsRequestControllerTest
                     r.ParseSucceeded == false
                 )));
 
+            objectMother.queryServiceOutpost.Stub(s => s.Query()).Return((new List<Outpost> {objectMother.outpost}).AsQueryable());
+
             objectMother.smsRequestService.Expect(call => call.UpdateOutpostStockLevelsWithValuesReceivedBySms(objectMother.smsReceived));
 
             // Act

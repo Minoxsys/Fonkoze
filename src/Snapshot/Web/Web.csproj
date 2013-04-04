@@ -493,6 +493,7 @@
     <Content Include="Assets\resources\img\edit.png" />
     <Content Include="Assets\js\ext-all-debug-w-comments.js" />
     <Content Include="Assets\js\jquery-1.7.1.min.js" />
+    <Content Include="Assets\resources\img\logo.gif" />
     <Content Include="Assets\resources\img\Logo.png" />
     <Content Include="Assets\resources\img\LogoLogin.png" />
     <Content Include="Assets\resources\img\Logout.png" />

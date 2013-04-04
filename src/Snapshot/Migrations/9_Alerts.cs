@@ -28,8 +28,7 @@ namespace Migrations
                 .WithColumn("OutpostStockLevelId").AsGuid()
                 .WithColumn("Contact").AsString(ConstraintUtility.NAME_LENGTH)
                 .WithColumn("LowLevelStock").AsString(ConstraintUtility.NAME_LENGTH)
-                .WithColumn("LastUpdate").AsDateTime()
-                ;
+                .WithColumn("LastUpdate").AsDateTime();
 
             Create.AddClientForeignKey("Alerts");
             Create.AddForeignKey("Alerts");

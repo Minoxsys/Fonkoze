@@ -47,6 +47,7 @@
     <Compile Include="Country.cs" />
     <Compile Include="District.cs" />
     <Compile Include="EmailRequest.cs" />
+    <Compile Include="Enums\AlertType.cs" />
     <Compile Include="Enums\OutpostType.cs" />
     <Compile Include="Outpost.cs" />
     <Compile Include="OutpostStockLevel.cs" />
