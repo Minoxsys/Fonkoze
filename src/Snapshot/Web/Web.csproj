@@ -291,6 +291,7 @@
     <Compile Include="Bootstrap\Container\ServicesConventionsRegistrar.cs" />
     <Compile Include="Controllers\AccountOptionsController.cs" />
     <Compile Include="Controllers\SendMessageController.cs" />
+    <Compile Include="Controllers\SmsReceiveEndpointController.cs" />
     <Compile Include="Helpers\ConvertHelper.cs" />
     <Compile Include="Models\AccountOptions\PasswordModel.cs" />
     <Compile Include="Models\AccountOptions\UserModel.cs" />

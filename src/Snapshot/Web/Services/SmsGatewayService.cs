@@ -44,9 +44,8 @@ namespace Web.Services
         public RawSmsReceived AssignOutpostToRawSmsReceivedBySenderNumber(RawSmsReceived rawSmsReceived)
         {
             string number = rawSmsReceived.Sender;
-            Contact contact = queryServiceContact.Query().Where(
-                c => c.ContactType.Equals(Contact.MOBILE_NUMBER_CONTACT_TYPE) && c.ContactDetail.Contains(number)).FirstOrDefault();
-            Outpost outpost = queryOutposts.GetAllContacts().Where(o => o.Contacts.Contains(contact)).FirstOrDefault();
+            Contact contact = queryServiceContact.Query().FirstOrDefault(c => c.ContactType.Equals(Contact.MOBILE_NUMBER_CONTACT_TYPE) && c.ContactDetail.Contains(number));
+            Outpost outpost = queryOutposts.GetAllContacts().FirstOrDefault(o => o.Contacts.Contains(contact));
             if (outpost != null)
             {
                 rawSmsReceived.OutpostId = outpost.Id;

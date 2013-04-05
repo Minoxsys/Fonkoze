@@ -1,4 +1,5 @@
-﻿using Core.Domain;
+﻿using System.Diagnostics;
+using Core.Domain;
 using Core.Persistence;
 using Domain;
 using Domain.Enums;
@@ -57,46 +58,6 @@ namespace Web.Controllers
         {
             var model = new SmsRequestCreateModel();
             return View(model);
-        }
-
-        public ActionResult ReceiveSms(string sender, string content, string inNumber, string email, string credits)
-        {
-            var rawSmsReceived = new RawSmsReceived
-                {
-                    Sender = sender,
-                    Content = content,
-                    Credits = credits
-                };
-
-            SaveCommandRawSmsReceived.Execute(rawSmsReceived);
-
-            rawSmsReceived = SmsGatewayService.AssignOutpostToRawSmsReceivedBySenderNumber(rawSmsReceived);
-
-            RawSmsReceivedParseResult parseResult = SmsGatewayService.ParseRawSmsReceived(rawSmsReceived);
-
-            rawSmsReceived.ParseSucceeded = parseResult.ParseSucceeded;
-            SaveCommandRawSmsReceived.Execute(rawSmsReceived);
-
-            if (parseResult.ParseSucceeded)
-            {
-                SmsRequestService.UpdateOutpostStockLevelsWithValuesReceivedBySms(parseResult.SmsReceived);
-            }
-            else
-            {
-                SaveAlertCmd.Execute(new Alert
-                    {
-                        AlertType = AlertType.Error,
-                        Client = _client,
-                        OutpostId = rawSmsReceived.OutpostId,
-                        Contact = sender,
-                        OutpostName = QueryOutpost.Query().First(o => o.Id == rawSmsReceived.OutpostId).Name,
-                        ProductGroupName = "-",
-                        LowLevelStock = "-",
-                        LastUpdate = null
-                    });
-            }
-
-            return null;
         }
 
         private List<SelectListItem> GetListOfAllOutposts()
