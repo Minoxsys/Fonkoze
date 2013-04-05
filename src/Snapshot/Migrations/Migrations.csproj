@@ -60,6 +60,7 @@
     <Compile Include="10_ProductLevelRequests.cs" />
     <Compile Include="AssignCommonColumnsExtensions.cs" />
     <Compile Include="ConstraintUtility.cs" />
+    <Compile Include="17_Insert3Roles.cs" />
     <Compile Include="DeleteExtensions.cs" />
     <Compile Include="13_EmailRequest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -76,6 +77,12 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Scripts\sqlserver_DeleteColumnFromAlerts_18.sql" />
+    </ItemGroup>
+   <ItemGroup>
+    <EmbeddedResource Include="Scripts\sqlserver_Insert3Roles_17.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Scripts\sqlserver_Insert3Roles_Down_17.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

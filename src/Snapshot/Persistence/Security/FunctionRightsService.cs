@@ -9,6 +9,7 @@ using Core.Security;
 using Persistence.Queries.Functions;
 using Persistence.Queries.Employees;
 
+
 namespace Persistence.Security
 {
 	/// <summary>
@@ -38,7 +39,7 @@ namespace Persistence.Security
 		public bool HasPermissionAssigned( string function, string userName )
 		{
 
-			var functionEntity = queryFunctions.Query(new FunctionByName(function)).FirstOrDefault();
+			var functionEntity = queryFunctions.QueryWithCacheRefresh(new FunctionByName(function)).FirstOrDefault();
 			if (functionEntity == null) // no such function found in the system
 				return false;
 

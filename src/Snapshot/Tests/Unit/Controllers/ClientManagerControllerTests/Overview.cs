@@ -26,8 +26,8 @@ namespace Tests.Unit.Controllers.ClientManagerControllerTests
         public void Returns_The_ViewModel()
         {
             //Arrange
-            objectMother.queryPermission.Expect(it => it.Query(Arg<FunctionByName>.Is.Anything)).Return(new Permission[] { }.AsQueryable());
-            objectMother.queryPermission.Expect(it => it.Query(Arg<FunctionByName>.Is.Anything)).Return(new Permission[] { objectMother.permission }.AsQueryable());
+            objectMother.queryPermission.Expect(it => it.QueryWithCacheRefresh(Arg<FunctionByName>.Is.Anything)).Return(new Permission[] { }.AsQueryable());
+            objectMother.queryPermission.Expect(it => it.QueryWithCacheRefresh(Arg<FunctionByName>.Is.Anything)).Return(new Permission[] { objectMother.permission }.AsQueryable());
             objectMother.queryUsers.Expect(bt => bt.Query(Arg<UserByUserName>.Is.Anything)).Return(new User[] { }.AsQueryable());
             objectMother.queryUsers.Expect(bt => bt.Query(Arg<UserByUserName>.Is.Anything)).Return(new User[] { objectMother.user }.AsQueryable());
 

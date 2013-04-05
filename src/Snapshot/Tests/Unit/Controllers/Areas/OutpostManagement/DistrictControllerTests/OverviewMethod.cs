@@ -27,8 +27,8 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.DistrictControllerTests
         public void Returns_The_ViewModel()
         {
             //Arrange
-            objectMother.queryPermission.Expect(it => it.Query(Arg<FunctionByName>.Is.Anything)).Return(new Permission[] { }.AsQueryable());
-            objectMother.queryPermission.Expect(it => it.Query(Arg<FunctionByName>.Is.Anything)).Return(new Permission[] { }.AsQueryable());
+            objectMother.queryPermission.Expect(it => it.QueryWithCacheRefresh(Arg<FunctionByName>.Is.Anything)).Return(new Permission[] { }.AsQueryable());
+            objectMother.queryPermission.Expect(it => it.QueryWithCacheRefresh(Arg<FunctionByName>.Is.Anything)).Return(new Permission[] { }.AsQueryable());
             objectMother.queryUsers.Expect(bt => bt.Query(Arg<UserByUserName>.Is.Anything)).Return(new User[] { }.AsQueryable());
            
             // Act

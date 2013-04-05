@@ -12,5 +12,9 @@ namespace Core.Persistence{
 		IQueryable<ENTITY> Query();
 
 		IQueryable<ENTITY> Query( IDomainQuery<ENTITY> whereQuery );
+
+        IQueryable<ENTITY> QueryWithCacheRefresh();
+
+        IQueryable<ENTITY> QueryWithCacheRefresh(IDomainQuery<ENTITY> whereQuery);
 	}
 }

@@ -26,8 +26,8 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.CountryControllerTests
         public void GetsTheCurrentUserAndItsClient()
         {
             objectMother.queryUsers.Expect(bt => bt.Query(Arg<UserByUserName>.Is.Anything)).Return(new User[] { }.AsQueryable());
-            objectMother.queryPermission.Expect(it => it.Query(Arg<FunctionByName>.Is.Anything)).Return(new Permission[] { }.AsQueryable());
-            objectMother.queryPermission.Expect(it => it.Query(Arg<FunctionByName>.Is.Anything)).Return(new Permission[] { }.AsQueryable());
+            objectMother.queryPermission.Expect(it => it.QueryWithCacheRefresh(Arg<FunctionByName>.Is.Anything)).Return(new Permission[] { }.AsQueryable());
+            objectMother.queryPermission.Expect(it => it.QueryWithCacheRefresh(Arg<FunctionByName>.Is.Anything)).Return(new Permission[] { }.AsQueryable());
 
             objectMother.QueryCountriesToReturnsEmptyResult();
             objectMother.QueryWorldCountryRecordsReturnsEmptyResult();
@@ -42,8 +42,8 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.CountryControllerTests
         public void Get_ReturnsTheViewModel_WithTheWorldCountriesLoaded()
         {
             objectMother.queryUsers.Expect(bt => bt.Query(Arg<UserByUserName>.Is.Anything)).Return(new User[] { }.AsQueryable());
-            objectMother.queryPermission.Expect(it => it.Query(Arg<FunctionByName>.Is.Anything)).Return(new Permission[] { }.AsQueryable());
-            objectMother.queryPermission.Expect(it => it.Query(Arg<FunctionByName>.Is.Anything)).Return(new Permission[] { }.AsQueryable());
+            objectMother.queryPermission.Expect(it => it.QueryWithCacheRefresh(Arg<FunctionByName>.Is.Anything)).Return(new Permission[] { }.AsQueryable());
+            objectMother.queryPermission.Expect(it => it.QueryWithCacheRefresh(Arg<FunctionByName>.Is.Anything)).Return(new Permission[] { }.AsQueryable());
             objectMother.QueryCountriesToReturnsEmptyResult();
 
             objectMother.queryWorldCountryRecords.Expect(call => call.Query()).Return( objectMother.WorldCountryRecords());
@@ -66,8 +66,8 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.CountryControllerTests
             var worldCountryRecord = objectMother.WorldCountryRecords();
 
             objectMother.queryUsers.Expect(bt => bt.Query(Arg<UserByUserName>.Is.Anything)).Return(new User[] { }.AsQueryable());
-            objectMother.queryPermission.Expect(it => it.Query(Arg<FunctionByName>.Is.Anything)).Return(new Permission[] { }.AsQueryable());
-            objectMother.queryPermission.Expect(it => it.Query(Arg<FunctionByName>.Is.Anything)).Return(new Permission[] { }.AsQueryable());
+            objectMother.queryPermission.Expect(it => it.QueryWithCacheRefresh(Arg<FunctionByName>.Is.Anything)).Return(new Permission[] { }.AsQueryable());
+            objectMother.queryPermission.Expect(it => it.QueryWithCacheRefresh(Arg<FunctionByName>.Is.Anything)).Return(new Permission[] { }.AsQueryable());
 
             objectMother.queryWorldCountryRecords.Expect(call => call.Query()).Return(worldCountryRecord);
             objectMother.queryCountry.Expect(call => call.Query()).Return(currentUserCountries);

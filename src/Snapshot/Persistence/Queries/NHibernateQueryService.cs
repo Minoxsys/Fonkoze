@@ -33,11 +33,27 @@ namespace Persistence.Queries
 			return query;
 		}
 
+        public IQueryable<ENTITY> QueryWithCacheRefresh()
+        {
+            IQueryable<ENTITY> query = unitOfWork.Query<ENTITY>().CacheMode<ENTITY>(CacheMode.Refresh);
+
+            return query;
+        }
+
 		public IQueryable<ENTITY> Query( IDomainQuery<ENTITY> whereQuery )
 		{			
 			var query = Query().Where(whereQuery.Expression);
 
 			return query;
 		}
+
+        public IQueryable<ENTITY> QueryWithCacheRefresh(IDomainQuery<ENTITY> whereQuery)
+        {
+            var query = QueryWithCacheRefresh().Where(whereQuery.Expression);
+
+            return query;
+        }
+
+
 	}
 }
