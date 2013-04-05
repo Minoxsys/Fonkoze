@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using Domain;
+using Domain.Enums;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Domain;
+using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 
 namespace Tests.Unit.Controllers.SmsRequestControllerTest
@@ -12,10 +11,10 @@ namespace Tests.Unit.Controllers.SmsRequestControllerTest
     [TestFixture]
     public class ReceiveSmsMethod
     {
-        ObjectMother objectMother = new ObjectMother();
+        private readonly ObjectMother objectMother = new ObjectMother();
 
         [SetUp]
-        public void BeforeAll()
+        public void PerTestSetup()
         {
             objectMother.Setup_Controller_And_Mock_Services();
             objectMother.SetUp_StubData();
@@ -27,33 +26,34 @@ namespace Tests.Unit.Controllers.SmsRequestControllerTest
             // Arrange
             objectMother.saveCommandRawSmsReceived.Expect(call => call.Execute(Arg<RawSmsReceived>.Matches(
                 r => r.Content.Equals(ObjectMother.SMS_CONTENT) &&
-                    r.Credits.Equals(ObjectMother.CREDITS) &&
-                    r.Sender.Equals(ObjectMother.MOBILE_NUMBER)
-                )));
+                     r.Credits.Equals(ObjectMother.CREDITS) &&
+                     r.Sender.Equals(ObjectMother.MOBILE_NUMBER)
+                                                                                   )));
             objectMother.smsGatewayService.Expect(call => call.AssignOutpostToRawSmsReceivedBySenderNumber(Arg<RawSmsReceived>.Matches(
                 r => r.Content.Equals(ObjectMother.SMS_CONTENT) &&
-                    r.Credits.Equals(ObjectMother.CREDITS) &&
-                    r.Sender.Equals(ObjectMother.MOBILE_NUMBER)
-                ))).Return(objectMother.rawSmsReceived);
+                     r.Credits.Equals(ObjectMother.CREDITS) &&
+                     r.Sender.Equals(ObjectMother.MOBILE_NUMBER)
+                                                                                                               ))).Return(objectMother.rawSmsReceived);
 
             objectMother.smsGatewayService.Expect(call => call.ParseRawSmsReceived(Arg<RawSmsReceived>.Matches(
                 r => r.Content.Equals(ObjectMother.SMS_CONTENT) &&
-                    r.Credits.Equals(ObjectMother.CREDITS) &&
-                    r.Sender.Equals(ObjectMother.MOBILE_NUMBER)
-                ))).Return(objectMother.rawSmsReceivedParseResult);
+                     r.Credits.Equals(ObjectMother.CREDITS) &&
+                     r.Sender.Equals(ObjectMother.MOBILE_NUMBER)
+                                                                                       ))).Return(objectMother.rawSmsReceivedParseResult);
 
             objectMother.saveCommandRawSmsReceived.Expect(call => call.Execute(Arg<RawSmsReceived>.Matches(
                 r => r.Content.Equals(ObjectMother.SMS_CONTENT) &&
-                    r.Credits.Equals(ObjectMother.CREDITS) &&
-                    r.Sender.Equals(ObjectMother.MOBILE_NUMBER) &&
-                    r.OutpostId.Equals(objectMother.outpostId) &&
-                    r.ParseSucceeded == true
-                )));
+                     r.Credits.Equals(ObjectMother.CREDITS) &&
+                     r.Sender.Equals(ObjectMother.MOBILE_NUMBER) &&
+                     r.OutpostId.Equals(objectMother.outpostId) &&
+                     r.ParseSucceeded
+                                                                                   )));
 
             objectMother.smsRequestService.Expect(call => call.UpdateOutpostStockLevelsWithValuesReceivedBySms(objectMother.smsReceived));
 
             // Act
-            ActionResult result = objectMother.controller.ReceiveSms(ObjectMother.MOBILE_NUMBER, ObjectMother.SMS_CONTENT, ObjectMother.IN_NUMBER, ObjectMother.EMAIL, ObjectMother.CREDITS);
+            ActionResult result = objectMother.controller.ReceiveSms(ObjectMother.MOBILE_NUMBER, ObjectMother.SMS_CONTENT, ObjectMother.IN_NUMBER,
+                                                                     ObjectMother.EMAIL, ObjectMother.CREDITS);
 
             // Assert
             objectMother.saveCommandRawSmsReceived.VerifyAllExpectations();
@@ -68,35 +68,61 @@ namespace Tests.Unit.Controllers.SmsRequestControllerTest
             // Arrange
             objectMother.smsGatewayService.Expect(call => call.AssignOutpostToRawSmsReceivedBySenderNumber(Arg<RawSmsReceived>.Matches(
                 r => r.Content.Equals(ObjectMother.SMS_CONTENT) &&
-                    r.Credits.Equals(ObjectMother.CREDITS) &&
-                    r.Sender.Equals(ObjectMother.MOBILE_NUMBER)
-                ))).Return(objectMother.rawSmsReceived);
+                     r.Credits.Equals(ObjectMother.CREDITS) &&
+                     r.Sender.Equals(ObjectMother.MOBILE_NUMBER)
+                                                                                                               ))).Return(objectMother.rawSmsReceived);
 
             objectMother.smsGatewayService.Expect(call => call.ParseRawSmsReceived(Arg<RawSmsReceived>.Matches(
                 r => r.Content.Equals(ObjectMother.SMS_CONTENT) &&
-                    r.Credits.Equals(ObjectMother.CREDITS) &&
-                    r.Sender.Equals(ObjectMother.MOBILE_NUMBER)
-                ))).Return(objectMother.rawSmsReceivedParseResultFailed);
+                     r.Credits.Equals(ObjectMother.CREDITS) &&
+                     r.Sender.Equals(ObjectMother.MOBILE_NUMBER)
+                                                                                       ))).Return(objectMother.rawSmsReceivedParseResultFailed);
 
             objectMother.saveCommandRawSmsReceived.Expect(call => call.Execute(Arg<RawSmsReceived>.Matches(
                 r => r.Content.Equals(ObjectMother.SMS_CONTENT) &&
-                    r.Credits.Equals(ObjectMother.CREDITS) &&
-                    r.Sender.Equals(ObjectMother.MOBILE_NUMBER) &&
-                    r.OutpostId.Equals(objectMother.outpostId) &&
-                    r.ParseSucceeded == false
-                )));
+                     r.Credits.Equals(ObjectMother.CREDITS) &&
+                     r.Sender.Equals(ObjectMother.MOBILE_NUMBER) &&
+                     r.OutpostId.Equals(objectMother.outpostId) &&
+                     r.ParseSucceeded == false
+                                                                                   )));
 
             objectMother.queryServiceOutpost.Stub(s => s.Query()).Return((new List<Outpost> {objectMother.outpost}).AsQueryable());
 
             objectMother.smsRequestService.Expect(call => call.UpdateOutpostStockLevelsWithValuesReceivedBySms(objectMother.smsReceived));
 
             // Act
-            objectMother.controller.ReceiveSms(ObjectMother.MOBILE_NUMBER, ObjectMother.SMS_CONTENT, ObjectMother.IN_NUMBER, ObjectMother.EMAIL, ObjectMother.CREDITS);
+            objectMother.controller.ReceiveSms(ObjectMother.MOBILE_NUMBER, ObjectMother.SMS_CONTENT, ObjectMother.IN_NUMBER, ObjectMother.EMAIL,
+                                               ObjectMother.CREDITS);
 
             // Assert
             objectMother.saveCommandRawSmsReceived.VerifyAllExpectations();
             objectMother.smsGatewayService.VerifyAllExpectations();
         }
 
+        [Test]
+        public void ReceiveSms_SavesAnErrorAlert_WhenMessageIsIncorrect()
+        {
+            // Arrange
+            objectMother.smsGatewayService.Stub(s => s.AssignOutpostToRawSmsReceivedBySenderNumber(Arg<RawSmsReceived>.Is.Anything))
+                        .Return(objectMother.rawSmsReceived);
+
+            objectMother.smsGatewayService.Stub(call => call.ParseRawSmsReceived(Arg<RawSmsReceived>.Is.Anything))
+                        .Return(objectMother.rawSmsReceivedParseResultFailed);
+
+
+            objectMother.queryServiceOutpost.Stub(s => s.Query()).Return((new List<Outpost> {objectMother.outpost}).AsQueryable());
+
+
+            // Act
+            objectMother.controller.ReceiveSms(ObjectMother.MOBILE_NUMBER, ObjectMother.SMS_CONTENT, ObjectMother.IN_NUMBER, ObjectMother.EMAIL,
+                                               ObjectMother.CREDITS);
+
+            // Assert
+            objectMother.saveAlertCmd.AssertWasCalled(
+                cm => cm.Execute(Arg<Alert>.Matches(a => a.AlertType == AlertType.Error &&
+                                                         a.LowLevelStock == "-" && a.ProductGroupName == "-" && a.Contact == ObjectMother.MOBILE_NUMBER &&
+                                                         a.LastUpdate == null && a.OutpostId == objectMother.outpost.Id &&
+                                                         a.OutpostName == objectMother.outpost.Name)));
+        }
     }
 }

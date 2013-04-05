@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using Core.Domain;
 using Core.Persistence;
 using Domain;
-using Core.Domain;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Web.Mvc;
 using Web.Models.Alerts;
 using Web.Security;
 
@@ -15,7 +15,6 @@ namespace Web.Controllers
     {
         public IQueryService<Client> QueryClients { get; set; }
         public IQueryService<User> QueryUsers { get; set; }
-
         public IQueryService<Alert> QueryAlerts { get; set; }
 
         private Client _client;
@@ -32,22 +31,25 @@ namespace Web.Controllers
         {
             LoadUserAndClient();
 
+            Debug.Assert(indexModel.limit != null, "indexModel.limit != null");
             var pageSize = indexModel.limit.Value;
-            var alertsDataQuery = this.QueryAlerts.Query().Where(it => it.Client.Id == this._client.Id);
+            var alertsDataQuery = QueryAlerts.Query().Where(it => it.Client.Id == _client.Id);
 
-            var orderByColumnDirection = new Dictionary<string, Func<IQueryable<Alert>>>()
-            {
-                { "OutpostName-ASC", () => alertsDataQuery.OrderBy(c => c.OutpostName) },
-                { "OutpostName-DESC", () => alertsDataQuery.OrderByDescending(c => c.OutpostName) },
-                { "Contact-ASC", () => alertsDataQuery.OrderBy(c => c.Contact) },
-                { "Contact-DESC", () => alertsDataQuery.OrderByDescending(c => c.Contact) },
-                { "ProductGroupName-ASC", () => alertsDataQuery.OrderBy(c => c.ProductGroupName) },
-                { "ProductGroupName-DESC", () => alertsDataQuery.OrderByDescending(c => c.ProductGroupName) },
-                { "LowLevelStock-ASC", () => alertsDataQuery.OrderBy(c => c.LowLevelStock) },
-                { "LowLevelStock-DESC", () => alertsDataQuery.OrderByDescending(c => c.LowLevelStock) },
-                { "LastUpdate-ASC", () => alertsDataQuery.OrderBy(c => c.LastUpdate) },
-                { "LastUpdate-DESC", () => alertsDataQuery.OrderByDescending(c => c.LastUpdate) }
-            };
+            var orderByColumnDirection = new Dictionary<string, Func<IQueryable<Alert>>>
+                {
+                    {"OutpostName-ASC", () => alertsDataQuery.OrderBy(c => c.OutpostName)},
+                    {"OutpostName-DESC", () => alertsDataQuery.OrderByDescending(c => c.OutpostName)},
+                    {"Contact-ASC", () => alertsDataQuery.OrderBy(c => c.Contact)},
+                    {"Contact-DESC", () => alertsDataQuery.OrderByDescending(c => c.Contact)},
+                    {"ProductGroupName-ASC", () => alertsDataQuery.OrderBy(c => c.ProductGroupName)},
+                    {"ProductGroupName-DESC", () => alertsDataQuery.OrderByDescending(c => c.ProductGroupName)},
+                    {"LowLevelStock-ASC", () => alertsDataQuery.OrderBy(c => c.LowLevelStock)},
+                    {"LowLevelStock-DESC", () => alertsDataQuery.OrderByDescending(c => c.LowLevelStock)},
+                    {"LastUpdate-ASC", () => alertsDataQuery.OrderBy(c => c.LastUpdate)},
+                    {"LastUpdate-DESC", () => alertsDataQuery.OrderByDescending(c => c.LastUpdate)},
+                    {"AlertType-ASC", () => alertsDataQuery.OrderBy(c => c.LastUpdate)},
+                    {"AlertType-DESC", () => alertsDataQuery.OrderByDescending(c => c.LastUpdate)}
+                };
 
             alertsDataQuery = orderByColumnDirection[String.Format("{0}-{1}", indexModel.sort, indexModel.dir)].Invoke();
 
@@ -59,34 +61,36 @@ namespace Web.Controllers
 
             var totalItems = alertsDataQuery.Count();
 
+            Debug.Assert(indexModel.start != null, "indexModel.start != null");
             alertsDataQuery = alertsDataQuery
                 .Take(pageSize)
                 .Skip(indexModel.start.Value);
 
             var alertsModelListProjection = (from alert in alertsDataQuery.ToList()
                                              select new AlertModel
-                                             {
-                                                 Id = alert.Id,
-                                                 OutpostId = alert.OutpostId,
-                                                 OutpostName = alert.OutpostName,
-                                                 ProductGroupId = alert.ProductGroupId,
-                                                 ProductGroupName = alert.ProductGroupName,
-                                                 LowLevelStock = alert.LowLevelStock,
-                                                 LastUpdate = alert.LastUpdate.Value.ToString("dd-MMM-yyyy"),
-                                                 Contact = alert.Contact
-                                             }).ToArray();
+                                                 {
+                                                     Id = alert.Id,
+                                                     OutpostId = alert.OutpostId,
+                                                     OutpostName = alert.OutpostName,
+                                                     ProductGroupId = alert.ProductGroupId,
+                                                     ProductGroupName = alert.ProductGroupName,
+                                                     LowLevelStock = alert.LowLevelStock,
+                                                     LastUpdate = alert.LastUpdate.HasValue ? alert.LastUpdate.Value.ToString("dd-MMM-yyyy") : "-",
+                                                     Contact = alert.Contact,
+                                                     AlertType = alert.AlertType.ToString()
+                                                 }).ToArray();
 
             return Json(new AlertsIndexOutputModel
-            {
-                Alerts = alertsModelListProjection,
-                TotalItems = totalItems
-            }, JsonRequestBehavior.AllowGet);
+                {
+                    Alerts = alertsModelListProjection,
+                    TotalItems = totalItems
+                }, JsonRequestBehavior.AllowGet);
         }
 
         private void LoadUserAndClient()
         {
             var loggedUser = User.Identity.Name;
-            this._user = QueryUsers.Query().FirstOrDefault(m => m.UserName == loggedUser);
+            _user = QueryUsers.Query().FirstOrDefault(m => m.UserName == loggedUser);
 
             if (_user == null)
                 throw new NullReferenceException("User is not logged in");
@@ -95,8 +99,7 @@ namespace Web.Controllers
             if (_user.ClientId != Guid.Empty)
                 clientId = _user.ClientId;
 
-            this._client = QueryClients.Load(clientId);
+            _client = QueryClients.Load(clientId);
         }
-
     }
 }

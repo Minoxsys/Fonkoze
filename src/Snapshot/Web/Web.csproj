@@ -495,7 +495,10 @@
     <Content Include="Assets\js\jquery-1.7.1.min.js" />
     <Content Include="Assets\resources\img\logo.gif" />
     <Content Include="Assets\resources\img\Logo.png" />
+    <Content Include="Assets\resources\img\logoFon.png" />
+    <Content Include="Assets\resources\img\logoFonLogin.png" />
     <Content Include="Assets\resources\img\LogoLogin.png" />
+    <Content Include="Assets\resources\img\logologinFon.png" />
     <Content Include="Assets\resources\img\Logout.png" />
     <Content Include="Assets\resources\img\Menu\Administration.png" />
     <Content Include="Assets\resources\img\Menu\Alerts.png" />

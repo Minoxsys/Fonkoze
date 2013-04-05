@@ -79,6 +79,7 @@ namespace Tests.Unit.Controllers.SmsRequestControllerTest
             controller.SmsGatewayService = smsGatewayService;
             controller.SaveCommandRawSmsReceived = saveCommandRawSmsReceived;
             controller.SaveAlertCmd = saveAlertCmd;
+
         }
 
         public void SetUp_StubData()

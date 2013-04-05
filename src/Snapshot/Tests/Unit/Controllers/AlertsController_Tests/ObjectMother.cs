@@ -1,13 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Web.Controllers;
+﻿using System.Diagnostics;
+using Core.Domain;
 using Core.Persistence;
 using Domain;
-using Core.Domain;
-using Rhino.Mocks;
+using Domain.Enums;
 using MvcContrib.TestHelper.Fakes;
+using Rhino.Mocks;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Web.Controllers;
 using Web.Models.Alerts;
 
 namespace Tests.Unit.Controllers.AlertsController_Tests
@@ -50,11 +51,12 @@ namespace Tests.Unit.Controllers.AlertsController_Tests
         {
             controller = new AlertsController();
 
-            FakeControllerContext.Builder.HttpContext.User = new FakePrincipal(new FakeIdentity(USER_NAME), new string[] { });
+            FakeControllerContext.Builder.HttpContext.User = new FakePrincipal(new FakeIdentity(USER_NAME), new string[] {});
             FakeControllerContext.Initialize(controller);
 
             controller.QueryAlerts = queryAlerts;
         }
+
         private void SetUp_StubData()
         {
             alertId = Guid.NewGuid();
@@ -70,6 +72,7 @@ namespace Tests.Unit.Controllers.AlertsController_Tests
             alert.LastUpdate = DateTime.UtcNow.AddDays(-2);
             alert.Client = client;
         }
+
         public void StubUserAndItsClient()
         {
             queryClients = MockRepository.GenerateStub<IQueryService<Client>>();
@@ -88,7 +91,7 @@ namespace Tests.Unit.Controllers.AlertsController_Tests
             user.Password = "4321";
 
             queryClients.Stub(c => c.Load(clientId)).Return(client);
-            queryUsers.Stub(c => c.Query()).Return(new[] { user }.AsQueryable());
+            queryUsers.Stub(c => c.Query()).Return(new[] {user}.AsQueryable());
 
             controller.QueryClients = queryClients;
             controller.QueryUsers = queryUsers;
@@ -97,29 +100,27 @@ namespace Tests.Unit.Controllers.AlertsController_Tests
 
         public IQueryable<Alert> PageOfAlertsData(AlertsIndexModel indexModel)
         {
-            List<Alert> alertsPageList = new List<Alert>();
+            var alertsPageList = new List<Alert>();
 
+            Debug.Assert(indexModel.start != null, "indexModel.start != null");
+            Debug.Assert(indexModel.limit != null, "indexModel.limit != null");
             for (int i = indexModel.start.Value; i < indexModel.limit.Value; i++)
             {
                 alertsPageList.Add(new Alert
-                {
-                    Contact = alert.Contact,
-                    LowLevelStock = alert.LowLevelStock,
-                    OutpostId = alert.OutpostId,
-                    OutpostName = alert.OutpostName + " " + i,
-                    OutpostStockLevelId = alert.OutpostStockLevelId,
-                    ProductGroupId = alert.ProductGroupId,
-                    ProductGroupName = alert.ProductGroupName,
-                    LastUpdate = DateTime.UtcNow.AddDays(-i),
-                    Client = alert.Client
-                });
+                    {
+                        Contact = alert.Contact,
+                        LowLevelStock = alert.LowLevelStock,
+                        OutpostId = alert.OutpostId,
+                        OutpostName = alert.OutpostName + " " + i,
+                        OutpostStockLevelId = alert.OutpostStockLevelId,
+                        ProductGroupId = alert.ProductGroupId,
+                        ProductGroupName = alert.ProductGroupName,
+                        LastUpdate = DateTime.UtcNow.AddDays(-i),
+                        Client = alert.Client,
+                        AlertType = (AlertType) (i%3)
+                    });
             }
             return alertsPageList.AsQueryable();
         }
-
-
-
-
-
     }
 }
