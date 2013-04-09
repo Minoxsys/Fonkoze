@@ -1,8 +1,6 @@
-﻿using System.Diagnostics;
-using Core.Domain;
+﻿using Core.Domain;
 using Core.Persistence;
 using Domain;
-using Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +17,6 @@ namespace Web.Controllers
         public IQueryService<Outpost> QueryOutpost { get; set; }
         public IQueryService<ProductGroup> QueryProductGroup { get; set; }
 
-        public ISmsRequestService SmsRequestService { get; set; }
         public ISmsGatewayService SmsGatewayService { get; set; }
 
         public ISaveOrUpdateCommand<RawSmsReceived> SaveCommandRawSmsReceived { get; set; }

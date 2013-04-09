@@ -255,16 +255,14 @@
     <Compile Include="Unit\Services\ProductLevelRequestMessagesDispatcherTests\ObjectMother.cs" />
     <Compile Include="Unit\Services\RawSmsMeesageQueryHelpersService.cs" />
     <Compile Include="Unit\Services\ReceiveSmsWorkflowServiceTests.cs" />
-    <Compile Include="Unit\Services\SmsGatewayServiceTest\AssignOutpostToRawSmsReceivedBySenderNumber.cs" />
     <Compile Include="Unit\Services\SmsGatewayServiceTest\ObjectMother.cs" />
-    <Compile Include="Unit\Services\SmsGatewayServiceTest\ParseRawSmsReceivedMethod.cs" />
     <Compile Include="Unit\Services\SmsGatewayServiceTest\SendSmsMethod.cs" />
     <Compile Include="Unit\Services\SmsRequestServiceTest\ObjectMother.cs" />
     <Compile Include="Unit\Services\SmsRequestServiceTest\SendProductLevelRequestMessageMethod.cs" />
-    <Compile Include="Unit\Services\SmsRequestServiceTest\UpdateOutpostStockLevelsWithValuesReceivedBySmsMethod.cs" />
     <Compile Include="Unit\Services\SmsTextParserServiceTests.cs" />
     <Compile Include="Unit\Services\StoreProductLevelRequestDetailTests\ObjectMother.cs" />
     <Compile Include="Unit\Services\StoreProductLevelRequestDetailTests\StoreProductLevelRequestDetailMethod.cs" />
+    <Compile Include="Unit\Services\UpdateProductStockServiceTests.cs" />
     <Compile Include="Utils\AutoMock.cs" />
     <Compile Include="Utils\FakeControllerContext.cs" />
     <Compile Include="Utils\JsonResultHelpers.cs" />

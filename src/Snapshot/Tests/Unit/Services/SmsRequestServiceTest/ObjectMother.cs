@@ -54,7 +54,7 @@ namespace Tests.Unit.Services.SmsRequestServiceTest
         public Outpost outpostWithNoNumberContact;
         public ProductGroup productGroup;
         public List<OutpostStockLevel> stockLevels;
-        public SmsReceived smsReceived;
+ 
         public SmsRequest smsRequest;
         public SmsRequest smsRequestWithDifferentPhoneNumber;
         public ProductLevelRequestMessageInput productLevelRequestMessageInput;
@@ -80,8 +80,7 @@ namespace Tests.Unit.Services.SmsRequestServiceTest
 
             outpostStockLevelService = new OutpostStockLevelService(saveCommandOutpostHistoricalStockLevel);
 
-            smsRequestService = new SmsRequestService(queryServiceOutpost, queryServiceProductGroup, queryServiceStockLevel, queryServiceSmsRequest,
-                saveCommandSmsRequest, outpostStockLevelService, saveCommandOutpostStockLevel, smsGatewayService,
+            smsRequestService = new SmsRequestService(saveCommandSmsRequest, smsGatewayService,
                 new FormattingStrategy());
         }
 
@@ -118,12 +117,7 @@ namespace Tests.Unit.Services.SmsRequestServiceTest
 
             stockLevels = GenerateListOfOutpostStockLevels();
 
-            smsReceived = new SmsReceived() {
-                ProductGroupReferenceCode = PRODUCT_GROUP_REFERENCE_CODE,
-                Number = RECEIVED_PHONE_NUMBER,
-                ReceivedStockLevels = new ReceivedStockLevel[] { 
-                    new ReceivedStockLevel() { ProductSmsReference = stockLevels[0].Product.SMSReferenceCode, StockLevel = RECEIVED_STOCK_LEVEL } }.ToList()
-                };
+          
 
             smsRequest = new SmsRequest() { OutpostId = outpostId, ProductGroupId = productGroupId, Number = PHONE_NUMBER, Created = DateTime.Now, ProductGroupReferenceCode = PRODUCT_GROUP_REFERENCE_CODE };
             smsRequestWithDifferentPhoneNumber = new SmsRequest() { OutpostId = outpostId, ProductGroupId = productGroupId, Number = WRONG_PHONE_NUMBER, Created = DateTime.Now, ProductGroupReferenceCode = PRODUCT_GROUP_REFERENCE_CODE };

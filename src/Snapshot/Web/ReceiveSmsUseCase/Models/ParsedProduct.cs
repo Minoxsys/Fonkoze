@@ -2,7 +2,7 @@
 
 namespace Web.ReceiveSmsUseCase.Models
 {
-    public class ParsedProduct : IEquatable<ParsedProduct>
+    public class ParsedProduct : IEquatable<ParsedProduct>, IParsedProduct
     {
         public string ProductGroupCode { get; set; }
         public string ProductCode { get; set; }

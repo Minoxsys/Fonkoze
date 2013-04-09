@@ -5,6 +5,6 @@ namespace Web.ReceiveSmsUseCase.Services
 {
     public interface IUpdateStockService
     {
-        void UpdateProductStocks(SmsParseResult parseResult);
+        void UpdateProductStocks(ISmsParseResult parseResult);
     }
 }

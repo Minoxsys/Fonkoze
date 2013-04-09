@@ -50,7 +50,7 @@ namespace Web.ReceiveSmsUseCase.Services
                 return;
             }
 
-            SmsParseResult parseResult = _smsTextParserService.Parse(rawSms.Content);
+            ISmsParseResult parseResult = _smsTextParserService.Parse(rawSms.Content);
 
             rawSms.ParseSucceeded = parseResult.Success;
             rawSms.ParseErrorMessage = parseResult.Message;
