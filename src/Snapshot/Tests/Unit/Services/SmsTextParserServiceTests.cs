@@ -41,12 +41,21 @@ namespace Tests.Unit.Services
         }
 
         [Test]
-        public void Parse_FailsParsingAsap_WhenInputStringLeghtIsLessThanMinimumForValidFormat()
+        public void Parse_FailsParsingAsap_WhenInputStringLengthIsLessThanMinimumForValidFormat()
         {
             var result = _sut.Parse("abc");
 
             Assert.IsFalse(result.Success);
             Assert.That(result.Message, Is.EqualTo("Invalid message format."));
+        }
+
+        [Test]
+        public void Parse_FailsParsing_WhenInputStringLengthForOneOneOfTheProductSpecsIsBellowMinimumSize()
+        {
+            var result = _sut.Parse("ASDF1K XXX KLLS3p");
+
+            Assert.IsFalse(result.Success);
+            Assert.That(result.Message, Is.EqualTo("At least one product specification is invalid."));
         }
 
         [Test]

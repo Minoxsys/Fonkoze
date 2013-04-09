@@ -80,7 +80,7 @@ namespace Tests.Unit.Services
 
             _sut.ProcessSms(_inputModel);
 
-            _updateStockServiceMock.Verify(s => s.UpdateProductStocks(parseResult));
+            _updateStockServiceMock.Verify(s => s.UpdateProductStocksForOutpost(parseResult, It.IsAny<Guid>()));
         }
 
         [Test]

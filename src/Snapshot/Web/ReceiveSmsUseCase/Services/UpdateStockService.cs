@@ -1,62 +1,54 @@
-﻿using System;
+﻿using Core.Persistence;
+using Domain;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Web.ReceiveSmsUseCase.Models;
 
 namespace Web.ReceiveSmsUseCase.Services
 {
     public class UpdateStockService : IUpdateStockService
     {
-        public void UpdateProductStocks(ISmsParseResult parseResult)
+        private const string UpdateMethodSms = "SMS";
+        private readonly ISaveOrUpdateCommand<OutpostStockLevel> _stockLevelSaveOrUpdateCommand;
+        private readonly IQueryService<OutpostStockLevel> _outpostStockLevelQueryService;
+        private readonly IOutpostHistoricalStockLevelService _outpostHistoricalStockLevelHistoryService;
+
+        public UpdateStockService(ISaveOrUpdateCommand<OutpostStockLevel> stockLevelSaveOrUpdateCommand,
+                                  IQueryService<OutpostStockLevel> outpostStockLevelQueryService,
+                                  IOutpostHistoricalStockLevelService outpostHistoricalStockLevelHistoryService)
+        {
+            _outpostHistoricalStockLevelHistoryService = outpostHistoricalStockLevelHistoryService;
+            _outpostStockLevelQueryService = outpostStockLevelQueryService;
+            _stockLevelSaveOrUpdateCommand = stockLevelSaveOrUpdateCommand;
+        }
+
+        public void UpdateProductStocksForOutpost(ISmsParseResult parseResult, Guid outpostId)
         {
             if (!parseResult.Success)
             {
                 throw new ArgumentException("Can't update stock with incorrect parse results!");
             }
+
+            List<OutpostStockLevel> allStockLevelsForOutpost = _outpostStockLevelQueryService.Query().Where(o => o.Outpost.Id == outpostId).ToList();
+
+            foreach (var parsedProductData in parseResult.ParsedProducts)
+            {
+                var stockLevel = allStockLevelsForOutpost.FirstOrDefault(
+                    o =>
+                    o.ProductGroup.ReferenceCode.ToLowerInvariant() == parsedProductData.ProductGroupCode.ToLowerInvariant() &&
+                    o.Product.SMSReferenceCode.ToLowerInvariant() == parsedProductData.ProductCode.ToLowerInvariant());
+
+                if (stockLevel != null)
+                {
+                    _outpostHistoricalStockLevelHistoryService.SaveHistoricalOutpostStockLevelToPreviousOutpostStockLevelOfCurrent(stockLevel);
+
+                    stockLevel.PrevStockLevel = stockLevel.StockLevel;
+                    stockLevel.StockLevel = parsedProductData.StockLevel;
+                    stockLevel.UpdateMethod = UpdateMethodSms;
+                    _stockLevelSaveOrUpdateCommand.Execute(stockLevel);
+                }
+            }
         }
-
-              //public void UpdateOutpostStockLevelsWithValuesReceivedBySms(SmsReceived smsReceived)
-        //{
-        //    var stockLevels = GetOutpostStockLevelsByProductGroupReferenceAndPhoneNumber(smsReceived.ProductGroupReferenceCode, smsReceived.Number);
-
-        //    foreach (OutpostStockLevel outpostStockLevel in stockLevels)
-        //    {
-        //        UpdateSingleOutpostStockLevelWithValuesReceivedBySms(outpostStockLevel, smsReceived);
-        //    }
-        //}
-
-        //private List<OutpostStockLevel> GetOutpostStockLevelsByProductGroupReferenceAndPhoneNumber(string productGroupReferenceCode, string phoneNumber)
-        //{
-        //    List<OutpostStockLevel> stockLevels = new List<OutpostStockLevel>();
-        //    SmsRequest smsRequest = queryServiceSmsRequest.Query().Where(r => r.ProductGroupReferenceCode == productGroupReferenceCode && r.Number.Contains(phoneNumber)).OrderByDescending(r => r.Created).FirstOrDefault();
-
-        //    if (smsRequest != null)
-        //    {
-        //        stockLevels.AddRange(GetOutpostStockLevelsByOutpostAndProductGroup(smsRequest.OutpostId, smsRequest.ProductGroupId));
-        //    }
-
-        //    return stockLevels;
-        //}
-
-        //private List<OutpostStockLevel> GetOutpostStockLevelsByOutpostAndProductGroup(Guid outpostId, Guid productGroupId)
-        //{
-        //    return queryServiceStockLevel.Query().Where(s => s.Outpost.Id == outpostId && s.ProductGroup.Id == productGroupId).ToList();
-        //}
-
-        //private void UpdateSingleOutpostStockLevelWithValuesReceivedBySms(OutpostStockLevel outpostStockLevel, SmsReceived smsReceived)
-        //{
-        //    outpostStockLevelService.SaveHistoricalOutpostStockLevelToPreviousOutpostStockLevelOfCurrent(outpostStockLevel);
-
-        //    foreach (ReceivedStockLevel receivedStockLevel in smsReceived.ReceivedStockLevels)
-        //    {
-        //        if (outpostStockLevel.Product.SMSReferenceCode.Equals(receivedStockLevel.ProductSmsReference))
-        //        {
-        //            outpostStockLevel.PrevStockLevel = outpostStockLevel.StockLevel;
-        //            outpostStockLevel.StockLevel = receivedStockLevel.StockLevel;
-        //            outpostStockLevel.UpdateMethod = SMS_UPDATED_METHOD;
-        //            saveCommandOutpostStockLevel.Execute(outpostStockLevel);
-        //        }
-        //    }
-        //}
-
-       // #endregion
     }
 }

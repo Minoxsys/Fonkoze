@@ -58,7 +58,7 @@ namespace Web.ReceiveSmsUseCase.Services
 
             if (rawSms.ParseSucceeded)
             {
-                _updateStockService.UpdateProductStocks(parseResult);
+                _updateStockService.UpdateProductStocksForOutpost(parseResult, rawSms.OutpostId);
             }
             else
             {

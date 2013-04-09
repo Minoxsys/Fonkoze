@@ -424,14 +424,14 @@
     <Compile Include="Services\IHttpService.cs" />
     <Compile Include="Services\IImportService.cs" />
     <Compile Include="Services\IProductLevelRequestMessageSenderService.cs" />
-    <Compile Include="Services\IOutpostStockLevelService.cs" />
+    <Compile Include="ReceiveSmsUseCase\Services\IOutpostHistoricalStockLevelService.cs" />
     <Compile Include="Services\IProductLevelRequestMessagesDispatcherService.cs" />
     <Compile Include="Services\ISmsGatewayService.cs" />
     <Compile Include="Services\ISmsGatewaySettingsService.cs" />
     <Compile Include="Services\ProcessProductLevelRequestStrategy.cs" />
     <Compile Include="Services\ProductLevelRequestMessagesDispatcherService.cs" />
     <Compile Include="Services\ProductLevelRequestMessageInput.cs" />
-    <Compile Include="Services\OutpostStockLevelService.cs" />
+    <Compile Include="ReceiveSmsUseCase\Services\OutpostHistoricalStockLevelService.cs" />
     <Compile Include="Services\ProductFilterByProductLevelRequest.cs" />
     <Compile Include="Services\RawSmsMeesageQueryHelpersService.cs" />
     <Compile Include="ReceiveSmsUseCase\Services\ReceiveSmsWorkflowService.cs" />

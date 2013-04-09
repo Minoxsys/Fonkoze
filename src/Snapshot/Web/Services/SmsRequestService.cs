@@ -13,7 +13,7 @@ namespace Web.Services
         //private IQueryService<ProductGroup> queryServiceProductGroup;
         //private IQueryService<OutpostStockLevel> queryServiceStockLevel;
         //private IQueryService<SmsRequest> queryServiceSmsRequest;
-        //private IOutpostStockLevelService outpostStockLevelService;
+        //private IOutpostHistoricalStockLevelService outpostStockLevelService;
         // private ISaveOrUpdateCommand<OutpostStockLevel> saveCommandOutpostStockLevel;
 
         private readonly ISaveOrUpdateCommand<SmsRequest> _saveCommandSmsRequest;

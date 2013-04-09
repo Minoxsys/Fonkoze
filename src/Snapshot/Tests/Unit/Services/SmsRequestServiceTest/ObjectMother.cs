@@ -5,6 +5,7 @@ using System.Text;
 using Domain;
 using Rhino.Mocks;
 using Core.Persistence;
+using Web.ReceiveSmsUseCase.Services;
 using Web.Services;
 using Web.Areas.CampaignManagement.Models.ProductLevelRequest;
 using Web.Areas.CampaignManagement.Models.Campaign;
@@ -61,7 +62,7 @@ namespace Tests.Unit.Services.SmsRequestServiceTest
         public ProductLevelRequestMessageInput productLevelRequestMessageInputWithoutProducts;
         public ProductLevelRequestMessageInput productLevelRequestMessageInputWithoutMobileNumber;
 
-        public IOutpostStockLevelService outpostStockLevelService;
+        public IOutpostHistoricalStockLevelService OutpostHistoricalStockLevelService;
         public SmsRequestService smsRequestService;
         public ISmsGatewayService smsGatewayService;
 
@@ -78,7 +79,7 @@ namespace Tests.Unit.Services.SmsRequestServiceTest
 
             smsGatewayService = MockRepository.GenerateMock<ISmsGatewayService>();
 
-            outpostStockLevelService = new OutpostStockLevelService(saveCommandOutpostHistoricalStockLevel);
+            OutpostHistoricalStockLevelService = new OutpostHistoricalStockLevelService(saveCommandOutpostHistoricalStockLevel);
 
             smsRequestService = new SmsRequestService(saveCommandSmsRequest, smsGatewayService,
                 new FormattingStrategy());
