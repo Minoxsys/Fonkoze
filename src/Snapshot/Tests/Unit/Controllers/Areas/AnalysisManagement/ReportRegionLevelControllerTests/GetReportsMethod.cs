@@ -45,7 +45,7 @@ namespace Tests.Unit.Controllers.Areas.AnalysisManagement.ReportRegionLevelContr
 
             var reportRegionLevelTree = (ReportRegionLevelTreeModel)result.Data;
             Assert.AreEqual(reportRegionLevelTree.children.Count, 3);
-            Assert.AreEqual(reportRegionLevelTree.children[2].Name, "region2 ( Quantity of Outposts:1 ) ");
+            Assert.AreEqual(reportRegionLevelTree.children[2].Name, "region2 ( Number of Sellers:1 ) ");
             Assert.AreEqual(reportRegionLevelTree.children[2].children[0].children[0].ProductLevelSum, "5");
         }
 

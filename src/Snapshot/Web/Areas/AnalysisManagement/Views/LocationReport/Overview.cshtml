@@ -456,6 +456,35 @@ Analysis: Location Report
                         id: item.get('Id'),
                         animation: google.maps.Animation.DROP
                     });
+                    var infowindow = new google.maps.InfoWindow({
+                        content: "<h1>" + marker.title + "</h1><br/><p><h3>"+marker.labelContent+"</h3></p>"
+                    });
+                    google.maps.event.addListener(marker, 'mouseover', function () {
+                        infowindow.open(map, marker);
+                    });
+
+                    google.maps.event.addListener(marker, 'mouseout', function () {
+                        infowindow.close(map, marker);
+                    });
+
+                    // !!! Implement here the navigate to seller report functionality :
+
+                   @* google.maps.event.addListener(marker, 'click', function () {
+                        var countryId = window.feature.container.down('#' + window.feature.countryComboboxId).getValue();
+                        var regionId = window.feature.container.down('#' + window.feature.regionComboboxId).getValue();
+                        var districtId = window.feature.container.down('#' + window.feature.districtComboboxId).getValue();
+
+                        var map = googleMapPanel.getMap();
+                        var zoomLevel = map.getZoom();
+
+                        var link = '@Url.RouteUrl(AnalysisManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "HealthFacilityReport", action = "FromGoogleMap" })';
+                        link = link + "?id=" + marker.id;
+                        link = link + "&location=" + GetLocation(zoomLevel);
+                        link = link + "&type=" + GetType(marker);
+
+                        navigateTo(link);
+
+                     });*@
 
                     markerArray[i] = marker;
                     i = i + 1;
@@ -535,6 +564,42 @@ Analysis: Location Report
 </script>
 
 <style type="text/css">
+.goodStock {
+   color: black;
+   background-color: #98fb98;
+   font-family: "Lucida Grande", "Arial", sans-serif;
+   font-size: 10px;
+   font-weight: bold;
+   text-align: center;
+   width: 30px;     
+   border: 1px solid black;
+   white-space: nowrap;
+}
+
+.closeToBadStock {
+   color: black;
+   background-color: #ffd700;
+   font-family: "Lucida Grande", "Arial", sans-serif;
+   font-size: 10px;
+   font-weight: bold;
+   text-align: center;
+   width: 30px;     
+   border: 1px solid black;
+   white-space: nowrap;
+}
+
+.badStock {
+   color: black;
+   background-color: #FFCCCC;
+   font-family: "Lucida Grande", "Arial", sans-serif;
+   font-size: 10px;
+   font-weight: bold;
+   text-align: center;
+   width: 30px;     
+   border: 1px solid black;
+   white-space: nowrap;
+}
+
 .outpost {
    color: black;
    background-color: #FFCCCC;

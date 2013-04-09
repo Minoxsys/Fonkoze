@@ -47,7 +47,7 @@ namespace Web.Areas.AnalysisManagement.Controllers
                         Id = country.Id,
                         Name = country.Name,
                         Number = GetStockLevel(country, null, null, null),
-                        Type = "outpost",
+                        Type = GetCssClassForMarker(country,null,null,null),
                         Coordonates = GetCenterCoordonates(country, null , null),
                     };
                     countries.Add(model);
@@ -59,6 +59,33 @@ namespace Web.Areas.AnalysisManagement.Controllers
                 Markers = countries.ToArray(),
                 TotalItems = countries.Count
             }, JsonRequestBehavior.AllowGet);
+        }
+
+        private string GetCssClassForMarker(Country country, Region region, District district, Outpost outpost)
+        {
+            var result = QueryStockLevel.Query().Where(it => it.Client == _client);
+            if (country != null)
+                result = result.Where(it => it.Outpost.Country.Id == country.Id);
+            if (region != null)
+                result = result.Where(it => it.Outpost.Region.Id == region.Id);
+            if (district != null)
+                result = result.Where(it => it.Outpost.District.Id == district.Id);
+            if (outpost != null)
+                result = result.Where(it => it.Outpost.Id == outpost.Id);
+           
+            result = result.Where(it => it.StockLevel < it.Product.LowerLimit);
+
+            if (result.Count<OutpostStockLevel>()>0)
+                return "badStock";
+            else
+            {
+                result = result.Where(it => it.StockLevel <= (it.Product.LowerLimit + it.Product.LowerLimit * 20 / 100) && it.StockLevel > it.Product.LowerLimit);
+                if (result.Count<OutpostStockLevel>() > 0)
+                    return "closeToBadStock";
+                else
+                    return "goodStock";
+            }
+           
         }
 
         private string GetStockLevel(Country country, Region region, District district, Outpost outpost)
@@ -133,7 +160,7 @@ namespace Web.Areas.AnalysisManagement.Controllers
                         Id = region.Id,
                         Name = region.Name,
                         Number = GetStockLevel(null, region, null, null),
-                        Type = "outpost",
+                        Type = GetCssClassForMarker(null,region,null,null),
                         Coordonates = GetCenterCoordonates(null, region, null),
                     };
                     regions.Add(model);
@@ -176,7 +203,7 @@ namespace Web.Areas.AnalysisManagement.Controllers
                         Id = district.Id,
                         Name = district.Name,
                         Number = GetStockLevel(null, null, district, null),
-                        Type = "outpost",
+                        Type = GetCssClassForMarker(null,null,district,null),
                         Coordonates = GetCenterCoordonates(null, null, district),
                     };
                     districts.Add(model);
@@ -216,7 +243,7 @@ namespace Web.Areas.AnalysisManagement.Controllers
                 model.Id = outpost.Id;
                 model.Name = outpost.Name;
                 model.Number = GetStockLevel(null, null, null, outpost);
-                model.Type = "outpost";
+                model.Type = GetCssClassForMarker(null,null,null,outpost);
                 model.Coordonates = outpost.Latitude;
 
                 outposts.Add(model);

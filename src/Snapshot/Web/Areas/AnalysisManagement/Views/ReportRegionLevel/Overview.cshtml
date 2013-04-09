@@ -289,7 +289,7 @@ Analysis: Product level information at region level
             singleExpand: false, 
             listeners: {
                 itemclick: function (view, rec, item, index, eventObj) {
-                    if (!rec.get('leaf') && rec.get('Name').indexOf('Quantity of Outposts:') == -1) {
+                    if (!rec.get('leaf') && rec.get('Name').indexOf('Number of Sellers:') == -1) {
 
                         window.feature.ProductsStore.proxy.extraParams.productGroupId = rec.get('Id');
                         window.feature.ProductsStore.load();

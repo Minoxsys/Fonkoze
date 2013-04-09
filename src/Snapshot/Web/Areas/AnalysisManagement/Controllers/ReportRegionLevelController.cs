@@ -129,7 +129,7 @@ namespace Web.Areas.AnalysisManagement.Controllers
         private ReportRegionLevelTreeModel ToRegionNode(IGrouping<Region, OutpostStockLevel> regionGroup)
         {
             var regionNode = new ReportRegionLevelTreeModel { Name = regionGroup.Key.Name, ProductLevelSum = "" };
-            regionNode.Name += " ( Quantity of Outposts:" + QueryOutpost.Query().Count(it => it.Region.Id == regionGroup.Key.Id) + " ) ";
+            regionNode.Name += " (Number of Sellers:" + QueryOutpost.Query().Count(it => it.Region.Id == regionGroup.Key.Id) + " ) ";
             regionNode.Id = regionGroup.Key.Id;
 
             var groupByProductGroup = regionGroup.GroupBy(it => it.ProductGroup);
@@ -252,7 +252,7 @@ namespace Web.Areas.AnalysisManagement.Controllers
                 foreach (var product in allProducts)
                 {
                     ChartInputModel model = new ChartInputModel();
-                    model.RegionName = region.Name.Substring(0,  region.Name.IndexOf(" ( Quantity of Outposts:"));
+                    model.RegionName = region.Name.Substring(0,  region.Name.IndexOf(" ( Number of Sellers:"));
                     model.ProductName = product.Name;
                     var pg = region.children.Find(it => it.Id == productGroupId);
                     if (pg != null)
