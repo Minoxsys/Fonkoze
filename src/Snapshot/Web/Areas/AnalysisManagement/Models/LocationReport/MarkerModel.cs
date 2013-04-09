@@ -12,5 +12,6 @@ namespace Web.Areas.AnalysisManagement.Models.LocationReport
         public string Number { get; set; }
         public string Type { get; set; }
         public string Coordonates { get; set; }
+        public string InfoWindowContent { get; set; }
     }
 }

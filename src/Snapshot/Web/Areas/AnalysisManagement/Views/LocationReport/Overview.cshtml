@@ -106,7 +106,7 @@ Analysis: Location Report
         });
 
         window.feature.countryMarkersStore = Ext.create('Ext.data.Store', {
-            fields: ['Id', 'Name', 'Number', 'Coordonates', 'Type'],
+            fields: ['Id', 'Name', 'Number', 'Coordonates', 'Type', 'InfoWindowContent'],
             proxy: {
                 type: 'ajax',
                 url: '@Url.RouteUrl(Web.Areas.AnalysisManagement.AnalysisManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "LocationReport", action = "GetCountryMarkers" })',
@@ -121,7 +121,7 @@ Analysis: Location Report
         });
 
         window.feature.regionMarkersStore = Ext.create('Ext.data.Store', {
-            fields: ['Id', 'Name', 'Number', 'Coordonates', 'Type'],
+            fields: ['Id', 'Name', 'Number', 'Coordonates', 'Type', 'InfoWindowContent'],
             proxy: {
                 type: 'ajax',
                 url: '@Url.RouteUrl(Web.Areas.AnalysisManagement.AnalysisManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "LocationReport", action = "GetRegionMarkers" })',
@@ -136,7 +136,7 @@ Analysis: Location Report
         });
 
         window.feature.districtMarkersStore = Ext.create('Ext.data.Store', {
-            fields: ['Id', 'Name', 'Number', 'Coordonates', 'Type'],
+            fields: ['Id', 'Name', 'Number', 'Coordonates', 'Type', 'InfoWindowContent'],
             proxy: {
                 type: 'ajax',
                 url: '@Url.RouteUrl(Web.Areas.AnalysisManagement.AnalysisManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "LocationReport", action = "GetDistrictMarkers" })',
@@ -151,7 +151,7 @@ Analysis: Location Report
         });
 
         window.feature.outpostMarkersStore = Ext.create('Ext.data.Store', {
-            fields: ['Id', 'Name', 'Number', 'Coordonates', 'Type'],
+            fields: ['Id', 'Name', 'Number', 'Coordonates', 'Type', 'InfoWindowContent'],
             proxy: {
                 type: 'ajax',
                 url: '@Url.RouteUrl(Web.Areas.AnalysisManagement.AnalysisManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "LocationReport", action = "GetOutpostMarkers" })',
@@ -457,7 +457,7 @@ Analysis: Location Report
                         animation: google.maps.Animation.DROP
                     });
                     var infowindow = new google.maps.InfoWindow({
-                        content: "<h1>" + marker.title + "</h1><br/><p><h3>"+marker.labelContent+"</h3></p>"
+                        content: "<h3>" + marker.title + "</h3><br/><p>" + item.get('InfoWindowContent') + "</p>"
                     });
                     google.maps.event.addListener(marker, 'mouseover', function () {
                         infowindow.open(map, marker);
@@ -578,7 +578,7 @@ Analysis: Location Report
 
 .closeToBadStock {
    color: black;
-   background-color: #ffd700;
+   background-color: #FFD24C; 	
    font-family: "Lucida Grande", "Arial", sans-serif;
    font-size: 10px;
    font-weight: bold;

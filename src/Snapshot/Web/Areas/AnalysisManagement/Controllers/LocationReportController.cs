@@ -38,17 +38,20 @@ namespace Web.Areas.AnalysisManagement.Controllers
 
             List<MarkerModel> countries = new List<MarkerModel>();
 
+            int noOfOutposts = 0;
             foreach (var country in countryQuery.ToList())
             {
-                if (HasOutposts(country))
+                noOfOutposts = NoOfOutposts(country);
+                if (noOfOutposts>0)
                 {
                     var model = new MarkerModel
                     {
                         Id = country.Id,
                         Name = country.Name,
                         Number = GetStockLevel(country, null, null, null),
-                        Type = GetCssClassForMarker(country,null,null,null),
+                        Type = GetCssClassAndInfoWindowContentForMarker(country,null,null,null),
                         Coordonates = GetCenterCoordonates(country, null , null),
+                        InfoWindowContent = "Existing Sellers = "+noOfOutposts
                     };
                     countries.Add(model);
                 }
@@ -61,8 +64,11 @@ namespace Web.Areas.AnalysisManagement.Controllers
             }, JsonRequestBehavior.AllowGet);
         }
 
-        private string GetCssClassForMarker(Country country, Region region, District district, Outpost outpost)
+                       
+        internal string GetCssClassAndInfoWindowContentForMarker(Country country, Region region, District district, Outpost outpost)
         {
+            string cssClass_InfoWindowContent = "";
+           
             var result = QueryStockLevel.Query().Where(it => it.Client == _client);
             if (country != null)
                 result = result.Where(it => it.Outpost.Country.Id == country.Id);
@@ -73,20 +79,51 @@ namespace Web.Areas.AnalysisManagement.Controllers
             if (outpost != null)
                 result = result.Where(it => it.Outpost.Id == outpost.Id);
            
-            result = result.Where(it => it.StockLevel < it.Product.LowerLimit);
+            var resultRed = result.Where(it => it.StockLevel <= it.Product.LowerLimit);
 
-            if (result.Count<OutpostStockLevel>()>0)
-                return "badStock";
+            if (resultRed.Count<OutpostStockLevel>() > 0)
+            {
+                cssClass_InfoWindowContent = "badStock";
+                cssClass_InfoWindowContent += GetInfoWindowContent_ForOutpost(outpost, resultRed);
+            }
             else
             {
                 result = result.Where(it => it.StockLevel <= (it.Product.LowerLimit + it.Product.LowerLimit * 20 / 100) && it.StockLevel > it.Product.LowerLimit);
                 if (result.Count<OutpostStockLevel>() > 0)
-                    return "closeToBadStock";
+                {
+                    cssClass_InfoWindowContent = "closeToBadStock";
+                    cssClass_InfoWindowContent += GetInfoWindowContent_ForOutpost(outpost, result);
+                }
                 else
-                    return "goodStock";
+                {
+                    cssClass_InfoWindowContent = "goodStock";
+                    if (outpost != null)
+                    {
+                        cssClass_InfoWindowContent += "; All Stock Levels Are Good.";
+                    }
+                    
+                }
             }
            
+            return cssClass_InfoWindowContent;
+           
         }
+
+        private string GetInfoWindowContent_ForOutpost(Outpost outpost, IQueryable<OutpostStockLevel> result)
+        {
+            string infoWindowContent = ";";
+            if (outpost != null)
+            {
+                foreach (OutpostStockLevel osl in result)
+                {
+                    infoWindowContent += osl.Product.Name + " = " + osl.StockLevel + "<br/>";
+                }
+                return infoWindowContent;
+            }
+            return "";
+        
+        }
+
 
         private string GetStockLevel(Country country, Region region, District district, Outpost outpost)
         {
@@ -108,10 +145,10 @@ namespace Web.Areas.AnalysisManagement.Controllers
             return sum.ToString();
         }
 
-        private bool HasOutposts(Country country)
+        private int NoOfOutposts(Country country)
         {
             int numberOfOutposts = QueryOutposts.Query().Where(it => it.Client == _client && it.Country.Id == country.Id).Count();
-            return numberOfOutposts > 0;
+            return numberOfOutposts;
         }
 
         private string GetCenterCoordonates(Country country, Region region, District district)
@@ -151,17 +188,20 @@ namespace Web.Areas.AnalysisManagement.Controllers
 
             List<MarkerModel> regions = new List<MarkerModel>();
 
+            int noOfOutposts = 0;
             foreach (var region in regionQuery.ToList())
             {
-                if (HasOutposts(region))
+                noOfOutposts = NoOfOutposts(region);
+                if (noOfOutposts > 0)
                 {
                     var model = new MarkerModel
                     {
                         Id = region.Id,
                         Name = region.Name,
                         Number = GetStockLevel(null, region, null, null),
-                        Type = GetCssClassForMarker(null,region,null,null),
+                        Type = GetCssClassAndInfoWindowContentForMarker(null,region,null,null),
                         Coordonates = GetCenterCoordonates(null, region, null),
+                        InfoWindowContent = "Existing Sellers = " + noOfOutposts
                     };
                     regions.Add(model);
                 }
@@ -174,10 +214,10 @@ namespace Web.Areas.AnalysisManagement.Controllers
             }, JsonRequestBehavior.AllowGet);
         }
 
-        private bool HasOutposts(Region region)
+        private int NoOfOutposts(Region region)
         {
             int numberOfOutposts = QueryOutposts.Query().Where(it => it.Client == _client && it.Region.Id == region.Id).Count();
-            return numberOfOutposts > 0;
+            return numberOfOutposts;
         }
 
         [HttpGet]
@@ -194,17 +234,20 @@ namespace Web.Areas.AnalysisManagement.Controllers
 
             List<MarkerModel> districts = new List<MarkerModel>();
 
+            int noOfOutposts = 0;
             foreach (var district in districtQuery.ToList())
             {
-                if (HasOutposts(district))
+                noOfOutposts = NoOfOutposts(district);
+                if (noOfOutposts > 0)
                 {
                     var model = new MarkerModel
                     {
                         Id = district.Id,
                         Name = district.Name,
                         Number = GetStockLevel(null, null, district, null),
-                        Type = GetCssClassForMarker(null,null,district,null),
+                        Type = GetCssClassAndInfoWindowContentForMarker(null,null,district,null),
                         Coordonates = GetCenterCoordonates(null, null, district),
+                        InfoWindowContent = "Existing Sellers = " + noOfOutposts
                     };
                     districts.Add(model);
                 }
@@ -217,10 +260,10 @@ namespace Web.Areas.AnalysisManagement.Controllers
             }, JsonRequestBehavior.AllowGet);
         }
 
-        private bool HasOutposts(District district)
+        private int NoOfOutposts(District district)
         {
             int numberOfOutposts = QueryOutposts.Query().Where(it => it.Client == _client && it.District.Id == district.Id).Count();
-            return numberOfOutposts > 0;
+            return numberOfOutposts;
         }
 
         [HttpGet]
@@ -238,13 +281,15 @@ namespace Web.Areas.AnalysisManagement.Controllers
             List<MarkerModel> outposts = new List<MarkerModel>();
 
             foreach (var outpost in outpostQuery.ToList())
-            {
+            {  
+                string[] cssClass_And_infoWinContent = GetCssClassAndInfoWindowContentForMarker(null,null,null,outpost).Split(';');
                 var model = new MarkerModel();
                 model.Id = outpost.Id;
                 model.Name = outpost.Name;
                 model.Number = GetStockLevel(null, null, null, outpost);
-                model.Type = GetCssClassForMarker(null,null,null,outpost);
+                model.Type = cssClass_And_infoWinContent[0];
                 model.Coordonates = outpost.Latitude;
+                model.InfoWindowContent = cssClass_And_infoWinContent[1];
 
                 outposts.Add(model);
             }
@@ -255,6 +300,7 @@ namespace Web.Areas.AnalysisManagement.Controllers
                 TotalItems = outposts.Count
             }, JsonRequestBehavior.AllowGet);
         }
+
 
 
         private void LoadUserAndClient()
