@@ -39,6 +39,8 @@ namespace Tests.Unit.Controllers.Areas.AnalysisManagement.LocationReportControll
         public Outpost outpost;
         public Guid stockLevelId;
         public OutpostStockLevel stockLevel;
+        public Guid productId;
+        public Product product;
 
         public List<Country> countryList;
         public List<Region> regionList;
@@ -140,6 +142,12 @@ namespace Tests.Unit.Controllers.Areas.AnalysisManagement.LocationReportControll
             outpost.District = district;
             outpost.Client = client;
 
+            productId = Guid.NewGuid();
+            product = MockRepository.GeneratePartialMock<Product>();
+            product.Stub(c => c.Id).Return(productId);
+            product.LowerLimit = 2;
+            
+
             stockLevelId = Guid.NewGuid();
             stockLevel = MockRepository.GeneratePartialMock<OutpostStockLevel>();
             stockLevel.Stub(c => c.Id).Return(stockLevelId);
@@ -147,6 +155,7 @@ namespace Tests.Unit.Controllers.Areas.AnalysisManagement.LocationReportControll
             stockLevel.PrevStockLevel = 10;
             stockLevel.StockLevel = 20;
             stockLevel.Client = client;
+            stockLevel.Product = product;
 
             countryList.Add(country);
             regionList.Add(region);
