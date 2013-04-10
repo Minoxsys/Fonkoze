@@ -49,7 +49,7 @@ namespace Web.Areas.AnalysisManagement.Controllers
                         Id = country.Id,
                         Name = country.Name,
                         Number = GetStockLevel(country, null, null, null),
-                        Type = GetCssClassAndInfoWindowContentForMarker(country,null,null,null),
+                        Type = GetCssClassAndInfoWindowContentForMarker(country,null,null,null).CssClass,
                         Coordonates = GetCenterCoordonates(country, null , null),
                         InfoWindowContent = "Existing Sellers = "+noOfOutposts
                     };
@@ -64,11 +64,11 @@ namespace Web.Areas.AnalysisManagement.Controllers
             }, JsonRequestBehavior.AllowGet);
         }
 
-                       
-        internal string GetCssClassAndInfoWindowContentForMarker(Country country, Region region, District district, Outpost outpost)
+
+        internal CssClassAndInfoWinContent GetCssClassAndInfoWindowContentForMarker(Country country, Region region, District district, Outpost outpost)
         {
-            string cssClass_InfoWindowContent = "";
-           
+           CssClassAndInfoWinContent returnValue = new CssClassAndInfoWinContent();
+
             var result = QueryStockLevel.Query().Where(it => it.Client == _client);
             if (country != null)
                 result = result.Where(it => it.Outpost.Country.Id == country.Id);
@@ -78,38 +78,48 @@ namespace Web.Areas.AnalysisManagement.Controllers
                 result = result.Where(it => it.Outpost.District.Id == district.Id);
             if (outpost != null)
                 result = result.Where(it => it.Outpost.Id == outpost.Id);
-           
+
+            if (result.Count<OutpostStockLevel>() == 0)
+            {
+                returnValue.CssClass = "badStock";
+                if (outpost != null)
+                {
+                    returnValue.InfoWinContent = "Seller has no products assigned.";
+                }
+                return returnValue;
+            }
+
             var resultRed = result.Where(it => it.StockLevel <= it.Product.LowerLimit);
 
             if (resultRed.Count<OutpostStockLevel>() > 0)
             {
-                cssClass_InfoWindowContent = "badStock";
-                cssClass_InfoWindowContent += GetInfoWindowContent_ForOutpost(outpost, resultRed);
+                returnValue.CssClass = "badStock";
+                returnValue.InfoWinContent = GetInfoWindowContentForOutpost(outpost, resultRed);
             }
             else
             {
                 result = result.Where(it => it.StockLevel <= (it.Product.LowerLimit + it.Product.LowerLimit * 20 / 100) && it.StockLevel > it.Product.LowerLimit);
                 if (result.Count<OutpostStockLevel>() > 0)
                 {
-                    cssClass_InfoWindowContent = "closeToBadStock";
-                    cssClass_InfoWindowContent += GetInfoWindowContent_ForOutpost(outpost, result);
+                    returnValue.CssClass = "closeToBadStock";
+                    returnValue.InfoWinContent = GetInfoWindowContentForOutpost(outpost, result);
                 }
                 else
                 {
-                    cssClass_InfoWindowContent = "goodStock";
+                    returnValue.CssClass = "goodStock";
                     if (outpost != null)
                     {
-                        cssClass_InfoWindowContent += "; All Stock Levels Are Good.";
+                        returnValue.InfoWinContent = "All Stock Levels Are Good.";
                     }
                     
                 }
             }
-           
-            return cssClass_InfoWindowContent;
+
+            return returnValue;
            
         }
 
-        private string GetInfoWindowContent_ForOutpost(Outpost outpost, IQueryable<OutpostStockLevel> result)
+        private string GetInfoWindowContentForOutpost(Outpost outpost, IQueryable<OutpostStockLevel> result)
         {
             string infoWindowContent = ";";
             if (outpost != null)
@@ -120,7 +130,7 @@ namespace Web.Areas.AnalysisManagement.Controllers
                 }
                 return infoWindowContent;
             }
-            return "";
+            return string.Empty;
         
         }
 
@@ -199,7 +209,7 @@ namespace Web.Areas.AnalysisManagement.Controllers
                         Id = region.Id,
                         Name = region.Name,
                         Number = GetStockLevel(null, region, null, null),
-                        Type = GetCssClassAndInfoWindowContentForMarker(null,region,null,null),
+                        Type = GetCssClassAndInfoWindowContentForMarker(null,region,null,null).CssClass,
                         Coordonates = GetCenterCoordonates(null, region, null),
                         InfoWindowContent = "Existing Sellers = " + noOfOutposts
                     };
@@ -245,7 +255,7 @@ namespace Web.Areas.AnalysisManagement.Controllers
                         Id = district.Id,
                         Name = district.Name,
                         Number = GetStockLevel(null, null, district, null),
-                        Type = GetCssClassAndInfoWindowContentForMarker(null,null,district,null),
+                        Type = GetCssClassAndInfoWindowContentForMarker(null,null,district,null).CssClass,
                         Coordonates = GetCenterCoordonates(null, null, district),
                         InfoWindowContent = "Existing Sellers = " + noOfOutposts
                     };
@@ -282,14 +292,14 @@ namespace Web.Areas.AnalysisManagement.Controllers
 
             foreach (var outpost in outpostQuery.ToList())
             {  
-                string[] cssClass_And_infoWinContent = GetCssClassAndInfoWindowContentForMarker(null,null,null,outpost).Split(';');
+                CssClassAndInfoWinContent cssClassAndinfoWinContent = GetCssClassAndInfoWindowContentForMarker(null,null,null,outpost);
                 var model = new MarkerModel();
                 model.Id = outpost.Id;
                 model.Name = outpost.Name;
                 model.Number = GetStockLevel(null, null, null, outpost);
-                model.Type = cssClass_And_infoWinContent[0];
+                model.Type = cssClassAndinfoWinContent.CssClass;
                 model.Coordonates = outpost.Latitude;
-                model.InfoWindowContent = cssClass_And_infoWinContent[1];
+                model.InfoWindowContent = cssClassAndinfoWinContent.InfoWinContent;
 
                 outposts.Add(model);
             }
@@ -316,6 +326,13 @@ namespace Web.Areas.AnalysisManagement.Controllers
                 clientId = _user.ClientId;
 
             this._client = QueryClients.Load(clientId);
+        }
+
+        internal struct CssClassAndInfoWinContent
+        {
+            internal string CssClass;
+            internal string InfoWinContent;
+
         }
 
     }
