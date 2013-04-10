@@ -61,6 +61,17 @@ namespace Tests.Unit.Services
         }
 
         [Test]
+        public void ProcessSms_SendsWarningMessageBackToSenderAndReturns_WhenSenderIsMatchedWithAnInactivePhoneNumberExistingInTheSystem()
+        {
+            SetupKnownSender(isSenderActive: false);   
+
+            _sut.ProcessSms(_inputModel);
+
+            _sendSmsServiceMock.Verify(s => s.SendSmsMessage(It.IsAny<string>(), _inputModel.Sender));
+            _smsTextParserServiceMock.Verify(s => s.Parse(It.IsAny<string>()), Times.Never());
+        }
+
+        [Test]
         public void ProcessSms_SavesTheSmsWithAnErrorMessage_WhenTheSenderIsUnknown()
         {
             _sut.ProcessSms(_inputModel);
@@ -84,8 +95,7 @@ namespace Tests.Unit.Services
         public void ProcessSms_UpdatesStockForProducts_WhenMessagePrasedSuccesfully()
         {
             SetupKnownSender();
-            var parseResult = new SmsParseResult {Success = true};
-            _smsTextParserServiceMock.Setup(s => s.Parse(_inputModel.Content)).Returns(parseResult);
+            var parseResult = SetupParseResult();
 
             _sut.ProcessSms(_inputModel);
 
@@ -96,8 +106,7 @@ namespace Tests.Unit.Services
         public void ProcessSms_SavesAnErrorAlert_WhenMessageIsIncorrect()
         {
             SetupKnownSender();
-            var parseResult = new SmsParseResult {Success = false};
-            _smsTextParserServiceMock.Setup(s => s.Parse(_inputModel.Content)).Returns(parseResult);
+            SetupParseResult(false);
 
             _sut.ProcessSms(_inputModel);
 
@@ -108,6 +117,23 @@ namespace Tests.Unit.Services
                                                                               a.OutpostName == _outpostMock.Object.Name)));
         }
 
+        [Test]
+        public void ProcessSms_SavesTheOutpostTypeInTheRawSmsEntry_WhenSenderIsKnown()
+        {
+            SetupKnownSender(true, true);
+            SetupParseResult();
+
+            _sut.ProcessSms(_inputModel);
+
+            _saveRawSmsCommandMock.Verify(cmd => cmd.Execute(It.Is<RawSmsReceived>(sms => sms.OutpostType == OutpostType.Warehouse)));
+        }
+
+        private SmsParseResult SetupParseResult(bool success = true)
+        {
+            var parseResult = new SmsParseResult { Success = success };
+            _smsTextParserServiceMock.Setup(s => s.Parse(_inputModel.Content)).Returns(parseResult);
+            return parseResult;
+        }
 
 
         private ReceivedSmsInputModel CreateReceivedSmsInputModel()
@@ -115,14 +141,16 @@ namespace Tests.Unit.Services
             return new ReceivedSmsInputModel {Sender = "123", Content = "a"};
         }
 
-        private void SetupKnownSender()
+        private void SetupKnownSender(bool isSenderActive = true, bool isWarehouse = false)
         {
-            var contact = new Contact { ContactType = Contact.MOBILE_NUMBER_CONTACT_TYPE, ContactDetail = _inputModel.Sender };
+            var contact = new Contact { ContactType = Contact.MOBILE_NUMBER_CONTACT_TYPE, ContactDetail = _inputModel.Sender, IsMainContact = isSenderActive };
             _outpostMock = new Mock<Outpost>();
             _outpostMock.Setup(o => o.Id).Returns(Guid.NewGuid());
             _outpostMock.Setup(o => o.Contacts).Returns(new List<Contact> { contact });
             _outpostMock.SetupGet(o => o.Client).Returns(new Client());
             _outpostMock.SetupGet(o => o.Name).Returns("n");
+            _outpostMock.SetupGet(o => o.IsWarehouse).Returns(isWarehouse);
+
 
             _contactQueryServiceMock.Setup(qs => qs.Query())
                                     .Returns(new List<Contact> { contact }.AsQueryable());

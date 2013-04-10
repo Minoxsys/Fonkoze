@@ -53,17 +53,16 @@ namespace Web.Services
                 .Take(pageSize)
                 .Skip(indexModel.start.Value);
 
-            var messagesModelListProjection = (from message in rawDataQuery.ToList()
-                                               let outpost = _queryOutpostService.Load(message.OutpostId)
-                                               select new MessageModel
-                                                   {
-                                                       Sender = message.Sender,
-                                                       Date = message.ReceivedDate.ToString("dd/MM/yyyy HH:mm"),
-                                                       Content = message.Content,
-                                                       ParseSucceeded = message.ParseSucceeded,
-                                                       ParseErrorMessage = message.ParseErrorMessage,
-                                                       OutpostName = outpost != null ? outpost.Name : null
-                                                   }).ToArray();
+            List<MessageModel> list = new List<MessageModel>();
+            foreach (RawSmsReceived message in rawDataQuery.ToList())
+            {
+                Outpost outpost = _queryOutpostService.Load(message.OutpostId);
+                list.Add(new MessageModel
+                    {
+                        Sender = message.Sender, Date = message.ReceivedDate.ToString("dd/MM/yyyy HH:mm"), Content = message.Content, ParseSucceeded = message.ParseSucceeded, ParseErrorMessage = message.ParseErrorMessage, OutpostName = outpost != null ? outpost.Name : null
+                    });
+            }
+            var messagesModelListProjection = list.ToArray();
 
 
             return new MessageIndexOuputModel

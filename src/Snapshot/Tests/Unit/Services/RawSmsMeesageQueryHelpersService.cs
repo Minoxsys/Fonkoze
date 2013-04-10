@@ -28,6 +28,28 @@ namespace Tests.Unit.Services
         }
 
         [Test]
+        public void GetMessagesFromOutpost_DoesNotReturnWarehouseItems_WhenThereAreNoWarehouses()
+        {
+            //Arrange
+            var indexModel = new MessagesIndexModel
+            {
+                dir = "ASC",
+                limit = 50,
+                page = 1,
+                start = 0,
+                sort = "Sender"
+            };
+
+            var pageofMessages = new List<RawSmsReceived>().AsQueryable();
+            _rawSmsQueryMock.Setup(service => service.Query()).Returns(pageofMessages);
+
+            //act
+            var result = _sut.GetMessagesFromOutpost(indexModel, OutpostType.Warehouse);
+
+            Assert.That(result.TotalItems, Is.EqualTo(0));
+        }
+
+        [Test]
         public void GetMessagesFromOutpost_ReturnsOnlySellerMessages_WhenOutpostTypeIsSeller()
         {
             //Arrange

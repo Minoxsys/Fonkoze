@@ -56,6 +56,11 @@ namespace Web.ReceiveSmsUseCase.Services
 
             rawSms.ParseSucceeded = parseResult.Success;
             rawSms.ParseErrorMessage = parseResult.Message;
+
+            var outpost = _outpostsQueryService.Query().FirstOrDefault(o => o.Id == rawSms.OutpostId);
+            Debug.Assert(outpost != null, "outpost != null");
+            rawSms.OutpostType = outpost.IsWarehouse ? OutpostType.Warehouse : OutpostType.Seller;
+           
             _saveRawSmsCommand.Execute(rawSms);
 
             if (rawSms.ParseSucceeded)
@@ -64,8 +69,6 @@ namespace Web.ReceiveSmsUseCase.Services
             }
             else
             {
-                var outpost = _outpostsQueryService.Query().FirstOrDefault(o => o.Id == rawSms.OutpostId);
-                Debug.Assert(outpost != null, "outpost != null");
                 var alert = new Alert
                     {
                         AlertType = AlertType.Error,
@@ -89,7 +92,7 @@ namespace Web.ReceiveSmsUseCase.Services
         private Guid GetOutpostForSender(string senderPhoneNumber)
         {
             Contact contact = _contactsQueryService.Query().FirstOrDefault(
-                c => c.ContactType.Equals(Contact.MOBILE_NUMBER_CONTACT_TYPE) && c.ContactDetail.Contains(senderPhoneNumber));
+                c => c.ContactType.Equals(Contact.MOBILE_NUMBER_CONTACT_TYPE) && c.ContactDetail.Contains(senderPhoneNumber) && c.IsMainContact);
             Outpost outpost = _outpostsQueryService.Query().FirstOrDefault(o => o.Contacts.Contains(contact));
 
             return outpost != null ? outpost.Id : Guid.Empty;
