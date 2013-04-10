@@ -61,6 +61,15 @@ namespace Tests.Unit.Services
         }
 
         [Test]
+        public void ProcessSms_SavesTheSmsWithAnErrorMessage_WhenTheSenderIsUnknown()
+        {
+            _sut.ProcessSms(_inputModel);
+
+            _saveRawSmsCommandMock.Verify(
+                cmd => cmd.Execute(It.Is<RawSmsReceived>(received => received.ParseSucceeded == false && received.ParseErrorMessage == "Sender is unknown.")));
+        }
+
+        [Test]
         public void ProcessSms_UpdatesMessageDetailsInDbWithParsingResults()
         {
             SetupKnownSender();
@@ -98,6 +107,8 @@ namespace Tests.Unit.Services
                                                                               a.LastUpdate == null && a.OutpostId == _outpostMock.Object.Id &&
                                                                               a.OutpostName == _outpostMock.Object.Name)));
         }
+
+
 
         private ReceivedSmsInputModel CreateReceivedSmsInputModel()
         {

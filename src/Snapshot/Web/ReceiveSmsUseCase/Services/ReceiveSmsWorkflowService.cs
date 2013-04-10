@@ -45,6 +45,8 @@ namespace Web.ReceiveSmsUseCase.Services
             rawSms.OutpostId = GetOutpostForSender(rawSms.Sender);
             if (IsUnknownOutpost(rawSms.OutpostId))
             {
+                rawSms.ParseSucceeded = false;
+                rawSms.ParseErrorMessage = "Sender is unknown.";
                 _saveRawSmsCommand.Execute(rawSms);
                 _sendSmsService.SendSmsMessage("Phone number not recognized. Please activate your phone number to send messages.", rawSms.Sender);
                 return;
