@@ -312,7 +312,6 @@ namespace Web.Areas.AnalysisManagement.Controllers
         }
 
 
-
         private void LoadUserAndClient()
         {
             var loggedUser = User.Identity.Name;
