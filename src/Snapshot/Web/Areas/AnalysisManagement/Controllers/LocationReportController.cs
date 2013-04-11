@@ -121,7 +121,7 @@ namespace Web.Areas.AnalysisManagement.Controllers
 
         private string GetInfoWindowContentForOutpost(Outpost outpost, IQueryable<OutpostStockLevel> result)
         {
-            string infoWindowContent = ";";
+            string infoWindowContent = "";
             if (outpost != null)
             {
                 foreach (OutpostStockLevel osl in result)
