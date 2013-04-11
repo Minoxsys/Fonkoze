@@ -298,6 +298,8 @@
     <Compile Include="ReceiveSmsUseCase\Models\MessageType.cs" />
     <Compile Include="ReceiveSmsUseCase\Models\ParsedProduct.cs" />
     <Compile Include="ReceiveSmsUseCase\Models\ReceivedSmsInputModel.cs" />
+    <Compile Include="ReceiveSmsUseCase\SmsMessageCommands\SmsCommandFactory.cs" />
+    <Compile Include="ReceiveSmsUseCase\SmsMessageCommands\ActivationMessageCommand.cs" />
     <Compile Include="ReceiveSmsUseCase\Services\ContactMethodsService.cs" />
     <Compile Include="ReceiveSmsUseCase\Services\IContactMethodsService.cs" />
     <Compile Include="ReceiveSmsUseCase\Services\IReceiveSmsWorkflowService.cs" />
@@ -405,6 +407,8 @@
     <Compile Include="Models\UserManager\UserModel.cs" />
     <Compile Include="Models\UserManager\UserOutputModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReceiveSmsUseCase\SmsMessageCommands\ISmsMessageCommand.cs" />
+    <Compile Include="ReceiveSmsUseCase\SmsMessageCommands\UpdateStockMessageCommand.cs" />
     <Compile Include="Security\AuthenticateUser.cs" />
     <Compile Include="Security\RequiresAttribute.cs" />
     <Compile Include="Security\SecurePassword.cs" />

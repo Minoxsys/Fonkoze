@@ -13,6 +13,6 @@ namespace Domain
         public virtual bool ParseSucceeded { get; set; }
         public virtual string ParseErrorMessage { get; set; }
         public virtual DateTime ReceivedDate { get; set; }
-        public virtual OutpostType OutpostType { get; set; }
+        public virtual OutpostType? OutpostType { get; set; }
     }
 }

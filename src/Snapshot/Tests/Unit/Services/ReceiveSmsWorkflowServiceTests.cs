@@ -155,6 +155,13 @@ namespace Tests.Unit.Services
             _sendSmsServiceMock.Verify(s => s.SendSmsMessage(It.IsAny<string>(), _inputModel.Sender));
         }
 
+        [Test]
+        public void ProcessSms_SendSEmailToCentralAccount_WhenTwoConsecutiveAndIncorrectSMSesAreReceivedFromTheSameSender()
+        {
+
+            _sut.ProcessSms(_inputModel);
+        }
+
         #region Helpers
 
         private SmsParseResult SetupStockUpdateParseResult(bool success = true)

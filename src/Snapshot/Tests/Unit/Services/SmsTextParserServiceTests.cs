@@ -132,5 +132,12 @@ namespace Tests.Unit.Services
             result = _sut.Parse(ActivateMessage);
             Assert.That(result.MessageType, Is.EqualTo(MessageType.Activation));
         }
+
+        [Test]
+        public void Parse_ShouldBeFlexibleWithActivationMessageAndAllowPunctuationCharsAtTheEndAndBeginning()
+        {
+            var result = _sut.Parse(",.,." + ActivateMessage + ".,;.");
+            Assert.That(result.MessageType, Is.EqualTo(MessageType.Activation));
+        }
     }
 }

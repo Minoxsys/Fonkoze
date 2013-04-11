@@ -272,6 +272,7 @@
     <Compile Include="Utils\MoqRegistrationHandler.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Unit\ReceiveSmsWorkflow\" />
     <Folder Include="Unit\Routes\Areas\" />
   </ItemGroup>
   <ItemGroup>

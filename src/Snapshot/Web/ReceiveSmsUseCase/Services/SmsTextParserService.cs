@@ -24,7 +24,7 @@ namespace Web.ReceiveSmsUseCase.Services
                 return CreateInvalidMessageFormatResponse();
             }
 
-            if (string.Compare(message, ActivationMessage, StringComparison.OrdinalIgnoreCase) == 0)
+            if (string.Compare(message.Trim(new[] {'.', ',', ';'}), ActivationMessage, StringComparison.OrdinalIgnoreCase) == 0)
             {
                 return CreateActivationMessageResponse();
             }
