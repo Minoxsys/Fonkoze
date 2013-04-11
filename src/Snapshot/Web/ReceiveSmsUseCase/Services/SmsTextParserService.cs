@@ -8,6 +8,7 @@ namespace Web.ReceiveSmsUseCase.Services
         private const int ValidMessageMinimumLength = 6;
         private const string InvalidMessageFormat = "Invalid message format.";
         private const string AtLeastOneProductWrong = "At least one product specification is invalid.";
+        private const string ActivationMessage = "activate";
 
         public SmsParseResult Parse(string message)
         {
@@ -21,6 +22,11 @@ namespace Web.ReceiveSmsUseCase.Services
             if (message.Length < ValidMessageMinimumLength)
             {
                 return CreateInvalidMessageFormatResponse();
+            }
+
+            if (string.Compare(message, ActivationMessage, StringComparison.OrdinalIgnoreCase) == 0)
+            {
+                return CreateActivationMessageResponse();
             }
 
             var tokens = message.Split(new[] {" "}, StringSplitOptions.RemoveEmptyEntries);
@@ -40,6 +46,7 @@ namespace Web.ReceiveSmsUseCase.Services
             }
 
             result.Success = true;
+            result.MessageType = MessageType.StockUpdate;
             return result;
         }
 
@@ -74,6 +81,15 @@ namespace Web.ReceiveSmsUseCase.Services
 
             parsedProduct = product;
             return parseResult;
+        }
+
+        private SmsParseResult CreateActivationMessageResponse()
+        {
+            return new SmsParseResult
+                {
+                    Success = true,
+                    MessageType = MessageType.Activation
+                };
         }
 
         private SmsParseResult CreateInvalidMessageFormatResponse()

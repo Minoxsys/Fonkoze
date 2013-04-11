@@ -8,7 +8,7 @@ using Web.ReceiveSmsUseCase.Models;
 
 namespace Web.ReceiveSmsUseCase.Services
 {
-    public class ReceiveSmsWorkflowService: IReceiveSmsWorkflowService
+    public class ReceiveSmsWorkflowService : IReceiveSmsWorkflowService
     {
         private readonly ISaveOrUpdateCommand<RawSmsReceived> _saveRawSmsCommand;
         private readonly ISendSmsService _sendSmsService;
@@ -17,12 +17,14 @@ namespace Web.ReceiveSmsUseCase.Services
         private readonly ISmsTextParserService _smsTextParserService;
         private readonly IUpdateStockService _updateStockService;
         private readonly ISaveOrUpdateCommand<Alert> _saveOrUpdateAlertCommand;
+        private readonly IContactMethodsService _contactMethodsService;
 
         public ReceiveSmsWorkflowService(ISaveOrUpdateCommand<RawSmsReceived> saveRawSmsCommand, ISendSmsService sendSmsService,
-                                 IQueryService<Outpost> outpostsQueryService, IQueryService<Contact> contactsQueryService,
-                                 ISmsTextParserService smsTextParserService, IUpdateStockService updateStockService,
-                                 ISaveOrUpdateCommand<Alert> saveOrUpdateAlertCommand)
+                                         IQueryService<Outpost> outpostsQueryService, IQueryService<Contact> contactsQueryService,
+                                         ISmsTextParserService smsTextParserService, IUpdateStockService updateStockService,
+                                         ISaveOrUpdateCommand<Alert> saveOrUpdateAlertCommand, IContactMethodsService contactMethodsService)
         {
+            _contactMethodsService = contactMethodsService;
             _saveOrUpdateAlertCommand = saveOrUpdateAlertCommand;
             _updateStockService = updateStockService;
             _smsTextParserService = smsTextParserService;
@@ -42,14 +44,21 @@ namespace Web.ReceiveSmsUseCase.Services
                     ReceivedDate = DateTime.UtcNow
                 };
 
-            rawSms.OutpostId = GetOutpostForSender(rawSms.Sender);
+            //try and identify the sender phone number with an existing phone number assigned to an outpost
+            bool isActiveSender = true;
+            rawSms.OutpostId = GetOutpostWithActiveSender(rawSms.Sender);
             if (IsUnknownOutpost(rawSms.OutpostId))
             {
-                rawSms.ParseSucceeded = false;
-                rawSms.ParseErrorMessage = "Sender is unknown.";
-                _saveRawSmsCommand.Execute(rawSms);
-                _sendSmsService.SendSmsMessage("Phone number not recognized. Please activate your phone number to send messages.", rawSms.Sender);
-                return;
+                isActiveSender = false;
+                rawSms.OutpostId = GetOutpostWithInactiveSender(rawSms.Sender);
+                if (IsUnknownOutpost(rawSms.OutpostId))
+                {
+                    rawSms.ParseSucceeded = false;
+                    rawSms.ParseErrorMessage = "Sender is unknown.";
+                    _saveRawSmsCommand.Execute(rawSms);
+                    _sendSmsService.SendSmsMessage("Phone number not recognized. Please register your phone number to send messages.", rawSms.Sender);
+                    return;
+                }
             }
 
             ISmsParseResult parseResult = _smsTextParserService.Parse(rawSms.Content);
@@ -60,12 +69,25 @@ namespace Web.ReceiveSmsUseCase.Services
             var outpost = _outpostsQueryService.Query().FirstOrDefault(o => o.Id == rawSms.OutpostId);
             Debug.Assert(outpost != null, "outpost != null");
             rawSms.OutpostType = outpost.IsWarehouse ? OutpostType.Warehouse : OutpostType.Seller;
-           
+
             _saveRawSmsCommand.Execute(rawSms);
+
+            if (parseResult.Success && parseResult.MessageType == MessageType.Activation)
+            {
+                _contactMethodsService.ActivatePhoneNumber(smsData.Sender, outpost);
+                return;
+            }
 
             if (rawSms.ParseSucceeded)
             {
-                _updateStockService.UpdateProductStocksForOutpost(parseResult, rawSms.OutpostId);
+                if (isActiveSender)
+                {
+                    _updateStockService.UpdateProductStocksForOutpost(parseResult, rawSms.OutpostId);
+                }
+                else
+                {
+                    _sendSmsService.SendSmsMessage("Phone number not active. Please activate your phone number to send update stock messages.", rawSms.Sender);
+                }
             }
             else
             {
@@ -89,10 +111,20 @@ namespace Web.ReceiveSmsUseCase.Services
             return outpostId == Guid.Empty;
         }
 
-        private Guid GetOutpostForSender(string senderPhoneNumber)
+        private Guid GetOutpostWithActiveSender(string senderPhoneNumber)
+        {
+            return OutpostWithActiveSender(senderPhoneNumber, true);
+        }
+
+        private Guid GetOutpostWithInactiveSender(string senderPhoneNumber)
+        {
+            return OutpostWithActiveSender(senderPhoneNumber, false);
+        }
+
+        private Guid OutpostWithActiveSender(string senderPhoneNumber, bool activeSender)
         {
             Contact contact = _contactsQueryService.Query().FirstOrDefault(
-                c => c.ContactType.Equals(Contact.MOBILE_NUMBER_CONTACT_TYPE) && c.ContactDetail.Contains(senderPhoneNumber) && c.IsMainContact);
+                c => c.ContactType.Equals(Contact.MOBILE_NUMBER_CONTACT_TYPE) && c.ContactDetail.Contains(senderPhoneNumber) && c.IsMainContact == activeSender);
             Outpost outpost = _outpostsQueryService.Query().FirstOrDefault(o => o.Contacts.Contains(contact));
 
             return outpost != null ? outpost.Id : Guid.Empty;

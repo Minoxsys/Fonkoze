@@ -24,6 +24,7 @@ namespace Tests.Unit.Services
         private Mock<ISaveOrUpdateCommand<Alert>> _saveAlertCommandMock;
         private ReceivedSmsInputModel _inputModel;
         private Mock<Outpost> _outpostMock;
+        private Mock<IContactMethodsService> _contactMehtodsServiceMock;
 
         [SetUp]
         public void PerTestSetup()
@@ -35,8 +36,11 @@ namespace Tests.Unit.Services
             _smsTextParserServiceMock = new Mock<ISmsTextParserService>();
             _updateStockServiceMock = new Mock<IUpdateStockService>();
             _saveAlertCommandMock = new Mock<ISaveOrUpdateCommand<Alert>>();
+            _contactMehtodsServiceMock = new Mock<IContactMethodsService>();
             _sut = new ReceiveSmsWorkflowService(_saveRawSmsCommandMock.Object, _sendSmsServiceMock.Object, _outpostsQueryServiceMock.Object,
-                                         _contactQueryServiceMock.Object, _smsTextParserServiceMock.Object, _updateStockServiceMock.Object, _saveAlertCommandMock.Object);
+                                                 _contactQueryServiceMock.Object, _smsTextParserServiceMock.Object, _updateStockServiceMock.Object,
+                                                 _saveAlertCommandMock.Object,
+                                                 _contactMehtodsServiceMock.Object);
 
             _inputModel = CreateReceivedSmsInputModel();
         }
@@ -54,17 +58,6 @@ namespace Tests.Unit.Services
         [Test]
         public void ProcessSms_SendsWarningMessageBackToSenderAndReturns_WhenSenderIsUnknow()
         {
-            _sut.ProcessSms(_inputModel);
-
-            _sendSmsServiceMock.Verify(s => s.SendSmsMessage(It.IsAny<string>(), _inputModel.Sender));
-            _smsTextParserServiceMock.Verify(s => s.Parse(It.IsAny<string>()), Times.Never());
-        }
-
-        [Test]
-        public void ProcessSms_SendsWarningMessageBackToSenderAndReturns_WhenSenderIsMatchedWithAnInactivePhoneNumberExistingInTheSystem()
-        {
-            SetupKnownSender(isSenderActive: false);   
-
             _sut.ProcessSms(_inputModel);
 
             _sendSmsServiceMock.Verify(s => s.SendSmsMessage(It.IsAny<string>(), _inputModel.Sender));
@@ -95,7 +88,7 @@ namespace Tests.Unit.Services
         public void ProcessSms_UpdatesStockForProducts_WhenMessagePrasedSuccesfully()
         {
             SetupKnownSender();
-            var parseResult = SetupParseResult();
+            var parseResult = SetupStockUpdateParseResult();
 
             _sut.ProcessSms(_inputModel);
 
@@ -106,7 +99,7 @@ namespace Tests.Unit.Services
         public void ProcessSms_SavesAnErrorAlert_WhenMessageIsIncorrect()
         {
             SetupKnownSender();
-            SetupParseResult(false);
+            SetupStockUpdateParseResult(false);
 
             _sut.ProcessSms(_inputModel);
 
@@ -121,20 +114,61 @@ namespace Tests.Unit.Services
         public void ProcessSms_SavesTheOutpostTypeInTheRawSmsEntry_WhenSenderIsKnown()
         {
             SetupKnownSender(true, true);
-            SetupParseResult();
+            SetupStockUpdateParseResult();
 
             _sut.ProcessSms(_inputModel);
 
             _saveRawSmsCommandMock.Verify(cmd => cmd.Execute(It.Is<RawSmsReceived>(sms => sms.OutpostType == OutpostType.Warehouse)));
         }
 
-        private SmsParseResult SetupParseResult(bool success = true)
+        [Test]
+        public void ProcessSms_ActivatesSenderPhoneNumberAndReturns_WhenSenderIsKnownButPhoneIsNotActiveAndTheMessageIsActivation()
         {
-            var parseResult = new SmsParseResult { Success = success };
+            SetupKnownSender(false);
+            SetupActivationParseResult();
+
+            _sut.ProcessSms(_inputModel);
+
+            _contactMehtodsServiceMock.Verify(s=>s.ActivatePhoneNumber(_inputModel.Sender, _outpostMock.Object));
+            _updateStockServiceMock.Verify(s => s.UpdateProductStocksForOutpost(It.IsAny<ISmsParseResult>(), It.IsAny<Guid>()), Times.Never());
+        }
+
+        [Test]
+        public void ProcessSms_DoNotAllowUpdatesOfStock_WhenSenderIsKnownButIsNotActive()
+        {
+            SetupKnownSender(false);
+            SetupStockUpdateParseResult();
+
+            _sut.ProcessSms(_inputModel);
+
+            _updateStockServiceMock.Verify(s => s.UpdateProductStocksForOutpost(It.IsAny<ISmsParseResult>(), It.IsAny<Guid>()), Times.Never());
+        }
+
+        [Test]
+        public void ProcessSms_SendsWarningMessageBackToSender_WhenSenderIsMatchedWithAnInactivePhoneNumberExistingInTheSystemAndCorrectUpdateStockMessegeIsParsed()
+        {
+            SetupKnownSender(isSenderActive: false);
+            SetupStockUpdateParseResult();
+
+            _sut.ProcessSms(_inputModel);
+
+            _sendSmsServiceMock.Verify(s => s.SendSmsMessage(It.IsAny<string>(), _inputModel.Sender));
+        }
+
+        #region Helpers
+
+        private SmsParseResult SetupStockUpdateParseResult(bool success = true)
+        {
+            var parseResult = new SmsParseResult { Success = success, MessageType = MessageType.StockUpdate};
             _smsTextParserServiceMock.Setup(s => s.Parse(_inputModel.Content)).Returns(parseResult);
             return parseResult;
         }
 
+        private void SetupActivationParseResult(bool success = true)
+        {
+            var parseResult = new SmsParseResult { Success = success, MessageType = MessageType.Activation };
+            _smsTextParserServiceMock.Setup(s => s.Parse(_inputModel.Content)).Returns(parseResult);
+        }
 
         private ReceivedSmsInputModel CreateReceivedSmsInputModel()
         {
@@ -157,5 +191,7 @@ namespace Tests.Unit.Services
             _outpostsQueryServiceMock.Setup(qs => qs.Query())
                                      .Returns(new List<Outpost> { _outpostMock.Object }.AsQueryable());
         }
+
+        #endregion
     }
 }

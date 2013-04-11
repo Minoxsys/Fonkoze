@@ -295,8 +295,11 @@
     <Compile Include="Helpers\ConvertHelper.cs" />
     <Compile Include="ReceiveSmsUseCase\Models\IParsedProduct.cs" />
     <Compile Include="ReceiveSmsUseCase\Models\ISmsParseResult.cs" />
+    <Compile Include="ReceiveSmsUseCase\Models\MessageType.cs" />
     <Compile Include="ReceiveSmsUseCase\Models\ParsedProduct.cs" />
     <Compile Include="ReceiveSmsUseCase\Models\ReceivedSmsInputModel.cs" />
+    <Compile Include="ReceiveSmsUseCase\Services\ContactMethodsService.cs" />
+    <Compile Include="ReceiveSmsUseCase\Services\IContactMethodsService.cs" />
     <Compile Include="ReceiveSmsUseCase\Services\IReceiveSmsWorkflowService.cs" />
     <Compile Include="Models\AccountOptions\PasswordModel.cs" />
     <Compile Include="Models\AccountOptions\UserModel.cs" />

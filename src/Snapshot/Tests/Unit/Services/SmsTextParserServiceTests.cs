@@ -10,6 +10,7 @@ namespace Tests.Unit.Services
     {
         private ISmsTextParserService _sut;
 
+        private const string ActivateMessage = "activate";
         private const string ValidMessageOneProduct = "MALA88F";
         private const string ValidMessageTwoProducts = "ALBG9999N HIVC9F";
         private const string InvalidMessageThreeProducts = "ALBG9999N MALYjF HIVC9F";
@@ -80,10 +81,10 @@ namespace Tests.Unit.Services
             result.ParsedProducts.Should().NotBeEmpty().And.HaveCount(2);
             result.ParsedProducts[0].ShouldHave()
                                     .AllProperties()
-                                    .EqualTo(new ParsedProduct { ProductGroupCode = "ALB", ProductCode = "G", StockLevel = 9999, IsClientIdentifier = "N" });
+                                    .EqualTo(new ParsedProduct {ProductGroupCode = "ALB", ProductCode = "G", StockLevel = 9999, IsClientIdentifier = "N"});
             result.ParsedProducts[1].ShouldHave()
                                     .AllProperties()
-                                    .EqualTo(new ParsedProduct { ProductGroupCode = "HIV", ProductCode = "C", StockLevel = 9, IsClientIdentifier = "F" });
+                                    .EqualTo(new ParsedProduct {ProductGroupCode = "HIV", ProductCode = "C", StockLevel = 9, IsClientIdentifier = "F"});
         }
 
         [Test]
@@ -104,14 +105,32 @@ namespace Tests.Unit.Services
             result.ParsedProducts.Should().NotBeEmpty().And.HaveCount(3);
             result.ParsedProducts[0].ShouldHave()
                                     .AllProperties()
-                                    .EqualTo(new ParsedProduct { ProductGroupCode = "ALB", ProductCode = "G", StockLevel = 9999, IsClientIdentifier = "N" });
+                                    .EqualTo(new ParsedProduct {ProductGroupCode = "ALB", ProductCode = "G", StockLevel = 9999, IsClientIdentifier = "N"});
             result.ParsedProducts[1].ShouldHave()
                                     .AllProperties()
-                                    .EqualTo(new ParsedProduct { ProductGroupCode = "MAL", ProductCode = "Y", StockLevel = 5, IsClientIdentifier = "F" });
+                                    .EqualTo(new ParsedProduct {ProductGroupCode = "MAL", ProductCode = "Y", StockLevel = 5, IsClientIdentifier = "F"});
             result.ParsedProducts[2].ShouldHave()
                                     .AllProperties()
-                                    .EqualTo(new ParsedProduct { ProductGroupCode = "HIV", ProductCode = "C", StockLevel = 9, IsClientIdentifier = "F" });
+                                    .EqualTo(new ParsedProduct {ProductGroupCode = "HIV", ProductCode = "C", StockLevel = 9, IsClientIdentifier = "F"});
         }
 
+        [Test]
+        public void Parse_ParsingResultMessageTypeMustBeSetToUpdateStock_UnlessTheMessageContainsActivation()
+        {
+            var result = _sut.Parse(MultipleSpaces);
+            Assert.That(result.MessageType, Is.EqualTo(MessageType.StockUpdate));
+
+            result = _sut.Parse(ValidMessageOneProduct);
+            Assert.That(result.MessageType, Is.EqualTo(MessageType.StockUpdate));
+
+            result = _sut.Parse(ValidMessageTwoProducts);
+            Assert.That(result.MessageType, Is.EqualTo(MessageType.StockUpdate));
+
+            result = _sut.Parse(InvalidMessageThreeProducts);
+            Assert.That(result.MessageType, Is.EqualTo(MessageType.StockUpdate));
+
+            result = _sut.Parse(ActivateMessage);
+            Assert.That(result.MessageType, Is.EqualTo(MessageType.Activation));
+        }
     }
 }
