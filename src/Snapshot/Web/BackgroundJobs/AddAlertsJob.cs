@@ -50,8 +50,7 @@ namespace Web.BackgroundJobs
                         (from outpostStockLevel in
                              _queryOutpostStockLevel().Query().Where(it => it.Updated.Value >= DateTime.UtcNow.AddHours(-2) && it.Created != it.Updated)
                          where
-                             outpostStockLevel.StockLevel <= outpostStockLevel.Product.LowerLimit ||
-                             outpostStockLevel.StockLevel >= outpostStockLevel.Product.UpperLimit
+                             outpostStockLevel.StockLevel <= outpostStockLevel.Product.LowerLimit
                          select new AlertOutputModel
                              {
                                  OutpostId = outpostStockLevel.Outpost.Id,

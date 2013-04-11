@@ -37,7 +37,6 @@
         window.feature.ProductNameId = 'productNameId';
         window.feature.ProductDescriptionId = 'productDescriptionId';
         window.feature.ProductLowerLimitId = 'productLowerLimitId';
-        window.feature.ProductUpperLimitId = 'productUpperLimitId';
         window.feature.ProductSMSReferecenceCodeId = 'productSMSCodeId';
         window.feature.formProductGroupNameId = 'productGroupName';
         window.feature.formProductGroupReferenceCodeId = 'productGroupRef';
@@ -138,7 +137,7 @@
             }
         });
 
-        function IsValid(productGroup, productName, productSMSCode,productLowerLimit, productUpperLimit) {
+        function IsValid(productGroup, productName, productSMSCode,productLowerLimit) {
     
             var ok = true;
             if (productGroup.getValue() == null || productGroup.getValue() == '@Guid.Empty') {
@@ -147,17 +146,7 @@
                 ok = false;
             }
             
-            if(productLowerLimit.getValue() > productUpperLimit.getValue()){
-            productLowerLimit.markInvalid('Value of product lower limit should be less than value of product upper limit!');
-            ok = false;
-            }
-
-            if(productLowerLimit.getValue() === productUpperLimit.getValue()){
-            productLowerLimit.markInvalid('Value of product lower limit should not be equal with value of product upper limit!');
-            ok = false;
-            }
-
-            if (productName.getValue() == '') {
+           if (productName.getValue() == '') {
                 productName.markInvalid('Field Product is required!');
                 productName.setValue(null);
                 ok = false;
@@ -369,13 +358,6 @@
                             itemId: window.feature.ProductLowerLimitId,
                             value: me.recordLowerLimit
     
-                        }, {
-                            xtype: 'numberfield',
-                            name: 'UpperLimit',
-                            fieldLabel: 'Upper Limit',
-                            itemId: window.feature.ProductUpperLimitId,
-                            value: me.recordUpperLimit
-
                         },{
                             xtype:'hiddenfield',
                             name: 'Id',
@@ -405,17 +387,16 @@
                             var productName = me.down('#' + window.feature.ProductNameId);
                             var productDescription = me.down('#' + window.feature.ProductDescriptionId);
                             var productLowerLimit = me.down('#' + window.feature.ProductLowerLimitId);
-                            var productUpperLimit = me.down('#' + window.feature.ProductUpperLimitId);
                             var productSMSCode = me.down('#' + window.feature.ProductSMSReferecenceCodeId);
 
-                            var ok = IsValid(productGroup, productName, productSMSCode,productLowerLimit,productUpperLimit);
+                            var ok = IsValid(productGroup, productName, productSMSCode,productLowerLimit);
 
                             if (ok == true) {
                                 var values = {
                                     'Name': productName.getValue(),
                                     'ProductGroup.Id': productGroup.getValue(),
                                     'LowerLimit': productLowerLimit.getValue(),
-                                    'UpperLimit': productUpperLimit.getValue(),
+                                    'UpperLimit': '99999',
                                     'SMSReferenceCode': productSMSCode.getValue(),
                                     'Description': productDescription.getValue()
                                 };
@@ -528,14 +509,6 @@
                 }, {
                     text: "Lower Limit",
                     dataIndex: 'LowerLimit',
-                    flex: 0.5,
-                    minWidth: 80,
-                    align: 'center',
-                    menuDisabled: true,
-                    sortable: false
-                }, {
-                    text: "Upper Limit",
-                    dataIndex: 'UpperLimit',
                     flex: 0.5,
                     minWidth: 80,
                     align: 'center',
