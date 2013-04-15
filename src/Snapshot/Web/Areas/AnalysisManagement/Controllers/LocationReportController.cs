@@ -49,7 +49,7 @@ namespace Web.Areas.AnalysisManagement.Controllers
                         Id = country.Id,
                         Name = country.Name,
                         Number = GetStockLevel(country, null, null, null),
-                        Type = GetCssClassAndInfoWindowContentForMarker(country,null,null,null).CssClass,
+                        Type = GetCssClassAndInfoWindowContentForMarker(country,null,null,null,_client).CssClass,
                         Coordonates = GetCenterCoordonates(country, null , null),
                         InfoWindowContent = "Existing Sellers = "+noOfOutposts
                     };
@@ -65,11 +65,11 @@ namespace Web.Areas.AnalysisManagement.Controllers
         }
 
 
-        internal CssClassAndInfoWinContent GetCssClassAndInfoWindowContentForMarker(Country country, Region region, District district, Outpost outpost)
+        internal CssClassAndInfoWinContent GetCssClassAndInfoWindowContentForMarker(Country country, Region region, District district, Outpost outpost, Client client)
         {
            CssClassAndInfoWinContent returnValue = new CssClassAndInfoWinContent();
 
-            var result = QueryStockLevel.Query().Where(it => it.Client == _client);
+            var result = QueryStockLevel.Query().Where(it => it.Client == client);
             if (country != null)
                 result = result.Where(it => it.Outpost.Country.Id == country.Id);
             if (region != null)
@@ -209,7 +209,7 @@ namespace Web.Areas.AnalysisManagement.Controllers
                         Id = region.Id,
                         Name = region.Name,
                         Number = GetStockLevel(null, region, null, null),
-                        Type = GetCssClassAndInfoWindowContentForMarker(null,region,null,null).CssClass,
+                        Type = GetCssClassAndInfoWindowContentForMarker(null, region, null, null, _client).CssClass,
                         Coordonates = GetCenterCoordonates(null, region, null),
                         InfoWindowContent = "Existing Sellers = " + noOfOutposts
                     };
@@ -255,7 +255,7 @@ namespace Web.Areas.AnalysisManagement.Controllers
                         Id = district.Id,
                         Name = district.Name,
                         Number = GetStockLevel(null, null, district, null),
-                        Type = GetCssClassAndInfoWindowContentForMarker(null,null,district,null).CssClass,
+                        Type = GetCssClassAndInfoWindowContentForMarker(null, null, district, null, _client).CssClass,
                         Coordonates = GetCenterCoordonates(null, null, district),
                         InfoWindowContent = "Existing Sellers = " + noOfOutposts
                     };
@@ -291,8 +291,8 @@ namespace Web.Areas.AnalysisManagement.Controllers
             List<MarkerModel> outposts = new List<MarkerModel>();
 
             foreach (var outpost in outpostQuery.ToList())
-            {  
-                CssClassAndInfoWinContent cssClassAndinfoWinContent = GetCssClassAndInfoWindowContentForMarker(null,null,null,outpost);
+            {
+                CssClassAndInfoWinContent cssClassAndinfoWinContent = GetCssClassAndInfoWindowContentForMarker(null, null, null, outpost, _client);
                 var model = new MarkerModel();
                 model.Id = outpost.Id;
                 model.Name = outpost.Name;
