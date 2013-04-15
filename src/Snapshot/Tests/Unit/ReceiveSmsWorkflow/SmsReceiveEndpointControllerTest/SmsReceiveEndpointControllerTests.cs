@@ -5,7 +5,7 @@ using Web.ReceiveSmsUseCase.Controller;
 using Web.ReceiveSmsUseCase.Models;
 using Web.ReceiveSmsUseCase.Services;
 
-namespace Tests.Unit.Controllers.SmsReceiveEndpointControllerTest
+namespace Tests.Unit.ReceiveSmsWorkflow.SmsReceiveEndpointControllerTest
 {
     [TestFixture]
     public class SmsReceiveEndpointControllerTests

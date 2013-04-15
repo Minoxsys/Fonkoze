@@ -220,7 +220,8 @@
     <Compile Include="Unit\Controllers\RoleManagerControllerTests\GetPermissionsForRoleMethod.cs" />
     <Compile Include="Unit\Controllers\RoleManagerControllerTests\ObjectMother.cs" />
     <Compile Include="Unit\Controllers\RoleManagerControllerTests\OverviewMethod.cs" />
-    <Compile Include="Unit\Controllers\SmsReceiveEndpointControllerTest\SmsReceiveEndpointControllerTests.cs" />
+    <Compile Include="Unit\ReceiveSmsWorkflow\ActivationMessageCommandTests.cs" />
+    <Compile Include="Unit\ReceiveSmsWorkflow\SmsReceiveEndpointControllerTest\SmsReceiveEndpointControllerTests.cs" />
     <Compile Include="Unit\Controllers\UnautorizedAccessController_Tests.cs" />
     <Compile Include="Unit\Controllers\CssControllerTests.cs" />
     <Compile Include="Unit\Controllers\JavascriptControllerTests.cs" />
@@ -242,6 +243,7 @@
     <Compile Include="Unit\ModelProviders\RoleManagerAssignModelProvider.cs" />
     <Compile Include="Unit\ModelProviders\RoleManagerEditOutput_Tests.cs" />
     <Compile Include="Unit\ModelProviders\RoleManagerUnAssignModelProvider.cs" />
+    <Compile Include="Unit\ReceiveSmsWorkflow\UpdateStockMessageCommandTests.cs" />
     <Compile Include="Unit\Routes\DefaultRoutesRegistrar_Tests.cs" />
     <Compile Include="Unit\Routes\IgnoredRoutesRegistrar_Tests.cs" />
     <Compile Include="Unit\Routes\RoleManagerRoutesRegistrar_Tests.cs" />
@@ -256,15 +258,15 @@
     <Compile Include="Unit\Services\ProductLevelRequestMessagesDispatcherTests\DispatchMessagesForProductLevelRequestMethod.cs" />
     <Compile Include="Unit\Services\ProductLevelRequestMessagesDispatcherTests\ObjectMother.cs" />
     <Compile Include="Unit\Services\RawSmsMeesageQueryHelpersService.cs" />
-    <Compile Include="Unit\Services\ReceiveSmsWorkflowServiceTests.cs" />
+    <Compile Include="Unit\ReceiveSmsWorkflow\ReceiveSmsWorkflowServiceTests.cs" />
     <Compile Include="Unit\Services\SmsGatewayServiceTest\ObjectMother.cs" />
     <Compile Include="Unit\Services\SmsGatewayServiceTest\SendSmsMethod.cs" />
     <Compile Include="Unit\Services\SmsRequestServiceTest\ObjectMother.cs" />
     <Compile Include="Unit\Services\SmsRequestServiceTest\SendProductLevelRequestMessageMethod.cs" />
-    <Compile Include="Unit\Services\SmsTextParserServiceTests.cs" />
+    <Compile Include="Unit\ReceiveSmsWorkflow\SmsTextParserServiceTests.cs" />
     <Compile Include="Unit\Services\StoreProductLevelRequestDetailTests\ObjectMother.cs" />
     <Compile Include="Unit\Services\StoreProductLevelRequestDetailTests\StoreProductLevelRequestDetailMethod.cs" />
-    <Compile Include="Unit\Services\UpdateProductStockServiceTests.cs" />
+    <Compile Include="Unit\ReceiveSmsWorkflow\UpdateProductStockServiceTests.cs" />
     <Compile Include="Utils\AutoMock.cs" />
     <Compile Include="Utils\FakeControllerContext.cs" />
     <Compile Include="Utils\JsonResultHelpers.cs" />
@@ -272,7 +274,6 @@
     <Compile Include="Utils\MoqRegistrationHandler.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Unit\ReceiveSmsWorkflow\" />
     <Folder Include="Unit\Routes\Areas\" />
   </ItemGroup>
   <ItemGroup>

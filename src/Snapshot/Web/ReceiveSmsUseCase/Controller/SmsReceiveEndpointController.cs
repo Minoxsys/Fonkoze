@@ -1,8 +1,6 @@
 ﻿using System.Web.Mvc;
-using Web.Models;
 using Web.ReceiveSmsUseCase.Models;
 using Web.ReceiveSmsUseCase.Services;
-using Web.Services;
 
 namespace Web.ReceiveSmsUseCase.Controller
 {

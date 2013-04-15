@@ -8,7 +8,7 @@ using System.Linq;
 using Web.ReceiveSmsUseCase.Models;
 using Web.ReceiveSmsUseCase.Services;
 
-namespace Tests.Unit.Services
+namespace Tests.Unit.ReceiveSmsWorkflow
 {
     [TestFixture]
     public class UpdateProductStockServiceTests

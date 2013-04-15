@@ -15,14 +15,14 @@ namespace Web.ReceiveSmsUseCase.Services
         private readonly IQueryService<Outpost> _outpostsQueryService;
         private readonly IQueryService<Contact> _contactsQueryService;
         private readonly ISmsTextParserService _smsTextParserService;
-        private readonly SmsCommandFactory _smsCommandFactory;
+        private readonly ISmsCommandFactory _smsCommandFactory;
 
         public ReceiveSmsWorkflowService(ISaveOrUpdateCommand<RawSmsReceived> saveRawSmsCommand, ISendSmsService sendSmsService,
                                          IQueryService<Outpost> outpostsQueryService, IQueryService<Contact> contactsQueryService,
-                                         ISmsTextParserService smsTextParserService, IUpdateStockService updateStockService,
-                                         ISaveOrUpdateCommand<Alert> saveOrUpdateAlertCommand, IContactMethodsService contactMethodsService)
+                                         ISmsTextParserService smsTextParserService, ISmsCommandFactory smsMessageCommandFactory)
         {
-            _smsCommandFactory = new SmsCommandFactory(contactMethodsService, saveOrUpdateAlertCommand, updateStockService, sendSmsService);
+            _smsCommandFactory = smsMessageCommandFactory;
+            //new SmsCommandFactory(contactMethodsService, saveOrUpdateAlertCommand, updateStockService, sendSmsService, null);
             _smsTextParserService = smsTextParserService;
             _contactsQueryService = contactsQueryService;
             _outpostsQueryService = outpostsQueryService;

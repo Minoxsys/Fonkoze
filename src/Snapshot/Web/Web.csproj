@@ -298,6 +298,8 @@
     <Compile Include="ReceiveSmsUseCase\Models\MessageType.cs" />
     <Compile Include="ReceiveSmsUseCase\Models\ParsedProduct.cs" />
     <Compile Include="ReceiveSmsUseCase\Models\ReceivedSmsInputModel.cs" />
+    <Compile Include="ReceiveSmsUseCase\SmsMessageCommands\ISmsCommandFactory.cs" />
+    <Compile Include="ReceiveSmsUseCase\SmsMessageCommands\NullObjectCommand.cs" />
     <Compile Include="ReceiveSmsUseCase\SmsMessageCommands\SmsCommandFactory.cs" />
     <Compile Include="ReceiveSmsUseCase\SmsMessageCommands\ActivationMessageCommand.cs" />
     <Compile Include="ReceiveSmsUseCase\Services\ContactMethodsService.cs" />
@@ -412,6 +414,9 @@
     <Compile Include="Security\AuthenticateUser.cs" />
     <Compile Include="Security\RequiresAttribute.cs" />
     <Compile Include="Security\SecurePassword.cs" />
+    <Compile Include="Services\Configuration\ConfigurationKeys.cs" />
+    <Compile Include="Services\Configuration\ConfigurationService.cs" />
+    <Compile Include="Services\Configuration\IConfigurationService.cs" />
     <Compile Include="Services\FormattingStrategy.cs" />
     <Compile Include="Services\GenerateProductLevelDetailsCommand.cs" />
     <Compile Include="Services\IRawSmsMeesageQueryHelpersService.cs" />
@@ -444,6 +449,9 @@
     <Compile Include="ReceiveSmsUseCase\Services\ReceiveSmsWorkflowService.cs" />
     <Compile Include="Services\SendEmailService.cs" />
     <Compile Include="ReceiveSmsUseCase\Services\SendSmsService.cs" />
+    <Compile Include="Services\SendEmail\EmailSendingService.cs" />
+    <Compile Include="Services\SendEmail\IEmailSendingService.cs" />
+    <Compile Include="Services\SendEmail\SmtpServerDetails.cs" />
     <Compile Include="Services\SmsGatewayService.cs" />
     <Compile Include="Services\SmsGatewaySettingsService.cs" />
     <Compile Include="ReceiveSmsUseCase\Models\SmsParseResult.cs" />
