@@ -1,0 +1,252 @@
+﻿@section page_title{
+    Campaign Administration: Send Messages
+}
+@{
+    Html.RenderPartial("_SubNavigation");
+    Html.RenderPartial("_CampaignManagementSideBar");
+}
+
+<script type="text/javascript">
+    Ext.onReady(function () {
+        var administrationBtnId = window.res.header.navigation.administration;
+        var administrationBtn = Ext.getCmp(administrationBtnId);
+        administrationBtn.toggle(true);
+
+        var campaignAdministrationBtnId = window.res.header.subnavigation.buttonTabs.campaign;
+        var campaignAdministrationBtn = Ext.getCmp(campaignAdministrationBtnId);
+        campaignAdministrationBtn.toggle(true);
+
+        var btnId = window.res.content.maincontent.sidebar.sendMessages;
+        var senMessagesBtn = Ext.getCmp(btnId);
+        senMessagesBtn.toggle(true);
+
+    });
+</script>
+
+<style>
+    .x-grid-checkheader
+    {
+        height: 14px;
+        background-image: url('@Url.AssetUrl("img/unchecked.gif")');
+        background-position: 50% -2px;
+        background-repeat: no-repeat;
+        background-color: transparent;
+    }
+    
+    .x-grid-checkheader-checked
+    {
+        background-image: url('@Url.AssetUrl("img/checked.gif")');
+    }
+    
+    .x-grid-checkheader-editor .x-form-cb-wrap
+    {
+        text-align: center;
+    }
+</style>
+
+<script type="text/javascript">
+    Ext.onReady(function () {
+        window.feature = {};
+
+        window.feature.leftGrid = 'Grid-Add-Seller-Left';
+        window.feature.rightGrid = 'Grid-Add-Seller-Right';
+                
+
+        window.feature.leftGridStore = Ext.create('Ext.data.Store', {
+            remoteSuport: true,
+            cls: 'white-border',
+            fields: ['Id', 'Name', 'Selected'],
+            proxy: {
+                type: 'ajax',
+                url: '@Url.RouteUrl(CampaignManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "SendMessages", action = "GetOutposts" })',
+                reader: {
+                    type: 'json',
+                    root: 'Items',
+                    totalProperty: 'TotalItems'
+                },
+                simpleSortMode: true
+            },
+            sorters: [
+                {
+                    property: 'Name',
+                    direction: 'ASC'
+                }
+            ]
+        });
+                
+        Ext.define('Ext.ux.CheckColumn', {
+            extend: 'Ext.grid.column.Column',
+            alias: 'widget.checkcolumn',
+
+            tdCls: Ext.baseCSSPrefix + 'grid-cell-checkcolumn',
+
+            constructor: function () {
+                this.addEvents(
+                    'checkchange'
+                    );
+                this.callParent(arguments);
+            },
+
+            processEvent: function (type, view, cell, recordIndex, cellIndex, e) {
+                if (type == 'mousedown' || (type == 'keydown' && (e.getKey() == e.ENTER || e.getKey() == e.SPACE))) {
+                    var record = view.panel.store.getAt(recordIndex),
+                    dataIndex = this.dataIndex,
+                    checked = !record.get(dataIndex);
+
+                    record.set(dataIndex, checked);
+                    this.fireEvent('checkchange', this, recordIndex, checked);
+                    // cancel selection.
+                    return false;
+                }
+                else {
+                    return this.callParent(arguments);
+                }
+            },
+
+            renderer: function (value, styles, record, recordIndex, columnIndex, store, gridView) {
+                var cssPrefix = Ext.baseCSSPrefix,
+                cls = [cssPrefix + 'grid-checkheader'];
+
+                if (value) {
+                    cls.push(cssPrefix + 'grid-checkheader-checked');
+                }
+                return '<div class="' + cls.join(' ') + '">&#160;</div>';
+            }
+        });
+
+      
+    });
+
+</script>
+
+<script type="text/javascript">
+    Ext.onReady(function () {
+        var contentRes = window.res.content;
+        var mainContent = Ext.getCmp(contentRes.maincontent.id);
+      
+        var topContainer = Ext.create('Ext.container.Container', {
+            margin: '15 15 15 15',
+            padding: '20 20 0 20',
+            id: 'TopContainer',
+            layout: {
+                align: 'stretch',
+                type: 'vbox'
+            },
+            items: [{
+                xtype: 'container',
+                height: 50,
+                layout: 'column',
+                items: [{
+                    xtype: 'container',
+                    height: 30,
+                    width: 30,
+                    html:'&nbsp;'
+                }, {
+                    xtype: 'image',
+                    src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/SubMenu/CampaignSelected.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                        margin: '0 10 10 0'
+                    }, {
+                        xtype: 'label',
+                        cls: 'x-title-label',
+                        html: 'Send Messages To Sellers'
+                    }]
+            },
+            {
+                xtype: 'container',
+                flex: 1,
+                margin: '20 0 0 20',
+                layout: {
+                    type: 'hbox',
+                    align: 'stretch'
+                },
+                items: [{
+                    xtype: 'container',
+                    flex: 2,
+                    margin: '20 15 20 0',
+                    layout: {
+                        type: 'vbox',
+                        align: 'stretch'
+                    },
+                    items: [
+                         {
+                             xtype: 'label',
+                             itemId: 'Label-For-Left-Grid',
+                             text: 'Sellers'
+                         }, {
+                             xtype: 'gridpanel',
+                             cls: 'white-border',
+                             itemId: window.feature.leftGrid,
+                             store: window.feature.leftGridStore,
+                             columnLines: true,
+                             margin: '0 0 10 0',
+                             loadMask: true,
+                             autoScroll: true,
+                             columns: [
+                                   {
+                                       text: 'Name',
+                                       dataIndex: 'Name',
+                                       menuDisabled: true
+                                   },
+                                   {
+                                       xtype:'checkcolumn',
+                                       text: 'Selected',
+                                       dataIndex: 'lastname',
+                                       menuDisabled: true,
+                                       sortable:false,
+                                   }
+                             ],
+                         }]}
+                         , {
+                             xtype: 'container',
+                             flex: 2,
+                             margin: '20 10 10 10',
+                             layout: {
+                                 type: 'vbox',
+                                 align: 'stretch'
+                             },
+                             items: [
+                                 {
+                                     xtype: 'label',
+                                     itemId: 'Label-For-Right-Grid',
+                                     text:'Selected Sellers'
+                                 }, {
+                                     xtype: 'gridpanel',
+                                     cls: 'white-border',
+                                     itemId: window.feature.rightGrid,
+                                     store: window.feature.rightGridStore,
+                                     columnLines: true,
+                                     loadMask: true,
+                                     flex: 3,
+                                     autoScroll: true,
+                                     columns: [
+                                         {
+                                             text: "Name",
+                                             dataIndex: 'Name',
+                                             menuDisabled: true,
+                                             flex: 1,
+                                             sortable: true
+                                         }, {
+                                             xtype: 'checkcolumn',
+                                             menuDisabled: true,
+                                             sortable: false,
+                                             dataIndex: 'Selected',
+                                             header: 'Selected'
+                                         }
+                                     ]
+                                 }
+                             ]
+                         }
+                    ]
+                }]
+
+          
+        });
+
+      
+
+        mainContent.add(topContainer);
+        window.feature.leftGridStore.load();
+      
+    });
+
+</script>

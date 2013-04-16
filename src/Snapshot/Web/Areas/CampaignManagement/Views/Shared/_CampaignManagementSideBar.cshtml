@@ -9,12 +9,14 @@
             existingRequest: 'SideBar-CampaignAdministration-ExistingRequest-Button',
             manageCampaigns: 'SideBar-CampaignAdministration-ManageCampaigns-Button',
             automaticSchedules: 'SideBar-CampaignAdministration-AutomaticSchedules-Button',
-            createProductLevelRequests: 'SideBar-CampaignAdministration-CreateProductLevelRequests-Button'
+            createProductLevelRequests: 'SideBar-CampaignAdministration-CreateProductLevelRequests-Button',
+            sendMessages: 'SideBar-CampaignAdministration-SendMessages-Button'
         }
     };
 
     window.res.link.productLevelRequest = '@(Url.RouteUrl<ProductLevelRequestController>(x => x.Overview(), CampaignManagementAreaRegistration.DEFAULT_ROUTE))';
     window.res.link.existingRequests = '@(Url.RouteUrl<ExistingRequestsController>(x => x.Overview(), CampaignManagementAreaRegistration.DEFAULT_ROUTE))';
+    window.res.link.sendMessages = '@(Url.RouteUrl<SendMessagesController>(x => x.Overview(), CampaignManagementAreaRegistration.DEFAULT_ROUTE))';
 
     Ext.onReady(function () {
 
@@ -114,6 +116,21 @@
                             iconCls:'x-btn-text-icon',
                             handler: function () {
                                 navigateTo(window.res.link.productLevelRequest);
+                            },
+                            enableToggle: true
+                        }, {
+                            xtype: 'button',
+                            id: contentRes.maincontent.sidebar.sendMessages,
+                            toggleGroup: contentRes.maincontent.sidebar.group,
+                            text: 'Send Messages',
+                            margin: '0 20 0 0',
+                            padding: '0 0 0 20',
+                            height: 30,
+                            ui: 'snapshot-sidebar-btn',
+                            icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/arrow.gif"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                            iconCls: 'x-btn-text-icon',
+                            handler: function () {
+                                navigateTo(window.res.link.sendMessages);
                             },
                             enableToggle: true
                         }

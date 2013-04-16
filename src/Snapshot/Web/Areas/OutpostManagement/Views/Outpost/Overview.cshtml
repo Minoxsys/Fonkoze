@@ -1031,7 +1031,7 @@
                                             msgConfirm.msgButtons['yes'].ui = 'snapshot-add-btn';
                                             msgConfirm.msgButtons['ok'].ui = 'snapshot-add-btn';
                                             msgConfirm.msgButtons['ok'].margin = '10 10 20 0';
-                                            msgConfirm.confirm(_t('Confirm deletion'), Ext.String.format(_t('Are you sure you want to delete outpost `{0}`'), rec.get('Name')), function (button) {
+                                            msgConfirm.confirm(_t('Confirm deletion'), Ext.String.format(_t('Are you sure you want to delete seller `{0}`'), rec.get('Name')), function (button) {
                                                 if (button === 'yes'){
                                                     var postToUrl = '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Outpost", action = "Delete" })';
                                                     var action = $.post(postToUrl, {
@@ -1058,8 +1058,8 @@
                     bbar: Ext.create('Ext.PagingToolbar', {
                         store: window.feature.outpostsStore,
                         displayInfo: true,
-                        displayMsg: 'Displaying outposts {0} - {1} of {2}',
-                        emptyMsg: "No outposts to display",
+                        displayMsg: 'Displaying sellers {0} - {1} of {2}',
+                        emptyMsg: "No sellers to display",
                         ui: 'snapshot-pagination-toolbar'
                     })
                 }

@@ -164,6 +164,7 @@
     <Compile Include="Areas\AnalysisManagement\Models\ReportRegionLevel\ChartReferenceOutputModel.cs" />
     <Compile Include="Areas\AnalysisManagement\Models\ReportRegionLevel\ProductsReferenceOutputModel.cs" />
     <Compile Include="Areas\CampaignManagement\Controllers\ExistingRequestsController.cs" />
+    <Compile Include="Areas\CampaignManagement\Controllers\SendMessagesController.cs" />
     <Compile Include="Areas\CampaignManagement\Models\ProductLevelRequest\GetProductLevelRequestDetailsModel.cs" />
     <Compile Include="Areas\CampaignManagement\Models\ProductLevelRequest\ProductLevelDetailModel.cs" />
     <Compile Include="Areas\CampaignManagement\Models\ExistingRequests\GetExistingRequestModel.cs" />
@@ -474,7 +475,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\CampaignManagement\Views\Campaign\Overview.cshtml" />
-    <Content Include="Areas\CampaignManagement\Views\Web.config" />
+    <Content Include="Areas\CampaignManagement\Views\Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Areas\CampaignManagement\Views\_ViewStart.cshtml" />
     <Content Include="Assets\css\button-template.css" />
     <Content Include="Assets\css\color-scheme.css" />
@@ -2232,6 +2235,7 @@
     <Content Include="Areas\MessagesManagement\Views\SentMessages\Overview.cshtml" />
     <Content Include="Areas\MessagesManagement\Views\Warehouse\Overview.cshtml" />
     <Content Include="Areas\MessagesManagement\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\CampaignManagement\Views\SendMessages\Overview.cshtml" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\core\_core.scss" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\core\_reset.scss" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\layout\_layout.scss" />
