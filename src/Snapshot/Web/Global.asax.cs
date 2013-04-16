@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using Autofac;
+using Autofac.Integration.Mvc;
+using Persistence;
 using System.Web.Mvc;
-using System.Web.Routing;
 using Web.Bootstrap.Container;
 using Web.Bootstrap.Routes;
-using Persistence;
-using Autofac;
-using Autofac.Integration.Mvc;
 using WebBackgrounder;
-using Autofac.Core;
 
 namespace Web
 {
@@ -18,15 +12,15 @@ namespace Web
     // visit http://go.microsoft.com/?LinkId=9394801
     public class MvcApplication : System.Web.HttpApplication, IContainerAccessor
     {
-        private static JobManager jobManager;
+        private static JobManager _jobManager;
 
-        private static IContainer container;
+        private static IContainer _container;
 
         IContainer IContainerAccessor.Container
         {
             get
             {
-                return container;
+                return _container;
             }
         }
 
@@ -40,8 +34,8 @@ namespace Web
         {
             InitializeContainer();
 
-            jobManager = CreateJobWorkersManager();
-            jobManager.Start();
+            _jobManager = CreateJobWorkersManager();
+            _jobManager.Start();
 
             AreaRegistration.RegisterAllAreas();
 
@@ -51,7 +45,7 @@ namespace Web
 
         protected void Application_Stop()
         {
-            jobManager.Stop();
+            _jobManager.Stop();
         }
 
 
@@ -65,24 +59,24 @@ namespace Web
             var builder = new ContainerBuilder();
             builder.RegisterControllers(typeof(MvcApplication).Assembly);
             ContainerRegistrar.Register(builder);
-            container = builder.Build();
-            DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
+            _container = builder.Build();
+            DependencyResolver.SetResolver(new AutofacDependencyResolver(_container));
         }
 
         private static JobManager CreateJobWorkersManager()
         {
             var jobs = new IJob[]
             {
-                container.Resolve<Web.BackgroundJobs.EmptyJob>(),
-                container.Resolve<Web.BackgroundJobs.AddAlertsJob>(),
-                container.Resolve<Web.BackgroundJobs.CampaignExecutionJob>()
+                _container.Resolve<BackgroundJobs.EmptyJob>(),
+                _container.Resolve<BackgroundJobs.AddAlertsJob>(),
+                _container.Resolve<BackgroundJobs.CampaignExecutionJob>()
                 
                 //new SampleJob(TimeSpan.FromSeconds(35), TimeSpan.FromSeconds(60)),
                 /* new ExceptionJob(TimeSpan.FromSeconds(15)), */
                 //new WorkItemCleanupJob(TimeSpan.FromMinutes(1), TimeSpan.FromMinutes(5), new WorkItemsContext())
             };
 
-            var coordinator = new WebFarmJobCoordinator(new NHibernateWorkItemRepository(() => container.Resolve<INHibernateSessionFactory>().CreateSession()));
+            var coordinator = new WebFarmJobCoordinator(new NHibernateWorkItemRepository(() => _container.Resolve<INHibernateSessionFactory>().CreateSession()));
             var manager = new JobManager(jobs, coordinator);
 
             //manager.Fail(ex => Elmah.ErrorLog.GetDefault(null).Log(new Error(ex)));

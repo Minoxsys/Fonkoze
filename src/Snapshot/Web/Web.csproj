@@ -291,6 +291,12 @@
     <Compile Include="Bootstrap\Container\ServicesConventionsRegistrar.cs" />
     <Compile Include="Controllers\AccountOptionsController.cs" />
     <Compile Include="Controllers\SendMessageController.cs" />
+    <Compile Include="Helpers\ProjectLinkExtensions.cs" />
+    <Compile Include="LocalizationResources\Strings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Strings.resx</DependentUpon>
+    </Compile>
     <Compile Include="ReceiveSmsUseCase\Controller\SmsReceiveEndpointController.cs" />
     <Compile Include="Helpers\ConvertHelper.cs" />
     <Compile Include="ReceiveSmsUseCase\Models\IParsedProduct.cs" />
@@ -328,7 +334,7 @@
     <Compile Include="Bootstrap\AppSettings.cs" />
     <Compile Include="Bootstrap\Container\AuthRegistrar.cs" />
     <Compile Include="Bootstrap\Container\ContainerRegistrar.cs" />
-    <Compile Include="Bootstrap\Container\IUnityContainerAccesor.cs" />
+    <Compile Include="Bootstrap\Container\IContainerAccesor.cs" />
     <Compile Include="Bootstrap\Container\PersistenceRegistrar.cs" />
     <Compile Include="Bootstrap\Converters\DateTimeToStringTypeConverter.cs" />
     <Compile Include="Bootstrap\Converters\NullableDateTimeToStringTypeConverter.cs" />
@@ -350,11 +356,9 @@
     <Compile Include="Controllers\RoleManagerController.cs" />
     <Compile Include="Controllers\UserManagerController.cs" />
     <Compile Include="Helpers\DateFormatter.cs" />
-    <Compile Include="Helpers\DomainEntityHelper.cs" />
     <Compile Include="Helpers\EmptyStringToDotsFormatter.cs" />
     <Compile Include="Helpers\NullableDoubleFormatter.cs" />
     <Compile Include="Helpers\NullableIntFormatter.cs" />
-    <Compile Include="Helpers\ProjectLinkExtensions.cs" />
     <Compile Include="Helpers\StringPlaceholder.cs" />
     <Compile Include="Models\Account\ChangePasswordModel.cs" />
     <Compile Include="Models\Account\LogOnModel.cs" />
@@ -451,6 +455,8 @@
     <Compile Include="ReceiveSmsUseCase\Services\SendSmsService.cs" />
     <Compile Include="Services\SendEmail\EmailSendingService.cs" />
     <Compile Include="Services\SendEmail\IEmailSendingService.cs" />
+    <Compile Include="Services\SendEmail\IPreconfiguredEmailService.cs" />
+    <Compile Include="Services\SendEmail\PreconfiguredEmailService.cs" />
     <Compile Include="Services\SendEmail\SmtpServerDetails.cs" />
     <Compile Include="Services\SmsGatewayService.cs" />
     <Compile Include="Services\SmsGatewaySettingsService.cs" />
@@ -2485,6 +2491,13 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\CampaignManagement\Views\RequestSchedule\Overview.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="LocalizationResources\Strings.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

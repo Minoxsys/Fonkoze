@@ -10,7 +10,6 @@ using System.Net.Mail;
 using Web.ReceiveSmsUseCase.Models;
 using Web.ReceiveSmsUseCase.Services;
 using Web.ReceiveSmsUseCase.SmsMessageCommands;
-using Web.Services.Configuration;
 using Web.Services.SendEmail;
 
 namespace Tests.Unit.ReceiveSmsWorkflow
@@ -22,10 +21,8 @@ namespace Tests.Unit.ReceiveSmsWorkflow
         private Mock<IUpdateStockService> _updateProductStockServiceMock;
         private Mock<ISendSmsService> _sendSmsServiceMock;
         private Mock<ISaveOrUpdateCommand<Alert>> _saveAlertCmdMock;
-        private Mock<IEmailSendingService> _sendEmailServiceMock;
+        private Mock<IPreconfiguredEmailService> _sendEmailServiceMock;
         private Mock<IQueryService<Alert>> _alertQueryServiceMock;
-        private Mock<IConfigurationService> _configurationServiceMock;
-
         private Mock<Outpost> _outpostMock;
         private ReceivedSmsInputModel _inputModel;
 
@@ -35,11 +32,10 @@ namespace Tests.Unit.ReceiveSmsWorkflow
             _updateProductStockServiceMock = new Mock<IUpdateStockService>();
             _sendSmsServiceMock = new Mock<ISendSmsService>();
             _saveAlertCmdMock = new Mock<ISaveOrUpdateCommand<Alert>>();
-            _sendEmailServiceMock = new Mock<IEmailSendingService>();
-            _configurationServiceMock = new Mock<IConfigurationService>();
+            _sendEmailServiceMock = new Mock<IPreconfiguredEmailService>();
             _alertQueryServiceMock = new Mock<IQueryService<Alert>>();
             _sut = new UpdateStockMessageCommand(_updateProductStockServiceMock.Object, _sendSmsServiceMock.Object, _saveAlertCmdMock.Object,
-                                                 _sendEmailServiceMock.Object, _configurationServiceMock.Object, _alertQueryServiceMock.Object);
+                                                 _sendEmailServiceMock.Object, _alertQueryServiceMock.Object);
 
             _inputModel = new ReceivedSmsInputModel {Sender = "123"};
         }
@@ -55,35 +51,31 @@ namespace Tests.Unit.ReceiveSmsWorkflow
                                                   {
                                                       AlertType = AlertType.StockLevel,
                                                       Created = new DateTime(2013, 1, 3),
-                                                      OutpostName = "a",
-                                                      Contact = "123"
+                                                      OutpostName = "abcdefg",
+                                                      Contact = "1234567"
                                                   },
-                                              new Alert {AlertType = AlertType.Error, Created = new DateTime(2013, 1, 7), OutpostName = "a", Contact = "123"},
+                                              new Alert
+                                                  {
+                                                      AlertType = AlertType.Error,
+                                                      Created = new DateTime(2013, 1, 7),
+                                                      OutpostName = "abcdefg",
+                                                      Contact = "1234567"
+                                                  },
                                               new Alert
                                                   {
                                                       AlertType = AlertType.StockLevel,
                                                       Created = new DateTime(2013, 1, 5),
-                                                      OutpostName = "a",
-                                                      Contact = "123"
+                                                      OutpostName = "abcdefg",
+                                                      Contact = "1234567"
                                                   }
                                           }.AsQueryable());
-
-            _configurationServiceMock.SetupGet(s => s.Keys).Returns(new ConfigurationKeys());
-            _configurationServiceMock.SetupGet(s => s["SendEmail.Host"]).Returns("a@a.com");
-            _configurationServiceMock.SetupGet(s => s["SendEmail.Port"]).Returns("25");
-            _configurationServiceMock.SetupGet(s => s["SendEmail.From"]).Returns("b@b.com");
-            _configurationServiceMock.SetupGet(s => s["SendEmail.Password"]).Returns("pass");
-            _configurationServiceMock.SetupGet(s => s["SendEmail.To"]).Returns("me@me.com");
-            _configurationServiceMock.SetupGet(s => s["SendEmail.CC"]).Returns("you@you.com");
+            _sendEmailServiceMock.Setup(s => s.CreatePartialMailMessageFromConfig()).Returns(new MailMessage());
 
 
-            _sut.Execute(new ReceivedSmsInputModel {Sender = "123"}, new SmsParseResult {Success = false}, new Outpost {Name = "a"});
+            _sut.Execute(new ReceivedSmsInputModel {Sender = "1234567"}, new SmsParseResult {Success = false}, new Outpost {Name = "abcdefg"});
 
-            _sendEmailServiceMock.Verify(
-                s => s.SendEmail(It.Is<MailMessage>(m => m.To.FirstOrDefault(adr => adr.Address == "me@me.com") != null &&
-                                                         m.CC.FirstOrDefault(adr => adr.Address == "you@you.com") != null &&
-                                                         m.From.Address == "b@b.com"),
-                                 It.Is<SmtpServerDetails>(c => c.FromAddress == "b@b.com" && c.FromPassword == "pass" && c.Port == 25 && c.Host == "a@a.com")));
+            _sendEmailServiceMock.Verify(s => s.SendEmail(It.Is<MailMessage>(m => m.Body.Contains("abcdefg") && m.Body.Contains("1234567"))));
+
         }
 
         [Test]
@@ -142,7 +134,7 @@ namespace Tests.Unit.ReceiveSmsWorkflow
             _outpostMock.Setup(o => o.Id).Returns(Guid.NewGuid());
             _outpostMock.Setup(o => o.Contacts).Returns(new List<Contact> {contact});
             _outpostMock.SetupGet(o => o.Client).Returns(new Client());
-            _outpostMock.SetupGet(o => o.Name).Returns("n");
+            _outpostMock.SetupGet(o => o.Name).Returns("MyOutpostName");
             _outpostMock.SetupGet(o => o.IsWarehouse).Returns(isWarehouse);
         }
     }

@@ -17,5 +17,6 @@ namespace Web.Models.Alerts
         public DateTime? LastUpdated { get; set; }
         public string RefCode { get; set; }
         public Guid ClientId { get; set; }
+        public int ProductLimit { get; set; }
     }
 }

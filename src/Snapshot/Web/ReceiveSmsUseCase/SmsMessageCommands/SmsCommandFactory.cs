@@ -2,7 +2,6 @@
 using Domain;
 using Web.ReceiveSmsUseCase.Models;
 using Web.ReceiveSmsUseCase.Services;
-using Web.Services.Configuration;
 using Web.Services.SendEmail;
 
 namespace Web.ReceiveSmsUseCase.SmsMessageCommands
@@ -14,14 +13,12 @@ namespace Web.ReceiveSmsUseCase.SmsMessageCommands
         private readonly IContactMethodsService _contactMethodsService;
         private readonly ISendSmsService _sendSmsService;
         private readonly IQueryService<Alert> _alertQueryService;
-        private readonly IEmailSendingService _emailSendingService;
-        private readonly IConfigurationService _configurationService;
+        private readonly IPreconfiguredEmailService _emailSendingService;
 
         public SmsCommandFactory(IContactMethodsService contactMethodsService, ISaveOrUpdateCommand<Alert> saveOrUpdateAlertCommand,
                                  IUpdateStockService updateStockService, ISendSmsService sendSmsService, IQueryService<Alert> alertQueryService,
-                                 IEmailSendingService emailSendingService, IConfigurationService configurationService)
+                                 IPreconfiguredEmailService emailSendingService)
         {
-            _configurationService = configurationService;
             _emailSendingService = emailSendingService;
             _alertQueryService = alertQueryService;
             _sendSmsService = sendSmsService;
@@ -40,11 +37,11 @@ namespace Web.ReceiveSmsUseCase.SmsMessageCommands
                     }
                 case MessageType.StockUpdate:
                     {
-                        return new UpdateStockMessageCommand(_updateStockService, _sendSmsService, _saveOrUpdateAlertCommand, _emailSendingService,
-                                                             _configurationService, _alertQueryService);
+                        return new UpdateStockMessageCommand(_updateStockService, _sendSmsService, _saveOrUpdateAlertCommand, _emailSendingService, _alertQueryService);
                     }
+                default:
+                    return new NullObjectCommand();
             }
-            return null;
         }
     }
 }

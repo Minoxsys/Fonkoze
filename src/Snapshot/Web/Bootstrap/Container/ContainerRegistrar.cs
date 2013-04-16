@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using Web.Bootstrap.Container;
-using Autofac;
-using System.Reflection;
-using Web.Controllers;
+﻿using Autofac;
+using Autofac.Core;
 using Autofac.Features.ResolveAnything;
+using System.Linq;
+using System.Web.Mvc;
+using Web.BackgroundJobs;
+using Web.Controllers;
+using Web.Services.Configuration;
+using Web.Services.SendEmail;
 
 namespace Web.Bootstrap.Container
 {
@@ -24,26 +23,25 @@ namespace Web.Bootstrap.Container
 
             ServicesConventionsRegistrar.Register(container);
 
-            container.RegisterSource(new AnyConcreteTypeNotAlreadyRegisteredSource(type =>
-                    type.Assembly.FullName.StartsWith("Web")
-                )
-            );
+            container.RegisterSource(new AnyConcreteTypeNotAlreadyRegisteredSource(type => type.Assembly.FullName.StartsWith("Web")));
+
+            //container.RegisterType<AddAlertsJob>()
+            //         .AsSelf()
+            //         .OnActivated(e => { e.Instance.PreconfiguredEmailService = (PreconfiguredEmailService) e.Context.ResolveNamed<IEmailSendingService>("config"); });
         }
 
         private static void AutoWireControllerProperties(ContainerBuilder container)
         {
-            var types = typeof(HomeController).Assembly.GetTypes();
+            var types = typeof (HomeController).Assembly.GetTypes();
 
             types.ToList().ForEach(it =>
-            {
-                if (it.BaseType == typeof(Controller))
                 {
-                    container.RegisterType(it).PropertiesAutowired();
-                }
+                    if (it.BaseType == typeof (Controller))
+                    {
+                        container.RegisterType(it).PropertiesAutowired();
+                    }
 
-            }
-                );
-
+                });
         }
     }
 }
