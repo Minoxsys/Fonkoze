@@ -1,8 +1,8 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using NUnit.Framework;
 using System.Web.Mvc;
 using Web.Areas.OutpostManagement.Models.Outpost;
+using FluentAssertions;
 
 namespace Tests.Unit.Controllers.Areas.OutpostManagement.OutpostControllerTests
 {
@@ -15,6 +15,17 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.OutpostControllerTests
 		{
 			_.Init();
 		}
+
+        [Test]
+        public void ReturnsOnlyOutpostsOfTypeWarehouse_WhenOnlyWarehouseFlagIsSetFromUI()
+        {
+            var inputModel = _.ExpectOutpostsToBeQueriedWithInputModelAskingOnlyForWarehouses();
+
+            var result = _.controller.GetOutposts(inputModel);
+
+            var models = (result.Data as GetOutpostsOutputModel).Outposts;
+            models.Should().NotContain(om => om.IsWarehouse == false);
+        }
 
 		[Test]
 		public void Returns_The_JsonResult_With_TheCorrectPageOfData()

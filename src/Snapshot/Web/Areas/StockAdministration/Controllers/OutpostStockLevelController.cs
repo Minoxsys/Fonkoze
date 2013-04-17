@@ -5,6 +5,7 @@ using System.Web.Mvc;
 using Core.Domain;
 using Core.Persistence;
 using Domain;
+using Web.Areas.OutpostManagement.Models.Outpost;
 using Web.Areas.StockAdministration.Models.OutpostStockLevel;
 using Web.Models.Shared;
 using Core.Security;
@@ -48,13 +49,23 @@ namespace Web.Areas.StockAdministration.Controllers
         Guid GUID_FOR_ALL_OPTION_ON_OUTPOST_LIST = Guid.Parse("00000000-0000-0000-0000-000000000001");
 
         [Requires(Permissions = "CurrentOutpostStockLevel.View")]
-        public ActionResult Overview()
+        public ActionResult Overview(Guid? outpostId)
         {
             ViewBag.HasNoRightsToEdit = (PermissionService.HasPermissionAssigned(CURRENTOUTPOSTSTOCKLEVEL_EDIT_PERMISSION, User.Identity.Name) == true) ? false.ToString().ToLowerInvariant() : true.ToString().ToLowerInvariant();
-           
 
-            return View();
+            OutpostOverviewModel model = new OutpostOverviewModel();
+            if (outpostId.HasValue && outpostId.Value != Guid.Empty)
+            {
+                var outpost = QueryOutpost.Load(outpostId.Value);
+                model.DistrictId = outpost.District.Id;
+                model.RegionId = outpost.Region.Id;
+                model.CountryId = outpost.Country.Id;
+            }
+
+            return View(model);
         }
+
+      
 
         private void LoadUserAndClient()
         {

@@ -8,6 +8,7 @@
 @using Web.Areas.AnalysisManagement.Controllers;
 @using Web.Areas.AnalysisManagement;
 @using Web.Bootstrap.Routes;
+@using Web.WarehouseMgmtUseCase.Controllers
 
 <!DOCTYPE html>
     <html>
@@ -52,14 +53,14 @@
             productGroup: '@(Url.RouteUrl<ProductGroupController>( x=>x.Overview() ,  Web.Areas.StockAdministration.StockAdministrationAreaRegistration.DEFAULT_ROUTE ))',
             usersOverview: '@(Url.RouteUrl<UserManagerController>( x=>x.Overview() ,  Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE ))',
             clientsOverview: '@(Url.RouteUrl<ClientManagerController>( x=>x.Overview() ,  Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE ))',
-            outpostStockLevelCurrent:'@(Url.RouteUrl<Web.Areas.StockAdministration.Controllers.OutpostStockLevelController>(x=>x.Overview(),Web.Areas.StockAdministration.StockAdministrationAreaRegistration.DEFAULT_ROUTE))',
+            outpostStockLevelCurrent:'@(Url.RouteUrl<OutpostStockLevelController>(x=>x.Overview(null),Web.Areas.StockAdministration.StockAdministrationAreaRegistration.DEFAULT_ROUTE))',
             rolesOverview: '@(Url.RouteUrl<RoleManagerController>( x=>x.Overview() ,  Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE ))',
             historicalLevel: '@(Url.RouteUrl<HistoricalProductLevelController>( x=>x.Overview() ,  Web.Areas.StockAdministration.StockAdministrationAreaRegistration.DEFAULT_ROUTE ))',
             campaignOverview: '@(Url.RouteUrl<CampaignController>(x=>x.Overview(),CampaignManagementAreaRegistration.DEFAULT_ROUTE))',
             alerts: '@(Url.RouteUrl<AlertsController>(x => x.Overview(), Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE))',
             automaticSchedules: '@(Url.RouteUrl<RequestScheduleController>(x=>x.Overview(),CampaignManagementAreaRegistration.DEFAULT_ROUTE))',
             analysisAndReports: '@(Url.RouteUrl<AnalysisController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))',
-            
+            warehouseadmin: '@(Url.RouteUrl<WarehouseManagementController>( x=>x.Overview() ,  DefaultRouteRegistrar.DEFAULT_ROUTE ))',
             seller: '@(Url.RouteUrl<SellerController>(x=>x.Overview(), MessagesManagementAreaRegistration.DefaultRoute))',
             warehouse: '@(Url.RouteUrl<WarehouseController>(x=>x.Overview(), MessagesManagementAreaRegistration.DefaultRoute))',
             sentMessage: '@(Url.RouteUrl<SentMessagesController>(x=>x.Overview(), MessagesManagementAreaRegistration.DefaultRoute))'

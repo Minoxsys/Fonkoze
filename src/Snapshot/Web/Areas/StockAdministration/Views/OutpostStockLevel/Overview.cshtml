@@ -7,6 +7,9 @@ Seller Stock Level Current
     Html.RenderPartial("_OutpostStockLevelSideBar");
     
 }
+
+@model Web.Areas.OutpostManagement.Models.Outpost.OutpostOverviewModel
+
 <script type="text/javascript">
     Ext.onReady(function () {
 
@@ -606,6 +609,24 @@ Seller Stock Level Current
 				window.feature.treegrid
             ]
         });
+
+      @*  if ('@Model.CountryId' != '@Guid.Empty' && '@Model.RegionId' != '@Guid.Empty' && '@Model.DistrictId' != '@Guid.Empty') {
+            window.feature.CountryStore.load();
+            window.feature.RegionsStore.load({
+                params: { countryId: '@Model.CountryId' }
+            });
+            window.feature.DistrictStore.load({
+                params: { regionId: '@Model.RegionId' }
+            });
+
+            window.feature.comboBoxFilters.country.setValue('@Model.CountryId');
+            window.feature.comboBoxFilters.region.setValue('@Model.RegionId');
+            window.feature.comboBoxFilters.district.setValue('@Model.DistrictId');
+
+            window.feature.OutpostStore.proxy.extraParams.countryId = '@Model.CountryId';
+            window.feature.OutpostStore.proxy.extraParams.regionId = '@Model.RegionId';
+            window.feature.OutpostStore.proxy.extraParams.districtId = '@Model.DistrictId';
+        }*@
 
     });
 </script>

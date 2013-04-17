@@ -159,7 +159,12 @@ namespace Web.Areas.OutpostManagement.Controllers
 				outpostsQueryData = outpostsQueryData.Where(o => o.Name.Contains(input.search));
 			}
 
-			var orderByColumnDirection = new Dictionary<string, Func<IQueryable<Outpost>>>()
+		    if (input.OnlyWarehouses)
+		    {
+		        outpostsQueryData = outpostsQueryData.Where(o => o.IsWarehouse);
+		    }
+
+		    var orderByColumnDirection = new Dictionary<string, Func<IQueryable<Outpost>>>()
 			{
 				{ "Name-ASC", () => outpostsQueryData.OrderBy(c => c.Name) },
 				{ "Name-DESC", () => outpostsQueryData.OrderByDescending(c => c.Name) }

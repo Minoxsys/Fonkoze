@@ -71,8 +71,12 @@
     <Reference Include="Microsoft.CSharp">
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.Web.Mvc">
-      <HintPath>..\packages\Mvc3Futures.3.0.20105.0\lib\Microsoft.Web.Mvc.dll</HintPath>
+    <Reference Include="Microsoft.Web.Mvc, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Mvc2Futures.2.0.50217.0\lib\Microsoft.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="MvcContrib">
+      <HintPath>..\packages\MvcContrib.2.0.95.0\lib\MvcContrib.dll</HintPath>
     </Reference>
     <Reference Include="mysql.data, Version=6.4.4.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
       <HintPath>..\packages\MySql.Data.6.4.4\lib\net40\mysql.data.dll</HintPath>
@@ -472,6 +476,7 @@
     <Compile Include="Validation\Account\PropertiesMustMatchAttribute.cs" />
     <Compile Include="Validation\Account\ValidatePasswordLengthAttribute.cs" />
     <Compile Include="Validation\ValidDate\ValidDate.cs" />
+    <Compile Include="WarehouseMgmtUseCase\Controllers\WarehouseManagementController.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\CampaignManagement\Views\Campaign\Overview.cshtml" />
@@ -518,6 +523,7 @@
     <Content Include="Assets\resources\img\Analysis\StockLevelRegion.png" />
     <Content Include="Assets\resources\img\arrow.gif" />
     <Content Include="Assets\css\snapshot-theme.css" />
+    <Content Include="Assets\resources\img\bycsv.png" />
     <Content Include="Assets\resources\img\charts.png" />
     <Content Include="Assets\resources\img\charts2.png" />
     <Content Include="Assets\resources\img\checked.gif" />
@@ -534,6 +540,7 @@
     <Content Include="Assets\resources\img\LogoLogin.png" />
     <Content Include="Assets\resources\img\logologinFon.png" />
     <Content Include="Assets\resources\img\Logout.png" />
+    <Content Include="Assets\resources\img\manually.png" />
     <Content Include="Assets\resources\img\Menu\Administration.png" />
     <Content Include="Assets\resources\img\Menu\Alerts.png" />
     <Content Include="Assets\resources\img\Menu\Analysis.png" />
@@ -2146,6 +2153,8 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\OutpostManagement\Services\" />
+    <Folder Include="WarehouseMgmtUseCase\Model\" />
+    <Folder Include="WarehouseMgmtUseCase\Views\Shared\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -2258,6 +2267,8 @@
     <Content Include="Views\AccountOptions\Overview.cshtml" />
     <Content Include="Views\Shared\_EmptySubNavigation.cshtml" />
     <Content Include="Views\SendMessage\Overview.cshtml" />
+    <Content Include="Views\Shared\_WarehouseAdministrationSideBar.cshtml" />
+    <Content Include="Views\WarehouseManagement\Overview.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\mixins\_color-by-background.scss" />
