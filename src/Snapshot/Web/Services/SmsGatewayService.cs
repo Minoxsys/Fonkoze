@@ -15,14 +15,21 @@ namespace Web.Services
             _smsGatewaySettingsService = smsGatewaySettingsService;
         }
 
+        public string SendSms(string toPhoneNumber, string message)//TODO: customize to the ways of the new gateway
+        {
+           string postData = GetPostDataFromSettings() + "&selectednums"+ toPhoneNumber +"&message=" + HttpUtility.HtmlEncode(message); 
+           string postResponse = _httpService.Post(_smsGatewaySettingsService.SmsGatewayUrl, postData);
+           return postResponse;
+        }
+
         public string SendSmsRequest(SmsRequest smsRequest)
         {
-            string postData = GetPostDataFromSettingsAndSmsRequest(smsRequest);
+            string postData = GetPostDataFromSettings() + "&" + GetPostDataFromSmsRequest(smsRequest); 
             string postResponse = _httpService.Post(_smsGatewaySettingsService.SmsGatewayUrl, postData);
             return postResponse;
         }
 
-        private string GetPostDataForSmsRequestFromSettings()
+        private string GetPostDataFromSettings()
         {
             var postDataBuilder = new StringBuilder();
             postDataBuilder.Append("uname=" + _smsGatewaySettingsService.SmsGatewayUserName);
@@ -44,9 +51,6 @@ namespace Web.Services
             return postDataBuilder.ToString();
         }
 
-        private string GetPostDataFromSettingsAndSmsRequest(SmsRequest smsRequest)
-        {
-            return GetPostDataForSmsRequestFromSettings() + "&" + GetPostDataFromSmsRequest(smsRequest);
-        }
+      
     }
 }

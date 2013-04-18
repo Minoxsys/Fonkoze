@@ -50,6 +50,7 @@
 
         window.feature.leftGrid = 'Grid-Add-Seller-Left';
         window.feature.rightGrid = 'Grid-Add-Seller-Right';
+        window.feature.messageContent = 'Message-Content-Textfield';
                 
 
         window.feature.leftGridStore = Ext.create('Ext.data.Store', {
@@ -73,6 +74,16 @@
                 }
             ]
         });
+
+        window.feature.rightGridStore = Ext.create('Ext.data.Store', {
+            fields: ['Id', 'Name', 'Selected'],
+            sorters: [
+                  {
+                      property: 'Name',
+                      direction: 'ASC'
+                  }
+              ]
+          });
                 
         Ext.define('Ext.ux.CheckColumn', {
             extend: 'Ext.grid.column.Column',
@@ -81,9 +92,7 @@
             tdCls: Ext.baseCSSPrefix + 'grid-cell-checkcolumn',
 
             constructor: function () {
-                this.addEvents(
-                    'checkchange'
-                    );
+                this.addEvents('checkchange');
                 this.callParent(arguments);
             },
 
@@ -124,50 +133,66 @@
         var contentRes = window.res.content;
         var mainContent = Ext.getCmp(contentRes.maincontent.id);
       
-        var topContainer = Ext.create('Ext.container.Container', {
+        window.feature.topContainer = Ext.create('Ext.container.Container', {
             margin: '15 15 15 15',
             padding: '20 20 0 20',
             id: 'TopContainer',
             layout: {
-                align: 'stretch',
-                type: 'vbox'
+                type: 'vbox',
+                align:'stretch'
+              
             },
-            items: [{
-                xtype: 'container',
+            items:
+              [
+               {xtype: 'container',
                 height: 50,
                 layout: 'column',
-                items: [{
-                    xtype: 'container',
-                    height: 30,
-                    width: 30,
-                    html:'&nbsp;'
-                }, {
-                    xtype: 'image',
-                    src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/SubMenu/CampaignSelected.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                items: [
+                    {
+                       xtype: 'container',
+                       height: 30,
+                       width: 30,
+                       html:'&nbsp;'
+                   },
+                   {
+                        xtype: 'image',
+                        src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/SubMenu/CampaignSelected.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
                         margin: '0 10 10 0'
-                    }, {
+                    },
+                    {
                         xtype: 'label',
                         cls: 'x-title-label',
                         html: 'Send Messages To Sellers'
-                    }]
-            },
-            {
+                    }
+                  ]
+               },
+               {
+                xtype: 'label',
+                cls: 'x-title-label',
+                text:'To:'
+              }
+              ,
+              {
                 xtype: 'container',
                 flex: 1,
-                margin: '20 0 0 20',
+                margin: '10 0 0 10',
+                width: 700,
+                height:280,
                 layout: {
                     type: 'hbox',
                     align: 'stretch'
-                },
-                items: [{
-                    xtype: 'container',
-                    flex: 2,
-                    margin: '20 15 20 0',
+                        },
+                items:
+                   [
+                   {xtype: 'container',
+                    flex: 1,
+                    margin: '10 15 10 0',
                     layout: {
                         type: 'vbox',
                         align: 'stretch'
-                    },
-                    items: [
+                        },
+                    items:
+                        [
                          {
                              xtype: 'label',
                              itemId: 'Label-For-Left-Grid',
@@ -178,73 +203,225 @@
                              itemId: window.feature.leftGrid,
                              store: window.feature.leftGridStore,
                              columnLines: true,
-                             margin: '0 0 10 0',
                              loadMask: true,
                              autoScroll: true,
+                             flex:3,
                              columns: [
                                    {
                                        text: 'Name',
                                        dataIndex: 'Name',
-                                       menuDisabled: true
+                                       menuDisabled: true,
+                                       flex:1
                                    },
                                    {
                                        xtype:'checkcolumn',
                                        text: 'Selected',
-                                       dataIndex: 'lastname',
+                                       dataIndex: 'Selected',
                                        menuDisabled: true,
                                        sortable:false,
                                    }
                              ],
-                         }]}
-                         , {
-                             xtype: 'container',
-                             flex: 2,
-                             margin: '20 10 10 10',
-                             layout: {
-                                 type: 'vbox',
-                                 align: 'stretch'
-                             },
-                             items: [
-                                 {
-                                     xtype: 'label',
-                                     itemId: 'Label-For-Right-Grid',
-                                     text:'Selected Sellers'
-                                 }, {
-                                     xtype: 'gridpanel',
-                                     cls: 'white-border',
-                                     itemId: window.feature.rightGrid,
-                                     store: window.feature.rightGridStore,
-                                     columnLines: true,
-                                     loadMask: true,
-                                     flex: 3,
-                                     autoScroll: true,
-                                     columns: [
-                                         {
-                                             text: "Name",
-                                             dataIndex: 'Name',
-                                             menuDisabled: true,
-                                             flex: 1,
-                                             sortable: true
-                                         }, {
-                                             xtype: 'checkcolumn',
-                                             menuDisabled: true,
-                                             sortable: false,
-                                             dataIndex: 'Selected',
-                                             header: 'Selected'
-                                         }
-                                     ]
-                                 }
-                             ]
-                         }
+                            }
+                          ]
+                   },
+                   {
+                    xtype: 'container',
+                    flex: 0.5,
+                    layout: {
+                        type: 'vbox',
+                        align: 'center'
+                    },
+
+                    items: [
+                        {
+                            xtype: 'container',
+                            flex: 1,
+                            layout: {
+                                type: 'vbox',
+                                pack: 'center'
+                            },
+                            items: [
+                                {
+                                    xtype: 'button',
+                                    margin: '0 0 5 0',
+                                    width: 80,
+                                    text: 'Add',
+                                    ui: 'snapshot-add-btn',
+                                    cls: 'x-add-button-gradient',
+                                    handler: function () {
+                                        var gridRight =  window.feature.topContainer.down('#' +window.feature.rightGrid);
+                                        var gridLeft = window.feature.topContainer.down('#' + window.feature.leftGrid);
+
+                                        var gridLeftStore = window.feature.topContainer.down('#' + window.feature.leftGrid).getStore();
+                                        gridLeftStore.each(function (record) {
+                                            if (record.dirty) {
+                                                var newValue = {
+                                                    Id: record.get('Id'),
+                                                    Name: record.get('Name')
+                                                };
+                                                var contains = RightGridContains(newValue, gridRight);
+                                                if (contains == false) {
+                                                    window.feature.rightGridStore.insert(0, newValue);
+                                                }
+                                            }
+                                        });
+
+                                    }
+                                }, {
+                                    xtype: 'button',
+                                    width: 80,
+                                    text: 'Remove',
+                                    ui: 'snapshot-add-btn',
+                                    cls: 'x-add-button-gradient',
+                                    handler: function () {
+                                        var rightGridStore = window.feature.topContainer.down('#' + window.feature.rightGrid).getStore();
+                                        rightGridStore.each(function (record) {
+                                            if (record.dirty) {
+                                                rightGridStore.remove(record);
+                                            }
+                                        });
+                                    }
+                                }
+                            ]
+
+                        }
                     ]
-                }]
+                },
+                {
+                 xtype: 'container',
+                 flex: 1,
+                 margin: '10 15 10 10',
+                 layout: {
+                    type: 'vbox',
+                    align: 'stretch'
+                        },
+                 items: [
+                        {
+                            xtype: 'label',
+                            itemId: 'Label-For-Right-Grid',
+                            text:'Selected Sellers'
+                        }, {
+                            xtype: 'gridpanel',
+                            cls: 'white-border',
+                            itemId: window.feature.rightGrid,
+                            store: window.feature.rightGridStore,
+                            columnLines: true,
+                            loadMask: true,
+                            flex: 3,
+                            autoScroll: true,
+                            columns: [
+                                {
+                                    text: "Name",
+                                    dataIndex: 'Name',
+                                    menuDisabled: true,
+                                    flex: 1,
+                                    sortable: true
+                                }, {
+                                    xtype: 'checkcolumn',
+                                    menuDisabled: true,
+                                    sortable: false,
+                                    dataIndex: 'Selected',
+                                    header: 'Selected'
+                                }]
+                        }
+                      ]
+                }
+               ]
+            },
+            {
+                xtype: 'label',
+                text: 'Message:',
+                cls: 'x-title-label'
+
+            },
+            {
+                xtype: 'container',
+                layout: 'vbox',
+                width:200,
+                items: [
+               {
+                   xtype: 'textfield',
+                   margin: '10 10 25 10',
+                   width: 500,
+                   itemId: window.feature.messageContent
+               },
+               {
+                 xtype: 'button',
+                 width: 120,
+                 text: 'Send',
+                 ui: 'snapshot-add-btn',
+                 cls: 'x-add-button-gradient',
+                 handler: function () {
+                     var outposts = window.feature.topContainer.down('#' + window.feature.rightGrid).getStore();
+                     var message = window.feature.topContainer.down('#' + window.feature.messageContent).getValue();
+                     var ids = GetRightGridStoreIds();
+                     if (ids.length > 0 && message.length > 0 )
+                     {
+                         var values = {
+                             outpostIds: ids,
+                             message: message,
+
+                         };
+                         var postToUrl = '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "SendMessages", action = "SendMessageToOutposts" })';
+                          var action = $.post(postToUrl, values);
+
+                          action.success(function (serverResponse) {
+                              var msgAlert = Ext.Msg;
+                              msgAlert.ui = 'snapshot-popup-window';
+                              msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                              msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+
+                              msgAlert.alert(serverResponse.Status, serverResponse.Message);
+                          });
+
+                     }
+                     else
+                     {
+                         var msgAlert = Ext.Msg;
+                         msgAlert.ui = 'snapshot-popup-window';
+                         msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                         msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+
+                         if (message.length == 0) {
+                             msgAlert.alert("Error", "Message can not be empty");
+                         }
+                         else
+                         {
+                             msgAlert.alert("Error", "You need to select at least one seller");
+                         }
+                        
+                     }
+                    
+                 }
+             }]
+            }
+            ]
 
           
         });
 
-      
 
-        mainContent.add(topContainer);
+        function RightGridContains(value, grid) {
+            var ok = false;
+            var gridRightStore = window.feature.topContainer.down('#' +window.feature.rightGrid).getStore();
+            gridRightStore.each(function (record) {
+                if (record.get('Id') == value.Id || record.get('Name') == value.Name)
+                    ok = true;
+            });
+
+            return ok;
+        }
+
+        function GetRightGridStoreIds() {
+            var ids = '';
+            var gridRightStore = window.feature.topContainer.down('#' + window.feature.rightGrid).getStore();
+            gridRightStore.each(function (record) {
+                ids = ids + record.get('Id') + ',';
+            });
+            return ids;
+        };
+      
+        mainContent.add(window.feature.topContainer);
         window.feature.leftGridStore.load();
       
     });

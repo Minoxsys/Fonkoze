@@ -260,7 +260,7 @@
     <Compile Include="Unit\Services\RawSmsMeesageQueryHelpersService.cs" />
     <Compile Include="Unit\ReceiveSmsWorkflow\ReceiveSmsWorkflowServiceTests.cs" />
     <Compile Include="Unit\Services\SmsGatewayServiceTest\ObjectMother.cs" />
-    <Compile Include="Unit\Services\SmsGatewayServiceTest\SendSmsMethod.cs" />
+    <Compile Include="Unit\Services\SmsGatewayServiceTest\SendSmsRequestMethod.cs" />
     <Compile Include="Unit\Services\SmsRequestServiceTest\ObjectMother.cs" />
     <Compile Include="Unit\Services\SmsRequestServiceTest\SendProductLevelRequestMessageMethod.cs" />
     <Compile Include="Unit\ReceiveSmsWorkflow\SmsTextParserServiceTests.cs" />
