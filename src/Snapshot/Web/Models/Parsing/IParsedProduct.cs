@@ -1,4 +1,4 @@
-﻿namespace Web.ReceiveSmsUseCase.Models
+﻿namespace Web.Models.Parsing
 {
     public interface IParsedProduct
     {

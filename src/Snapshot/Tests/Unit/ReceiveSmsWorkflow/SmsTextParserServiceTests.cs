@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
+using Web.Models.Parsing;
 using Web.ReceiveSmsUseCase.Models;
 using Web.ReceiveSmsUseCase.Services;
 

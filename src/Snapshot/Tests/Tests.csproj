@@ -267,6 +267,9 @@
     <Compile Include="Unit\Services\StoreProductLevelRequestDetailTests\ObjectMother.cs" />
     <Compile Include="Unit\Services\StoreProductLevelRequestDetailTests\StoreProductLevelRequestDetailMethod.cs" />
     <Compile Include="Unit\ReceiveSmsWorkflow\UpdateProductStockServiceTests.cs" />
+    <Compile Include="Unit\WarehouseManagementWorkflow\StockUpdateCsvFileParserTests.cs" />
+    <Compile Include="Unit\WarehouseManagementWorkflow\WarehouseManagementControllerTests\WarehouseManagementControllerTests.cs" />
+    <Compile Include="Unit\WarehouseManagementWorkflow\WarehouseManagementWorkflowServiceTests.cs" />
     <Compile Include="Utils\AutoMock.cs" />
     <Compile Include="Utils\FakeControllerContext.cs" />
     <Compile Include="Utils\JsonResultHelpers.cs" />

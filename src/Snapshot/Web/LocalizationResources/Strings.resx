@@ -135,4 +135,7 @@
   <data name="PhoneNumberNotActive" xml:space="preserve">
     <value>Phone number not active. Please activate your phone number to send update stock messages.</value>
   </data>
+  <data name="InvalidFileSelectedForUpload" xml:space="preserve">
+    <value>The file selected is an invalid. Please choose another one.</value>
+  </data>
 </root>

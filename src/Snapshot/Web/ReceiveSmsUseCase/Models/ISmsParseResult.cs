@@ -1,12 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using Web.Models.Parsing;
 
 namespace Web.ReceiveSmsUseCase.Models
 {
-    public interface ISmsParseResult
+    public interface ISmsParseResult : IParseResult
     {
         MessageType MessageType { get; set; }
-        bool Success { get; set; }
         string Message { get; set; }
-        List<IParsedProduct> ParsedProducts { get; set; }
     }
 }

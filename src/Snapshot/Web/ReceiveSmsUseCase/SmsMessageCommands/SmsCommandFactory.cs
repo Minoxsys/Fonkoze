@@ -3,6 +3,7 @@ using Domain;
 using Web.ReceiveSmsUseCase.Models;
 using Web.ReceiveSmsUseCase.Services;
 using Web.Services.SendEmail;
+using Web.Services.StockUpdates;
 
 namespace Web.ReceiveSmsUseCase.SmsMessageCommands
 {

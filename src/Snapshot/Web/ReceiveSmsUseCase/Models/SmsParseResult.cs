@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Web.Models.Parsing;
 
 namespace Web.ReceiveSmsUseCase.Models
 {

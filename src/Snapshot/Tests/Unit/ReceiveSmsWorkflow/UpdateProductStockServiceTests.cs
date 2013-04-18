@@ -5,8 +5,10 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Web.Models.Parsing;
 using Web.ReceiveSmsUseCase.Models;
 using Web.ReceiveSmsUseCase.Services;
+using Web.Services.StockUpdates;
 
 namespace Tests.Unit.ReceiveSmsWorkflow
 {

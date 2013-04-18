@@ -11,6 +11,7 @@ using Web.ReceiveSmsUseCase.Models;
 using Web.ReceiveSmsUseCase.Services;
 using Web.ReceiveSmsUseCase.SmsMessageCommands;
 using Web.Services.SendEmail;
+using Web.Services.StockUpdates;
 
 namespace Tests.Unit.ReceiveSmsWorkflow
 {

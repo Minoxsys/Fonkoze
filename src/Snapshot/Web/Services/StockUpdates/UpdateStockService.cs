@@ -3,9 +3,10 @@ using Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Web.ReceiveSmsUseCase.Models;
+using Web.Models.Parsing;
+using Web.ReceiveSmsUseCase.Services;
 
-namespace Web.ReceiveSmsUseCase.Services
+namespace Web.Services.StockUpdates
 {
     public class UpdateStockService : IUpdateStockService
     {
@@ -23,7 +24,7 @@ namespace Web.ReceiveSmsUseCase.Services
             _stockLevelSaveOrUpdateCommand = stockLevelSaveOrUpdateCommand;
         }
 
-        public void UpdateProductStocksForOutpost(ISmsParseResult parseResult, Guid outpostId)
+        public void UpdateProductStocksForOutpost(IParseResult parseResult, Guid outpostId)
         {
             if (!parseResult.Success)
             {

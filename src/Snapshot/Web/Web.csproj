@@ -68,6 +68,9 @@
     <Reference Include="Iesi.Collections, Version=1.0.1.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
       <HintPath>..\packages\Iesi.Collections.3.1.0.4000\lib\Net35\Iesi.Collections.dll</HintPath>
     </Reference>
+    <Reference Include="LumenWorks.Framework.IO">
+      <HintPath>..\packages\CSVReader.3.8.1\lib\net40\LumenWorks.Framework.IO.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp">
       <Private>True</Private>
     </Reference>
@@ -75,8 +78,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Mvc2Futures.2.0.50217.0\lib\Microsoft.Web.Mvc.dll</HintPath>
     </Reference>
-    <Reference Include="MvcContrib">
-      <HintPath>..\packages\MvcContrib.2.0.95.0\lib\MvcContrib.dll</HintPath>
+    <Reference Include="MvcContrib, Version=3.0.100.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\MvcContrib.Mvc3-ci.3.0.100.0\lib\MvcContrib.dll</HintPath>
     </Reference>
     <Reference Include="mysql.data, Version=6.4.4.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
       <HintPath>..\packages\MySql.Data.6.4.4\lib\net40\mysql.data.dll</HintPath>
@@ -304,10 +308,11 @@
     </Compile>
     <Compile Include="ReceiveSmsUseCase\Controller\SmsReceiveEndpointController.cs" />
     <Compile Include="Helpers\ConvertHelper.cs" />
-    <Compile Include="ReceiveSmsUseCase\Models\IParsedProduct.cs" />
+    <Compile Include="Models\Parsing\IParsedProduct.cs" />
+    <Compile Include="Models\Parsing\IParseResult.cs" />
     <Compile Include="ReceiveSmsUseCase\Models\ISmsParseResult.cs" />
     <Compile Include="ReceiveSmsUseCase\Models\MessageType.cs" />
-    <Compile Include="ReceiveSmsUseCase\Models\ParsedProduct.cs" />
+    <Compile Include="Models\Parsing\ParsedProduct.cs" />
     <Compile Include="ReceiveSmsUseCase\Models\ReceivedSmsInputModel.cs" />
     <Compile Include="ReceiveSmsUseCase\SmsMessageCommands\ISmsCommandFactory.cs" />
     <Compile Include="ReceiveSmsUseCase\SmsMessageCommands\NullObjectCommand.cs" />
@@ -432,7 +437,7 @@
     <Compile Include="Services\ISendEmailService.cs" />
     <Compile Include="ReceiveSmsUseCase\Services\ISendSmsService.cs" />
     <Compile Include="ReceiveSmsUseCase\Services\ISmsTextParserService.cs" />
-    <Compile Include="ReceiveSmsUseCase\Services\IUpdateStockService.cs" />
+    <Compile Include="Services\StockUpdates\IUpdateStockService.cs" />
     <Compile Include="Services\PathService.cs" />
     <Compile Include="Services\IPathService.cs" />
     <Compile Include="Services\EmailRequestService.cs" />
@@ -470,13 +475,18 @@
     <Compile Include="Services\IURLService.cs" />
     <Compile Include="ReceiveSmsUseCase\Services\SmsTextParserService.cs" />
     <Compile Include="Services\StoreProductLevelRequestDetailService.cs" />
-    <Compile Include="ReceiveSmsUseCase\Services\UpdateStockService.cs" />
+    <Compile Include="Services\StockUpdates\UpdateStockService.cs" />
     <Compile Include="Services\URLService.cs" />
     <Compile Include="Validation\Account\MembershipStatusCodeConverter.cs" />
     <Compile Include="Validation\Account\PropertiesMustMatchAttribute.cs" />
     <Compile Include="Validation\Account\ValidatePasswordLengthAttribute.cs" />
     <Compile Include="Validation\ValidDate\ValidDate.cs" />
     <Compile Include="WarehouseMgmtUseCase\Controllers\WarehouseManagementController.cs" />
+    <Compile Include="WarehouseMgmtUseCase\Model\CsvParseResult.cs" />
+    <Compile Include="WarehouseMgmtUseCase\Services\IStockUpdateCsvFileParserService.cs" />
+    <Compile Include="WarehouseMgmtUseCase\Services\IWarehouseManagementWorkflowService.cs" />
+    <Compile Include="WarehouseMgmtUseCase\Services\StockUpdateCsvFileParserService.cs" />
+    <Compile Include="WarehouseMgmtUseCase\Services\WarehouseManagementWorkflowService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\CampaignManagement\Views\Campaign\Overview.cshtml" />
@@ -2153,7 +2163,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\OutpostManagement\Services\" />
-    <Folder Include="WarehouseMgmtUseCase\Model\" />
     <Folder Include="WarehouseMgmtUseCase\Views\Shared\" />
   </ItemGroup>
   <ItemGroup>

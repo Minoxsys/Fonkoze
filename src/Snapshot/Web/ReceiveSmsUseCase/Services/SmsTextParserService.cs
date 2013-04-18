@@ -1,4 +1,5 @@
 ﻿using System;
+using Web.Models.Parsing;
 using Web.ReceiveSmsUseCase.Models;
 
 namespace Web.ReceiveSmsUseCase.Services

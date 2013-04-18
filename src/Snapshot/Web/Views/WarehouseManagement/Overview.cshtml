@@ -323,13 +323,12 @@
                             width: 500,
                             bodyPadding: '20 20 20 20',
                             border: '0 0 0 0',
-                            html: '<form action="/WarehouseManagement/Upload" enctype="multipart/form-data" method="post">' +
+                            html: '<form action="/WarehouseManagement/Upload?outpostId=' + me.entityId + '" enctype="multipart/form-data" method="post">' +
                                 '<p> Please specify a CSV file:<br>' +
                                 '<input type="file" name="csvfile" size="60">' +
                                 '</p><br>' +
                                 '<div><input type="submit" value="Upload file"></div>' +
                                 '</form>'
-                                
                         }
                     ]//end items for modal
                 });
@@ -468,32 +467,6 @@
                             minWidth: 150,
                             menuDisabled: true,
                             sortable: true
-                            @*,
-                          
-                            processEvent: function (type, view, cell, recordIndex, cellIndex, e) {
-                                if (type == 'click'){
-                                    if (@(ViewBag.HasNoRightsToAdd) === true){
-                                        var msgAlert = Ext.Msg;
-                                        msgAlert.ui = 'snapshot-popup-window';
-                                        msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
-                                        msgAlert.msgButtons['ok'].margin = '10 10 20 0';
-                                        msgAlert.alert("Alert", "You have no rights for this action!");
-                                    }
-                                    else{
-    
-                                        var rec = view.panel.store.getAt(recordIndex);
-	
-                                        var assignProducts = new window.feature.assignProductsModal({
-                                            outpostId: rec.get('Id'),
-                                            outpostName: rec.get('Name')
-                                        });
-                                        assignProducts.show();
-    
-                                        return false;
-                                    }
-                                    return true;
-                                }
-                            }*@
                         },{
                             text: "Contact Method",
                             dataIndex: 'ContactMethod',

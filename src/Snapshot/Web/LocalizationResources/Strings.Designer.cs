@@ -79,6 +79,15 @@ namespace Web.LocalizationResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The file selected is an invalid. Please choose another one..
+        /// </summary>
+        internal static string InvalidFileSelectedForUpload {
+            get {
+                return ResourceManager.GetString("InvalidFileSelectedForUpload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Phone number not active. Please activate your phone number to send update stock messages..
         /// </summary>
         internal static string PhoneNumberNotActive {

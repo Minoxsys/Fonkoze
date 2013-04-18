@@ -1,31 +1,40 @@
-﻿using System.IO;
+﻿using System;
+using MvcContrib;
 using System.Web;
 using System.Web.Mvc;
 using Web.Areas.OutpostManagement.Models.Outpost;
-using MvcContrib;
+using Web.LocalizationResources;
+using Web.WarehouseMgmtUseCase.Services;
 
 namespace Web.WarehouseMgmtUseCase.Controllers
 {
     public class WarehouseManagementController : Controller
     {
-        public ActionResult Overview()
+        private readonly IWarehouseManagementWorkflowService _warehouseManagementWorkflowService;
+
+        public WarehouseManagementController(IWarehouseManagementWorkflowService warehouseManagementWorkflowService)
         {
-           return View(new OutpostOverviewModel());
+            _warehouseManagementWorkflowService = warehouseManagementWorkflowService;
+        }
+
+        public ViewResult Overview()
+        {
+            return View(new OutpostOverviewModel());
         }
 
         [HttpPost]
-        public ActionResult Upload(HttpPostedFileBase csvfile)
+        public ActionResult Upload(HttpPostedFileBase csvfile, Guid? outpostId)
         {
             // Verify that the user selected a file
             if (csvfile != null && csvfile.ContentLength > 0)
             {
-                // extract only the fielname
-                var fileName = Path.GetFileName(csvfile.FileName);
-                // store the file inside ~/App_Data/uploads folder
-                var path = Path.Combine(Server.MapPath("~/App_Data/uploads"), fileName);
-                //csvfile.SaveAs(path);
+                _warehouseManagementWorkflowService.ProcessWarehouseStockData(csvfile.InputStream, outpostId.Value);
             }
-            // redirect back to the index action to show the form once again
+            else
+            {
+                TempData["invalidFile"] = Strings.InvalidFileSelectedForUpload;
+            }
+
             return this.RedirectToAction(c => c.Overview());
         }
     }
