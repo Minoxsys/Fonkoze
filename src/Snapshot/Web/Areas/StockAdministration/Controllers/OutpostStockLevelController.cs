@@ -60,6 +60,7 @@ namespace Web.Areas.StockAdministration.Controllers
                 model.DistrictId = outpost.District.Id;
                 model.RegionId = outpost.Region.Id;
                 model.CountryId = outpost.Country.Id;
+                model.OutpostId = outpost.Id;
             }
 
             return View(model);

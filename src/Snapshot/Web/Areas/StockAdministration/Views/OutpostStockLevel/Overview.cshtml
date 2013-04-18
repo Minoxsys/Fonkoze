@@ -580,29 +580,7 @@ Seller Stock Level Current
                         text: 'View Product Status',
                         ui: 'snapshot-add-btn',
                         cls: 'x-add-button-gradient',
-                        handler: function () {
-                            var selectedOutpostId = window.feature.comboBoxOutposts.getValue();
-                            var selectedDistrictId = window.feature.comboBoxDistricts.getValue();
-                            var selectedRegionId = window.feature.comboBoxRegions.getValue();
-                            var selectedCountryId = window.feature.comboBoxCountries.getValue();
-                                
-                            window.feature.treeStore.setRootNode(null);        
-                            if(selectedOutpostId !==null){
-                                window.feature.treegrid.getStore().proxy.extraParams.OutpostId = selectedOutpostId;
-                                window.feature.treegrid.getStore().proxy.extraParams.DistrictId = selectedDistrictId;
-                                window.feature.treegrid.getStore().proxy.extraParams.RegionId = selectedRegionId;
-                                window.feature.treegrid.getStore().proxy.extraParams.CountryId = selectedCountryId;
-                                window.feature.treegrid.getStore().proxy.extraParams.ProductGroupExpandedOnEdit = '';
-                                window.feature.treegrid.getRootNode().expand();
-                            }else{
-                                var msgAlert = Ext.Msg;
-                                    msgAlert.ui = 'snapshot-popup-window';
-                                    msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
-                                    msgAlert.msgButtons['ok'].margin = '10 10 20 0',
-                                    msgAlert.alert("Alert", "Please select all option in order to see outpost stock level data!");
-                                    
-                            }
-                        }
+                        handler: viewProductStatusHandler
                     }]
 				}]
 			},
@@ -610,23 +588,56 @@ Seller Stock Level Current
             ]
         });
 
-      @*  if ('@Model.CountryId' != '@Guid.Empty' && '@Model.RegionId' != '@Guid.Empty' && '@Model.DistrictId' != '@Guid.Empty') {
+        if ('@Model.CountryId' != '@Guid.Empty' && '@Model.RegionId' != '@Guid.Empty' && '@Model.DistrictId' != '@Guid.Empty') {
             window.feature.CountryStore.load();
-            window.feature.RegionsStore.load({
+            window.feature.RegionStore.load({
                 params: { countryId: '@Model.CountryId' }
             });
             window.feature.DistrictStore.load({
                 params: { regionId: '@Model.RegionId' }
             });
+            window.feature.OutpostStore.load({ params: { districtId: '@Model.DistrictId'} });
 
-            window.feature.comboBoxFilters.country.setValue('@Model.CountryId');
-            window.feature.comboBoxFilters.region.setValue('@Model.RegionId');
-            window.feature.comboBoxFilters.district.setValue('@Model.DistrictId');
+            window.feature.comboBoxCountries.setValue('@Model.CountryId');
+            window.feature.comboBoxRegions.setValue('@Model.RegionId');
+            window.feature.comboBoxDistricts.setValue('@Model.DistrictId');
+            window.feature.comboBoxOutposts.setValue('@Model.OutpostId');
+            
 
             window.feature.OutpostStore.proxy.extraParams.countryId = '@Model.CountryId';
             window.feature.OutpostStore.proxy.extraParams.regionId = '@Model.RegionId';
             window.feature.OutpostStore.proxy.extraParams.districtId = '@Model.DistrictId';
-        }*@
+
+            Ext.getCmp(window.feature.comboboxDistrictsId).setDisabled(false);
+            Ext.getCmp(window.feature.comboboxRegionsId).setDisabled(false);
+            Ext.getCmp(window.feature.comboboxOutpostsId).setDisabled(false);
+            
+
+            viewProductStatusHandler();
+        }
+
+        function viewProductStatusHandler() {
+            var selectedOutpostId = window.feature.comboBoxOutposts.getValue();
+            var selectedDistrictId = window.feature.comboBoxDistricts.getValue();
+            var selectedRegionId = window.feature.comboBoxRegions.getValue();
+            var selectedCountryId = window.feature.comboBoxCountries.getValue();
+
+            window.feature.treeStore.setRootNode(null);
+            if (selectedOutpostId !== null) {
+                window.feature.treegrid.getStore().proxy.extraParams.OutpostId = selectedOutpostId;
+                window.feature.treegrid.getStore().proxy.extraParams.DistrictId = selectedDistrictId;
+                window.feature.treegrid.getStore().proxy.extraParams.RegionId = selectedRegionId;
+                window.feature.treegrid.getStore().proxy.extraParams.CountryId = selectedCountryId;
+                window.feature.treegrid.getStore().proxy.extraParams.ProductGroupExpandedOnEdit = '';
+                window.feature.treegrid.getRootNode().expand();
+            } else {
+                var msgAlert = Ext.Msg;
+                msgAlert.ui = 'snapshot-popup-window';
+                msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                msgAlert.msgButtons['ok'].margin = '10 10 20 0',
+                msgAlert.alert("Alert", "Please select all option in order to see outpost stock level data!");
+            }
+        };
 
     });
 </script>

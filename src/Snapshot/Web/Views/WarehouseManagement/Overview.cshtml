@@ -533,10 +533,9 @@
                                     handler: function(grid, rowIndex, colIndex) {
 
                                         var rec = grid.getStore().getAt(rowIndex);
-                                        var postToUrl = '@Url.RouteUrl(StockAdministrationAreaRegistration.DEFAULT_ROUTE, new { controller = "OutpostStockLevel", action = "Overview" })';
-                                        var action = $.get(postToUrl, {
-                                            outpostId: rec.get('Id')
-                                        });
+                                        var link = '@Url.RouteUrl(StockAdministrationAreaRegistration.DEFAULT_ROUTE, new { controller = "OutpostStockLevel", action = "Overview" })';
+                                        link = link + "/?outpostId=" + rec.get('Id');
+                                        navigateTo(link);
 
                                     }
                                 }//end item 2

@@ -8,5 +8,6 @@ namespace Web.Areas.OutpostManagement.Models.Outpost
         public Guid CountryId { get; set; }
         public Guid RegionId { get; set; }
         public Guid DistrictId { get; set; }
+        public Guid OutpostId { get; set; }
     }
 }
