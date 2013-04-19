@@ -297,9 +297,11 @@
     <Compile Include="Areas\StockAdministration\Models\Product\ProductIndexOutputModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\Product\ProductInputModel.cs" />
     <Compile Include="BackgroundJobs\ExecutedCampaign.cs" />
+    <Compile Include="BackgroundJobs\OutpostInactivityEmailJob.cs" />
     <Compile Include="Bootstrap\Container\ServicesConventionsRegistrar.cs" />
     <Compile Include="Controllers\AccountOptionsController.cs" />
     <Compile Include="Controllers\SendMessageController.cs" />
+    <Compile Include="Helpers\Comparers\OutpostIdEqualityComparer.cs" />
     <Compile Include="Helpers\ProjectLinkExtensions.cs" />
     <Compile Include="LocalizationResources\Strings.Designer.cs">
       <AutoGen>True</AutoGen>

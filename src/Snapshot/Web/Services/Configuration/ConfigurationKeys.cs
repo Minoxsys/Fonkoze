@@ -8,5 +8,6 @@
         public string SendEmailPassword = "SendEmail.Password";
         public string SendEmailTo = "SendEmail.To";
         public string SendEmailCc = "SendEmail.CC";
+        public string OutpostInactiveTimespan = "OutpostInactiveTimespan";
     }
 }

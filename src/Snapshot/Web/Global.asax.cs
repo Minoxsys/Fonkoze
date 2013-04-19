@@ -24,7 +24,6 @@ namespace Web
             }
         }
 
-
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
             filters.Add(new HandleErrorAttribute());
@@ -48,7 +47,6 @@ namespace Web
             _jobManager.Stop();
         }
 
-
         /// <summary>
         /// Instantiate the container and add all Controllers that derive from 
         /// UnityController to the container.  Also associate the Controller 
@@ -62,15 +60,15 @@ namespace Web
             _container = builder.Build();
             DependencyResolver.SetResolver(new AutofacDependencyResolver(_container));
         }
-
+        
         private static JobManager CreateJobWorkersManager()
         {
             var jobs = new IJob[]
             {
                 _container.Resolve<BackgroundJobs.EmptyJob>(),
                 _container.Resolve<BackgroundJobs.AddAlertsJob>(),
-                _container.Resolve<BackgroundJobs.CampaignExecutionJob>()
-                
+                _container.Resolve<BackgroundJobs.CampaignExecutionJob>(),
+                _container.Resolve<BackgroundJobs.OutpostInactivityEmailJob>()
                 //new SampleJob(TimeSpan.FromSeconds(35), TimeSpan.FromSeconds(60)),
                 /* new ExceptionJob(TimeSpan.FromSeconds(15)), */
                 //new WorkItemCleanupJob(TimeSpan.FromMinutes(1), TimeSpan.FromMinutes(5), new WorkItemsContext())

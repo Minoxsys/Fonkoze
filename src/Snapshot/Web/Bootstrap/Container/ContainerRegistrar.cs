@@ -1,12 +1,8 @@
 ﻿using Autofac;
-using Autofac.Core;
 using Autofac.Features.ResolveAnything;
 using System.Linq;
 using System.Web.Mvc;
-using Web.BackgroundJobs;
 using Web.Controllers;
-using Web.Services.Configuration;
-using Web.Services.SendEmail;
 
 namespace Web.Bootstrap.Container
 {
@@ -24,10 +20,6 @@ namespace Web.Bootstrap.Container
             ServicesConventionsRegistrar.Register(container);
 
             container.RegisterSource(new AnyConcreteTypeNotAlreadyRegisteredSource(type => type.Assembly.FullName.StartsWith("Web")));
-
-            //container.RegisterType<AddAlertsJob>()
-            //         .AsSelf()
-            //         .OnActivated(e => { e.Instance.PreconfiguredEmailService = (PreconfiguredEmailService) e.Context.ResolveNamed<IEmailSendingService>("config"); });
         }
 
         private static void AutoWireControllerProperties(ContainerBuilder container)

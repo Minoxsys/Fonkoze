@@ -138,4 +138,11 @@
   <data name="InvalidFileSelectedForUpload" xml:space="preserve">
     <value>The file selected is an invalid. Please choose another one.</value>
   </data>
+  <data name="InactiveSellerDetectedSubject" xml:space="preserve">
+    <value>Inactive seller detected</value>
+  </data>
+  <data name="InactiveSellerDetectedBody" xml:space="preserve">
+    <value>The following sellers have not sent stock or sell updates in {0} days:
+</value>
+  </data>
 </root>

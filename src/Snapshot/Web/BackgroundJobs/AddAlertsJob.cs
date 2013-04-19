@@ -37,7 +37,8 @@ namespace Web.BackgroundJobs
         }
 
         public AddAlertsJob(Func<ISaveOrUpdateCommand<Alert>> saveOrUpdateCommand, Func<IQueryService<Alert>> queryAlerts,
-                            Func<IQueryService<OutpostStockLevel>> queryOutpostStockLevel, Func<IQueryService<Client>> queryClients, PreconfiguredEmailService preconfiguredEmailService)
+                            Func<IQueryService<OutpostStockLevel>> queryOutpostStockLevel, Func<IQueryService<Client>> queryClients,
+                            PreconfiguredEmailService preconfiguredEmailService)
         {
             _preconfiguredEmailService = preconfiguredEmailService;
             _saveOrUpdateCommand = saveOrUpdateCommand;

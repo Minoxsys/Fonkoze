@@ -70,6 +70,25 @@ namespace Web.LocalizationResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The following sellers have not sent stock or sell updates in {0} days:
+        ///.
+        /// </summary>
+        internal static string InactiveSellerDetectedBody {
+            get {
+                return ResourceManager.GetString("InactiveSellerDetectedBody", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Inactive seller detected.
+        /// </summary>
+        internal static string InactiveSellerDetectedSubject {
+            get {
+                return ResourceManager.GetString("InactiveSellerDetectedSubject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Incorrect SMS alert.
         /// </summary>
         internal static string IncorrectSMSAlertSubject {
