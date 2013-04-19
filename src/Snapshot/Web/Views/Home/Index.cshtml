@@ -7,11 +7,12 @@ Snapshot Application
     .imgHeight {
       height:40px;
     }
-    .poweredBy {
-        position: fixed;
-    right: 0;
-    bottom: 0;
-    }
+  
+.alignRight  {
+        text-align : right;
+       
+}
+
 
 
 </style>
@@ -36,7 +37,6 @@ Snapshot Application
             [
             {
                 xtype: 'container',
-                margin: '15 25 15 15',
                 padding: '20 20 20 20',
                 layout: {
                     type: 'table',
@@ -91,9 +91,17 @@ Snapshot Application
                 ]
             },
              {
-                 xtype: 'image',
-                 cls:'poweredBy',
-                 autoEl: { html: "<img height='30' src = '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/copyright.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))'/>" },
+                 xtype: 'container',
+                 layout: 'fit',
+                 width: content.container.lastBox.width - 80,
+                 padding: content.container.lastBox.height-400 +' 0 0 0',
+                 items: [{
+                     xtype: 'image',
+                     cls: 'alignRight',
+                     autoEl: { html: "<img height='35' src = '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/copyright.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))'/>" },
+                 }]
+
+                
 
 
             }
