@@ -17,7 +17,7 @@ namespace Web.Services
 
         public string SendSms(string toPhoneNumber, string message)//TODO: customize to the ways of the new gateway
         {
-           string postData = GetPostDataFromSettings() + "&selectednums"+ toPhoneNumber +"&message=" + HttpUtility.HtmlEncode(message); 
+           string postData = GetPostDataFromSettings() + "&selectednums="+ toPhoneNumber +"&message=" + HttpUtility.HtmlEncode(message); 
            string postResponse = _httpService.Post(_smsGatewaySettingsService.SmsGatewayUrl, postData);
            return postResponse;
         }

@@ -21,6 +21,7 @@ namespace Web.Controllers
 		public IQueryService<Client> LoadClient { get; set; }
 
 		public IQueryService<User> QueryUsers { get; set; }
+        public IQueryService<Alert> QueryAlerts { get; set; }
 
         [Requires(Permissions = "Home.Index")]
         public ActionResult Index()
@@ -33,6 +34,13 @@ namespace Web.Controllers
 
 
             return View(listModel);
+        }
+
+        [HttpGet]
+        public string GetNoOfAlertsInLast2Days()
+        {
+           var latestAlerts = QueryAlerts.Query().Where(it => it.Created >= DateTime.Now.AddDays(-2));
+           return latestAlerts.Count().ToString();
         }
 
 		public ActionResult UserDetails()

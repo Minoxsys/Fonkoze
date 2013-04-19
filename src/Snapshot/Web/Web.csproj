@@ -524,6 +524,7 @@
     <Content Include="Assets\resources\img\Administration\SubMenu\ProductSelected.png" />
     <Content Include="Assets\resources\img\Administration\SubMenu\UserNotSelected.png" />
     <Content Include="Assets\resources\img\Administration\SubMenu\UserSelected.png" />
+    <Content Include="Assets\resources\img\alert.gif" />
     <Content Include="Assets\resources\img\Alerts\AlertsAdministration.png" />
     <Content Include="Assets\resources\img\Alerts\Checked.png" />
     <Content Include="Assets\resources\img\Alerts\Star.png" />
@@ -539,11 +540,13 @@
     <Content Include="Assets\resources\img\charts2.png" />
     <Content Include="Assets\resources\img\checked.gif" />
     <Content Include="Assets\resources\img\copy.png" />
+    <Content Include="Assets\resources\img\copyright.png" />
     <Content Include="Assets\resources\img\dashboard_image.png" />
     <Content Include="Assets\resources\img\delete.png" />
     <Content Include="Assets\resources\img\edit.png" />
     <Content Include="Assets\js\ext-all-debug-w-comments.js" />
     <Content Include="Assets\js\jquery-1.7.1.min.js" />
+    <Content Include="Assets\resources\img\green-ok.gif" />
     <Content Include="Assets\resources\img\logo.gif" />
     <Content Include="Assets\resources\img\Logo.png" />
     <Content Include="Assets\resources\img\logoFon.png" />

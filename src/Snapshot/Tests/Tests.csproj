@@ -135,6 +135,8 @@
     <Compile Include="Unit\Controllers\Areas\CampaignManagement\CampaignController_Tests\GetRightGridStoreMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\CampaignManagement\CampaignController_Tests\ObjectMother.cs" />
     <Compile Include="Unit\Controllers\Areas\CampaignManagement\ProductLevelRequest_Tests\StopProductLevelRequestMethod.cs" />
+    <Compile Include="Unit\Controllers\Areas\CampaignManagement\SendMessagesControllerTests\ObjectMother.cs" />
+    <Compile Include="Unit\Controllers\Areas\CampaignManagement\SendMessagesControllerTests\SendMessageToOutpostsMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\MessagesManagement\SellerControllerTests\SellerControllerTests.cs" />
     <Compile Include="Unit\Controllers\Areas\MessagesManagement\SentMessagesControllerTests\GetSentMessagesMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\MessagesManagement\SentMessagesControllerTests\ObjectMother.cs" />
@@ -211,6 +213,7 @@
     <Compile Include="Unit\Controllers\Areas\CampaignManagement\RequestScheduleController_Tests\EditMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\CampaignManagement\RequestScheduleController_Tests\GetListOfRequestSchedulesMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\CampaignManagement\RequestScheduleController_Tests\ObjectMother.cs" />
+    <Compile Include="Unit\Controllers\HomeControllerTests\GetNoOfAlertsInLast2DaysMethod.cs" />
     <Compile Include="Unit\Controllers\JavaScriptControllerTests\IndexMethod.cs" />
     <Compile Include="Unit\Controllers\JavaScriptControllerTests\ObjectMother.cs" />
     <Compile Include="Unit\Controllers\RoleManagerControllerTests\CreateMethod.cs" />
@@ -260,6 +263,7 @@
     <Compile Include="Unit\Services\RawSmsMeesageQueryHelpersService.cs" />
     <Compile Include="Unit\ReceiveSmsWorkflow\ReceiveSmsWorkflowServiceTests.cs" />
     <Compile Include="Unit\Services\SmsGatewayServiceTest\ObjectMother.cs" />
+    <Compile Include="Unit\Services\SmsGatewayServiceTest\SendSmsMethod.cs" />
     <Compile Include="Unit\Services\SmsGatewayServiceTest\SendSmsRequestMethod.cs" />
     <Compile Include="Unit\Services\SmsRequestServiceTest\ObjectMother.cs" />
     <Compile Include="Unit\Services\SmsRequestServiceTest\SendProductLevelRequestMessageMethod.cs" />

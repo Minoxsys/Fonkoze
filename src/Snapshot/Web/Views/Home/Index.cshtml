@@ -3,6 +3,18 @@
 Snapshot Application
 }
 
+<style>
+    .imgHeight {
+      height:40px;
+    }
+    .poweredBy {
+        position: fixed;
+    right: 0;
+    bottom: 0;
+    }
+
+
+</style>
 
 <script type="text/javascript">
     window.res.header.subnavigation.buttonTabs = {
@@ -19,36 +31,97 @@ Snapshot Application
 
         content.add({
             xtype: 'container',
-            margin: '15 25 15 15',
-            padding: '20 20 20 20',
-            layout: {
-                type: 'table',
-                columns: '2'
-            },
-            items: [{                
-                xtype: 'image',
-                autoEl: { html: "<a href='@(Url.RouteUrl<Web.Areas.AnalysisManagement.Controllers.LocationReportController>(x=>x.Overview(),Web.Areas.AnalysisManagement.AnalysisManagementAreaRegistration.DEFAULT_ROUTE))'><img height='60' src = '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Analysis/LocationReport.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))'/></a>" },
+            layout: 'vbox',
+            items:
+            [
+            {
+                xtype: 'container',
+                margin: '15 25 15 15',
+                padding: '20 20 20 20',
+                layout: {
+                    type: 'table',
+                    columns: '2'
+                },
+                items: [
+                {
+                    xtype: 'image',
+                    autoEl: { html: "<a href='@(Url.RouteUrl<Web.Areas.AnalysisManagement.Controllers.LocationReportController>(x=>x.Overview(),Web.Areas.AnalysisManagement.AnalysisManagementAreaRegistration.DEFAULT_ROUTE))'><img height='60' src = '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Analysis/LocationReport.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))'/></a>" },
                     margin: '0 20 0 20',
                     height: 110,
                     rowspan: 2
-            }, {
-                xtype: 'label',
-                tdAttrs: { height: 25, valign: 'top' },
-                autoEl: { tag: 'a', cls: 'blue-label analysis-label', href: '@(Url.RouteUrl<Web.Areas.AnalysisManagement.Controllers.LocationReportController>(x=>x.Overview(),Web.Areas.AnalysisManagement.AnalysisManagementAreaRegistration.DEFAULT_ROUTE))', html: 'Location Report' }
+                }, {
+                    xtype: 'label',
+                    tdAttrs: { height: 25, valign: 'top' },
+                    autoEl: { tag: 'a', cls: 'blue-label analysis-label', href: '@(Url.RouteUrl<Web.Areas.AnalysisManagement.Controllers.LocationReportController>(x=>x.Overview(),Web.Areas.AnalysisManagement.AnalysisManagementAreaRegistration.DEFAULT_ROUTE))', html: 'Location Report' }
 
-                        }, {
-                            xtype: 'label',
-                            tdAttrs: { valign: 'top' },
-                            text: 'This report will show stock levels for different outposts.'
-                                    
-           
-               @* xtype: 'image',
+                }, {
+                    xtype: 'label',
+                    tdAttrs: { valign: 'top' },
+                    text: 'This report will show stock levels for different outposts.'
+
+
+                    @* xtype: 'image',
                 src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/charts2.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
                 width: 1400,
                 margin: '20 0 0 0'*@
-            }]
+                }
+                ]
+            },
+            {
+                xtype: 'container',
+                layout: {
+                    type: 'table',
+                    columns: '2'
+                },
+                margin: '0 10 10 60',
+                items: [
+                    {
+                        xtype: 'image',
+                        itemId: 'No-of-alerts-image',
+                        cls: 'imgHeight'
+                    }
+                   ,{
+                       xtype: 'label',
+                       cls:'blue-label analysis-label',
+                       padding: '0 0 0 30',
+                       itemId: 'No-of-alerts-label',
+                       autoEl: { tag: 'a', cls: 'blue-label analysis-label', href: '@(Url.RouteUrl<AlertsController>(x => x.Overview(), Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE))', html: '' }
+                      
+                    }
+                ]
+            },
+             {
+                 xtype: 'image',
+                 cls:'poweredBy',
+                 autoEl: { html: "<img height='30' src = '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/copyright.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))'/>" },
+
+
+            }
+
+
+            ]
+           
         });
 
+
+        var noOfAlertsLabel = content.down('#No-of-alerts-label');
+        var noOfAlertsImg = content.down('#No-of-alerts-image');
+        var getFromUrl = '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "Home", action = "GetNoOfAlertsInLast2Days" })';
+        var action = $.get(getFromUrl);
+        action.success(function (response) {
+            var alertStr = 'alert';
+            if (response == "0") {
+                noOfAlertsImg.getEl().dom.src = '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/green-ok.gif"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))';
+            }
+            else {
+                if (response > 1) { alertStr += 's'; }
+                noOfAlertsImg.getEl().dom.src = '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/alert.gif"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))';
+            }
+            noOfAlertsLabel.setText(response + " " + alertStr + " received in the last two days!");
+                        
+        });
+
+                     
     });
 </script>
 
