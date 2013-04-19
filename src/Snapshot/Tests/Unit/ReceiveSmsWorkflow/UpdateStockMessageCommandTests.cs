@@ -86,7 +86,7 @@ namespace Tests.Unit.ReceiveSmsWorkflow
 
             _sut.Execute(_inputModel, new SmsParseResult {Success = true, MessageType = MessageType.StockUpdate}, _outpostMock.Object);
 
-            _updateProductStockServiceMock.Verify(s => s.UpdateProductStocksForOutpost(It.IsAny<ISmsParseResult>(), It.IsAny<Guid>()), Times.Never());
+            _updateProductStockServiceMock.Verify(s => s.UpdateProductStocksForOutpost(It.IsAny<ISmsParseResult>(), It.IsAny<Guid>(), StockUpdateMethod.SMS), Times.Never());
         }
 
 
@@ -103,6 +103,16 @@ namespace Tests.Unit.ReceiveSmsWorkflow
                                                                           a.Contact == _inputModel.Sender &&
                                                                           a.LastUpdate == null && a.OutpostId == _outpostMock.Object.Id &&
                                                                           a.OutpostName == _outpostMock.Object.Name)));
+        }
+
+        [Test]
+        public void ExecutingTheCommand_DoesNotSavesAnErrorAlert_WhenMessageIsCorrect()
+        {
+            SetupKnownSender();
+
+            _sut.Execute(_inputModel, new SmsParseResult { Success = true }, _outpostMock.Object);
+
+            _saveAlertCmdMock.Verify(cmd => cmd.Execute(It.IsAny<Alert>()), Times.Never());
         }
 
         [Test]
@@ -125,7 +135,7 @@ namespace Tests.Unit.ReceiveSmsWorkflow
 
             _sut.Execute(_inputModel, parseResult, _outpostMock.Object);
 
-            _updateProductStockServiceMock.Verify(s => s.UpdateProductStocksForOutpost(parseResult, _outpostMock.Object.Id));
+            _updateProductStockServiceMock.Verify(s => s.UpdateProductStocksForOutpost(parseResult, _outpostMock.Object.Id, StockUpdateMethod.SMS));
         }
 
         private void SetupKnownSender(bool isSenderActive = true, bool isWarehouse = false)

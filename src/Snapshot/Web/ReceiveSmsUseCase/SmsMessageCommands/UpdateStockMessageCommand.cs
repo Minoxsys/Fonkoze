@@ -35,7 +35,7 @@ namespace Web.ReceiveSmsUseCase.SmsMessageCommands
             {
                 if (IsActiveSender(outpost, smsData.Sender))
                 {
-                    _updateStockService.UpdateProductStocksForOutpost(parseResult, outpost.Id);
+                    _updateStockService.UpdateProductStocksForOutpost(parseResult, outpost.Id, StockUpdateMethod.SMS);
                 }
                 else
                 {
@@ -44,31 +44,31 @@ namespace Web.ReceiveSmsUseCase.SmsMessageCommands
             }
             else
             {
-                // get the latest error alert from the same sender if any
-                var previousWrongAlert =
+                // see if this is the second consecutive mistake
+                var previousAlert =
                     _alertQueryService.Query()
                                       .OrderByDescending(a => a.Created)
-                                      .FirstOrDefault(a => a.AlertType == AlertType.Error && a.OutpostName == outpost.Name && a.Contact == smsData.Sender);
+                                      .FirstOrDefault(a => a.OutpostName == outpost.Name && a.Contact == smsData.Sender);
 
-                if (previousWrongAlert != null)
+                if (previousAlert != null && previousAlert.AlertType == AlertType.Error)
                 {
                     var msg = CreateMailMessage(smsData, outpost);
                     _emailSendingService.SendEmail(msg);
                 }
-            }
 
-            var alert = new Alert
-                {
-                    AlertType = AlertType.Error,
-                    Client = outpost.Client,
-                    OutpostId = outpost.Id,
-                    Contact = smsData.Sender,
-                    OutpostName = outpost.Name,
-                    ProductGroupName = "-",
-                    LowLevelStock = "-",
-                    LastUpdate = null
-                };
-            _saveOrUpdateAlertCommand.Execute(alert);
+                var alert = new Alert
+                    {
+                        AlertType = AlertType.Error,
+                        Client = outpost.Client,
+                        OutpostId = outpost.Id,
+                        Contact = smsData.Sender,
+                        OutpostName = outpost.Name,
+                        ProductGroupName = "-",
+                        LowLevelStock = "-",
+                        LastUpdate = null
+                    };
+                _saveOrUpdateAlertCommand.Execute(alert);
+            }
         }
 
         private MailMessage CreateMailMessage(ReceivedSmsInputModel smsData, Outpost outpost)

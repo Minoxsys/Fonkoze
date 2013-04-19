@@ -30,7 +30,7 @@ namespace Tests.Unit.WarehouseManagementWorkflow
         }
 
         [Test]
-        public void UpdatesStockWithParsedDataFromTheStream_WhenParsingSuccessful()
+        public void IncrementsStockLevelsFromParsedDataFromTheStream_WhenParsingSuccessful()
         {
             var list = new List<IParsedProduct>();
             
@@ -40,11 +40,11 @@ namespace Tests.Unit.WarehouseManagementWorkflow
             _sut.ProcessWarehouseStockData(_dummyStream.Object, _outpostId);
 
             _updateStockServiceMock.Verify(
-                s => s.UpdateProductStocksForOutpost(It.Is<CsvParseResult>(r => r.Success && r.ParsedProducts == list), _outpostId));
+                s => s.IncrementProductStocksForOutpost(It.Is<CsvParseResult>(r => r.Success && r.ParsedProducts == list), _outpostId, StockUpdateMethod.CSV));
         }
 
         [Test]
-        public void DoesNotUpdateStock_WhenParsingFails()
+        public void DoesNotIncrementStock_WhenParsingFails()
         {
             _stockUpdateCsvFileParser.Setup(s => s.ParseStream(_dummyStream.Object))
                                      .Returns(new CsvParseResult {Success = false});
@@ -52,7 +52,7 @@ namespace Tests.Unit.WarehouseManagementWorkflow
             _sut.ProcessWarehouseStockData(_dummyStream.Object, _outpostId);
 
             _updateStockServiceMock.Verify(
-                s => s.UpdateProductStocksForOutpost(It.IsAny<CsvParseResult>(), _outpostId), Times.Never());
+                s => s.IncrementProductStocksForOutpost(It.IsAny<CsvParseResult>(), _outpostId, StockUpdateMethod.CSV), Times.Never());
         }
     }
 }

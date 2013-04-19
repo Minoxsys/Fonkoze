@@ -9,6 +9,7 @@ using Web.Models.Parsing;
 using Web.ReceiveSmsUseCase.Models;
 using Web.ReceiveSmsUseCase.Services;
 using Web.Services.StockUpdates;
+using Web.WarehouseMgmtUseCase.Model;
 
 namespace Tests.Unit.ReceiveSmsWorkflow
 {
@@ -32,13 +33,14 @@ namespace Tests.Unit.ReceiveSmsWorkflow
             _outpostMock = new Mock<Outpost>();
             _outpostMock.SetupGet(o => o.Id).Returns(_outpostId);
             _parsedProduct = CreateParsedProduct("ABC", "A", 4);
-            _sut = new UpdateStockService(_outpostStockLevelSaveCommandMock.Object, _outpostStockLevelQueryServiceMock.Object, _outpostStockLevelHistoryServiceMock.Object);
+            _sut = new UpdateStockService(_outpostStockLevelSaveCommandMock.Object, _outpostStockLevelQueryServiceMock.Object,
+                                          _outpostStockLevelHistoryServiceMock.Object);
         }
 
         [Test]
         public void UpdateProductStocks_ThrowsException_WhenPassedInAFailedParseResult()
         {
-            Assert.That(() => _sut.UpdateProductStocksForOutpost(new SmsParseResult {Success = false}, Guid.Empty), Throws.ArgumentException);
+            Assert.That(() => _sut.UpdateProductStocksForOutpost(new SmsParseResult {Success = false}, Guid.Empty, StockUpdateMethod.Manual), Throws.ArgumentException);
         }
 
         [Test]
@@ -54,13 +56,13 @@ namespace Tests.Unit.ReceiveSmsWorkflow
                     Success = true,
                     ParsedProducts =
                         new List<IParsedProduct> {_parsedProduct}
-                }, _outpostId);
+                }, _outpostId, StockUpdateMethod.Manual);
 
             _outpostStockLevelSaveCommandMock.Verify(
                 cmd => cmd.Execute(It.Is<OutpostStockLevel>(osl => osl.StockLevel == _parsedProduct.StockLevel && osl.Outpost.Id == _outpostId &&
                                                                    osl.Product.SMSReferenceCode == _parsedProduct.ProductCode &&
                                                                    osl.ProductGroup.ReferenceCode == _parsedProduct.ProductGroupCode &&
-                                                                   osl.UpdateMethod == "SMS")));
+                                                                   osl.UpdateMethod == StockUpdateMethod.Manual.ToString())));
         }
 
         [Test]
@@ -69,27 +71,56 @@ namespace Tests.Unit.ReceiveSmsWorkflow
             _outpostStockLevelQueryServiceMock.Setup(s => s.Query()).Returns((new List<OutpostStockLevel>
                 {
                     CreateOutpostStockLevel(_parsedProduct.ProductGroupCode, _parsedProduct.ProductCode),
-                    CreateOutpostStockLevel("GHJ","K")
+                    CreateOutpostStockLevel("GHJ", "K")
                 }).AsQueryable());
 
             _sut.UpdateProductStocksForOutpost(new SmsParseResult
-            {
-                Success = true,
-                ParsedProducts =
-                    new List<IParsedProduct> { _parsedProduct, CreateParsedProduct("GHJ","K",3) }
-            }, _outpostId);
+                {
+                    Success = true,
+                    ParsedProducts =
+                        new List<IParsedProduct> {_parsedProduct, CreateParsedProduct("GHJ", "K", 3)}
+                }, _outpostId, StockUpdateMethod.Manual);
 
             _outpostStockLevelSaveCommandMock.Verify(
                 cmd => cmd.Execute(It.Is<OutpostStockLevel>(osl => osl.StockLevel == _parsedProduct.StockLevel && osl.Outpost.Id == _outpostId &&
                                                                    osl.Product.SMSReferenceCode == _parsedProduct.ProductCode &&
                                                                    osl.ProductGroup.ReferenceCode == _parsedProduct.ProductGroupCode &&
-                                                                   osl.UpdateMethod == "SMS")));
+                                                                   osl.UpdateMethod == StockUpdateMethod.Manual.ToString())));
 
             _outpostStockLevelSaveCommandMock.Verify(
-               cmd => cmd.Execute(It.Is<OutpostStockLevel>(osl => osl.StockLevel == 3 && osl.Outpost.Id == _outpostId &&
-                                                                  osl.Product.SMSReferenceCode == "K" &&
-                                                                  osl.ProductGroup.ReferenceCode == "GHJ" &&
-                                                                  osl.UpdateMethod == "SMS")));
+                cmd => cmd.Execute(It.Is<OutpostStockLevel>(osl => osl.StockLevel == 3 && osl.Outpost.Id == _outpostId &&
+                                                                   osl.Product.SMSReferenceCode == "K" &&
+                                                                   osl.ProductGroup.ReferenceCode == "GHJ" &&
+                                                                   osl.UpdateMethod == StockUpdateMethod.Manual.ToString())));
+        }
+
+        [Test]
+        public void IncrementProductStocks_UpdatesTheStockLevelForTwoExistingProduct_WhenThereAreTwoResultsAfterParsing()
+        {
+            _outpostStockLevelQueryServiceMock.Setup(s => s.Query()).Returns((new List<OutpostStockLevel>
+                {
+                    CreateOutpostStockLevel("DEF", "L", 1),
+                    CreateOutpostStockLevel("GHJ", "K", 2)
+                }).AsQueryable());
+
+            _sut.IncrementProductStocksForOutpost(new CsvParseResult
+                {
+                    Success = true,
+                    ParsedProducts =
+                        new List<IParsedProduct> {CreateParsedProduct("DEF", "L", 3), CreateParsedProduct("GHJ", "K", 5)}
+                }, _outpostId, StockUpdateMethod.Manual);
+
+            _outpostStockLevelSaveCommandMock.Verify(
+                cmd => cmd.Execute(It.Is<OutpostStockLevel>(osl => osl.StockLevel == 4 && osl.Outpost.Id == _outpostId &&
+                                                                   osl.Product.SMSReferenceCode == "L" &&
+                                                                   osl.ProductGroup.ReferenceCode == "DEF" &&
+                                                                   osl.UpdateMethod == StockUpdateMethod.Manual.ToString())));
+
+            _outpostStockLevelSaveCommandMock.Verify(
+                cmd => cmd.Execute(It.Is<OutpostStockLevel>(osl => osl.StockLevel == 7 && osl.Outpost.Id == _outpostId &&
+                                                                   osl.Product.SMSReferenceCode == "K" &&
+                                                                   osl.ProductGroup.ReferenceCode == "GHJ" &&
+                                                                   osl.UpdateMethod == StockUpdateMethod.Manual.ToString())));
         }
 
         [Test]
@@ -106,7 +137,7 @@ namespace Tests.Unit.ReceiveSmsWorkflow
                     Success = true,
                     ParsedProducts =
                         new List<IParsedProduct> {_parsedProduct}
-                }, _outpostId);
+                }, _outpostId, StockUpdateMethod.SMS);
 
             _outpostStockLevelSaveCommandMock.Verify(cmd => cmd.Execute(It.IsAny<OutpostStockLevel>()), Times.Never());
         }
@@ -125,19 +156,20 @@ namespace Tests.Unit.ReceiveSmsWorkflow
                     Success = true,
                     ParsedProducts =
                         new List<IParsedProduct> {_parsedProduct}
-                }, _outpostId);
+                }, _outpostId, StockUpdateMethod.Manual);
 
             _outpostStockLevelHistoryServiceMock.Verify(s => s.SaveHistoricalOutpostStockLevelToPreviousOutpostStockLevelOfCurrent(
                 It.Is<OutpostStockLevel>(osl => osl == existingStockLevel)));
         }
 
-        private OutpostStockLevel CreateOutpostStockLevel(string productGroupCode, string productCode)
+        private OutpostStockLevel CreateOutpostStockLevel(string productGroupCode, string productCode, int stockLevel = 0)
         {
             return new OutpostStockLevel
                 {
                     ProductGroup = new ProductGroup {ReferenceCode = productGroupCode},
                     Product = new Product {SMSReferenceCode = productCode},
-                    Outpost = _outpostMock.Object
+                    Outpost = _outpostMock.Object,
+                    StockLevel = stockLevel
                 };
         }
 

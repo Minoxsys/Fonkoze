@@ -21,7 +21,7 @@ namespace Web.WarehouseMgmtUseCase.Services
             IParseResult parseResult = _stockUpdateCsvFileParser.ParseStream(inputData);
             if (parseResult.Success)
             {
-                _updateStockService.UpdateProductStocksForOutpost(parseResult, outpostId);
+                _updateStockService.IncrementProductStocksForOutpost(parseResult, outpostId, StockUpdateMethod.CSV);
             }
         }
     }
