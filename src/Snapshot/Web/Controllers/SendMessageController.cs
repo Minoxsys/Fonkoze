@@ -22,7 +22,7 @@ namespace Web.Controllers
 {
     public class SendMessageController : Controller
     {
-        public ISmsGatewayService smsGatewayService { get; set; }
+        public ISendSmsService smsGatewayService { get; set; }
         public ISendEmailService EmailService { get; set; }
         public IHttpService HttpService { get; set; }
         public ISaveOrUpdateCommand<SentSms> SaveOrUpdateCommand { get; set; }

@@ -37,7 +37,7 @@ namespace Tests.Unit.Services.SmsGatewayServiceTest
 
         public ISmsGatewaySettingsService fakeSmsGatewaySettingsService;
         public IHttpService fakeHttpService;
-        public ISmsGatewayService smsGatewayService;
+        public ISendSmsService smsGatewayService;
 
         public IQueryOutposts queryOutposts;
 
@@ -65,7 +65,7 @@ namespace Tests.Unit.Services.SmsGatewayServiceTest
             queryOutposts = MockRepository.GenerateMock<IQueryOutposts>();
 
             queryServiceContact = MockRepository.GenerateMock<IQueryService<Contact>>();
-            smsGatewayService = new SmsGatewayService(fakeSmsGatewaySettingsService, fakeHttpService);
+            smsGatewayService = new SendSmsService(fakeSmsGatewaySettingsService, fakeHttpService);
         }
 
         public void SetUp_StubData()

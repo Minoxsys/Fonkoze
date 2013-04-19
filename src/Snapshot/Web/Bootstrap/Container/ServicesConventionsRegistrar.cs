@@ -9,7 +9,7 @@ namespace Web.Bootstrap.Container
     {
         public static void Register(ContainerBuilder container)
         {
-            var webAssembly = typeof (SmsGatewayService).Assembly;
+            var webAssembly = typeof (SendSmsService).Assembly;
             ApplyServicesConvention(container, webAssembly);
             ApplyFactoryConvention(container, webAssembly);
 

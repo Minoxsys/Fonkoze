@@ -8,6 +8,7 @@ using Web.ReceiveSmsUseCase.Models;
 using Web.ReceiveSmsUseCase.Services;
 using Web.Services.SendEmail;
 using Web.Services.StockUpdates;
+using Web.Services;
 
 namespace Web.ReceiveSmsUseCase.SmsMessageCommands
 {
@@ -39,7 +40,7 @@ namespace Web.ReceiveSmsUseCase.SmsMessageCommands
                 }
                 else
                 {
-                    _sendSmsService.SendSmsMessage(Strings.PhoneNumberNotActive, smsData.Sender);
+                    _sendSmsService.SendSms(Strings.PhoneNumberNotActive, smsData.Sender);
                 }
             }
             else

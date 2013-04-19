@@ -20,7 +20,7 @@ namespace Tests.Unit.Controllers.Areas.CampaignManagement.SendMessagesController
         public const string SMS_GATEWAY_DEBUG = "0";
 
         public ISmsGatewaySettingsService fakeSmsGatewaySettingsService;
-        public ISmsGatewayService smsGatewayService;
+        public ISendSmsService smsGatewayService;
         public IQueryOutposts queryOutposts;
         public IHttpService fakeHttpService;
         public ISaveOrUpdateCommand<SentSms> SaveOrUpdateCommand;
@@ -37,7 +37,7 @@ namespace Tests.Unit.Controllers.Areas.CampaignManagement.SendMessagesController
             fakeSmsGatewaySettingsService.Stub(c => c.SmsGatewayFrom).Return(SMS_GATEWAY_FROM);
             fakeSmsGatewaySettingsService.Stub(c => c.SmsGatewayTestMode).Return(SMS_GATEWAY_TESTMODE);
             fakeSmsGatewaySettingsService.Stub(c => c.SmsGatewayDebugMode).Return(SMS_GATEWAY_DEBUG);
-            smsGatewayService = new SmsGatewayService(fakeSmsGatewaySettingsService, fakeHttpService);
+            smsGatewayService = new SendSmsService(fakeSmsGatewaySettingsService, fakeHttpService);
 
             queryOutposts = MockRepository.GenerateMock<IQueryOutposts>();
 

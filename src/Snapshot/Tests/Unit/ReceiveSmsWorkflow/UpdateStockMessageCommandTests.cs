@@ -12,6 +12,7 @@ using Web.ReceiveSmsUseCase.Services;
 using Web.ReceiveSmsUseCase.SmsMessageCommands;
 using Web.Services.SendEmail;
 using Web.Services.StockUpdates;
+using Web.Services;
 
 namespace Tests.Unit.ReceiveSmsWorkflow
 {
@@ -124,7 +125,7 @@ namespace Tests.Unit.ReceiveSmsWorkflow
 
             _sut.Execute(_inputModel, new SmsParseResult {Success = true, MessageType = MessageType.StockUpdate}, _outpostMock.Object);
 
-            _sendSmsServiceMock.Verify(s => s.SendSmsMessage(It.IsAny<string>(), _inputModel.Sender));
+            _sendSmsServiceMock.Verify(s => s.SendSms(It.IsAny<string>(), _inputModel.Sender));
         }
 
         [Test]

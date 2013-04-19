@@ -17,10 +17,10 @@ namespace Web.Services
         // private ISaveOrUpdateCommand<OutpostStockLevel> saveCommandOutpostStockLevel;
 
         private readonly ISaveOrUpdateCommand<SmsRequest> _saveCommandSmsRequest;
-        private readonly ISmsGatewayService _smsGatewayService;
+        private readonly ISendSmsService _smsGatewayService;
         private readonly FormattingStrategy _formattingStrategy;
 
-        public SmsRequestService(ISaveOrUpdateCommand<SmsRequest> saveCommandSmsRequest, ISmsGatewayService smsGatewayService,
+        public SmsRequestService(ISaveOrUpdateCommand<SmsRequest> saveCommandSmsRequest, ISendSmsService smsGatewayService,
                                  FormattingStrategy formattingStrategy)
         {
             _saveCommandSmsRequest = saveCommandSmsRequest;

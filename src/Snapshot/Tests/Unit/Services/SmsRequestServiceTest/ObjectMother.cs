@@ -64,7 +64,7 @@ namespace Tests.Unit.Services.SmsRequestServiceTest
 
         public IOutpostHistoricalStockLevelService OutpostHistoricalStockLevelService;
         public SmsRequestService smsRequestService;
-        public ISmsGatewayService smsGatewayService;
+        public ISendSmsService smsGatewayService;
 
         public void Setup_SmsRequestService_And_MockServices()
         {
@@ -77,7 +77,7 @@ namespace Tests.Unit.Services.SmsRequestServiceTest
             saveCommandOutpostStockLevel = MockRepository.GenerateMock<ISaveOrUpdateCommand<OutpostStockLevel>>();
             saveCommandOutpostHistoricalStockLevel = MockRepository.GenerateMock<ISaveOrUpdateCommand<OutpostHistoricalStockLevel>>();
 
-            smsGatewayService = MockRepository.GenerateMock<ISmsGatewayService>();
+            smsGatewayService = MockRepository.GenerateMock<ISendSmsService>();
 
             OutpostHistoricalStockLevelService = new OutpostHistoricalStockLevelService(saveCommandOutpostHistoricalStockLevel);
 

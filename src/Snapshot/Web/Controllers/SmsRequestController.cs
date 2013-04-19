@@ -17,7 +17,7 @@ namespace Web.Controllers
         public IQueryService<Outpost> QueryOutpost { get; set; }
         public IQueryService<ProductGroup> QueryProductGroup { get; set; }
 
-        public ISmsGatewayService SmsGatewayService { get; set; }
+        public ISendSmsService SmsGatewayService { get; set; }
 
         public ISaveOrUpdateCommand<RawSmsReceived> SaveCommandRawSmsReceived { get; set; }
         public ISaveOrUpdateCommand<Alert> SaveAlertCmd { get; set; }

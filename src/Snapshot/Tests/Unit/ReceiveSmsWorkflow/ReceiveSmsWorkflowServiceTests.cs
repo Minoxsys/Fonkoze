@@ -9,6 +9,7 @@ using System.Linq;
 using Web.ReceiveSmsUseCase.Models;
 using Web.ReceiveSmsUseCase.Services;
 using Web.ReceiveSmsUseCase.SmsMessageCommands;
+using Web.Services;
 
 namespace Tests.Unit.ReceiveSmsWorkflow
 {
@@ -57,7 +58,7 @@ namespace Tests.Unit.ReceiveSmsWorkflow
         {
             _sut.ProcessSms(_inputModel);
 
-            _sendSmsServiceMock.Verify(s => s.SendSmsMessage(It.IsAny<string>(), _inputModel.Sender));
+            _sendSmsServiceMock.Verify(s => s.SendSms(It.IsAny<string>(), _inputModel.Sender));
             _smsTextParserServiceMock.Verify(s => s.Parse(It.IsAny<string>()), Times.Never());
         }
 

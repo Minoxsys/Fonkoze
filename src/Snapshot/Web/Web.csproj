@@ -437,7 +437,6 @@
     <Compile Include="Services\GenerateProductLevelDetailsCommand.cs" />
     <Compile Include="Services\IRawSmsMeesageQueryHelpersService.cs" />
     <Compile Include="Services\ISendEmailService.cs" />
-    <Compile Include="ReceiveSmsUseCase\Services\ISendSmsService.cs" />
     <Compile Include="ReceiveSmsUseCase\Services\ISmsTextParserService.cs" />
     <Compile Include="Services\StockUpdates\IUpdateStockService.cs" />
     <Compile Include="Services\PathService.cs" />
@@ -454,7 +453,7 @@
     <Compile Include="Services\IProductLevelRequestMessageSenderService.cs" />
     <Compile Include="ReceiveSmsUseCase\Services\IOutpostHistoricalStockLevelService.cs" />
     <Compile Include="Services\IProductLevelRequestMessagesDispatcherService.cs" />
-    <Compile Include="Services\ISmsGatewayService.cs" />
+    <Compile Include="Services\ISendSmsService.cs" />
     <Compile Include="Services\ISmsGatewaySettingsService.cs" />
     <Compile Include="Services\ProcessProductLevelRequestStrategy.cs" />
     <Compile Include="Services\ProductLevelRequestMessagesDispatcherService.cs" />
@@ -464,13 +463,12 @@
     <Compile Include="Services\RawSmsMeesageQueryHelpersService.cs" />
     <Compile Include="ReceiveSmsUseCase\Services\ReceiveSmsWorkflowService.cs" />
     <Compile Include="Services\SendEmailService.cs" />
-    <Compile Include="ReceiveSmsUseCase\Services\SendSmsService.cs" />
     <Compile Include="Services\SendEmail\EmailSendingService.cs" />
     <Compile Include="Services\SendEmail\IEmailSendingService.cs" />
     <Compile Include="Services\SendEmail\IPreconfiguredEmailService.cs" />
     <Compile Include="Services\SendEmail\PreconfiguredEmailService.cs" />
     <Compile Include="Services\SendEmail\SmtpServerDetails.cs" />
-    <Compile Include="Services\SmsGatewayService.cs" />
+    <Compile Include="Services\SendSmsService.cs" />
     <Compile Include="Services\SmsGatewaySettingsService.cs" />
     <Compile Include="ReceiveSmsUseCase\Models\SmsParseResult.cs" />
     <Compile Include="Services\SmsRequestService.cs" />

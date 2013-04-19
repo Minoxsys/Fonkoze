@@ -5,6 +5,7 @@ using System;
 using System.Linq;
 using Web.ReceiveSmsUseCase.Models;
 using Web.ReceiveSmsUseCase.SmsMessageCommands;
+using Web.Services;
 
 namespace Web.ReceiveSmsUseCase.Services
 {
@@ -40,7 +41,7 @@ namespace Web.ReceiveSmsUseCase.Services
                 if (outpost == null)
                 {
                     SaveRawSmsEntry(smsData, new SmsParseResult {Success = false, Message = "Sender is unknown."}, null);
-                    _sendSmsService.SendSmsMessage("Phone number not recognized. Please register your phone number to send messages.", smsData.Sender);
+                    _sendSmsService.SendSms("Phone number not recognized. Please register your phone number to send messages.", smsData.Sender);
                     return;
                 }
             }

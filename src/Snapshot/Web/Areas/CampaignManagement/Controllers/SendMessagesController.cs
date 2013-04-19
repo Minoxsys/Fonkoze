@@ -20,7 +20,7 @@ namespace Web.Areas.CampaignManagement.Controllers
         public IQueryService<User> QueryUsers { get; set; }
         public IQueryService<Outpost> QueryOutposts { get; set; }
 
-        public ISmsGatewayService smsGatewayService { get; set; }
+        public ISendSmsService smsGatewayService { get; set; }
         public ISaveOrUpdateCommand<SentSms> SaveOrUpdateCommand { get; set; }
 
         private Client _client;
