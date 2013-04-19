@@ -297,7 +297,7 @@
     <Compile Include="Areas\StockAdministration\Models\Product\ProductIndexOutputModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\Product\ProductInputModel.cs" />
     <Compile Include="BackgroundJobs\ExecutedCampaign.cs" />
-    <Compile Include="BackgroundJobs\OutpostInactivityEmailJob.cs" />
+    <Compile Include="BackgroundJobs\OutpostInactivityJob.cs" />
     <Compile Include="Bootstrap\Container\ServicesConventionsRegistrar.cs" />
     <Compile Include="Controllers\AccountOptionsController.cs" />
     <Compile Include="Controllers\SendMessageController.cs" />
@@ -331,7 +331,7 @@
     <Compile Include="Areas\StockAdministration\Models\Product\ProductOverviewModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\StockLevel\OutpostStockLevelModel.cs" />
     <Compile Include="Areas\StockAdministration\StockAdministrationAreaRegistration.cs" />
-    <Compile Include="BackgroundJobs\AddAlertsJob.cs" />
+    <Compile Include="BackgroundJobs\StockLevelsMonitoringJob.cs" />
     <Compile Include="BackgroundJobs\EmptyJob.cs" />
     <Compile Include="Controllers\AlertsController.cs" />
     <Compile Include="Controllers\ClientManagerController.cs" />

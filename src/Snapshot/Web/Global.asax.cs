@@ -66,9 +66,9 @@ namespace Web
             var jobs = new IJob[]
             {
                 _container.Resolve<BackgroundJobs.EmptyJob>(),
-                _container.Resolve<BackgroundJobs.AddAlertsJob>(),
+                _container.Resolve<BackgroundJobs.StockLevelsMonitoringJob>(),
                 _container.Resolve<BackgroundJobs.CampaignExecutionJob>(),
-                _container.Resolve<BackgroundJobs.OutpostInactivityEmailJob>()
+                _container.Resolve<BackgroundJobs.OutpostInactivityJob>()
                 //new SampleJob(TimeSpan.FromSeconds(35), TimeSpan.FromSeconds(60)),
                 /* new ExceptionJob(TimeSpan.FromSeconds(15)), */
                 //new WorkItemCleanupJob(TimeSpan.FromMinutes(1), TimeSpan.FromMinutes(5), new WorkItemsContext())

@@ -12,13 +12,13 @@ using WebBackgrounder;
 
 namespace Web.BackgroundJobs
 {
-    public class OutpostInactivityEmailJob : IJob
+    public class OutpostInactivityJob : IJob
     {
         private readonly PreconfiguredEmailService _preconfiguredEmailService;
         private readonly IConfigurationService _configurationService;
         private readonly Func<IQueryService<OutpostStockLevel>> _queryOutpostStockLevel;
 
-        public OutpostInactivityEmailJob(Func<IQueryService<OutpostStockLevel>> queryOutpostStockLevel,
+        public OutpostInactivityJob(Func<IQueryService<OutpostStockLevel>> queryOutpostStockLevel,
                                          PreconfiguredEmailService preconfiguredEmailService, IConfigurationService configurationService)
         {
             _queryOutpostStockLevel = queryOutpostStockLevel;
