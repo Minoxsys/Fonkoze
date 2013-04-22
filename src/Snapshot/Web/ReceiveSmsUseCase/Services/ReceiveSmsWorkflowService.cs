@@ -3,6 +3,7 @@ using Domain;
 using Domain.Enums;
 using System;
 using System.Linq;
+using Web.LocalizationResources;
 using Web.ReceiveSmsUseCase.Models;
 using Web.ReceiveSmsUseCase.SmsMessageCommands;
 using Web.Services;
@@ -23,7 +24,6 @@ namespace Web.ReceiveSmsUseCase.Services
                                          ISmsTextParserService smsTextParserService, ISmsCommandFactory smsMessageCommandFactory)
         {
             _smsCommandFactory = smsMessageCommandFactory;
-            //new SmsCommandFactory(contactMethodsService, saveOrUpdateAlertCommand, updateStockService, sendSmsService, null);
             _smsTextParserService = smsTextParserService;
             _contactsQueryService = contactsQueryService;
             _outpostsQueryService = outpostsQueryService;
@@ -40,8 +40,8 @@ namespace Web.ReceiveSmsUseCase.Services
                 outpost = GetOutpostWithInactiveSender(smsData.Sender);
                 if (outpost == null)
                 {
-                    SaveRawSmsEntry(smsData, new SmsParseResult {Success = false, Message = "Sender is unknown."}, null);
-                    _sendSmsService.SendSms("Phone number not recognized. Please register your phone number to send messages.", smsData.Sender);
+                    SaveRawSmsEntry(smsData, new SmsParseResult {Success = false, Message = Strings.SenderIsUnknown}, null);
+                    _sendSmsService.SendSms(smsData.Sender, Strings.PhoneNumberNotRecognized, false);
                     return;
                 }
             }

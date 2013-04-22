@@ -145,4 +145,10 @@
     <value>The following sellers have not sent stock or sell updates in {0} days:
 </value>
   </data>
+  <data name="SenderIsUnknown" xml:space="preserve">
+    <value>Sender is unknown.</value>
+  </data>
+  <data name="PhoneNumberNotRecognized" xml:space="preserve">
+    <value>Phone number not recognized. Please register your phone number to send messages.</value>
+  </data>
 </root>

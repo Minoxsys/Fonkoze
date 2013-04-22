@@ -116,6 +116,24 @@ namespace Web.LocalizationResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Phone number not recognized. Please register your phone number to send messages..
+        /// </summary>
+        internal static string PhoneNumberNotRecognized {
+            get {
+                return ResourceManager.GetString("PhoneNumberNotRecognized", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sender is unknown..
+        /// </summary>
+        internal static string SenderIsUnknown {
+            get {
+                return ResourceManager.GetString("SenderIsUnknown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Seller: {1} {0}Product below limit: {2} {0}Current stock: {3} {0}Lower limit set at: {6} {0}Contact details: {4} {0}{0}{5}.
         /// </summary>
         internal static string StockBellowLimitEmailBody {

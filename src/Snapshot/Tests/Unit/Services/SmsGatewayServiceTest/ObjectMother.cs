@@ -42,6 +42,7 @@ namespace Tests.Unit.Services.SmsGatewayServiceTest
         public IQueryOutposts queryOutposts;
 
         public IQueryService<Contact> queryServiceContact;
+        public ISaveOrUpdateCommand<SentSms> sentSmsSaveOrUpdateCmd; 
 
         public SmsRequest smsRequest;
         public RawSmsReceived rawSmsReceived;
@@ -63,9 +64,9 @@ namespace Tests.Unit.Services.SmsGatewayServiceTest
             fakeSmsGatewaySettingsService.Stub(c => c.SmsGatewayDebugMode).Return(SMS_GATEWAY_DEBUG);
 
             queryOutposts = MockRepository.GenerateMock<IQueryOutposts>();
-
+            sentSmsSaveOrUpdateCmd = MockRepository.GenerateMock<ISaveOrUpdateCommand<SentSms>>();
             queryServiceContact = MockRepository.GenerateMock<IQueryService<Contact>>();
-            smsGatewayService = new SendSmsService(fakeSmsGatewaySettingsService, fakeHttpService);
+            smsGatewayService = new SendSmsService(fakeSmsGatewaySettingsService, fakeHttpService, sentSmsSaveOrUpdateCmd);
         }
 
         public void SetUp_StubData()

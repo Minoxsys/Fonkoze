@@ -47,12 +47,12 @@ namespace Tests.Unit.Services.SmsRequestServiceTest
 
             _.smsGatewayService.Expect(call => call.SendSmsRequest(Arg<SmsRequest>.Matches(
                 r => r.ProductGroupId.Equals(_.productGroupId) &&
-                    r.ProductGroupReferenceCode == ObjectMother.PRODUCT_GROUP_REFERENCE_CODE &&
+                     r.ProductGroupReferenceCode == ObjectMother.PRODUCT_GROUP_REFERENCE_CODE &&
                      r.OutpostId.Equals(_.outpostId) &&
                      r.Number.Equals(ObjectMother.PHONE_NUMBER) &&
                      r.Client == _.client &&
                      r.Message.Equals(string.Format(SMS_MESSAGE_TEMPLATE, ObjectMother.PRODUCT_GROUP_NAME, ObjectMother.PRODUCT_GROUP_REFERENCE_CODE + " A0"))
-                ))).Return("");
+                                                                       ), Arg<bool>.Is.Equal(false))).Return("");
 
             // Act
             var sent = _.smsRequestService.SendProductLevelRequestMessage(_.productLevelRequestMessageInput);
@@ -73,7 +73,7 @@ namespace Tests.Unit.Services.SmsRequestServiceTest
 
             // Assert
             _.saveCommandSmsRequest.AssertWasNotCalled(call => call.Execute(Arg<SmsRequest>.Is.Anything));
-            _.smsGatewayService.AssertWasNotCalled(call => call.SendSmsRequest(Arg<SmsRequest>.Is.Anything));
+            _.smsGatewayService.AssertWasNotCalled(call => call.SendSmsRequest(Arg<SmsRequest>.Is.Anything, Arg<bool>.Is.Equal(false)));
             Assert.IsFalse(sent);
         }
 
@@ -87,7 +87,7 @@ namespace Tests.Unit.Services.SmsRequestServiceTest
 
             // Assert
             _.saveCommandSmsRequest.AssertWasNotCalled(call => call.Execute(Arg<SmsRequest>.Is.Anything));
-            _.smsGatewayService.AssertWasNotCalled(call => call.SendSmsRequest(Arg<SmsRequest>.Is.Anything));
+            _.smsGatewayService.AssertWasNotCalled(call => call.SendSmsRequest(Arg<SmsRequest>.Is.Anything, Arg<bool>.Is.Equal(false)));
             Assert.IsFalse(sent);
         }
 
@@ -102,7 +102,7 @@ namespace Tests.Unit.Services.SmsRequestServiceTest
 
             // Assert
             _.saveCommandSmsRequest.AssertWasNotCalled(call => call.Execute(Arg<SmsRequest>.Is.Anything));
-            _.smsGatewayService.AssertWasNotCalled(call => call.SendSmsRequest(Arg<SmsRequest>.Is.Anything));
+            _.smsGatewayService.AssertWasNotCalled(call => call.SendSmsRequest(Arg<SmsRequest>.Is.Anything, Arg<bool>.Is.Equal(false)));
             Assert.IsFalse(sent);
         }
     }

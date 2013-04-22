@@ -27,7 +27,7 @@ namespace Tests.Unit.Services.SmsGatewayServiceTest
             objectMother.fakeHttpService.Expect(call => call.Post(ObjectMother.SMS_GATEWAY_URL, objectMother.postRequest)).Return(postResponse);
 
             // act
-            string result = objectMother.smsGatewayService.SendSmsRequest(objectMother.smsRequest);
+            string result = objectMother.smsGatewayService.SendSmsRequest(objectMother.smsRequest, false);
 
 
             //assert

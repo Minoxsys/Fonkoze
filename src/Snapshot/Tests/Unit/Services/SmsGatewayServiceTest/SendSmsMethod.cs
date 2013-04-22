@@ -27,7 +27,7 @@ namespace Tests.Unit.Services.SmsGatewayServiceTest
             objectMother.fakeHttpService.Expect(call => call.Post(ObjectMother.SMS_GATEWAY_URL, "uname=geo_nasa@yahoo.com&pword=asd123&from=xreplyx&test=1&info=0&selectednums=01234567&message=Smscontent")).Return(postResponse);
 
             // act
-            string result = objectMother.smsGatewayService.SendSms("01234567","Smscontent");
+            string result = objectMother.smsGatewayService.SendSms("01234567","Smscontent", false);
             
             //assert
             objectMother.fakeHttpService.VerifyAllExpectations();

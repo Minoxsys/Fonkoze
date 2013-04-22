@@ -48,7 +48,7 @@ namespace Web.Areas.CampaignManagement.Controllers
                     string responseString = string.Empty;
                     try
                     {
-                        responseString = smsGatewayService.SendSms(outpost.DetailMethod, message); //TODO : logic for possible return statuses
+                        responseString = smsGatewayService.SendSms(outpost.DetailMethod, message, false); //TODO : logic for possible return statuses
                         SaveMessage("+" + outpost.DetailMethod, message, responseString);
 
                     }

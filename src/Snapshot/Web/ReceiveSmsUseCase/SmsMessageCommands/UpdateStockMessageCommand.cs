@@ -40,7 +40,7 @@ namespace Web.ReceiveSmsUseCase.SmsMessageCommands
                 }
                 else
                 {
-                    _sendSmsService.SendSms(Strings.PhoneNumberNotActive, smsData.Sender);
+                    _sendSmsService.SendSms(smsData.Sender, Strings.PhoneNumberNotActive, false);
                 }
             }
             else

@@ -7,14 +7,6 @@ namespace Web.Services
     public class SmsRequestService : IProductLevelRequestMessageSenderService
     {
         public const string MessageNotDelivered = "Message not delivered";
-        public const string SmsUpdatedMethod = "SMS";
-
-        //private IQueryService<Outpost> queryServiceOutpost;
-        //private IQueryService<ProductGroup> queryServiceProductGroup;
-        //private IQueryService<OutpostStockLevel> queryServiceStockLevel;
-        //private IQueryService<SmsRequest> queryServiceSmsRequest;
-        //private IOutpostHistoricalStockLevelService outpostStockLevelService;
-        // private ISaveOrUpdateCommand<OutpostStockLevel> saveCommandOutpostStockLevel;
 
         private readonly ISaveOrUpdateCommand<SmsRequest> _saveCommandSmsRequest;
         private readonly ISendSmsService _smsGatewayService;
@@ -49,7 +41,7 @@ namespace Web.Services
 
                 try
                 {
-                    _smsGatewayService.SendSmsRequest(smsRequest);
+                    _smsGatewayService.SendSmsRequest(smsRequest, false);
                     return true;
                 }
                 catch (Exception)

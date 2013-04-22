@@ -58,7 +58,7 @@ namespace Tests.Unit.ReceiveSmsWorkflow
         {
             _sut.ProcessSms(_inputModel);
 
-            _sendSmsServiceMock.Verify(s => s.SendSms(It.IsAny<string>(), _inputModel.Sender));
+            _sendSmsServiceMock.Verify(s => s.SendSms(_inputModel.Sender, It.IsAny<string>(), false));
             _smsTextParserServiceMock.Verify(s => s.Parse(It.IsAny<string>()), Times.Never());
         }
 
