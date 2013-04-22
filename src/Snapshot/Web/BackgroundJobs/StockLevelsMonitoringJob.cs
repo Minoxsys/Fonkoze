@@ -19,7 +19,7 @@ namespace Web.BackgroundJobs
         private readonly Func<IQueryService<Client>> _queryClients;
         private readonly PreconfiguredEmailService _preconfiguredEmailService;
 
-        private const string JobName = "AddAlertsJob";
+        private const string JobName = "StockLevelMonitoringJob";
 
         public TimeSpan Interval
         {
