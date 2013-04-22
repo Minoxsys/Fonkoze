@@ -1,33 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using Core.Services;
-using Core.Domain;
+﻿using Core.Domain;
 using Core.Persistence;
+using Core.Services;
+using System.Linq;
 
 namespace Web.Security
 {
     public class AuthenticateUser : IMembershipService
     {
-        private IQueryService<User> queryUsers;
-        private ISecurePassword SecurePassword;
-                
-        public AuthenticateUser(IQueryService<User> queryUsers,ISecurePassword SecurePassword)
-        {
-            this.queryUsers = queryUsers;
-            this.SecurePassword = SecurePassword;
- 
-        }
-        public bool ValidateUser(string userName,string password)
-        {
-            string securedPassword = SecurePassword.EncryptPassword(password);
-            var user = queryUsers.Query().Where(it => it.UserName == userName && it.Password == securedPassword);
+        private readonly IQueryService<User> _queryUsers;
+        private readonly ISecurePassword _securePassword;
 
-            if (user.ToList().Count != 0)
-                return true;
-            else
-                return false;
+        public AuthenticateUser(IQueryService<User> queryUsers, ISecurePassword securePassword)
+        {
+            _queryUsers = queryUsers;
+            _securePassword = securePassword;
+        }
+
+        public bool ValidateUser(string userName, string password)
+        {
+            string securedPassword = _securePassword.EncryptPassword(password);
+            var user = _queryUsers.Query().Where(it => it.UserName == userName && it.Password == securedPassword);
+
+            return user.Count() != 0;
         }
     }
 }

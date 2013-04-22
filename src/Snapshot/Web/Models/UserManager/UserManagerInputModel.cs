@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace Web.Models.UserManager
 {
@@ -15,7 +12,6 @@ namespace Web.Models.UserManager
         public string Email { get; set; }
         public Guid RoleId { get; set; }
         public Guid ClientId { get; set; }
-
-
+        public string PhoneNumber { get; set; }
     }
 }

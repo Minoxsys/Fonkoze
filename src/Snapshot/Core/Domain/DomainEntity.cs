@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace Core.Domain
 {
@@ -13,11 +10,7 @@ namespace Core.Domain
             Updated = DateTime.UtcNow;
         }
 
-        public virtual Guid Id
-        {
-            get;
-            private set;
-        }
+        public virtual Guid Id { get; private set; }
 
         public virtual DateTime? Created { get; set; }
         public virtual DateTime? Updated { get; set; }
@@ -30,7 +23,7 @@ namespace Core.Domain
         /// true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.
         /// </returns>
         /// <param name="other">A DomainEntity to compare with this object.</param>
-        public virtual bool Equals( DomainEntity other )
+        public virtual bool Equals(DomainEntity other)
         {
             if (ReferenceEquals(null, other))
                 return false;
@@ -54,14 +47,14 @@ namespace Core.Domain
         /// </returns>
         /// <param name="obj">The <see cref="T:System.Object" /> to compare with the current <see cref="T:System.Object" />. </param>
         /// <exception cref="T:System.NullReferenceException">The <paramref name="obj" /> parameter is null.</exception><filterpriority>2</filterpriority>
-        public override bool Equals( object obj )
+        public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj))
                 return false;
             if (ReferenceEquals(this, obj))
                 return true;
             if (null == (obj as DomainEntity)) return false;
-            return Equals((DomainEntity)obj); //this is the old version
+            return Equals((DomainEntity) obj); //this is the old version
         }
 
         /// <summary>
@@ -74,19 +67,18 @@ namespace Core.Domain
         public override int GetHashCode()
         {
             return Equals(Id, default(Guid))
-                ? base.GetHashCode()
-                : Id.GetHashCode();
+                       ? base.GetHashCode()
+                       : Id.GetHashCode();
         }
 
-        public static bool operator ==( DomainEntity left, DomainEntity right )
+        public static bool operator ==(DomainEntity left, DomainEntity right)
         {
             return Equals(left, right);
         }
 
-        public static bool operator !=( DomainEntity left, DomainEntity right )
+        public static bool operator !=(DomainEntity left, DomainEntity right)
         {
             return !Equals(left, right);
         }
-
     }
 }

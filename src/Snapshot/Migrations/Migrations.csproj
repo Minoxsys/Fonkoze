@@ -47,6 +47,7 @@
     <Compile Include="12_InsertWorldCountryRecords.cs" />
     <Compile Include="14_RemoveForeignKeyFromRawSmsReceivedsToOutposts.cs" />
     <Compile Include="18_AlertTypes.cs" />
+    <Compile Include="19_AugmentUserEntity.cs" />
     <Compile Include="2_OutpostAdministration.cs" />
     <Compile Include="1_BasicAuthenticationInfrastructure.cs" />
     <Compile Include="3_ProductAdministration.cs" />
@@ -77,12 +78,15 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Scripts\sqlserver_DeleteColumnFromAlerts_18.sql" />
-    </ItemGroup>
-   <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
     <EmbeddedResource Include="Scripts\sqlserver_Insert3Roles_17.sql" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Scripts\sqlserver_Insert3Roles_Down_17.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Scripts\sqlserver_DeleteColumnFromUsers_19.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

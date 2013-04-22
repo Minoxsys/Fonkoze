@@ -162,6 +162,7 @@ namespace Web.Controllers
                                                 Password = user.Password,
                                                 ClientName = GetClientName(user.ClientId),
                                                 RoleName = GetRoleName(user.RoleId),
+                                                PhoneNumber = user.PhoneNumber,
                                                 ClientId = user.ClientId,
                                                 RoleId = user.RoleId
                                             }).ToArray();

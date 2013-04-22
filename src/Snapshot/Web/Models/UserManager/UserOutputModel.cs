@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using Core.Domain;
 
 namespace Web.Models.UserManager
@@ -18,6 +16,7 @@ namespace Web.Models.UserManager
         public Guid? RoleId { get; set; }
         public string ClientName { get; set; }
         public string RoleName { get; set; }
+        public string PhoneNumber { get; set; }
 
         public IList<Role> Roles { get; set; }
 
