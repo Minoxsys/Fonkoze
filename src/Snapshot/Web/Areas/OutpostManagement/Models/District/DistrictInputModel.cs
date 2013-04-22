@@ -1,29 +1,28 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using Web.Areas.OutpostManagement.Models.Region;
 using System.ComponentModel.DataAnnotations;
-using Web.Areas.OutpostManagement.Models.Client;
+using Web.LocalizationResources;
 
 namespace Web.Areas.OutpostManagement.Models.District
 {
     public class DistrictInputModel
     {
         public Guid Id { get; set; }
-        [Required(ErrorMessage="Name for district is required")]
+
+        [Required(ErrorMessageResourceType = typeof (Strings), ErrorMessageResourceName = "DistrictInputModel_Name_Name_for_district_is_required")]
         public string Name { get; set; }
+
         public RegionInputModel Region { get; set; }
         public ClientInputModel Client { get; set; }
+        public Guid ManagerId { get; set; }
 
         public DistrictInputModel()
         {
-            this.Region = new RegionInputModel();
-            this.Client = new ClientInputModel();
+            Region = new RegionInputModel();
+            Client = new ClientInputModel();
         }
         public class RegionInputModel
         {
-            [Required(ErrorMessage = "Region is required")]
+            [Required(ErrorMessageResourceType = typeof (Strings), ErrorMessageResourceName = "RegionInputModel_Id_Region_is_required")]
             public Guid Id { get; set; }
 
             public Guid CountryId { get; set; }
@@ -34,6 +33,4 @@ namespace Web.Areas.OutpostManagement.Models.District
             public Guid Id { get; set; }
         }
     }
-
-   
 }

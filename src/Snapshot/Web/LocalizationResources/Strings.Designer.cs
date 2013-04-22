@@ -70,6 +70,15 @@ namespace Web.LocalizationResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Name for district is required.
+        /// </summary>
+        internal static string DistrictInputModel_Name_Name_for_district_is_required {
+            get {
+                return ResourceManager.GetString("DistrictInputModel_Name_Name_for_district_is_required", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The following sellers have not sent stock or sell updates in {0} days:
         ///.
         /// </summary>
@@ -121,6 +130,15 @@ namespace Web.LocalizationResources {
         internal static string PhoneNumberNotRecognized {
             get {
                 return ResourceManager.GetString("PhoneNumberNotRecognized", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Region is required.
+        /// </summary>
+        internal static string RegionInputModel_Id_Region_is_required {
+            get {
+                return ResourceManager.GetString("RegionInputModel_Id_Region_is_required", resourceCulture);
             }
         }
         

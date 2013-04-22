@@ -4,6 +4,8 @@ using Persistence;
 using System.Web.Mvc;
 using Web.Bootstrap.Container;
 using Web.Bootstrap.Routes;
+using Web.CustomModelBinders;
+using Web.Security;
 using WebBackgrounder;
 
 namespace Web
@@ -37,6 +39,8 @@ namespace Web
             _jobManager.Start();
 
             AreaRegistration.RegisterAllAreas();
+
+            ModelBinders.Binders.Add(typeof(UserAndClientIdentity), _container.Resolve<UserAndClientIdentityModelBinder>());
 
             RegisterGlobalFilters(GlobalFilters.Filters);
             RoutesRegistrar.Register();

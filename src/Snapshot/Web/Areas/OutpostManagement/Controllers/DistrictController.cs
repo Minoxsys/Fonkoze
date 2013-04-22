@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Domain;
+using Web.Areas.OutpostManagement.Models;
 using Web.Controllers;
 using AutoMapper;
 using Web.Bootstrap.Converters;
@@ -44,6 +45,7 @@ namespace Web.Areas.OutpostManagement.Controllers
 
         public IQueryService<District> QueryService { get; set; }
         public IQueryService<Client> LoadClient { get; set; }
+        public IQueryService<Role> RolesQueryService { get; set; }
 
         public IQueryService<User> QueryUsers { get; set; }
         public IPermissionsService PermissionService { get; set; }
@@ -134,6 +136,8 @@ namespace Web.Areas.OutpostManagement.Controllers
                 districtModel.RegionId = district.Region.Id;
                 districtModel.CountryId = district.Region.Country.Id;
                 districtModel.OutpostNo = QueryOutpost.Query().Count(it => it.District.Id == district.Id && it.Client == _client);
+                if (district.DistrictManager != null)
+                    districtModel.ManagerId = district.DistrictManager.Id;
                 districtModelList.Add(districtModel);
 
             }
@@ -230,6 +234,36 @@ namespace Web.Areas.OutpostManagement.Controllers
 
         }
 
+        public JsonResult GetManagers(UserAndClientIdentity loggedInUser)
+        {
+            Guid managerRoleId = GetManagerRole();
+
+            var managerUsers = QueryUsers.Query().Where(it => it.ClientId == loggedInUser.Client.Id && it.RoleId == managerRoleId);
+            var viewModelList =
+                managerUsers.Select(managerUser => new ManagerModel
+                    {
+                        Id = managerUser.Id,
+                        Name = managerUser.FirstName + " " + managerUser.LastName
+                    }).ToList();
+
+            return Json(new
+                {
+                    regions = viewModelList.ToArray(),
+                    TotalItems = viewModelList.Count()
+                }, JsonRequestBehavior.AllowGet);
+        }
+
+        private Guid GetManagerRole()
+        {
+            var managerRole = RolesQueryService.Query().FirstOrDefault(r => r.Name == "Manager");
+            if (managerRole != null)
+            {
+                return managerRole.Id;
+            }
+            return Guid.Empty;
+        }
+
+
         private void CreateMapping()
         {
             Mapper.CreateMap<DistrictModel, District>();
@@ -293,6 +327,12 @@ namespace Web.Areas.OutpostManagement.Controllers
                     });
  
             }
+
+            if (districtInputModel.ManagerId != Guid.Empty)
+            {
+                district.DistrictManager = QueryUsers.Query().FirstOrDefault(u => u.Id == districtInputModel.ManagerId);
+            }
+
             SaveOrUpdateCommand.Execute(district);
 
             return Json(
@@ -341,7 +381,12 @@ namespace Web.Areas.OutpostManagement.Controllers
             var client = QueryClients.Load(districtInputModel.Client.Id);
             district.Region = region;
             district.Client = client;
-            
+
+            if (districtInputModel.ManagerId != Guid.Empty)
+            {
+                district.DistrictManager = QueryUsers.Query().FirstOrDefault(u => u.Id == districtInputModel.ManagerId);
+            }
+
             SaveOrUpdateCommand.Execute(district);
             return Json(
                 new JsonActionResponse

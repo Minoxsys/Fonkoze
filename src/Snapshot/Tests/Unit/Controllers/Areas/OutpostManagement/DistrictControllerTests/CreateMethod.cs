@@ -25,7 +25,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.DistrictControllerTests
         [Test]
         public void Should_ReturnJsonWithErrorMessage_WhenModelState_Invalid()
         {
- 
+
             //act
             var result = objectMother.controller.Create(new DistrictInputModel());
 
@@ -45,8 +45,8 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.DistrictControllerTests
             districtInputModel.Name = objectMother.district.Name;
             districtInputModel.Region.Id = objectMother.district.Region.Id;
 
-            objectMother.saveCommand.Expect(it => it.Execute(Arg<District>.Matches(st=>st.Name.Equals(objectMother.district.Name))));
-            objectMother.queryService.Expect(it => it.Query()).Return(new District[] { }.AsQueryable());
+            objectMother.saveCommand.Expect(it => it.Execute(Arg<District>.Matches(st => st.Name.Equals(objectMother.district.Name))));
+            objectMother.queryService.Expect(it => it.Query()).Return(new District[] {}.AsQueryable());
             //act
             var result = objectMother.controller.Create(districtInputModel);
 
@@ -56,7 +56,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.DistrictControllerTests
             Assert.IsNotNull(response);
             Assert.AreEqual(response.Status, "Success");
             Assert.AreEqual(response.Message, "District Cluj has been saved.");
- 
+
         }
 
         [Test]
@@ -67,7 +67,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.DistrictControllerTests
             districtInputModel.Name = objectMother.district.Name;
             districtInputModel.Region.Id = objectMother.district.Region.Id;
 
-            objectMother.queryService.Expect(it => it.Query()).Return(new District[] { objectMother.district }.AsQueryable());
+            objectMother.queryService.Expect(it => it.Query()).Return(new District[] {objectMother.district}.AsQueryable());
             //act
             var result = objectMother.controller.Create(districtInputModel);
 
@@ -79,6 +79,5 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.DistrictControllerTests
             Assert.AreEqual(response.Message, "The region already contains a district with the name Cluj! Please insert a different name!");
 
         }
-
     }
 }

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Core.Domain;
+﻿using Core.Domain;
 
 namespace Domain
 {
@@ -11,5 +7,6 @@ namespace Domain
         public virtual string Name { get; set; }
         public virtual Region Region { get; set; }
         public virtual Client Client { get; set; }
+        public virtual User DistrictManager { get; set; }
     }
 }

@@ -34,6 +34,7 @@ Districts: Overview
         window.feature = {};
         window.feature.comboboxCountriesForModalId = 'countriesComboboxForModalId';
         window.feature.comboboxRegionsForModalId = 'regionsComboboxForModalId';
+        window.feature.comboboxManagersForModalId = 'managersComboboxForModalId';
         window.feature.districtNameId = 'districtName';
         window.feature.districtNameEditModalId = 'districtNameModal';
         window.feature.comboboxRegionsId = 'regionsCombobox';
@@ -98,11 +99,25 @@ Districts: Overview
                 }
             }
         });
+        
+        window.feature.managersStoreforModal = Ext.create('Ext.data.Store', {
+            fields: ['Name', 'Id'],
+            proxy: {
+                type: 'ajax',
+                url: '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "District", action = "GetManagers" })',
+                reader: {
+                    type: 'json',
+                    root: 'regions',
+                    disableCaching: true,
+                    totalProperty: 'TotalItems'
+                }
+            }
+          });
 
         window.feature.modal = Ext.define('Ext.feature.district.Modal', {
             extend: 'Ext.window.Window',
             title: 'Add new District',
-            height: 200,
+            height: 240,
             width: 390,
             modal: true,
             ui: 'snapshot-popup-window',
@@ -157,11 +172,24 @@ Districts: Overview
                                                 allowBlank: false,
                                                 itemId: window.feature.districtNameId,
                                                 anchor: '100%'
-                                            }]
+                                            },
+                     {   xtype: 'combobox',
+                         fieldLabel: 'Manager',
+                         queryMode: 'local',
+                         displayField: 'Name',
+                         valueField: 'Id',
+                         id: window.feature.comboboxManagersForModalId,
+                         emptyText: _t('Select a manager'),
+                         allowBlank: true,
+                         editable: false,
+                         store: window.feature.managersStoreforModal
+                     }]
                 });
                 me.listeners = {
                     afterrender: function () {
                         window.feature.countriesStoreforModal.load();
+                        window.feature.managersStoreforModal.load();
+                        
 
                         var selectedCountryValue = window.feature.comboBoxCountries.getValue();
                         var selectedRegionValue = window.feature.comboBoxRegions.getValue();
@@ -202,12 +230,14 @@ Districts: Overview
                         var region = Ext.getCmp(window.feature.comboboxRegionsForModalId);
                         var districtName = me.down('#' + window.feature.districtNameId);
                         var country = Ext.getCmp(window.feature.comboboxCountriesForModalId);
+                        var manager = Ext.getCmp(window.feature.comboboxManagersForModalId);
 
                         var ok = IsValid(country, region, districtName);
                         if (ok == true) {
                             var values = {
                                 'districtInputModel.Name': districtName.getValue(),
-                                'districtInputModel.Region.Id': region.getValue()
+                                'districtInputModel.Region.Id': region.getValue(),
+                                'districtInputModel.ManagerId': manager.getValue()
                             };
                             var postToUrl = '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "District", action = "Create" })';
                             var action = $.post(postToUrl, values);
@@ -249,7 +279,7 @@ Districts: Overview
         window.feature.modalEdit = Ext.define('Ext.feature.district.ModalEdit', {
             extend: 'Ext.window.Window',
             title: 'Edit District',
-            height: 200,
+            height: 240,
             width: 390,
             modal: true,
             ui: 'snapshot-popup-window',
@@ -309,11 +339,23 @@ Districts: Overview
                         name: 'Id',
                         id: window.feature.DistrictId
 
-                    }]
+                    },
+                     {   xtype: 'combobox',
+                         fieldLabel: 'Manager',
+                         queryMode: 'local',
+                         displayField: 'Name',
+                         valueField: 'Id',
+                         id: window.feature.comboboxManagersForModalId,
+                         emptyText: _t('Select a manager'),
+                         allowBlank: true,
+                         editable: false,
+                         store: window.feature.managersStoreforModal
+                     }]
                 });
                 me.listeners = {
                     afterrender: function () {
                         window.feature.countriesStoreforModal.load();
+                        
 
                         var selectedCountryValue = window.feature.comboBoxCountries.getValue();
                         var selectedRegionValue = window.feature.comboBoxRegions.getValue();
@@ -336,6 +378,11 @@ Districts: Overview
                             }
                         }
 
+
+                        if (me.managerId !== "00000000-0000-0000-0000-000000000000") {
+                            var comboManagers = Ext.getCmp(window.feature.comboboxManagersForModalId);
+                            comboManagers.setValue(me.managerId);
+                        }
                     }
 
                 };
@@ -361,7 +408,8 @@ Districts: Overview
                                 'districtInputModel.Name': districtName.getValue(),
                                 'districtInputModel.Region.Id': region.getValue(),
                                 'districtInputModel.Client.Id': Ext.getCmp(window.feature.clientId).getValue(),
-                                'districtInputModel.Id': Ext.getCmp(window.feature.DistrictId).getValue()
+                                'districtInputModel.Id': Ext.getCmp(window.feature.DistrictId).getValue(),
+                                'districtInputModel.ManagerId': Ext.getCmp(window.feature.comboboxManagersForModalId).getValue()
                             };
                             var postToUrl = '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "District", action = "Edit" })';
                             var action = $.post(postToUrl, values);
@@ -482,7 +530,7 @@ Districts: Overview
         window.feature.store = Ext.create('Ext.data.Store', {
             pageSize: 50,
             remoteSort: true,
-            fields: ['Name', 'OutpostNo', 'Id', 'ClientId', 'RegionId', 'CountryId'],
+            fields: ['Name', 'OutpostNo', 'Id', 'ClientId', 'RegionId', 'CountryId','ManagerId'],
             proxy: {
                 type: 'ajax',
                 url: '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "District", action = "Index" })',
@@ -564,8 +612,14 @@ Districts: Overview
                             params: { countryId: record.get('CountryId') }
                         });
                         window.feature.comboBoxRegions.setValue(record.get('RegionId'));
+                        
+                       // var managersCombo = Ext.getCmp(window.feature.comboboxManagersForModalId);
+                        window.feature.managersStoreforModal.load();
+                      //  managersCombo.setValue(record.get('ManagerId'));
+                        
 
                         var modalForEdit = new window.feature.modalEdit();
+                        modalForEdit.managerId = record.get('ManagerId');
                         Ext.getCmp(window.feature.districtNameEditModalId).setValue(record.data.Name);
                         Ext.getCmp(window.feature.clientId).setValue(record.data.ClientId);
                         Ext.getCmp(window.feature.DistrictId).setValue(record.data.Id);
