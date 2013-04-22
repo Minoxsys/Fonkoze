@@ -27,16 +27,13 @@ namespace Web.ReceiveSmsUseCase.Services
                 _contactsQueryService.Query().FirstOrDefault(c => c.ContactType.Equals(Contact.MOBILE_NUMBER_CONTACT_TYPE) && c.ContactDetail.Contains(sender));
             if (contact != null)
             {
-                contact.IsMainContact = true;
 
                 foreach (var cont in outpost.Contacts)
                 {
                     cont.IsMainContact = cont.Id == contact.Id;
                     _saveCommandContact.Execute(cont);
                 }
-
-                _saveCommandContact.Execute(contact);
-
+                
                 outpost.DetailMethod = sender;
                 _saveOrUpdateOutpost.Execute(outpost);
 

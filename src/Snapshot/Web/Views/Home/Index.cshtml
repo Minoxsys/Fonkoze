@@ -119,6 +119,7 @@ Snapshot Application
         action.success(function (response) {
             var alertStr = 'alert';
             if (response == "0") {
+                alertStr += 's';
                 noOfAlertsImg.getEl().dom.src = '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/green-ok.gif"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))';
             }
             else {
