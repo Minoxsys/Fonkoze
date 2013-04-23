@@ -477,6 +477,7 @@
     <Compile Include="Services\IURLService.cs" />
     <Compile Include="ReceiveSmsUseCase\Services\SmsTextParserService.cs" />
     <Compile Include="Services\StockUpdates\StockUpdateMethodEnum.cs" />
+    <Compile Include="Services\StockUpdates\StockUpdateResult.cs" />
     <Compile Include="Services\StoreProductLevelRequestDetailService.cs" />
     <Compile Include="Services\StockUpdates\UpdateStockService.cs" />
     <Compile Include="Services\URLService.cs" />

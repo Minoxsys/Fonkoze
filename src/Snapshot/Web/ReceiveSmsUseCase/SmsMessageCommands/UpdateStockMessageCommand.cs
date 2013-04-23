@@ -1,14 +1,17 @@
-﻿using Core.Persistence;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using Core.Persistence;
 using Domain;
 using Domain.Enums;
 using System.Linq;
 using System.Net.Mail;
 using Web.LocalizationResources;
+using Web.Models.Parsing;
 using Web.ReceiveSmsUseCase.Models;
-using Web.ReceiveSmsUseCase.Services;
+using Web.Services;
 using Web.Services.SendEmail;
 using Web.Services.StockUpdates;
-using Web.Services;
 
 namespace Web.ReceiveSmsUseCase.SmsMessageCommands
 {
@@ -36,7 +39,11 @@ namespace Web.ReceiveSmsUseCase.SmsMessageCommands
             {
                 if (IsActiveSender(outpost, smsData.Sender))
                 {
-                    _updateStockService.UpdateProductStocksForOutpost(parseResult, outpost.Id, StockUpdateMethod.SMS);
+                    StockUpdateResult result = _updateStockService.UpdateProductStocksForOutpost(parseResult, outpost.Id, StockUpdateMethod.SMS);
+                    if (result != null && !result.Success)
+                    {
+                        _sendSmsService.SendSms(smsData.Sender, ComposeFailMessage(result.FailedProducts), true);
+                    }
                 }
                 else
                 {
@@ -70,6 +77,17 @@ namespace Web.ReceiveSmsUseCase.SmsMessageCommands
                     };
                 _saveOrUpdateAlertCommand.Execute(alert);
             }
+        }
+
+        private string ComposeFailMessage(IEnumerable<IParsedProduct> failedProducts)
+        {
+            var sb = new StringBuilder(string.Format(Strings.InvalidCodesPart1, Environment.NewLine));
+            foreach (var failedProduct in failedProducts)
+            {
+                sb.AppendLine(string.Format("({0},{1})", failedProduct.ProductGroupCode, failedProduct.ProductCode));
+            }
+            sb.AppendLine(Strings.InvalidCodesPart2);
+            return sb.ToString();
         }
 
         private MailMessage CreateMailMessage(ReceivedSmsInputModel smsData, Outpost outpost)

@@ -1,4 +1,5 @@
-﻿using Core.Persistence;
+﻿using System.Diagnostics;
+using Core.Persistence;
 using Domain;
 using Domain.Enums;
 using System;
@@ -64,7 +65,8 @@ namespace Web.ReceiveSmsUseCase.Services
                     ReceivedDate = DateTime.UtcNow,
                     ParseSucceeded = parseResult.Success,
                     ParseErrorMessage = parseResult.Message,
-                    OutpostType = outpost != null ? (outpost.IsWarehouse ? OutpostType.Warehouse : OutpostType.Seller) : (OutpostType?) null
+                    OutpostType = outpost != null ? (outpost.IsWarehouse ? OutpostType.Warehouse : OutpostType.Seller) : (OutpostType?) null,
+                    OutpostId = outpost != null ? outpost.Id : Guid.Empty
                 };
 
             _saveRawSmsCommand.Execute(rawSms);

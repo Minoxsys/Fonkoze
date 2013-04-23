@@ -7,11 +7,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Mail;
+using Web.Models.Parsing;
 using Web.ReceiveSmsUseCase.Models;
 using Web.ReceiveSmsUseCase.SmsMessageCommands;
+using Web.Services;
 using Web.Services.SendEmail;
 using Web.Services.StockUpdates;
-using Web.Services;
 
 namespace Tests.Unit.ReceiveSmsWorkflow
 {
@@ -86,7 +87,8 @@ namespace Tests.Unit.ReceiveSmsWorkflow
 
             _sut.Execute(_inputModel, new SmsParseResult {Success = true, MessageType = MessageType.StockUpdate}, _outpostMock.Object);
 
-            _updateProductStockServiceMock.Verify(s => s.UpdateProductStocksForOutpost(It.IsAny<ISmsParseResult>(), It.IsAny<Guid>(), StockUpdateMethod.SMS), Times.Never());
+            _updateProductStockServiceMock.Verify(s => s.UpdateProductStocksForOutpost(It.IsAny<ISmsParseResult>(), It.IsAny<Guid>(), StockUpdateMethod.SMS),
+                                                  Times.Never());
         }
 
 
@@ -110,7 +112,7 @@ namespace Tests.Unit.ReceiveSmsWorkflow
         {
             SetupKnownSender();
 
-            _sut.Execute(_inputModel, new SmsParseResult { Success = true }, _outpostMock.Object);
+            _sut.Execute(_inputModel, new SmsParseResult {Success = true}, _outpostMock.Object);
 
             _saveAlertCmdMock.Verify(cmd => cmd.Execute(It.IsAny<Alert>()), Times.Never());
         }
@@ -128,7 +130,7 @@ namespace Tests.Unit.ReceiveSmsWorkflow
         }
 
         [Test]
-        public void ExecutingTheCommand_UpdatesStockForProducts_WhenMessagePrasedSuccesfully()
+        public void ExecutingTheCommand_UpdatesStockForProducts_WhenMessageParsedSuccesfully()
         {
             SetupKnownSender();
             var parseResult = new SmsParseResult {Success = true};
@@ -136,6 +138,19 @@ namespace Tests.Unit.ReceiveSmsWorkflow
             _sut.Execute(_inputModel, parseResult, _outpostMock.Object);
 
             _updateProductStockServiceMock.Verify(s => s.UpdateProductStocksForOutpost(parseResult, _outpostMock.Object.Id, StockUpdateMethod.SMS));
+        }
+
+        [Test]
+        public void ExecutingTheCommand_SendWarningSmsBackToSender_WhenThereExistParsedProductGroupsOrProductsCodesThatDoNotExistInTheSystem()
+        {
+            SetupKnownSender();
+            var parseResult = new SmsParseResult {Success = true};
+            _updateProductStockServiceMock.Setup(s => s.UpdateProductStocksForOutpost(parseResult, _outpostMock.Object.Id, StockUpdateMethod.SMS))
+                                          .Returns(new StockUpdateResult {Success = false, FailedProducts = new List<IParsedProduct>()});
+
+            _sut.Execute(_inputModel, parseResult, _outpostMock.Object);
+
+            _sendSmsServiceMock.Verify(s => s.SendSms(_inputModel.Sender, It.IsAny<string>(), true));
         }
 
         private void SetupKnownSender(bool isSenderActive = true, bool isWarehouse = false)

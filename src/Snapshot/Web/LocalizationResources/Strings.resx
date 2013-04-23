@@ -157,4 +157,10 @@
   <data name="RegionInputModel_Id_Region_is_required" xml:space="preserve">
     <value>Region is required</value>
   </data>
+  <data name="InvalidCodesPart1" xml:space="preserve">
+    <value>Invalid codes:{0}</value>
+  </data>
+  <data name="InvalidCodesPart2" xml:space="preserve">
+    <value>Others updated successfully</value>
+  </data>
 </root>

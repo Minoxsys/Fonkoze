@@ -1,4 +1,5 @@
-﻿using Core.Persistence;
+﻿using System.Collections.Specialized;
+using Core.Persistence;
 using Domain;
 using Moq;
 using NUnit.Framework;
@@ -162,6 +163,49 @@ namespace Tests.Unit.ReceiveSmsWorkflow
                 It.Is<OutpostStockLevel>(osl => osl == existingStockLevel)));
         }
 
+        [Test]
+        public void IncrementProductStocks_ReturnsSuccessAndNoFailedProducts_WhenAllParsedProductsWereFoundToBeValidAndUpdated()
+        {
+            _outpostStockLevelQueryServiceMock.Setup(s => s.Query()).Returns((new List<OutpostStockLevel>
+                {
+                    CreateOutpostStockLevel("DEF", "L", 1),
+                    CreateOutpostStockLevel("GHJ", "K", 2)
+                }).AsQueryable());
+
+            var result = _sut.IncrementProductStocksForOutpost(new CsvParseResult
+            {
+                Success = true,
+                ParsedProducts =
+                    new List<IParsedProduct> { CreateParsedProduct("DEF", "L", 3), CreateParsedProduct("GHJ", "K", 5) }
+            }, _outpostId, StockUpdateMethod.Manual);
+
+            Assert.IsTrue(result.Success);
+            Assert.Null(result.FailedProducts);
+        }
+
+        [Test]
+        public void IncrementProductStocks_ReturnsFailAndOneFailedProductOut_WhenOneParsedProductsWasNotFoundToBeRegisteredInTheSystem()
+        {
+            _outpostStockLevelQueryServiceMock.Setup(s => s.Query()).Returns((new List<OutpostStockLevel>
+                {
+                    CreateOutpostStockLevel("DEF", "L", 1),
+                }).AsQueryable());
+            var extraParsedProduct = CreateParsedProduct("GHJ", "K", 5);
+
+
+            var result = _sut.IncrementProductStocksForOutpost(new CsvParseResult
+                {
+                    Success = true,
+                    ParsedProducts =
+                        new List<IParsedProduct> {CreateParsedProduct("DEF", "L", 3), extraParsedProduct}
+                }, _outpostId, StockUpdateMethod.Manual);
+
+            Assert.IsFalse(result.Success);
+            CollectionAssert.AreEquivalent(result.FailedProducts, new List<IParsedProduct> {extraParsedProduct});
+        }
+
+        #region Helpers
+
         private OutpostStockLevel CreateOutpostStockLevel(string productGroupCode, string productCode, int stockLevel = 0)
         {
             return new OutpostStockLevel
@@ -177,5 +221,7 @@ namespace Tests.Unit.ReceiveSmsWorkflow
         {
             return new ParsedProduct {IsClientIdentifier = "F", ProductCode = productCode, ProductGroupCode = productGroupCode, StockLevel = stockLevel};
         }
+
+        #endregion
     }
 }

@@ -107,6 +107,24 @@ namespace Web.LocalizationResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invalid codes:{0}.
+        /// </summary>
+        internal static string InvalidCodesPart1 {
+            get {
+                return ResourceManager.GetString("InvalidCodesPart1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Others updated successfully.
+        /// </summary>
+        internal static string InvalidCodesPart2 {
+            get {
+                return ResourceManager.GetString("InvalidCodesPart2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The file selected is an invalid. Please choose another one..
         /// </summary>
         internal static string InvalidFileSelectedForUpload {

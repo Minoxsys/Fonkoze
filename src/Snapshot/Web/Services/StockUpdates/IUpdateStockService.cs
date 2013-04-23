@@ -5,7 +5,7 @@ namespace Web.Services.StockUpdates
 {
     public interface IUpdateStockService
     {
-        void UpdateProductStocksForOutpost(IParseResult parseResult, Guid outpostId, StockUpdateMethod updateMethod);
-        void IncrementProductStocksForOutpost(IParseResult parseResult, Guid outpostId, StockUpdateMethod updateMethod);
+        StockUpdateResult UpdateProductStocksForOutpost(IParseResult parseResult, Guid outpostId, StockUpdateMethod updateMethod);
+        StockUpdateResult IncrementProductStocksForOutpost(IParseResult parseResult, Guid outpostId, StockUpdateMethod updateMethod);
     }
 }

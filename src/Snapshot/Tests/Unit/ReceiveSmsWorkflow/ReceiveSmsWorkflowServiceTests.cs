@@ -44,16 +44,6 @@ namespace Tests.Unit.ReceiveSmsWorkflow
         }
 
         [Test]
-        public void ProcessSms_SavesTheFirstDraftOfTheSmsDataReceivedAsIsSettingReceivedDate()
-        {
-            _sut.ProcessSms(_inputModel);
-
-            _saveRawSmsCommandMock.Verify(
-                cmd => cmd.Execute(
-                    It.Is<RawSmsReceived>(sms => sms.Sender == _inputModel.Sender && sms.Content == _inputModel.Content && sms.ReceivedDate != DateTime.MinValue)));
-        }
-
-        [Test]
         public void ProcessSms_SendsWarningMessageBackToSenderAndReturns_WhenSenderIsUnknow()
         {
             _sut.ProcessSms(_inputModel);
@@ -95,6 +85,20 @@ namespace Tests.Unit.ReceiveSmsWorkflow
             _sut.ProcessSms(_inputModel);
 
             smsCommandMock.Verify(c => c.Execute(_inputModel, dummyParseResult, _outpostMock.Object));
+        }
+
+        [Test]
+        public void ProcessSms_SavesAllTheNecessaryInformation_WhenSavingTheRawSmsInDb()
+        {
+            SetupKnownSender(true, true);
+            _smsTextParserServiceMock.Setup(s => s.Parse(_inputModel.Content)).Returns(new SmsParseResult { Success = false, Message = "a" });
+            _smsMessageCommandFactoryMock.Setup(f => f.CreateSmsMessageCommand(It.IsAny<MessageType>())).Returns(new NullObjectCommand());
+
+            _sut.ProcessSms(_inputModel);
+            _saveRawSmsCommandMock.Verify(c => c.Execute(It.Is<RawSmsReceived>(m => m.OutpostId == _outpostMock.Object.Id &&
+                                                                                    m.OutpostType == OutpostType.Warehouse && m.Sender == _inputModel.Sender &&
+                                                                                    m.Content == _inputModel.Content && m.ReceivedDate != DateTime.MinValue &&
+                                                                                    m.ParseSucceeded == false && m.ParseErrorMessage == "a")));
         }
 
         #region Helpers

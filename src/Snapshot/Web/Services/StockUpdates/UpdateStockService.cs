@@ -23,18 +23,18 @@ namespace Web.Services.StockUpdates
             _stockLevelSaveOrUpdateCommand = stockLevelSaveOrUpdateCommand;
         }
 
-        public void UpdateProductStocksForOutpost(IParseResult parseResult, Guid outpostId, StockUpdateMethod updateMethod)
+        public StockUpdateResult UpdateProductStocksForOutpost(IParseResult parseResult, Guid outpostId, StockUpdateMethod updateMethod)
         {
-            UpdateStockTemplate(parseResult, outpostId, updateMethod, (osl, pp) => osl.StockLevel = pp.StockLevel);
+            return UpdateStockTemplate(parseResult, outpostId, updateMethod, (osl, pp) => osl.StockLevel = pp.StockLevel);
         }
 
-        public void IncrementProductStocksForOutpost(IParseResult parseResult, Guid outpostId, StockUpdateMethod updateMethod)
+        public StockUpdateResult IncrementProductStocksForOutpost(IParseResult parseResult, Guid outpostId, StockUpdateMethod updateMethod)
         {
-            UpdateStockTemplate(parseResult, outpostId, updateMethod, (osl, pp) => osl.StockLevel += pp.StockLevel);
+            return UpdateStockTemplate(parseResult, outpostId, updateMethod, (osl, pp) => osl.StockLevel += pp.StockLevel);
         }
 
-        private void UpdateStockTemplate(IParseResult parseResult, Guid outpostId, StockUpdateMethod updateMethod,
-                                         Action<OutpostStockLevel, IParsedProduct> stockUpdateStrategy)
+        private StockUpdateResult UpdateStockTemplate(IParseResult parseResult, Guid outpostId, StockUpdateMethod updateMethod,
+                                                      Action<OutpostStockLevel, IParsedProduct> stockUpdateStrategy)
         {
             if (!parseResult.Success)
             {
@@ -43,6 +43,8 @@ namespace Web.Services.StockUpdates
 
             List<OutpostStockLevel> allStockLevelsForOutpost = _outpostStockLevelQueryService.Query().Where(o => o.Outpost.Id == outpostId).ToList();
 
+            var nonExistingParsedProducts = new List<IParsedProduct>();
+
             foreach (var parsedProductData in parseResult.ParsedProducts)
             {
                 var stockLevel = allStockLevelsForOutpost.FirstOrDefault(
@@ -50,7 +52,11 @@ namespace Web.Services.StockUpdates
                     o.ProductGroup.ReferenceCode.ToLowerInvariant() == parsedProductData.ProductGroupCode.ToLowerInvariant() &&
                     o.Product.SMSReferenceCode.ToLowerInvariant() == parsedProductData.ProductCode.ToLowerInvariant());
 
-                if (stockLevel == null) continue;
+                if (stockLevel == null)
+                {
+                    nonExistingParsedProducts.Add(parsedProductData);
+                    continue;
+                }
 
                 _outpostHistoricalStockLevelHistoryService.SaveHistoricalOutpostStockLevelToPreviousOutpostStockLevelOfCurrent(stockLevel);
 
@@ -62,6 +68,12 @@ namespace Web.Services.StockUpdates
                 stockLevel.UpdateMethod = updateMethod.ToString();
                 _stockLevelSaveOrUpdateCommand.Execute(stockLevel);
             }
+
+            return new StockUpdateResult
+                {
+                    Success = !nonExistingParsedProducts.Any(),
+                    FailedProducts = nonExistingParsedProducts.Any() ? nonExistingParsedProducts : null
+                };
         }
     }
 }
