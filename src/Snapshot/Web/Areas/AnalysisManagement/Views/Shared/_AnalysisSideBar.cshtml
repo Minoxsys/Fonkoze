@@ -1,23 +1,24 @@
 ﻿@using Web.Areas.AnalysisManagement.Controllers;
 @using Web.Areas.AnalysisManagement;
 
-<script type="text/javascript" />
+<script type="text/javascript">
     window.res.content.maincontent = {
         id: 'MainContent',
         sidebar: {
             id: 'SideBar',
             group: 'SideBarGroup',
-            reportproductlevel: 'Sidebar-AnalysisAdministration-Report-Region-Level-Button',
-            @*reportdistrictlevel: 'Sidebar-AnalysisAdministration-Report-District-Level-Button',
-            activityreport: 'Sidebar-AnalysisAdministration-Activity-Report-Button',
-            excesslevels: 'Sidebar-AnalysisAdministration-Excess-Levels-Report-Button',*@
-            locationreport: 'Sidebar-AnalysisAdministration-Location-Report-Button'
+            reportregionlevel: 'Sidebar-AnalysisAdministration-Report-Region-Level-Button',
+            reportdistrictlevel: 'Sidebar-AnalysisAdministration-Report-District-Level-Button',
+            reportsellerlevel: 'Sidebar-AnalysisAdministration-Report-Seller-Level-Button'
+            //locationreport: 'Sidebar-AnalysisAdministration-Location-Report-Button'
         }
     };
 
-    window.res.link.reportproductlevel = '@(Url.RouteUrl<ReportRegionLevelController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))';
-    @*window.res.link.reportdistrictlevel = '@(Url.RouteUrl<ReportDistrictLevelController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))';*@
-    window.res.link.locationreport = '@(Url.RouteUrl<LocationReportController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))';
+    
+    window.res.link.reportregionlevel = '@(Url.RouteUrl<ReportRegionLevelController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))';
+    window.res.link.reportdistrictlevel = '@(Url.RouteUrl<ReportDistrictLevelController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))';
+    window.res.link.reportsellerlevel = '@(Url.RouteUrl<ReportOutpostLevelController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))';
+    @*window.res.link.locationreport = '@(Url.RouteUrl<LocationReportController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))';*@
    
     Ext.onReady(function () {
 
@@ -47,28 +48,42 @@
                     align: 'stretch',
                     type: 'vbox'
                 },
-                items: [{
+                items: [
+                {
                     xtype: 'button',
-                    id: contentRes.maincontent.sidebar.reportproductlevel,
+                    id: contentRes.maincontent.sidebar.reportregionlevel,
                     toggleGroup: contentRes.maincontent.sidebar.group,
                     enableToggle: true,
-                    text: 'Product level information',
+                    text: 'Product level information at <br/> region level',
                     height: 45,
                     margin: '45 20 0 0',
                     ui: 'snapshot-sidebar-btn',
                     handler: function () {
-                        navigateTo(window.res.link.reportproductlevel);
-                    }
-                }, {
+                        navigateTo(window.res.link.reportregionlevel);
+                        }
+                },
+                 {
                     xtype: 'button',
-                    id: window.res.content.maincontent.sidebar.locationreport,
+                    id: contentRes.maincontent.sidebar.reportdistrictlevel,
                     toggleGroup: contentRes.maincontent.sidebar.group,
+                    text: 'Product level information at <br/> district level',
                     height: 45,
                     margin: '0 20 0 0',
-                    text: 'Location Report',
                     ui: 'snapshot-sidebar-btn',
                     handler: function () {
-                        navigateTo(window.res.link.locationreport);
+                        navigateTo(window.res.link.reportdistrictlevel);
+                    },
+                    enableToggle: true
+                }, {
+                    xtype: 'button',
+                    id: contentRes.maincontent.sidebar.reportsellerlevel,
+                    toggleGroup: contentRes.maincontent.sidebar.group,
+                    text: 'Product level information at <br/> seller level',
+                    height: 45,
+                    margin: '0 20 0 0',
+                    ui: 'snapshot-sidebar-btn',
+                    handler: function () {
+                        navigateTo(window.res.link.reportsellerlevel);
                     },
                     enableToggle: true
                 }]

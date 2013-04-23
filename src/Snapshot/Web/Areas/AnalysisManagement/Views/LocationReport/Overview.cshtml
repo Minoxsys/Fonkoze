@@ -8,7 +8,7 @@ Analysis: Location Report
 
 @{
     Html.RenderPartial("_EmptySubNavigation");
-    Html.RenderPartial("_AnalysisSideBar");
+    
     Html.RenderPartial("SelectPositionGoogleMapWindow");
 }
 
@@ -20,11 +20,11 @@ Analysis: Location Report
         var analysisBtn = Ext.getCmp(analysisBtnId);
         analysisBtn.toggle(true);
 
-//        if (window.res.content.maincontent.sidebar.googlemaps) {
-            var reportBtnId = window.res.content.maincontent.sidebar.locationreport;
-            var reportBtn = Ext.getCmp(reportBtnId);
-            reportBtn.toggle(true);
-//        }
+
+            //var reportBtnId = window.res.content.maincontent.sidebar.locationreport;
+            //var reportBtn = Ext.getCmp(reportBtnId);
+            //reportBtn.toggle(true);
+
     });
 
 </script>
@@ -545,7 +545,7 @@ Analysis: Location Report
         }
 
         var contentRes = window.res.content;
-        var mainContent = Ext.getCmp(contentRes.maincontent.id);
+        var mainContent = Ext.getCmp(contentRes.id);
 
         mainContent.add(window.feature.container);
         window.feature.countryMarkersStore.load(function () {
