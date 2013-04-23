@@ -47,7 +47,7 @@ namespace Web.BackgroundJobs
 
         public TimeSpan Interval
         {
-            get { return TimeSpan.FromHours(24); }
+            get { return TimeSpan.FromMinutes(10); }
         }
 
         public TimeSpan Timeout
