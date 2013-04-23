@@ -23,7 +23,8 @@ namespace Web.Services
         {
             string postData = GetPostDataFromSettings() + "&selectednums=" + toPhoneNumber + "&message=" + HttpUtility.HtmlEncode(message);
             string postResponse = _httpService.Post(_smsGatewaySettingsService.SmsGatewayUrl, postData);
-            SaveMessage(toPhoneNumber, message, postResponse);
+            if(saveMessage)
+               SaveMessage(toPhoneNumber, message, postResponse);
             return postResponse;
         }
 

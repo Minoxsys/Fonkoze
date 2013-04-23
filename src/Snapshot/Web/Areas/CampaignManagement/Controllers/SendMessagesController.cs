@@ -48,9 +48,7 @@ namespace Web.Areas.CampaignManagement.Controllers
                     string responseString = string.Empty;
                     try
                     {
-                        responseString = smsGatewayService.SendSms(outpost.DetailMethod, message, false); //TODO : logic for possible return statuses
-                        SaveMessage("+" + outpost.DetailMethod, message, responseString);
-
+                        responseString = smsGatewayService.SendSms(outpost.DetailMethod, message, true); //TODO : logic for possible return statuses
                     }
                     catch (Exception ext)
                     {
@@ -81,13 +79,7 @@ namespace Web.Areas.CampaignManagement.Controllers
 
         }
        
-        private void SaveMessage(string sentTo, string message, string responseString)
-        {
-            SentSms sentSms = new SentSms { PhoneNumber = sentTo, Message = message, Response = responseString, SentDate = DateTime.UtcNow };
-            SaveOrUpdateCommand.Execute(sentSms);
-        }
-
-        
+               
         [HttpGet]
         public JsonResult GetOutposts()
         {
