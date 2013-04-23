@@ -1,4 +1,5 @@
 ﻿using System;
+using Web.LocalizationResources;
 using Web.Models.Parsing;
 using Web.ReceiveSmsUseCase.Models;
 
@@ -7,8 +8,6 @@ namespace Web.ReceiveSmsUseCase.Services
     public class SmsTextParserService : ISmsTextParserService
     {
         private const int ValidMessageMinimumLength = 6;
-        private const string InvalidMessageFormat = "Invalid message format.";
-        private const string AtLeastOneProductWrong = "At least one product specification is invalid.";
         private const string ActivationMessage = "activate";
 
         public SmsParseResult Parse(string message)
@@ -95,12 +94,12 @@ namespace Web.ReceiveSmsUseCase.Services
 
         private SmsParseResult CreateInvalidMessageFormatResponse()
         {
-            return CreateErrorMessage(InvalidMessageFormat);
+            return CreateErrorMessage(Strings.InvalidMessageFormat);
         }
 
         private SmsParseResult CreateAtLeastOneProductWrongResponse()
         {
-            return CreateErrorMessage(AtLeastOneProductWrong);
+            return CreateErrorMessage(Strings.At_least_one_product_specification_is_invalid);
         }
 
         private SmsParseResult CreateErrorMessage(string msg)

@@ -42,7 +42,7 @@ namespace Web.ReceiveSmsUseCase.SmsMessageCommands
                     StockUpdateResult result = _updateStockService.UpdateProductStocksForOutpost(parseResult, outpost.Id, StockUpdateMethod.SMS);
                     if (result != null && !result.Success)
                     {
-                        _sendSmsService.SendSms(smsData.Sender, ComposeFailMessage(result.FailedProducts), true);
+                        _sendSmsService.SendSms(smsData.Sender, ComposeUpdateStockFailMessage(result.FailedProducts), true);
                     }
                 }
                 else
@@ -76,10 +76,17 @@ namespace Web.ReceiveSmsUseCase.SmsMessageCommands
                         LastUpdate = null
                     };
                 _saveOrUpdateAlertCommand.Execute(alert);
+
+                _sendSmsService.SendSms(smsData.Sender, ComposeFailedParsingMessage(parseResult.Message), true);
             }
         }
 
-        private string ComposeFailMessage(IEnumerable<IParsedProduct> failedProducts)
+        private string ComposeFailedParsingMessage(string detailsMessage)
+        {
+            return string.Format(Strings.InvalidSmsReceived, detailsMessage, Environment.NewLine);
+        }
+
+        private string ComposeUpdateStockFailMessage(IEnumerable<IParsedProduct> failedProducts)
         {
             var sb = new StringBuilder(string.Format(Strings.InvalidCodesPart1, Environment.NewLine));
             foreach (var failedProduct in failedProducts)

@@ -153,6 +153,16 @@ namespace Tests.Unit.ReceiveSmsWorkflow
             _sendSmsServiceMock.Verify(s => s.SendSms(_inputModel.Sender, It.IsAny<string>(), true));
         }
 
+        [Test]
+        public void ExecutingTheCommand_SendsErrorMessageBackToSender_WhenTheParsignOfTheMessageFailed()
+        {
+            SetupKnownSender();
+
+            _sut.Execute(_inputModel, new SmsParseResult {Success = false}, _outpostMock.Object);
+
+            _sendSmsServiceMock.Verify(s => s.SendSms(It.Is<string>(snd => snd == _inputModel.Sender), It.IsAny<string>(), true));
+        }
+
         private void SetupKnownSender(bool isSenderActive = true, bool isWarehouse = false)
         {
             var contact = new Contact {ContactType = Contact.MOBILE_NUMBER_CONTACT_TYPE, ContactDetail = _inputModel.Sender, IsMainContact = isSenderActive};

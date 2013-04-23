@@ -163,4 +163,13 @@
   <data name="InvalidCodesPart2" xml:space="preserve">
     <value>Others updated successfully</value>
   </data>
+  <data name="InvalidSmsReceived" xml:space="preserve">
+    <value>Invalid sms: {0}{1}Please call this toll free number to get assistance: +000000000000</value>
+  </data>
+  <data name="InvalidMessageFormat" xml:space="preserve">
+    <value>Invalid message format.</value>
+  </data>
+  <data name="At_least_one_product_specification_is_invalid" xml:space="preserve">
+    <value>At least one product specification is invalid.</value>
+  </data>
 </root>
