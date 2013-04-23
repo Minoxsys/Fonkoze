@@ -14,15 +14,15 @@ namespace Web.ReceiveSmsUseCase.SmsMessageCommands
         private readonly ISaveOrUpdateCommand<Alert> _saveOrUpdateAlertCommand;
         private readonly IContactMethodsService _contactMethodsService;
         private readonly ISendSmsService _sendSmsService;
-        private readonly IQueryService<Alert> _alertQueryService;
         private readonly IPreconfiguredEmailService _emailSendingService;
+        private readonly IQueryService<RawSmsReceived> _rawSmsReceivedQueryService;
 
         public SmsCommandFactory(IContactMethodsService contactMethodsService, ISaveOrUpdateCommand<Alert> saveOrUpdateAlertCommand,
-                                 IUpdateStockService updateStockService, ISendSmsService sendSmsService, IQueryService<Alert> alertQueryService,
-                                 IPreconfiguredEmailService emailSendingService)
+                                 IUpdateStockService updateStockService, ISendSmsService sendSmsService,
+                                 IPreconfiguredEmailService emailSendingService, IQueryService<RawSmsReceived> rawSmsReceivedQueryService)
         {
+            _rawSmsReceivedQueryService = rawSmsReceivedQueryService;
             _emailSendingService = emailSendingService;
-            _alertQueryService = alertQueryService;
             _sendSmsService = sendSmsService;
             _contactMethodsService = contactMethodsService;
             _saveOrUpdateAlertCommand = saveOrUpdateAlertCommand;
@@ -39,7 +39,7 @@ namespace Web.ReceiveSmsUseCase.SmsMessageCommands
                     }
                 case MessageType.StockUpdate:
                     {
-                        return new UpdateStockMessageCommand(_updateStockService, _sendSmsService, _saveOrUpdateAlertCommand, _emailSendingService, _alertQueryService);
+                        return new UpdateStockMessageCommand(_updateStockService, _sendSmsService, _saveOrUpdateAlertCommand, _emailSendingService, _rawSmsReceivedQueryService);
                     }
                 default:
                     return new NullObjectCommand();

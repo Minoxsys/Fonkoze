@@ -75,7 +75,7 @@ namespace Web.Controllers
                                                      ProductGroupId = alert.ProductGroupId,
                                                      ProductGroupName = alert.ProductGroupName,
                                                      LowLevelStock = alert.LowLevelStock,
-                                                     LastUpdate = alert.LastUpdate.HasValue ? alert.LastUpdate.Value.ToString("dd-MMM-yyyy") : "-",
+                                                     LastUpdate = alert.LastUpdate.HasValue ? alert.LastUpdate.Value.ToString("dd-MMM-yyyy, HH:mm") : "-",
                                                      Contact = alert.Contact,
                                                      AlertType = alert.AlertType.ToString()
                                                  }).ToArray();

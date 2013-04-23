@@ -24,53 +24,37 @@ namespace Tests.Unit.ReceiveSmsWorkflow
         private Mock<ISendSmsService> _sendSmsServiceMock;
         private Mock<ISaveOrUpdateCommand<Alert>> _saveAlertCmdMock;
         private Mock<IPreconfiguredEmailService> _sendEmailServiceMock;
-        private Mock<IQueryService<Alert>> _alertQueryServiceMock;
         private Mock<Outpost> _outpostMock;
         private ReceivedSmsInputModel _inputModel;
+        private Mock<IQueryService<RawSmsReceived>> _rawSmsQueryServiceMock;
 
         [SetUp]
         public void PerTestSetup()
         {
+            _rawSmsQueryServiceMock = new Mock<IQueryService<RawSmsReceived>>();
             _updateProductStockServiceMock = new Mock<IUpdateStockService>();
             _sendSmsServiceMock = new Mock<ISendSmsService>();
             _saveAlertCmdMock = new Mock<ISaveOrUpdateCommand<Alert>>();
             _sendEmailServiceMock = new Mock<IPreconfiguredEmailService>();
-            _alertQueryServiceMock = new Mock<IQueryService<Alert>>();
+            new Mock<IQueryService<Alert>>();
             _sut = new UpdateStockMessageCommand(_updateProductStockServiceMock.Object, _sendSmsServiceMock.Object, _saveAlertCmdMock.Object,
-                                                 _sendEmailServiceMock.Object, _alertQueryServiceMock.Object);
+                                                 _sendEmailServiceMock.Object, _rawSmsQueryServiceMock.Object);
 
-            _inputModel = new ReceivedSmsInputModel {Sender = "123"};
+            _inputModel = new ReceivedSmsInputModel { Sender = "123" };
         }
 
         [Test]
         public void ExecutingTheCommand_SendsEmailToCentralAccountWithDetailsfromConfigurationFile_WhenSellerMakes2ConsecutiveMistakesInSmsMessage()
         {
-            _alertQueryServiceMock.Setup(s => s.Query())
-                                  .Returns(
-                                      new List<Alert>
-                                          {
-                                              new Alert
-                                                  {
-                                                      AlertType = AlertType.StockLevel,
-                                                      Created = new DateTime(2013, 1, 3),
-                                                      OutpostName = "abcdefg",
-                                                      Contact = "1234567"
-                                                  },
-                                              new Alert
-                                                  {
-                                                      AlertType = AlertType.Error,
-                                                      Created = new DateTime(2013, 1, 7),
-                                                      OutpostName = "abcdefg",
-                                                      Contact = "1234567"
-                                                  },
-                                              new Alert
-                                                  {
-                                                      AlertType = AlertType.StockLevel,
-                                                      Created = new DateTime(2013, 1, 5),
-                                                      OutpostName = "abcdefg",
-                                                      Contact = "1234567"
-                                                  }
-                                          }.AsQueryable());
+            _rawSmsQueryServiceMock.Setup(s => s.Query()).Returns(new List<RawSmsReceived>
+                {
+                    new RawSmsReceived {ParseSucceeded = false, Created = new DateTime(2013, 4, 5), Sender = "1234567"},//the most recent for given sender is the msg just received
+                    new RawSmsReceived {ParseSucceeded = true, Created = new DateTime(2013, 4, 6), Sender = "789"},
+                    new RawSmsReceived {ParseSucceeded = false, Created = new DateTime(2013, 4, 3), Sender = "1234567"},//the second most recent for given sender is failure
+                    new RawSmsReceived {ParseSucceeded = true, Created = new DateTime(2013, 4, 1), Sender = "1234567"},
+                }.AsQueryable());
+
+
             _sendEmailServiceMock.Setup(s => s.CreatePartialMailMessageFromConfig()).Returns(new MailMessage());
 
 

@@ -21,12 +21,12 @@ namespace Web.ReceiveSmsUseCase.SmsMessageCommands
         private readonly ISendSmsService _sendSmsService;
         private readonly ISaveOrUpdateCommand<Alert> _saveOrUpdateAlertCommand;
         private readonly IPreconfiguredEmailService _emailSendingService;
-        private readonly IQueryService<Alert> _alertQueryService;
+        private readonly IQueryService<RawSmsReceived> _rawSmsReceivedQueryService;
 
         public UpdateStockMessageCommand(IUpdateStockService updateStockService, ISendSmsService sendSmsService,
-                                         ISaveOrUpdateCommand<Alert> saveOrUpdateAlertCommand, IPreconfiguredEmailService emailSendingService, IQueryService<Alert> alertQueryService)
+                                         ISaveOrUpdateCommand<Alert> saveOrUpdateAlertCommand, IPreconfiguredEmailService emailSendingService, IQueryService<RawSmsReceived> rawSmsReceived)
         {
-            _alertQueryService = alertQueryService;
+            _rawSmsReceivedQueryService = rawSmsReceived;
             _emailSendingService = emailSendingService;
             _updateStockService = updateStockService;
             _sendSmsService = sendSmsService;
@@ -52,13 +52,7 @@ namespace Web.ReceiveSmsUseCase.SmsMessageCommands
             }
             else
             {
-                // see if this is the second consecutive mistake
-                var previousAlert =
-                    _alertQueryService.Query()
-                                      .OrderByDescending(a => a.Created)
-                                      .FirstOrDefault(a => a.OutpostName == outpost.Name && a.Contact == smsData.Sender);
-
-                if (previousAlert != null && previousAlert.AlertType == AlertType.Error)
+                if (IsSecondConsecutiveMistake(smsData))
                 {
                     var msg = CreateMailMessage(smsData, outpost);
                     _emailSendingService.SendEmail(msg);
@@ -79,6 +73,15 @@ namespace Web.ReceiveSmsUseCase.SmsMessageCommands
 
                 _sendSmsService.SendSms(smsData.Sender, ComposeFailedParsingMessage(parseResult.Message), true);
             }
+        }
+
+        private bool IsSecondConsecutiveMistake(ReceivedSmsInputModel smsData)
+        {
+            var beforePreviousMessage =
+                _rawSmsReceivedQueryService.Query()
+                                           .OrderByDescending(m => m.Created).Where(m => m.Sender == smsData.Sender).Skip(1)
+                                           .FirstOrDefault();
+            return beforePreviousMessage != null && !beforePreviousMessage.ParseSucceeded;
         }
 
         private string ComposeFailedParsingMessage(string detailsMessage)
