@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Core.Domain;
 using NUnit.Framework;
 using Web.Areas.OutpostManagement.Models.District;
 using Web.Models.Shared;
@@ -87,6 +88,47 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.DistrictControllerTests
             Assert.IsNotNull(response);
             Assert.AreEqual(response.Status, "Error");
             Assert.AreEqual(response.Message, "The region already contains a district with the name Cluj! Please insert a different name!");
+
+        }
+
+        [Test]
+        public void SavesTheDistrictManager_WhenSetFromUI()
+        {
+            var districtInputModel = new DistrictInputModel
+                {
+                    Name = objectMother.district.Name,
+                    Region = {Id = objectMother.district.Region.Id},
+                    ManagerId = objectMother.manager.Id
+                };
+
+            objectMother.queryService.Expect(it => it.Query()).Return(new District[] {}.AsQueryable());
+            objectMother.queryService.Stub(q => q.Load(Arg<Guid>.Is.Anything)).Return(objectMother.district);
+            objectMother.queryUsers.Stub(q => q.Query()).Return(new[] { objectMother.manager }.AsQueryable());
+
+            //act
+            objectMother.controller.Edit(districtInputModel);
+
+            objectMother.saveCommand.AssertWasCalled(c => c.Execute(Arg<District>.Matches(d => d.DistrictManager.Id == districtInputModel.ManagerId)));
+        }
+
+        [Test]
+        public void DoesNotSetTheDistrictManager_WhenNotSetFromUI()
+        {
+            var districtInputModel = new DistrictInputModel
+                {
+                    Name = objectMother.district.Name,
+                    Region = { Id = objectMother.district.Region.Id },
+                    ManagerId = Guid.Empty
+                };
+
+            objectMother.queryService.Expect(it => it.Query()).Return(new District[] { }.AsQueryable());
+            objectMother.queryService.Stub(q => q.Load(Arg<Guid>.Is.Anything)).Return(objectMother.district);
+            objectMother.queryUsers.Stub(q => q.Query()).Return(new[] { new  User()}.AsQueryable());
+
+            //act
+            objectMother.controller.Edit(districtInputModel);
+
+            objectMother.saveCommand.AssertWasCalled(c => c.Execute(Arg<District>.Matches(d => d.DistrictManager == null)));
 
         }
     }

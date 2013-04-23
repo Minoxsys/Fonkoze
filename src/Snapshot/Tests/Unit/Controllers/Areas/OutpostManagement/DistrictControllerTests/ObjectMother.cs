@@ -43,6 +43,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.DistrictControllerTests
         public Client client;
         public Outpost outpost;
         User user;
+        public User manager;
 
         Guid districtId;
         Guid countryId;
@@ -60,6 +61,14 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.DistrictControllerTests
             StubRegion();
             StubDistrict();
             StubOutpost();
+            StubManagerUser();
+        }
+
+        private void StubManagerUser()
+        {
+            var guid = Guid.NewGuid();
+            manager = MockRepository.GeneratePartialMock<User>();
+            manager.Stub(c => c.Id).Return(guid);
         }
 
         internal void StubOutpost()
@@ -150,7 +159,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.DistrictControllerTests
             user.Password = "asdf";
 
             queryClient.Stub(c => c.Load(clientId)).Return(client);
-            queryUsers.Stub(c => c.Query()).Return(new[] { user }.AsQueryable());
+            queryUsers.Stub(c => c.Query()).Return(new[] {user}.AsQueryable()).Repeat.Once();
 
             controller.LoadClient = queryClient;
             controller.QueryUsers = queryUsers;
