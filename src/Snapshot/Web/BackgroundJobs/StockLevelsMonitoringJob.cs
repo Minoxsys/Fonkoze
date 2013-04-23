@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Web.LocalizationResources;
 using Web.Models.Alerts;
+using Web.Services;
 using Web.Services.SendEmail;
 using WebBackgrounder;
 
@@ -18,6 +19,7 @@ namespace Web.BackgroundJobs
         private readonly Func<IQueryService<OutpostStockLevel>> _queryOutpostStockLevel;
         private readonly Func<IQueryService<Client>> _queryClients;
         private readonly PreconfiguredEmailService _preconfiguredEmailService;
+        private readonly ISendSmsService _sendSmsService;
 
         private const string JobName = "StockLevelMonitoringJob";
 
@@ -38,8 +40,9 @@ namespace Web.BackgroundJobs
 
         public StockLevelsMonitoringJob(Func<ISaveOrUpdateCommand<Alert>> saveOrUpdateCommand, Func<IQueryService<Alert>> queryAlerts,
                             Func<IQueryService<OutpostStockLevel>> queryOutpostStockLevel, Func<IQueryService<Client>> queryClients,
-                            PreconfiguredEmailService preconfiguredEmailService)
+                            PreconfiguredEmailService preconfiguredEmailService, ISendSmsService sendSmsService)
         {
+            _sendSmsService = sendSmsService;
             _preconfiguredEmailService = preconfiguredEmailService;
             _saveOrUpdateCommand = saveOrUpdateCommand;
             _queryAlerts = queryAlerts;
@@ -68,7 +71,11 @@ namespace Web.BackgroundJobs
                                  LastUpdated = outpostStockLevel.Updated,
                                  RefCode = outpostStockLevel.Product.SMSReferenceCode,
                                  ClientId = outpostStockLevel.Client.Id,
-                                 ProductLimit = outpostStockLevel.Product.LowerLimit
+                                 ProductLimit = outpostStockLevel.Product.LowerLimit,
+                                 DistrictManagerPhoneNumber =
+                                     outpostStockLevel.Outpost.District.DistrictManager != null
+                                         ? outpostStockLevel.Outpost.District.DistrictManager.PhoneNumber
+                                         : string.Empty
                              }).ToList();
 
                     foreach (var f in foos)
@@ -79,9 +86,24 @@ namespace Web.BackgroundJobs
                             _saveOrUpdateCommand().Execute(alert);
 
                             SendEmailToCentralAccount(f);
+                            SendSmsMessageToDistrictManager(f);
                         }
                     }
                 });
+        }
+
+        private void SendSmsMessageToDistrictManager(AlertOutputModel alertOutputModel)
+        {
+            if (!string.IsNullOrEmpty(alertOutputModel.DistrictManagerPhoneNumber))
+            {
+                _sendSmsService.SendSms(alertOutputModel.DistrictManagerPhoneNumber, BuildSmsMessage(alertOutputModel), true);
+            }
+        }
+
+        private string BuildSmsMessage(AlertOutputModel model)
+        {
+            return string.Format(Strings.StockBellowLimitSmsBody, Environment.NewLine,
+                                 model.OutpostName, model.RefCode, model.StockLevel, model.Contact);
         }
 
         private void SendEmailToCentralAccount(AlertOutputModel model)

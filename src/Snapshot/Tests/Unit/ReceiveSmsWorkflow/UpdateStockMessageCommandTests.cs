@@ -36,7 +36,6 @@ namespace Tests.Unit.ReceiveSmsWorkflow
             _sendSmsServiceMock = new Mock<ISendSmsService>();
             _saveAlertCmdMock = new Mock<ISaveOrUpdateCommand<Alert>>();
             _sendEmailServiceMock = new Mock<IPreconfiguredEmailService>();
-            new Mock<IQueryService<Alert>>();
             _sut = new UpdateStockMessageCommand(_updateProductStockServiceMock.Object, _sendSmsServiceMock.Object, _saveAlertCmdMock.Object,
                                                  _sendEmailServiceMock.Object, _rawSmsQueryServiceMock.Object);
 

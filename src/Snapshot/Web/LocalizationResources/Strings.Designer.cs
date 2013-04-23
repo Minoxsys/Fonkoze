@@ -215,6 +215,15 @@ namespace Web.LocalizationResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to LOW STOCK: Seller: {1} {0}Product: {2} {0}Stock: {3} {0} {0}Contact: {4}.
+        /// </summary>
+        internal static string StockBellowLimitSmsBody {
+            get {
+                return ResourceManager.GetString("StockBellowLimitSmsBody", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Seller {0} with phone number {1} has send the second consecutive invalid SMS. Please assist..
         /// </summary>
         internal static string TwoConsecutiveInvalidSMSEmailBody {

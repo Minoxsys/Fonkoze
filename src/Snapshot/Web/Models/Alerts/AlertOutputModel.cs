@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace Web.Models.Alerts
 {
@@ -18,5 +15,6 @@ namespace Web.Models.Alerts
         public string RefCode { get; set; }
         public Guid ClientId { get; set; }
         public int ProductLimit { get; set; }
+        public string DistrictManagerPhoneNumber { get; set; }
     }
 }

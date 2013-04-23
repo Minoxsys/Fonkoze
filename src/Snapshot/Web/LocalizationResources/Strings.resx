@@ -172,4 +172,7 @@
   <data name="At_least_one_product_specification_is_invalid" xml:space="preserve">
     <value>At least one product specification is invalid.</value>
   </data>
+  <data name="StockBellowLimitSmsBody" xml:space="preserve">
+    <value>LOW STOCK: Seller: {1} {0}Product: {2} {0}Stock: {3} {0} {0}Contact: {4}</value>
+  </data>
 </root>
