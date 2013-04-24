@@ -9,47 +9,46 @@ namespace Web.BackgroundJobs
 {
     public class EmptyJob : IJob
     {
-        const string EMPTY_JOB_NAME = "EmptyJob";
-        private readonly Func<IQueryService<WorkItem>> queryWorkItems;
-        private readonly Func<IDeleteCommand<WorkItem>> deleteWorkItems;
+        private const string EmptyJobName = "EmptyJob";
+        private readonly Func<IQueryService<WorkItem>> _queryWorkItems;
+        private readonly Func<IDeleteCommand<WorkItem>> _deleteWorkItems;
 
         public EmptyJob(Func<IQueryService<WorkItem>> queryWorkItems, Func<IDeleteCommand<WorkItem>> deleteWorkItems)
         {
-            this.queryWorkItems = queryWorkItems;
-            this.deleteWorkItems = deleteWorkItems;
-
+            _queryWorkItems = queryWorkItems;
+            _deleteWorkItems = deleteWorkItems;
         }
-        public System.Threading.Tasks.Task Execute()
+
+        public Task Execute()
         {
-            return new Task(() => {
-
-                var cutoffDate = DateTime.UtcNow.Subtract(TimeSpan.FromMinutes(15));
-                var oldItems = queryWorkItems().Query().Where(w => w.Completed != null && w.Completed < cutoffDate);
-                if (oldItems.Any())
+            return new Task(() =>
                 {
-                    foreach (var workItem in oldItems.ToList())
+                    var cutoffDate = DateTime.UtcNow.Subtract(TimeSpan.FromHours(4));
+                    var oldItems = _queryWorkItems().Query().Where(w => w.Completed != null && w.Completed < cutoffDate).ToList();
+                    if (oldItems.Any())
                     {
-                        deleteWorkItems().Execute(workItem);
+                        foreach (var workItem in oldItems)
+                        {
+                            _deleteWorkItems().Execute(workItem);
+                        }
                     }
-                }
-
-            });
-            
+                });
         }
 
         public TimeSpan Interval
         {
-            get { return TimeSpan.FromSeconds(10); }
+            //23 hours and 53 minutes
+            get { return TimeSpan.FromMinutes(1433); }
         }
 
         public string Name
         {
-            get { return EMPTY_JOB_NAME; }
+            get { return EmptyJobName; }
         }
 
         public TimeSpan Timeout
         {
-            get { return TimeSpan.FromMinutes(2); }
+            get { return TimeSpan.FromMinutes(10); }
         }
     }
 }

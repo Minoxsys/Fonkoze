@@ -43,16 +43,16 @@ namespace Web.BackgroundJobs
                 });
         }
 
-        private const string JobName = "InactivityEmailsJob";
+        private const string JobName = "OutpostInactivityJob";
 
         public TimeSpan Interval
         {
-            get { return TimeSpan.FromMinutes(10); }
+            get { return TimeSpan.FromMinutes(11); }
         }
 
         public TimeSpan Timeout
         {
-            get { return TimeSpan.FromSeconds(90); }
+            get { return TimeSpan.FromMinutes(5); }
         }
 
         public string Name

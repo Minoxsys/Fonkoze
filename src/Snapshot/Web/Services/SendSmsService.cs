@@ -32,7 +32,10 @@ namespace Web.Services
         {
             string postData = GetPostDataFromSettings() + "&" + GetPostDataFromSmsRequest(smsRequest);
             string postResponse = _httpService.Post(_smsGatewaySettingsService.SmsGatewayUrl, postData);
-            SaveMessage(smsRequest.Number, smsRequest.Message, postResponse);
+            if (saveRequest)
+            {
+                SaveMessage(smsRequest.Number, smsRequest.Message, postResponse);
+            }
             return postResponse;
         }
 

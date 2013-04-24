@@ -1,76 +1,86 @@
-﻿using System;
+﻿using Core.Persistence;
+using Domain;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using WebBackgrounder;
 using System.Threading.Tasks;
-using Core.Persistence;
-using Domain;
-using Web.Areas.CampaignManagement.Models.ProductLevelRequest;
-using Web.Areas.CampaignManagement.Models.Campaign;
 using Web.Services;
+using WebBackgrounder;
 
 namespace Web.BackgroundJobs
 {
     public class CampaignExecutionJob : IJob
     {
-        private const string JOB_NAME = "CampaignExecutionJob";
-        public TimeSpan Interval { get { return TimeSpan.FromSeconds(70); } }
-        public TimeSpan Timeout { get { return TimeSpan.FromSeconds(130); } }
-        public string Name { get { return JOB_NAME; } }
+        private const string JobName = "CampaignExecutionJob";
 
-        private readonly Func<IQueryService<ProductLevelRequest>> queryProductLevelRequests;
-        private readonly Func<IQueryService<RequestRecord>> queryExistingRequests;
-        private readonly Func<IProductLevelRequestMessagesDispatcherService> dispatcherService;
+        public TimeSpan Interval
+        {
+            get { return TimeSpan.FromMinutes(123); }
+        }
+
+        public TimeSpan Timeout
+        {
+            get { return TimeSpan.FromMinutes(5); }
+        }
+
+        public string Name
+        {
+            get { return JobName; }
+        }
+
+        private readonly Func<IQueryService<ProductLevelRequest>> _queryProductLevelRequests;
+        private readonly Func<IQueryService<RequestRecord>> _queryExistingRequests;
+        private readonly Func<IProductLevelRequestMessagesDispatcherService> _dispatcherService;
 
         public CampaignExecutionJob(
-           Func<IQueryService<ProductLevelRequest>> queryProductLevelRequests,
-           Func<IQueryService<RequestRecord>> queryExecutedCampaign,
-           Func<IProductLevelRequestMessagesDispatcherService> dispatcherService)
+            Func<IQueryService<ProductLevelRequest>> queryProductLevelRequests,
+            Func<IQueryService<RequestRecord>> queryExecutedCampaign,
+            Func<IProductLevelRequestMessagesDispatcherService> dispatcherService)
         {
-            this.queryProductLevelRequests = queryProductLevelRequests;
-            this.queryExistingRequests = queryExecutedCampaign;
-            this.dispatcherService = dispatcherService;
+            _queryProductLevelRequests = queryProductLevelRequests;
+            _queryExistingRequests = queryExecutedCampaign;
+            _dispatcherService = dispatcherService;
         }
 
-        public System.Threading.Tasks.Task Execute()
+        public Task Execute()
         {
             return new Task(() =>
-            {
-                List<ProductLevelRequest> needToBeExecuted = GetListOfProductLevelRequestsThatNeedToBeExecuted();
-                var dispatcher = dispatcherService();
-                foreach (var productLevelRequest in needToBeExecuted)
                 {
-                    dispatcher.DispatchMessagesForProductLevelRequest(productLevelRequest);
-                }
+                    IEnumerable<ProductLevelRequest> needToBeExecuted = GetListOfProductLevelRequestsThatNeedToBeExecuted();
+                    var dispatcher = _dispatcherService();
+                    foreach (var productLevelRequest in needToBeExecuted)
+                    {
+                        dispatcher.DispatchMessagesForProductLevelRequest(productLevelRequest);
+                    }
 
-            });
+                });
         }
 
-        private List<ProductLevelRequest> GetListOfProductLevelRequestsThatNeedToBeExecuted()
+        private IEnumerable<ProductLevelRequest> GetListOfProductLevelRequestsThatNeedToBeExecuted()
         {
-            List<ProductLevelRequest> needToBeExecuted = new List<ProductLevelRequest>();
+            var needToBeExecuted = new List<ProductLevelRequest>();
 
-            var productlevelrequests = queryProductLevelRequests().Query()
-                .Where(it => it.Campaign.StartDate.Value.Date <= DateTime.UtcNow.Date)
-                .Where(it => it.IsStopped == false)
-                .Where(it => it.Schedule != null)
-                .Where(it => it.Campaign.Opened == true).ToList();
+            var productlevelrequests = _queryProductLevelRequests().Query()
+                                                                   .Where(it => it.Campaign.StartDate.Value.Date <= DateTime.UtcNow.Date)
+                                                                   .Where(it => it.IsStopped == false)
+                                                                   .Where(it => it.Schedule != null)
+                                                                   .Where(it => it.Campaign.Opened).ToList();
 
 
             foreach (var productLevelRequest in productlevelrequests)
             {
                 var lastExecuted = GetLastExecuted(productLevelRequest);
 
-                if (!lastExecuted.HasValue && 
-                    DateTime.UtcNow.Date >= NextExecutionDate(productLevelRequest.Created.Value, productLevelRequest.Schedule.FrequencyValue)) //Has not been Executed yet
+                if (productLevelRequest.Created.HasValue && (!lastExecuted.HasValue &&
+                                                            DateTime.UtcNow.Date >= NextExecutionDate(productLevelRequest.Created.Value, productLevelRequest.Schedule.FrequencyValue)))
+                    //Has not been Executed yet
                 {
                     needToBeExecuted.Add(productLevelRequest);
                 }
 
-                if ( lastExecuted.HasValue &&
+                if (lastExecuted.HasValue &&
                     lastExecuted.Value.Date != DateTime.UtcNow.Date &&
-                    DateTime.UtcNow.Date == NextExecutionDate(lastExecuted.Value, productLevelRequest.Schedule.FrequencyValue) )
+                    DateTime.UtcNow.Date == NextExecutionDate(lastExecuted.Value, productLevelRequest.Schedule.FrequencyValue))
                 {
                     needToBeExecuted.Add(productLevelRequest);
                 }
@@ -86,15 +96,17 @@ namespace Web.BackgroundJobs
 
         private DateTime? GetLastExecuted(ProductLevelRequest productLevelRequest)
         {
-            var existingRequests = queryExistingRequests().Query()
-                .Where(it => it.ProductLevelRequestId == productLevelRequest.Id)
-                .OrderByDescending(it => it.Created);
+            var existingRequests = _queryExistingRequests().Query()
+                                                           .Where(it => it.ProductLevelRequestId == productLevelRequest.Id)
+                                                           .OrderByDescending(it => it.Created);
 
             if (existingRequests.Any())
-                return existingRequests.FirstOrDefault().Created;
+            {
+                var firstOrDefault = existingRequests.FirstOrDefault();
+                if (firstOrDefault != null) return firstOrDefault.Created;
+            }
 
             return null;
         }
-
     }
 }

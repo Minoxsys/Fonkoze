@@ -21,16 +21,16 @@ namespace Web.BackgroundJobs
         private readonly PreconfiguredEmailService _preconfiguredEmailService;
         private readonly ISendSmsService _sendSmsService;
 
-        private const string JobName = "StockLevelMonitoringJob";
+        private const string JobName = "StockLevelsMonitoringJob";
 
         public TimeSpan Interval
         {
-            get { return TimeSpan.FromMinutes(1); }
+            get { return TimeSpan.FromMinutes(14); }
         }
 
         public TimeSpan Timeout
         {
-            get { return TimeSpan.FromSeconds(90); }
+            get { return TimeSpan.FromMinutes(5); }
         }
 
         public string Name
