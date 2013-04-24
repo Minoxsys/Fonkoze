@@ -31,7 +31,7 @@ namespace Tests.Unit.Controllers.Areas.CampaignManagement.SendMessagesController
         public void Should_QueryOutpostsAndCallSendSmsAndReturnJsonActionResponse()
         {
             objectMother.queryOutposts.Expect(call => call.Query()).Return(new Outpost[] {objectMother.outpost}.AsQueryable());
-            objectMother.smsGatewayService.Expect(call => call.SendSms(objectMother.outpost.DetailMethod, message, false)).Return(null);
+            objectMother.smsGatewayService.Expect(call => call.SendSms(objectMother.outpost.DetailMethod, message, true)).Return(null);
 
             var jsonResult = objectMother.controller.SendMessageToOutposts(objectMother.outpostIds, message);
 
