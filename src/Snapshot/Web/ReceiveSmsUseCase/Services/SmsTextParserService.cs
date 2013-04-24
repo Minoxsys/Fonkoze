@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 using Web.LocalizationResources;
 using Web.Models.Parsing;
 using Web.ReceiveSmsUseCase.Models;
@@ -64,7 +65,7 @@ namespace Web.ReceiveSmsUseCase.Services
                     };
 
                 int stockLevel;
-                if (int.TryParse(GetStockLevelString(token), out stockLevel))
+                if (ValidContents(token, product, out stockLevel))
                 {
                     product.StockLevel = stockLevel;
                 }
@@ -81,6 +82,24 @@ namespace Web.ReceiveSmsUseCase.Services
 
             parsedProduct = product;
             return parseResult;
+        }
+
+        private bool ValidContents(string token, ParsedProduct product, out int stockLevel)
+        {
+            return int.TryParse(GetStockLevelString(token), out stockLevel) && ContainsOnlyLetters(product.ProductGroupCode) &&
+                   ContainsOnlyLetters(product.ProductCode) && IsValidClientIdefifier(product.IsClientIdentifier);
+        }
+
+        private bool IsValidClientIdefifier(string identifier)
+        {
+            var regex = new Regex("^[f,n,F,N]{1}$");
+            return regex.IsMatch(identifier);
+        }
+
+        private bool ContainsOnlyLetters(string code)
+        {
+            var regex = new Regex("^[a-zA-Z]+$");
+            return regex.IsMatch(code);
         }
 
         private SmsParseResult CreateActivationMessageResponse()

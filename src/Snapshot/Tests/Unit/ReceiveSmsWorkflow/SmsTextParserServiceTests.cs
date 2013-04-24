@@ -54,7 +54,7 @@ namespace Tests.Unit.ReceiveSmsWorkflow
         [Test]
         public void Parse_FailsParsing_WhenInputStringLengthForOneOneOfTheProductSpecsIsBellowMinimumSize()
         {
-            var result = _sut.Parse("ASDF1K XXX KLLS3p");
+            var result = _sut.Parse("ASDF1F XXX KLLS3F");
 
             Assert.IsFalse(result.Success);
             Assert.That(result.Message, Is.EqualTo("At least one product specification is invalid."));
@@ -140,5 +140,67 @@ namespace Tests.Unit.ReceiveSmsWorkflow
             var result = _sut.Parse(",.,." + ActivateMessage + ".,;.");
             Assert.That(result.MessageType, Is.EqualTo(MessageType.Activation));
         }
+
+        [Test]
+        public void Parse_FailsParse_WhenProductGroupCodeContainsAnythingBut3Letters()
+        {
+            var result = _sut.Parse("a5bd88f");
+            Assert.False(result.Success);
+
+            result = _sut.Parse("5abd88f");
+            Assert.False(result.Success);
+
+            result = _sut.Parse("aa5d88f");
+            Assert.False(result.Success);
+
+            result = _sut.Parse("a888888f");
+            Assert.False(result.Success);
+
+            result = _sut.Parse("aa4b8f");
+            Assert.False(result.Success);
+
+            result = _sut.Parse("aa>b8f");
+            Assert.False(result.Success);
+        }
+
+        [Test]
+        public void Parse_FailsParse_WhenProductCodeIsAnythingBut1Letter()
+        {
+            var result = _sut.Parse("aaa588f");
+            Assert.False(result.Success);
+
+            result = _sut.Parse("aaa8888f");
+            Assert.False(result.Success);
+
+            result = _sut.Parse("aaa,888f");
+            Assert.False(result.Success);
+        }
+
+        [Test]
+        public void Parse_FailsParse_WhenLastLetterIsAnythingButFOrNCaseInsensitive()
+        {
+            var result = _sut.Parse("aaab588f");
+            Assert.True(result.Success);
+
+            result = _sut.Parse("aaab8888n");
+            Assert.True(result.Success);
+
+            result = _sut.Parse("aaab8888F");
+            Assert.True(result.Success);
+
+            result = _sut.Parse("aaab8888N");
+            Assert.True(result.Success);
+
+
+            result = _sut.Parse("aaab8888c");
+            Assert.False(result.Success);
+
+            result = _sut.Parse("aaab88888");
+            Assert.False(result.Success);
+
+            result = _sut.Parse("aaab8888/");
+            Assert.False(result.Success);
+        }
+
     }
 }
