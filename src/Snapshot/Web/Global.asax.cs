@@ -5,6 +5,7 @@ using System.Web.Mvc;
 using Web.Bootstrap.Container;
 using Web.Bootstrap.Routes;
 using Web.CustomModelBinders;
+using Web.CustomViewEngine;
 using Web.Security;
 using WebBackgrounder;
 
@@ -33,6 +34,8 @@ namespace Web
 
         protected void Application_Start()
         {
+            ReplaceDefaultViewEngine();
+
             InitializeContainer();
 
             _jobManager = CreateJobWorkersManager();
@@ -44,6 +47,21 @@ namespace Web
 
             RegisterGlobalFilters(GlobalFilters.Filters);
             RoutesRegistrar.Register();
+        }
+
+        private void ReplaceDefaultViewEngine()
+        {
+            ViewEngines.Engines.Clear();
+
+            var engine = new CustomPathsRazorViewEngine();
+            engine.AddViewLocationFormat("~/WarehouseMgmtUseCase/Views/{1}/{0}.cshtml");
+            engine.AddViewLocationFormat("~/WarehouseMgmtUseCase/Views/{1}/{0}.vbhtml");
+
+            // Add a shared location too, as the lines above are controller specific
+            engine.AddPartialViewLocationFormat("~/WarehouseMgmtUseCase/Views/Shared/{0}.cshtml");
+            engine.AddPartialViewLocationFormat("~/WarehouseMgmtUseCase/Views/Shared/{0}.vbhtml");
+
+            ViewEngines.Engines.Add(engine);
         }
 
         protected void Application_Stop()

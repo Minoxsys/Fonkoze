@@ -305,6 +305,7 @@
     <Compile Include="Bootstrap\Container\ServicesConventionsRegistrar.cs" />
     <Compile Include="Controllers\AccountOptionsController.cs" />
     <Compile Include="Controllers\SendMessageController.cs" />
+    <Compile Include="CustomViewEngine\CustomPathsRazorViewEngine.cs" />
     <Compile Include="Helpers\ProjectLinkExtensions.cs" />
     <Compile Include="LocalizationResources\Strings.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -2173,7 +2174,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\OutpostManagement\Services\" />
-    <Folder Include="WarehouseMgmtUseCase\Views\Shared\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -2287,8 +2287,10 @@
     <Content Include="Views\AccountOptions\Overview.cshtml" />
     <Content Include="Views\Shared\_EmptySubNavigation.cshtml" />
     <Content Include="Views\SendMessage\Overview.cshtml" />
-    <Content Include="Views\Shared\_WarehouseAdministrationSideBar.cshtml" />
-    <Content Include="Views\WarehouseManagement\Overview.cshtml" />
+    <Content Include="WarehouseMgmtUseCase\Views\Shared\_WarehouseAdministrationSideBar.cshtml" />
+    <Content Include="WarehouseMgmtUseCase\Views\WarehouseManagement\Overview.cshtml" />
+    <Content Include="WarehouseMgmtUseCase\Views\_ViewStart.cshtml" />
+    <Content Include="WarehouseMgmtUseCase\Views\Web.config" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\mixins\_color-by-background.scss" />
