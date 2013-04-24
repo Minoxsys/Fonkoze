@@ -9,5 +9,6 @@ namespace Web.Areas.AnalysisManagement.Models.ReportDistrictLevel
     {
         public string ProductName {get; set;}
         public string StockLevel { get; set; }
+        public int LowerLimit { get; set; }
     }
 }

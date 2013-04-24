@@ -116,7 +116,7 @@ namespace Web.Areas.AnalysisManagement.Controllers
 
         private static ReportOutpostLevelTreeModel ToProductNode(IGrouping<Product, OutpostStockLevel> product, Guid parentId)
         {
-            var productNode = new ReportOutpostLevelTreeModel { Name = product.Key.Name, ProductLevelSum = "", Id = product.Key.Id, ParentId = parentId };
+            var productNode = new ReportOutpostLevelTreeModel { Name = product.Key.Name, ProductLevelSum = "", Id = product.Key.Id, ParentId = parentId,LowerLimit=product.Key.LowerLimit };
 
             int productLevelSum = 0;
 
@@ -161,7 +161,7 @@ namespace Web.Areas.AnalysisManagement.Controllers
             var pg = outpost.children.Find(it => it.Id == productGroupId);
             foreach (var product in pg.children)
             {
-                ProductsChartModel model = new ProductsChartModel() { ProductName = product.Name, StockLevel = product.ProductLevelSum };
+                ProductsChartModel model = new ProductsChartModel() { ProductName = product.Name, StockLevel = product.ProductLevelSum ,LowerLimit=product.LowerLimit};
                 listOfProducts.Add(model);
             }
 

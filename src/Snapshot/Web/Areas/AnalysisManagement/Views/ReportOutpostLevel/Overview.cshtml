@@ -236,13 +236,13 @@ Analysis: Product level information at seller level
 
         });
 
-        Ext.define('ReportDistrictLevel', {
+        Ext.define('ReportOutpostLevel', {
             extend: 'Ext.data.Model',
-            fields: ['Name', 'ProductLevelSum', 'Id', 'ParentId', 'leaf']
+            fields: ['Name', 'ProductLevelSum', 'Id', 'ParentId', 'leaf','LowerLimit']
         });
 
         window.feature.treeStore = Ext.create('Ext.data.TreeStore', {
-            model: 'ReportDistrictLevel',
+            model: 'ReportOutpostLevel',
             autoLoad: false,
             root: {},
             proxy: {
@@ -256,7 +256,8 @@ Analysis: Product level information at seller level
             remoteSuport: true,
             fields: [
                 { name: 'ProductName' },
-                { name: 'StockLevel', type: 'int' }
+                { name: 'StockLevel', type: 'int' },
+                { name: 'LowerLimit', type: 'int' }
             ],
             proxy: {
                 type: 'ajax',
@@ -345,7 +346,8 @@ Analysis: Product level information at seller level
             var storeChart1 = new Ext.data.SimpleStore({
                 fields: [
                     { name: 'ProductName' },
-                    { name: 'StockLevel', type: 'int' }
+                    { name: 'StockLevel', type: 'int' },
+                    { name: 'LowerLimit', type: 'int' }
                 ]
             });
 
@@ -369,20 +371,27 @@ Analysis: Product level information at seller level
                 style: 'background:#fff',
                 axes: [{
                     type: 'Numeric',
-                    position: 'bottom',
+                    position: 'left',
                     fields: ['StockLevel'],
                     title: 'Current Stock Level',
                     grid: true,
                     minimum: 0
                 }, {
                     type: 'Category',
-                    position: 'left',
+                    position: 'bottom',
                     fields: ['ProductName'],
-                    title: 'Products'
+                    title: 'Products',
+                    label: {
+                        orientation: 'horizontal',
+                        rotate: {
+                            degrees: 60
+                        }
+                    }
+
                 }],
                 series: [{
-                    type: 'bar',
-                    axis: 'bottom',
+                    type: 'column',
+                    axis: 'left',
                     highlight: true,
                     tips: {
                         trackMouse: true,
@@ -395,7 +404,7 @@ Analysis: Product level information at seller level
                     xField: ['ProductName'],
                     yField: ['StockLevel'],
                     renderer: function (sprite, storeItem, barAttr, i, store) {
-                        barAttr.fill = colors[i % colors.length];
+                        barAttr.fill = (storeItem.data.StockLevel<= storeItem.data.LowerLimit?'rgb(212, 40, 40)':'rgb(154, 205, 50)');
                         return barAttr;
                     },
                 }]
@@ -441,11 +450,13 @@ Analysis: Product level information at seller level
             });
         });
 
+
         window.feature.treegrid = Ext.create('Ext.tree.Panel', {
             useArrows: true,
             cls: 'white-border',
             rootVisible: false,
             flex: 3,
+            width:660,
             scroll: 'vertical',
             root: {},
             store: window.feature.treeStore,
@@ -498,48 +509,49 @@ Analysis: Product level information at seller level
             },
             items: [{
                 xtype: 'container',
-                flex: 1,
+                flex: 0.85,
                 layout: {
                     align: 'stretch',
                     type: 'vbox'
-                },
+                   },
                 items: [{
                     xtype: 'container',
                     layout: {
                         align: 'stretch',
                         type: 'vbox'
-                    },
+                      },
                     height: 110,
                     items: [
-                {
-                    xtype: 'container',
-                    height: 45,
-                    layout: {
-                        type: 'column'
-                    },
-                    items: [{
-                        xtype: 'label',
-                        cls: 'x-title-label',
-                        text: 'Product level information at seller level'
-                    }]
-                }, {
-                    xtype: 'container',
-                    height: 65,
-                    layout: {
-                        type: 'column'
-                    },
-                    items: [
-                            window.feature.comboBoxCountries,
-							window.feature.comboBoxRegions,
-                            window.feature.comboboxDistricts,
-                            window.feature.comboBoxOutposts
-                    ]
-                }]
-                }, window.feature.treegrid
+                      {
+                        xtype: 'container',
+                        height: 45,
+                        layout: {
+                            type: 'column'
+                        },
+                        items: [{
+                            xtype: 'label',
+                            cls: 'x-title-label',
+                            text: 'Product level information at seller level'
+                        }]
+                       }, {
+                        xtype: 'container',
+                        height: 65,
+                        layout: {
+                            type: 'column'
+                        },
+                        items: [
+                                window.feature.comboBoxCountries,
+							    window.feature.comboBoxRegions,
+                                window.feature.comboboxDistricts,
+                                window.feature.comboBoxOutposts
+                        ]
+                  }]
+                },
+                 window.feature.treegrid
                 ]
             }, {
                 xtype: 'container',
-                flex: 1,
+                flex: 1.15,
                 layout: {
                     align: 'stretch',
                     type: 'vbox'

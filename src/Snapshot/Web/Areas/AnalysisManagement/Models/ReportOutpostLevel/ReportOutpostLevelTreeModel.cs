@@ -10,6 +10,7 @@ namespace Web.Areas.AnalysisManagement.Models.ReportOutpostLevel
         public Guid Id { get; set; }
         public String Name { get; set; }
         public String ProductLevelSum { get; set; }
+        public int LowerLimit { get; set; }
         public Guid ParentId { get; set; }
 
         public bool leaf { get; set; }
