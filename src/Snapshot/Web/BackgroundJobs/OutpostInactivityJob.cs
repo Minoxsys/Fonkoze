@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Domain.Enums;
 using Web.LocalizationResources;
 using Web.Services;
 using Web.Services.Configuration;
@@ -19,11 +20,13 @@ namespace Web.BackgroundJobs
         private readonly IConfigurationService _configurationService;
         private readonly Func<IQueryService<OutpostStockLevel>> _queryOutpostStockLevel;
         private readonly ISendSmsService _sendSmsService;
+        private readonly ISaveOrUpdateCommand<Alert> _alertSaveOrUpdateCommand;
 
         public OutpostInactivityJob(Func<IQueryService<OutpostStockLevel>> queryOutpostStockLevel,
                                     PreconfiguredEmailService preconfiguredEmailService, IConfigurationService configurationService,
-                                    ISendSmsService sendSmsService)
+                                    ISendSmsService sendSmsService, ISaveOrUpdateCommand<Alert> alertSaveOrUpdateCommand)
         {
+            _alertSaveOrUpdateCommand = alertSaveOrUpdateCommand;
             _sendSmsService = sendSmsService;
             _queryOutpostStockLevel = queryOutpostStockLevel;
             _configurationService = configurationService;
@@ -39,8 +42,28 @@ namespace Web.BackgroundJobs
                     {
                         NotifyCentralAccountOfInactiveOutposts(inactiveOutposts);
                         NotifyDistrictManagersForInactiveOutposts(inactiveOutposts);
+                        PostAlerts(inactiveOutposts);
                     }
                 });
+        }
+
+        private void PostAlerts(IEnumerable<Outpost> inactiveOutposts)
+        {
+            foreach (Outpost outpost in inactiveOutposts)
+            {
+                var alert = new Alert
+                    {
+                        AlertType = AlertType.Inactivity,
+                        Client = outpost.Client,
+                        OutpostId = outpost.Id,
+                        Contact = outpost.DetailMethod,
+                        OutpostName = outpost.Name,
+                        ProductGroupName = "-",
+                        LowLevelStock = "-",
+                        LastUpdate = null
+                    };
+                _alertSaveOrUpdateCommand.Execute(alert);
+            }
         }
 
         private const string JobName = "OutpostInactivityJob";
