@@ -27,7 +27,7 @@ User Administration Clients: Overview
         window.feature.alertsStore = Ext.create('Ext.data.Store', {
             pageSize: 50,
             remoteSuport: true,
-            fields: ['Id', 'OutpostId', 'OutpostName', 'ProductGroupId', 'ProductGroupName', 'LowLevelStock', 'LastUpdate', 'Contact','AlertType'],
+            fields: ['Id', 'OutpostId', 'OutpostName', 'ProductGroupId', 'ProductGroupName', 'LowLevelStock', 'LastUpdate', 'Contact','AlertType','Date'],
             proxy: {
                 type: 'ajax',
                 url: '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "Alerts", action = "GetAlerts" })',
@@ -41,8 +41,8 @@ User Administration Clients: Overview
             },
             remoteSort: true,
             sorters: [{
-                property: 'OutpostName',
-                direction: 'ASC'
+                property: 'Date',
+                direction: 'DESC'
             }]
         });
 
@@ -121,12 +121,18 @@ User Administration Clients: Overview
                 flex:3,
                 autoScroll:true,
                 columns: [{
+                    header: 'Date',
+                    menuDisabled: true,
+                    dataIndex: 'Date',
+                    minWidth: 100,
+                    flex: 1,
+                    sortable: true
+                }, {
                     header: 'Seller Name',
                     dataIndex: 'OutpostName',
                     flex: 1,
                     minWidth: 100,
                     menuDisabled: true,
-                    sortable: true
                 },{
                     header: 'Contact',
                     dataIndex: 'Contact',

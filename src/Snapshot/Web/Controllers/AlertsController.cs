@@ -48,7 +48,9 @@ namespace Web.Controllers
                     {"LastUpdate-ASC", () => alertsDataQuery.OrderBy(c => c.LastUpdate)},
                     {"LastUpdate-DESC", () => alertsDataQuery.OrderByDescending(c => c.LastUpdate)},
                     {"AlertType-ASC", () => alertsDataQuery.OrderBy(c => c.LastUpdate)},
-                    {"AlertType-DESC", () => alertsDataQuery.OrderByDescending(c => c.LastUpdate)}
+                    {"AlertType-DESC", () => alertsDataQuery.OrderByDescending(c => c.LastUpdate)},
+                    {"Date-ASC", () => alertsDataQuery.OrderBy(c => c.Created)},
+                    {"Date-DESC", () => alertsDataQuery.OrderByDescending(c => c.Created)},
                 };
 
             alertsDataQuery = orderByColumnDirection[String.Format("{0}-{1}", indexModel.sort, indexModel.dir)].Invoke();
@@ -77,7 +79,8 @@ namespace Web.Controllers
                                                      LowLevelStock = alert.LowLevelStock,
                                                      LastUpdate = alert.LastUpdate.HasValue ? alert.LastUpdate.Value.ToString("dd-MMM-yyyy, HH:mm") : "-",
                                                      Contact = alert.Contact,
-                                                     AlertType = alert.AlertType.ToString()
+                                                     AlertType = alert.AlertType.ToString(),
+                                                     Date = alert.Created.HasValue? alert.Created.Value.ToString("dd-MMM-yyyy, HH:mm"): "-"
                                                  }).ToArray();
 
             return Json(new AlertsIndexOutputModel

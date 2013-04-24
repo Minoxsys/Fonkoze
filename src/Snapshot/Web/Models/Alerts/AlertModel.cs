@@ -13,5 +13,6 @@ namespace Web.Models.Alerts
         public string LowLevelStock { get; set; }
         public string LastUpdate { get; set; }
         public string AlertType { get; set; }
+        public string Date { get; set; }
     }
 }
