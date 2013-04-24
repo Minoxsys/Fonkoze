@@ -72,10 +72,7 @@ namespace Web.BackgroundJobs
                                  RefCode = outpostStockLevel.Product.SMSReferenceCode,
                                  ClientId = outpostStockLevel.Client.Id,
                                  ProductLimit = outpostStockLevel.Product.LowerLimit,
-                                 DistrictManagerPhoneNumber =
-                                     outpostStockLevel.Outpost.District.DistrictManager != null
-                                         ? outpostStockLevel.Outpost.District.DistrictManager.PhoneNumber
-                                         : string.Empty
+                                 DistrictManagerPhoneNumber = outpostStockLevel.Outpost.GetDistrictManagersPhoneNumberAsString()
                              }).ToList();
 
                     foreach (var f in foos)

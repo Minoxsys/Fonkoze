@@ -26,5 +26,10 @@ namespace Domain
         {
             Contacts.Add(contact);
         }
+
+        public string GetDistrictManagersPhoneNumberAsString()
+        {
+            return District.DistrictManager != null ? District.DistrictManager.PhoneNumber : string.Empty;
+        }
     }
 }

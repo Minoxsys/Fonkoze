@@ -52,10 +52,16 @@ namespace Web.ReceiveSmsUseCase.SmsMessageCommands
             }
             else
             {
-                if (IsSecondConsecutiveMistake(smsData))
+                if (IsSecondOrMoreConsecutiveMistake(smsData))
                 {
                     var msg = CreateMailMessage(smsData, outpost);
                     _emailSendingService.SendEmail(msg);
+
+                    var phoneNumber = outpost.GetDistrictManagersPhoneNumberAsString();
+                    if (!string.IsNullOrEmpty(phoneNumber))
+                    {
+                        _sendSmsService.SendSms(phoneNumber, ComposeSecondMistakeSms(smsData, outpost), true);
+                    }
                 }
 
                 var alert = new Alert
@@ -75,7 +81,12 @@ namespace Web.ReceiveSmsUseCase.SmsMessageCommands
             }
         }
 
-        private bool IsSecondConsecutiveMistake(ReceivedSmsInputModel smsData)
+        private string ComposeSecondMistakeSms(ReceivedSmsInputModel smsData, Outpost outpost)
+        {
+            return string.Format(Strings._2ndMistakeSmsToManager, outpost.Name, smsData.Sender, smsData.Content);
+        }
+
+        private bool IsSecondOrMoreConsecutiveMistake(ReceivedSmsInputModel smsData)
         {
             var beforePreviousMessage =
                 _rawSmsReceivedQueryService.Query()

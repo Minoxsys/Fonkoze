@@ -175,4 +175,7 @@
   <data name="StockBellowLimitSmsBody" xml:space="preserve">
     <value>LOW STOCK: Seller: {1} {0}Product: {2} {0}Stock: {3} {0} {0}Contact: {4}</value>
   </data>
+  <data name="2ndMistakeSmsToManager" xml:space="preserve">
+    <value>2nd mistake for: {0}({1}), MSG: {2}</value>
+  </data>
 </root>

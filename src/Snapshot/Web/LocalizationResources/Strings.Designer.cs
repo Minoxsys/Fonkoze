@@ -61,6 +61,15 @@ namespace Web.LocalizationResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 2nd mistake for: {0}({1}), MSG: {2}.
+        /// </summary>
+        internal static string _2ndMistakeSmsToManager {
+            get {
+                return ResourceManager.GetString("2ndMistakeSmsToManager", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to At least one product specification is invalid..
         /// </summary>
         internal static string At_least_one_product_specification_is_invalid {

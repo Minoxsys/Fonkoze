@@ -1,4 +1,5 @@
-﻿using Core.Persistence;
+﻿using Core.Domain;
+using Core.Persistence;
 using Domain;
 using Domain.Enums;
 using Moq;
@@ -19,6 +20,8 @@ namespace Tests.Unit.ReceiveSmsWorkflow
     [TestFixture]
     public class UpdateStockMessageCommandTests
     {
+        #region Setup
+
         private UpdateStockMessageCommand _sut;
         private Mock<IUpdateStockService> _updateProductStockServiceMock;
         private Mock<ISendSmsService> _sendSmsServiceMock;
@@ -39,28 +42,32 @@ namespace Tests.Unit.ReceiveSmsWorkflow
             _sut = new UpdateStockMessageCommand(_updateProductStockServiceMock.Object, _sendSmsServiceMock.Object, _saveAlertCmdMock.Object,
                                                  _sendEmailServiceMock.Object, _rawSmsQueryServiceMock.Object);
 
-            _inputModel = new ReceivedSmsInputModel { Sender = "123" };
+            _inputModel = new ReceivedSmsInputModel {Sender = "123"};
+        }
+
+        #endregion
+
+        [Test]
+        public void ExecutingTheCommand_SendsEmailToCentralAccount_WhenSellerMakes2ConsecutiveMistakesInSmsMessage()
+        {
+            SetupTwoConsecutiveIncorrectMessages();
+            _sendEmailServiceMock.Setup(s => s.CreatePartialMailMessageFromConfig()).Returns(new MailMessage());
+
+            _sut.Execute(new ReceivedSmsInputModel {Sender = "1234567"}, new SmsParseResult {Success = false}, new Outpost {Name = "abcdefg", District = new District()});
+
+            _sendEmailServiceMock.Verify(s => s.SendEmail(It.Is<MailMessage>(m => m.Body.Contains("abcdefg") && m.Body.Contains("1234567"))));
         }
 
         [Test]
-        public void ExecutingTheCommand_SendsEmailToCentralAccountWithDetailsfromConfigurationFile_WhenSellerMakes2ConsecutiveMistakesInSmsMessage()
+        public void ExecutingTheCommand_SendsSmsToDistrictManager_WhenSellerMakes2ConsecutiveMistakesInSmsMessage()
         {
-            _rawSmsQueryServiceMock.Setup(s => s.Query()).Returns(new List<RawSmsReceived>
-                {
-                    new RawSmsReceived {ParseSucceeded = false, Created = new DateTime(2013, 4, 5), Sender = "1234567"},//the most recent for given sender is the msg just received
-                    new RawSmsReceived {ParseSucceeded = true, Created = new DateTime(2013, 4, 6), Sender = "789"},
-                    new RawSmsReceived {ParseSucceeded = false, Created = new DateTime(2013, 4, 3), Sender = "1234567"},//the second most recent for given sender is failure
-                    new RawSmsReceived {ParseSucceeded = true, Created = new DateTime(2013, 4, 1), Sender = "1234567"},
-                }.AsQueryable());
-
-
+            SetupTwoConsecutiveIncorrectMessages();
             _sendEmailServiceMock.Setup(s => s.CreatePartialMailMessageFromConfig()).Returns(new MailMessage());
 
+            _sut.Execute(new ReceivedSmsInputModel {Sender = "1234567"}, new SmsParseResult {Success = false},
+                         new Outpost {Name = "abcdefg", District = new District {DistrictManager = new User {PhoneNumber = "0000"}}});
 
-            _sut.Execute(new ReceivedSmsInputModel {Sender = "1234567"}, new SmsParseResult {Success = false}, new Outpost {Name = "abcdefg"});
-
-            _sendEmailServiceMock.Verify(s => s.SendEmail(It.Is<MailMessage>(m => m.Body.Contains("abcdefg") && m.Body.Contains("1234567"))));
-
+            _sendSmsServiceMock.Verify(s => s.SendSms("0000", It.Is<string>(m => m.Contains("abcdefg")), true));
         }
 
         [Test]
@@ -73,8 +80,6 @@ namespace Tests.Unit.ReceiveSmsWorkflow
             _updateProductStockServiceMock.Verify(s => s.UpdateProductStocksForOutpost(It.IsAny<ISmsParseResult>(), It.IsAny<Guid>(), StockUpdateMethod.SMS),
                                                   Times.Never());
         }
-
-
 
         [Test]
         public void ExecutingTheCommand_SavesAnErrorAlert_WhenMessageIsIncorrect()
@@ -146,6 +151,21 @@ namespace Tests.Unit.ReceiveSmsWorkflow
             _sendSmsServiceMock.Verify(s => s.SendSms(It.Is<string>(snd => snd == _inputModel.Sender), It.IsAny<string>(), true));
         }
 
+        #region Helpers
+
+        private void SetupTwoConsecutiveIncorrectMessages()
+        {
+            _rawSmsQueryServiceMock.Setup(s => s.Query()).Returns(new List<RawSmsReceived>
+                {
+                    new RawSmsReceived {ParseSucceeded = false, Created = new DateTime(2013, 4, 5), Sender = "1234567"},
+                    //the most recent for given sender is the msg just received
+                    new RawSmsReceived {ParseSucceeded = true, Created = new DateTime(2013, 4, 6), Sender = "789"},
+                    new RawSmsReceived {ParseSucceeded = false, Created = new DateTime(2013, 4, 3), Sender = "1234567"},
+                    //the second most recent for given sender is failure
+                    new RawSmsReceived {ParseSucceeded = true, Created = new DateTime(2013, 4, 1), Sender = "1234567"},
+                }.AsQueryable());
+        }
+
         private void SetupKnownSender(bool isSenderActive = true, bool isWarehouse = false)
         {
             var contact = new Contact {ContactType = Contact.MOBILE_NUMBER_CONTACT_TYPE, ContactDetail = _inputModel.Sender, IsMainContact = isSenderActive};
@@ -156,5 +176,7 @@ namespace Tests.Unit.ReceiveSmsWorkflow
             _outpostMock.SetupGet(o => o.Name).Returns("MyOutpostName");
             _outpostMock.SetupGet(o => o.IsWarehouse).Returns(isWarehouse);
         }
+
+        #endregion
     }
 }
