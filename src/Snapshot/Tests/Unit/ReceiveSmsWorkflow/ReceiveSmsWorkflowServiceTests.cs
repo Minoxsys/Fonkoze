@@ -5,7 +5,6 @@ using Moq;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Web.ReceiveSmsUseCase.Models;
 using Web.ReceiveSmsUseCase.Services;
 using Web.ReceiveSmsUseCase.SmsMessageCommands;
@@ -19,26 +18,23 @@ namespace Tests.Unit.ReceiveSmsWorkflow
         private ReceiveSmsWorkflowService _sut;
         private Mock<ISaveOrUpdateCommand<RawSmsReceived>> _saveRawSmsCommandMock;
         private Mock<ISendSmsService> _sendSmsServiceMock;
-        private Mock<IQueryService<Outpost>> _outpostsQueryServiceMock;
-        private Mock<IQueryService<Contact>> _contactQueryServiceMock;
         private Mock<ISmsTextParserService> _smsTextParserServiceMock;
         private ReceivedSmsInputModel _inputModel;
         private Mock<Outpost> _outpostMock;
         private Mock<ISmsCommandFactory> _smsMessageCommandFactoryMock;
+        private Mock<ISenderInformationService> _senderInformationServiceMock;
 
         [SetUp]
         public void PerTestSetup()
         {
+            _senderInformationServiceMock = new Mock<ISenderInformationService>();
             _saveRawSmsCommandMock = new Mock<ISaveOrUpdateCommand<RawSmsReceived>>();
             _sendSmsServiceMock = new Mock<ISendSmsService>();
-            _outpostsQueryServiceMock = new Mock<IQueryService<Outpost>>();
-            _contactQueryServiceMock = new Mock<IQueryService<Contact>>();
             _smsTextParserServiceMock = new Mock<ISmsTextParserService>();
-           
             _smsMessageCommandFactoryMock = new Mock<ISmsCommandFactory>();
 
-            _sut = new ReceiveSmsWorkflowService(_saveRawSmsCommandMock.Object, _sendSmsServiceMock.Object, _outpostsQueryServiceMock.Object,
-                                                 _contactQueryServiceMock.Object, _smsTextParserServiceMock.Object, _smsMessageCommandFactoryMock.Object);
+            _sut = new ReceiveSmsWorkflowService(_saveRawSmsCommandMock.Object, _sendSmsServiceMock.Object, _smsTextParserServiceMock.Object, _smsMessageCommandFactoryMock.Object,
+                                                 _senderInformationServiceMock.Object);
 
             _inputModel = CreateReceivedSmsInputModel();
         }
@@ -105,19 +101,16 @@ namespace Tests.Unit.ReceiveSmsWorkflow
 
         private void SetupKnownSender(bool isSenderActive = true, bool isWarehouse = false)
         {
-            var contact = new Contact { ContactType = Contact.MOBILE_NUMBER_CONTACT_TYPE, ContactDetail = _inputModel.Sender, IsMainContact = isSenderActive };
+            var contact = new Contact {ContactType = Contact.MOBILE_NUMBER_CONTACT_TYPE, ContactDetail = _inputModel.Sender, IsMainContact = isSenderActive};
             _outpostMock = new Mock<Outpost>();
             _outpostMock.Setup(o => o.Id).Returns(Guid.NewGuid());
-            _outpostMock.Setup(o => o.Contacts).Returns(new List<Contact> { contact });
+            _outpostMock.Setup(o => o.Contacts).Returns(new List<Contact> {contact});
             _outpostMock.SetupGet(o => o.Client).Returns(new Client());
             _outpostMock.SetupGet(o => o.Name).Returns("n");
             _outpostMock.SetupGet(o => o.IsWarehouse).Returns(isWarehouse);
 
-
-            _contactQueryServiceMock.Setup(qs => qs.Query())
-                                    .Returns(new List<Contact> { contact }.AsQueryable());
-            _outpostsQueryServiceMock.Setup(qs => qs.Query())
-                                     .Returns(new List<Outpost> { _outpostMock.Object }.AsQueryable());
+            _senderInformationServiceMock.Setup(s => s.GetOutpostWithActiveSender(It.IsAny<string>()))
+                                         .Returns(_outpostMock.Object);
         }
 
         private ReceivedSmsInputModel CreateReceivedSmsInputModel()

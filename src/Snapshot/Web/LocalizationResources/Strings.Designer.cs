@@ -170,6 +170,15 @@ namespace Web.LocalizationResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Seller: {0}({1}). Last message sent invalid and no follow-up in over 4 hours. Message sent at {2}.
+        /// </summary>
+        internal static string LastSmsInvalidNoFollowUpSmsMessage {
+            get {
+                return ResourceManager.GetString("LastSmsInvalidNoFollowUpSmsMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Phone number not active. Please activate your phone number to send update stock messages..
         /// </summary>
         internal static string PhoneNumberNotActive {

@@ -1,5 +1,4 @@
-﻿using System.Collections.Specialized;
-using Core.Persistence;
+﻿using Core.Persistence;
 using Domain;
 using Moq;
 using NUnit.Framework;

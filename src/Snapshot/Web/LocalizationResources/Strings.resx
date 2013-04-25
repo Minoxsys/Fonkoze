@@ -178,4 +178,7 @@
   <data name="2ndMistakeSmsToManager" xml:space="preserve">
     <value>2nd mistake for: {0}({1}), MSG: {2}</value>
   </data>
+  <data name="LastSmsInvalidNoFollowUpSmsMessage" xml:space="preserve">
+    <value>Seller: {0}({1}). Last message sent invalid and no follow-up in over 4 hours. Message sent at {2}</value>
+  </data>
 </root>

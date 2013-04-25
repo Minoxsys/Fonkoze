@@ -27,7 +27,7 @@ namespace Domain
             Contacts.Add(contact);
         }
 
-        public string GetDistrictManagersPhoneNumberAsString()
+        public virtual string GetDistrictManagersPhoneNumberAsString()
         {
             return District.DistrictManager != null ? District.DistrictManager.PhoneNumber : string.Empty;
         }

@@ -82,19 +82,20 @@ namespace Web
             _container = builder.Build();
             DependencyResolver.SetResolver(new AutofacDependencyResolver(_container));
         }
-        
+
         private static JobManager CreateJobWorkersManager()
         {
             var jobs = new IJob[]
-            {
-                _container.Resolve<BackgroundJobs.EmptyJob>(),
-                _container.Resolve<BackgroundJobs.StockLevelsMonitoringJob>(),
-                _container.Resolve<BackgroundJobs.CampaignExecutionJob>(),
-                _container.Resolve<BackgroundJobs.OutpostInactivityJob>()
-                //new SampleJob(TimeSpan.FromSeconds(35), TimeSpan.FromSeconds(60)),
-                /* new ExceptionJob(TimeSpan.FromSeconds(15)), */
-                //new WorkItemCleanupJob(TimeSpan.FromMinutes(1), TimeSpan.FromMinutes(5), new WorkItemsContext())
-            };
+                {
+                    _container.Resolve<BackgroundJobs.EmptyJob>(),
+                    _container.Resolve<BackgroundJobs.StockLevelsMonitoringJob>(),
+                    _container.Resolve<BackgroundJobs.CampaignExecutionJob>(),
+                    _container.Resolve<BackgroundJobs.OutpostInactivityJob>(),
+                    _container.Resolve<BackgroundJobs.SmsMessagesMonitoringJob>()
+                    //new SampleJob(TimeSpan.FromSeconds(35), TimeSpan.FromSeconds(60)),
+                    /* new ExceptionJob(TimeSpan.FromSeconds(15)), */
+                    //new WorkItemCleanupJob(TimeSpan.FromMinutes(1), TimeSpan.FromMinutes(5), new WorkItemsContext())
+                };
 
             var coordinator = new WebFarmJobCoordinator(new NHibernateWorkItemRepository(() => _container.Resolve<INHibernateSessionFactory>().CreateSession()));
             var manager = new JobManager(jobs, coordinator);

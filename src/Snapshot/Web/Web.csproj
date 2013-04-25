@@ -302,6 +302,7 @@
     <Compile Include="Areas\StockAdministration\Models\Product\ProductInputModel.cs" />
     <Compile Include="BackgroundJobs\ExecutedCampaign.cs" />
     <Compile Include="BackgroundJobs\OutpostInactivityJob.cs" />
+    <Compile Include="BackgroundJobs\SmsMessagesMonitoringJob.cs" />
     <Compile Include="Bootstrap\Container\ServicesConventionsRegistrar.cs" />
     <Compile Include="Controllers\AccountOptionsController.cs" />
     <Compile Include="Controllers\SendMessageController.cs" />
@@ -321,6 +322,8 @@
     <Compile Include="ReceiveSmsUseCase\Models\MessageType.cs" />
     <Compile Include="Models\Parsing\ParsedProduct.cs" />
     <Compile Include="ReceiveSmsUseCase\Models\ReceivedSmsInputModel.cs" />
+    <Compile Include="ReceiveSmsUseCase\Services\ISenderInformationService.cs" />
+    <Compile Include="ReceiveSmsUseCase\Services\SenderInformationService.cs" />
     <Compile Include="ReceiveSmsUseCase\SmsMessageCommands\ISmsCommandFactory.cs" />
     <Compile Include="ReceiveSmsUseCase\SmsMessageCommands\NullObjectCommand.cs" />
     <Compile Include="ReceiveSmsUseCase\SmsMessageCommands\SmsCommandFactory.cs" />
