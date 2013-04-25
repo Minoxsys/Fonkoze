@@ -322,8 +322,8 @@
     <Compile Include="ReceiveSmsUseCase\Models\MessageType.cs" />
     <Compile Include="Models\Parsing\ParsedProduct.cs" />
     <Compile Include="ReceiveSmsUseCase\Models\ReceivedSmsInputModel.cs" />
-    <Compile Include="ReceiveSmsUseCase\Services\ISenderInformationService.cs" />
-    <Compile Include="ReceiveSmsUseCase\Services\SenderInformationService.cs" />
+    <Compile Include="Services\Helper\ISenderInformationService.cs" />
+    <Compile Include="Services\Helper\SenderInformationService.cs" />
     <Compile Include="ReceiveSmsUseCase\SmsMessageCommands\ISmsCommandFactory.cs" />
     <Compile Include="ReceiveSmsUseCase\SmsMessageCommands\NullObjectCommand.cs" />
     <Compile Include="ReceiveSmsUseCase\SmsMessageCommands\SmsCommandFactory.cs" />

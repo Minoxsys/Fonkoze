@@ -2,7 +2,7 @@
 using Domain;
 using System.Linq;
 
-namespace Web.ReceiveSmsUseCase.Services
+namespace Web.Services.Helper
 {
     public class SenderInformationService : ISenderInformationService
     {

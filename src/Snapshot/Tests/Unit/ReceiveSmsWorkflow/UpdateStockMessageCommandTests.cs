@@ -50,24 +50,27 @@ namespace Tests.Unit.ReceiveSmsWorkflow
         [Test]
         public void ExecutingTheCommand_SendsEmailToCentralAccount_WhenSellerMakes2ConsecutiveMistakesInSmsMessage()
         {
+            SetupKnownSender();
             SetupTwoConsecutiveIncorrectMessages();
             _sendEmailServiceMock.Setup(s => s.CreatePartialMailMessageFromConfig()).Returns(new MailMessage());
 
-            _sut.Execute(new ReceivedSmsInputModel {Sender = "1234567"}, new SmsParseResult {Success = false}, new Outpost {Name = "abcdefg", District = new District()});
+            _sut.Execute(_inputModel, new SmsParseResult {Success = false}, _outpostMock.Object);
 
-            _sendEmailServiceMock.Verify(s => s.SendEmail(It.Is<MailMessage>(m => m.Body.Contains("abcdefg") && m.Body.Contains("1234567"))));
+            _sendEmailServiceMock.Verify(
+                s => s.SendEmail(It.Is<MailMessage>(m => m.Body.Contains(_outpostMock.Object.Name) && m.Body.Contains(_inputModel.Sender))));
         }
 
         [Test]
         public void ExecutingTheCommand_SendsSmsToDistrictManager_WhenSellerMakes2ConsecutiveMistakesInSmsMessage()
         {
+            SetupKnownSender();
             SetupTwoConsecutiveIncorrectMessages();
             _sendEmailServiceMock.Setup(s => s.CreatePartialMailMessageFromConfig()).Returns(new MailMessage());
 
-            _sut.Execute(new ReceivedSmsInputModel {Sender = "1234567"}, new SmsParseResult {Success = false},
-                         new Outpost {Name = "abcdefg", District = new District {DistrictManager = new User {PhoneNumber = "0000"}}});
+            _sut.Execute(_inputModel, new SmsParseResult {Success = false}, _outpostMock.Object);
 
-            _sendSmsServiceMock.Verify(s => s.SendSms("0000", It.Is<string>(m => m.Contains("abcdefg")), true));
+            _sendSmsServiceMock.Verify(
+                s => s.SendSms(_outpostMock.Object.District.DistrictManager.PhoneNumber, It.Is<string>(m => m.Contains(_outpostMock.Object.Name)), true));
         }
 
         [Test]
@@ -151,18 +154,24 @@ namespace Tests.Unit.ReceiveSmsWorkflow
             _sendSmsServiceMock.Verify(s => s.SendSms(It.Is<string>(snd => snd == _inputModel.Sender), It.IsAny<string>(), true));
         }
 
+        [Test]
+        public void ExecutingTheCommand_()
+        {
+
+        }
+
         #region Helpers
 
         private void SetupTwoConsecutiveIncorrectMessages()
         {
             _rawSmsQueryServiceMock.Setup(s => s.Query()).Returns(new List<RawSmsReceived>
                 {
-                    new RawSmsReceived {ParseSucceeded = false, Created = new DateTime(2013, 4, 5), Sender = "1234567"},
+                    new RawSmsReceived {ParseSucceeded = false, Created = new DateTime(2013, 4, 5), Sender = _inputModel.Sender},
                     //the most recent for given sender is the msg just received
                     new RawSmsReceived {ParseSucceeded = true, Created = new DateTime(2013, 4, 6), Sender = "789"},
-                    new RawSmsReceived {ParseSucceeded = false, Created = new DateTime(2013, 4, 3), Sender = "1234567"},
+                    new RawSmsReceived {ParseSucceeded = false, Created = new DateTime(2013, 4, 3), Sender = _inputModel.Sender},
                     //the second most recent for given sender is failure
-                    new RawSmsReceived {ParseSucceeded = true, Created = new DateTime(2013, 4, 1), Sender = "1234567"},
+                    new RawSmsReceived {ParseSucceeded = true, Created = new DateTime(2013, 4, 1), Sender = _inputModel.Sender},
                 }.AsQueryable());
         }
 
@@ -175,6 +184,8 @@ namespace Tests.Unit.ReceiveSmsWorkflow
             _outpostMock.SetupGet(o => o.Client).Returns(new Client());
             _outpostMock.SetupGet(o => o.Name).Returns("MyOutpostName");
             _outpostMock.SetupGet(o => o.IsWarehouse).Returns(isWarehouse);
+            _outpostMock.SetupGet(o => o.District).Returns(new District {DistrictManager = new User {PhoneNumber = "0000"}});
+            _outpostMock.Setup(o => o.GetDistrictManagersPhoneNumberAsString()).Returns("0000");
         }
 
         #endregion

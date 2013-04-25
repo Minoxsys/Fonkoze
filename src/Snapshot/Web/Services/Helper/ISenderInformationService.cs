@@ -1,6 +1,6 @@
 ﻿using Domain;
 
-namespace Web.ReceiveSmsUseCase.Services
+namespace Web.Services.Helper
 {
     public interface ISenderInformationService
     {

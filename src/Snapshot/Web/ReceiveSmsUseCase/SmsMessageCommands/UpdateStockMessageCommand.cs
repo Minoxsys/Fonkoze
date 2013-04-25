@@ -24,7 +24,8 @@ namespace Web.ReceiveSmsUseCase.SmsMessageCommands
         private readonly IQueryService<RawSmsReceived> _rawSmsReceivedQueryService;
 
         public UpdateStockMessageCommand(IUpdateStockService updateStockService, ISendSmsService sendSmsService,
-                                         ISaveOrUpdateCommand<Alert> saveOrUpdateAlertCommand, IPreconfiguredEmailService emailSendingService, IQueryService<RawSmsReceived> rawSmsReceived)
+                                         ISaveOrUpdateCommand<Alert> saveOrUpdateAlertCommand, IPreconfiguredEmailService emailSendingService,
+                                         IQueryService<RawSmsReceived> rawSmsReceived)
         {
             _rawSmsReceivedQueryService = rawSmsReceived;
             _emailSendingService = emailSendingService;
@@ -35,19 +36,18 @@ namespace Web.ReceiveSmsUseCase.SmsMessageCommands
 
         public void Execute(ReceivedSmsInputModel smsData, ISmsParseResult parseResult, Outpost outpost)
         {
+            if (!IsActiveSender(outpost, smsData.Sender))
+            {
+                _sendSmsService.SendSms(smsData.Sender, Strings.PhoneNumberNotActive, false);
+                return;
+            }
+
             if (parseResult.Success)
             {
-                if (IsActiveSender(outpost, smsData.Sender))
+                StockUpdateResult result = _updateStockService.UpdateProductStocksForOutpost(parseResult, outpost.Id, StockUpdateMethod.SMS);
+                if (result != null && !result.Success)
                 {
-                    StockUpdateResult result = _updateStockService.UpdateProductStocksForOutpost(parseResult, outpost.Id, StockUpdateMethod.SMS);
-                    if (result != null && !result.Success)
-                    {
-                        _sendSmsService.SendSms(smsData.Sender, ComposeUpdateStockFailMessage(result.FailedProducts), true);
-                    }
-                }
-                else
-                {
-                    _sendSmsService.SendSms(smsData.Sender, Strings.PhoneNumberNotActive, false);
+                    _sendSmsService.SendSms(smsData.Sender, ComposeUpdateStockFailMessage(result.FailedProducts), true);
                 }
             }
             else

@@ -4,8 +4,8 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Web.LocalizationResources;
-using Web.ReceiveSmsUseCase.Services;
 using Web.Services;
+using Web.Services.Helper;
 using WebBackgrounder;
 
 namespace Web.BackgroundJobs
