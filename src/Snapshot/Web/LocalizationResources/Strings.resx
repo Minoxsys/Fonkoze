@@ -136,7 +136,7 @@
     <value>Phone number not active. Please activate your phone number to send update stock messages.</value>
   </data>
   <data name="InvalidFileSelectedForUpload" xml:space="preserve">
-    <value>The file selected is an invalid. Please choose another one.</value>
+    <value>The file selected is invalid. Please choose another one.</value>
   </data>
   <data name="InactiveSellerDetectedSubject" xml:space="preserve">
     <value>Inactive seller detected</value>

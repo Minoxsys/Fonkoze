@@ -112,7 +112,7 @@ namespace Tests.Unit.WarehouseManagementWorkflow.WarehouseManagementControllerTe
 
         private void AssertErrorMessageIsPostedInTempData()
         {
-            Assert.That(_sut.TempData["result"], Is.EqualTo("The file selected is an invalid. Please choose another one."));
+            Assert.That(_sut.TempData["result"], Is.EqualTo("The file selected is invalid. Please choose another one."));
         }
     }
 }

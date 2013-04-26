@@ -152,7 +152,7 @@ namespace Web.LocalizationResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The file selected is an invalid. Please choose another one..
+        ///   Looks up a localized string similar to The file selected is invalid. Please choose another one..
         /// </summary>
         internal static string InvalidFileSelectedForUpload {
             get {
