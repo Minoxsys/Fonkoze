@@ -614,6 +614,7 @@ Seller Stock Level Current
             
 
             viewProductStatusHandler();
+            window.feature.treegrid.expandAll();
         }
 
         function viewProductStatusHandler() {
@@ -630,6 +631,7 @@ Seller Stock Level Current
                 window.feature.treegrid.getStore().proxy.extraParams.CountryId = selectedCountryId;
                 window.feature.treegrid.getStore().proxy.extraParams.ProductGroupExpandedOnEdit = '';
                 window.feature.treegrid.getRootNode().expand();
+              
             } else {
                 var msgAlert = Ext.Msg;
                 msgAlert.ui = 'snapshot-popup-window';
