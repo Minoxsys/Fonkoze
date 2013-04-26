@@ -54,5 +54,29 @@ namespace Tests.Unit.WarehouseManagementWorkflow
             _updateStockServiceMock.Verify(
                 s => s.IncrementProductStocksForOutpost(It.IsAny<CsvParseResult>(), _outpostId, StockUpdateMethod.CSV), Times.Never());
         }
+
+        [Test]
+        public void ReturnsTrue_WhenParseIsSuccesfull()
+        {
+            _stockUpdateCsvFileParser.Setup(s => s.ParseStream(_dummyStream.Object))
+                                     .Returns(new CsvParseResult {Success = true});
+
+            var result = _sut.ProcessWarehouseStockData(_dummyStream.Object, _outpostId);
+
+            Assert.IsTrue(result);
+        }
+
+
+        [Test]
+        public void ReturnsFalse_WhenParseFailed()
+        {
+            _stockUpdateCsvFileParser.Setup(s => s.ParseStream(_dummyStream.Object))
+                                     .Returns(new CsvParseResult { Success = false });
+
+            var result = _sut.ProcessWarehouseStockData(_dummyStream.Object, _outpostId);
+
+            Assert.IsFalse(result);
+        }
+
     }
 }

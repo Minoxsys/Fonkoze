@@ -5,6 +5,6 @@ namespace Web.WarehouseMgmtUseCase.Services
 {
     public interface IWarehouseManagementWorkflowService
     {
-        void ProcessWarehouseStockData(Stream inputData, Guid outpostId);
+        bool ProcessWarehouseStockData(Stream inputData, Guid outpostId);
     }
 }

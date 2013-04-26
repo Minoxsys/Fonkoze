@@ -299,7 +299,7 @@
             coordinatesId:'window-feature-textfield-coordinates'
         };
     
-   window.feature.modal = Ext.define('Ext.feature.region.Modal', {
+        window.feature.modal = Ext.define('Ext.feature.region.Modal', {
             extend: 'Ext.window.Window',
             modal: true,
             ui: 'snapshot-popup-window',
@@ -361,7 +361,7 @@
                             layout: {
                                 type: 'hbox'
                             },
-                            items:[
+                            items: [
                                 {
                                     xtype: 'container',
                                     flex: 2,
@@ -373,23 +373,23 @@
                                             xtype: 'container',
                                             height: 30,
                                             width: 30,
-                                            html:'&nbsp;'
-                                        },{
+                                            html: '&nbsp;'
+                                        }, {
                                             xtype: 'image',
                                             src: '@(Url.RouteUrl<AssetsController>(it => it.Shared("/img/Administration/Content/outpost.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
                                             margin: '0 10 10 0'
-                                        },{
+                                        }, {
                                             xtype: 'label',
                                             cls: 'x-title-label',
                                             text: 'Warehouse Administration'
                                         }
                                     ]
-                                },{
+                                }, {
                                     xtype: 'container',
                                     flex: 1,
                                     layout: {
                                         type: 'hbox',
-                                        pack:'end'
+                                        pack: 'end'
                                     },
                                     items: [
                                         {
@@ -400,29 +400,29 @@
                                             emptyText: 'Warehouse Search',
                                             enableKeyEvents: true,
                                             listeners: {
-                                                specialkey: function (field, e) {
+                                                specialkey: function(field, e) {
                                                     if (e.getKey() == Ext.EventObject.ESC) {
-    
+
                                                         var extraParams = window.feature.outpostsStore.getProxy().extraParams;
                                                         var comboFilters = window.feature.comboBoxFilters;
-                                                        extraParams.countryId = comboFilters.country.getValue(); 
-                                                        extraParams.regionId = comboFilters.region.getValue(); 
-                                                        extraParams.districtId = comboFilters.district.getValue(); 
+                                                        extraParams.countryId = comboFilters.country.getValue();
+                                                        extraParams.regionId = comboFilters.region.getValue();
+                                                        extraParams.districtId = comboFilters.district.getValue();
                                                         extraParams.search = '';
-    
+
                                                         field.setValue('');
-    
+
                                                         window.feature.doSearch.delay(500);
                                                     }
                                                 },
-                                                keyup: function (textField) {
+                                                keyup: function(textField) {
                                                     var extraParams = window.feature.outpostsStore.getProxy().extraParams;
                                                     var comboFilters = window.feature.comboBoxFilters;
-                                                    extraParams.countryId = comboFilters.country.getValue(); 
-                                                    extraParams.regionId = comboFilters.region.getValue(); 
-                                                    extraParams.districtId = comboFilters.district.getValue(); 
+                                                    extraParams.countryId = comboFilters.country.getValue();
+                                                    extraParams.regionId = comboFilters.region.getValue();
+                                                    extraParams.districtId = comboFilters.district.getValue();
                                                     extraParams.search = textField.getValue();
-    
+
                                                     window.feature.doSearch.delay(500);
                                                 }
                                             }
@@ -430,7 +430,7 @@
                                     ]
                                 }
                             ]
-                        },{
+                        }, {
                             xtype: 'container',
                             height: 65,
                             margin: '0 0 0 30',
@@ -440,12 +440,17 @@
                             items: [
                                 window.feature.comboBoxFilters.country,
                                 window.feature.comboBoxFilters.region,
-                                window.feature.comboBoxFilters.district							
+                                window.feature.comboBoxFilters.district,
+                                {
+                                    margin: '30 0 0 30',
+                                    xtype: 'label',
+                                    style: 'color: #7F0037;',
+                                    text: '@TempData["result"]',
+                                }                                
                             ]
                         }
                     ]
-                }
-                ,
+                },
                 {
                     xtype: 'gridpanel',
                     cls: "white-border",

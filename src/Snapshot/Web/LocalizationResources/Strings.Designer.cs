@@ -88,6 +88,15 @@ namespace Web.LocalizationResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to CSV file parsing has failed. Please check the contents of the CSV file to be valid..
+        /// </summary>
+        internal static string CSV_file_parsing_has_failed {
+            get {
+                return ResourceManager.GetString("CSV_file_parsing_has_failed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Name for district is required.
         /// </summary>
         internal static string DistrictInputModel_Name_Name_for_district_is_required {
@@ -247,6 +256,15 @@ namespace Web.LocalizationResources {
         internal static string TwoConsecutiveInvalidSMSEmailBody {
             get {
                 return ResourceManager.GetString("TwoConsecutiveInvalidSMSEmailBody", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The file uploaded successfully..
+        /// </summary>
+        internal static string Upload_The_file_uploaded_succesfully {
+            get {
+                return ResourceManager.GetString("Upload_The_file_uploaded_succesfully", resourceCulture);
             }
         }
     }

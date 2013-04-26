@@ -28,11 +28,18 @@ namespace Web.WarehouseMgmtUseCase.Controllers
             // Verify that the user selected a file
             if (csvfile != null && csvfile.ContentLength > 0)
             {
-                _warehouseManagementWorkflowService.ProcessWarehouseStockData(csvfile.InputStream, outpostId.Value);
+                if (_warehouseManagementWorkflowService.ProcessWarehouseStockData(csvfile.InputStream, outpostId.Value))
+                {
+                    TempData["result"] = Strings.Upload_The_file_uploaded_succesfully;
+                }
+                else
+                {
+                    TempData["result"] = Strings.CSV_file_parsing_has_failed;
+                }
             }
             else
             {
-                TempData["invalidFile"] = Strings.InvalidFileSelectedForUpload;
+                TempData["result"] = Strings.InvalidFileSelectedForUpload;
             }
 
             return this.RedirectToAction(c => c.Overview());

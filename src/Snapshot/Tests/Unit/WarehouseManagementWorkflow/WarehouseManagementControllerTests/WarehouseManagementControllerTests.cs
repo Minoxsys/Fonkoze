@@ -17,15 +17,15 @@ namespace Tests.Unit.WarehouseManagementWorkflow.WarehouseManagementControllerTe
     {
         private WarehouseManagementController _sut;
         private Mock<HttpPostedFileBase> _fileMock;
-        private Mock<IWarehouseManagementWorkflowService> _warehouseMgmtWorflowService;
+        private Mock<IWarehouseManagementWorkflowService> _warehouseMgmtWorflowServiceMock;
 
         [SetUp]
         public void PerTestSetup()
         {
             _fileMock = new Mock<HttpPostedFileBase>();
             _fileMock.Setup(f => f.ContentLength).Returns(0);
-            _warehouseMgmtWorflowService = new Mock<IWarehouseManagementWorkflowService>();
-            _sut = new WarehouseManagementController(_warehouseMgmtWorflowService.Object);
+            _warehouseMgmtWorflowServiceMock = new Mock<IWarehouseManagementWorkflowService>();
+            _sut = new WarehouseManagementController(_warehouseMgmtWorflowServiceMock.Object);
         }
 
         [Test]
@@ -62,21 +62,57 @@ namespace Tests.Unit.WarehouseManagementWorkflow.WarehouseManagementControllerTe
         }
 
         [Test]
+        public void Upload_ReturnsSuccessMessageInTempData_WhenUploadSuccesfull()
+        {
+            CreateDummyValidStream();
+            _warehouseMgmtWorflowServiceMock.Setup(s => s.ProcessWarehouseStockData(It.IsAny<Stream>(), It.IsAny<Guid>())).Returns(true);
+
+            _sut.Upload(_fileMock.Object, Guid.Empty);
+
+            AssertSuccessMessageIsPostedInTempData();
+        }
+
+        [Test]
+        public void Upload_ReturnsFailParseMessageInTempData_WhenParsingFailed()
+        {
+            CreateDummyValidStream();
+
+            _sut.Upload(_fileMock.Object, Guid.Empty);
+            AssertFaildParsingErrorMessageIsPostedInTempData();
+        }
+
+        [Test]
         public void Upload_SendDataStreamToWorkflowServiceToCarryOutTheUseCase_WhenFileIsValid()
         {
             var outpostId = Guid.NewGuid();
-            var dummyStream = new Mock<Stream>();
-            _fileMock.Setup(f => f.ContentLength).Returns(1);
-            _fileMock.Setup(f => f.InputStream).Returns(dummyStream.Object);
+            var dummyStream = CreateDummyValidStream();
 
             _sut.Upload(_fileMock.Object, outpostId);
 
-            _warehouseMgmtWorflowService.Verify(s => s.ProcessWarehouseStockData(It.Is<Stream>(str => str == dummyStream.Object), outpostId));
+            _warehouseMgmtWorflowServiceMock.Verify(s => s.ProcessWarehouseStockData(It.Is<Stream>(str => str == dummyStream.Object), outpostId));
+        }
+
+        private Mock<Stream> CreateDummyValidStream()
+        {
+            var dummyStream = new Mock<Stream>();
+            _fileMock.Setup(f => f.ContentLength).Returns(1);
+            _fileMock.Setup(f => f.InputStream).Returns(dummyStream.Object);
+            return dummyStream;
+        }
+
+        private void AssertFaildParsingErrorMessageIsPostedInTempData()
+        {
+            Assert.That(_sut.TempData["result"], Is.EqualTo("CSV file parsing has failed. Please check the contents of the CSV file to be valid."));
+        }
+
+        private void AssertSuccessMessageIsPostedInTempData()
+        {
+            Assert.That(_sut.TempData["result"], Is.EqualTo("The file uploaded successfully."));
         }
 
         private void AssertErrorMessageIsPostedInTempData()
         {
-            Assert.That(_sut.TempData["invalidFile"], Is.EqualTo("The file selected is an invalid. Please choose another one."));
+            Assert.That(_sut.TempData["result"], Is.EqualTo("The file selected is an invalid. Please choose another one."));
         }
     }
 }
