@@ -326,9 +326,9 @@
                             border: '0 0 0 0',
                             html: '<form action="/WarehouseManagement/Upload?outpostId=' + me.entityId + '" enctype="multipart/form-data" method="post">' +
                                 '<p> Please specify a CSV file:<br>' +
-                                '<input type="file" name="csvfile" size="60">' +
+                                '<input type="file" name="csvfile" size="60" onchange="validateFile();">' +
                                 '</p><br>' +
-                                '<div><input type="submit" value="Upload file"></div>' +
+                                '<div><input type="submit" value="Upload file" disabled="" id="upl"></div>' +
                                 '</form>'
                         }
                     ]//end items for modal
@@ -569,6 +569,17 @@
         window.feature.outpostsStore.loadPage(1);
 
     });
+</script>
+
+<script type="text/javascript">
+    function validateFile() {
+        var value = $("input:file").val();
+        if (value != "") {
+            $("#upl").removeAttr("disabled");
+        } else {
+            $("#upl").attr("disabled", "");
+        }
+    }
 </script>
 
 <style type="text/css">
