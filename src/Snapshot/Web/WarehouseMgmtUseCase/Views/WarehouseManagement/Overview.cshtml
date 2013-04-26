@@ -493,21 +493,22 @@
                             flex: 1,
                             maxWidth: 250,
                             minWidth: 150,
+                            style: 'cursor: hand;',
                             items: [{
-                                    icon: '@(Url.RouteUrl<AssetsController>(it => it.Shared("/img/bycsv.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',  
-                                    text: 'By CSV upload',
+                                    icon: '@(Url.RouteUrl<AssetsController>(it => it.Shared("/img/bycsv.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                                    iconCls: 'mousepointer',
                                     handler: function(grid, rowIndex, colIndex) {
-                                            var rec = grid.getStore().getAt(rowIndex);
-                                            var winEdit = new window.feature.modal({
-                                                maxWidth: 900,
-                                                entityId: rec.get('Id'),
-                                            });
-    
-                                            winEdit.show();       
+                                        var rec = grid.getStore().getAt(rowIndex);
+                                        var winEdit = new window.feature.modal({
+                                            maxWidth: 900,
+                                            entityId: rec.get('Id'),
+                                        });
+
+                                        winEdit.show();
                                     }
-                                },{    
+                                },{
                                     icon: '@(Url.RouteUrl<AssetsController>(it => it.Shared("/img/manually.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',  
-                                    action: 'Manually',
+                                    iconCls: 'mousepointer',
                                     handler: function(grid, rowIndex, colIndex) {
 
                                         var rec = grid.getStore().getAt(rowIndex);
@@ -558,4 +559,9 @@
     });
 </script>
 
-
+<style type="text/css">
+    .mousepointer 
+    {
+        cursor: pointer; 
+    }
+</style>

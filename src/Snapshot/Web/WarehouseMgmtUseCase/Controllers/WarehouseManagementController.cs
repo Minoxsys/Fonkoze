@@ -19,7 +19,9 @@ namespace Web.WarehouseMgmtUseCase.Controllers
 
         public ViewResult Overview()
         {
+// ReSharper disable Mvc.ViewNotResolved
             return View(new OutpostOverviewModel());
+// ReSharper restore Mvc.ViewNotResolved
         }
 
         [HttpPost]
@@ -28,7 +30,7 @@ namespace Web.WarehouseMgmtUseCase.Controllers
             // Verify that the user selected a file
             if (csvfile != null && csvfile.ContentLength > 0)
             {
-                if (_warehouseManagementWorkflowService.ProcessWarehouseStockData(csvfile.InputStream, outpostId.Value))
+                if (outpostId.HasValue && _warehouseManagementWorkflowService.ProcessWarehouseStockData(csvfile.InputStream, outpostId.Value))
                 {
                     TempData["result"] = Strings.Upload_The_file_uploaded_succesfully;
                 }
