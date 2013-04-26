@@ -43,7 +43,8 @@
 <script type="text/javascript">
     var allowUserToClearValue = {
         'load':function(){
-            //this.insert(0, {Id:'@Guid.Empty', Name:'All'});
+
+           
         }
     };
     
@@ -535,6 +536,17 @@
         var contentRes = window.res.content;
         var mainContent = Ext.getCmp(contentRes.maincontent.id);
         mainContent.add(window.feature.container);
+
+        window.feature.countryStore.load();
+        window.feature.regionsStore.load({
+            params: { countryId: '@Guid.Empty' }
+            });
+        window.feature.districtsStore.load({
+            params: { regionId: '@Guid.Empty' }
+        });
+        window.feature.comboBoxFilters.country.setValue('@Guid.Empty');
+        window.feature.comboBoxFilters.region.setValue('@Guid.Empty');
+        window.feature.comboBoxFilters.district.setValue('@Guid.Empty');	
 
         if ('@Model.CountryId' != '@Guid.Empty' && '@Model.RegionId' != '@Guid.Empty' && '@Model.DistrictId' != '@Guid.Empty'){ 
             window.feature.countryStore.load();
