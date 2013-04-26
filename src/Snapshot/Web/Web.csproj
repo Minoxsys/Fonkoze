@@ -169,6 +169,9 @@
     <Compile Include="Areas\AnalysisManagement\Models\LocationReport\MarkerModel.cs" />
     <Compile Include="Areas\AnalysisManagement\Models\ReportDistrictLevel\ProductsChartModel.cs" />
     <Compile Include="Areas\AnalysisManagement\Models\ReportDistrictLevel\ProductsForChartOutputModel.cs" />
+    <Compile Include="Areas\AnalysisManagement\Models\ReportOutpostLevel\OutpostsForStackedBarChartOutputModel.cs" />
+    <Compile Include="Areas\AnalysisManagement\Models\ReportOutpostLevel\OutpostStackedBarChartModel.cs" />
+    <Compile Include="Areas\AnalysisManagement\Models\ReportOutpostLevel\ProductStackedBarChartModel.cs" />
     <Compile Include="Areas\AnalysisManagement\Models\ReportRegionLevel\ChartInputModel.cs" />
     <Compile Include="Areas\AnalysisManagement\Models\ReportRegionLevel\ChartReferenceOutputModel.cs" />
     <Compile Include="Areas\AnalysisManagement\Models\ReportRegionLevel\ProductsReferenceOutputModel.cs" />
@@ -2268,6 +2271,7 @@
     <Content Include="Areas\MessagesManagement\Views\_ViewStart.cshtml" />
     <Content Include="Areas\CampaignManagement\Views\SendMessages\Overview.cshtml" />
     <Content Include="Areas\AnalysisManagement\Views\ReportOutpostLevel\Overview.cshtml" />
+    <Content Include="Areas\AnalysisManagement\Views\ReportOutpostLevel\GraphicOverview.cshtml" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\core\_core.scss" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\core\_reset.scss" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\layout\_layout.scss" />

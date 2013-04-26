@@ -1,6 +1,7 @@
 ﻿@using Domain
 @using Microsoft.Web.Mvc;
 @using Web.Areas.AnalysisManagement;
+@using Web.Areas.AnalysisManagement.Controllers;
 
 @section page_title{
 Analysis: Product level information at seller level
@@ -532,7 +533,18 @@ Analysis: Product level information at seller level
                             xtype: 'label',
                             cls: 'x-title-label',
                             text: 'Product level information at seller level'
-                        }]
+                        },
+                        {
+                            xtype: 'button',
+                            margin: '0 10 0 20',
+                            ui: 'snapshot-add-btn',
+                            cls: 'x-add-button-gradient',
+                            text: 'Graphic View',
+                            handler: function () {
+                                navigateTo('@(Url.RouteUrl<ReportOutpostLevelController>(x=>x.GraphicOverview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))')
+                            }
+                        }
+                        ]
                        }, {
                         xtype: 'container',
                         height: 65,
@@ -548,8 +560,9 @@ Analysis: Product level information at seller level
                   }]
                 },
                  window.feature.treegrid
+                 
                 ]
-            }, {
+               }, {
                 xtype: 'container',
                 flex: 1.15,
                 layout: {

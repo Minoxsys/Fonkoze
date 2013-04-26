@@ -35,6 +35,11 @@ namespace Web.Areas.AnalysisManagement.Controllers
             return View();
         }
 
+        public ActionResult GraphicOverview()
+        {
+            return View();
+        }
+
         public JsonResult GetReports(ReportOutpostLevelInputModel inputModel)
         {
             LoadUserAndClient();
@@ -66,8 +71,8 @@ namespace Web.Areas.AnalysisManagement.Controllers
                 }
             }
 
-            var reportDistrictLevelTreeModel = GetReportOutpostTreeModel(reportOutpostLevel);
-            return Json(reportDistrictLevelTreeModel, JsonRequestBehavior.AllowGet);
+            var reportOutpostLevelTreeModel = GetReportOutpostTreeModel(reportOutpostLevel);
+            return Json(reportOutpostLevelTreeModel, JsonRequestBehavior.AllowGet);
         }
 
         private ReportOutpostLevelTreeModel GetReportOutpostTreeModel(List<OutpostStockLevel> reportOutpostLevel)
@@ -168,6 +173,87 @@ namespace Web.Areas.AnalysisManagement.Controllers
             return listOfProducts;
         }
 
+        public JsonResult GetDataForStackedBarChart(ReportOutpostLevelInputModel inputModel)
+        {
+
+            List<OutpostStockLevel> reportOutpostLevel = FilterOutpostStockLevel(inputModel);
+
+            List<OutpostStackedBarChartModel> nestedResult = new List<OutpostStackedBarChartModel>();
+            var oslGroupedByOutpost = reportOutpostLevel.GroupBy(it => it.Outpost);
+
+            foreach (var byOutpostGroup in oslGroupedByOutpost)
+            {
+                OutpostStackedBarChartModel outpostStackedBarChart = new OutpostStackedBarChartModel() { OutpostName = byOutpostGroup.Key.Name };
+                int i = 0;
+                foreach (var osl in byOutpostGroup)
+                {
+                    ProductStackedBarChartModel product = new ProductStackedBarChartModel() { ProductName= osl.Product.Name , StockLevel = osl.StockLevel};
+                    outpostStackedBarChart.Products.Add(product);
+                    if (osl.StockLevel <= osl.Product.LowerLimit)
+                        i++;
+                }
+                outpostStackedBarChart.ProductsUnderTresholdNo = i;
+
+                nestedResult.Add(outpostStackedBarChart);
+            }
+
+            return Json(new OutpostsForStackedBarChartOutputModel
+            {
+                Outposts = nestedResult.ToArray(),
+                TotalItems = nestedResult.Count()
+            }, JsonRequestBehavior.AllowGet);
+
+        }
+
+        [HttpGet]
+        public string GetProductFields(ReportOutpostLevelInputModel inputModel)
+        {
+            string productFields = "";
+            List<OutpostStockLevel> oslList = FilterOutpostStockLevel(inputModel);
+            var groupedByProduct = oslList.GroupBy(x => x.Product);
+            foreach(var pGroup in groupedByProduct)
+            {
+                if (!productFields.Contains(pGroup.Key.Name+","))
+                    productFields += pGroup.Key.Name + ",";
+            }
+
+            return productFields.Trim(',');
+           
+
+        }
+
+        private List<OutpostStockLevel> FilterOutpostStockLevel(ReportOutpostLevelInputModel inputModel)
+        {
+            LoadUserAndClient();
+
+            var oslList = QueryOutpostStockLevel.Query().Where(it => it.Client.Id == _client.Id).ToList();
+            if ((inputModel.OutpostId != ID_ALL_OPTION_FOR_OUTPOSTS) && (inputModel.OutpostId != Guid.Empty))
+            {
+                oslList = oslList.Where(it => it.Outpost.Id == inputModel.OutpostId).ToList();
+            }
+            else
+            {
+                if ((inputModel.DistrictId != ID_ALL_OPTION_FOR_DISTRICTS) && (inputModel.DistrictId != Guid.Empty))
+                {
+                    oslList = oslList.Where(it => it.Outpost.District.Id == inputModel.DistrictId).ToList();
+                }
+                else
+                {
+                    if ((inputModel.RegionId != ID_ALL_OPTION_FOR_REGIONS) && (inputModel.RegionId != Guid.Empty))
+                    {
+                        oslList = oslList.Where(it => it.Outpost.Region.Id == inputModel.RegionId).ToList();
+                    }
+                    else
+                    {
+                        if ((inputModel.CountryId != ID_ALL_OPTION_FOR_COUNTRIES) && (inputModel.CountryId != Guid.Empty))
+                        {
+                            oslList = oslList.Where(it => it.Outpost.Country.Id == inputModel.CountryId).ToList();
+                        }
+                    }
+                }
+            }
+            return oslList;
+        }
 
         public JsonResult GetOutposts(Guid? CountryId, Guid? RegionId,Guid? DistrictId)
         {
