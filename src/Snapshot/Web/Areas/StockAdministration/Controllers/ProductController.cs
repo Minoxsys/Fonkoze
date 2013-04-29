@@ -94,8 +94,6 @@ namespace Web.Areas.StockAdministration.Controllers
 
             var productGroups = QueryProductGroup.Query().Where(p => p.Client == _client).ToList();
             var productGroupModelList = new List<ProductGroupModel>();
-            ProductGroupModel allModel = new ProductGroupModel { Id=Guid.Empty, Name=" All"};
-            productGroupModelList.Add(allModel);
 
             foreach (var productGroup in productGroups)
             {
