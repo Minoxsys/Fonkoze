@@ -24,6 +24,122 @@ Analysis: Product level information at seller level
         var reportBtnId = window.res.content.maincontent.sidebar.reportsellerlevel;
         var reportBtn = Ext.getCmp(reportBtnId);
         reportBtn.toggle(true);
+
+        //Ext.override(Ext.chart.series.Bar, {
+        //    drawSeries: function () {
+        //        var me = this,
+        //            chart = me.chart,
+        //            store = chart.getChartStore(),
+        //            surface = chart.surface,
+        //            animate = chart.animate,
+        //            stacked = me.stacked,
+        //            column = me.column,
+        //            enableShadows = chart.shadow,
+        //            shadowGroups = me.shadowGroups,
+        //            shadowGroupsLn = shadowGroups.length,
+        //            group = me.group,
+        //            seriesStyle = me.seriesStyle,
+        //            items, ln, i, j, baseAttrs, sprite, rendererAttributes, shadowIndex, shadowGroup,
+        //            bounds, endSeriesStyle, barAttr, attrs, anim;
+
+        //        // ---- start edit ----
+        //        var currentCol, currentStoreIndex;
+        //        // ---- end edit ----
+
+
+        //        if (!store || !store.getCount()) {
+        //            return;
+        //        }
+
+        //        //fill colors are taken from the colors array.
+        //        delete seriesStyle.fill;
+        //        endSeriesStyle = Ext.apply(seriesStyle, this.style);
+        //        me.unHighlightItem();
+        //        me.cleanHighlights();
+
+        //        me.getPaths();
+        //        bounds = me.bounds;
+        //        items = me.items;
+
+        //        baseAttrs = column ? {
+        //            y: bounds.zero,
+        //            height: 0
+        //        } : {
+        //            x: bounds.zero,
+        //            width: 0
+        //        };
+        //        ln = items.length;
+        //        // Create new or reuse sprites and animate/display
+        //        for (i = 0; i < ln; i++) {
+        //            sprite = group.getAt(i);
+        //            barAttr = items[i].attr;
+
+        //            if (enableShadows) {
+        //                items[i].shadows = me.renderShadows(i, barAttr, baseAttrs, bounds);
+        //            }
+
+        //            // ---- start edit ----
+        //            if (stacked && items[i].storeItem.index != currentStoreIndex) {
+        //                //console.log("i: %o, barsLen: %o, j: %o, items[i]: %o",i,bounds.barsLen,i / bounds.barsLen,items[i]);
+        //                currentStoreIndex = items[i].storeItem.index;
+        //                currentCol = 0;
+        //            }
+        //            else {
+        //                ++currentCol;
+        //            }
+        //            // ---- end edit ----
+
+        //            // Create a new sprite if needed (no height)
+        //            if (!sprite) {
+        //                attrs = Ext.apply({}, baseAttrs, barAttr);
+        //                attrs = Ext.apply(attrs, endSeriesStyle || {});
+        //                sprite = surface.add(Ext.apply({}, {
+        //                    type: 'rect',
+        //                    group: group
+        //                }, attrs));
+        //            }
+        //            if (animate) {
+        //                // ---- start edit ----
+        //                rendererAttributes = me.renderer(sprite, items[i].storeItem, barAttr, (stacked ? currentStoreIndex : i), store, (stacked ? currentCol : undefined));
+        //                // ---- end edit ----
+        //                sprite._to = rendererAttributes;
+        //                anim = me.onAnimate(sprite, { to: Ext.apply(rendererAttributes, endSeriesStyle) });
+        //                if (enableShadows && stacked && (i % bounds.barsLen === 0)) {
+        //                    j = i / bounds.barsLen;
+        //                    for (shadowIndex = 0; shadowIndex < shadowGroupsLn; shadowIndex++) {
+        //                        anim.on('afteranimate', function () {
+        //                            this.show(true);
+        //                        }, shadowGroups[shadowIndex].getAt(j));
+        //                    }
+        //                }
+        //            }
+        //            else {
+        //                // ---- start edit ----
+        //                rendererAttributes = me.renderer(sprite, items[i].storeItem, Ext.apply(barAttr, { hidden: false }), (stacked ? currentStoreIndex : i), store, (stacked ? currentCol : undefined));
+        //                // ---- end edit ----
+        //                sprite.setAttributes(Ext.apply(rendererAttributes, endSeriesStyle), true);
+        //            }
+        //            items[i].sprite = sprite;
+        //        }
+
+        //        // Hide unused sprites
+        //        ln = group.getCount();
+        //        for (j = i; j < ln; j++) {
+        //            group.getAt(j).hide(true);
+        //        }
+        //        // Hide unused shadows
+        //        if (enableShadows) {
+        //            for (shadowIndex = 0; shadowIndex < shadowGroupsLn; shadowIndex++) {
+        //                shadowGroup = shadowGroups[shadowIndex];
+        //                ln = shadowGroup.getCount();
+        //                for (j = i; j < ln; j++) {
+        //                    shadowGroup.getAt(j).hide(true);
+        //                }
+        //            }
+        //        }
+        //        me.renderLabels();
+        //    }
+        //});
     });
 
 </script>
@@ -37,11 +153,13 @@ Analysis: Product level information at seller level
         window.feature.comboboxRegionsId = 'combobxRegionsId';
         window.feature.comboboxDistrictsId = 'comboboxDistrictsId';
         window.feature.comboboxOutpostsId = 'comboboxOutpostId';
-
+        window.feature.chkOnlyUnderTreshold = 'chkOnlyUnderTreshold';
+        
         var productFields = [];
         var storeFields = [];
         var dataStore = [];
         var chartSeries = [];
+        var lowerLimits;
 
         window.feature.CountryStore = Ext.create('Ext.data.Store', {
             fields: ['Name', 'Id'],
@@ -146,7 +264,7 @@ Analysis: Product level information at seller level
                         params: { CountryId: selectedCountryId, RegionId: '' }
                     });
 
-                    doStuff();
+                    showChart();
                     
              
                 }
@@ -177,7 +295,7 @@ Analysis: Product level information at seller level
                     window.feature.OutpostStore.load({
                         params: { CountryId: selectedCountryId, RegionId: selectedRegionId }
                     });
-
+                    showChart();
                 }
             }
         });
@@ -202,7 +320,7 @@ Analysis: Product level information at seller level
                         params: { CountryId: selectedCountryId, RegionId: selectedRegionId, DistrictId:selectedDistrictId }
                     });
 
-                   
+                    showChart();
                 }
             }
         });
@@ -221,7 +339,7 @@ Analysis: Product level information at seller level
             listeners: {
                 select: function (combo, record, index) {
                     var selectedOutpostId = record[0].data.Id;
-
+                    showChart();
                   
                 }
             }
@@ -230,10 +348,8 @@ Analysis: Product level information at seller level
 
         //-----------------------------------------------
         Ext.regModel("StockLevelForOutposts", {
-            fields: ['OutpostName','ProductsUnderTresholdNo'],
-
+            fields: ['OutpostName','ProductsUnderTresholdNo','Total'],
             hasMany: { model: 'Product', name: 'Products' },
-
             proxy: {
                 type: 'rest',
                 url: '@Url.RouteUrl(AnalysisManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "ReportOutpostLevel", action = "GetDataForStackedBarChart" })',
@@ -249,7 +365,7 @@ Analysis: Product level information at seller level
 
         Ext.regModel("Product", {
             fields: [
-                'ProductName', 'StockLevel'
+                'ProductName', 'StockLevel','LowerLimit'
             ],
                         
             belongsTo: 'StockLevelForOutposts'
@@ -259,17 +375,6 @@ Analysis: Product level information at seller level
         window.feature.StockLevelForOutpostsStore = Ext.create('Ext.data.Store', {
             remoteSuport: true,
             model:'StockLevelForOutposts',
-            @* proxy: {
-                type: 'ajax',
-                url: '@Url.RouteUrl(AnalysisManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "ReportOutpostLevel", action = "GetProductsForChart" })',
-                reader: {
-                    type: 'json',
-                    root: 'Outposts',
-                    totalProperty: 'TotalItems'
-                },
-                simpleSortMode: true,
-                extraParams: { countryId: '', regionId: '', districtId: '', outpostId: '' }
-            },*@
             sorters: [{
                 property: 'ProductsUnderTreshholdNo',
                 direction: 'Desc'
@@ -278,65 +383,83 @@ Analysis: Product level information at seller level
 
         
        
-        function doStuff()
+        function showChart()
         {
             var getFromUrl = '@Url.RouteUrl(AnalysisManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "ReportOutpostLevel", action = "GetProductFields" })';
+            
             var action = $.get(getFromUrl,
                     {
                         CountryId: Ext.getCmp(window.feature.comboboxCountriesId).getValue(),
                         RegionId: Ext.getCmp(window.feature.comboboxRegionsId).getValue(),
                         DistrictId: Ext.getCmp(window.feature.comboboxDistrictsId).getValue(),
-                        OutpostId: Ext.getCmp(window.feature.comboboxOutpostsId).getValue()
+                        OutpostId: Ext.getCmp(window.feature.comboboxOutpostsId).getValue(),
+                        OnlyUnderTreshold: Ext.getCmp(window.feature.chkOnlyUnderTreshold).getValue()
+                        
                     })
             action.success(function (response) {
                 productFields = response.split(",");
+                lowerLimits = new Array(productFields.length);
                 GenerateChartStoreData()
                 
             })
         }
         
-       
+        Ext.define('Ext.chart.theme.MyTheme', {
+            extend: 'Ext.chart.theme.Base',
+            colors: ['rgb(212, 40, 40)', 'rgb(154, 205, 50)'],
+            constructor: function (config) {
+                this.callParent([Ext.apply({
+                    colors: this.colors
+                }, config)]);
+            }
+        });
        
         function GenerateChartStoreData() {
             storeFields = [];
             dataStore = [];
             
-            storeFields.push({name:'OutpostName'});
+            storeFields.push({ name: 'OutpostName' });
+            storeFields.push({ name: 'ProductsUnderTresholdNo', type: 'int' });
 
             productFields.forEach(function (entry){
                 storeFields.push({name:entry, type: 'int'})
             })
-
+            storeFields.push({ name: 'Total', type: 'int' });
+           
             
-
             window.feature.StockLevelForOutpostsStore.load({
                 params: {
                           CountryId: Ext.getCmp(window.feature.comboboxCountriesId).getValue(),
                           RegionId: Ext.getCmp(window.feature.comboboxRegionsId).getValue(),
                           DistrictId: Ext.getCmp(window.feature.comboboxDistrictsId).getValue(),
-                          OutpostId: Ext.getCmp(window.feature.comboboxOutpostsId).getValue()
+                          OutpostId: Ext.getCmp(window.feature.comboboxOutpostsId).getValue(),
+                          OnlyUnderTreshold: Ext.getCmp(window.feature.chkOnlyUnderTreshold).getValue()
                       },
                 callback: function () {
                    
                     window.feature.StockLevelForOutpostsStore.each(function (outpost){
                         
-                        var row = new Array(productFields.length + 1);
+                        var row = new Array(productFields.length + 3);
                         for (var j = 1; j < row.length; j++) {
                             row[j] = 0;
                         }
                         row[0] = outpost.get('OutpostName');
+                        row[1] = outpost.get('ProductsUnderTresholdNo');
+                        row[row.length - 1] = outpost.get('Total');
                         outpost.Products().each(function (product) {
                           
                             for (var i=0;i<productFields.length;i++)
                             { 
                                 if (productFields[i] == product.get('ProductName'))
                                 {
-                                    row[i+1] = product.get('StockLevel');
+                                    row[i + 2] = product.get('StockLevel');
+                                    break;
                                 }
                             }
                         })
                         dataStore.push(row);
-                    }).callback(window.feature.execute.delay(300))
+                    })
+                       window.feature.execute.delay(1000);
                     }
                    
               
@@ -344,16 +467,10 @@ Analysis: Product level information at seller level
           
         };
 
-
         
-
-
         //-----Build CHART
-
         window.feature.execute = new Ext.util.DelayedTask(function () {
             
-            //GenerateChartStoreData()
-
             var chartStore = new Ext.data.SimpleStore({
                 fields:storeFields
             })
@@ -367,12 +484,12 @@ Analysis: Product level information at seller level
                 id: 'chart2DistrictLevel',
                 xtype: 'chart',
                 flex: 1,
-                minHeight: 600,
+               // theme:'MyTheme',
+                minHeight: 650,
                 margin: '25 0 0 0',
                 style: 'background:#fff',
                 animate: true,
                 store: chartStore,
-                shadow: true,
                 legend: {
                     position: 'right',
                     padding: 5,
@@ -389,6 +506,7 @@ Analysis: Product level information at seller level
                     position: 'left',
                     fields: productFields,
                     title: 'Product Stock Levels',
+                    grid:true
                 
                 }],
                 series: [{
@@ -403,9 +521,41 @@ Analysis: Product level information at seller level
                         }
                     },
                     xField: 'OutpostName',
-                    yField: productFields,
-                    stacked: true
-                }],
+                    yField:productFields,
+                    stacked: true,
+                    renderer: function (sprite, record, attr, storeIndex, store) {
+                        //barAttr.fill = (storeItem.data.StockLevel <= storeItem.data.LowerLimit ? 'rgb(212, 40, 40)' : 'rgb(154, 205, 50)');
+                        return attr;
+                    },
+                  
+                },
+                {
+                    type: 'line',
+                    xField: 'OutpostName',
+                    yField: ['Total'],
+                    axis: 'left',
+                    highlight: true,
+                    markerConfig: {  size: 10 },
+                    tips: {
+                        trackMouse: true,
+                        width: 240,
+                        height: 60,
+                        renderer: function(storeItem, item) {
+                            this.setTitle('Total Stock: ' + storeItem.get('Total') + ' <br/><br/> Products under treshold: ' + storeItem.get('ProductsUnderTresholdNo'));
+                        }
+                    },
+                   
+                    label: {
+                        display: 'over',
+                        field: 'Total',
+                        renderer: Ext.util.Format.numberRenderer('0'),
+                        orientation: 'horizontal',
+                        color: '#333',
+                        'text-anchor': 'middle'
+                    }
+                    
+                }
+                ],
                 legend: {
                     position: 'right'
 
@@ -471,7 +621,18 @@ Analysis: Product level information at seller level
                                   window.feature.comboBoxCountries,
                                   window.feature.comboBoxRegions,
                                   window.feature.comboboxDistricts,
-                                  window.feature.comboBoxOutposts
+                                  window.feature.comboBoxOutposts,
+                                 {
+                                     xtype: 'checkbox',
+                                     id: window.feature.chkOnlyUnderTreshold,
+                                     boxLabel: '<b>Show products under treshold only</b>',
+                                     margin: '30 0 0 10',
+                                     listeners: {
+                                         change: function (chk, checked) {
+                                             showChart();
+                                         }
+                                     }
+                                 }
                           ]
                       }]
                 }
@@ -505,3 +666,10 @@ Analysis: Product level information at seller level
     });
 
     </script>
+
+<style>
+    .alignBottom {
+    padding-top:20px;
+    }
+
+</style>

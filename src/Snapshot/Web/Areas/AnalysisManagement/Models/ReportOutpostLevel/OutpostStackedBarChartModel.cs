@@ -9,6 +9,7 @@ namespace Web.Areas.AnalysisManagement.Models.ReportOutpostLevel
     {
         public string OutpostName { get; set; }
         public int ProductsUnderTresholdNo { get; set; }
+        public int Total { get; set; }
         public List<ProductStackedBarChartModel> Products  { get; set; }
        
         public OutpostStackedBarChartModel()

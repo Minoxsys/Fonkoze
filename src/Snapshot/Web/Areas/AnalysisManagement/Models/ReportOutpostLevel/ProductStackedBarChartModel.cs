@@ -10,6 +10,6 @@ namespace Web.Areas.AnalysisManagement.Models.ReportOutpostLevel
        // public string OutpostName { get; set; }
         public string ProductName {get; set;}
         public int StockLevel { get; set; }
-       // public int LowerLimit { get; set; }
+        public int LowerLimit { get; set; }
     }
 }

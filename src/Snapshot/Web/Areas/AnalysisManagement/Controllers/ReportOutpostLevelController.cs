@@ -185,16 +185,38 @@ namespace Web.Areas.AnalysisManagement.Controllers
             {
                 OutpostStackedBarChartModel outpostStackedBarChart = new OutpostStackedBarChartModel() { OutpostName = byOutpostGroup.Key.Name };
                 int i = 0;
+                int total = 0;
                 foreach (var osl in byOutpostGroup)
                 {
-                    ProductStackedBarChartModel product = new ProductStackedBarChartModel() { ProductName= osl.Product.Name , StockLevel = osl.StockLevel};
-                    outpostStackedBarChart.Products.Add(product);
+                    ProductStackedBarChartModel product = new ProductStackedBarChartModel() { ProductName= osl.Product.Name , StockLevel = osl.StockLevel, LowerLimit=osl.Product.LowerLimit};
+                    
+                    total += osl.StockLevel;
                     if (osl.StockLevel <= osl.Product.LowerLimit)
+                    {
                         i++;
+                        if (inputModel.OnlyUnderTreshold)
+                        {
+                            outpostStackedBarChart.Products.Add(product);
+                        }
+                    }
+                    if (!inputModel.OnlyUnderTreshold)
+                    {
+                        outpostStackedBarChart.Products.Add(product);
+                    }
                 }
                 outpostStackedBarChart.ProductsUnderTresholdNo = i;
-
-                nestedResult.Add(outpostStackedBarChart);
+                outpostStackedBarChart.Total = total;
+                if (inputModel.OnlyUnderTreshold)
+                {
+                    if(outpostStackedBarChart.ProductsUnderTresholdNo>0)
+                        nestedResult.Add(outpostStackedBarChart);
+                }
+                else
+                {
+                    nestedResult.Add(outpostStackedBarChart);
+                }
+                
+                nestedResult = nestedResult.OrderByDescending(c => c.ProductsUnderTresholdNo).ToList();
             }
 
             return Json(new OutpostsForStackedBarChartOutputModel
@@ -251,6 +273,10 @@ namespace Web.Areas.AnalysisManagement.Controllers
                         }
                     }
                 }
+            }
+            if (inputModel.OnlyUnderTreshold)
+            {
+                oslList = oslList.Where(it => it.StockLevel <= it.Product.LowerLimit).ToList();
             }
             return oslList;
         }
