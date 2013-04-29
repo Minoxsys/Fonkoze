@@ -1,149 +1,44 @@
-﻿using System;
-using System.Text.RegularExpressions;
-using Web.LocalizationResources;
-using Web.Models.Parsing;
-using Web.ReceiveSmsUseCase.Models;
+﻿using Web.ReceiveSmsUseCase.Models;
+using Web.ReceiveSmsUseCase.Services.MessageParsingStrategies;
 
 namespace Web.ReceiveSmsUseCase.Services
 {
     public class SmsTextParserService : ISmsTextParserService
     {
+        private readonly MessageParsingHelpers _parsingHelper = new MessageParsingHelpers();
         private const int ValidMessageMinimumLength = 6;
-        private const string ActivationMessage = "activate";
 
         public SmsParseResult Parse(string message)
         {
             message = message.Trim();
-            var result = new SmsParseResult();
 
             if (string.IsNullOrEmpty(message))
             {
-                return CreateInvalidMessageFormatResponse();
+                return _parsingHelper.CreateInvalidMessageFormatResponse();
             }
             if (message.Length < ValidMessageMinimumLength)
             {
-                return CreateInvalidMessageFormatResponse();
+                return _parsingHelper.CreateInvalidMessageFormatResponse();
             }
 
-            if (string.Compare(message.Trim(new[] {'.', ',', ';'}), ActivationMessage, StringComparison.OrdinalIgnoreCase) == 0)
-            {
-                return CreateActivationMessageResponse();
-            }
+            var activationMessageStrategy = new ParseActivationMessageStrategy();
+            var parseResult = activationMessageStrategy.Parse(message);
+            if (parseResult.Success)
+                return parseResult;
 
-            var tokens = message.Split(new[] {" "}, StringSplitOptions.RemoveEmptyEntries);
-            foreach (var token in tokens)
-            {
-                ParsedProduct parsedProduct;
-                if (!TryParseToken(token, out parsedProduct))
-                {
-                    if (result.ParsedProducts.Count > 0)
-                    {
-                        return CreateAtLeastOneProductWrongResponse();
-                    }
-                    return CreateInvalidMessageFormatResponse();
-                }
+            var parseStockCountMessageStrategy = new ParseStockCountMessageStrategy();
+            parseResult = parseStockCountMessageStrategy.Parse(message);
+            if (parseResult.Success)
+                return parseResult;
 
-                result.ParsedProducts.Add(parsedProduct);
-            }
+            var parseReceivedMessageStrategy = new ParseReceivedStockMessageStrategy();
+            parseResult = parseReceivedMessageStrategy.Parse(message);
+            if (parseResult.Success)
+                return parseResult; 
 
-            result.Success = true;
-            result.MessageType = MessageType.StockUpdate;
-            return result;
-        }
-
-        private bool TryParseToken(string token, out ParsedProduct parsedProduct)
-        {
-            bool parseResult = true;
-            ParsedProduct product = null;
-            try
-            {
-                product = new ParsedProduct
-                    {
-                        ProductGroupCode = GetProductGroupCode(token),
-                        ProductCode = GetProductCode(token),
-                        IsClientIdentifier = GetIsClientIdentifier(token),
-                    };
-
-                int stockLevel;
-                if (ValidContents(token, product, out stockLevel))
-                {
-                    product.StockLevel = stockLevel;
-                }
-                else
-                {
-                    parseResult = false;
-                    parsedProduct = null;
-                }
-            }
-            catch (ArgumentOutOfRangeException)
-            {
-                parseResult = false;
-            }
-
-            parsedProduct = product;
+            var parseStockUpdateMessageStrategy = new ParseStockSaleMessageStrategy();
+            parseResult = parseStockUpdateMessageStrategy.Parse(message);
             return parseResult;
-        }
-
-        private bool ValidContents(string token, ParsedProduct product, out int stockLevel)
-        {
-            return int.TryParse(GetStockLevelString(token), out stockLevel) && ContainsOnlyLetters(product.ProductGroupCode) &&
-                   ContainsOnlyLetters(product.ProductCode) && IsValidClientIdefifier(product.IsClientIdentifier);
-        }
-
-        private bool IsValidClientIdefifier(string identifier)
-        {
-            var regex = new Regex("^[f,n,F,N]{1}$");
-            return regex.IsMatch(identifier);
-        }
-
-        private bool ContainsOnlyLetters(string code)
-        {
-            var regex = new Regex("^[a-zA-Z]+$");
-            return regex.IsMatch(code);
-        }
-
-        private SmsParseResult CreateActivationMessageResponse()
-        {
-            return new SmsParseResult
-                {
-                    Success = true,
-                    MessageType = MessageType.Activation
-                };
-        }
-
-        private SmsParseResult CreateInvalidMessageFormatResponse()
-        {
-            return CreateErrorMessage(Strings.InvalidMessageFormat);
-        }
-
-        private SmsParseResult CreateAtLeastOneProductWrongResponse()
-        {
-            return CreateErrorMessage(Strings.At_least_one_product_specification_is_invalid);
-        }
-
-        private SmsParseResult CreateErrorMessage(string msg)
-        {
-            return new SmsParseResult {Message = msg};
-        }
-
-        private string GetStockLevelString(string message)
-        {
-            return message.Substring(4, message.Length - 1 - 4);
-        }
-
-        private string GetIsClientIdentifier(string message)
-        {
-            return message.Substring(message.Length - 1, 1);
-        }
-
-        private string GetProductCode(string message)
-        {
-            return message.Substring(3, 1);
-        }
-
-        private string GetProductGroupCode(string message)
-        {
-            return message.Substring(0, 3);
         }
     }
 }

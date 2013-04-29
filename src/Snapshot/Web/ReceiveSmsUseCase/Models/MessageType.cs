@@ -2,7 +2,9 @@
 {
     public enum MessageType
     {
-        StockUpdate,
-        Activation
+        StockSale,
+        Activation,
+        StockCount,
+        ReceivedStock
     }
 }

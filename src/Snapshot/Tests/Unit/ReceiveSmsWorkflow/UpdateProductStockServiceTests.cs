@@ -124,6 +124,35 @@ namespace Tests.Unit.ReceiveSmsWorkflow
         }
 
         [Test]
+        public void DecrementProductStocks_UpdatesTheStockLevelForTwoExistingProduct_WhenThereAreTwoResultsAfterParsing()
+        {
+            _outpostStockLevelQueryServiceMock.Setup(s => s.Query()).Returns((new List<OutpostStockLevel>
+                {
+                    CreateOutpostStockLevel("DEF", "L", 10),
+                    CreateOutpostStockLevel("GHJ", "K", 20)
+                }).AsQueryable());
+
+            _sut.DecrementProductStocksForOutpost(new CsvParseResult
+            {
+                Success = true,
+                ParsedProducts =
+                    new List<IParsedProduct> { CreateParsedProduct("DEF", "L", 3), CreateParsedProduct("GHJ", "K", 5) }
+            }, _outpostId, StockUpdateMethod.Manual);
+
+            _outpostStockLevelSaveCommandMock.Verify(
+                cmd => cmd.Execute(It.Is<OutpostStockLevel>(osl => osl.StockLevel == 7 && osl.Outpost.Id == _outpostId &&
+                                                                   osl.Product.SMSReferenceCode == "L" &&
+                                                                   osl.ProductGroup.ReferenceCode == "DEF" &&
+                                                                   osl.UpdateMethod == StockUpdateMethod.Manual.ToString())));
+
+            _outpostStockLevelSaveCommandMock.Verify(
+                cmd => cmd.Execute(It.Is<OutpostStockLevel>(osl => osl.StockLevel == 15 && osl.Outpost.Id == _outpostId &&
+                                                                   osl.Product.SMSReferenceCode == "K" &&
+                                                                   osl.ProductGroup.ReferenceCode == "GHJ" &&
+                                                                   osl.UpdateMethod == StockUpdateMethod.Manual.ToString())));
+        }
+
+        [Test]
         public void UpdateProductStocks_NoUpdatesTakePlace_WhenTheParsedCodesDoNotExistInTheSystem()
         {
             //arrange

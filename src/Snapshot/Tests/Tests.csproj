@@ -248,7 +248,7 @@
     <Compile Include="Unit\ModelProviders\RoleManagerAssignModelProvider.cs" />
     <Compile Include="Unit\ModelProviders\RoleManagerEditOutput_Tests.cs" />
     <Compile Include="Unit\ModelProviders\RoleManagerUnAssignModelProvider.cs" />
-    <Compile Include="Unit\ReceiveSmsWorkflow\UpdateStockMessageCommandTests.cs" />
+    <Compile Include="Unit\ReceiveSmsWorkflow\StockSaleMessageCommandTests.cs" />
     <Compile Include="Unit\Routes\DefaultRoutesRegistrar_Tests.cs" />
     <Compile Include="Unit\Routes\IgnoredRoutesRegistrar_Tests.cs" />
     <Compile Include="Unit\Routes\RoleManagerRoutesRegistrar_Tests.cs" />

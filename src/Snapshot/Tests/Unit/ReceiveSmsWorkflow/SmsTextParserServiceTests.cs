@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using System.Collections.Generic;
+using FluentAssertions;
 using NUnit.Framework;
 using Web.Models.Parsing;
 using Web.ReceiveSmsUseCase.Models;
@@ -16,6 +17,12 @@ namespace Tests.Unit.ReceiveSmsWorkflow
         private const string ValidMessageTwoProducts = "ALBG9999N HIVC9F";
         private const string InvalidMessageThreeProducts = "ALBG9999N MALYjF HIVC9F";
         private const string MultipleSpaces = "   ALBG9999N    MALY5F    HIVC9F     ";
+        private const string SimpleStockCountMessage = "SC MALA88F";
+        private const string InvalidStockCountMessage = "S MALB88F";
+        private const string StockCountMesageWithInvalidContents = "SC asdfghjg";
+        private const string SimpleReceivedMessage = "RD MALA88F";
+        private const string InvalidReceivedMessage = "R MALB88F";
+        private const string ReceivedMesageWithInvalidContents = "RD asdfghjg";
 
         [SetUp]
         public void PerTestSetup()
@@ -116,22 +123,25 @@ namespace Tests.Unit.ReceiveSmsWorkflow
         }
 
         [Test]
-        public void Parse_ParsingResultMessageTypeMustBeSetToUpdateStock_UnlessTheMessageContainsActivation()
+        public void Parse_ParsingResultMessageTypeMustBeSetProperly()
         {
             var result = _sut.Parse(MultipleSpaces);
-            Assert.That(result.MessageType, Is.EqualTo(MessageType.StockUpdate));
+            Assert.That(result.MessageType, Is.EqualTo(MessageType.StockSale));
 
             result = _sut.Parse(ValidMessageOneProduct);
-            Assert.That(result.MessageType, Is.EqualTo(MessageType.StockUpdate));
+            Assert.That(result.MessageType, Is.EqualTo(MessageType.StockSale));
 
             result = _sut.Parse(ValidMessageTwoProducts);
-            Assert.That(result.MessageType, Is.EqualTo(MessageType.StockUpdate));
+            Assert.That(result.MessageType, Is.EqualTo(MessageType.StockSale));
 
             result = _sut.Parse(InvalidMessageThreeProducts);
-            Assert.That(result.MessageType, Is.EqualTo(MessageType.StockUpdate));
+            Assert.That(result.MessageType, Is.EqualTo(MessageType.StockSale));
 
             result = _sut.Parse(ActivateMessage);
             Assert.That(result.MessageType, Is.EqualTo(MessageType.Activation));
+
+            result = _sut.Parse(SimpleStockCountMessage);
+            Assert.That(result.MessageType, Is.EqualTo(MessageType.StockCount));
         }
 
         [Test]
@@ -200,6 +210,72 @@ namespace Tests.Unit.ReceiveSmsWorkflow
 
             result = _sut.Parse("aaab8888/");
             Assert.False(result.Success);
+        }
+
+        [Test]
+        public void Parse_ReturnsParsedProducts_WhenMessageTypeIsStockCount()
+        {
+            var result = _sut.Parse(SimpleStockCountMessage);
+
+            Assert.IsTrue(result.Success);
+            Assert.That(result.ParsedProducts.Count, Is.EqualTo(1));
+            Assert.That(result.MessageType, Is.EqualTo(MessageType.StockCount));
+            CollectionAssert.AreEquivalent(result.ParsedProducts,
+                                           new List<IParsedProduct>
+                                               {
+                                                   new ParsedProduct {ProductCode = "A", ProductGroupCode = "MAL", StockLevel = 88, IsClientIdentifier = "F"}
+                                               });
+        }
+
+        [Test]
+        public void Parse_FailsParsingAsap_WhenWhatAppearsToBeAStockCountMessageIsInvalid()
+        {
+            var result = _sut.Parse(InvalidStockCountMessage);
+
+            Assert.IsFalse(result.Success);
+            Assert.That(result.Message, Is.EqualTo("Invalid message format."));
+        }
+
+        [Test]
+        public void Parse_FailsParsing_WithAnInvalidStringFormatForAStockCountMessage()
+        {
+            var result = _sut.Parse(StockCountMesageWithInvalidContents);
+
+            Assert.IsFalse(result.Success);
+            Assert.That(result.Message, Is.EqualTo("Invalid message format."));
+        }
+
+        [Test]
+        public void Parse_ReturnsParsedProducts_WhenMessageTypeIsReceivedStock()
+        {
+            var result = _sut.Parse(SimpleReceivedMessage);
+
+            Assert.IsTrue(result.Success);
+            Assert.That(result.ParsedProducts.Count, Is.EqualTo(1));
+            Assert.That(result.MessageType, Is.EqualTo(MessageType.ReceivedStock));
+            CollectionAssert.AreEquivalent(result.ParsedProducts,
+                                           new List<IParsedProduct>
+                                               {
+                                                   new ParsedProduct {ProductCode = "A", ProductGroupCode = "MAL", StockLevel = 88, IsClientIdentifier = "F"}
+                                               });
+        }
+
+        [Test]
+        public void Parse_FailsParsingAsap_WhenWhatAppearsToBeAReceivedStockMessageIsInvalid()
+        {
+            var result = _sut.Parse(InvalidReceivedMessage);
+
+            Assert.IsFalse(result.Success);
+            Assert.That(result.Message, Is.EqualTo("Invalid message format."));
+        }
+
+        [Test]
+        public void Parse_FailsParsing_WithAnInvalidStringFormatForAReceivedStockMessage()
+        {
+            var result = _sut.Parse(ReceivedMesageWithInvalidContents);
+
+            Assert.IsFalse(result.Success);
+            Assert.That(result.Message, Is.EqualTo("Invalid message format."));
         }
 
     }

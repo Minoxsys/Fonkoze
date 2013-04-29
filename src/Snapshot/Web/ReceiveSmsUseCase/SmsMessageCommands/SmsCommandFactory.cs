@@ -37,9 +37,9 @@ namespace Web.ReceiveSmsUseCase.SmsMessageCommands
                     {
                         return new ActivationMessageCommand(_contactMethodsService);
                     }
-                case MessageType.StockUpdate:
+                case MessageType.StockSale:
                     {
-                        return new UpdateStockMessageCommand(_updateStockService, _sendSmsService, _saveOrUpdateAlertCommand, _emailSendingService, _rawSmsReceivedQueryService);
+                        return new StockSaleMessageCommand(_updateStockService, _sendSmsService, _saveOrUpdateAlertCommand, _emailSendingService, _rawSmsReceivedQueryService);
                     }
                 default:
                     return new NullObjectCommand();

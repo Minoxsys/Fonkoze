@@ -7,5 +7,6 @@ namespace Web.Services.StockUpdates
     {
         StockUpdateResult UpdateProductStocksForOutpost(IParseResult parseResult, Guid outpostId, StockUpdateMethod updateMethod);
         StockUpdateResult IncrementProductStocksForOutpost(IParseResult parseResult, Guid outpostId, StockUpdateMethod updateMethod);
+        StockUpdateResult DecrementProductStocksForOutpost(IParseResult parseResult, Guid outpostId, StockUpdateMethod updateMethod);
     }
 }

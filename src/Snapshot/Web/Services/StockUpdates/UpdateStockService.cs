@@ -33,6 +33,11 @@ namespace Web.Services.StockUpdates
             return UpdateStockTemplate(parseResult, outpostId, updateMethod, (osl, pp) => osl.StockLevel += pp.StockLevel);
         }
 
+        public StockUpdateResult DecrementProductStocksForOutpost(IParseResult parseResult, Guid outpostId, StockUpdateMethod updateMethod)
+        {
+            return UpdateStockTemplate(parseResult, outpostId, updateMethod, (osl, pp) => osl.StockLevel -= pp.StockLevel);
+        }
+
         private StockUpdateResult UpdateStockTemplate(IParseResult parseResult, Guid outpostId, StockUpdateMethod updateMethod,
                                                       Action<OutpostStockLevel, IParsedProduct> stockUpdateStrategy)
         {

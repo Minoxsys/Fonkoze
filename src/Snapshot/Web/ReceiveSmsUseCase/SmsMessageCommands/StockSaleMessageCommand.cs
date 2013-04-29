@@ -15,7 +15,7 @@ using Web.Services.StockUpdates;
 
 namespace Web.ReceiveSmsUseCase.SmsMessageCommands
 {
-    public class UpdateStockMessageCommand : ISmsMessageCommand
+    public class StockSaleMessageCommand : ISmsMessageCommand
     {
         private readonly IUpdateStockService _updateStockService;
         private readonly ISendSmsService _sendSmsService;
@@ -23,7 +23,7 @@ namespace Web.ReceiveSmsUseCase.SmsMessageCommands
         private readonly IPreconfiguredEmailService _emailSendingService;
         private readonly IQueryService<RawSmsReceived> _rawSmsReceivedQueryService;
 
-        public UpdateStockMessageCommand(IUpdateStockService updateStockService, ISendSmsService sendSmsService,
+        public StockSaleMessageCommand(IUpdateStockService updateStockService, ISendSmsService sendSmsService,
                                          ISaveOrUpdateCommand<Alert> saveOrUpdateAlertCommand, IPreconfiguredEmailService emailSendingService,
                                          IQueryService<RawSmsReceived> rawSmsReceived)
         {
@@ -44,7 +44,7 @@ namespace Web.ReceiveSmsUseCase.SmsMessageCommands
 
             if (parseResult.Success)
             {
-                StockUpdateResult result = _updateStockService.UpdateProductStocksForOutpost(parseResult, outpost.Id, StockUpdateMethod.SMS);
+                StockUpdateResult result = _updateStockService.DecrementProductStocksForOutpost(parseResult, outpost.Id, StockUpdateMethod.SMS);
                 if (result != null && !result.Success)
                 {
                     _sendSmsService.SendSms(smsData.Sender, ComposeUpdateStockFailMessage(result.FailedProducts), true);

@@ -18,11 +18,11 @@ using Web.Services.StockUpdates;
 namespace Tests.Unit.ReceiveSmsWorkflow
 {
     [TestFixture]
-    public class UpdateStockMessageCommandTests
+    public class StockSaleMessageCommandTests
     {
         #region Setup
 
-        private UpdateStockMessageCommand _sut;
+        private StockSaleMessageCommand _sut;
         private Mock<IUpdateStockService> _updateProductStockServiceMock;
         private Mock<ISendSmsService> _sendSmsServiceMock;
         private Mock<ISaveOrUpdateCommand<Alert>> _saveAlertCmdMock;
@@ -39,7 +39,7 @@ namespace Tests.Unit.ReceiveSmsWorkflow
             _sendSmsServiceMock = new Mock<ISendSmsService>();
             _saveAlertCmdMock = new Mock<ISaveOrUpdateCommand<Alert>>();
             _sendEmailServiceMock = new Mock<IPreconfiguredEmailService>();
-            _sut = new UpdateStockMessageCommand(_updateProductStockServiceMock.Object, _sendSmsServiceMock.Object, _saveAlertCmdMock.Object,
+            _sut = new StockSaleMessageCommand(_updateProductStockServiceMock.Object, _sendSmsServiceMock.Object, _saveAlertCmdMock.Object,
                                                  _sendEmailServiceMock.Object, _rawSmsQueryServiceMock.Object);
 
             _inputModel = new ReceivedSmsInputModel {Sender = "123"};
@@ -78,7 +78,7 @@ namespace Tests.Unit.ReceiveSmsWorkflow
         {
             SetupKnownSender(false);
 
-            _sut.Execute(_inputModel, new SmsParseResult {Success = true, MessageType = MessageType.StockUpdate}, _outpostMock.Object);
+            _sut.Execute(_inputModel, new SmsParseResult {Success = true, MessageType = MessageType.StockSale}, _outpostMock.Object);
 
             _updateProductStockServiceMock.Verify(s => s.UpdateProductStocksForOutpost(It.IsAny<ISmsParseResult>(), It.IsAny<Guid>(), StockUpdateMethod.SMS),
                                                   Times.Never());
@@ -115,7 +115,7 @@ namespace Tests.Unit.ReceiveSmsWorkflow
         {
             SetupKnownSender(isSenderActive: false);
 
-            _sut.Execute(_inputModel, new SmsParseResult {Success = true, MessageType = MessageType.StockUpdate}, _outpostMock.Object);
+            _sut.Execute(_inputModel, new SmsParseResult {Success = true, MessageType = MessageType.StockSale}, _outpostMock.Object);
 
             _sendSmsServiceMock.Verify(s => s.SendSms(_inputModel.Sender, It.IsAny<string>(), false));
         }
@@ -128,7 +128,7 @@ namespace Tests.Unit.ReceiveSmsWorkflow
 
             _sut.Execute(_inputModel, parseResult, _outpostMock.Object);
 
-            _updateProductStockServiceMock.Verify(s => s.UpdateProductStocksForOutpost(parseResult, _outpostMock.Object.Id, StockUpdateMethod.SMS));
+            _updateProductStockServiceMock.Verify(s => s.DecrementProductStocksForOutpost(parseResult, _outpostMock.Object.Id, StockUpdateMethod.SMS));
         }
 
         [Test]
@@ -136,7 +136,7 @@ namespace Tests.Unit.ReceiveSmsWorkflow
         {
             SetupKnownSender();
             var parseResult = new SmsParseResult {Success = true};
-            _updateProductStockServiceMock.Setup(s => s.UpdateProductStocksForOutpost(parseResult, _outpostMock.Object.Id, StockUpdateMethod.SMS))
+            _updateProductStockServiceMock.Setup(s => s.DecrementProductStocksForOutpost(parseResult, _outpostMock.Object.Id, StockUpdateMethod.SMS))
                                           .Returns(new StockUpdateResult {Success = false, FailedProducts = new List<IParsedProduct>()});
 
             _sut.Execute(_inputModel, parseResult, _outpostMock.Object);
