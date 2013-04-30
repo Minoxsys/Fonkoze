@@ -1,5 +1,5 @@
  GO
-if not exists(select [Name] from [ProductGroups] where [Name]='ALL' )
+if not exists(select [Name] from [ProductGroups] where [Name]='All Products' )
 begin
 INSERT INTO ProductGroups
 		   (Id

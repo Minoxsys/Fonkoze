@@ -555,6 +555,7 @@
     <Content Include="Assets\resources\img\Analysis\LocationReport.png" />
     <Content Include="Assets\resources\img\Analysis\OutpostList.png" />
     <Content Include="Assets\resources\img\Analysis\StockLevelDistrict.png" />
+    <Content Include="Assets\resources\img\Analysis\StockLevelInformationReport.png" />
     <Content Include="Assets\resources\img\Analysis\StockLevelRegion.png" />
     <Content Include="Assets\resources\img\arrow.gif" />
     <Content Include="Assets\css\snapshot-theme.css" />
