@@ -49,7 +49,7 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration.OutpostStockLevelCont
         public List<ProductGroup> productGroups;
         public List<Product> products;
         const string USERNAME = "admin";
-        public string GUID_FOR_ALL_OPTION_ON_OUTPOST_LIST = "00000000-0000-0000-0000-000000000001";
+        public string GUID_FOR_ALL_OPTION_ON_OUTPOST_LIST = "00000000-0000-0000-0000-000000000000";
        
         public void Init()
         {
