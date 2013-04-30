@@ -61,7 +61,7 @@ Historical Product Level: Overview
             }]
         });
 
-         window.feature.regionStore = Ext.create('Ext.data.Store', {
+        window.feature.regionStore = Ext.create('Ext.data.Store', {
             remoteSort: true,
             fields: ['Id','Name'],
             proxy: {
@@ -173,43 +173,43 @@ Historical Product Level: Overview
             }]
         });
         
+        function ClearDistrictStore(){
+            var noOfItemsToDelete = window.feature.districtStore.getCount()-1;
+            window.feature.districtStore.removeAt(1, noOfItemsToDelete);
+        };
+
+        function ClearSellerStore(){
+            var noOfItemsToDelete = window.feature.outpostStore.getCount()-1;
+            window.feature.outpostStore.removeAt(1, noOfItemsToDelete);
+        };
+
         function ResetCountryDependencies(){
             var regionCombobox = window.feature.container.down('#'+window.feature.regionComboboxId);
-            regionCombobox.setValue(null); 
-            regionCombobox.disable();
+            regionCombobox.setValue('@Guid.Empty'); 
 
             var districtCombobox = window.feature.container.down('#'+window.feature.districtComboboxId);
-            districtCombobox.setValue(null); 
-            districtCombobox.disable();
+            districtCombobox.setValue('@Guid.Empty'); 
 
             var outpostCombobox = window.feature.container.down('#'+window.feature.outpostComboboxId);
-            outpostCombobox.setValue(null); 
-            outpostCombobox.disable();
+            outpostCombobox.setValue('@Guid.Empty'); 
 
-            var viewButton = window.feature.container.down('#'+window.feature.viewProductStockLevelId);
-            viewButton.disable();
+            ClearDistrictStore();
+            ClearSellerStore();
         };
 
         function ResetDistrictDependencies(){
             var outpostCombobox = window.feature.container.down('#'+window.feature.outpostComboboxId);
-            outpostCombobox.setValue(null); 
-            outpostCombobox.disable();
-
-            var viewButton = window.feature.container.down('#'+window.feature.viewProductStockLevelId);
-            viewButton.disable();
+            outpostCombobox.setValue('@Guid.Empty'); 
         };
 
         function ResetRegionDependencies(){
             var districtCombobox = window.feature.container.down('#'+window.feature.districtComboboxId);
-            districtCombobox.setValue(null); 
-            districtCombobox.disable();
+            districtCombobox.setValue('@Guid.Empty'); 
 
-            var outpostCombobox = window.feature.container.down('#'+window.feature.outpostComboboxId);
-            outpostCombobox.setValue(null); 
-            outpostCombobox.disable();
+            window.feature.districtStore.proxy.extraParams.regionId = districtCombobox.getValue();
+            outpostCombobox.setValue('@Guid.Empty'); 
 
-            var viewButton = window.feature.container.down('#'+window.feature.viewProductStockLevelId);
-            viewButton.disable();
+            ClearSellerStore();
         };
 
         var tooltipText = 'Click on the product group to view the historical product level';
@@ -220,7 +220,7 @@ Historical Product Level: Overview
             return val;
         }; 
 
-         window.feature.productGroupLevel = Ext.define('Ext.feature.region.Modal', {
+        window.feature.productGroupLevel = Ext.define('Ext.feature.region.Modal', {
             extend: 'Ext.window.Window',
             title: 'Product Group Level',
             modal:true,
@@ -289,78 +289,78 @@ Historical Product Level: Overview
                         listeners: {
                             itemclick: function(view, record, item, index, e ) {
                                 if(@(ViewBag.HasNoRightsToEdit) === true){
-                                           var msgAlert = Ext.Msg;
-                                            msgAlert.ui = 'snapshot-popup-window';
-                                            msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
-                                            msgAlert.msgButtons['ok'].margin = '10 10 20 0';
-                                            msgAlert.alert("Alert","You have no rights for this action!");
-                            }else{
-                                var editView = new window.feature.editHistorical({
-                                    buttons: [
-                                        { text: 'Cancel',
-                                         margin: '10 10 20 0',
-                                        ui: 'snapshot-cancel-btn',
-                                        cls: 'x-add-button-gradient',
-                                         handler:function(){ editView.close(); editView.destroy();} },
-                                        { text: 'Save',
-                                         margin: '10 10 20 0',
-                                        ui: 'snapshot-add-btn',
-                                        cls: 'x-add-button-gradient',
-                                         handler:function(){
+                                    var msgAlert = Ext.Msg;
+                                    msgAlert.ui = 'snapshot-popup-window';
+                                    msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                    msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+                                    msgAlert.alert("Alert","You have no rights for this action!");
+                                }else{
+                                    var editView = new window.feature.editHistorical({
+                                        buttons: [
+                                            { text: 'Cancel',
+                                                margin: '10 10 20 0',
+                                                ui: 'snapshot-cancel-btn',
+                                                cls: 'x-add-button-gradient',
+                                                handler:function(){ editView.close(); editView.destroy();} },
+                                            { text: 'Save',
+                                                margin: '10 10 20 0',
+                                                ui: 'snapshot-add-btn',
+                                                cls: 'x-add-button-gradient',
+                                                handler:function(){
 
-                                            var stockLevel = editView.down('#'+window.feature.editProductStockLevel);
-                                            if (stockLevel.getValue() == ''){
-                                            }else{
-                                                var values = {
-                                                    Id: record.get('Id'),
-                                                    StockLevel: editView.down('#'+window.feature.editProductStockLevel).getValue()
-                                                };
-                                                var postToUrl = '@Url.RouteUrl(StockAdministrationAreaRegistration.DEFAULT_ROUTE, new { controller = "HistoricalProductLevel", action = "Edit" })';
-                                                var action = $.post(postToUrl, values);                                               
-                                                action.success(function(serverResponse){
-                                                if(serverResponse.Status === "Error")
-                                                {
-                                                   var msgAlert = Ext.Msg;
-                                                                    msgAlert.ui = 'snapshot-popup-window';
-                                                                    msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
-                                                                    msgAlert.msgButtons['ok'].margin = '10 10 20 0',
-                                                                    msgAlert.alert(serverResponse.Status, serverResponse.Message);
-                                                }
-                                                else
-                                                {                                                    
-                                                    editView.close();
-                                                    editView.destroy();
+                                                    var stockLevel = editView.down('#'+window.feature.editProductStockLevel);
+                                                    if (stockLevel.getValue() == ''){
+                                                    }else{
+                                                        var values = {
+                                                            Id: record.get('Id'),
+                                                            StockLevel: editView.down('#'+window.feature.editProductStockLevel).getValue()
+                                                        };
+                                                        var postToUrl = '@Url.RouteUrl(StockAdministrationAreaRegistration.DEFAULT_ROUTE, new { controller = "HistoricalProductLevel", action = "Edit" })';
+                                                        var action = $.post(postToUrl, values);                                               
+                                                        action.success(function(serverResponse){
+                                                            if(serverResponse.Status === "Error")
+                                                            {
+                                                                var msgAlert = Ext.Msg;
+                                                                msgAlert.ui = 'snapshot-popup-window';
+                                                                msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                                                msgAlert.msgButtons['ok'].margin = '10 10 20 0',
+                                                                msgAlert.alert(serverResponse.Status, serverResponse.Message);
+                                                            }
+                                                            else
+                                                            {                                                    
+                                                                editView.close();
+                                                                editView.destroy();
 
-                                                    ResetExtraParams();
-                                                    SetNewExtraParams();
-                                                    window.feature.gridOutpostStore.load();  
-                                                }
-                                            });  
-                                            }   
-                                        }  
-                                    }]    
-                                });
+                                                                ResetExtraParams();
+                                                                SetNewExtraParams();
+                                                                window.feature.gridOutpostStore.load();  
+                                                            }
+                                                        });  
+                                                    }   
+                                                }  
+                                            }]    
+                                    });
                         
-                                editView.down('#'+window.feature.editOutpostName).setValue(record.get('OutpostName'));
-                                editView.down('#'+window.feature.editProductGroup).setValue(record.get('ProductGroupName'));
-                                editView.down('#'+window.feature.editProductName).setValue(record.get('ProductName'));
-                                editView.down('#'+window.feature.editSMSCode).setValue(record.get('SMSReferenceCode'));
-                                editView.down('#'+window.feature.editProductStockLevel).setValue(record.get('ProductStockLevel'));
-                                editView.down('#'+ window.feature.editLastUpdated).setValue(record.get('LastUpdated'));
-                                editView.down('#'+window.feature.editUpdateMethod).setValue(record.get('UpdateMethod'));
-                                editView.down('#'+window.feature.editDescription).setValue(record.get('Description'));
+                                        editView.down('#'+window.feature.editOutpostName).setValue(record.get('OutpostName'));
+                                        editView.down('#'+window.feature.editProductGroup).setValue(record.get('ProductGroupName'));
+                                        editView.down('#'+window.feature.editProductName).setValue(record.get('ProductName'));
+                                        editView.down('#'+window.feature.editSMSCode).setValue(record.get('SMSReferenceCode'));
+                                        editView.down('#'+window.feature.editProductStockLevel).setValue(record.get('ProductStockLevel'));
+                                        editView.down('#'+ window.feature.editLastUpdated).setValue(record.get('LastUpdated'));
+                                        editView.down('#'+window.feature.editUpdateMethod).setValue(record.get('UpdateMethod'));
+                                        editView.down('#'+window.feature.editDescription).setValue(record.get('Description'));
 
-                                me.close();
-                                me.destroy();
+                                        me.close();
+                                        me.destroy();
 
-                                editView.show();
-                                }
-                             }
+                                        editView.show();
+                                    }
+                            }
                         }
                     }]
                 });
 
-                 me.callParent(arguments);
+                me.callParent(arguments);
             }
         }); 
 
@@ -451,7 +451,7 @@ Historical Product Level: Overview
                     }]
                 });
 
-                 me.callParent(arguments);
+                me.callParent(arguments);
             }
         }); 
 
@@ -492,150 +492,150 @@ Historical Product Level: Overview
                         cls: 'x-title-label',
                         text: 'Historical Product Status'
                     }]
-                    },{
-						xtype: 'container',
-                        height: 65,
-                        margin: '0 0 0 30',
-						layout: {
-							type: 'column'
-						},
-						items: [{
-                            xtype: 'combobox',
-                            itemId: window.feature.countryComboboxId,
-			                store: window.feature.countryStore,
-                            labelAlign: 'top',
-                            fieldLabel: 'Selected Country',
-			                displayField: 'Name',
-			                valueField:'Id',
-                            labelClsExtra: 'combo-label',
-			                emptyText: 'Country List', 
-			                typeAhead: true,
-                            editable: false,
-                            typeAhead: false,
-			                listeners:{
-				                'select': function(combo, record){
+                },{
+                    xtype: 'container',
+                    height: 65,
+                    margin: '0 0 0 30',
+                    layout: {
+                        type: 'column'
+                    },
+                    items: [{
+                        xtype: 'combobox',
+                        itemId: window.feature.countryComboboxId,
+                        store: window.feature.countryStore,
+                        labelAlign: 'top',
+                        fieldLabel: 'Selected Country',
+                        displayField: 'Name',
+                        valueField:'Id',
+                        labelClsExtra: 'combo-label',
+                        emptyText: 'Country List', 
+                        typeAhead: true,
+                        editable: false,
+                        typeAhead: false,
+                        listeners:{
+                            'select': function(combo, record){
+                                ResetCountryDependencies();
+
+                                window.feature.regionStore.proxy.extraParams.countryId = combo.getValue();
+                                window.feature.regionStore.load();
+
+                                var regionCombobox = window.feature.container.down('#'+window.feature.regionComboboxId);
+                                regionCombobox.enable();
+                            },
+                            specialkey: function(field, e){
+                                if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
+                                    field.setValue(null);
                                     ResetCountryDependencies();
-
-                                    window.feature.regionStore.proxy.extraParams.countryId = combo.getValue();
-                                    window.feature.regionStore.load();
-
-                                    var regionCombobox = window.feature.container.down('#'+window.feature.regionComboboxId);
-                                    regionCombobox.enable();
-				                },
-                                specialkey: function(field, e){
-                                    if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
-                                        field.setValue(null);
-                                        ResetCountryDependencies();
-                                    }
                                 }
-			                } 
-                        },{ 
-                            xtype: 'combobox',
-                            itemId: window.feature.regionComboboxId,
-			                store: window.feature.regionStore,
-                            disabled: true,
-                            labelAlign: 'top',
-                            fieldLabel: 'Selected Region',
-			                displayField: 'Name',
-			                valueField:'Id',
-                            labelClsExtra: 'combo-label',
-			                emptyText: 'Region List', 
-			                typeAhead: true,
-                            editable: false,
-                            typeAhead: false,
-			                listeners:{
-                                'select': function(combo, record){
+                            }
+                        } 
+                    },{ 
+                        xtype: 'combobox',
+                        itemId: window.feature.regionComboboxId,
+                        store: window.feature.regionStore,
+                        disabled: false,
+                        labelAlign: 'top',
+                        fieldLabel: 'Selected Region',
+                        displayField: 'Name',
+                        valueField:'Id',
+                        labelClsExtra: 'combo-label',
+                        emptyText: 'Region List', 
+                        typeAhead: true,
+                        editable: false,
+                        typeAhead: false,
+                        listeners:{
+                            'select': function(combo, record){
+                                ResetRegionDependencies();
+
+                                window.feature.districtStore.proxy.extraParams.regionId = combo.getValue();
+                                window.feature.districtStore.load();
+
+                                var districtCombobox = window.feature.container.down('#'+window.feature.districtComboboxId);
+                                districtCombobox.enable();
+                            },
+                            specialkey: function(field, e){
+                                if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
+                                    field.setValue(null);
                                     ResetRegionDependencies();
-
-                                    window.feature.districtStore.proxy.extraParams.regionId = combo.getValue();
-                                    window.feature.districtStore.load();
-
-                                    var districtCombobox = window.feature.container.down('#'+window.feature.districtComboboxId);
-                                    districtCombobox.enable();
-				                },
-                                specialkey: function(field, e){
-                                    if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
-                                        field.setValue(null);
-                                        ResetRegionDependencies();
-                                    }
                                 }
-			                } 
-                        },{ 
-                            xtype: 'combobox',
-                            itemId: window.feature.districtComboboxId,
-			                store: window.feature.districtStore,
-                            disabled: true,
-                            labelAlign: 'top',
-                            fieldLabel: 'Selected District',
-			                displayField: 'Name',
-                            labelClsExtra: 'combo-label',
-			                valueField:'Id',
-			                emptyText: 'District List', 
-			                typeAhead: true,
-                            editable: false,
-                            typeAhead: false,
-			                listeners:{
-                                'select': function(combo, record){
+                            }
+                        } 
+                    },{ 
+                        xtype: 'combobox',
+                        itemId: window.feature.districtComboboxId,
+                        store: window.feature.districtStore,
+                        disabled: false,
+                        labelAlign: 'top',
+                        fieldLabel: 'Selected District',
+                        displayField: 'Name',
+                        labelClsExtra: 'combo-label',
+                        valueField:'Id',
+                        emptyText: 'District List', 
+                        typeAhead: true,
+                        editable: false,
+                        typeAhead: false,
+                        listeners:{
+                            'select': function(combo, record){
+                                ResetDistrictDependencies();
+
+                                window.feature.outpostStore.proxy.extraParams.districtId = combo.getValue();
+                                window.feature.outpostStore.load();
+
+                                var outpostCombobox = window.feature.container.down('#'+window.feature.outpostComboboxId);
+                                outpostCombobox.enable();
+                            },
+                            specialkey: function(field, e){
+                                if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
+                                    field.setValue(null);
                                     ResetDistrictDependencies();
-
-                                    window.feature.outpostStore.proxy.extraParams.districtId = combo.getValue();
-                                    window.feature.outpostStore.load();
-
-                                    var outpostCombobox = window.feature.container.down('#'+window.feature.outpostComboboxId);
-                                    outpostCombobox.enable();
-				                },
-                                specialkey: function(field, e){
-                                    if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
-                                        field.setValue(null);
-                                        ResetDistrictDependencies();
-                                    }
                                 }
-			                } 
-                        },{ 
-                            xtype: 'combobox',
-                            itemId: window.feature.outpostComboboxId,
-			                store: window.feature.outpostStore,
-                            disabled: true,
-                            labelAlign: 'top',
-                            labelClsExtra: 'combo-label',
-                            fieldLabel: 'Selected Seller',
-			                displayField: 'Name',
-			                valueField:'Id',
-			                emptyText: 'Seller List', 
-			                typeAhead: true,
-                            editable: false,
-                            typeAhead: false,
-                            listeners:{
-                                'select': function(combo, record){
+                            }
+                        } 
+                    },{ 
+                        xtype: 'combobox',
+                        itemId: window.feature.outpostComboboxId,
+                        store: window.feature.outpostStore,
+                        disabled: false,
+                        labelAlign: 'top',
+                        labelClsExtra: 'combo-label',
+                        fieldLabel: 'Selected Seller',
+                        displayField: 'Name',
+                        valueField:'Id',
+                        emptyText: 'Seller List', 
+                        typeAhead: true,
+                        editable: false,
+                        typeAhead: false,
+                        listeners:{
+                            'select': function(combo, record){
+                                var viewButton = window.feature.container.down('#'+window.feature.viewProductStockLevelId);
+                                viewButton.enable();
+                            },
+                            specialkey: function(field, e){
+                                if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
+                                    field.setValue(null);
                                     var viewButton = window.feature.container.down('#'+window.feature.viewProductStockLevelId);
-                                    viewButton.enable();
-				                },
-                                specialkey: function(field, e){
-                                    if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
-                                        field.setValue(null);
-                                        var viewButton = window.feature.container.down('#'+window.feature.viewProductStockLevelId);
-                                        viewButton.disable();
-                                    }
+                                    viewButton.disable();
                                 }
                             }
+                        }
 			                
-                        },{ 
-                            xtype: 'button',
-                            margin: '25 0 0 0',
-                            text: 'View Product Status',
-                            ui: 'snapshot-add-btn',
-							cls: 'x-add-button-gradient',
-                            disabled: true,
-                            itemId: window.feature.viewProductStockLevelId,
-                            handler: function(){
-                                ResetExtraParams();
-                                SetNewExtraParams();
-                                window.feature.gridOutpostStore.load();  
-                            }
+                    },{ 
+                        xtype: 'button',
+                        margin: '25 0 0 0',
+                        text: 'View Product Status',
+                        ui: 'snapshot-add-btn',
+                        cls: 'x-add-button-gradient',
+                        disabled: false,
+                        itemId: window.feature.viewProductStockLevelId,
+                        handler: function(){
+                            ResetExtraParams();
+                            SetNewExtraParams();
+                            window.feature.gridOutpostStore.load();  
+                        }
 
-                        }]
-				    }]
-			},{
+                    }]
+                }]
+            },{
                 xtype: 'gridpanel',
                 cls: 'white-border',
                 store: window.feature.gridOutpostStore,
@@ -687,7 +687,7 @@ Historical Product Level: Overview
                         productView.down('#'+window.feature.productGroupName).setValue(record.get('ProductGroupName'));
 
                         productView.show();
-                     }
+                    }
                 }
             }]
         });
@@ -726,6 +726,26 @@ Historical Product Level: Overview
 
         mainContent.add(window.feature.container);
 
+        var countryCombobox = window.feature.container.down('#'+window.feature.countryComboboxId);
+        var regionCombobox = window.feature.container.down('#'+window.feature.regionComboboxId);
+        var districtCombobox = window.feature.container.down('#'+window.feature.districtComboboxId);
+        var outpostCombobox = window.feature.container.down('#'+window.feature.outpostComboboxId);
+
+        window.feature.countryStore.load();
+        window.feature.regionStore.load({
+            params: { countryId: '@Guid.Empty' }
+        });
+        window.feature.districtStore.load({
+            params: { regionId: '@Guid.Empty' }
+        });
+        window.feature.outpostStore.load({ 
+            params: { districtId: '@Guid.Empty'} 
+        });
+
+        countryCombobox.setValue('@Guid.Empty');
+        regionCombobox.setValue('@Guid.Empty');
+        districtCombobox.setValue('@Guid.Empty');
+        outpostCombobox.setValue('@Guid.Empty');
     });
 </script>
 

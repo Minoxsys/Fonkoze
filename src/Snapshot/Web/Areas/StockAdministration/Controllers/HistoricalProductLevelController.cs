@@ -32,7 +32,7 @@ namespace Web.Areas.StockAdministration.Controllers
         private Client _client;
         private User _user;
 
-        const string GUID_FOR_ALL_OPTION_ON_OUTPOST_LIST = "00000000-0000-0000-0000-000000000023";
+        const string GUID_FOR_ALL_OPTION_ON_OUTPOST_LIST = "00000000-0000-0000-0000-000000000000";
 
         [Requires(Permissions = "HistoricalOutpostStockLevel.View")]
         public ActionResult Overview()
@@ -204,10 +204,13 @@ namespace Web.Areas.StockAdministration.Controllers
         {
             LoadUserAndClient();
 
+            var outpostModelListProjection = new List<GetOutpostsOutputModel.OutpostModel>();
+            outpostModelListProjection.Add(new GetOutpostsOutputModel.OutpostModel() { Id = GUID_FOR_ALL_OPTION_ON_OUTPOST_LIST, Name = " All" });
+
             if (!districtId.HasValue)
                 return Json(new GetOutpostsOutputModel
                 {
-                    Outposts = null,
+                    Outposts = outpostModelListProjection.ToArray(),
                     TotalItems = 0
                 }, JsonRequestBehavior.AllowGet);
 
@@ -217,9 +220,6 @@ namespace Web.Areas.StockAdministration.Controllers
                 outposts = outposts.Where(it => it.District.Id == districtId);
 
             int totalItems = outposts.Count();
-
-            var outpostModelListProjection = new List<GetOutpostsOutputModel.OutpostModel>();
-            outpostModelListProjection.Add(new GetOutpostsOutputModel.OutpostModel() { Id = GUID_FOR_ALL_OPTION_ON_OUTPOST_LIST, Name = " All" });
 
             foreach (var outpost in outposts.ToList())
             {

@@ -90,6 +90,16 @@ Seller Stock Level Current
             }
         });
 
+        function ClearDistrictStore(){
+            var noOfItemsToDelete = window.feature.DistrictStore.getCount()-1;
+            window.feature.DistrictStore.removeAt(1, noOfItemsToDelete);
+        };
+
+        function ClearSellerStore(){
+            var noOfItemsToDelete = window.feature.OutpostStore.getCount()-1;
+            window.feature.OutpostStore.removeAt(1, noOfItemsToDelete);
+        };
+
         window.feature.comboBoxCountries = Ext.create('Ext.form.ComboBox', {
             store: window.feature.CountryStore,
             queryMode: 'local',
@@ -106,7 +116,7 @@ Seller Stock Level Current
                 select: function (combo, record, index) {
                     var selectedCountryId = record[0].data.Id;
                     var comboboxRegions = Ext.getCmp(window.feature.comboboxRegionsId);
-                    comboboxRegions.setValue(null);
+                    comboboxRegions.setValue('@Guid.Empty');
                     comboboxRegions.setDisabled(false);
 
                     window.feature.RegionStore.load({ params: { countryId: selectedCountryId} });
@@ -115,12 +125,14 @@ Seller Stock Level Current
                     var comboboxOutposts = Ext.getCmp(window.feature.comboboxOutpostsId);
 
 
-                    comboboxDistricts.setValue(null);
-                    comboboxDistricts.setDisabled(true);
+                    comboboxDistricts.setValue('@Guid.Empty');
+                    comboboxDistricts.setDisabled(false);
 
-                    comboboxOutposts.setValue(null);
-                    comboboxOutposts.setDisabled(true);
+                    comboboxOutposts.setValue('@Guid.Empty');
+                    comboboxOutposts.setDisabled(false);
 
+                    ClearDistrictStore();
+                    ClearSellerStore();
                 }
             }
         });
@@ -134,7 +146,7 @@ Seller Stock Level Current
             labelClsExtra: 'combo-label',
             displayField: 'Name',
             valueField: 'Id',
-            disabled: true,
+            disabled: false,
             editable: false,
             typeAhead: false,
             emptyText: _t('Region List'),
@@ -142,14 +154,14 @@ Seller Stock Level Current
                 select: function (combo, record, index) {
                     var selectedRegionId = record[0].data.Id;
                     Ext.getCmp(window.feature.comboboxDistrictsId).setDisabled(false);
-                    Ext.getCmp(window.feature.comboboxDistrictsId).setValue(null);
+                    Ext.getCmp(window.feature.comboboxDistrictsId).setValue('@Guid.Empty');
                     window.feature.DistrictStore.load({ params: { regionId: selectedRegionId} });
 
                     var comboboxOutpost = Ext.getCmp(window.feature.comboboxOutpostsId);
 
-                    comboboxOutpost.setValue(null);
-                    comboboxOutpost.setDisabled(true);
+                    comboboxOutpost.setValue('@Guid.Empty');
 
+                    ClearSellerStore();
                 }
             }
         });
@@ -163,7 +175,7 @@ Seller Stock Level Current
             labelClsExtra: 'combo-label',
             displayField: 'Name',
             valueField: 'Id',
-            disabled: true,
+            disabled: false,
             editable: false,
             typeAhead: false,
             emptyText: _t('District List'),
@@ -173,7 +185,6 @@ Seller Stock Level Current
                     window.feature.OutpostStore.load({ params: { districtId: selectedDistrictId} });
 
                     Ext.getCmp(window.feature.comboboxOutpostsId).setDisabled(false);
-
                 }
             }
         });
@@ -187,7 +198,7 @@ Seller Stock Level Current
             displayField: 'Name',
             labelClsExtra: 'combo-label',
             valueField: 'Id',
-            disabled: true,
+            disabled: false,
             editable: false,
             typeAhead: false,
             emptyText: _t('Seller List')
@@ -522,6 +533,20 @@ Seller Stock Level Current
         
         var contentRes = window.res.content;
         window.feature.CountryStore.load();
+        window.feature.RegionStore.load({
+            params: { countryId: '@Guid.Empty' }
+        });
+        window.feature.DistrictStore.load({
+            params: { regionId: '@Guid.Empty' }
+        });
+        window.feature.OutpostStore.load({ 
+            params: { districtId: '@Guid.Empty'} 
+        });
+
+        window.feature.comboBoxCountries.setValue('@Guid.Empty');
+        window.feature.comboBoxRegions.setValue('@Guid.Empty');
+        window.feature.comboBoxDistricts.setValue('@Guid.Empty');
+        window.feature.comboBoxOutposts.setValue('@Guid.Empty');
 
         var mainContent = Ext.getCmp(contentRes.maincontent.id);
         mainContent.add({
@@ -637,7 +662,7 @@ Seller Stock Level Current
                 msgAlert.ui = 'snapshot-popup-window';
                 msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
                 msgAlert.msgButtons['ok'].margin = '10 10 20 0',
-                msgAlert.alert("Alert", "Please select all option in order to see outpost stock level data!");
+                msgAlert.alert("Alert", "Please select all option in order to see seller stock level data!");
             }
         };
 

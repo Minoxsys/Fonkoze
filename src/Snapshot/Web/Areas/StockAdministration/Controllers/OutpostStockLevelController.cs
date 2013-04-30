@@ -46,7 +46,7 @@ namespace Web.Areas.StockAdministration.Controllers
         private Client _client;
         private User _user;
 
-        Guid GUID_FOR_ALL_OPTION_ON_OUTPOST_LIST = Guid.Parse("00000000-0000-0000-0000-000000000001");
+        Guid GUID_FOR_ALL_OPTION_ON_OUTPOST_LIST = Guid.Parse("00000000-0000-0000-0000-000000000000");
 
         [Requires(Permissions = "CurrentOutpostStockLevel.View")]
         public ActionResult Overview(Guid? outpostId)
