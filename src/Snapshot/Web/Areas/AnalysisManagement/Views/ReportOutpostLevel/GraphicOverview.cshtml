@@ -159,7 +159,8 @@ Analysis: Product level information at seller level
         var storeFields = [];
         var dataStore = [];
         var chartSeries = [];
-        var lowerLimits;
+        //var lowerLimits;
+        var chartStore;
 
         window.feature.CountryStore = Ext.create('Ext.data.Store', {
             fields: ['Name', 'Id'],
@@ -366,8 +367,7 @@ Analysis: Product level information at seller level
         Ext.regModel("Product", {
             fields: [
                 'ProductName', 'StockLevel','LowerLimit'
-            ],
-                        
+            ],                        
             belongsTo: 'StockLevelForOutposts'
         });
 
@@ -398,21 +398,13 @@ Analysis: Product level information at seller level
                     })
             action.success(function (response) {
                 productFields = response.split(",");
-                lowerLimits = new Array(productFields.length);
+               // lowerLimits = new Array(productFields.length);
                 GenerateChartStoreData()
                 
             })
         }
         
-        Ext.define('Ext.chart.theme.MyTheme', {
-            extend: 'Ext.chart.theme.Base',
-            colors: ['rgb(212, 40, 40)', 'rgb(154, 205, 50)'],
-            constructor: function (config) {
-                this.callParent([Ext.apply({
-                    colors: this.colors
-                }, config)]);
-            }
-        });
+       
        
         function GenerateChartStoreData() {
             storeFields = [];
@@ -467,11 +459,25 @@ Analysis: Product level information at seller level
           
         };
 
-        
+        function getMax()
+        {
+            var maxTotal=0;
+            chartStore.each(function (record) {
+                var total = record.get('Total');
+                if (total > maxTotal)
+                    maxTotal = total;
+            });
+
+            if (maxTotal == 1)
+                maxTotal = 2;
+
+            return maxTotal;
+
+        }
         //-----Build CHART
         window.feature.execute = new Ext.util.DelayedTask(function () {
             
-            var chartStore = new Ext.data.SimpleStore({
+             chartStore = new Ext.data.ArrayStore({
                 fields:storeFields
             })
             chartStore.loadData(dataStore);
@@ -483,36 +489,34 @@ Analysis: Product level information at seller level
             cont.add({
                 id: 'chart2DistrictLevel',
                 xtype: 'chart',
-                flex: 1,
-               // theme:'MyTheme',
+                flex: 1,               
                 minHeight: 650,
-                margin: '25 0 0 0',
-                style: 'background:#fff',
-                animate: true,
-                store: chartStore,
-                legend: {
-                    position: 'right',
-                    padding: 5,
-                    itemSpacing: 1
-                },
-                axes: [ {
-                    type: 'Category',
-                    position: 'bottom',
-                    fields: ['OutpostName'],
-                    title: 'Sellers'
-                },{
+                margin: '0 0 0 70',
+                //style: 'background:#fff',
+                // animate: true,
+                //shadow:false,
+                store: chartStore,               
+                axes: [{
                     type: 'Numeric',
-                    minimum: 0,
+                    grid: true,
                     position: 'left',
                     fields: productFields,
                     title: 'Product Stock Levels',
+                    minimum:0,
+                   // maximum: getMax(),
+                   // adjustMinimumByMajorUnit: 0,
+                                   
+                }, {
+                    type: 'Category',
+                    position: 'bottom',
+                    fields: ['OutpostName'],
+                    title: 'Sellers',
                     grid:true
-                
                 }],
                 series: [{
                     type: 'column',
-                    axis: 'bottom',
-                    highlight: true,
+                    highlight: false,
+                    axis: 'bottom',                   
                     tips: {
                         trackMouse: true,
                         width: 140,
@@ -522,11 +526,11 @@ Analysis: Product level information at seller level
                     },
                     xField: 'OutpostName',
                     yField:productFields,
-                    stacked: true,
-                    renderer: function (sprite, record, attr, storeIndex, store) {
-                        //barAttr.fill = (storeItem.data.StockLevel <= storeItem.data.LowerLimit ? 'rgb(212, 40, 40)' : 'rgb(154, 205, 50)');
-                        return attr;
-                    },
+                    stacked: true
+                    //renderer: function (sprite, record, attr, storeIndex, store) {
+                    //    //barAttr.fill = (storeItem.data.StockLevel <= storeItem.data.LowerLimit ? 'rgb(212, 40, 40)' : 'rgb(154, 205, 50)');
+                    //    return attr;
+                    //},
                   
                 },
                 {
@@ -535,7 +539,7 @@ Analysis: Product level information at seller level
                     yField: ['Total'],
                     axis: 'left',
                     highlight: true,
-                    markerConfig: {  size: 10 },
+                    //markerConfig: {  size: 10 },
                     tips: {
                         trackMouse: true,
                         width: 240,
@@ -547,18 +551,18 @@ Analysis: Product level information at seller level
                    
                     label: {
                         display: 'over',
-                        field: 'Total',
+                        field: 'ProductsUnderTresholdNo',
                         renderer: Ext.util.Format.numberRenderer('0'),
                         orientation: 'horizontal',
                         color: '#333',
                         'text-anchor': 'middle'
-                    }
+                    },
+                    selectionTolerance: 4,
                     
                 }
                 ],
                 legend: {
                     position: 'right'
-
                 }
             });
         });
@@ -587,7 +591,7 @@ Analysis: Product level information at seller level
                         align: 'stretch',
                         type: 'vbox'
                     },
-                    height: 110,
+                    height: 100,
                     items: [
                       {
                           xtype: 'container',
@@ -613,7 +617,7 @@ Analysis: Product level information at seller level
                           ]
                       }, {
                           xtype: 'container',
-                          height: 65,
+                          height: 55,
                           layout: {
                               type: 'column'
                           },
@@ -641,7 +645,7 @@ Analysis: Product level information at seller level
                 xtype: 'container',
               
                 layout:'fit',
-                padding: '0 0 0 20',
+                padding: '0 0 0 0',
                 items: [{
                     xtype: 'container',
                     id: 'DivChartContainer',
@@ -649,6 +653,7 @@ Analysis: Product level information at seller level
                         align: 'stretch',
                         type: 'vbox'
                     },
+                    minHeight:650,
                     autoScroll: true,
                     items: []
                 }]
