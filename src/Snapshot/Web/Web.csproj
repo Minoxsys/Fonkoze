@@ -327,6 +327,7 @@
     <Compile Include="ReceiveSmsUseCase\Models\ReceivedSmsInputModel.cs" />
     <Compile Include="ReceiveSmsUseCase\Services\MessageParsers\Fonkoze\FonkozeSmsTextParserService.cs" />
     <Compile Include="ReceiveSmsUseCase\Services\MessageParsingStrategies\Fonkoze\ParseFonkozeMainMessageContentsStrategy.cs" />
+    <Compile Include="ReceiveSmsUseCase\Services\MessageParsingStrategies\Fonkoze\ParseFonkozeMainMessageContentsWithGroupsAndTwoLetterProductCodeStrategy.cs" />
     <Compile Include="ReceiveSmsUseCase\Services\MessageParsingStrategies\ISmsParsingStrategy.cs" />
     <Compile Include="ReceiveSmsUseCase\Services\MessageParsingStrategies\MessageParsingHelpers.cs" />
     <Compile Include="ReceiveSmsUseCase\Services\MessageParsingStrategies\ParseActivationMessageStrategy.cs" />

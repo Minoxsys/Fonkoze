@@ -22,17 +22,17 @@ namespace Web.ReceiveSmsUseCase.Services.MessageParsers.Fonkoze
             if (parseResult.Success)
                 return parseResult;
 
-            var parseStockCountMessageStrategyWithGroup = new ParseStockCountMessageStrategy(new ParseMainMessageContentsStrategy());
+            var parseStockCountMessageStrategyWithGroup = new ParseStockCountMessageStrategy(new ParseFonkozeMainMessageContentsWithGroupsAndTwoLetterProductCodeStrategy());
             parseResult = parseStockCountMessageStrategyWithGroup.Parse(message);
             if (parseResult.Success)
                 return parseResult;
 
-            var parseReceivedMessageStrategyWithGroup = new ParseReceivedStockMessageStrategy(new ParseMainMessageContentsStrategy());
+            var parseReceivedMessageStrategyWithGroup = new ParseReceivedStockMessageStrategy(new ParseFonkozeMainMessageContentsWithGroupsAndTwoLetterProductCodeStrategy());
             parseResult = parseReceivedMessageStrategyWithGroup.Parse(message);
             if (parseResult.Success)
                 return parseResult;
 
-            var parseStockUpdateMessageStrategyWithGroup = new ParseStockSaleMessageStrategy(new ParseMainMessageContentsStrategy());
+            var parseStockUpdateMessageStrategyWithGroup = new ParseStockSaleMessageStrategy(new ParseFonkozeMainMessageContentsWithGroupsAndTwoLetterProductCodeStrategy());
             parseResult = parseStockUpdateMessageStrategyWithGroup.Parse(message);
             if (parseResult.Success)
                 return parseResult;

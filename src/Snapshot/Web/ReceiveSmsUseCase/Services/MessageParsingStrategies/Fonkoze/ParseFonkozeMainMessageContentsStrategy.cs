@@ -3,6 +3,7 @@
     public class ParseFonkozeMainMessageContentsStrategy : ParseMainMessageContentsStrategy
     {
         private const string GenericProductGroupCode = "ALL";
+        private const int ProductCodeLength = 2;
 
         protected override string GetProductGroupCode(string message)
         {
@@ -11,12 +12,12 @@
 
         protected override string GetProductCode(string message)
         {
-            return message.Substring(0, 2);
+            return message.Substring(0, ProductCodeLength);
         }
 
         protected override string GetStockLevelString(string message)
         {
-            return message.Substring(2, message.Length - 1 - 2);
+            return message.Substring(ProductCodeLength, message.Length - 1 - ProductCodeLength);
         }
     }
 }
