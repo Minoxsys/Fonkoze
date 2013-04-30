@@ -4,6 +4,7 @@ using Domain.Enums;
 using System;
 using Web.LocalizationResources;
 using Web.ReceiveSmsUseCase.Models;
+using Web.ReceiveSmsUseCase.Services.MessageParsers;
 using Web.ReceiveSmsUseCase.SmsMessageCommands;
 using Web.Services;
 using Web.Services.Helper;

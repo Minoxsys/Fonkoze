@@ -325,9 +325,12 @@
     <Compile Include="ReceiveSmsUseCase\Models\MessageType.cs" />
     <Compile Include="Models\Parsing\ParsedProduct.cs" />
     <Compile Include="ReceiveSmsUseCase\Models\ReceivedSmsInputModel.cs" />
+    <Compile Include="ReceiveSmsUseCase\Services\MessageParsers\Fonkoze\FonkozeSmsTextParserService.cs" />
+    <Compile Include="ReceiveSmsUseCase\Services\MessageParsingStrategies\Fonkoze\ParseFonkozeMainMessageContentsStrategy.cs" />
     <Compile Include="ReceiveSmsUseCase\Services\MessageParsingStrategies\ISmsParsingStrategy.cs" />
     <Compile Include="ReceiveSmsUseCase\Services\MessageParsingStrategies\MessageParsingHelpers.cs" />
     <Compile Include="ReceiveSmsUseCase\Services\MessageParsingStrategies\ParseActivationMessageStrategy.cs" />
+    <Compile Include="ReceiveSmsUseCase\Services\MessageParsingStrategies\ParseMainMessageContentsStrategy.cs" />
     <Compile Include="ReceiveSmsUseCase\Services\MessageParsingStrategies\ParseMessageWithIdentifierAbstractStrategy.cs" />
     <Compile Include="ReceiveSmsUseCase\Services\MessageParsingStrategies\ParseReceivedStockMessageStrategy.cs" />
     <Compile Include="ReceiveSmsUseCase\Services\MessageParsingStrategies\ParseStockCountMessageStrategy.cs" />
@@ -456,7 +459,7 @@
     <Compile Include="Services\GenerateProductLevelDetailsCommand.cs" />
     <Compile Include="Services\IRawSmsMeesageQueryHelpersService.cs" />
     <Compile Include="Services\ISendEmailService.cs" />
-    <Compile Include="ReceiveSmsUseCase\Services\ISmsTextParserService.cs" />
+    <Compile Include="ReceiveSmsUseCase\Services\MessageParsers\ISmsTextParserService.cs" />
     <Compile Include="Services\StockUpdates\IUpdateStockService.cs" />
     <Compile Include="Services\PathService.cs" />
     <Compile Include="Services\IPathService.cs" />
@@ -492,7 +495,7 @@
     <Compile Include="ReceiveSmsUseCase\Models\SmsParseResult.cs" />
     <Compile Include="Services\SmsRequestService.cs" />
     <Compile Include="Services\IURLService.cs" />
-    <Compile Include="ReceiveSmsUseCase\Services\SmsTextParserService.cs" />
+    <Compile Include="ReceiveSmsUseCase\Services\MessageParsers\SmsTextParserService.cs" />
     <Compile Include="Services\StockUpdates\StockUpdateMethodEnum.cs" />
     <Compile Include="Services\StockUpdates\StockUpdateResult.cs" />
     <Compile Include="Services\StoreProductLevelRequestDetailService.cs" />

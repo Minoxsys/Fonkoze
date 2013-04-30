@@ -6,6 +6,12 @@ namespace Web.ReceiveSmsUseCase.Services.MessageParsingStrategies
     {
         private const string ReceivedMessageIdentifier = "RD";
 
+        public ParseReceivedStockMessageStrategy(ISmsParsingStrategy mainMessageStrategy)
+            : base(mainMessageStrategy)
+        {
+
+        }
+
         protected override string MessageIdentifier
         {
             get { return ReceivedMessageIdentifier; }

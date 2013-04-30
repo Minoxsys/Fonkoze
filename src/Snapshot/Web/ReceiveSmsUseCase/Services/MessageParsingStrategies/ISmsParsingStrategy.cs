@@ -2,7 +2,8 @@
 
 namespace Web.ReceiveSmsUseCase.Services.MessageParsingStrategies
 {
-    interface ISmsParsingStrategy
+
+    public interface ISmsParsingStrategy
     {
         SmsParseResult Parse(string message);
     }

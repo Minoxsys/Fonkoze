@@ -6,6 +6,12 @@ namespace Web.ReceiveSmsUseCase.Services.MessageParsingStrategies
     {
         private const string StockCountMessageIdentifier = "SC";
 
+        public ParseStockCountMessageStrategy(ISmsParsingStrategy mainMessageStrategy)
+            : base(mainMessageStrategy)
+        {
+
+        }
+
         protected override string MessageIdentifier
         {
             get { return StockCountMessageIdentifier; }
