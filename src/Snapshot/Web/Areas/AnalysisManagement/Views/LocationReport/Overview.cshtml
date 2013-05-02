@@ -21,9 +21,9 @@ Analysis: Location Report
         analysisBtn.toggle(true);
 
 
-            //var reportBtnId = window.res.content.maincontent.sidebar.locationreport;
-            //var reportBtn = Ext.getCmp(reportBtnId);
-            //reportBtn.toggle(true);
+        //var reportBtnId = window.res.content.maincontent.sidebar.locationreport;
+        //var reportBtn = Ext.getCmp(reportBtnId);
+        //reportBtn.toggle(true);
 
     });
 
@@ -165,18 +165,32 @@ Analysis: Location Report
             }
         });
 
-        function ResetCountryDependencies() {
+        function ResetCountryDependencies(value) {
             var regionCombobox = window.feature.container.down('#' + window.feature.regionComboboxId);
-            regionCombobox.setValue(null);
+            regionCombobox.setValue(value);
 
             var districtCombobox = window.feature.container.down('#' + window.feature.districtComboboxId);
-            districtCombobox.setValue(null);
+            districtCombobox.setValue(value);
         };
 
-        function ResetRegionDependencies() {
+        function ResetRegionDependencies(value) {
             var districtCombobox = window.feature.container.down('#' + window.feature.districtComboboxId);
-            districtCombobox.setValue(null);
+            districtCombobox.setValue(value);
         };
+
+        function ClearRegionsStore() {
+            var first = window.feature.regionStore.first();
+
+
+            var noOfItemsToDelete = window.feature.regionStore.getCount() - 1;
+            window.feature.regionStore.removeAt(1, noOfItemsToDelete);
+        };
+
+        function ClearDistrictStore() {
+            var noOfItemsToDelete = window.feature.districtStore.getCount() - 1;
+            window.feature.districtStore.removeAt(1, noOfItemsToDelete);
+        };
+
 
         //        function ResetDistrictMarkers() {
         //            window.feature.outpostMarkersStore.proxy.extraParams.districtId = '';
@@ -213,8 +227,13 @@ Analysis: Location Report
             editable: false,
             typeAhead: false,
             listeners: {
+                'afterrender': function (combo, record) {
+                    window.feature.countryStore.load();
+                    combo.setValue('@Guid.Empty');
+                },
                 'select': function (combo, record) {
-                    ResetCountryDependencies();
+                    ResetCountryDependencies('@Guid.Empty');
+                    ClearDistrictStore();
 
                     window.feature.regionStore.proxy.extraParams.countryId = combo.getValue();
                     window.feature.regionStore.load();
@@ -237,7 +256,9 @@ Analysis: Location Report
                 specialkey: function (field, e) {
                     if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
                         field.setValue(null);
-                        ResetCountryDependencies();
+                        ResetCountryDependencies(null);
+                        ClearRegionsStore();
+                        ClearDistrictStore();
 
                         window.feature.outpostMarkersStore.proxy.extraParams.districtId = '';
                         window.feature.outpostMarkersStore.proxy.extraParams.regionId = '';
@@ -277,8 +298,12 @@ Analysis: Location Report
             editable: false,
             typeAhead: false,
             listeners: {
+                'afterrender': function (combo, record) {
+                    window.feature.regionStore.load();
+                    combo.setValue('@Guid.Empty');
+                },
                 'select': function (combo, record) {
-                    ResetRegionDependencies();
+                    ResetRegionDependencies('@Guid.Empty');
 
                     window.feature.districtStore.proxy.extraParams.regionId = combo.getValue();
                     window.feature.districtStore.load();
@@ -298,7 +323,7 @@ Analysis: Location Report
                 specialkey: function (field, e) {
                     if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
                         field.setValue(null);
-                        ResetRegionDependencies();
+                        ResetRegionDependencies(null);
 
                         var map = googleMapPanel.getMap();
                         ClearMarkers();
@@ -334,6 +359,10 @@ Analysis: Location Report
             editable: false,
             typeAhead: false,
             listeners: {
+                'afterrender': function (combo, record) {
+                    window.feature.districtStore.load();
+                    combo.setValue('@Guid.Empty');
+                },
                 'select': function (combo, record) {
 
                     window.feature.outpostMarkersStore.proxy.extraParams.districtId = combo.getValue();
@@ -551,7 +580,7 @@ Analysis: Location Report
         window.feature.countryMarkersStore.load(function () {
             SetUpZoomEvent();
             var map = googleMapPanel.getMap();
-            map.setZoom(2);        
+            map.setZoom(2);
         });
         window.feature.regionMarkersStore.load();
         window.feature.districtMarkersStore.load();

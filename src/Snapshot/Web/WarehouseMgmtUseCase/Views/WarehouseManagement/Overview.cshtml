@@ -24,7 +24,7 @@
 </script>
 
 <script type="text/javascript">
-    Ext.onReady(function() {
+    Ext.onReady(function () {
         var administrationBtnId = window.res.header.navigation.administration;
         var administrationBtn = Ext.getCmp(administrationBtnId);
         administrationBtn.toggle(true);
@@ -42,16 +42,16 @@
 
 <script type="text/javascript">
     var allowUserToClearValue = {
-        'load':function(){
+        'load': function () {
 
-           
+
         }
     };
-    
+
     Ext.onReady(function () {
         window.feature.countryStore = Ext.create('Ext.data.Store', {
             remoteSuport: true,
-            fields: ['Id','Name'],
+            fields: ['Id', 'Name'],
             proxy: {
                 type: 'ajax',
                 url: '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Region", action = "GetCountries" })',
@@ -67,7 +67,7 @@
                     direction: 'ASC'
                 }
             ],
-            listeners:allowUserToClearValue
+            listeners: allowUserToClearValue
         });
         window.feature.regionsStore = Ext.create('Ext.data.Store', {
             fields: ['Id', 'Name'],
@@ -78,10 +78,10 @@
                     type: 'json',
                     root: 'regions'
                 }
-    
+
             },
             listeners: allowUserToClearValue
-    
+
         });
         window.feature.districtsStore = Ext.create('Ext.data.Store', {
             fields: ['Id', 'Name'],
@@ -92,16 +92,16 @@
                     type: 'json',
                     root: 'Districts'
                 }
-    
+
             },
             listeners: allowUserToClearValue
-    
+
         });
         window.feature.outpostsStore = Ext.create('Ext.data.Store', {
             pageSize: 50,
             remoteSuport: true,
             fields: [
-                'Id','Name', 'Coordinates', 'ContactMethod', 'IsWarehouse', 'WarehouseName',
+                'Id', 'Name', 'Coordinates', 'ContactMethod', 'IsWarehouse', 'WarehouseName',
                 'CountryId', 'RegionId', 'DistrictId', 'WarehouseId'
             ],
             proxy: {
@@ -112,10 +112,10 @@
                     root: 'Outposts',
                     totalProperty: 'TotalItems'
                 },
-                extraParams:{
+                extraParams: {
                     districtId: null,
-                    countryId:null,
-                    regionId:null,
+                    countryId: null,
+                    regionId: null,
                     search: null,
                     OnlyWarehouses: true
                 },
@@ -128,11 +128,11 @@
                 }
             ]
         });
-    
+
         window.feature.warehouseOutpostStore = Ext.create('Ext.data.Store', {
             pageSize: 50,
             remoteSuport: true,
-            fields: ['Id','Name'],
+            fields: ['Id', 'Name'],
             proxy: {
                 type: 'ajax',
                 url: '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Outpost", action = "GetWarehouses" })',
@@ -149,71 +149,70 @@
                 }
             ]
         });
-    
+
         window.feature.isWarehouseStore = Ext.create('Ext.data.Store', {
-            fields:['Value', 'Text'],
-            data:[
-                {Value:'false', Text:'No'},
-                {Value:'true', Text:'Yes'}
+            fields: ['Value', 'Text'],
+            data: [
+                { Value: 'false', Text: 'No' },
+                { Value: 'true', Text: 'Yes' }
             ]
         });
-    
-        window.feature.comboBoxFilters= {};
-        window.feature.comboBoxFilters.listeners={
-            specialkey: function(field, e){
+
+        window.feature.comboBoxFilters = {};
+        window.feature.comboBoxFilters.listeners = {
+            specialkey: function (field, e) {
                 if (e.getKey() == e.BACKSPACE) {
-                    field.setValue(null);
                     if (field.itemId === window.feature.comboBoxFilters.district.itemId ||
-                        field.itemId === window.feature.modalIds.districtId){
+                        field.itemId === window.feature.modalIds.districtId) {
                         window.feature.resetDistrictDependencies();
                     }
-    
+
                     if (field.itemId === window.feature.comboBoxFilters.region.itemId ||
-                        field.itemId === window.feature.modalIds.regionId){
+                        field.itemId === window.feature.modalIds.regionId) {
                         window.feature.resetRegionDependencies();
                     }
-    
+
                     if (field.itemId === window.feature.comboBoxFilters.country.itemId ||
-                        field.itemId === window.feature.modalIds.countryId){
+                        field.itemId === window.feature.modalIds.countryId) {
                         window.feature.resetCountryDependencies();
                     }
                 }
             }
         };
-    
-        window.feature.on={
-            'select':{
-                country:function(combo, record){
+
+        window.feature.on = {
+            'select': {
+                country: function (combo, record) {
                     window.feature.resetRegionDependencies();
-    
+
                     window.feature.outpostsStore.getProxy().extraParams.countryId = combo.getValue();
                     window.feature.outpostsStore.loadPage(1);
-    
+
                     window.feature.regionsStore.load({
-                        params:{
+                        params: {
                             countryId: combo.getValue()
                         }
                     });
                 },
-                region:function(combo, record){
+                region: function (combo, record) {
                     window.feature.resetDistrictDependencies();
-    
+
                     window.feature.outpostsStore.getProxy().extraParams.regionId = combo.getValue();
                     window.feature.outpostsStore.loadPage(1);
-    
+
                     window.feature.districtsStore.load({
-                        params:{
+                        params: {
                             regionId: combo.getValue()
                         }
                     });
                 },
-                district:function(combo, record){
+                district: function (combo, record) {
                     window.feature.outpostsStore.getProxy().extraParams.districtId = combo.getValue();
                     window.feature.outpostsStore.loadPage(1);
                 }
             }
         };
-    
+
         window.feature.comboBoxFilters.country = Ext.create('Ext.form.ComboBox', {
             xtype: 'combobox',
             itemId: window.feature.countryOverviewComboId,
@@ -221,85 +220,89 @@
             displayField: 'Name',
             labelAlign: 'top',
             fieldLabel: 'Selected Country',
-            valueField:'Id',
+            valueField: 'Id',
             labelClsExtra: 'combo-label',
-            emptyText: 'Selected Country', 
+            emptyText: 'Selected Country',
             typeAhead: true,
-            listeners:{
+            editable: false,
+            listeners: {
                 specialkey: window.feature.comboBoxFilters.listeners.specialkey,
                 'select': window.feature.on.select.country
-            } 
+            }
         });
-    
+
         window.feature.comboBoxFilters.region = Ext.create('Ext.form.ComboBox', {
             xtype: 'combobox',
             itemId: window.feature.regionOverviewComboId,
             store: window.feature.regionsStore,
-            queryMode:'local',
+            queryMode: 'local',
             displayField: 'Name',
             labelAlign: 'top',
             fieldLabel: 'Selected Region',
-            valueField:'Id',
+            valueField: 'Id',
             labelClsExtra: 'combo-label',
-            emptyText: 'Selected Region', 
+            emptyText: 'Selected Region',
             typeAhead: true,
-            listeners:{
+            editable: false,
+            listeners: {
                 specialkey: window.feature.comboBoxFilters.listeners.specialkey,
                 'select': window.feature.on.select.region
-            } 
+            }
         });
         window.feature.comboBoxFilters.district = Ext.create('Ext.form.ComboBox', {
             xtype: 'combobox',
             itemId: window.feature.districtOverviewComboId,
             store: window.feature.districtsStore,
-            queryMode:'local',
+            queryMode: 'local',
             displayField: 'Name',
             labelAlign: 'top',
             fieldLabel: 'Selected District',
             labelClsExtra: 'combo-label',
-            valueField:'Id',
-            emptyText: 'Selected District', 
+            valueField: 'Id',
+            emptyText: 'Selected District',
             typeAhead: true,
-            listeners:{
+            editable: false,
+            listeners: {
                 specialkey: window.feature.comboBoxFilters.listeners.specialkey,
                 'select': window.feature.on.select.district
-            } 
+            }
         });
-    
+
         window.feature.resetCountryDependencies = function () {
-            window.feature.comboBoxFilters.country.setValue(null);
+            window.feature.comboBoxFilters.country.setValue('@Guid.Empty');
             window.feature.outpostsStore.getProxy().extraParams.countryId = null;
             window.feature.resetRegionDependencies();
         };
-    
+
         window.feature.resetRegionDependencies = function () {
-            window.feature.comboBoxFilters.region.setValue(null);
+            window.feature.comboBoxFilters.region.setValue('@Guid.Empty');
             window.feature.outpostsStore.getProxy().extraParams.regionId = null;
             window.feature.resetDistrictDependencies();
         };
-    
+
         window.feature.resetDistrictDependencies = function () {
-            window.feature.comboBoxFilters.district.setValue(null);
-    
+            window.feature.comboBoxFilters.district.setValue('@Guid.Empty');
             window.feature.outpostsStore.getProxy().extraParams.districtId = null;
-    
+
+            var noOfItemsToDelete = window.feature.districtsStore.getCount() - 1;
+            window.feature.districtsStore.removeAt(1, noOfItemsToDelete);
         };
-    
-        window.feature.doSearch = new Ext.util.DelayedTask(function(){
+
+        window.feature.doSearch = new Ext.util.DelayedTask(function () {
             window.feature.outpostsStore.loadPage(1);
         });
-    
-        window.feature.modalIds={
-            countryId:'window-feature-combobox-country-id',
-            regionId:'window-feature-combobox-region-id',
-            districtId:'window-feature-combobox-district-id',
-            isWarehouseId:'window-feature-combobox-is-warehouse-id',
-            warehouseId:'window-feature-combobox-warehouse',
-            nameId:'window-feature-textfield-name',
+
+        window.feature.modalIds = {
+            countryId: 'window-feature-combobox-country-id',
+            regionId: 'window-feature-combobox-region-id',
+            districtId: 'window-feature-combobox-district-id',
+            isWarehouseId: 'window-feature-combobox-is-warehouse-id',
+            warehouseId: 'window-feature-combobox-warehouse',
+            nameId: 'window-feature-textfield-name',
             entityId: 'window-feature-hiddenfield-entityId',
-            coordinatesId:'window-feature-textfield-coordinates'
+            coordinatesId: 'window-feature-textfield-coordinates'
         };
-    
+
         window.feature.modal = Ext.define('Ext.feature.region.Modal', {
             extend: 'Ext.window.Window',
             modal: true,
@@ -313,7 +316,7 @@
                 type: 'vbox'
             },
 
-            initComponent: function() {
+            initComponent: function () {
                 var me = this;
 
                 Ext.applyIf(me, {
@@ -337,12 +340,12 @@
                 me.callParent(arguments);
             }
         });
-	
+
         window.feature.container = Ext.create('Ext.container.Container', {
             margin: '15 15 15 15',
             padding: '20 0 0 20',
-            autoScroll:true,
-            id:'TopContainer',
+            autoScroll: true,
+            id: 'TopContainer',
             layout: {
                 align: 'stretch',
                 type: 'vbox'
@@ -401,7 +404,7 @@
                                             emptyText: 'Warehouse Search',
                                             enableKeyEvents: true,
                                             listeners: {
-                                                specialkey: function(field, e) {
+                                                specialkey: function (field, e) {
                                                     if (e.getKey() == Ext.EventObject.ESC) {
 
                                                         var extraParams = window.feature.outpostsStore.getProxy().extraParams;
@@ -416,7 +419,7 @@
                                                         window.feature.doSearch.delay(500);
                                                     }
                                                 },
-                                                keyup: function(textField) {
+                                                keyup: function (textField) {
                                                     var extraParams = window.feature.outpostsStore.getProxy().extraParams;
                                                     var comboFilters = window.feature.comboBoxFilters;
                                                     extraParams.countryId = comboFilters.country.getValue();
@@ -447,7 +450,7 @@
                                     xtype: 'label',
                                     style: 'color: #7F0037;',
                                     text: '@TempData["result"]',
-                                }                                
+                                }
                             ]
                         }
                     ]
@@ -458,11 +461,11 @@
                     store: window.feature.outpostsStore,
                     disableSelection: true,
                     loadMask: true,
-                    flex:3,
+                    flex: 3,
                     cls: 'white-border',
-                    autoScroll:true,
+                    autoScroll: true,
                     listeners: {
-                        itemclick:function(view, rec, item, index, eventObj) {
+                        itemclick: function (view, rec, item, index, eventObj) {
                         }
                     },
                     columns: [
@@ -473,21 +476,21 @@
                             minWidth: 150,
                             menuDisabled: true,
                             sortable: true
-                        },{
+                        }, {
                             text: "Contact Method",
                             dataIndex: 'ContactMethod',
-                            menuDisabled:true,
+                            menuDisabled: true,
                             flex: 1,
                             minWidth: 150,
                             sortable: false
-                        },{
+                        }, {
                             text: "Coordinates",
                             dataIndex: 'Coordinates',
                             flex: 1,
                             minWidth: 200,
                             menuDisabled: true,
                             sortable: false
-                        },{
+                        }, {
                             xtype: 'actioncolumn',
                             text: 'Update stock',
                             menuDisabled: true,
@@ -496,21 +499,21 @@
                             minWidth: 150,
                             style: 'cursor: hand;',
                             items: [{
-                                    icon: '@(Url.RouteUrl<AssetsController>(it => it.Shared("/img/bycsv.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
-                                    iconCls: 'mousepointer',
-                                    handler: function(grid, rowIndex, colIndex) {
-                                        var rec = grid.getStore().getAt(rowIndex);
-                                        var winEdit = new window.feature.modal({
-                                            maxWidth: 900,
-                                            entityId: rec.get('Id'),
-                                        });
+                                icon: '@(Url.RouteUrl<AssetsController>(it => it.Shared("/img/bycsv.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                                iconCls: 'mousepointer',
+                                handler: function (grid, rowIndex, colIndex) {
+                                    var rec = grid.getStore().getAt(rowIndex);
+                                    var winEdit = new window.feature.modal({
+                                        maxWidth: 900,
+                                        entityId: rec.get('Id'),
+                                    });
 
-                                        winEdit.show();
-                                    }
-                                },{
-                                    icon: '@(Url.RouteUrl<AssetsController>(it => it.Shared("/img/manually.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',  
+                                    winEdit.show();
+                                }
+                            }, {
+                                icon: '@(Url.RouteUrl<AssetsController>(it => it.Shared("/img/manually.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
                                     iconCls: 'mousepointer',
-                                    handler: function(grid, rowIndex, colIndex) {
+                                    handler: function (grid, rowIndex, colIndex) {
 
                                         var rec = grid.getStore().getAt(rowIndex);
                                         var link = '@Url.RouteUrl(StockAdministrationAreaRegistration.DEFAULT_ROUTE, new { controller = "OutpostStockLevel", action = "Overview" })';
@@ -532,7 +535,7 @@
                 }
             ]
         });
-	
+
         var contentRes = window.res.content;
         var mainContent = Ext.getCmp(contentRes.maincontent.id);
         mainContent.add(window.feature.container);
@@ -540,32 +543,32 @@
         window.feature.countryStore.load();
         window.feature.regionsStore.load({
             params: { countryId: '@Guid.Empty' }
-            });
+        });
         window.feature.districtsStore.load({
             params: { regionId: '@Guid.Empty' }
         });
         window.feature.comboBoxFilters.country.setValue('@Guid.Empty');
         window.feature.comboBoxFilters.region.setValue('@Guid.Empty');
-        window.feature.comboBoxFilters.district.setValue('@Guid.Empty');	
+        window.feature.comboBoxFilters.district.setValue('@Guid.Empty');
 
-        if ('@Model.CountryId' != '@Guid.Empty' && '@Model.RegionId' != '@Guid.Empty' && '@Model.DistrictId' != '@Guid.Empty'){ 
+        if ('@Model.CountryId' != '@Guid.Empty' && '@Model.RegionId' != '@Guid.Empty' && '@Model.DistrictId' != '@Guid.Empty') {
             window.feature.countryStore.load();
             window.feature.regionsStore.load({
                 params: { countryId: '@Model.CountryId' }
             });
             window.feature.districtsStore.load({
-                params:{ regionId: '@Model.RegionId' }
+                params: { regionId: '@Model.RegionId' }
             });
-    
+
             window.feature.comboBoxFilters.country.setValue('@Model.CountryId');
             window.feature.comboBoxFilters.region.setValue('@Model.RegionId');
-            window.feature.comboBoxFilters.district.setValue('@Model.DistrictId');				
-    
+            window.feature.comboBoxFilters.district.setValue('@Model.DistrictId');
+
             window.feature.outpostsStore.proxy.extraParams.countryId = '@Model.CountryId';
             window.feature.outpostsStore.proxy.extraParams.regionId = '@Model.RegionId';
             window.feature.outpostsStore.proxy.extraParams.districtId = '@Model.DistrictId';
         }
-    
+
         window.feature.outpostsStore.loadPage(1);
 
     });

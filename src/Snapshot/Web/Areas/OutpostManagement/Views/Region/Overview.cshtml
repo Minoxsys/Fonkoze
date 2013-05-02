@@ -250,7 +250,11 @@ Outpost Management Regions: Overview
                             fieldLabel: 'Selected Country', 
 			                editable: false,
                             typeAhead: false,
-			                listeners:{
+                            listeners:{
+                                'afterrender': function(combo, record){
+                                    window.feature.countryStore.load();
+                                    combo.setValue('@Guid.Empty');
+                                },
 				                'select': function(combo, record){
 					                window.feature.container.down('#'+window.feature.overviewcomboboxid).setValue(combo.getValue());
                                     window.feature.regionStore.proxy.extraParams.countryId = combo.getValue();
@@ -444,7 +448,7 @@ Outpost Management Regions: Overview
         {
             window.feature.regionStore.proxy.extraParams.countryId = '@Model.CountryId';
             window.feature.countryStore.load();
-            window.feature.container.down('#'+window.feature.overviewcomboboxid).setValue('@Model.CountryId');
+            window.feature.container.down('#'+window.feature.overviewCountryComboBoxId).setValue('@Model.CountryId');
 
         }
         window.feature.regionStore.loadPage(1);

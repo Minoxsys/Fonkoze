@@ -155,7 +155,6 @@
         window.feature.comboBoxFilters.listeners={
             specialkey: function(field, e){
                 if (e.getKey() == e.BACKSPACE) {
-                    field.setValue(null);
                     if (field.itemId === window.feature.comboBoxFilters.district.itemId ||
                         field.itemId === window.feature.modalIds.districtId){
                         window.feature.resetDistrictDependencies();
@@ -218,7 +217,12 @@
             labelClsExtra: 'combo-label',
             emptyText: 'Selected Country', 
             typeAhead: true,
+            editable:false,
             listeners:{
+                afterrender: function(combo, record){
+                    window.feature.countryStore.load();
+                    combo.setValue('@Guid.Empty');
+                },
                 specialkey: window.feature.comboBoxFilters.listeners.specialkey,
                 'select': window.feature.on.select.country
             } 
@@ -236,7 +240,12 @@
             labelClsExtra: 'combo-label',
             emptyText: 'Selected Region', 
             typeAhead: true,
+            editable: false,
             listeners:{
+                afterrender: function(combo, record){
+                    window.feature.regionsStore.load();
+                    combo.setValue('@Guid.Empty');
+                },
                 specialkey: window.feature.comboBoxFilters.listeners.specialkey,
                 'select': window.feature.on.select.region
             } 
@@ -253,29 +262,36 @@
             valueField:'Id',
             emptyText: 'Selected District', 
             typeAhead: true,
+            editable: false,
             listeners:{
+                afterrender: function(combo, record){
+                    window.feature.districtsStore.load();
+                    combo.setValue('@Guid.Empty');
+                },
                 specialkey: window.feature.comboBoxFilters.listeners.specialkey,
                 'select': window.feature.on.select.district
             } 
         });
     
         window.feature.resetCountryDependencies = function () {
-            window.feature.comboBoxFilters.country.setValue(null);
+            window.feature.comboBoxFilters.country.setValue('@Guid.Empty');
             window.feature.outpostsStore.getProxy().extraParams.countryId = null;
             window.feature.resetRegionDependencies();
         };
     
         window.feature.resetRegionDependencies = function () {
-            window.feature.comboBoxFilters.region.setValue(null);
+            window.feature.comboBoxFilters.region.setValue('@Guid.Empty');
             window.feature.outpostsStore.getProxy().extraParams.regionId = null;
             window.feature.resetDistrictDependencies();
         };
     
         window.feature.resetDistrictDependencies = function () {
-            window.feature.comboBoxFilters.district.setValue(null);
-    
+            window.feature.comboBoxFilters.district.setValue('@Guid.Empty'); 
             window.feature.outpostsStore.getProxy().extraParams.districtId = null;
     
+            var NoOfItemsToDelete = window.feature.districtsStore.getCount() - 1;
+            window.feature.districtsStore.removeAt(1, NoOfItemsToDelete);
+
         };
     
         window.feature.doSearch = new Ext.util.DelayedTask(function(){
@@ -351,24 +367,24 @@
                 }
                 me.postContactsFromMemoryProxy = function(outpostId){
                     me.contactsStore.setProxy(new Ext.data.proxy.Rest({ url: url,
-                            appendId: false,
-                            extraParams: {
-                                OutpostId: outpostId
-                            },
-                            id: 'ContactModelProxy',
-                            reader: {
-                                type: 'json',
-                                root: 'data',
-                                successProperty: 'success'
-                            },
-                            writer: {
-                                type: 'json',
-                                writeAllFields: true,
-                                encode: false
-                            }
+                        appendId: false,
+                        extraParams: {
+                            OutpostId: outpostId
+                        },
+                        id: 'ContactModelProxy',
+                        reader: {
+                            type: 'json',
+                            root: 'data',
+                            successProperty: 'success'
+                        },
+                        writer: {
+                            type: 'json',
+                            writeAllFields: true,
+                            encode: false
+                        }
                     }));
                     me.contactsStore.on('write',function(){
-                          window.feature.outpostsStore.loadPage(1);
+                        window.feature.outpostsStore.loadPage(1);
                     });
                     me.contactsStore.sync();
                 };
@@ -678,13 +694,13 @@
                                                 if (!window.feature.googleMapWindow){
                                                     window.feature.googleMapWindow = Ext.create('Ext.feature.GoogleMapWindow', {
                                                         zoom: 5,
-                                                                modal:true,
+                                                        modal:true,
                                                         closeAction: 'hide',
                                                         selectLocationHandler: Ext.emptyFn 
                                                     });
                                                 }
 
-                                                        window.feature.googleMapWindow.setSize($(window).width()*70/100, $(window).height()*80/100);
+                                                window.feature.googleMapWindow.setSize($(window).width()*70/100, $(window).height()*80/100);
     
                                                 window.feature.googleMapWindow.getSelectButton().handler = function() {
                                                     window.feature.googleMapWindow.close();
@@ -715,27 +731,27 @@
                                     }]
                                 }]
                             }]
-                            }]
-                        },{
-                            xtype:'container',
-                            layout:'column',
-                            margin: '20 0 0 0',
-                            height: 40,
-                            items:[{
-                                xtype:'button',
-                                text: 'Add New Contact Method',
-                                ui: 'snapshot-add-btn',
-                                cls: 'x-add-button-gradient',
-                                width: 195,
-                                handler: function(){
-                                    window.feature.rowEditor.cancelEdit();
+                        }]
+                    },{
+                        xtype:'container',
+                        layout:'column',
+                        margin: '20 0 0 0',
+                        height: 40,
+                        items:[{
+                            xtype:'button',
+                            text: 'Add New Contact Method',
+                            ui: 'snapshot-add-btn',
+                            cls: 'x-add-button-gradient',
+                            width: 195,
+                            handler: function(){
+                                window.feature.rowEditor.cancelEdit();
 
-                                    Ext.getCmp('SaveButtonOutpost').disable();
-                                    Ext.getCmp('CancelButtonOutpost').disable(); 
+                                Ext.getCmp('SaveButtonOutpost').disable();
+                                Ext.getCmp('CancelButtonOutpost').disable(); 
     
-                                    // Create a record instance through the ModelManager
-                                    var r = new window.feature.ContactModel({
-                                        'ContactType': '@Domain.Contact.EMAIL_CONTACT_TYPE', 
+                                // Create a record instance through the ModelManager
+                                var r = new window.feature.ContactModel({
+                                    'ContactType': '@Domain.Contact.EMAIL_CONTACT_TYPE', 
                                         'ContactDetail': null,
                                         'IsMainContact': false,
                                     });

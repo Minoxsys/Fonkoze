@@ -576,7 +576,6 @@ Historical Product Level: Overview
                         emptyText: 'Country List', 
                         typeAhead: true,
                         editable: false,
-                        typeAhead: false,
                         listeners:{
                             'select': function(combo, record){
                                 ResetCountryDependencies();
@@ -589,7 +588,7 @@ Historical Product Level: Overview
                             },
                             specialkey: function(field, e){
                                 if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
-                                    field.setValue(null);
+                                    field.setValue('@Guid.Empty');
                                     ResetCountryDependencies();
                                 }
                             }
@@ -607,7 +606,6 @@ Historical Product Level: Overview
                         emptyText: 'Region List', 
                         typeAhead: true,
                         editable: false,
-                        typeAhead: false,
                         listeners:{
                             'select': function(combo, record){
                                 ResetRegionDependencies();
@@ -620,7 +618,7 @@ Historical Product Level: Overview
                             },
                             specialkey: function(field, e){
                                 if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
-                                    field.setValue(null);
+                                    field.setValue('@Guid.Empty');
                                     ResetRegionDependencies();
                                 }
                             }
@@ -638,7 +636,6 @@ Historical Product Level: Overview
                         emptyText: 'District List', 
                         typeAhead: true,
                         editable: false,
-                        typeAhead: false,
                         listeners:{
                             'select': function(combo, record){
                                 ResetDistrictDependencies();
@@ -651,7 +648,7 @@ Historical Product Level: Overview
                             },
                             specialkey: function(field, e){
                                 if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
-                                    field.setValue(null);
+                                    field.setValue('@Guid.Empty');
                                     ResetDistrictDependencies();
                                 }
                             }
@@ -669,7 +666,6 @@ Historical Product Level: Overview
                         emptyText: 'Seller List', 
                         typeAhead: true,
                         editable: false,
-                        typeAhead: false,
                         listeners:{
                             'select': function(combo, record){
                                 var viewButton = window.feature.container.down('#'+window.feature.viewProductStockLevelId);
@@ -677,9 +673,7 @@ Historical Product Level: Overview
                             },
                             specialkey: function(field, e){
                                 if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
-                                    field.setValue(null);
-                                    var viewButton = window.feature.container.down('#'+window.feature.viewProductStockLevelId);
-                                    viewButton.disable();
+                                    field.setValue('@Guid.Empty');
                                 }
                             }
                         }

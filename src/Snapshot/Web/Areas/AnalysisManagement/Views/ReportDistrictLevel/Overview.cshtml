@@ -33,6 +33,10 @@ Analysis: Product level information at district level
         window.feature.comboboxRegionsId = 'combobxRegionsId';
         window.feature.comboboxDistrictsId = 'comboboxDistrictsId';
 
+        var allCountryGUID = '@Guid.Parse("00000000-0000-0000-0000-000000000001")';
+        var allRegionGUID = '@Guid.Parse("00000000-0000-0000-0000-000000000002")';
+        var allDistrictGUID = '@Guid.Parse("00000000-0000-0000-0000-000000000003")';
+
         window.feature.CountryStore = Ext.create('Ext.data.Store', {
             fields: ['Name', 'Id'],
             proxy: {
@@ -100,8 +104,6 @@ Analysis: Product level information at district level
             listeners: {
                 select: function (combo, record, index) {
                     var selectedCountryId = record[0].data.Id;
-                    window.feature.comboBoxRegions.setValue(null);
-                    window.feature.comboboxDistricts.setValue(null);
 
                     window.feature.treegrid.getStore().proxy.extraParams.CountryId = '';
                     window.feature.treegrid.getStore().proxy.extraParams.RegionId = '';
@@ -137,7 +139,6 @@ Analysis: Product level information at district level
                 select: function (combo, record, index) {
                     var selectedRegionId = record[0].data.Id;
                     var selectedCountryId = Ext.getCmp(window.feature.comboboxCountriesId).getValue();
-                    window.feature.comboboxDistricts.setValue(null);
                     window.feature.treegrid.getStore().proxy.extraParams.DistrictId = '';
 
                     window.feature.DistrictStore.load({
@@ -496,7 +497,17 @@ Analysis: Product level information at district level
         var mainContent = Ext.getCmp(contentRes.maincontent.id);
 
         mainContent.add(window.feature.container);
-        window.feature.CountryStore.load();
 
+        window.feature.CountryStore.load();
+        window.feature.RegionStore.load({
+            params: { CountryId: allCountryGUID }
+        });
+        window.feature.DistrictStore.load({
+            params: { CountryId: allCountryGUID, RegionId: allRegionGUID}
+        });
+
+        window.feature.comboBoxCountries.setValue(allCountryGUID);
+        window.feature.comboBoxRegions.setValue(allRegionGUID);
+        window.feature.comboBoxRegions.setValue(allDistrictGUID);
     });
 </script>
