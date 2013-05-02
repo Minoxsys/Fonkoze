@@ -7,9 +7,9 @@ using Web.Services.StockUpdates;
 
 namespace Web.ReceiveSmsUseCase.SmsMessageCommands
 {
-    public class StockSaleMessageCommand: StockUpdateMessageCommandBase
+    public class StockCountMessageCommand : StockUpdateMessageCommandBase
     {
-        public StockSaleMessageCommand(IUpdateStockService updateStockService, ISendSmsService sendSmsService,
+        public StockCountMessageCommand(IUpdateStockService updateStockService, ISendSmsService sendSmsService,
                                         ISaveOrUpdateCommand<Alert> saveOrUpdateAlertCommand, IPreconfiguredEmailService emailSendingService,
                                         IQueryService<RawSmsReceived> rawSmsReceived)
             : base(updateStockService, sendSmsService, saveOrUpdateAlertCommand, emailSendingService, rawSmsReceived)
@@ -18,7 +18,7 @@ namespace Web.ReceiveSmsUseCase.SmsMessageCommands
 
         internal override StockUpdateResult UpdateProductStocksForOutpost(ISmsParseResult parseResult, Outpost outpost)
         {
-            return UpdateStockService.DecrementProductStocksForOutpost(parseResult, outpost.Id, StockUpdateMethod.SMS);
+            return UpdateStockService.UpdateProductStocksForOutpost(parseResult, outpost.Id, StockUpdateMethod.SMS);
         }
     }
 }

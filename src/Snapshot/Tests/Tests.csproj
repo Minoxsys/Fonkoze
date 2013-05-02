@@ -223,6 +223,9 @@
     <Compile Include="Unit\Controllers\RoleManagerControllerTests\GetPermissionsForRoleMethod.cs" />
     <Compile Include="Unit\Controllers\RoleManagerControllerTests\ObjectMother.cs" />
     <Compile Include="Unit\Controllers\RoleManagerControllerTests\OverviewMethod.cs" />
+    <Compile Include="Unit\ReceiveSmsWorkflow\Commands\StockCountMessageCommandTests.cs" />
+    <Compile Include="Unit\ReceiveSmsWorkflow\Commands\StockReceivedMessageCommandTests.cs" />
+    <Compile Include="Unit\ReceiveSmsWorkflow\Commands\StockSaleMessageCommandTests.cs" />
     <Compile Include="Unit\ReceiveSmsWorkflow\ContactMethodServiceTests.cs" />
     <Compile Include="Unit\ModelBinders\UserAndClientIdentityModelBinderTests.cs" />
     <Compile Include="Unit\ReceiveSmsWorkflow\ActivationMessageCommandTests.cs" />
@@ -249,7 +252,7 @@
     <Compile Include="Unit\ModelProviders\RoleManagerAssignModelProvider.cs" />
     <Compile Include="Unit\ModelProviders\RoleManagerEditOutput_Tests.cs" />
     <Compile Include="Unit\ModelProviders\RoleManagerUnAssignModelProvider.cs" />
-    <Compile Include="Unit\ReceiveSmsWorkflow\StockSaleMessageCommandTests.cs" />
+    <Compile Include="Unit\ReceiveSmsWorkflow\Base\StockUpdateMessageCommandTestsBase.cs" />
     <Compile Include="Unit\Routes\DefaultRoutesRegistrar_Tests.cs" />
     <Compile Include="Unit\Routes\IgnoredRoutesRegistrar_Tests.cs" />
     <Compile Include="Unit\Routes\RoleManagerRoutesRegistrar_Tests.cs" />

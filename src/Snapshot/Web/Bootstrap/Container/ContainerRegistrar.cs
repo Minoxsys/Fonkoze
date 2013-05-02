@@ -3,6 +3,8 @@ using Autofac.Features.ResolveAnything;
 using System.Linq;
 using System.Web.Mvc;
 using Web.Controllers;
+using Web.ReceiveSmsUseCase.Services.MessageParsers;
+using Web.ReceiveSmsUseCase.Services.MessageParsers.Fonkoze;
 
 namespace Web.Bootstrap.Container
 {
@@ -20,6 +22,8 @@ namespace Web.Bootstrap.Container
             ServicesConventionsRegistrar.Register(container);
 
             container.RegisterSource(new AnyConcreteTypeNotAlreadyRegisteredSource(type => type.Assembly.FullName.StartsWith("Web")));
+
+            container.RegisterType<FonkozeSmsTextParserService>().As<ISmsTextParserService>();
         }
 
         private static void AutoWireControllerProperties(ContainerBuilder container)

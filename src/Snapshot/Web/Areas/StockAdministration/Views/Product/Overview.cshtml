@@ -1,5 +1,4 @@
 ﻿@using Microsoft.Web.Mvc
-@using Web.Areas.OutpostManagement.HtmlHelpers
 @model Web.Areas.StockAdministration.Models.Product.FromProductGroupModel
        
 @section page_title{
@@ -158,8 +157,8 @@
                 ok = false;
             }
 
-             if (productSMSCode.getValue().length > 1) {
-                productSMSCode.markInvalid('Field Product Code should have maximum one character!');
+             if (productSMSCode.getValue().length != 2) {
+                productSMSCode.markInvalid('Field Product Code should have exactly two letters!');
                 ok = false;
             }
 
@@ -341,8 +340,8 @@
                             allowBlank:false,
                             itemId: window.feature.ProductSMSReferecenceCodeId,
                             value: me.recordSMSReferenceCode,
-                            regex: /^[A-Za-z]{1}$/,
-                            regexText:'You need to provide 1 letter!'
+                            regex: /^[A-Za-z]{2}$/,
+                            regexText:'You need to provide 2 letters!'
                         }, {
                             xtype: 'textarea',
                             name: 'Description',

@@ -39,7 +39,18 @@ namespace Web.ReceiveSmsUseCase.SmsMessageCommands
                     }
                 case MessageType.StockSale:
                     {
-                        return new StockSaleMessageCommand(_updateStockService, _sendSmsService, _saveOrUpdateAlertCommand, _emailSendingService, _rawSmsReceivedQueryService);
+                        return new StockSaleMessageCommand(_updateStockService, _sendSmsService, _saveOrUpdateAlertCommand, _emailSendingService,
+                                                           _rawSmsReceivedQueryService);
+                    }
+                case MessageType.StockCount:
+                    {
+                        return new StockCountMessageCommand(_updateStockService, _sendSmsService, _saveOrUpdateAlertCommand, _emailSendingService,
+                                                            _rawSmsReceivedQueryService);
+                    }
+                case MessageType.ReceivedStock:
+                    {
+                        return new StockReceivedMessageCommand(_updateStockService, _sendSmsService, _saveOrUpdateAlertCommand, _emailSendingService,
+                                                               _rawSmsReceivedQueryService);
                     }
                 default:
                     return new NullObjectCommand();
