@@ -124,7 +124,7 @@
     <value>Stock below limit</value>
   </data>
   <data name="StockBellowLimitEmailBody" xml:space="preserve">
-    <value>Seller: {1} {0}Product below limit: {2} {0}Current stock: {3} {0}Lower limit set at: {6} {0}Contact details: {4} {0}{0}{5}</value>
+    <value>Seller: {1} {0}Product below limit: {2} {0}Current stock: {3} {0}Minimum limit set at: {6} {0}Contact details: {4} {0}{0}{5}</value>
   </data>
   <data name="IncorrectSMSAlertSubject" xml:space="preserve">
     <value>Incorrect SMS alert</value>

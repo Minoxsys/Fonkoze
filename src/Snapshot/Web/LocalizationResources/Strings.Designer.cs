@@ -224,7 +224,7 @@ namespace Web.LocalizationResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Seller: {1} {0}Product below limit: {2} {0}Current stock: {3} {0}Lower limit set at: {6} {0}Contact details: {4} {0}{0}{5}.
+        ///   Looks up a localized string similar to Seller: {1} {0}Product below limit: {2} {0}Current stock: {3} {0}Minimum limit set at: {6} {0}Contact details: {4} {0}{0}{5}.
         /// </summary>
         internal static string StockBellowLimitEmailBody {
             get {
