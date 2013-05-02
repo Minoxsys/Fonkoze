@@ -46,7 +46,7 @@
         viewport: 'SnapshotViewport',
         link:{
             dashboard:'@Url.RouteUrl(DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "Home", action = "Index" })',
-            administration:'@(Url.RouteUrl<CountryController>( x=>x.Overview() ,  OutpostManagementAreaRegistration.DEFAULT_ROUTE ))',
+            administration:'@(Url.RouteUrl<OutpostController>( x=>x.Overview() ,  OutpostManagementAreaRegistration.DEFAULT_ROUTE ))',
             regionOverview:'@(Url.RouteUrl<RegionController>( x => x.Overview() ,  OutpostManagementAreaRegistration.DEFAULT_ROUTE ))',
             district: '@(Url.RouteUrl<DistrictController>( x=>x.Overview() ,  OutpostManagementAreaRegistration.DEFAULT_ROUTE ))',
             product:'@(Url.RouteUrl<ProductController>(x=>x.Overview(),Web.Areas.StockAdministration.StockAdministrationAreaRegistration.DEFAULT_ROUTE))',
