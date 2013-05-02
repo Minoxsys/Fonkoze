@@ -21,7 +21,7 @@ namespace Tests.Unit.WarehouseManagementWorkflow
         }
 
         [Test]
-        public void ParseStream_ReturnsTheListOfParsedObjects_WhenParsingWasSuccesfull()
+        public void ParseStream_ReturnsTheListOfParsedObjects_WhenParsingWasSuccesfullWithGroupCodes()
         {
             //arrange
             CsvParseResult result;
@@ -39,6 +39,28 @@ namespace Tests.Unit.WarehouseManagementWorkflow
             Assert.That(result.Success, Is.EqualTo(true));
             CollectionAssert.AreEquivalent(parsedProducts, result.ParsedProducts);
         }
+
+        [Test]
+        public void ParseStream_ReturnsTheListOfParsedObjects_WhenParsingWasSuccesfullWithNoGroupCodes()
+        {
+            //arrange
+            CsvParseResult result;
+            var list = CreateListOfProducts();
+            var parsedProducts = list as IList<ParsedProduct> ?? list.ToList();
+            using (var stream = CreateStreamWithValidValuesNoGroupCode(parsedProducts))
+            {
+                stream.Seek(0, SeekOrigin.Begin);
+
+                //act
+                result = _sut.ParseStream(stream);
+            }
+
+            //assert
+            Assert.That(result.Success, Is.EqualTo(true));
+            CollectionAssert.AreEquivalent(parsedProducts, result.ParsedProducts);
+        }
+
+
 
         [Test]
         public void ParseStream_ReturnsAnEmptyList_WhenParsingWasSuccesfullButThereWereNoItems()
@@ -99,14 +121,26 @@ namespace Tests.Unit.WarehouseManagementWorkflow
             return stream;
         }
 
-        private Stream CreateStreamWithValidValues(IEnumerable<ParsedProduct> productsList)
+        private Stream CreateStreamWithValidValuesNoGroupCode(IEnumerable<ParsedProduct> parsedProducts)
+        {
+            return CreateStreamWithValidValues(parsedProducts, true);
+        }
+
+        private Stream CreateStreamWithValidValues(IEnumerable<ParsedProduct> productsList, bool genericGroupCode = false)
         {
             var stream = new MemoryStream();
             var writer = new StreamWriter(stream);
 
             foreach (var product in productsList)
             {
-                writer.WriteLine("{0}, {1}, {2}", product.ProductGroupCode, product.ProductCode, product.StockLevel);
+                if (genericGroupCode)
+                {
+                    writer.WriteLine("{0}, {1}", product.ProductCode, product.StockLevel);
+                }
+                else
+                {
+                    writer.WriteLine("{0}, {1}, {2}", product.ProductGroupCode, product.ProductCode, product.StockLevel);
+                }
             }
             writer.Flush();
             return stream;
@@ -117,7 +151,7 @@ namespace Tests.Unit.WarehouseManagementWorkflow
             var list = new List<ParsedProduct>();
             for (int i = 'A'; i < 'Z'; i++)
             {
-                list.Add(new ParsedProduct {ProductGroupCode = "ASB", ProductCode = i.ToString(CultureInfo.InvariantCulture), StockLevel = i});
+                list.Add(new ParsedProduct {ProductGroupCode = "ALL", ProductCode = i.ToString(CultureInfo.InvariantCulture), StockLevel = i});
             }
             return list;
         }
