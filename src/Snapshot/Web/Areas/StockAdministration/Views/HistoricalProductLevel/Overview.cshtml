@@ -470,29 +470,94 @@ Historical Product Level: Overview
                     align: 'stretch',
                     type: 'vbox'
                 },
-                height: 110,
+                // height: 110,
                 items: [
+                
+               {
+                   xtype: 'container',
+                   height: 50,
+                   layout: {
+                       type: 'column'
+                   },
+                   items: [{
+                       xtype: 'container',
+                       height: 30,
+                       width: 30,
+                       html:'&nbsp;'
+                   },{
+                       xtype: 'image',
+                       src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/OutpostStockLevel/HistoricalProductLevel.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                       margin: '0 10 10 0'
+                   },{
+                       xtype: 'label',
+                       cls: 'x-title-label',
+                       text: 'Historical Product Sales'
+                   }]
+               },
+                  {  xtype: 'container',
+                      height: 65,
+                      margin: '0 0 0 30',
+                      layout: {
+                          type: 'column'
+                      },
+                      items: [{
+                          xtype: 'datefield',
+                          fieldLabel: 'Start Date',
+                          width: 170,
+                          format: 'd-M-Y',
+                          labelAlign: 'top',
+                          itemId: 'ghjjkk',
+                          
+                          // value: startDateOverviewCombobox.getValue(),
+                          listeners: {
+                              select: function (t, n, o) {
+                                  var date = t.getValue();
+                                  //window.feature.exportStartDate = date;
+                                  //startDateOverviewCombobox.setValue(date);
+                                  //window.feature.chartStore.proxy.extraParams.startDate = date;
+                                  //window.feature.chartStore.load();
+                              },
+                              specialkey: function (field, e) {
+                                  if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
+                                      //field.setValue(null);
+                                      //startDateOverviewCombobox.setValue(null);
+                                      //window.feature.chartStore.proxy.extraParams.startDate = "";
+                                      //window.feature.exportStartDate = "";
+                                      //window.feature.chartStore.load();
+                                  }
+                              }
+                          }
+                      },
+                      {
+                          xtype: 'datefield',
+                          fieldLabel: 'End Date',
+                          width: 170,
+                          labelAlign: 'top',
+                          format: 'd-M-Y',
+                          itemId:'ghjkl',
+                          // value: endDateOverviewCombobox.getValue(),
+                          listeners: {
+                              select: function (t, n, o) {
+                                  var date = t.getValue();
+                                  //window.feature.exportEndDate = date;
+                                  //endDateOverviewCombobox.setValue(date);
+                                  //window.feature.chartStore.proxy.extraParams.endDate = date;
+                                  //window.feature.chartStore.load();
+                              },
+                              specialkey: function (field, e) {
+                                  if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
+                                      field.setValue(null);
+                                      //endDateOverviewCombobox.setValue(null);
+                                      //window.feature.chartStore.proxy.extraParams.endDate = "";
+                                      //window.feature.exportEndDate = "";
+                                      //window.feature.chartStore.load();
+                                  }
+                              }
+                          }
+                      }
+                      
+                      ]},
                 {
-                    xtype: 'container',
-                    height: 50,
-                    layout: {
-                        type: 'column'
-                    },
-                    items: [{
-                        xtype: 'container',
-                        height: 30,
-                        width: 30,
-                        html:'&nbsp;'
-                    },{
-                        xtype: 'image',
-                        src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/OutpostStockLevel/HistoricalProductLevel.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
-                        margin: '0 10 10 0'
-                    },{
-                        xtype: 'label',
-                        cls: 'x-title-label',
-                        text: 'Historical Product Status'
-                    }]
-                },{
                     xtype: 'container',
                     height: 65,
                     margin: '0 0 0 30',
@@ -622,7 +687,7 @@ Historical Product Level: Overview
                     },{ 
                         xtype: 'button',
                         margin: '25 0 0 0',
-                        text: 'View Product Status',
+                        text: 'View Product Sales',
                         ui: 'snapshot-add-btn',
                         cls: 'x-add-button-gradient',
                         disabled: false,
