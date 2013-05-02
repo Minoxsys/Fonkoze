@@ -505,12 +505,6 @@ User Administration Users: Overview
                 ok = false;
             }
 
-            if (email.getValue() == ''){
-                email.markInvalid('Field Email is required!');  
-                email.setValue(null);
-                ok = false;
-            }
-
             if (role.getValue() == null){
                 role.markInvalid('Field Role is required!');  
                 role.setValue(null);
