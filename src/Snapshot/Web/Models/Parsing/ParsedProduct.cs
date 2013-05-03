@@ -7,7 +7,7 @@ namespace Web.Models.Parsing
         public string ProductGroupCode { get; set; }
         public string ProductCode { get; set; }
         public int StockLevel { get; set; }
-        public string IsClientIdentifier { get; set; }
+        public string ClientIdentifier { get; set; }
 
         public override bool Equals(Object other)
         {
@@ -15,7 +15,7 @@ namespace Web.Models.Parsing
             if (other == null || GetType() != other.GetType()) return false;
             var p = (ParsedProduct) other;
             return ProductGroupCode == p.ProductGroupCode && ProductCode == p.ProductCode && StockLevel == p.StockLevel &&
-                   IsClientIdentifier == p.IsClientIdentifier;
+                   ClientIdentifier == p.ClientIdentifier;
         }
 
         public override int GetHashCode()

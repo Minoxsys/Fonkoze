@@ -13,7 +13,7 @@ namespace Tests.Unit.ReceiveSmsWorkflow.Commands
         {
             return new StockSaleMessageCommand(UpdateProductStockServiceMock.Object, SendSmsServiceMock.Object, SaveAlertCmdMock.Object,
                                                SendEmailServiceMock.Object,
-                                               RawSmsQueryServiceMock.Object);
+                                               RawSmsQueryServiceMock.Object, ProductQueryServiceMock.Object, SaveProductSaleCmdMock.Object);
         }
 
         public override void ExecutingTheCommand_UpdatesStockForProducts_WhenMessageParsedSuccesfully()

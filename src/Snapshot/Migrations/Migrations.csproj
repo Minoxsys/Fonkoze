@@ -63,6 +63,7 @@
     <Compile Include="AssignCommonColumnsExtensions.cs" />
     <Compile Include="ConstraintUtility.cs" />
     <Compile Include="17_Insert3Roles.cs" />
+    <Compile Include="22_ProductSales.cs" />
     <Compile Include="DeleteExtensions.cs" />
     <Compile Include="13_EmailRequest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

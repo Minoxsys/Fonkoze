@@ -69,7 +69,7 @@ namespace Tests.Unit.ReceiveSmsWorkflow
             Assert.That(result.ParsedProducts.Count, Is.EqualTo(1));
             result.ParsedProducts[0].ShouldHave()
                                     .AllProperties()
-                                    .EqualTo(new ParsedProduct {ProductGroupCode = "MAL", ProductCode = "A", StockLevel = 88, IsClientIdentifier = "F"});
+                                    .EqualTo(new ParsedProduct {ProductGroupCode = "MAL", ProductCode = "A", StockLevel = 88, ClientIdentifier = "F"});
         }
 
         [Test]
@@ -82,10 +82,10 @@ namespace Tests.Unit.ReceiveSmsWorkflow
             result.ParsedProducts.Should().NotBeEmpty().And.HaveCount(2);
             result.ParsedProducts[0].ShouldHave()
                                     .AllProperties()
-                                    .EqualTo(new ParsedProduct {ProductGroupCode = "ALB", ProductCode = "G", StockLevel = 9999, IsClientIdentifier = "N"});
+                                    .EqualTo(new ParsedProduct {ProductGroupCode = "ALB", ProductCode = "G", StockLevel = 9999, ClientIdentifier = "N"});
             result.ParsedProducts[1].ShouldHave()
                                     .AllProperties()
-                                    .EqualTo(new ParsedProduct {ProductGroupCode = "HIV", ProductCode = "C", StockLevel = 9, IsClientIdentifier = "F"});
+                                    .EqualTo(new ParsedProduct {ProductGroupCode = "HIV", ProductCode = "C", StockLevel = 9, ClientIdentifier = "F"});
         }
 
         [Test]
@@ -97,13 +97,13 @@ namespace Tests.Unit.ReceiveSmsWorkflow
             result.ParsedProducts.Should().NotBeEmpty().And.HaveCount(3);
             result.ParsedProducts[0].ShouldHave()
                                     .AllProperties()
-                                    .EqualTo(new ParsedProduct {ProductGroupCode = "ALB", ProductCode = "G", StockLevel = 9999, IsClientIdentifier = "N"});
+                                    .EqualTo(new ParsedProduct {ProductGroupCode = "ALB", ProductCode = "G", StockLevel = 9999, ClientIdentifier = "N"});
             result.ParsedProducts[1].ShouldHave()
                                     .AllProperties()
-                                    .EqualTo(new ParsedProduct {ProductGroupCode = "MAL", ProductCode = "Y", StockLevel = 5, IsClientIdentifier = "F"});
+                                    .EqualTo(new ParsedProduct {ProductGroupCode = "MAL", ProductCode = "Y", StockLevel = 5, ClientIdentifier = "F"});
             result.ParsedProducts[2].ShouldHave()
                                     .AllProperties()
-                                    .EqualTo(new ParsedProduct {ProductGroupCode = "HIV", ProductCode = "C", StockLevel = 9, IsClientIdentifier = "F"});
+                                    .EqualTo(new ParsedProduct {ProductGroupCode = "HIV", ProductCode = "C", StockLevel = 9, ClientIdentifier = "F"});
         }
 
         [Test]
@@ -207,7 +207,7 @@ namespace Tests.Unit.ReceiveSmsWorkflow
             CollectionAssert.AreEquivalent(result.ParsedProducts,
                                            new List<IParsedProduct>
                                                {
-                                                   new ParsedProduct {ProductCode = "A", ProductGroupCode = "MAL", StockLevel = 88, IsClientIdentifier = "F"}
+                                                   new ParsedProduct {ProductCode = "A", ProductGroupCode = "MAL", StockLevel = 88, ClientIdentifier = "F"}
                                                });
         }
 
@@ -240,7 +240,7 @@ namespace Tests.Unit.ReceiveSmsWorkflow
             CollectionAssert.AreEquivalent(result.ParsedProducts,
                                            new List<IParsedProduct>
                                                {
-                                                   new ParsedProduct {ProductCode = "A", ProductGroupCode = "MAL", StockLevel = 88, IsClientIdentifier = "F"}
+                                                   new ParsedProduct {ProductCode = "A", ProductGroupCode = "MAL", StockLevel = 88, ClientIdentifier = "F"}
                                                });
         }
 

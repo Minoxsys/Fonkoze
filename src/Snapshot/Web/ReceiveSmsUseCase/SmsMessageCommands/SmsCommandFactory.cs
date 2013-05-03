@@ -16,10 +16,12 @@ namespace Web.ReceiveSmsUseCase.SmsMessageCommands
         private readonly ISendSmsService _sendSmsService;
         private readonly IPreconfiguredEmailService _emailSendingService;
         private readonly IQueryService<RawSmsReceived> _rawSmsReceivedQueryService;
+        private IQueryService<Product> _queryProductService;
+        private ISaveOrUpdateCommand<ProductSale> _saveProductSale;
 
         public SmsCommandFactory(IContactMethodsService contactMethodsService, ISaveOrUpdateCommand<Alert> saveOrUpdateAlertCommand,
                                  IUpdateStockService updateStockService, ISendSmsService sendSmsService,
-                                 IPreconfiguredEmailService emailSendingService, IQueryService<RawSmsReceived> rawSmsReceivedQueryService)
+                                 IPreconfiguredEmailService emailSendingService, IQueryService<RawSmsReceived> rawSmsReceivedQueryService, IQueryService<Product> queryProductService, ISaveOrUpdateCommand<ProductSale> saveProductSale)
         {
             _rawSmsReceivedQueryService = rawSmsReceivedQueryService;
             _emailSendingService = emailSendingService;
@@ -27,6 +29,8 @@ namespace Web.ReceiveSmsUseCase.SmsMessageCommands
             _contactMethodsService = contactMethodsService;
             _saveOrUpdateAlertCommand = saveOrUpdateAlertCommand;
             _updateStockService = updateStockService;
+            _queryProductService = queryProductService;
+            _saveProductSale = saveProductSale;
         }
 
         public ISmsMessageCommand CreateSmsMessageCommand(MessageType messageType)
@@ -40,7 +44,7 @@ namespace Web.ReceiveSmsUseCase.SmsMessageCommands
                 case MessageType.StockSale:
                     {
                         return new StockSaleMessageCommand(_updateStockService, _sendSmsService, _saveOrUpdateAlertCommand, _emailSendingService,
-                                                           _rawSmsReceivedQueryService);
+                                                           _rawSmsReceivedQueryService,_queryProductService,_saveProductSale);
                     }
                 case MessageType.StockCount:
                     {

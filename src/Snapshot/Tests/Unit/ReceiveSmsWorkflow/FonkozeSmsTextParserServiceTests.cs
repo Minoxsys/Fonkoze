@@ -88,7 +88,7 @@ namespace Tests.Unit.ReceiveSmsWorkflow
             Assert.That(result.ParsedProducts.Count, Is.EqualTo(1));
             result.ParsedProducts[0].ShouldHave()
                                     .AllProperties()
-                                    .EqualTo(new ParsedProduct {ProductGroupCode = "ALL", ProductCode = "AA", StockLevel = 88, IsClientIdentifier = "F"});
+                                    .EqualTo(new ParsedProduct {ProductGroupCode = "ALL", ProductCode = "AA", StockLevel = 88, ClientIdentifier = "F"});
         }
 
         [Test]
@@ -101,10 +101,10 @@ namespace Tests.Unit.ReceiveSmsWorkflow
             result.ParsedProducts.Should().NotBeEmpty().And.HaveCount(2);
             result.ParsedProducts[0].ShouldHave()
                                     .AllProperties()
-                                    .EqualTo(new ParsedProduct {ProductGroupCode = "ALL", ProductCode = "AL", StockLevel = 9999, IsClientIdentifier = "N"});
+                                    .EqualTo(new ParsedProduct {ProductGroupCode = "ALL", ProductCode = "AL", StockLevel = 9999, ClientIdentifier = "N"});
             result.ParsedProducts[1].ShouldHave()
                                     .AllProperties()
-                                    .EqualTo(new ParsedProduct {ProductGroupCode = "ALL", ProductCode = "VC", StockLevel = 9, IsClientIdentifier = "F"});
+                                    .EqualTo(new ParsedProduct {ProductGroupCode = "ALL", ProductCode = "VC", StockLevel = 9, ClientIdentifier = "F"});
         }
 
         [Test]
@@ -116,13 +116,13 @@ namespace Tests.Unit.ReceiveSmsWorkflow
             result.ParsedProducts.Should().NotBeEmpty().And.HaveCount(3);
             result.ParsedProducts[0].ShouldHave()
                                     .AllProperties()
-                                    .EqualTo(new ParsedProduct {ProductGroupCode = "ALL", ProductCode = "BG", StockLevel = 9999, IsClientIdentifier = "N"});
+                                    .EqualTo(new ParsedProduct {ProductGroupCode = "ALL", ProductCode = "BG", StockLevel = 9999, ClientIdentifier = "N"});
             result.ParsedProducts[1].ShouldHave()
                                     .AllProperties()
-                                    .EqualTo(new ParsedProduct {ProductGroupCode = "ALL", ProductCode = "LY", StockLevel = 5, IsClientIdentifier = "F"});
+                                    .EqualTo(new ParsedProduct {ProductGroupCode = "ALL", ProductCode = "LY", StockLevel = 5, ClientIdentifier = "F"});
             result.ParsedProducts[2].ShouldHave()
                                     .AllProperties()
-                                    .EqualTo(new ParsedProduct {ProductGroupCode = "ALL", ProductCode = "VC", StockLevel = 9, IsClientIdentifier = "F"});
+                                    .EqualTo(new ParsedProduct {ProductGroupCode = "ALL", ProductCode = "VC", StockLevel = 9, ClientIdentifier = "F"});
         }
 
         [Test]
@@ -223,7 +223,7 @@ namespace Tests.Unit.ReceiveSmsWorkflow
             CollectionAssert.AreEquivalent(result.ParsedProducts,
                                            new List<IParsedProduct>
                                                {
-                                                   new ParsedProduct {ProductCode = "LA", ProductGroupCode = "ALL", StockLevel = 88, IsClientIdentifier = "F"}
+                                                   new ParsedProduct {ProductCode = "LA", ProductGroupCode = "ALL", StockLevel = 88, ClientIdentifier = "F"}
                                                });
         }
 
@@ -256,7 +256,7 @@ namespace Tests.Unit.ReceiveSmsWorkflow
             CollectionAssert.AreEquivalent(result.ParsedProducts,
                                            new List<IParsedProduct>
                                                {
-                                                   new ParsedProduct {ProductCode = "LA", ProductGroupCode = "ALL", StockLevel = 88, IsClientIdentifier = "F"}
+                                                   new ParsedProduct {ProductCode = "LA", ProductGroupCode = "ALL", StockLevel = 88, ClientIdentifier = "F"}
                                                });
         }
 
@@ -291,7 +291,7 @@ namespace Tests.Unit.ReceiveSmsWorkflow
             Assert.That(result.ParsedProducts.Count, Is.EqualTo(1));
             result.ParsedProducts[0].ShouldHave()
                                     .AllProperties()
-                                    .EqualTo(new ParsedProduct {ProductGroupCode = "MAL", ProductCode = "AA", StockLevel = 88, IsClientIdentifier = "F"});
+                                    .EqualTo(new ParsedProduct {ProductGroupCode = "MAL", ProductCode = "AA", StockLevel = 88, ClientIdentifier = "F"});
         }
 
         [Test]
@@ -304,10 +304,10 @@ namespace Tests.Unit.ReceiveSmsWorkflow
             result.ParsedProducts.Should().NotBeEmpty().And.HaveCount(2);
             result.ParsedProducts[0].ShouldHave()
                                     .AllProperties()
-                                    .EqualTo(new ParsedProduct {ProductGroupCode = "ALB", ProductCode = "GG", StockLevel = 9999, IsClientIdentifier = "N"});
+                                    .EqualTo(new ParsedProduct {ProductGroupCode = "ALB", ProductCode = "GG", StockLevel = 9999, ClientIdentifier = "N"});
             result.ParsedProducts[1].ShouldHave()
                                     .AllProperties()
-                                    .EqualTo(new ParsedProduct {ProductGroupCode = "HIV", ProductCode = "CC", StockLevel = 9, IsClientIdentifier = "F"});
+                                    .EqualTo(new ParsedProduct {ProductGroupCode = "HIV", ProductCode = "CC", StockLevel = 9, ClientIdentifier = "F"});
         }
 
         [Test]
@@ -319,13 +319,13 @@ namespace Tests.Unit.ReceiveSmsWorkflow
             result.ParsedProducts.Should().NotBeEmpty().And.HaveCount(3);
             result.ParsedProducts[0].ShouldHave()
                                     .AllProperties()
-                                    .EqualTo(new ParsedProduct {ProductGroupCode = "ALB", ProductCode = "GG", StockLevel = 9999, IsClientIdentifier = "N"});
+                                    .EqualTo(new ParsedProduct {ProductGroupCode = "ALB", ProductCode = "GG", StockLevel = 9999, ClientIdentifier = "N"});
             result.ParsedProducts[1].ShouldHave()
                                     .AllProperties()
-                                    .EqualTo(new ParsedProduct {ProductGroupCode = "MAL", ProductCode = "YY", StockLevel = 5, IsClientIdentifier = "F"});
+                                    .EqualTo(new ParsedProduct {ProductGroupCode = "MAL", ProductCode = "YY", StockLevel = 5, ClientIdentifier = "F"});
             result.ParsedProducts[2].ShouldHave()
                                     .AllProperties()
-                                    .EqualTo(new ParsedProduct {ProductGroupCode = "HIV", ProductCode = "CC", StockLevel = 9, IsClientIdentifier = "F"});
+                                    .EqualTo(new ParsedProduct {ProductGroupCode = "HIV", ProductCode = "CC", StockLevel = 9, ClientIdentifier = "F"});
         }
 
         [Test]
@@ -422,7 +422,7 @@ namespace Tests.Unit.ReceiveSmsWorkflow
             CollectionAssert.AreEquivalent(result.ParsedProducts,
                                            new List<IParsedProduct>
                                                {
-                                                   new ParsedProduct {ProductCode = "AA", ProductGroupCode = "MAL", StockLevel = 88, IsClientIdentifier = "F"}
+                                                   new ParsedProduct {ProductCode = "AA", ProductGroupCode = "MAL", StockLevel = 88, ClientIdentifier = "F"}
                                                });
         }
 
@@ -455,7 +455,7 @@ namespace Tests.Unit.ReceiveSmsWorkflow
             CollectionAssert.AreEquivalent(result.ParsedProducts,
                                            new List<IParsedProduct>
                                                {
-                                                   new ParsedProduct {ProductCode = "AA", ProductGroupCode = "MAL", StockLevel = 88, IsClientIdentifier = "F"}
+                                                   new ParsedProduct {ProductCode = "AA", ProductGroupCode = "MAL", StockLevel = 88, ClientIdentifier = "F"}
                                                });
         }
 

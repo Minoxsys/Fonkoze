@@ -38,7 +38,7 @@ namespace Web.ReceiveSmsUseCase.Services.MessageParsingStrategies
                     {
                         ProductGroupCode = GetProductGroupCode(token),
                         ProductCode = GetProductCode(token),
-                        IsClientIdentifier = GetIsClientIdentifier(token),
+                        ClientIdentifier = GetClientIdentifier(token),
                     };
 
                 int stockLevel;
@@ -64,10 +64,10 @@ namespace Web.ReceiveSmsUseCase.Services.MessageParsingStrategies
         protected virtual bool ValidContents(string token, ParsedProduct product, out int stockLevel)
         {
             return int.TryParse(GetStockLevelString(token), out stockLevel) && ContainsOnlyLetters(product.ProductGroupCode) &&
-                   ContainsOnlyLetters(product.ProductCode) && IsValidClientIdefifier(product.IsClientIdentifier);
+                   ContainsOnlyLetters(product.ProductCode) && IsValidClientIdefifier(product.ClientIdentifier);
         }
 
-        protected virtual string GetIsClientIdentifier(string message)
+        protected virtual string GetClientIdentifier(string message)
         {
             return message.Substring(message.Length - 1, 1);
         }

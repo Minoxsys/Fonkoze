@@ -22,6 +22,7 @@ namespace Web.ReceiveSmsUseCase.SmsMessageCommands
         private readonly ISaveOrUpdateCommand<Alert> _saveOrUpdateAlertCommand;
         private readonly IPreconfiguredEmailService _emailSendingService;
         private readonly IQueryService<RawSmsReceived> _rawSmsReceivedQueryService;
+        private readonly ISaveOrUpdateCommand<ProductSale> _productSaleQueryService;
 
         protected StockUpdateMessageCommandBase(IUpdateStockService updateStockService, ISendSmsService sendSmsService,
                                          ISaveOrUpdateCommand<Alert> saveOrUpdateAlertCommand, IPreconfiguredEmailService emailSendingService,
@@ -48,6 +49,8 @@ namespace Web.ReceiveSmsUseCase.SmsMessageCommands
                 if (result != null && !result.Success)
                 {
                     _sendSmsService.SendSms(smsData.Sender, ComposeUpdateStockFailMessage(result.FailedProducts), true);
+                   
+                    DoAfterStockUpdate(parseResult,outpost);
                 }
                 else
                 {
@@ -86,6 +89,11 @@ namespace Web.ReceiveSmsUseCase.SmsMessageCommands
         }
 
         internal abstract StockUpdateResult UpdateProductStocksForOutpost(ISmsParseResult parseResult, Outpost outpost);
+
+        internal virtual void DoAfterStockUpdate(ISmsParseResult parseResult, Outpost outpost)
+        {
+
+        }
 
         private string ComposeSecondMistakeSms(ReceivedSmsInputModel smsData, Outpost outpost)
         {

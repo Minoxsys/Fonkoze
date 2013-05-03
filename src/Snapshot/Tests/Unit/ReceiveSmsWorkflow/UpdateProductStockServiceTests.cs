@@ -247,7 +247,7 @@ namespace Tests.Unit.ReceiveSmsWorkflow
 
         private static ParsedProduct CreateParsedProduct(string productGroupCode, string productCode, int stockLevel)
         {
-            return new ParsedProduct {IsClientIdentifier = "F", ProductCode = productCode, ProductGroupCode = productGroupCode, StockLevel = stockLevel};
+            return new ParsedProduct {ClientIdentifier = "F", ProductCode = productCode, ProductGroupCode = productGroupCode, StockLevel = stockLevel};
         }
 
         #endregion

@@ -30,6 +30,8 @@ namespace Tests.Unit.ReceiveSmsWorkflow.Base
         protected Mock<Outpost> OutpostMock;
         protected ReceivedSmsInputModel InputModel;
         protected Mock<IQueryService<RawSmsReceived>> RawSmsQueryServiceMock;
+        protected Mock<IQueryService<Product>> ProductQueryServiceMock;
+        protected Mock<ISaveOrUpdateCommand<ProductSale>> SaveProductSaleCmdMock;
 
         [SetUp]
         public void PerTestSetup()
@@ -39,6 +41,8 @@ namespace Tests.Unit.ReceiveSmsWorkflow.Base
             SendSmsServiceMock = new Mock<ISendSmsService>();
             SaveAlertCmdMock = new Mock<ISaveOrUpdateCommand<Alert>>();
             SendEmailServiceMock = new Mock<IPreconfiguredEmailService>();
+            ProductQueryServiceMock = new Mock<IQueryService<Product>>();
+            SaveProductSaleCmdMock = new Mock<ISaveOrUpdateCommand<ProductSale>>();
             Sut = CreateConcreteCommand();
 
             InputModel = new ReceivedSmsInputModel {Sender = "123"};
