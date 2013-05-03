@@ -100,6 +100,9 @@ User Administration Users: Overview
             }]
         });
 
+        Ext.tip.QuickTipManager.init();
+        Ext.QuickTips.init();
+
         window.feature.modal = Ext.define('Ext.feature.region.Modal', {
             extend: 'Ext.window.Window',
             modal:true,
@@ -155,10 +158,20 @@ User Administration Users: Overview
                         itemId: window.feature.formUserConfirmPasswordId
                     },{
                         xtype: 'textfield',
+                        itemId: window.feature.formUserPhoneNumberId,
                         name: 'PhoneNumber',
                         fieldLabel: 'Phone Number',
                         anchor: '100%',
-                        itemId: window.feature.formUserPhoneNumberId
+                        
+                        qtip: "It is recommended that managers enter their phone number to receive important SMS notifications",
+                        listeners: {
+                            afterrender: function(c) {
+                                Ext.QuickTips.register({
+                                    target: c.getEl(),
+                                    text: c.qtip
+                                });
+                            }
+                        }                        
                     },{
                         xtype: 'combobox',
                         itemId: window.feature.formUserRoleId,
@@ -289,6 +302,7 @@ User Administration Users: Overview
                                 ]
                             });
                             winAdd.show();
+                            
                         }
                     }]
                 },{
