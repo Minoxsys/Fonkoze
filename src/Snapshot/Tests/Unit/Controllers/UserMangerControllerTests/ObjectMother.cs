@@ -1,45 +1,45 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Rhino.Mocks;
-using Web.Controllers;
-using Domain;
+﻿using System.Diagnostics;
 using Core.Domain;
 using Core.Persistence;
-using Core.Services;
-using Web.Security;
-using Web.Models.UserManager;
 using Core.Security;
-using Persistence.Security;
+using Core.Services;
+using Domain;
 using MvcContrib.TestHelper.Fakes;
+using Persistence.Security;
+using Rhino.Mocks;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Web.Controllers;
+using Web.Models.UserManager;
+using Web.Security;
 
 namespace Tests.Unit.Controllers.UserMangerControllerTests
 {
     public class ObjectMother
     {
-        public UserManagerController controller;
+        public UserManagerController Controller;
 
-        public IQueryService<User> queryUsers;
-        public IQueryService<Role> queryRole;
-        public IQueryService<Client> queryClient;
+        public IQueryService<User> QueryUsers;
+        public IQueryService<Role> QueryRole;
+        public IQueryService<Client> QueryClient;
 
-        public IQueryService<Permission> queryPermission;
+        public IQueryService<Permission> QueryPermission;
 
-        public ISaveOrUpdateCommand<User> saveCommand;
-        public IDeleteCommand<User> deleteCommand;
+        public ISaveOrUpdateCommand<User> SaveCommand;
+        public IDeleteCommand<User> DeleteCommand;
 
-        private ISecurePassword securePassword = new SecurePassword();
+        public ISecurePassword SecurePassword;
         public IPermissionsService PermissionService;
 
-        public User user;
-        public Client client;
-        public Permission permission;
-        public Guid permissionId;
-        public Role role;
-        public Guid userId;
-        public Guid clientId;
-        public Guid roleId;
+        public User User;
+        public Client Client;
+        public Permission Permission;
+        public Guid PermissionId;
+        public Role Role;
+        public Guid UserId;
+        public Guid ClientId;
+        public Guid RoleId;
 
         public void Init()
         {
@@ -51,79 +51,99 @@ namespace Tests.Unit.Controllers.UserMangerControllerTests
 
         private void MockServices()
         {
-            queryUsers = MockRepository.GenerateMock<IQueryService<User>>();
-            queryRole = MockRepository.GenerateMock<IQueryService<Role>>();
-            queryClient = MockRepository.GenerateMock<IQueryService<Client>>();
-            saveCommand = MockRepository.GenerateMock<ISaveOrUpdateCommand<User>>();
-            deleteCommand = MockRepository.GenerateMock<IDeleteCommand<User>>();
-            queryPermission = MockRepository.GenerateMock<IQueryService<Permission>>();
+            QueryUsers = MockRepository.GenerateMock<IQueryService<User>>();
+            QueryRole = MockRepository.GenerateMock<IQueryService<Role>>();
+            QueryClient = MockRepository.GenerateMock<IQueryService<Client>>();
+            SaveCommand = MockRepository.GenerateMock<ISaveOrUpdateCommand<User>>();
+            DeleteCommand = MockRepository.GenerateMock<IDeleteCommand<User>>();
+            QueryPermission = MockRepository.GenerateMock<IQueryService<Permission>>();
+            SecurePassword = MockRepository.GenerateMock<ISecurePassword>();
         }
 
         private void Setup_Controller()
         {
-            controller = new UserManagerController();
-            FakeControllerContext.Builder.HttpContext.User = new FakePrincipal(new FakeIdentity("admin"), new string[] { });
-            FakeControllerContext.Initialize(controller);
-            PermissionService = new FunctionRightsService(queryPermission, queryUsers);
-            controller.QueryClients = queryClient;
-            controller.QueryRoles = queryRole;
-            controller.QueryUsers = queryUsers;
-            controller.SaveOrUpdateCommand = saveCommand;
-            controller.DeleteCommand = deleteCommand;
-            controller.PermissionService = PermissionService;
-            controller.SecurePassword = securePassword;
+            Controller = new UserManagerController();
+            FakeControllerContext.Builder.HttpContext.User = new FakePrincipal(new FakeIdentity("admin"), new string[] {});
+            FakeControllerContext.Initialize(Controller);
+            PermissionService = new FunctionRightsService(QueryPermission, QueryUsers);
+            Controller.QueryClients = QueryClient;
+            Controller.QueryRoles = QueryRole;
+            Controller.QueryUsers = QueryUsers;
+            Controller.SaveOrUpdateCommand = SaveCommand;
+            Controller.DeleteCommand = DeleteCommand;
+            Controller.PermissionService = PermissionService;
+            Controller.SecurePassword = SecurePassword;
         }
+
         private void StubPermission()
         {
-            permissionId = Guid.NewGuid();
-            permission = MockRepository.GeneratePartialMock<Permission>();
-            permission.Stub(c => c.Id).Return(permissionId);
-            permission.Roles = new List<Role>();
-            permission.Roles.Add(role);
+            PermissionId = Guid.NewGuid();
+            Permission = MockRepository.GeneratePartialMock<Permission>();
+            Permission.Stub(c => c.Id).Return(PermissionId);
+            Permission.Roles = new List<Role>();
+            Permission.Roles.Add(Role);
 
         }
+
         private void SetUp_StubData()
         {
-            clientId = Guid.NewGuid();
-            client = MockRepository.GeneratePartialMock<Client>();
-            client.Stub(c => c.Id).Return(clientId);
-            client.Name = "Edgard";
+            ClientId = Guid.NewGuid();
+            Client = MockRepository.GeneratePartialMock<Client>();
+            Client.Stub(c => c.Id).Return(ClientId);
+            Client.Name = "Edgard";
 
-            roleId = Guid.NewGuid();
-            role = MockRepository.GeneratePartialMock<Role>();
-            role.Stub(c => c.Id).Return(roleId);
-            role.Name = "PM";
-            
-            
+            RoleId = Guid.NewGuid();
+            Role = MockRepository.GeneratePartialMock<Role>();
+            Role.Stub(c => c.Id).Return(RoleId);
+            Role.Name = "PM";
 
-            userId = Guid.NewGuid();
-            user = MockRepository.GeneratePartialMock<User>();
-            user.Stub(c => c.Id).Return(userId);
-            user.Email = "eu@yahoo.com";
-            user.FirstName = "Ion";
-            user.LastName = "Pop";
-            user.Password = "123asd";
-            user.UserName = "admin";
-            user.ClientId = client.Id;
-            user.RoleId = role.Id;
+
+
+            UserId = Guid.NewGuid();
+            User = MockRepository.GeneratePartialMock<User>();
+            User.Stub(c => c.Id).Return(UserId);
+            User.Email = "eu@yahoo.com";
+            User.FirstName = "Ion";
+            User.LastName = "Pop";
+            User.Password = "123asd";
+            User.UserName = "admin";
+            User.ClientId = Client.Id;
+            User.RoleId = Role.Id;
         }
 
         public IQueryable<User> PageOfUsersData(UserManagerIndexModel indexModel)
         {
-            List<User> userPageList = new List<User>();
+            var userPageList = new List<User>();
 
+            Debug.Assert(indexModel.start != null, "indexModel.start != null");
+            Debug.Assert(indexModel.limit != null, "indexModel.limit != null");
             for (int i = indexModel.start.Value; i < indexModel.limit.Value; i++)
             {
                 userPageList.Add(new User
-                {
-                    FirstName = user.FirstName,
-                    LastName = user.LastName,
-                    UserName = i + user.UserName,
-                    Email = i + user.Email,
-                    Password = user.Password
-                });
+                    {
+                        FirstName = User.FirstName,
+                        LastName = User.LastName,
+                        UserName = i + User.UserName,
+                        Email = i + User.Email,
+                        Password = User.Password
+                    });
             }
             return userPageList.AsQueryable();
+        }
+
+        public UserManagerInputModel CreatePopulatedUser()
+        {
+            return new UserManagerInputModel
+                {
+                    Id = User.Id,
+                    ClientId = Client.Id,
+                    UserName = User.UserName,
+                    Email = User.Email,
+                    FirstName = User.FirstName,
+                    LastName = User.LastName,
+                    Password = User.Password,
+                    RoleId = User.RoleId
+                };
         }
     }
 }

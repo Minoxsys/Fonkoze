@@ -26,7 +26,7 @@ namespace Tests.Unit.Controllers.UserMangerControllerTests
             //Arrange
 
             //Act
-            var jsonResult = objectMother.controller.Delete(null);
+            var jsonResult = objectMother.Controller.Delete(null);
 
             //Assert
             var response = jsonResult.Data as JsonActionResponse;
@@ -40,15 +40,15 @@ namespace Tests.Unit.Controllers.UserMangerControllerTests
         public void Executes_DeleteCommand_WithTheSelectedUser()
         {
             //Arrange
-            objectMother.queryUsers.Expect(call => call.Load(objectMother.user.Id)).Return(objectMother.user);
-            objectMother.deleteCommand.Expect(call => call.Execute(Arg<User>.Matches(p => p.Id == objectMother.user.Id)));
+            objectMother.QueryUsers.Expect(call => call.Load(objectMother.User.Id)).Return(objectMother.User);
+            objectMother.DeleteCommand.Expect(call => call.Execute(Arg<User>.Matches(p => p.Id == objectMother.User.Id)));
 
             //Act
-            var jsonResult = objectMother.controller.Delete(objectMother.user.Id);
+            var jsonResult = objectMother.Controller.Delete(objectMother.User.Id);
 
             //Assert
-            objectMother.deleteCommand.VerifyAllExpectations();
-            objectMother.queryUsers.VerifyAllExpectations();
+            objectMother.DeleteCommand.VerifyAllExpectations();
+            objectMother.QueryUsers.VerifyAllExpectations();
 
             Assert.IsNotNull(jsonResult);
 

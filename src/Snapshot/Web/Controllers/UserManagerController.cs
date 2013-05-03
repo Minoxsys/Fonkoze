@@ -51,47 +51,54 @@ namespace Web.Controllers
 
             Mapper.Map(inputModel, user);
 
-            SaveOrUpdateCommand.Execute(user);
+            var existingUsers = QueryUsers.Query().FirstOrDefault(u => u.UserName == inputModel.UserName);
+            if (existingUsers == null)
+            {
+                SaveOrUpdateCommand.Execute(user);
 
+                return Json(
+                    new JsonActionResponse
+                        {
+                            Status = "Success",
+                            Message = String.Format("Username {0} has been saved.", inputModel.UserName)
+                        });
+            }
             return Json(
-               new JsonActionResponse
-               {
-                   Status = "Success",
-                   Message = String.Format("Username {0} has been saved.", inputModel.UserName)
-               });
+                new JsonActionResponse
+                    {
+                        Status = "Error",
+                        Message = String.Format("Username {0} already exists!", inputModel.UserName)
+                    });
         }
 
         [HttpPost]
         public JsonResult Edit(UserManagerInputModel inputModel)
         {
-
             if (inputModel.Id == Guid.Empty)
             {
                 return Json(
-                   new JsonActionResponse
-                   {
-                       Status = "Error",
-                       Message = "You must supply a userId in order to edit the user."
-                   });
+                    new JsonActionResponse
+                        {
+                            Status = "Error",
+                            Message = "You must supply a userId in order to edit the user."
+                        });
             }
 
             var user = QueryUsers.Load(inputModel.Id);
 
             CreateMapping();
 
-            if (string.IsNullOrEmpty(inputModel.Password))
-                inputModel.Password = user.Password;
-
+            inputModel.Password = string.IsNullOrEmpty(inputModel.Password) ? user.Password : SecurePassword.EncryptPassword(inputModel.Password);
             Mapper.Map(inputModel, user);
 
             SaveOrUpdateCommand.Execute(user);
 
             return Json(
-               new JsonActionResponse
-               {
-                   Status = "Success",
-                   Message = String.Format("Username {0} has been saved.", inputModel.UserName)
-               });
+                new JsonActionResponse
+                    {
+                        Status = "Success",
+                        Message = String.Format("Username {0} has been saved.", inputModel.UserName)
+                    });
         }
 
         [HttpPost]

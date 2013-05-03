@@ -1,24 +1,22 @@
-﻿using System;
+﻿using Core.Domain;
+using NUnit.Framework;
+using Rhino.Mocks;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using NUnit.Framework;
-using Web.Models.UserManager;
 using Web.Models.Shared;
-using Rhino.Mocks;
-using Core.Domain;
+using Web.Models.UserManager;
 
 namespace Tests.Unit.Controllers.UserMangerControllerTests
 {
     [TestFixture]
     public class EditMethod
     {
-        public ObjectMother objectMother = new ObjectMother();
+        private readonly ObjectMother _objectMother = new ObjectMother();
 
         [SetUp]
-        public void BeforeAll()
+        public void BeforeEach()
         {
-            objectMother.Init();
+            _objectMother.Init();
         }
 
         [Test]
@@ -27,7 +25,7 @@ namespace Tests.Unit.Controllers.UserMangerControllerTests
             //Arrange
 
             //Act
-            var jsonResult = objectMother.controller.Edit(new UserManagerInputModel());
+            var jsonResult = _objectMother.Controller.Edit(new UserManagerInputModel());
 
             //Assert
             var response = jsonResult.Data as JsonActionResponse;
@@ -40,33 +38,45 @@ namespace Tests.Unit.Controllers.UserMangerControllerTests
         public void Returns_JSON_With_SuccessMessage_When_User_Has_Been_Saved()
         {
             //Arrange
-            UserManagerInputModel userInputModel = new UserManagerInputModel()
-            {
-                Id = objectMother.user.Id,
-                ClientId = objectMother.client.Id,
-                Email = objectMother.user.Email,
-                FirstName = objectMother.user.FirstName,
-                LastName = objectMother.user.LastName,
-                Password = objectMother.user.Password,
-                UserName = objectMother.user.UserName,
-                RoleId = objectMother.user.RoleId
-            };
-            objectMother.saveCommand.Expect(call => call.Execute(Arg<User>.Matches(p => p.UserName == objectMother.user.UserName &&
-                                                                                        p.FirstName == objectMother.user.FirstName &&
-                                                                                        p.LastName == objectMother.user.LastName &&
-                                                                                        p.Id == objectMother.user.Id
-                                                                                   )));
-            objectMother.queryUsers.Expect(call => call.Load(objectMother.userId)).Return(objectMother.user);
+            var userInputModel = new UserManagerInputModel()
+                {
+                    Id = _objectMother.User.Id,
+                    ClientId = _objectMother.Client.Id,
+                    Email = _objectMother.User.Email,
+                    FirstName = _objectMother.User.FirstName,
+                    LastName = _objectMother.User.LastName,
+                    Password = _objectMother.User.Password,
+                    UserName = _objectMother.User.UserName,
+                    RoleId = _objectMother.User.RoleId
+                };
+            _objectMother.SaveCommand.Expect(call => call.Execute(Arg<User>.Matches(p => p.UserName == _objectMother.User.UserName &&
+                                                                                        p.FirstName == _objectMother.User.FirstName &&
+                                                                                        p.LastName == _objectMother.User.LastName &&
+                                                                                        p.Id == _objectMother.User.Id
+                                                                     )));
+            _objectMother.QueryUsers.Expect(call => call.Load(_objectMother.UserId)).Return(_objectMother.User);
             //Act
-            var jsonResult = objectMother.controller.Edit(userInputModel);
+            var jsonResult = _objectMother.Controller.Edit(userInputModel);
 
             //Assert
-            objectMother.queryUsers.VerifyAllExpectations();
-            objectMother.saveCommand.VerifyAllExpectations();
+            _objectMother.QueryUsers.VerifyAllExpectations();
+            _objectMother.SaveCommand.VerifyAllExpectations();
             var response = jsonResult.Data as JsonActionResponse;
             Assert.IsNotNull(response);
             Assert.That(response.Status, Is.EqualTo("Success"));
             Assert.That(response.Message, Is.EqualTo("Username admin has been saved."));
+        }
+
+        [Test]
+        public void EncryptPasswordBeforeSaveInDb()
+        {
+            var userModel = _objectMother.CreatePopulatedUser();
+            _objectMother.QueryUsers.Stub(s => s.Load(userModel.Id)).Return(new User());
+            _objectMother.SecurePassword.Stub(s => s.EncryptPassword(userModel.Password)).Return("xxxx");
+
+            _objectMother.Controller.Edit(userModel);
+
+            _objectMother.SaveCommand.AssertWasCalled(s => s.Execute(Arg<User>.Matches(u => u.Password == "xxxx")));
         }
     }
 }

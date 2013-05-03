@@ -25,13 +25,13 @@ namespace Tests.Unit.Controllers.UserMangerControllerTests
         public void Returns_JSON_With_List_Of_Clients()
         {
             //Arange
-            objectMother.queryClient.Expect(call => call.Query()).Return(new Client[] {objectMother.client}.AsQueryable());
+            objectMother.QueryClient.Expect(call => call.Query()).Return(new Client[] {objectMother.Client}.AsQueryable());
 
             //Act
-            var jsonResult = objectMother.controller.GetListOfClients();
+            var jsonResult = objectMother.Controller.GetListOfClients();
 
             //Assert
-            objectMother.queryClient.VerifyAllExpectations();
+            objectMother.QueryClient.VerifyAllExpectations();
 
             Assert.IsNotNull(jsonResult);
             Assert.IsInstanceOf<ClientsIndexOutputModel>(jsonResult.Data);

@@ -25,14 +25,14 @@ namespace Tests.Unit.Controllers.UserMangerControllerTests
         public void Returns_The_ViewModel()
         {
             ////Arrange            
-            objectMother.queryPermission.Expect(it => it.QueryWithCacheRefresh(Arg<FunctionByName>.Is.Anything)).Return(new Permission[] {}.AsQueryable());
-            objectMother.queryPermission.Expect(it => it.QueryWithCacheRefresh(Arg<FunctionByName>.Is.Anything)).Return(new Permission[] { objectMother.permission }.AsQueryable());
-            objectMother.queryUsers.Expect(bt => bt.Query(Arg<UserByUserName>.Is.Anything)).Return(new User[] { }.AsQueryable());
-            objectMother.queryUsers.Expect(bt => bt.Query(Arg<UserByUserName>.Is.Anything)).Return(new User[] { objectMother.user }.AsQueryable());
+            objectMother.QueryPermission.Expect(it => it.QueryWithCacheRefresh(Arg<FunctionByName>.Is.Anything)).Return(new Permission[] {}.AsQueryable());
+            objectMother.QueryPermission.Expect(it => it.QueryWithCacheRefresh(Arg<FunctionByName>.Is.Anything)).Return(new Permission[] { objectMother.Permission }.AsQueryable());
+            objectMother.QueryUsers.Expect(bt => bt.Query(Arg<UserByUserName>.Is.Anything)).Return(new User[] { }.AsQueryable());
+            objectMother.QueryUsers.Expect(bt => bt.Query(Arg<UserByUserName>.Is.Anything)).Return(new User[] { objectMother.User }.AsQueryable());
 
 
             //// Act
-            var viewResult = (ViewResult)objectMother.controller.Overview();
+            var viewResult = (ViewResult)objectMother.Controller.Overview();
 
             //// Assert
             Assert.IsNull(viewResult.Model);

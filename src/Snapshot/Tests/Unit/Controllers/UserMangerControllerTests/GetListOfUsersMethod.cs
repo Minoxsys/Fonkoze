@@ -33,13 +33,13 @@ namespace Tests.Unit.Controllers.UserMangerControllerTests
                 sort = "UserName"
             };
             var pageOfData = objectMother.PageOfUsersData(indexModel);
-            objectMother.queryUsers.Expect(call => call.Query()).Return(pageOfData);
+            objectMother.QueryUsers.Expect(call => call.Query()).Return(pageOfData);
 
             //Act
-            var jsonResult = objectMother.controller.GetListOfUsers(indexModel);
+            var jsonResult = objectMother.Controller.GetListOfUsers(indexModel);
 
             //Assert
-            objectMother.queryUsers.VerifyAllExpectations();
+            objectMother.QueryUsers.VerifyAllExpectations();
 
             Assert.IsInstanceOf<UserIndexOutputModel>(jsonResult.Data);
             var jsonData = jsonResult.Data as UserIndexOutputModel;
@@ -63,19 +63,19 @@ namespace Tests.Unit.Controllers.UserMangerControllerTests
             };
 
             var pageOfData = objectMother.PageOfUsersData(indexModel);
-            objectMother.queryUsers.Expect(call => call.Query()).Return(pageOfData);
+            objectMother.QueryUsers.Expect(call => call.Query()).Return(pageOfData);
 
             //Act
 
-            var jsonResult = objectMother.controller.GetListOfUsers(indexModel);
+            var jsonResult = objectMother.Controller.GetListOfUsers(indexModel);
 
             //Assert
-            objectMother.queryUsers.VerifyAllExpectations();
+            objectMother.QueryUsers.VerifyAllExpectations();
 
             var jsonData = jsonResult.Data as UserIndexOutputModel;
 
             Assert.That(jsonData.Users[0].UserName, Is.EqualTo("9admin"));
-            Assert.That(jsonData.Users[0].Email, Is.EqualTo("9"+objectMother.user.Email));
+            Assert.That(jsonData.Users[0].Email, Is.EqualTo("9"+objectMother.User.Email));
 
         }
 

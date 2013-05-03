@@ -28,13 +28,13 @@ namespace Tests.Unit.Controllers.UserMangerControllerTests
         public void Returns_JSON_With_List_Of_Roles()
         {
             //Arange
-            objectMother.queryRole.Expect(call => call.Query()).Return(new Role[] {objectMother.role}.AsQueryable());
+            objectMother.QueryRole.Expect(call => call.Query()).Return(new Role[] {objectMother.Role}.AsQueryable());
 
             //Act
-            var jsonResult = objectMother.controller.GetListOfRoles();
+            var jsonResult = objectMother.Controller.GetListOfRoles();
 
             //Assert
-            objectMother.queryRole.VerifyAllExpectations();
+            objectMother.QueryRole.VerifyAllExpectations();
 
             Assert.IsNotNull(jsonResult);
             Assert.IsInstanceOf<RolesIndexOutputModel>(jsonResult.Data);

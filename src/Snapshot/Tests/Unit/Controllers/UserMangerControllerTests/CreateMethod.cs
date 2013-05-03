@@ -1,58 +1,81 @@
-﻿using System;
+﻿using Core.Domain;
+using NUnit.Framework;
+using Rhino.Mocks;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using NUnit.Framework;
-using Web.Models.UserManager;
-using Rhino.Mocks;
-using Core.Domain;
+using Tests.Utils;
 using Web.Models.Shared;
-using Web.Security;
-using Core.Services;
 
 namespace Tests.Unit.Controllers.UserMangerControllerTests
 {
     [TestFixture]
     public class CreateMethod
     {
-        public ObjectMother objectMother = new ObjectMother();
+        private readonly ObjectMother _objectMother = new ObjectMother();
         
 
         [SetUp]
-        public void BeforeAll()
+        public void BeforeEach()
         {
-            objectMother.Init();
+            _objectMother.Init();
         }
 
         [Test]
         public void Returns_JSON_With_SuccessMessage_When_User_Has_Been_Saved()
         {
             //Arrange
-            UserManagerInputModel userInputModel = new UserManagerInputModel()
-            {
-               ClientId = objectMother.client.Id,
-               UserName = objectMother.user.UserName,
-               Email = objectMother.user.Email,
-               FirstName = objectMother.user.FirstName,
-               LastName = objectMother.user.LastName,
-               Password = objectMother.user.Password,
-               RoleId = objectMother.user.RoleId
-            };
-            objectMother.saveCommand.Expect(call => call.Execute(Arg<User>.Matches(p => p.UserName == objectMother.user.UserName && 
-                                                                                        p.FirstName == objectMother.user.FirstName &&
-                                                                                        p.LastName == objectMother.user.LastName 
+            var userInputModel = _objectMother.CreatePopulatedUser();
+            _objectMother.SaveCommand.Expect(call => call.Execute(Arg<User>.Matches(p => p.UserName == _objectMother.User.UserName && 
+                                                                                        p.FirstName == _objectMother.User.FirstName &&
+                                                                                        p.LastName == _objectMother.User.LastName 
                                                                                    )));
+            _objectMother.QueryUsers.Stub(s => s.Query()).Return(new List<User>().AsQueryable());
 
             //Act
-            var jsonResult = objectMother.controller.Create(userInputModel);
+            var jsonResult = _objectMother.Controller.Create(userInputModel);
 
             //Assert
-            objectMother.saveCommand.VerifyAllExpectations();
+            _objectMother.SaveCommand.VerifyAllExpectations();
 
             var response = jsonResult.Data as JsonActionResponse;
             Assert.IsNotNull(response);
             Assert.That(response.Status, Is.EqualTo("Success"));
             Assert.That(response.Message, Is.EqualTo("Username admin has been saved."));
+        }
+
+        [Test]
+        public void DoNotSaveUser_WhenUserWithSameUsernameAlreadyExists()
+        {
+            var userModel = _objectMother.CreatePopulatedUser();
+            _objectMother.QueryUsers.Stub(s => s.Query()).Return((new List<User> {new User {UserName = userModel.UserName}}).AsQueryable());
+
+            _objectMother.Controller.Create(userModel);
+
+            _objectMother.SaveCommand.AssertWasNotCalled(c => c.Execute(Arg<User>.Is.Anything));
+        }
+
+        [Test]
+        public void ReturnJSONErrorMessage_WhenUserWithSameUsernameAlreadyExists()
+        {
+            var userModel = _objectMother.CreatePopulatedUser();
+            _objectMother.QueryUsers.Stub(s => s.Query()).Return((new List<User> { new User { UserName = userModel.UserName } }).AsQueryable());
+
+            var result = _objectMother.Controller.Create(userModel);
+
+            Assert.That(result.GetValueFromJsonResult<string>("Status"), Is.EqualTo("Error"));
+            Assert.That(result.GetValueFromJsonResult<string>("Message"), Is.EqualTo("Username " + userModel.UserName + " already exists!"));
+        }
+
+        [Test]
+        public void EncryptPasswordBeforeSaveInDb()
+        {
+            var userModel = _objectMother.CreatePopulatedUser();
+            _objectMother.QueryUsers.Stub(s => s.Query()).Return(new List<User> ().AsQueryable());
+            _objectMother.SecurePassword.Stub(s => s.EncryptPassword(userModel.Password)).Return("xxxx");
+
+            _objectMother.Controller.Create(userModel);
+
+            _objectMother.SaveCommand.AssertWasCalled(s => s.Execute(Arg<User>.Matches(u => u.Password == "xxxx")));
         }
     }
 }
