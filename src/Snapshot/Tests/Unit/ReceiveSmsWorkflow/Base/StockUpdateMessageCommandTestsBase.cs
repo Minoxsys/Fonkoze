@@ -163,6 +163,17 @@ namespace Tests.Unit.ReceiveSmsWorkflow.Base
             SendSmsServiceMock.Verify(s => s.SendSms(It.Is<string>(snd => snd == InputModel.Sender), It.IsAny<string>(), true));
         }
 
+        [Test]
+        public void ExecutingTheCommand_SendConfirmationBackToSender_WhenStockUpdateSuccessfull()
+        {
+            SetupKnownSender();
+
+            Sut.Execute(InputModel, new SmsParseResult {Success = true}, OutpostMock.Object);
+
+            SendSmsServiceMock.Verify(
+                s => s.SendSms(It.Is<string>(snd => snd == InputModel.Sender), "Stock updated successfully! Thank you for your message.", true));
+        }
+
         #region Helpers
 
         private void SetupTwoConsecutiveIncorrectMessages()

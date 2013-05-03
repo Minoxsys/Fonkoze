@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Core.Persistence;
+﻿using Core.Persistence;
 using Domain;
 using Domain.Enums;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Mail;
+using System.Text;
 using Web.LocalizationResources;
 using Web.Models.Parsing;
 using Web.ReceiveSmsUseCase.Models;
@@ -48,6 +48,10 @@ namespace Web.ReceiveSmsUseCase.SmsMessageCommands
                 if (result != null && !result.Success)
                 {
                     _sendSmsService.SendSms(smsData.Sender, ComposeUpdateStockFailMessage(result.FailedProducts), true);
+                }
+                else
+                {
+                    _sendSmsService.SendSms(smsData.Sender, Strings.StockUpdateSuccessConfirmation, true);
                 }
             }
             else

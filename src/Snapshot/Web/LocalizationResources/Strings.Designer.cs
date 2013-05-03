@@ -251,6 +251,15 @@ namespace Web.LocalizationResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Stock updated successfully! Thank you for your message..
+        /// </summary>
+        internal static string StockUpdateSuccessConfirmation {
+            get {
+                return ResourceManager.GetString("StockUpdateSuccessConfirmation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Seller {0} with phone number {1} has send the second consecutive invalid SMS. Please assist..
         /// </summary>
         internal static string TwoConsecutiveInvalidSMSEmailBody {

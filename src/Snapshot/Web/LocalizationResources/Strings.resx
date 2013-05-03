@@ -187,4 +187,7 @@
   <data name="CSV_file_parsing_has_failed" xml:space="preserve">
     <value>CSV file parsing has failed. Please check the contents of the CSV file to be valid.</value>
   </data>
+  <data name="StockUpdateSuccessConfirmation" xml:space="preserve">
+    <value>Stock updated successfully! Thank you for your message.</value>
+  </data>
 </root>
