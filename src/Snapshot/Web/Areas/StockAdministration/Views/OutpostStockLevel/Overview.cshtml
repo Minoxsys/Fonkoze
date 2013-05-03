@@ -10,6 +10,12 @@ Seller Stock Level Current
 
 @model Web.Areas.OutpostManagement.Models.Outpost.OutpostOverviewModel
 
+<style>
+    .x-mask, .x-mask.x-mask-gray {
+        background-color: transparent;
+    }
+</style>           
+
 <script type="text/javascript">
     Ext.onReady(function () {
 
@@ -133,6 +139,12 @@ Seller Stock Level Current
 
                     ClearDistrictStore();
                     ClearSellerStore();
+                },
+                render: function(p) {
+                    p.setLoading({
+                        store: p.getStore(),
+                        shadow: false
+                    });
                 }
             }
         });
@@ -162,6 +174,11 @@ Seller Stock Level Current
                     comboboxOutpost.setValue('@Guid.Empty');
 
                     ClearSellerStore();
+                },
+                render: function(p) {
+                    p.setLoading({
+                        store: p.getStore()
+                    });
                 }
             }
         });
@@ -185,6 +202,11 @@ Seller Stock Level Current
                     window.feature.OutpostStore.load({ params: { districtId: selectedDistrictId} });
 
                     Ext.getCmp(window.feature.comboboxOutpostsId).setDisabled(false);
+                },
+                render: function(p) {
+                    p.setLoading({
+                        store: p.getStore()
+                    });
                 }
             }
         });
@@ -201,7 +223,15 @@ Seller Stock Level Current
             disabled: false,
             editable: false,
             typeAhead: false,
-            emptyText: _t('Seller List')
+            emptyText: _t('Seller List'),
+            listeners: {
+                
+                render: function(p) {
+                    p.setLoading({
+                        store: p.getStore()
+                    });
+                }
+            }
 
         });
         window.feature.fieldOutpostNameId = 'fieldOutpostNAmeId';
@@ -532,6 +562,76 @@ Seller Stock Level Current
         });
         
         var contentRes = window.res.content;
+      
+        
+        var mainContent = Ext.getCmp(contentRes.maincontent.id);
+        mainContent.add({
+            xtype: 'container',
+            margin: '15 15 15 15',
+            padding: '20 20 0 20',
+            autoScroll:true,
+            id:'TopContainer',
+            layout: {
+                align: 'stretch',
+                type: 'vbox'
+            },
+            items: [
+                {
+                    xtype: 'container',
+                    layout: {
+                        align: 'stretch',
+                        type: 'vbox'
+                    },
+                    height: 110,
+                    items: [{
+                            xtype: 'container',
+                            height: 50,
+                            layout: {
+                                type: 'column'
+                            },
+                            items: [{
+                                    xtype: 'container',
+                                    height: 30,
+                                    width: 30,
+                                    html: '&nbsp;'
+                                }, {
+                                    xtype: 'image',
+                                    src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/OutpostStockLevel/CurrentProductLevel.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                                    margin: '0 10 10 0'
+                                }, {
+                                    xtype: 'label',
+                                    cls: 'x-title-label',
+                                    text: 'Current Product Status'
+                                }]
+                        }, {
+                            xtype: 'container',
+                            id: 'combosContainer',
+                            height: 65,
+                            margin: '0 0 0 30',
+                            layout: {
+                                type: 'column'
+                            },
+                            items: [
+                                window.feature.comboBoxCountries,
+                                window.feature.comboBoxRegions,
+                                window.feature.comboBoxDistricts,
+                                window.feature.comboBoxOutposts, {
+                                    xtype: 'button',
+                                    margin: '25 0 10 0',
+                                    text: 'View Product Status',
+                                    ui: 'snapshot-add-btn',
+                                    cls: 'x-add-button-gradient',
+                                    handler: viewProductStatusHandler
+                                }]
+                        }]
+                },
+				window.feature.treegrid
+            ]
+        });
+       
+     //  var cmbContainer = Ext.getCmp('combosContainer');
+     //   cmbContainer.setLoading(true);
+        
         window.feature.CountryStore.load();
         window.feature.RegionStore.load({
             params: { countryId: '@Guid.Empty' }
@@ -548,70 +648,10 @@ Seller Stock Level Current
         window.feature.comboBoxDistricts.setValue('@Guid.Empty');
         window.feature.comboBoxOutposts.setValue('@Guid.Empty');
 
-        var mainContent = Ext.getCmp(contentRes.maincontent.id);
-        mainContent.add({
-            xtype: 'container',
-            margin: '15 15 15 15',
-            padding: '20 20 0 20',
-            autoScroll:true,
-            id:'TopContainer',
-            layout: {
-                align: 'stretch',
-                type: 'vbox'
-            },
-            items: [
-            {
-                xtype: 'container',
-                layout: {
-                    align: 'stretch',
-                    type: 'vbox'
-                },
-                height: 110,
-                items: [{
-                    xtype: 'container',
-                    height: 50,
-                    layout: {
-                        type: 'column'
-                    },
-                    items: [{
-                        xtype: 'container',
-                        height: 30,
-                        width: 30,
-                        html:'&nbsp;'
-                    },{
-                        xtype: 'image',
-                        src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/OutpostStockLevel/CurrentProductLevel.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
-                        margin: '0 10 10 0'
-                    },{
-                        xtype: 'label',
-                        cls: 'x-title-label',
-                        text: 'Current Product Status'
-                    }]
-                },{
-					xtype: 'container',
-                    height: 65,
-                    margin: '0 0 0 30',
-					layout: {
-						type: 'column'
-					},
-					items: [
-                        window.feature.comboBoxCountries, 
-						window.feature.comboBoxRegions,
-						window.feature.comboBoxDistricts,
-						window.feature.comboBoxOutposts 
-                    ,{ 
-                        xtype: 'button',
-                        margin: '25 0 10 0',
-                        text: 'View Product Status',
-                        ui: 'snapshot-add-btn',
-                        cls: 'x-add-button-gradient',
-                        handler: viewProductStatusHandler
-                    }]
-				}]
-			},
-				window.feature.treegrid
-            ]
-        });
+
+
+       //  cmbContainer.setLoading(false);
+
 
         if ('@Model.CountryId' != '@Guid.Empty' && '@Model.RegionId' != '@Guid.Empty' && '@Model.DistrictId' != '@Guid.Empty') {
             window.feature.CountryStore.load();
@@ -640,6 +680,7 @@ Seller Stock Level Current
 
             viewProductStatusHandler();
             window.feature.treegrid.expandAll();
+            
         }
 
         function viewProductStatusHandler() {
@@ -667,4 +708,7 @@ Seller Stock Level Current
         };
 
     });
+    
+
+
 </script>
