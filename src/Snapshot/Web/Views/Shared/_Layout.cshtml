@@ -95,6 +95,8 @@
                 margin: '0 auto',
                 padding: '0',
                 layout: 'fit',
+                scrollable: true,
+                autoScroll: true,
                 items: [{
                     xtype: 'container',
                     layout: 'fit',
@@ -107,7 +109,7 @@
                             align: 'stretch',
                             type: 'vbox'
                         },
-                        minWidth: 1410,
+                        minWidth: 1500,
                         minHeight: 700,
                         items: [{
                             xtype: 'container',
@@ -129,7 +131,7 @@
                                 },
                                 items: [{
                                     xtype: 'container',
-                                    width: 1300,
+                                    width: 1120,
                                     layout:'column',
                                     items:[{
                                         xtype: 'container',
@@ -137,7 +139,7 @@
                                         margin: '15 60 0 20',
                                         id: res.header.navigation.logo,
                                         padding: 0,
-                                        width: 200,
+                                        width: 180,
                                         items: [{ 
                                             xtype: 'image',
                                             src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/LogoFon.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))'

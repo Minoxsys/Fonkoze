@@ -126,6 +126,7 @@ Analysis: Product level information at seller level
             displayField: 'Name',
             valueField: 'Id',
             emptyText: _t('Country List'),
+            columnWidth: 0.25,
             listeners: {
                 select: function (combo, record, index) {
                     var selectedCountryId = record[0].data.Id;
@@ -165,6 +166,7 @@ Analysis: Product level information at seller level
             valueField: 'Id',
             margin: '0 0 0 20',
             emptyText: _t('Region List'),
+            columnWidth: 0.25,
             listeners: {
                 select: function (combo, record, index) {
                     var selectedRegionId = record[0].data.Id;
@@ -198,6 +200,7 @@ Analysis: Product level information at seller level
             valueField: 'Id',
             margin: '0 0 0 20',
             emptyText: _t('District List'),
+            columnWidth: 0.25,
             listeners: {
                 select: function (combo, record, index) {
                     var selectedDistrictId = record[0].data.Id;
@@ -225,6 +228,7 @@ Analysis: Product level information at seller level
             valueField: 'Id',            
             margin: '0 0 0 20',
             emptyText: _t('Seller List'),
+            columnWidth: 0.25,
             listeners: {
                 select: function (combo, record, index) {
                    var selectedOutpostId = record[0].data.Id;
@@ -456,8 +460,8 @@ Analysis: Product level information at seller level
             useArrows: true,
             cls: 'white-border',
             rootVisible: false,
-            flex: 3,
-            width:660,
+            flex: 1,
+           // width:660,
             scroll: 'vertical',
             root: {},
             store: window.feature.treeStore,
@@ -510,7 +514,7 @@ Analysis: Product level information at seller level
             },
             items: [{
                 xtype: 'container',
-                flex: 0.85,
+                flex: 1,
                 layout: {
                     align: 'stretch',
                     type: 'vbox'
@@ -549,7 +553,10 @@ Analysis: Product level information at seller level
                         xtype: 'container',
                         height: 65,
                         layout: {
-                            type: 'column'
+                            type: 'column',
+                            
+                            //align: 'left',
+                            //pack: 'start'
                         },
                         items: [
                                 window.feature.comboBoxCountries,
@@ -564,7 +571,7 @@ Analysis: Product level information at seller level
                 ]
                }, {
                 xtype: 'container',
-                flex: 1.15,
+                flex: 1,
                 layout: {
                     align: 'stretch',
                     type: 'vbox'
