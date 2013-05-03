@@ -56,27 +56,56 @@ namespace Tests.Unit.WarehouseManagementWorkflow
         }
 
         [Test]
-        public void ReturnsTrue_WhenParseIsSuccesfull()
+        public void ReturnsNullFailedProductsAndSuccessTrue_WhenParseSuccessAndNoFailedProducts()
         {
             _stockUpdateCsvFileParser.Setup(s => s.ParseStream(_dummyStream.Object))
                                      .Returns(new CsvParseResult {Success = true});
 
+            _updateStockServiceMock.Setup(s => s.IncrementProductStocksForOutpost(It.IsAny<CsvParseResult>(), _outpostId, StockUpdateMethod.CSV))
+                                     .Returns(new StockUpdateResult { FailedProducts = null, Success = true });
+
             var result = _sut.ProcessWarehouseStockData(_dummyStream.Object, _outpostId);
 
-            Assert.IsTrue(result);
+            Assert.IsTrue(result.Success);
+            Assert.IsNull(result.FailedProducts);
         }
 
+        [Test]
+        public void ReturnsNotNullFailedProductsAndSuccessFalse_WhenParseSuccessAndThereAreFailedProducts()
+        {
+            _stockUpdateCsvFileParser.Setup(s => s.ParseStream(_dummyStream.Object))
+                                     .Returns(new CsvParseResult { Success = true });
+
+            _updateStockServiceMock.Setup(s => s.IncrementProductStocksForOutpost(It.IsAny<CsvParseResult>(), _outpostId, StockUpdateMethod.CSV))
+                                     .Returns(new StockUpdateResult { FailedProducts = CreateFailedProducts(), Success = false });
+
+            var result = _sut.ProcessWarehouseStockData(_dummyStream.Object, _outpostId);
+
+            Assert.IsFalse(result.Success);
+            Assert.IsNotNull(result.FailedProducts);
+        }
 
         [Test]
-        public void ReturnsFalse_WhenParseFailed()
+        public void ReturnsNullFailedProductsAndSuccessFalse_WhenParseFailed()
         {
             _stockUpdateCsvFileParser.Setup(s => s.ParseStream(_dummyStream.Object))
                                      .Returns(new CsvParseResult { Success = false });
 
             var result = _sut.ProcessWarehouseStockData(_dummyStream.Object, _outpostId);
 
-            Assert.IsFalse(result);
+            Assert.IsFalse(result.Success);
+            Assert.IsNull(result.FailedProducts);
         }
 
+        private List<IParsedProduct> CreateFailedProducts()
+        {
+            var productList = new List<IParsedProduct>();
+            var failedParsedProduct1 = new ParsedProduct { ProductGroupCode = "ALL", ProductCode = "TTB", StockLevel = 12 };
+            var failedParsedProduct2 = new ParsedProduct { ProductGroupCode = "ALL", ProductCode = "YYZ", StockLevel = 12 };
+            productList.Add(failedParsedProduct1);
+            productList.Add(failedParsedProduct2);
+
+            return productList;
+        }
     }
 }

@@ -16,14 +16,14 @@ namespace Web.WarehouseMgmtUseCase.Services
             _stockUpdateCsvFileParser = stockUpdateCsvFileParser;
         }
 
-        public bool ProcessWarehouseStockData(Stream inputData, Guid outpostId)
+        public StockUpdateResult ProcessWarehouseStockData(Stream inputData, Guid outpostId)
         {
             IParseResult parseResult = _stockUpdateCsvFileParser.ParseStream(inputData);
             if (parseResult.Success)
             {
-                _updateStockService.IncrementProductStocksForOutpost(parseResult, outpostId, StockUpdateMethod.CSV);
+                return _updateStockService.IncrementProductStocksForOutpost(parseResult, outpostId, StockUpdateMethod.CSV);
             }
-            return parseResult.Success;
+            return new StockUpdateResult();
         }
     }
 }

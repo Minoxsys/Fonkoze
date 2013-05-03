@@ -190,4 +190,7 @@
   <data name="StockUpdateSuccessConfirmation" xml:space="preserve">
     <value>Stock updated successfully! Thank you for your message.</value>
   </data>
+  <data name="CSV_file_failed_products" xml:space="preserve">
+    <value>The file uploaded successfully. The following Products could not be updated:</value>
+  </data>
 </root>

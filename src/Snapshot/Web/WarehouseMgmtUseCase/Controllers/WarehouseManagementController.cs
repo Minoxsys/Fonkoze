@@ -5,6 +5,8 @@ using System.Web.Mvc;
 using Web.Areas.OutpostManagement.Models.Outpost;
 using Web.LocalizationResources;
 using Web.WarehouseMgmtUseCase.Services;
+using System.Text;
+using Web.Services.StockUpdates;
 
 namespace Web.WarehouseMgmtUseCase.Controllers
 {
@@ -30,13 +32,22 @@ namespace Web.WarehouseMgmtUseCase.Controllers
             // Verify that the user selected a file
             if (csvfile != null && csvfile.ContentLength > 0)
             {
-                if (outpostId.HasValue && _warehouseManagementWorkflowService.ProcessWarehouseStockData(csvfile.InputStream, outpostId.Value))
+                var stockUpdateResult = _warehouseManagementWorkflowService.ProcessWarehouseStockData(csvfile.InputStream, outpostId.Value);
+
+                if (outpostId.HasValue && stockUpdateResult.Success)
                 {
                     TempData["result"] = Strings.Upload_The_file_uploaded_succesfully;
                 }
                 else
                 {
-                    TempData["result"] = Strings.CSV_file_parsing_has_failed;
+                    if (stockUpdateResult.FailedProducts == null)
+                    {
+                        TempData["result"] = Strings.CSV_file_parsing_has_failed;
+                    }
+                    else
+                    {
+                        TempData["result"] = Strings.CSV_file_failed_products + GetFailedProductsString(stockUpdateResult);
+                    }
                 }
             }
             else
@@ -45,6 +56,29 @@ namespace Web.WarehouseMgmtUseCase.Controllers
             }
 
             return this.RedirectToAction(c => c.Overview());
+        }
+
+        private StringBuilder GetFailedProductsString(StockUpdateResult stockUpdateResult)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            for (int i = 0; i <= stockUpdateResult.FailedProducts.Count; ++i)
+            {
+                if (i == 0)
+                {
+                    sb.Append(" ").Append(stockUpdateResult.FailedProducts[i].ProductCode);
+                }
+                else if (i == stockUpdateResult.FailedProducts.Count)
+                {
+                    sb.Append(".");
+                }
+                else
+                {
+                    sb.Append(", ").Append(stockUpdateResult.FailedProducts[i].ProductCode);
+                }
+            }
+
+            return sb;
         }
     }
 }

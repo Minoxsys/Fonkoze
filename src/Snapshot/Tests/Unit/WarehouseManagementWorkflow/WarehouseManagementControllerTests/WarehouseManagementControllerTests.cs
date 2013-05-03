@@ -9,6 +9,11 @@ using System.Web.Mvc;
 using Web.Areas.OutpostManagement.Models.Outpost;
 using Web.WarehouseMgmtUseCase.Controllers;
 using Web.WarehouseMgmtUseCase.Services;
+using Web.Services.StockUpdates;
+using Web.Models.Parsing;
+using Web.WarehouseMgmtUseCase.Model;
+using System.Collections.Generic;
+using System.Globalization;
 
 namespace Tests.Unit.WarehouseManagementWorkflow.WarehouseManagementControllerTests
 {
@@ -62,10 +67,10 @@ namespace Tests.Unit.WarehouseManagementWorkflow.WarehouseManagementControllerTe
         }
 
         [Test]
-        public void Upload_ReturnsSuccessMessageInTempData_WhenUploadSuccesfull()
+        public void Upload_ReturnsSuccessMessageInTempData_WhenUploadSuccesfullAndNoFailedProducts()
         {
             CreateDummyValidStream();
-            _warehouseMgmtWorflowServiceMock.Setup(s => s.ProcessWarehouseStockData(It.IsAny<Stream>(), It.IsAny<Guid>())).Returns(true);
+            _warehouseMgmtWorflowServiceMock.Setup(s => s.ProcessWarehouseStockData(It.IsAny<Stream>(), It.IsAny<Guid>())).Returns(new StockUpdateResult { Success = true });
 
             _sut.Upload(_fileMock.Object, Guid.Empty);
 
@@ -76,6 +81,7 @@ namespace Tests.Unit.WarehouseManagementWorkflow.WarehouseManagementControllerTe
         public void Upload_ReturnsFailParseMessageInTempData_WhenParsingFailed()
         {
             CreateDummyValidStream();
+            _warehouseMgmtWorflowServiceMock.Setup(s => s.ProcessWarehouseStockData(It.IsAny<Stream>(), It.IsAny<Guid>())).Returns(new StockUpdateResult { Success = false });
 
             _sut.Upload(_fileMock.Object, Guid.Empty);
             AssertFaildParsingErrorMessageIsPostedInTempData();
@@ -87,9 +93,21 @@ namespace Tests.Unit.WarehouseManagementWorkflow.WarehouseManagementControllerTe
             var outpostId = Guid.NewGuid();
             var dummyStream = CreateDummyValidStream();
 
+            _warehouseMgmtWorflowServiceMock.Setup(s => s.ProcessWarehouseStockData(It.IsAny<Stream>(), It.IsAny<Guid>())).Returns(new StockUpdateResult { Success = false });
+
             _sut.Upload(_fileMock.Object, outpostId);
 
             _warehouseMgmtWorflowServiceMock.Verify(s => s.ProcessWarehouseStockData(It.Is<Stream>(str => str == dummyStream.Object), outpostId));
+        }
+
+        [Test]
+        public void Upload_ReturnsFailedProductsMessageInTempData_WhenUploadSuccesfullAndFailedProducts()
+        {
+            CreateDummyValidStream();
+            _warehouseMgmtWorflowServiceMock.Setup(s => s.ProcessWarehouseStockData(It.IsAny<Stream>(), It.IsAny<Guid>())).Returns(new StockUpdateResult {FailedProducts = CreateFailedProducts(), Success = false });
+
+            _sut.Upload(_fileMock.Object, Guid.Empty);
+            AssertFailedProductsMessageIsPostedInTempData();
         }
 
         private Mock<Stream> CreateDummyValidStream()
@@ -98,6 +116,17 @@ namespace Tests.Unit.WarehouseManagementWorkflow.WarehouseManagementControllerTe
             _fileMock.Setup(f => f.ContentLength).Returns(1);
             _fileMock.Setup(f => f.InputStream).Returns(dummyStream.Object);
             return dummyStream;
+        }
+
+        private IParseResult CreateListOfProducts()
+        {
+            var list = new List<IParsedProduct>();
+            for (int i = 'A'; i < 'Z'; i++)
+            {
+                list.Add(new ParsedProduct { ProductGroupCode = "ALL", ProductCode = i.ToString(CultureInfo.InvariantCulture), StockLevel = i });
+            }
+
+            return new CsvParseResult { Success = true, ParsedProducts = list };
         }
 
         private void AssertFaildParsingErrorMessageIsPostedInTempData()
@@ -110,9 +139,25 @@ namespace Tests.Unit.WarehouseManagementWorkflow.WarehouseManagementControllerTe
             Assert.That(_sut.TempData["result"], Is.EqualTo("The file uploaded successfully."));
         }
 
+        private void AssertFailedProductsMessageIsPostedInTempData()
+        {
+            Assert.That(_sut.TempData["result"], Is.EqualTo("The file uploaded successfully. The following Products could not be updated:"+ " TTB, YYZ."));
+        }
+
         private void AssertErrorMessageIsPostedInTempData()
         {
             Assert.That(_sut.TempData["result"], Is.EqualTo("The file selected is invalid. Please choose another one."));
+        }
+
+        private List<IParsedProduct> CreateFailedProducts()
+        {
+            var productList = new List<IParsedProduct>();
+            var failedParsedProduct1 = new ParsedProduct { ProductGroupCode = "ALL", ProductCode = "TTB", StockLevel = 12 };
+            var failedParsedProduct2 = new ParsedProduct { ProductGroupCode = "ALL", ProductCode = "YYZ", StockLevel = 12 };
+            productList.Add(failedParsedProduct1);
+            productList.Add(failedParsedProduct2);
+
+            return productList;
         }
     }
 }

@@ -1,10 +1,11 @@
 ﻿using System;
 using System.IO;
+using Web.Services.StockUpdates;
 
 namespace Web.WarehouseMgmtUseCase.Services
 {
     public interface IWarehouseManagementWorkflowService
     {
-        bool ProcessWarehouseStockData(Stream inputData, Guid outpostId);
+        StockUpdateResult ProcessWarehouseStockData(Stream inputData, Guid outpostId);
     }
 }
