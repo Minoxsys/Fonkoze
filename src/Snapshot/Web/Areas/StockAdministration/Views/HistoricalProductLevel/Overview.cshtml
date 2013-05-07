@@ -29,6 +29,8 @@ Historical Product Level: Overview
         window.feature.regionComboboxId = 'Overview-Combobox-Region-Historical';
         window.feature.districtComboboxId = 'Overview-Combobox-District-Historical';
         window.feature.outpostComboboxId = 'Overview-Combobox-Outpost-Historical';
+        window.feature.productComboboxId = 'Overview-Combobox-Product-Historical';
+
         window.feature.containerForHistoricalGridId = 'Container-For-Historical-Grid-Id';
         window.feature.viewProductStockLevelId = 'Button-For-View-Product-Stock-Level-Id';
         window.feature.outpostName = 'Product-Group-Level-Outpost-Name';
@@ -43,54 +45,7 @@ Historical Product Level: Overview
        // window.feature.editOutpostName = 'Edit-Outpost-Name-Historical-Id';
         
 
-        Ext.define('ProductSales', {
-            extend: 'Ext.data.Model',
-            fields: ['OutpostName', 'ProductName', 'Date', {
-                name: 'Quantity',
-                type: 'int'
-            }]
-        });
-
-        window.feature.productSalesStore = Ext.create('Ext.data.Store', {
-            model: 'ProductSales',
-            @* proxy:{
-                type:'ajax',
-                url: '@Url.RouteUrl(Web.Areas.OutpostManagement.OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "HistoricalProductLevel", action = "GetProductSales" })',
-                reader:{
-                    type: 'json',
-                    root: 'Countries',
-                    totalProperty: 'TotalItems'
-                },
-                simpleSortMode: true
-            },*@
-            data: [{
-                OutpostName: 'Seller 1',
-                ProductName: 'Vitamin C',
-                Date: '05-Apr-2013 12:22 AM',
-                Quantity: 2
-            },{
-                OutpostName: 'Seller 1',
-                ProductName: 'Vitamin D',
-                Date: '05-Apr-2013 12:22 AM',
-                Quantity: 1
-            },{
-                OutpostName: 'Seller 2',
-                ProductName: 'Vitamin C',
-                Date: '05-Apr-2013 12:22 AM',
-                Quantity: 2
-            },{
-                OutpostName: 'Seller 2',
-                ProductName: 'Vitamin C',
-                Date: '05-Apr-2013 12:22 AM',
-                Quantity: 3
-            }],
-            sorters: [{
-                property: 'Date',
-                direction: 'DESC'
-            }],
-            groupField:'OutpostName'
-        })
-
+       
         window.feature.countryStore = Ext.create('Ext.data.Store', {
             remoteSort: true,
             fields: ['Id','Name'],
@@ -169,6 +124,65 @@ Historical Product Level: Overview
                 direction: 'ASC'
             }]
         });
+
+       
+        Ext.define('ProductSales', {
+            extend: 'Ext.data.Model',
+            fields: ['OutpostName', 'ProductName', 'Date', {
+                name: 'Quantity',
+                type: 'int'
+            }]
+        });
+
+        window.feature.productSalesStore = Ext.create('Ext.data.Store', {
+            model: 'ProductSales',
+            proxy: {
+                type: 'ajax',
+                url: '@Url.RouteUrl(StockAdministrationAreaRegistration.DEFAULT_ROUTE, new { controller = "HistoricalProductLevel", action = "GetProductSales" })',
+                reader: {
+                    type: 'json',
+                    root: 'ProductSales',
+                    totalProperty: 'TotalItems'
+                },
+                extraParams: {
+                    countryId: '',
+                    regionId: '',
+                    districtId: '',
+                    outpostId: '',
+                    startDate: '',
+                    endDate: '',
+                    productId:''
+                },
+                simpleSortMode: true
+             },
+            //data: [{
+            //    OutpostName: 'Seller 1',
+            //    ProductName: 'Vitamin C',
+            //    Date: '05-Apr-2013 12:22 AM',
+            //    Quantity: 2
+            //},{
+            //    OutpostName: 'Seller 1',
+            //    ProductName: 'Vitamin D',
+            //    Date: '05-Apr-2013 12:22 AM',
+            //    Quantity: 1
+            //},{
+            //    OutpostName: 'Seller 2',
+            //    ProductName: 'Vitamin C',
+            //    Date: '05-Apr-2013 12:22 AM',
+            //    Quantity: 2
+            //},{
+            //    OutpostName: 'Seller 2',
+            //    ProductName: 'Vitamin C',
+            //    Date: '05-Apr-2013 12:22 AM',
+            //    Quantity: 3
+            //}],
+            sorters: [{
+                property: 'Date',
+                direction: 'DESC'
+            }],
+            groupField: 'OutpostName'
+        })
+
 
         window.feature.gridOutpostStore = Ext.create('Ext.data.Store', {
             remoteSort: true,
@@ -470,7 +484,21 @@ Historical Product Level: Overview
                             }
                         }
 			                
-                    },{ 
+                    }, {
+                        xtype: 'combobox',
+                        itemId: window.feature.productComboboxId,
+                        //store: window.feature.productStore,
+                        disabled: false,
+                        labelAlign: 'top',
+                        labelClsExtra: 'combo-label',
+                        fieldLabel: 'Selected Product',
+                        displayField: 'Name',
+                        valueField: 'Id',
+                        emptyText: 'Product List',
+                        typeAhead: true,
+                        editable: false,
+                       
+                    }, {
                         xtype: 'button',
                         margin: '25 0 0 0',
                         text: 'View Product Sales',
@@ -481,7 +509,7 @@ Historical Product Level: Overview
                         handler: function(){
                             ResetExtraParams();
                             SetNewExtraParams();
-                            window.feature.gridOutpostStore.load();  
+                            window.feature.productSalesStore.load();  
                         }
 
                     }]
@@ -490,24 +518,22 @@ Historical Product Level: Overview
                 xtype: 'gridpanel',
                 cls: 'white-border',
                 store: window.feature.productSalesStore,
-                flex: 3,
+                flex: 2,
                 loadMask: true,
                 autoScroll: true,
-                viewConfig: {
-                    stripeRows: false
-                },
-                features: [{
+                features: [
+                    {
                     id: 'group',
                     ftype: 'groupingsummary',
                     groupHeaderTpl: '{name}',
-                   // hideGroupedHeader: true,                    
+                    hideGroupedHeader: true,                    
                     startCollapsed: true
                 },
-                {
-                    id: 'totalSummary',
-                    ftype: 'summary',
+                //{
+                //    id: 'totalSummary',
+                //    ftype: 'summary',
 
-                }
+                //}
                 ],
                 columns: [{
                     header: "Sellers and Products Sold",
@@ -516,11 +542,11 @@ Historical Product Level: Overview
                     flex: 1,
                     minWidth: 100,
                     sortable: true,
-                   // summaryType: 'count',
                     summaryRenderer: function (value) {
-                        return '<b>Total </b>';
+                        return '<b> Total  </b>';
                     }
-                   // renderer: addTooltip
+                   
+                   
                 },{
                     header: "Date",
                     dataIndex: 'Date',
@@ -536,53 +562,41 @@ Historical Product Level: Overview
                     minWidth: 100,
                     align: 'center',
                     sortable: true,
-                    summaryType: 'sum'
+                    summaryType: 'sum',
+                    summaryRenderer: function (value) {
+                        return '<b> ' + value + ' </b>';
+                    }
                 }],
-                //listeners: {
-                //    itemclick: function(view, record, item, index, e ) {
-
-                //        window.feature.productGroupLevels.proxy.extraParams.outpostId = record.get('Id');
-                //        window.feature.productGroupLevels.proxy.extraParams.smsResponseDate = record.get('SMSResponseDate');
-                //        window.feature.productGroupLevels.proxy.extraParams.productGroupId = record.get('ProductGroupId');
-                //        window.feature.productGroupLevels.load();
-
-                //        var productView = new window.feature.productGroupLevel();
-                        
-                //        productView.down('#'+window.feature.outpostName).setValue(record.get('Name'));
-                //        productView.down('#'+window.feature.productGroupName).setValue(record.get('ProductGroupName'));
-
-                //        productView.show();
-                //    }
-               // }
+                
             }]
         });
 
         function ResetExtraParams(){
-            window.feature.gridOutpostStore.proxy.extraParams.outpostId = null;
-            window.feature.gridOutpostStore.proxy.extraParams.districtId = null;
-            window.feature.gridOutpostStore.proxy.extraParams.regionId = null;
-            window.feature.gridOutpostStore.proxy.extraParams.countryId = null;
+            window.feature.productSalesStore.proxy.extraParams.outpostId = null;
+            window.feature.productSalesStore.proxy.extraParams.districtId = null;
+            window.feature.productSalesStore.proxy.extraParams.regionId = null;
+            window.feature.productSalesStore.proxy.extraParams.countryId = null;
         };
 
         function SetNewExtraParams(){
             var outpostSelectedValue = window.feature.container.down('#'+window.feature.outpostComboboxId).getValue();
             if (outpostSelectedValue != null){
-                window.feature.gridOutpostStore.proxy.extraParams.outpostId = outpostSelectedValue;
+                window.feature.productSalesStore.proxy.extraParams.outpostId = outpostSelectedValue;
             }
 
             var districtSelectedValue = window.feature.container.down('#'+window.feature.districtComboboxId).getValue();
             if (districtSelectedValue != null){
-                window.feature.gridOutpostStore.proxy.extraParams.districtId = districtSelectedValue;
+                window.feature.productSalesStore.proxy.extraParams.districtId = districtSelectedValue;
             }
 
             var regionSelectedValue = window.feature.container.down('#'+window.feature.regionComboboxId).getValue();
             if (regionSelectedValue != null){
-                window.feature.gridOutpostStore.proxy.extraParams.regionId = regionSelectedValue;
+                window.feature.productSalesStore.proxy.extraParams.regionId = regionSelectedValue;
             }
 
             var countrySelectedValue = window.feature.container.down('#'+window.feature.countryComboboxId).getValue();
             if (countrySelectedValue != null){
-                window.feature.gridOutpostStore.proxy.extraParams.countryId = countrySelectedValue;
+                window.feature.productSalesStore.proxy.extraParams.countryId = countrySelectedValue;
             }
         };
 
@@ -597,6 +611,7 @@ Historical Product Level: Overview
         var outpostCombobox = window.feature.container.down('#'+window.feature.outpostComboboxId);
 
         window.feature.countryStore.load();
+
         window.feature.regionStore.load({
             params: { countryId: '@Guid.Empty' }
         });

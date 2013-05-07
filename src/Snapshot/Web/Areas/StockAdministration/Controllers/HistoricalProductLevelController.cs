@@ -21,6 +21,7 @@ namespace Web.Areas.StockAdministration.Controllers
         public IQueryService<ProductGroup> QueryProductGroup { get; set; }
         public IQueryService<Product> QueryProduct { get; set; }
         public IQueryService<OutpostHistoricalStockLevel> QueryHistorical { get; set; }
+        public IQueryService<ProductSale> QueryProductSale { get; set; }
 
         public ISaveOrUpdateCommand<OutpostHistoricalStockLevel> SaveOrUpdateMethod { get; set; }
 
@@ -121,6 +122,35 @@ namespace Web.Areas.StockAdministration.Controllers
                 .Where(it => it.UpdateDate.Value.Year == dateTime.Year)
                 .Where(it => it.UpdateDate.Value.Month == dateTime.Month)
                 .Where(it => it.UpdateDate.Value.Day == dateTime.Day).Count();
+        }
+
+        [HttpGet]
+        public JsonResult GetProductSales(Guid? countryId, Guid? regionId, Guid? districtId, Guid? outpostId, DateTime? startDate, DateTime? endDate, Guid? productId)
+        {
+
+            var ps = QueryProductSale.Query();                  
+
+            if (countryId.HasValue && countryId != Guid.Empty)
+                ps = ps.Where(it => it.Outpost.Country.Id == countryId);
+            if (regionId.HasValue && regionId != Guid.Empty)
+                ps = ps.Where(it => it.Outpost.Region.Id == regionId);
+            if (districtId.HasValue && districtId != Guid.Empty)
+                ps = ps.Where(it => it.Outpost.District.Id == districtId);
+            if (outpostId.HasValue && outpostId.ToString() != GUID_FOR_ALL_OPTION_ON_OUTPOST_LIST)
+                ps = ps.Where(it => it.Outpost.Id == outpostId);
+
+            var psms = new List<ProductSaleModel>();
+            foreach (var productSale in ps.ToList())
+            {
+                var psm = new ProductSaleModel() { OutpostName = productSale.Outpost.Name, ProductName = productSale.Product.Name, Date = productSale.Created.ToString(), Quantity = productSale.Quantity };
+                psms.Add(psm);
+            }
+          
+            return Json(new ProductsSoldOutputModel
+            {
+                ProductSales = psms.ToArray(),
+                TotalItems = 0
+            }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]
