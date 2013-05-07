@@ -9,29 +9,33 @@ using Web.Services.StockUpdates;
 
 namespace Web.ReceiveSmsUseCase.SmsMessageCommands
 {
-    public class StockSaleMessageCommand: StockUpdateMessageCommandBase
+    public class StockSaleMessageCommand : StockUpdateMessageCommandBase
     {
-        private IQueryService<Product> _queryProductService;
-        private ISaveOrUpdateCommand<ProductSale> _saveProductSale;
-        
+        private readonly IQueryService<Product> _queryProductService;
+        private readonly ISaveOrUpdateCommand<ProductSale> _saveProductSale;
+
         public StockSaleMessageCommand(IUpdateStockService updateStockService, ISendSmsService sendSmsService,
-                                        ISaveOrUpdateCommand<Alert> saveOrUpdateAlertCommand, IPreconfiguredEmailService emailSendingService,
-                                        IQueryService<RawSmsReceived> rawSmsReceived, IQueryService<Product> queryProductService, ISaveOrUpdateCommand<ProductSale> saveProductSale)
+                                       ISaveOrUpdateCommand<Alert> saveOrUpdateAlertCommand, IPreconfiguredEmailService emailSendingService,
+                                       IQueryService<RawSmsReceived> rawSmsReceived, IQueryService<Product> queryProductService,
+                                       ISaveOrUpdateCommand<ProductSale> saveProductSale)
             : base(updateStockService, sendSmsService, saveOrUpdateAlertCommand, emailSendingService, rawSmsReceived)
         {
             _queryProductService = queryProductService;
             _saveProductSale = saveProductSale;
-            
+
         }
 
-        internal override void DoAfterStockUpdate(ISmsParseResult parseResult,Outpost outpost)
+        internal override void DoAfterStockUpdate(ISmsParseResult parseResult, Outpost outpost)
         {
             foreach (ParsedProduct s in parseResult.ParsedProducts)
             {
-                var ps = new ProductSale() { Outpost = outpost,
-                    Product = _queryProductService.Query().FirstOrDefault(it => it.SMSReferenceCode == s.ProductCode),
-                    Quantity = s.StockLevel,
-                    ClientIdentifier = s.ClientIdentifier };
+                var ps = new ProductSale
+                    {
+                        Outpost = outpost,
+                        Product = _queryProductService.Query().FirstOrDefault(it => it.SMSReferenceCode == s.ProductCode),
+                        Quantity = s.StockLevel,
+                        ClientIdentifier = s.ClientIdentifier
+                    };
 
                 _saveProductSale.Execute(ps);
             }
