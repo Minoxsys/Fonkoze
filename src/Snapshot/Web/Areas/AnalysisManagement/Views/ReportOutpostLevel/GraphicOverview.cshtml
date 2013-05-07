@@ -489,12 +489,11 @@ Analysis: Product level information at seller level
             cont.add({
                 id: 'chart2DistrictLevel',
                 xtype: 'chart',
-                flex: 1,               
-                minHeight: 650,
+                flex: 6,               
+                //minHeight: 650,
                 margin: '0 0 0 70',
-                //style: 'background:#fff',
                 // animate: true,
-                //shadow:false,
+                shadow:false,
                 store: chartStore,               
                 axes: [{
                     type: 'Numeric',
@@ -503,8 +502,8 @@ Analysis: Product level information at seller level
                     fields: productFields,
                     title: 'Product Stock Levels',
                     minimum:0,
-                   // maximum: getMax(),
-                   // adjustMinimumByMajorUnit: 0,
+                    //maximum: getMax(),
+                    //adjustMinimumByMajorUnit: 0,
                                    
                 }, {
                     type: 'Category',
@@ -525,7 +524,7 @@ Analysis: Product level information at seller level
                         }
                     },
                     xField: 'OutpostName',
-                    yField:productFields,
+                    yField: productFields,
                     stacked: true
                     //renderer: function (sprite, record, attr, storeIndex, store) {
                     //    //barAttr.fill = (storeItem.data.StockLevel <= storeItem.data.LowerLimit ? 'rgb(212, 40, 40)' : 'rgb(154, 205, 50)');
@@ -550,7 +549,7 @@ Analysis: Product level information at seller level
                     },
                    
                     label: {
-                        display: 'over',
+                        display: 'under',
                         field: 'ProductsUnderTresholdNo',
                         renderer: Ext.util.Format.numberRenderer('0'),
                         orientation: 'horizontal',
@@ -580,7 +579,7 @@ Analysis: Product level information at seller level
             },
             items: [{
                 xtype: 'container',
-                flex:1.5,
+                flex:1,
                 layout: {
                     align: 'stretch',
                     type: 'vbox'
@@ -642,10 +641,10 @@ Analysis: Product level information at seller level
                 }
                 ]
             }, {
-                xtype: 'container',
-              
+                xtype: 'container',              
                 layout:'fit',
                 padding: '0 0 0 0',
+                flex:5,
                 items: [{
                     xtype: 'container',
                     id: 'DivChartContainer',
@@ -653,8 +652,8 @@ Analysis: Product level information at seller level
                         align: 'stretch',
                         type: 'vbox'
                     },
-                    minHeight:650,
                     autoScroll: true,
+                    scrollable: true,
                     items: []
                 }]
             }]
