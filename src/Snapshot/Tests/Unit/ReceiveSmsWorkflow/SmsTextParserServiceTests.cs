@@ -261,6 +261,5 @@ namespace Tests.Unit.ReceiveSmsWorkflow
             Assert.IsFalse(result.Success);
             Assert.That(result.Message, Is.EqualTo("Invalid message format."));
         }
-
     }
 }

@@ -28,7 +28,7 @@ namespace Web.ReceiveSmsUseCase.Services.MessageParsingStrategies
             return result;
         }
 
-        protected bool TryParseToken(string token, out ParsedProduct parsedProduct)
+        protected virtual bool TryParseToken(string token, out ParsedProduct parsedProduct)
         {
             bool parseResult = true;
             ParsedProduct product = null;

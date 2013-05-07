@@ -182,7 +182,7 @@
     <value>Seller: {0}({1}). Last message sent invalid and no follow-up in over 4 hours. Message sent at {2}</value>
   </data>
   <data name="Upload_The_file_uploaded_succesfully" xml:space="preserve">
-    <value>The file uploaded successfully.</value>
+    <value>The stock update was successful.</value>
   </data>
   <data name="CSV_file_parsing_has_failed" xml:space="preserve">
     <value>CSV file parsing has failed. Please check the contents of the CSV file to be valid.</value>

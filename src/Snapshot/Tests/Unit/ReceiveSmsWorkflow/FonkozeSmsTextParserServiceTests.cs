@@ -21,11 +21,11 @@ namespace Tests.Unit.ReceiveSmsWorkflow
         private const string InvalidMessageThreeProducts = "BG9999N LYjF VC9F";
         private const string MultipleSpaces = "   BG9999N    LY5F    VC9F     ";
 
-        private const string SimpleStockCountMessage = "SC LA88F";
-        private const string InvalidStockCountMessage = "S LB88F";
+        private const string SimpleStockCountMessage = "SC LA88";
+        private const string InvalidStockCountMessage = "S LB88";
         private const string StockCountMesageWithInvalidContents = "SC asdfghjg";
-        private const string SimpleReceivedMessage = "RD LA88F";
-        private const string InvalidReceivedMessage = "R LB88F";
+        private const string SimpleReceivedMessage = "RD LA88";
+        private const string InvalidReceivedMessage = "R LB88";
         private const string ReceivedMesageWithInvalidContents = "RD asdfghjg";
 
         private const string ValidMessageOneProduct2 = "MALAA88F";
@@ -33,11 +33,11 @@ namespace Tests.Unit.ReceiveSmsWorkflow
         private const string InvalidMessageThreeProducts2 = "ALBGG9999N MALYjF HIVCC9F";
         private const string MultipleSpaces2 = "   ALBGG9999N    MALYY5F    HIVCC9F     ";
 
-        private const string SimpleStockCountMessage2 = "SC MALAA88F";
-        private const string InvalidStockCountMessage2 = "S MALB88F";
+        private const string SimpleStockCountMessage2 = "SC MALAA88";
+        private const string InvalidStockCountMessage2 = "S MALB88";
         private const string StockCountMesageWithInvalidContents2 = "SC asdfghjg";
-        private const string SimpleReceivedMessage2 = "RD MALAA88F";
-        private const string InvalidReceivedMessage2 = "R MALBB88F";
+        private const string SimpleReceivedMessage2 = "RD MALAA88";
+        private const string InvalidReceivedMessage2 = "R MALBB88";
         private const string ReceivedMesageWithInvalidContents2 = "RD asdfghjg";
 
 
@@ -145,6 +145,9 @@ namespace Tests.Unit.ReceiveSmsWorkflow
 
             result = _sut.Parse(SimpleStockCountMessage);
             Assert.That(result.MessageType, Is.EqualTo(MessageType.StockCount));
+
+            result = _sut.Parse(SimpleReceivedMessage);
+            Assert.That(result.MessageType, Is.EqualTo(MessageType.ReceivedStock));
         }
 
         [Test]
@@ -223,7 +226,7 @@ namespace Tests.Unit.ReceiveSmsWorkflow
             CollectionAssert.AreEquivalent(result.ParsedProducts,
                                            new List<IParsedProduct>
                                                {
-                                                   new ParsedProduct {ProductCode = "LA", ProductGroupCode = "ALL", StockLevel = 88, ClientIdentifier = "F"}
+                                                   new ParsedProduct {ProductCode = "LA", ProductGroupCode = "ALL", StockLevel = 88, ClientIdentifier = string.Empty}
                                                });
         }
 
@@ -256,7 +259,7 @@ namespace Tests.Unit.ReceiveSmsWorkflow
             CollectionAssert.AreEquivalent(result.ParsedProducts,
                                            new List<IParsedProduct>
                                                {
-                                                   new ParsedProduct {ProductCode = "LA", ProductGroupCode = "ALL", StockLevel = 88, ClientIdentifier = "F"}
+                                                   new ParsedProduct {ProductCode = "LA", ProductGroupCode = "ALL", StockLevel = 88, ClientIdentifier = string.Empty}
                                                });
         }
 
@@ -276,6 +279,27 @@ namespace Tests.Unit.ReceiveSmsWorkflow
 
             Assert.IsFalse(result.Success);
             Assert.That(result.Message, Is.EqualTo("Invalid message format."));
+        }
+
+        [Test]
+        public void Parse_FailsParsing_WhenReceivedStockMessageTypeContainsClientIndentifier()
+        {
+            var result = _sut.Parse("RD AA88F");
+
+            Assert.IsFalse(result.Success);
+            Assert.IsTrue(result.MessageType == MessageType.ReceivedStock);
+        }
+
+        [Test]
+        public void Parse_ParsingIsSuccessfull_WhenReceivedStockMessageTypeDoesNotContainClientIndentifier()
+        {
+            var result = _sut.Parse("RD AA88");
+         
+            Assert.IsTrue(result.MessageType == MessageType.ReceivedStock);
+            Assert.IsTrue(result.Success);
+            CollectionAssert.AreEquivalent(
+                new List<ParsedProduct> {new ParsedProduct {ProductCode = "AA", ProductGroupCode = "ALL", StockLevel = 88, ClientIdentifier = string.Empty}},
+                result.ParsedProducts);
         }
 
         #endregion
@@ -348,6 +372,9 @@ namespace Tests.Unit.ReceiveSmsWorkflow
 
             result = _sut.Parse(SimpleStockCountMessage2);
             Assert.That(result.MessageType, Is.EqualTo(MessageType.StockCount));
+
+            result = _sut.Parse(SimpleReceivedMessage2);
+            Assert.That(result.MessageType, Is.EqualTo(MessageType.ReceivedStock));
         }
 
         [Test]
@@ -422,7 +449,7 @@ namespace Tests.Unit.ReceiveSmsWorkflow
             CollectionAssert.AreEquivalent(result.ParsedProducts,
                                            new List<IParsedProduct>
                                                {
-                                                   new ParsedProduct {ProductCode = "AA", ProductGroupCode = "MAL", StockLevel = 88, ClientIdentifier = "F"}
+                                                   new ParsedProduct {ProductCode = "AA", ProductGroupCode = "MAL", StockLevel = 88, ClientIdentifier = string.Empty}
                                                });
         }
 
@@ -455,7 +482,7 @@ namespace Tests.Unit.ReceiveSmsWorkflow
             CollectionAssert.AreEquivalent(result.ParsedProducts,
                                            new List<IParsedProduct>
                                                {
-                                                   new ParsedProduct {ProductCode = "AA", ProductGroupCode = "MAL", StockLevel = 88, ClientIdentifier = "F"}
+                                                   new ParsedProduct {ProductCode = "AA", ProductGroupCode = "MAL", StockLevel = 88, ClientIdentifier = string.Empty}
                                                });
         }
 
@@ -475,6 +502,27 @@ namespace Tests.Unit.ReceiveSmsWorkflow
 
             Assert.IsFalse(result.Success);
             Assert.That(result.Message, Is.EqualTo("Invalid message format."));
+        }
+
+        [Test]
+        public void Parse_FailsParsing_WhenReceivedStockMessageTypeContainsClientIndentifier_WithGroupCode()
+        {
+            var result = _sut.Parse("RD MALAA88F");
+
+            Assert.IsFalse(result.Success);
+            Assert.IsTrue(result.MessageType == MessageType.ReceivedStock);
+        }
+
+        [Test]
+        public void Parse_ParsingIsSuccessfull_WhenReceivedStockMessageTypeDoesNotContainClientIndentifier_WithGroupCode()
+        {
+            var result = _sut.Parse("RD MALAA88");
+
+            Assert.IsTrue(result.MessageType == MessageType.ReceivedStock);
+            Assert.IsTrue(result.Success);
+            CollectionAssert.AreEquivalent(
+                new List<ParsedProduct> { new ParsedProduct { ProductCode = "AA", ProductGroupCode = "MAL", StockLevel = 88, ClientIdentifier = string.Empty } },
+                result.ParsedProducts);
         }
 
         #endregion
