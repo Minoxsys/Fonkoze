@@ -8,7 +8,7 @@ namespace Web.BackgroundJobs
     public class TrimLogJob : IJob
     {
         private readonly Func<ISession> _sessionThunk;
-        private readonly ISession _session;
+        private ISession _session;
 
         public TrimLogJob(Func<ISession> sessionThunk)
         {
@@ -20,9 +20,11 @@ namespace Web.BackgroundJobs
         {
             return new Task(() =>
                 {
+                    _session = _sessionThunk();
                     var query = _session.CreateSQLQuery("exec TrimLogTable @cutoffdays=:days");
                     query.SetInt32("days", 30);
                     query.ExecuteUpdate();
+                    _session.Dispose();
                 });
         }
 
