@@ -54,8 +54,8 @@ namespace Persistence
                 transaction.Complete();
             }
 
-           // _session.Dispose();
-         //   _session = _sessionThunk();
+            _session.Dispose();
+            _session = _sessionThunk();
         }
 
         public void SetWorkItemCompleted(long workItemId)
