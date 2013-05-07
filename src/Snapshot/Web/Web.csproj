@@ -313,6 +313,7 @@
     <Compile Include="BackgroundJobs\ExecutedCampaign.cs" />
     <Compile Include="BackgroundJobs\OutpostInactivityJob.cs" />
     <Compile Include="BackgroundJobs\SmsMessagesMonitoringJob.cs" />
+    <Compile Include="BackgroundJobs\TrimLogJob.cs" />
     <Compile Include="Bootstrap\Container\ServicesConventionsRegistrar.cs" />
     <Compile Include="Controllers\AccountOptionsController.cs" />
     <Compile Include="Controllers\SendMessageController.cs" />

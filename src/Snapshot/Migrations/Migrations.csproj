@@ -49,6 +49,7 @@
     <Compile Include="18_AlertTypes.cs" />
     <Compile Include="19_Managers.cs" />
     <Compile Include="21_ProductCodeWithTwoLetters.cs" />
+    <Compile Include="23_Elmah.cs" />
     <Compile Include="2_OutpostAdministration.cs" />
     <Compile Include="1_BasicAuthenticationInfrastructure.cs" />
     <Compile Include="3_ProductAdministration.cs" />
@@ -91,6 +92,12 @@
   <ItemGroup>
     <EmbeddedResource Include="Scripts\sqlserver_DeleteColumnFromUsers_19.sql" />
     <EmbeddedResource Include="Scripts\sqlserver_InsertProductGroupDefaultRecord_20.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Scripts\ELMAH-1.2-db-SQLServer.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Scripts\ELMAH_TrimLog.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

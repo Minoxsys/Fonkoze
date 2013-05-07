@@ -2,6 +2,7 @@
 using Autofac.Integration.Mvc;
 using Persistence;
 using System.Web.Mvc;
+using Web.BackgroundJobs;
 using Web.Bootstrap.Container;
 using Web.Bootstrap.Routes;
 using Web.CustomModelBinders;
@@ -84,11 +85,12 @@ namespace Web
         {
             var jobs = new IJob[]
                 {
-                    _container.Resolve<BackgroundJobs.EmptyJob>(),
-                    _container.Resolve<BackgroundJobs.StockLevelsMonitoringJob>(),
-                    _container.Resolve<BackgroundJobs.CampaignExecutionJob>(),
-                    _container.Resolve<BackgroundJobs.OutpostInactivityJob>(),
-                    _container.Resolve<BackgroundJobs.SmsMessagesMonitoringJob>()
+                    _container.Resolve<EmptyJob>(),
+                    _container.Resolve<StockLevelsMonitoringJob>(),
+                    _container.Resolve<CampaignExecutionJob>(),
+                    _container.Resolve<OutpostInactivityJob>(),
+                    _container.Resolve<SmsMessagesMonitoringJob>(),
+                    new TrimLogJob(() => _container.Resolve<INHibernateSessionFactory>().CreateSession()) 
                     //new SampleJob(TimeSpan.FromSeconds(35), TimeSpan.FromSeconds(60)),
                     /* new ExceptionJob(TimeSpan.FromSeconds(15)), */
                     // new WorkItemCleanupJob(TimeSpan.FromMinutes(1), TimeSpan.FromMinutes(5), new WorkItemsContext())
