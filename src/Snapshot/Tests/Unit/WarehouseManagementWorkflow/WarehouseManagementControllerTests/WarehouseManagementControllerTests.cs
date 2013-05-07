@@ -11,9 +11,7 @@ using Web.WarehouseMgmtUseCase.Controllers;
 using Web.WarehouseMgmtUseCase.Services;
 using Web.Services.StockUpdates;
 using Web.Models.Parsing;
-using Web.WarehouseMgmtUseCase.Model;
 using System.Collections.Generic;
-using System.Globalization;
 
 namespace Tests.Unit.WarehouseManagementWorkflow.WarehouseManagementControllerTests
 {
@@ -118,17 +116,6 @@ namespace Tests.Unit.WarehouseManagementWorkflow.WarehouseManagementControllerTe
             return dummyStream;
         }
 
-        private IParseResult CreateListOfProducts()
-        {
-            var list = new List<IParsedProduct>();
-            for (int i = 'A'; i < 'Z'; i++)
-            {
-                list.Add(new ParsedProduct { ProductGroupCode = "ALL", ProductCode = i.ToString(CultureInfo.InvariantCulture), StockLevel = i });
-            }
-
-            return new CsvParseResult { Success = true, ParsedProducts = list };
-        }
-
         private void AssertFaildParsingErrorMessageIsPostedInTempData()
         {
             Assert.That(_sut.TempData["result"], Is.EqualTo("CSV file parsing has failed. Please check the contents of the CSV file to be valid."));
@@ -136,7 +123,7 @@ namespace Tests.Unit.WarehouseManagementWorkflow.WarehouseManagementControllerTe
 
         private void AssertSuccessMessageIsPostedInTempData()
         {
-            Assert.That(_sut.TempData["result"], Is.EqualTo("The file uploaded successfully."));
+            Assert.That(_sut.TempData["result"], Is.EqualTo("The stock update was successful."));
         }
 
         private void AssertFailedProductsMessageIsPostedInTempData()

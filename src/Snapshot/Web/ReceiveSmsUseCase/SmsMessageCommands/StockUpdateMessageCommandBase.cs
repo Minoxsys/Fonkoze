@@ -22,7 +22,6 @@ namespace Web.ReceiveSmsUseCase.SmsMessageCommands
         private readonly ISaveOrUpdateCommand<Alert> _saveOrUpdateAlertCommand;
         private readonly IPreconfiguredEmailService _emailSendingService;
         private readonly IQueryService<RawSmsReceived> _rawSmsReceivedQueryService;
-        private readonly ISaveOrUpdateCommand<ProductSale> _productSaleQueryService;
 
         protected StockUpdateMessageCommandBase(IUpdateStockService updateStockService, ISendSmsService sendSmsService,
                                          ISaveOrUpdateCommand<Alert> saveOrUpdateAlertCommand, IPreconfiguredEmailService emailSendingService,
