@@ -315,6 +315,8 @@ Analysis: Product level information at seller level
             listeners: {
                 select: function (combo, record, index) {
                     var selectedDistrictId = record[0].data.Id;
+                    var selectedCountryId = Ext.getCmp(window.feature.comboboxCountriesId).getValue();
+                    var selectedRegionId = Ext.getCmp(window.feature.comboboxRegionsId).getValue();
 
                     window.feature.comboBoxOutposts.setValue(null);
                     window.feature.OutpostStore.load({
@@ -489,7 +491,7 @@ Analysis: Product level information at seller level
             cont.add({
                 id: 'chart2DistrictLevel',
                 xtype: 'chart',
-                flex: 6,               
+                flex: 5.5,               
                 //minHeight: 650,
                 margin: '0 0 0 70',
                 // animate: true,
@@ -533,9 +535,10 @@ Analysis: Product level information at seller level
                   
                 },
                 {
-                    type: 'line',
+                    type: 'scatter',
                     xField: 'OutpostName',
                     yField: ['Total'],
+                    title:'UnderThreshold',
                     axis: 'left',
                     highlight: true,
                     //markerConfig: {  size: 10 },
@@ -544,17 +547,18 @@ Analysis: Product level information at seller level
                         width: 240,
                         height: 60,
                         renderer: function(storeItem, item) {
-                            this.setTitle('Total Stock: ' + storeItem.get('Total') + ' <br/><br/> Products under treshold: ' + storeItem.get('ProductsUnderTresholdNo'));
+                            this.setTitle('Total Stock: ' + storeItem.get('Total') + ' <br/><br/> Products under threshold: ' + storeItem.get('ProductsUnderTresholdNo'));
                         }
                     },
                    
                     label: {
-                        display: 'under',
+                        display: 'over',
                         field: 'ProductsUnderTresholdNo',
-                        renderer: Ext.util.Format.numberRenderer('0'),
+                        renderer: Ext.util.Format.numberRenderer('0 under threshold'),
                         orientation: 'horizontal',
-                        color: '#333',
-                        'text-anchor': 'middle'
+                        'text-anchor':'middle',
+                      font: '14px Helvetica, sans-serif'
+                       
                     },
                     selectionTolerance: 4,
                     
@@ -628,7 +632,7 @@ Analysis: Product level information at seller level
                                  {
                                      xtype: 'checkbox',
                                      id: window.feature.chkOnlyUnderTreshold,
-                                     boxLabel: '<b>Show products under treshold only</b>',
+                                     boxLabel: '<b>Show products under threshold only</b>',
                                      margin: '30 0 0 10',
                                      listeners: {
                                          change: function (chk, checked) {
