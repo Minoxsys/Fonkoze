@@ -38,7 +38,7 @@ namespace Web.BackgroundJobs
         public TimeSpan Interval
         {
             //23 hours and 53 minutes
-            get { return TimeSpan.FromMinutes(1433); }
+            get { return TimeSpan.FromMinutes(20); }
         }
 
         public string Name

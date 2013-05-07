@@ -21,10 +21,7 @@ namespace Web
 
         IContainer IContainerAccessor.Container
         {
-            get
-            {
-                return _container;
-            }
+            get { return _container; }
         }
 
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
@@ -43,7 +40,7 @@ namespace Web
 
             AreaRegistration.RegisterAllAreas();
 
-            ModelBinders.Binders.Add(typeof(UserAndClientIdentity), _container.Resolve<UserAndClientIdentityModelBinder>());
+            ModelBinders.Binders.Add(typeof (UserAndClientIdentity), _container.Resolve<UserAndClientIdentityModelBinder>());
 
             RegisterGlobalFilters(GlobalFilters.Filters);
             RoutesRegistrar.Register();
@@ -77,7 +74,7 @@ namespace Web
         protected static void InitializeContainer()
         {
             var builder = new ContainerBuilder();
-            builder.RegisterControllers(typeof(MvcApplication).Assembly);
+            builder.RegisterControllers(typeof (MvcApplication).Assembly);
             ContainerRegistrar.Register(builder);
             _container = builder.Build();
             DependencyResolver.SetResolver(new AutofacDependencyResolver(_container));
@@ -94,13 +91,13 @@ namespace Web
                     _container.Resolve<BackgroundJobs.SmsMessagesMonitoringJob>()
                     //new SampleJob(TimeSpan.FromSeconds(35), TimeSpan.FromSeconds(60)),
                     /* new ExceptionJob(TimeSpan.FromSeconds(15)), */
-                    //new WorkItemCleanupJob(TimeSpan.FromMinutes(1), TimeSpan.FromMinutes(5), new WorkItemsContext())
+                    // new WorkItemCleanupJob(TimeSpan.FromMinutes(1), TimeSpan.FromMinutes(5), new WorkItemsContext())
                 };
 
             var coordinator = new WebFarmJobCoordinator(new NHibernateWorkItemRepository(() => _container.Resolve<INHibernateSessionFactory>().CreateSession()));
-            var manager = new JobManager(jobs, coordinator);
+            var manager = new JobManager(jobs, coordinator) {RestartSchedulerOnFailure = true};
+            manager.Fail(ex => Elmah.ErrorLog.GetDefault(null).Log(new Elmah.Error(ex)));
 
-            //manager.Fail(ex => Elmah.ErrorLog.GetDefault(null).Log(new Error(ex)));
             return manager;
         }
     }

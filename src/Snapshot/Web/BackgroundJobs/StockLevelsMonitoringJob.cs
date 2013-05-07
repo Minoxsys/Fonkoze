@@ -26,7 +26,7 @@ namespace Web.BackgroundJobs
         public TimeSpan Interval
         {
             //1 hour 32 minutes
-            get { return TimeSpan.FromMinutes(92); }
+            get { return TimeSpan.FromMinutes(5); }
         }
 
         public TimeSpan Timeout
