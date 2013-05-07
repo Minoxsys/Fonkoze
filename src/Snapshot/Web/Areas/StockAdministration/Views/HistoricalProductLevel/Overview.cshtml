@@ -32,15 +32,64 @@ Historical Product Level: Overview
         window.feature.containerForHistoricalGridId = 'Container-For-Historical-Grid-Id';
         window.feature.viewProductStockLevelId = 'Button-For-View-Product-Stock-Level-Id';
         window.feature.outpostName = 'Product-Group-Level-Outpost-Name';
-        window.feature.productGroupName = 'Product-Group-Level-Product-Group-Name';
-        window.feature.editLastUpdated = 'Edit-Last-Updated-Historical-Id';
-        window.feature.editDescription = 'Edit-Description-Historical-Id';
-        window.feature.editProductGroup = 'Edit-Product-Group-Historical-Id';
-        window.feature.editProductStockLevel = 'Edit-Product-Stock-Level-Historical-Id';
-        window.feature.editUpdateMethod = 'Edit-Update-Method-Historical-Id';
-        window.feature.editSMSCode = 'Edit-SMS-Code-Historical-Id';
-        window.feature.editProductName = 'Edit-Product-Name-Historical-Id';
-        window.feature.editOutpostName = 'Edit-Outpost-Name-Historical-Id';
+      //  window.feature.productGroupName = 'Product-Group-Level-Product-Group-Name';
+      //  window.feature.editLastUpdated = 'Edit-Last-Updated-Historical-Id';
+      //  window.feature.editDescription = 'Edit-Description-Historical-Id';
+       // window.feature.editProductGroup = 'Edit-Product-Group-Historical-Id';
+       // window.feature.editProductStockLevel = 'Edit-Product-Stock-Level-Historical-Id';
+       // window.feature.editUpdateMethod = 'Edit-Update-Method-Historical-Id';
+       // window.feature.editSMSCode = 'Edit-SMS-Code-Historical-Id';
+        //window.feature.editProductName = 'Edit-Product-Name-Historical-Id';
+       // window.feature.editOutpostName = 'Edit-Outpost-Name-Historical-Id';
+        
+
+        Ext.define('ProductSales', {
+            extend: 'Ext.data.Model',
+            fields: ['OutpostName', 'ProductName', 'Date', {
+                name: 'Quantity',
+                type: 'int'
+            }]
+        });
+
+        window.feature.productSalesStore = Ext.create('Ext.data.Store', {
+            model: 'ProductSales',
+            @* proxy:{
+                type:'ajax',
+                url: '@Url.RouteUrl(Web.Areas.OutpostManagement.OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "HistoricalProductLevel", action = "GetProductSales" })',
+                reader:{
+                    type: 'json',
+                    root: 'Countries',
+                    totalProperty: 'TotalItems'
+                },
+                simpleSortMode: true
+            },*@
+            data: [{
+                OutpostName: 'Seller 1',
+                ProductName: 'Vitamin C',
+                Date: '05-Apr-2013 12:22 AM',
+                Quantity: 2
+            },{
+                OutpostName: 'Seller 1',
+                ProductName: 'Vitamin D',
+                Date: '05-Apr-2013 12:22 AM',
+                Quantity: 1
+            },{
+                OutpostName: 'Seller 2',
+                ProductName: 'Vitamin C',
+                Date: '05-Apr-2013 12:22 AM',
+                Quantity: 2
+            },{
+                OutpostName: 'Seller 2',
+                ProductName: 'Vitamin C',
+                Date: '05-Apr-2013 12:22 AM',
+                Quantity: 3
+            }],
+            sorters: [{
+                property: 'Date',
+                direction: 'DESC'
+            }],
+            groupField:'OutpostName'
+        })
 
         window.feature.countryStore = Ext.create('Ext.data.Store', {
             remoteSort: true,
@@ -130,8 +179,7 @@ Historical Product Level: Overview
                 url: '@Url.RouteUrl(StockAdministrationAreaRegistration.DEFAULT_ROUTE, new { controller = "HistoricalProductLevel", action = "GetHistoricalProductLevel" })',
                 reader: {
                     type: 'json',
-                    root: 'Historical',
-                    
+                    root: 'Historical',                    
                     totalProperty: 'TotalItems'
                 },
                 extraParams: { 
@@ -149,30 +197,7 @@ Historical Product Level: Overview
             }]
         });
 
-        window.feature.productGroupLevels = Ext.create('Ext.data.Store', {
-            remoteSort: true,
-            fields: ['Id', 'OutpostId', 'OutpostName', 'ProductGroupId', 'ProductGroupName', 'ProductId', 'ProductName', 'SMSReferenceCode', 'ProductStockLevel', 'LastUpdated', 'UpdateMethod', 'Description'],
-            proxy: {
-                type: 'ajax',
-                url: '@Url.RouteUrl(StockAdministrationAreaRegistration.DEFAULT_ROUTE, new { controller = "HistoricalProductLevel", action = "GetProductGroupLevels" })',
-                reader: {
-                    type: 'json',
-                    root: 'Products',
-                    totalProperty: 'TotalItems'
-                },
-                extraParams: { 
-                    outpostId: '',
-                    productGroupId: '',
-                    smsResponseDate: '' 
-                },
-                simpleSortMode: true
-            },
-            sorters: [{
-                property: 'Name',
-                direction: 'ASC'
-            }]
-        });
-        
+      
         function ClearDistrictStore(){
             var noOfItemsToDelete = window.feature.districtStore.getCount()-1;
             window.feature.districtStore.removeAt(1, noOfItemsToDelete);
@@ -212,248 +237,15 @@ Historical Product Level: Overview
             ClearSellerStore();
         };
 
-        var tooltipText = 'Click on the product group to view the historical product level';
-        Ext.QuickTips.init();
+        //var tooltipText = 'Click on the product group to view the historical product level';
+        //Ext.QuickTips.init();
 
-        function addTooltip(val, meta, rec, rowIdx, colIdx, ds){
-            meta.tdAttr = 'data-qtip="' + tooltipText +'"' ;
-            return val;
-        }; 
+        //function addTooltip(val, meta, rec, rowIdx, colIdx, ds){
+        //    meta.tdAttr = 'data-qtip="' + tooltipText +'"' ;
+        //    return val;
+        //}; 
 
-        window.feature.productGroupLevel = Ext.define('Ext.feature.region.Modal', {
-            extend: 'Ext.window.Window',
-            title: 'Product Group Level',
-            modal:true,
-            ui: 'snapshot-popup-window',
-            height: 500,
-            width: 950,
-            layout: {
-                align: 'stretch',
-                type: 'vbox'
-            },
-
-            initComponent: function () {
-                var me = this;
-
-                Ext.applyIf(me, {
-                    items: [{
-                        xtype: 'container',
-                        flex: 1,
-                        layout: {
-                            type: 'column'
-                        },
-                        items: [{
-                            xtype: 'textfield',
-                            fieldLabel: 'Seller',
-                            margin: '0 20 0 0',
-                            readOnly:true,
-                            itemId: window.feature.outpostName
-                        },{
-                            xtype: 'textfield',
-                            readOnly: true,
-                            fieldLabel: 'Product Group',
-                            itemId: window.feature.productGroupName
-                           
-                        }]
-                    },{
-                        xtype: 'gridpanel',
-                        cls: 'white-border',
-                        flex: 5,
-                        loadMask: true,
-                        autoScroll:true,
-                        store: window.feature.productGroupLevels,
-                        columns: [{
-                            header: "Product",
-                            menuDisabled: true,
-                            dataIndex: 'ProductName',
-                            flex: 1,
-                            sortable: true
-                        },{
-                            header: "SMS Reference Code",
-                            dataIndex: 'SMSReferenceCode',
-                            menuDisabled: true,
-                            flex: 1
-                        },{
-                            header: "Product Stock Level",
-                            dataIndex: 'ProductStockLevel',
-                            menuDisabled:true,
-                            flex: 1,
-                            sortable: true
-                        },{
-                            header: "Last Update",
-                            dataIndex: 'LastUpdated',
-                            menuDisabled:true,
-                            flex: 1,
-                            sortable: true
-                        }],
-                        listeners: {
-                            itemclick: function(view, record, item, index, e ) {
-                                if(@(ViewBag.HasNoRightsToEdit) === true){
-                                    var msgAlert = Ext.Msg;
-                                    msgAlert.ui = 'snapshot-popup-window';
-                                    msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
-                                    msgAlert.msgButtons['ok'].margin = '10 10 20 0';
-                                    msgAlert.alert("Alert","You have no rights for this action!");
-                                }else{
-                                    var editView = new window.feature.editHistorical({
-                                        buttons: [
-                                            { text: 'Cancel',
-                                                margin: '10 10 20 0',
-                                                ui: 'snapshot-cancel-btn',
-                                                cls: 'x-add-button-gradient',
-                                                handler:function(){ editView.close(); editView.destroy();} },
-                                            { text: 'Save',
-                                                margin: '10 10 20 0',
-                                                ui: 'snapshot-add-btn',
-                                                cls: 'x-add-button-gradient',
-                                                handler:function(){
-
-                                                    var stockLevel = editView.down('#'+window.feature.editProductStockLevel);
-                                                    if (stockLevel.getValue() == ''){
-                                                    }else{
-                                                        var values = {
-                                                            Id: record.get('Id'),
-                                                            StockLevel: editView.down('#'+window.feature.editProductStockLevel).getValue()
-                                                        };
-                                                        var postToUrl = '@Url.RouteUrl(StockAdministrationAreaRegistration.DEFAULT_ROUTE, new { controller = "HistoricalProductLevel", action = "Edit" })';
-                                                        var action = $.post(postToUrl, values);                                               
-                                                        action.success(function(serverResponse){
-                                                            if(serverResponse.Status === "Error")
-                                                            {
-                                                                var msgAlert = Ext.Msg;
-                                                                msgAlert.ui = 'snapshot-popup-window';
-                                                                msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
-                                                                msgAlert.msgButtons['ok'].margin = '10 10 20 0',
-                                                                msgAlert.alert(serverResponse.Status, serverResponse.Message);
-                                                            }
-                                                            else
-                                                            {                                                    
-                                                                editView.close();
-                                                                editView.destroy();
-
-                                                                ResetExtraParams();
-                                                                SetNewExtraParams();
-                                                                window.feature.gridOutpostStore.load();  
-                                                            }
-                                                        });  
-                                                    }   
-                                                }  
-                                            }]    
-                                    });
-                        
-                                        editView.down('#'+window.feature.editOutpostName).setValue(record.get('OutpostName'));
-                                        editView.down('#'+window.feature.editProductGroup).setValue(record.get('ProductGroupName'));
-                                        editView.down('#'+window.feature.editProductName).setValue(record.get('ProductName'));
-                                        editView.down('#'+window.feature.editSMSCode).setValue(record.get('SMSReferenceCode'));
-                                        editView.down('#'+window.feature.editProductStockLevel).setValue(record.get('ProductStockLevel'));
-                                        editView.down('#'+ window.feature.editLastUpdated).setValue(record.get('LastUpdated'));
-                                        editView.down('#'+window.feature.editUpdateMethod).setValue(record.get('UpdateMethod'));
-                                        editView.down('#'+window.feature.editDescription).setValue(record.get('Description'));
-
-                                        me.close();
-                                        me.destroy();
-
-                                        editView.show();
-                                    }
-                            }
-                        }
-                    }]
-                });
-
-                me.callParent(arguments);
-            }
-        }); 
-
-        window.feature.editHistorical = Ext.define('Ext.feature.region.Modal', {
-            extend: 'Ext.window.Window',
-            title: 'Product Group Level',
-            modal:true,
-            ui: 'snapshot-popup-window',
-            height: 350,
-            width: 950,
-            layout: {
-                align: 'stretch',
-                type: 'vbox'
-            },
-
-            initComponent: function () {
-                var me = this;
-
-                Ext.applyIf(me, {
-                    items: [{
-                        xtype: 'container',
-                        flex: 1,
-                        layout: {
-                            align: 'stretch',
-                            type: 'hbox'
-                        },
-                        items: [{
-                            xtype: 'container',
-                            flex: 1,
-                            margin: '0 20 0 0',
-                            layout: {
-                                align: 'stretch',
-                                padding: 10,
-                                type: 'vbox'
-                            },
-                            items: [{                                                                                         
-                                xtype: 'textfield',
-                                fieldLabel: 'Outpost Name',
-                                disabled: true,
-                                itemId: window.feature.editOutpostName
-                            },{
-                                xtype: 'textfield',
-                                fieldLabel: 'Product',
-                                disabled: true,
-                                itemId: window.feature.editProductName
-                            },{
-                                xtype: 'textfield',
-                                fieldLabel: 'SMS Code',
-                                disabled: true,
-                                itemId: window.feature.editSMSCode
-                            },{
-                                xtype: 'textfield',
-                                fieldLabel: 'Update Method',
-                                disabled: true,
-                                itemId: window.feature.editUpdateMethod
-                            },{
-                                xtype: 'textfield',
-                                fieldLabel: 'Product Stock Level',
-                                itemId: window.feature.editProductStockLevel
-                            }]
-                        }, {
-                            xtype: 'container',
-                            flex: 1,
-                            layout: {
-                                align: 'stretch',
-                                padding: 10,
-                                type: 'vbox'
-                            },
-                            items: [{
-                                xtype: 'textfield',                           
-                                fieldLabel: 'Product Group',
-                                disabled: true,
-                                itemId: window.feature.editProductGroup
-                            },{
-                                xtype: 'textareafield',
-                                fieldLabel: 'Description',
-                                disabled: true,
-                                grow: true,
-                                anchor: '100%',
-                                itemId: window.feature.editDescription
-                            },{
-                                xtype: 'textfield',
-                                fieldLabel: 'Last updated at:',
-                                disabled: true,
-                                itemId: window.feature.editLastUpdated
-                            }]
-                        }]
-                    }]
-                });
-
-                me.callParent(arguments);
-            }
-        }); 
+       
 
         window.feature.container = Ext.create('Ext.container.Container', {
             margin: '15 15 15 15',
@@ -697,57 +489,71 @@ Historical Product Level: Overview
             },{
                 xtype: 'gridpanel',
                 cls: 'white-border',
-                store: window.feature.gridOutpostStore,
+                store: window.feature.productSalesStore,
                 flex: 3,
                 loadMask: true,
-                autoScroll:true,
+                autoScroll: true,
+                viewConfig: {
+                    stripeRows: false
+                },
                 features: [{
                     id: 'group',
                     ftype: 'groupingsummary',
                     groupHeaderTpl: '{name}',
-                    hideGroupedHeader: true,                    
+                   // hideGroupedHeader: true,                    
                     startCollapsed: true
-                }],
+                },
+                {
+                    id: 'totalSummary',
+                    ftype: 'summary',
+
+                }
+                ],
                 columns: [{
-                    header: "Product Group",
-                    dataIndex: 'ProductGroupName',
+                    header: "Sellers and Products Sold",
+                    dataIndex: 'ProductName',
                     menuDisabled:true,
                     flex: 1,
                     minWidth: 100,
                     sortable: true,
-                    renderer: addTooltip
+                   // summaryType: 'count',
+                    summaryRenderer: function (value) {
+                        return '<b>Total </b>';
+                    }
+                   // renderer: addTooltip
                 },{
-                    header: "SMS Response Date",
-                    dataIndex: 'SMSResponseDate',
+                    header: "Date",
+                    dataIndex: 'Date',
                     menuDisabled:true,
                     flex: 1,
                     minWidth: 100,
                     sortable: true
                 },{
-                    header: "Number Of Products",
-                    dataIndex: 'NumberOfProducts',
+                    header: "Quantity",
+                    dataIndex: 'Quantity',
                     menuDisabled:true,
                     flex: 1,
                     minWidth: 100,
                     align: 'center',
-                    sortable: true
+                    sortable: true,
+                    summaryType: 'sum'
                 }],
-                listeners: {
-                    itemclick: function(view, record, item, index, e ) {
+                //listeners: {
+                //    itemclick: function(view, record, item, index, e ) {
 
-                        window.feature.productGroupLevels.proxy.extraParams.outpostId = record.get('Id');
-                        window.feature.productGroupLevels.proxy.extraParams.smsResponseDate = record.get('SMSResponseDate');
-                        window.feature.productGroupLevels.proxy.extraParams.productGroupId = record.get('ProductGroupId');
-                        window.feature.productGroupLevels.load();
+                //        window.feature.productGroupLevels.proxy.extraParams.outpostId = record.get('Id');
+                //        window.feature.productGroupLevels.proxy.extraParams.smsResponseDate = record.get('SMSResponseDate');
+                //        window.feature.productGroupLevels.proxy.extraParams.productGroupId = record.get('ProductGroupId');
+                //        window.feature.productGroupLevels.load();
 
-                        var productView = new window.feature.productGroupLevel();
+                //        var productView = new window.feature.productGroupLevel();
                         
-                        productView.down('#'+window.feature.outpostName).setValue(record.get('Name'));
-                        productView.down('#'+window.feature.productGroupName).setValue(record.get('ProductGroupName'));
+                //        productView.down('#'+window.feature.outpostName).setValue(record.get('Name'));
+                //        productView.down('#'+window.feature.productGroupName).setValue(record.get('ProductGroupName'));
 
-                        productView.show();
-                    }
-                }
+                //        productView.show();
+                //    }
+               // }
             }]
         });
 

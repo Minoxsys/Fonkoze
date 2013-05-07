@@ -294,6 +294,7 @@
     <Compile Include="Areas\StockAdministration\Models\HistoricalProductLevel\OutpostIndexGridModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\HistoricalProductLevel\ProductGroupLevelModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\HistoricalProductLevel\ProductsIndexOutputModel.cs" />
+    <Compile Include="Areas\StockAdministration\Models\HistoricalProductLevel\ProductSoldModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\OutpostStockLevel\EntityModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\OutpostStockLevel\OutpostStockLevelCurrentTreeModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\OutpostStockLevel\OutpostStockLevelInputModel.cs" />
