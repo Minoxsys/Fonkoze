@@ -2304,6 +2304,7 @@
     <Content Include="Areas\CampaignManagement\Views\SendMessages\Overview.cshtml" />
     <Content Include="Areas\AnalysisManagement\Views\ReportOutpostLevel\Overview.cshtml" />
     <Content Include="Areas\AnalysisManagement\Views\ReportOutpostLevel\GraphicOverview.cshtml" />
+    <Content Include="Areas\StockAdministration\Views\HistoricalProductLevel\GraphicOverview.cshtml" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\core\_core.scss" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\core\_reset.scss" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\layout\_layout.scss" />

@@ -1,0 +1,599 @@
+﻿@using Microsoft.Web.Mvc;
+
+@section page_title{
+Historical Product Level: Overview
+}
+
+@{
+    Html.RenderPartial("_OutpostStockLevelSubNavigation");
+    Html.RenderPartial("_OutpostStockLevelSideBar");
+}
+
+<script type="text/javascript">
+    Ext.onReady(function () {
+        var outpostStockLevelBtnId = window.res.header.navigation.outpostStockLevel;
+        var outpostStockLevelBtn = Ext.getCmp(outpostStockLevelBtnId);
+        outpostStockLevelBtn.toggle(true);
+
+        var historicalBtnId = window.res.content.maincontent.sidebar.outpostStockLevelHistorical;
+        var historicalBtn = Ext.getCmp(historicalBtnId);
+        historicalBtn.toggle(true);
+    });
+</script>
+
+<script type="text/javascript">
+
+    Ext.onReady(function () {
+        window.feature = {};
+        window.feature.countryComboboxId = 'Overview-Combobox-Country-Historical';
+        window.feature.regionComboboxId = 'Overview-Combobox-Region-Historical';
+        window.feature.districtComboboxId = 'Overview-Combobox-District-Historical';
+        window.feature.outpostComboboxId = 'Overview-Combobox-Outpost-Historical';
+        window.feature.productComboboxId = 'Overview-Combobox-Product-Historical';
+        window.feature.clientComboboxId = 'Overview-Combobox-Client-Historical';
+
+        window.feature.containerForHistoricalGridId = 'Container-For-Historical-Grid-Id';
+        window.feature.viewProductStockLevelId = 'Button-For-View-Product-Stock-Level-Id';
+        window.feature.startDateId = 'Overview-Datefield-StartDate';
+        window.feature.endDateId = 'Overview-Datefield-EndDate';
+
+        // window.feature.outpostName = 'Product-Group-Level-Outpost-Name';
+      //  window.feature.productGroupName = 'Product-Group-Level-Product-Group-Name';
+      //  window.feature.editLastUpdated = 'Edit-Last-Updated-Historical-Id';
+      //  window.feature.editDescription = 'Edit-Description-Historical-Id';
+       // window.feature.editProductGroup = 'Edit-Product-Group-Historical-Id';
+       // window.feature.editProductStockLevel = 'Edit-Product-Stock-Level-Historical-Id';
+       // window.feature.editUpdateMethod = 'Edit-Update-Method-Historical-Id';
+       // window.feature.editSMSCode = 'Edit-SMS-Code-Historical-Id';
+        //window.feature.editProductName = 'Edit-Product-Name-Historical-Id';
+       // window.feature.editOutpostName = 'Edit-Outpost-Name-Historical-Id';
+        
+        var currentDate = new Date();
+        var prevMonthDate = new Date();
+        prevMonthDate.setMonth(currentDate.getMonth() - 1);
+       
+        window.feature.countryStore = Ext.create('Ext.data.Store', {
+            remoteSort: true,
+            fields: ['Id','Name'],
+            proxy: {
+                type: 'ajax',
+                url: '@Url.RouteUrl(Web.Areas.OutpostManagement.OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Region", action = "GetCountries" })',
+                reader: {
+                    type: 'json',
+                    root: 'Countries',
+                    totalProperty: 'TotalItems'
+                },
+                simpleSortMode: true
+            },
+            sorters: [{
+                property: 'Name',
+                direction: 'ASC'
+            }]
+        });
+
+        window.feature.regionStore = Ext.create('Ext.data.Store', {
+            remoteSort: true,
+            fields: ['Id','Name'],
+            proxy: {
+                type: 'ajax',
+                url: '@Url.RouteUrl(Web.Areas.OutpostManagement.OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "District", action = "GetRegions" })',
+                reader: {
+                    type: 'json',
+                    root: 'regions',
+                    totalProperty: 'TotalItems'
+                },
+                extraParams: { countryId: '' },
+                simpleSortMode: true
+            },
+            sorters: [{
+                property: 'Name',
+                direction: 'ASC'
+            }]
+        });
+
+        window.feature.districtStore = Ext.create('Ext.data.Store', {
+            remoteSort: true,
+            fields: ['Id','Name'],
+            proxy: {
+                type: 'ajax',
+                url: '@Url.RouteUrl(Web.Areas.OutpostManagement.OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Outpost", action = "GetDistricts" })',
+                reader: {
+                    type: 'json',
+                    root: 'Districts',
+                    totalProperty: 'TotalItems'
+                },
+                extraParams: { regionId: '' },
+                simpleSortMode: true
+            },
+            sorters: [{
+                property: 'Name',
+                direction: 'ASC'
+            }]
+        });
+
+        window.feature.outpostStore = Ext.create('Ext.data.Store', {
+            remoteSort: true,
+            fields: ['Id','Name'],
+            proxy: {
+                type: 'ajax',
+                url: '@Url.RouteUrl(StockAdministrationAreaRegistration.DEFAULT_ROUTE, new { controller = "HistoricalProductLevel", action = "GetOutposts" })',
+                reader: {
+                    type: 'json',
+                    root: 'Outposts',
+                    totalProperty: 'TotalItems'
+                },
+                extraParams: { districtId: '' },
+                simpleSortMode: true
+            },
+            sorters: [{
+                property: 'Name',
+                direction: 'ASC'
+            }]
+        });
+
+        window.feature.productStore = Ext.create('Ext.data.Store', {
+            fields: ['Id', 'Name'],
+            proxy: {
+                type: 'ajax',
+                url: '@Url.RouteUrl(StockAdministrationAreaRegistration.DEFAULT_ROUTE, new { controller = "HistoricalProductLevel", action = "GetProducts" })',
+                reader: {
+                    type: 'json',
+                    root: 'Products',
+                    totalProperty: 'TotalItems'
+                },
+                extraParams: { countryId: '', regionId:'',districId:'',outpostId:'' },
+                simpleSortMode: true
+            },
+            sorters: [{
+                property: 'Name',
+                direction: 'ASC'
+            }]
+        })
+
+       
+        Ext.define('ProductSales', {
+            extend: 'Ext.data.Model',
+            fields: ['OutpostName', 'ProductName', 'Date', {
+                name: 'Quantity',
+                type: 'int'
+            }]
+        });
+
+        window.feature.productSalesStore = Ext.create('Ext.data.Store', {
+            model: 'ProductSales',
+            proxy: {
+                type: 'ajax',
+                url: '@Url.RouteUrl(StockAdministrationAreaRegistration.DEFAULT_ROUTE, new { controller = "HistoricalProductLevel", action = "GetProductSales" })',
+                reader: {
+                    type: 'json',
+                    root: 'ProductSales',
+                    totalProperty: 'TotalItems'
+                },
+                extraParams: {
+                    countryId: '',
+                    regionId: '',
+                    districtId: '',
+                    outpostId: '',
+                    startDate: '',
+                    endDate: '',
+                    productId: '',
+                    clientId:''
+                },
+                simpleSortMode: true
+             },
+            sorters: [{
+                property: 'Date',
+                direction: 'DESC'
+            }],
+            groupField: 'OutpostName'
+        })
+
+        window.feature.clientStore = Ext.create('Ext.data.ArrayStore', {
+            fields: ['Id', 'Name'],
+            data: [['0','All'],['F','Fonkoze'],['N','Non-Fonkoze']]
+        })
+
+       @* window.feature.gridOutpostStore = Ext.create('Ext.data.Store', {
+            remoteSort: true,
+            fields: ['Id', 'Name', 'ProductGroupId', 'ProductGroupName', 'SMSResponseDate', 'NumberOfProducts'],
+            groupField: 'Name',
+            proxy: {
+                type: 'ajax',
+                url: '@Url.RouteUrl(StockAdministrationAreaRegistration.DEFAULT_ROUTE, new { controller = "HistoricalProductLevel", action = "GetHistoricalProductLevel" })',
+                reader: {
+                    type: 'json',
+                    root: 'Historical',                    
+                    totalProperty: 'TotalItems'
+                },
+                extraParams: { 
+                    countryId: '', 
+                    regionId: '', 
+                    districtId: '', 
+                    outpostId: '' 
+                },
+                
+                simpleSortMode: true
+            },
+            sorters: [{
+                property: 'Name',
+                direction: 'ASC'
+            }]
+        });*@
+
+      
+        function ClearDistrictStore(){
+            var noOfItemsToDelete = window.feature.districtStore.getCount()-1;
+            window.feature.districtStore.removeAt(1, noOfItemsToDelete);
+        };
+
+        function ClearOutpostStore(){
+            var noOfItemsToDelete = window.feature.outpostStore.getCount()-1;
+            window.feature.outpostStore.removeAt(1, noOfItemsToDelete);
+        };
+
+        function ResetCountryDependencies(){
+            var regionCombobox = window.feature.container.down('#'+window.feature.regionComboboxId);
+            regionCombobox.setValue('@Guid.Empty'); 
+
+            var districtCombobox = window.feature.container.down('#'+window.feature.districtComboboxId);
+            districtCombobox.setValue('@Guid.Empty'); 
+
+            var outpostCombobox = window.feature.container.down('#'+window.feature.outpostComboboxId);
+            outpostCombobox.setValue('@Guid.Empty'); 
+
+            ClearDistrictStore();
+            ClearOutpostStore();
+        };
+
+        function ResetDistrictDependencies(){
+            var outpostCombobox = window.feature.container.down('#'+window.feature.outpostComboboxId);
+            outpostCombobox.setValue('@Guid.Empty'); 
+        };
+
+        function ResetRegionDependencies(){
+            var districtCombobox = window.feature.container.down('#'+window.feature.districtComboboxId);
+            districtCombobox.setValue('@Guid.Empty'); 
+
+            window.feature.districtStore.proxy.extraParams.regionId = districtCombobox.getValue();
+            outpostCombobox.setValue('@Guid.Empty'); 
+
+            ClearOutpostStore();
+        };
+
+              
+
+        window.feature.container = Ext.create('Ext.container.Container', {
+            margin: '15 15 15 15',
+            padding: '20 20 0 20',
+            autoScroll:true,
+            id:'TopContainer',
+            layout: {
+                align: 'stretch',
+                type: 'vbox'
+            },
+            items: [{
+                xtype: 'container',
+                layout: {
+                    align: 'stretch',
+                    type: 'vbox'
+                },
+               items: [
+               {
+                   xtype: 'container',
+                   height: 50,
+                   layout: {
+                       type: 'column'
+                   },
+                   items: [{
+                       xtype: 'container',
+                       height: 30,
+                       width: 30,
+                       html:'&nbsp;'
+                   },{
+                       xtype: 'image',
+                       src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/OutpostStockLevel/HistoricalProductLevel.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                       margin: '0 10 10 0'
+                   },{
+                       xtype: 'label',
+                       cls: 'x-title-label',
+                       text: 'Historical Product Sales'
+                   },
+                   {
+                       xtype: 'button',
+                       margin: '0 10 0 20',
+                       ui: 'snapshot-add-btn',
+                       cls: 'x-add-button-gradient',
+                       text: 'Table View',
+                       handler: function () {
+                           navigateTo('@(Url.RouteUrl<HistoricalProductLevelController>( x=>x.Overview() ,  Web.Areas.StockAdministration.StockAdministrationAreaRegistration.DEFAULT_ROUTE ))')
+                       }
+                   }
+                   ]
+               },
+                  {  xtype: 'container',
+                      height: 65,
+                      margin: '0 0 0 30',
+                      layout: {
+                          type: 'column'
+                      },
+                      items: [{
+                          xtype: 'datefield',
+                          fieldLabel: 'Start Date',
+                          width: 170,
+                          format: 'd-M-Y',
+                          labelAlign: 'top',
+                          itemId: window.feature.startDateId,
+                          value: prevMonthDate,
+                         
+                      },
+                      {
+                          xtype: 'datefield',
+                          fieldLabel: 'End Date',
+                          width: 170,
+                          labelAlign: 'top',
+                          format: 'd-M-Y',
+                          itemId:window.feature.endDateId,
+                          value: currentDate,
+                         
+                      }
+                      
+                      ]},
+                {
+                    xtype: 'container',
+                    height: 65,
+                    margin: '0 0 0 30',
+                    layout: {
+                        type: 'column'
+                    },
+                    items: [{
+                        xtype: 'combobox',
+                        itemId: window.feature.countryComboboxId,
+                        store: window.feature.countryStore,
+                        labelAlign: 'top',
+                        fieldLabel: 'Selected Country',
+                        displayField: 'Name',
+                        valueField:'Id',
+                        labelClsExtra: 'combo-label',
+                        emptyText: 'Country List', 
+                        typeAhead: true,
+                        editable: false,
+                        listeners:{
+                            'select': function(combo, record){
+                                ResetCountryDependencies();
+
+                                window.feature.regionStore.proxy.extraParams.countryId = combo.getValue();
+                                window.feature.regionStore.load();
+
+                                window.feature.productStore.proxy.extraParams.countryId = combo.getValue();
+                                window.feature.productStore.load();
+
+                                var regionCombobox = window.feature.container.down('#'+window.feature.regionComboboxId);
+                                regionCombobox.enable();
+                            },
+                            specialkey: function(field, e){
+                                if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
+                                    field.setValue('@Guid.Empty');
+                                    ResetCountryDependencies();
+                                }
+                            }
+                        } 
+                    },{ 
+                        xtype: 'combobox',
+                        itemId: window.feature.regionComboboxId,
+                        store: window.feature.regionStore,
+                        disabled: false,
+                        labelAlign: 'top',
+                        fieldLabel: 'Selected Region',
+                        displayField: 'Name',
+                        valueField:'Id',
+                        labelClsExtra: 'combo-label',
+                        emptyText: 'Region List', 
+                        typeAhead: true,
+                        editable: false,
+                        listeners:{
+                            'select': function(combo, record){
+                                ResetRegionDependencies();
+
+                                window.feature.districtStore.proxy.extraParams.regionId = combo.getValue();
+                                window.feature.districtStore.load();
+
+                                window.feature.productStore.proxy.extraParams.regionId = combo.getValue();
+                                window.feature.productStore.load();
+
+                                var districtCombobox = window.feature.container.down('#'+window.feature.districtComboboxId);
+                                districtCombobox.enable();
+                            },
+                            specialkey: function(field, e){
+                                if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
+                                    field.setValue('@Guid.Empty');
+                                    ResetRegionDependencies();
+                                }
+                            }
+                        } 
+                    },{ 
+                        xtype: 'combobox',
+                        itemId: window.feature.districtComboboxId,
+                        store: window.feature.districtStore,
+                        disabled: false,
+                        labelAlign: 'top',
+                        fieldLabel: 'Selected District',
+                        displayField: 'Name',
+                        labelClsExtra: 'combo-label',
+                        valueField:'Id',
+                        emptyText: 'District List', 
+                        typeAhead: true,
+                        editable: false,
+                        listeners:{
+                            'select': function(combo, record){
+                                ResetDistrictDependencies();
+
+                                window.feature.outpostStore.proxy.extraParams.districtId = combo.getValue();
+                                window.feature.outpostStore.load();
+
+                                window.feature.productStore.proxy.extraParams.districId = combo.getValue();
+                                window.feature.productStore.load();
+
+                                var outpostCombobox = window.feature.container.down('#'+window.feature.outpostComboboxId);
+                                outpostCombobox.enable();
+                            },
+                            specialkey: function(field, e){
+                                if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
+                                    field.setValue('@Guid.Empty');
+                                    ResetDistrictDependencies();
+                                }
+                            }
+                        } 
+                    },{ 
+                        xtype: 'combobox',
+                        itemId: window.feature.outpostComboboxId,
+                        store: window.feature.outpostStore,
+                        disabled: false,
+                        labelAlign: 'top',
+                        labelClsExtra: 'combo-label',
+                        fieldLabel: 'Selected Seller',
+                        displayField: 'Name',
+                        valueField:'Id',
+                        emptyText: 'Seller List', 
+                        typeAhead: true,
+                        editable: false,
+                        listeners:{
+                            'select': function (combo, record) {
+
+                                window.feature.productStore.proxy.extraParams.outpostId = combo.getValue();
+                                window.feature.productStore.load();
+
+                                var viewButton = window.feature.container.down('#'+window.feature.viewProductStockLevelId);
+                                viewButton.enable();
+                            },
+                            specialkey: function(field, e){
+                                if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
+                                    field.setValue('@Guid.Empty');
+                                }
+                            }
+                        }
+			                
+                    }, {
+                        xtype: 'combobox',
+                        itemId: window.feature.productComboboxId,
+                        store: window.feature.productStore,
+                        disabled: false,
+                        labelAlign: 'top',
+                        labelClsExtra: 'combo-label',
+                        fieldLabel: 'Selected Product',
+                        displayField: 'Name',
+                        valueField: 'Id',
+                        emptyText: 'Product List',
+                        typeAhead: true,
+                        editable: false,
+                       
+                    },
+                    {
+                        xtype: 'combobox',
+                        itemId: window.feature.clientComboboxId,
+                        store: window.feature.clientStore,
+                        labelAlign: 'top',
+                        labelClsExtra: 'combo-label',
+                        fieldLabel: 'Selected Client',
+                        displayField: 'Name',
+                        valueField: 'Id',
+                        emptyText: 'Client Type',
+                        typeAhead: true,
+                        editable: false,
+                        value:'0',
+                    },
+                    {
+                        xtype: 'button',
+                        margin: '25 0 0 0',
+                        text: 'View Product Sales',
+                        ui: 'snapshot-add-btn',
+                        cls: 'x-add-button-gradient',
+                        disabled: false,
+                        itemId: window.feature.viewProductStockLevelId,
+                        handler: function(){
+                            ResetExtraParams();
+                            SetNewExtraParams();
+                            window.feature.productSalesStore.load();  
+                        }
+
+                    }]
+                }]
+            },
+
+            ]
+        });
+
+        function ResetExtraParams(){
+            window.feature.productSalesStore.proxy.extraParams.outpostId = null;
+            window.feature.productSalesStore.proxy.extraParams.districtId = null;
+            window.feature.productSalesStore.proxy.extraParams.regionId = null;
+            window.feature.productSalesStore.proxy.extraParams.countryId = null;
+            window.feature.productSalesStore.proxy.extraParams.productId = null;
+            window.feature.productSalesStore.proxy.extraParams.clientId = null;
+        };
+
+        function SetNewExtraParams(){
+            var outpostSelectedValue = window.feature.container.down('#'+window.feature.outpostComboboxId).getValue();
+            if (outpostSelectedValue != null){
+                window.feature.productSalesStore.proxy.extraParams.outpostId = outpostSelectedValue;
+            }
+
+            var districtSelectedValue = window.feature.container.down('#'+window.feature.districtComboboxId).getValue();
+            if (districtSelectedValue != null){
+                window.feature.productSalesStore.proxy.extraParams.districtId = districtSelectedValue;
+            }
+
+            var regionSelectedValue = window.feature.container.down('#'+window.feature.regionComboboxId).getValue();
+            if (regionSelectedValue != null){
+                window.feature.productSalesStore.proxy.extraParams.regionId = regionSelectedValue;
+            }
+
+            var countrySelectedValue = window.feature.container.down('#'+window.feature.countryComboboxId).getValue();
+            if (countrySelectedValue != null){
+                window.feature.productSalesStore.proxy.extraParams.countryId = countrySelectedValue;
+            }
+
+            var productSelectedValue = window.feature.container.down('#' + window.feature.productComboboxId).getValue();
+            if (productSelectedValue != null)            {
+                window.feature.productSalesStore.proxy.extraParams.productId = productSelectedValue;
+            }
+
+            var clientSelectedValue = window.feature.container.down('#' + window.feature.clientComboboxId).getValue();
+            if (productSelectedValue != null) {
+                window.feature.productSalesStore.proxy.extraParams.clientId = clientSelectedValue;
+            }
+        };
+
+        var contentRes = window.res.content;
+        var mainContent = Ext.getCmp(contentRes.maincontent.id);
+
+        mainContent.add(window.feature.container);
+
+        var countryCombobox = window.feature.container.down('#'+window.feature.countryComboboxId);
+        var regionCombobox = window.feature.container.down('#'+window.feature.regionComboboxId);
+        var districtCombobox = window.feature.container.down('#'+window.feature.districtComboboxId);
+        var outpostCombobox = window.feature.container.down('#' + window.feature.outpostComboboxId);
+        var productCombobox = window.feature.container.down('#' + window.feature.productComboboxId);
+
+        window.feature.countryStore.load();
+        window.feature.productStore.load();
+
+        window.feature.regionStore.load({
+            params: { countryId: '@Guid.Empty' }
+        });
+        window.feature.districtStore.load({
+            params: { regionId: '@Guid.Empty' }
+        });
+        window.feature.outpostStore.load({ 
+            params: { districtId: '@Guid.Empty'} 
+        });
+
+        countryCombobox.setValue('@Guid.Empty');
+        regionCombobox.setValue('@Guid.Empty');
+        districtCombobox.setValue('@Guid.Empty');
+        outpostCombobox.setValue('@Guid.Empty');
+        productCombobox.setValue('@Guid.Empty');
+        
+       
+    });
+</script>
+

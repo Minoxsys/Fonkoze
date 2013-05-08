@@ -297,7 +297,18 @@ Historical Product Level: Overview
                        xtype: 'label',
                        cls: 'x-title-label',
                        text: 'Historical Product Sales'
-                   }]
+                   },
+                   {
+                       xtype: 'button',
+                       margin: '0 10 0 20',
+                       ui: 'snapshot-add-btn',
+                       cls: 'x-add-button-gradient',
+                       text: 'Graphic View',
+                       handler: function () {
+                           navigateTo('@(Url.RouteUrl<HistoricalProductLevelController>( x=>x.GraphicOverview() ,  Web.Areas.StockAdministration.StockAdministrationAreaRegistration.DEFAULT_ROUTE ))')
+                       }
+                   }
+                   ]
                },
                   {  xtype: 'container',
                       height: 65,
@@ -313,24 +324,7 @@ Historical Product Level: Overview
                           labelAlign: 'top',
                           itemId: window.feature.startDateId,
                           value: prevMonthDate,
-                          listeners: {
-                              select: function (t, n, o) {
-                                  var date = t.getValue();
-                                  //window.feature.exportStartDate = date;
-                                  //startDateOverviewCombobox.setValue(date);
-                                  //window.feature.chartStore.proxy.extraParams.startDate = date;
-                                  //window.feature.chartStore.load();
-                              },
-                              specialkey: function (field, e) {
-                                  if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
-                                      //field.setValue(null);
-                                      //startDateOverviewCombobox.setValue(null);
-                                      //window.feature.chartStore.proxy.extraParams.startDate = "";
-                                      //window.feature.exportStartDate = "";
-                                      //window.feature.chartStore.load();
-                                  }
-                              }
-                          }
+                          
                       },
                       {
                           xtype: 'datefield',
@@ -340,24 +334,7 @@ Historical Product Level: Overview
                           format: 'd-M-Y',
                           itemId:window.feature.endDateId,
                           value: currentDate,
-                          listeners: {
-                              select: function (t, n, o) {
-                                  var date = t.getValue();
-                                  //window.feature.exportEndDate = date;
-                                  //endDateOverviewCombobox.setValue(date);
-                                  //window.feature.chartStore.proxy.extraParams.endDate = date;
-                                  //window.feature.chartStore.load();
-                              },
-                              specialkey: function (field, e) {
-                                  if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
-                                      field.setValue(null);
-                                      //endDateOverviewCombobox.setValue(null);
-                                      //window.feature.chartStore.proxy.extraParams.endDate = "";
-                                      //window.feature.exportEndDate = "";
-                                      //window.feature.chartStore.load();
-                                  }
-                              }
-                          }
+                          
                       }
                       
                       ]},

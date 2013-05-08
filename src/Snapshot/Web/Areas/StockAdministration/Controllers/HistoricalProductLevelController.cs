@@ -47,6 +47,15 @@ namespace Web.Areas.StockAdministration.Controllers
             return View();
         }
 
+         [Requires(Permissions = "HistoricalOutpostStockLevel.View")]
+        public ActionResult GraphicOverview()
+        {
+            ViewBag.HasNoRightsToEdit = (PermissionService.HasPermissionAssigned(HISTORICALOUTPOSTSTOCKLEVEL_EDIT_PERMISSION, User.Identity.Name) == true) ? false.ToString().ToLowerInvariant() : true.ToString().ToLowerInvariant();
+
+
+            return View();
+        }
+
         [HttpGet]
         public JsonResult GetHistoricalProductLevel(Guid? countryId, Guid? regionId, Guid? districtId, Guid? outpostId)
         {
