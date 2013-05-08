@@ -473,10 +473,11 @@
                                         msgAlert.alert(serverResponse.Status, serverResponse.Message);
                                     }
                                     else{
-    
                                         me.postContactsFromMemoryProxy(serverResponse.OutpostId || me.entityId);
                                         me.close();
                                         me.destroy();
+
+                                        window.feature.outpostsStore.loadPage(1);
                                     }
                                 });
     
