@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
-namespace Web.Utils
+namespace Infrastructure.Logging
 {
     public interface ILogger
     {
         void LogError(Exception ex, string contextualMessage = null);
+        void LogInfo(string message);
     }
 }

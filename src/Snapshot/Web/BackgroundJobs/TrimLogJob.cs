@@ -1,7 +1,8 @@
-﻿using NHibernate;
+﻿
+using Infrastructure.Logging;
+using NHibernate;
 using System;
 using System.Threading.Tasks;
-using Web.Utils;
 using WebBackgrounder;
 
 namespace Web.BackgroundJobs
@@ -10,9 +11,9 @@ namespace Web.BackgroundJobs
     {
         private readonly Func<ISession> _sessionThunk;
         private ISession _session;
-        private readonly ILogger _logger;
+        private readonly Func<ILogger> _logger;
 
-        public TrimLogJob(Func<ISession> sessionThunk, ILogger logger)
+        public TrimLogJob(Func<ISession> sessionThunk, Func<ILogger> logger)
         {
             _logger = logger;
             _sessionThunk = sessionThunk;
@@ -33,7 +34,7 @@ namespace Web.BackgroundJobs
                     }
                     catch (Exception ex)
                     {
-                        _logger.LogError(ex, "Trim job has failed");
+                        _logger().LogError(ex, "Trim job has failed");
                         throw;
                     }
 

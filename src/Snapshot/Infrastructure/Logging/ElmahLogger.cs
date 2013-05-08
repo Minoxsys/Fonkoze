@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Elmah;
+using System;
 using System.Web;
-using Elmah;
 
-namespace Web.Utils
+namespace Infrastructure.Logging
 {
-    public class Logger : ILogger
+    public class ElmahLogger : ILogger
     {
         public void LogError(Exception ex, string contextualMessage = null)
         {
@@ -21,6 +21,23 @@ namespace Web.Utils
                 else
                 {
                     ErrorSignal.FromCurrentContext().Raise(ex, HttpContext.Current);
+                }
+            }
+            catch
+            {
+                //just keep going
+            }
+        }
+
+        public void LogInfo(string message)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(message))
+                {
+                    //elmah is designed to log exceptions so we improvize
+                    var annotatedException = new Exception("INFO: " + message);
+                    ErrorSignal.FromCurrentContext().Raise(annotatedException, HttpContext.Current);
                 }
             }
             catch

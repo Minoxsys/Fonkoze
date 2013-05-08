@@ -2,10 +2,10 @@
 using Autofac.Features.ResolveAnything;
 using System.Linq;
 using System.Web.Mvc;
+using Infrastructure.Logging;
 using Web.Controllers;
 using Web.ReceiveSmsUseCase.Services.MessageParsers;
 using Web.ReceiveSmsUseCase.Services.MessageParsers.Fonkoze;
-using Web.Utils;
 
 namespace Web.Bootstrap.Container
 {
@@ -25,7 +25,7 @@ namespace Web.Bootstrap.Container
             container.RegisterSource(new AnyConcreteTypeNotAlreadyRegisteredSource(type => type.Assembly.FullName.StartsWith("Web")));
 
             container.RegisterType<FonkozeSmsTextParserService>().As<ISmsTextParserService>();
-            container.RegisterType<Logger>().As<ILogger>();
+            container.RegisterType<ElmahLogger>().As<ILogger>();
         }
 
         private static void AutoWireControllerProperties(ContainerBuilder container)

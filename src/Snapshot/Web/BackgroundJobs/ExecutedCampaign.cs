@@ -1,11 +1,11 @@
 ﻿using Core.Persistence;
 using Domain;
+using Infrastructure.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Web.Services;
-using Web.Utils;
 using WebBackgrounder;
 
 namespace Web.BackgroundJobs
@@ -32,12 +32,12 @@ namespace Web.BackgroundJobs
         private readonly Func<IQueryService<ProductLevelRequest>> _queryProductLevelRequests;
         private readonly Func<IQueryService<RequestRecord>> _queryExistingRequests;
         private readonly Func<IProductLevelRequestMessagesDispatcherService> _dispatcherService;
-        private readonly ILogger _logger;
+        private readonly Func<ILogger> _logger;
 
         public CampaignExecutionJob(
             Func<IQueryService<ProductLevelRequest>> queryProductLevelRequests,
             Func<IQueryService<RequestRecord>> queryExecutedCampaign,
-            Func<IProductLevelRequestMessagesDispatcherService> dispatcherService, ILogger logger)
+            Func<IProductLevelRequestMessagesDispatcherService> dispatcherService, Func<ILogger> logger)
         {
             _logger = logger;
             _queryProductLevelRequests = queryProductLevelRequests;
@@ -60,7 +60,7 @@ namespace Web.BackgroundJobs
                     }
                     catch (Exception ex)
                     {
-                        _logger.LogError(ex, "Campaign job has failed.");
+                        _logger().LogError(ex, "Campaign job has failed.");
                         throw;
                     }
                 });

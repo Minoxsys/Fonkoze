@@ -1,22 +1,22 @@
 ﻿using Core.Persistence;
 using Domain;
+using Infrastructure.Logging;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Web.LocalizationResources;
 using Web.Services;
 using Web.Services.Helper;
-using Web.Utils;
 using WebBackgrounder;
 
 namespace Web.BackgroundJobs
 {
-    public class SmsMessagesMonitoringJob: IJob
+    public class SmsMessagesMonitoringJob : IJob
     {
-        private readonly IQueryService<RawSmsReceived> _rawSmsQueryService;
-        private readonly ISendSmsService _sendSmsService;
-        private readonly ISenderInformationService _senderInformationService;
-        private readonly ILogger _logger;
+        private readonly Func<IQueryService<RawSmsReceived>> _rawSmsQueryService;
+        private readonly Func<ISendSmsService> _sendSmsService;
+        private readonly Func<ISenderInformationService> _senderInformationService;
+        private readonly Func<ILogger> _logger;
         private const string JobName = "SmsMessagesMonitoringJob";
 
         public TimeSpan Interval
@@ -35,8 +35,8 @@ namespace Web.BackgroundJobs
             get { return JobName; }
         }
 
-        public SmsMessagesMonitoringJob(IQueryService<RawSmsReceived> rawSmsQueryService, ISendSmsService sendSmsService,
-                                        ISenderInformationService senderInformationService, ILogger logger)
+        public SmsMessagesMonitoringJob(Func<IQueryService<RawSmsReceived>> rawSmsQueryService, Func<ISendSmsService> sendSmsService,
+                                        Func<ISenderInformationService> senderInformationService, Func<ILogger> logger)
         {
             _logger = logger;
             _senderInformationService = senderInformationService;
@@ -51,14 +51,14 @@ namespace Web.BackgroundJobs
                     try
                     {
                         var latestSmsBySender =
-                            _rawSmsQueryService.Query()
-                                               .Where(sms => sms.Created > DateTime.UtcNow.AddHours(-6))
-                                               .OrderByDescending(r => r.Created)
-                                               .GroupBy(r => r.Sender).Select(g => g);
+                            _rawSmsQueryService().Query()
+                                                 .Where(sms => sms.Created > DateTime.UtcNow.AddHours(-24))
+                                                 .OrderByDescending(r => r.Created)
+                                                 .GroupBy(r => r.Sender).Select(g => g);
 
                         foreach (IGrouping<string, RawSmsReceived> smsGroup in latestSmsBySender)
                         {
-                            Outpost senderOutpost = _senderInformationService.GetOutpostWithActiveSender(smsGroup.Key);
+                            Outpost senderOutpost = _senderInformationService().GetOutpostWithActiveSender(smsGroup.Key);
                             if (senderOutpost == null)
                                 continue;
 
@@ -71,14 +71,14 @@ namespace Web.BackgroundJobs
                                 var phoneNumber = senderOutpost.GetDistrictManagersPhoneNumberAsString();
                                 if (!string.IsNullOrEmpty(phoneNumber))
                                 {
-                                    _sendSmsService.SendSms(phoneNumber, ComposeMessage(senderOutpost, latestSmsMessage.Created), true);
+                                    _sendSmsService().SendSms(phoneNumber, ComposeMessage(senderOutpost, latestSmsMessage.Created), true);
                                 }
                             }
                         }
                     }
                     catch (Exception ex)
                     {
-                        _logger.LogError(ex, "Sms monitorign job has failed");
+                        _logger().LogError(ex, "Sms monitorign job has failed");
                         throw;
                     }
                 });

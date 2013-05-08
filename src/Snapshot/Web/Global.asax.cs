@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Autofac.Integration.Mvc;
+using Infrastructure.Logging;
 using Persistence;
 using System.Web.Mvc;
 using Web.BackgroundJobs;
@@ -8,7 +9,6 @@ using Web.Bootstrap.Routes;
 using Web.CustomModelBinders;
 using Web.CustomViewEngine;
 using Web.Security;
-using Web.Utils;
 using WebBackgrounder;
 
 namespace Web
@@ -18,7 +18,7 @@ namespace Web
     public class MvcApplication : System.Web.HttpApplication, IContainerAccessor
     {
         private static JobManager _jobManager;
-
+        private readonly ILogger _logger = new ElmahLogger();
         private static IContainer _container;
 
         IContainer IContainerAccessor.Container
@@ -33,6 +33,8 @@ namespace Web
 
         protected void Application_Start()
         {
+            _logger.LogInfo("Application is starting");
+
             ReplaceDefaultViewEngine();
 
             InitializeContainer();
@@ -46,6 +48,7 @@ namespace Web
 
             RegisterGlobalFilters(GlobalFilters.Filters);
             RoutesRegistrar.Register();
+            _logger.LogInfo("Application is started");
         }
 
         private void ReplaceDefaultViewEngine()
@@ -91,13 +94,15 @@ namespace Web
                     _container.Resolve<CampaignExecutionJob>(),
                     _container.Resolve<OutpostInactivityJob>(),
                     _container.Resolve<SmsMessagesMonitoringJob>(),
-                    new TrimLogJob(() => _container.Resolve<INHibernateSessionFactory>().CreateSession(), _container.Resolve<ILogger>()) 
+                    new TrimLogJob(() => _container.Resolve<INHibernateSessionFactory>().CreateSession(), () => _container.Resolve<ILogger>()) 
                     //new SampleJob(TimeSpan.FromSeconds(35), TimeSpan.FromSeconds(60)),
                     /* new ExceptionJob(TimeSpan.FromSeconds(15)), */
                     // new WorkItemCleanupJob(TimeSpan.FromMinutes(1), TimeSpan.FromMinutes(5), new WorkItemsContext())
                 };
 
-            var coordinator = new WebFarmJobCoordinator(new NHibernateWorkItemRepository(() => _container.Resolve<INHibernateSessionFactory>().CreateSession()));
+            var coordinator =
+                new WebFarmJobCoordinator(new NHibernateWorkItemRepository(() => _container.Resolve<INHibernateSessionFactory>().CreateSession(),
+                                                                           () => _container.Resolve<ILogger>()));
             var manager = new JobManager(jobs, coordinator) {RestartSchedulerOnFailure = true};
             manager.Fail(ex => Elmah.ErrorLog.GetDefault(null).Log(new Elmah.Error(ex)));
 

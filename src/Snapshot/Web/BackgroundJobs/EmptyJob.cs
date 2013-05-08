@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Core.Persistence;
+using Domain;
+using Infrastructure.Logging;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Web.Utils;
 using WebBackgrounder;
-using Domain;
-using Core.Persistence;
 
 namespace Web.BackgroundJobs
 {
@@ -13,9 +13,9 @@ namespace Web.BackgroundJobs
         private const string EmptyJobName = "EmptyJob";
         private readonly Func<IQueryService<WorkItem>> _queryWorkItems;
         private readonly Func<IDeleteCommand<WorkItem>> _deleteWorkItems;
-        private readonly ILogger _logger;
+        private readonly Func<ILogger> _logger;
 
-        public EmptyJob(Func<IQueryService<WorkItem>> queryWorkItems, Func<IDeleteCommand<WorkItem>> deleteWorkItems, ILogger logger)
+        public EmptyJob(Func<IQueryService<WorkItem>> queryWorkItems, Func<IDeleteCommand<WorkItem>> deleteWorkItems, Func<ILogger> logger)
         {
             _logger = logger;
             _queryWorkItems = queryWorkItems;
@@ -40,7 +40,7 @@ namespace Web.BackgroundJobs
                     }
                     catch (Exception ex)
                     {
-                        _logger.LogError(ex, "EmptyJpob has failed");
+                        _logger().LogError(ex, "EmptyJpob has failed");
                         throw;
                     }
                 });
