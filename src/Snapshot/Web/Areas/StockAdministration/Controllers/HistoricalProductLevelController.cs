@@ -11,6 +11,8 @@ using Web.Helpers;
 using Web.Models.Shared;
 using Core.Security;
 using Web.Security;
+using Web.Models.UserManager;
+using Web.Areas.AnalysisManagement.Models.ReportRegionLevel;
 
 namespace Web.Areas.StockAdministration.Controllers
 {
@@ -21,6 +23,7 @@ namespace Web.Areas.StockAdministration.Controllers
         public IQueryService<ProductGroup> QueryProductGroup { get; set; }
         public IQueryService<Product> QueryProduct { get; set; }
         public IQueryService<OutpostHistoricalStockLevel> QueryHistorical { get; set; }
+        public IQueryService<OutpostStockLevel> QueryStockLevel { get; set; }
         public IQueryService<ProductSale> QueryProductSale { get; set; }
 
         public ISaveOrUpdateCommand<OutpostHistoricalStockLevel> SaveOrUpdateMethod { get; set; }
@@ -124,8 +127,11 @@ namespace Web.Areas.StockAdministration.Controllers
                 .Where(it => it.UpdateDate.Value.Day == dateTime.Day).Count();
         }
 
+        
+
+
         [HttpGet]
-        public JsonResult GetProductSales(Guid? countryId, Guid? regionId, Guid? districtId, Guid? outpostId, DateTime? startDate, DateTime? endDate, Guid? productId)
+        public JsonResult GetProductSales(Guid? countryId, Guid? regionId, Guid? districtId, Guid? outpostId, DateTime? startDate, DateTime? endDate, Guid? productId, string clientId)
         {
 
             var ps = QueryProductSale.Query();                  
@@ -138,6 +144,22 @@ namespace Web.Areas.StockAdministration.Controllers
                 ps = ps.Where(it => it.Outpost.District.Id == districtId);
             if (outpostId.HasValue && outpostId.ToString() != GUID_FOR_ALL_OPTION_ON_OUTPOST_LIST)
                 ps = ps.Where(it => it.Outpost.Id == outpostId);
+            if (startDate.HasValue)
+                ps = ps.Where(it => it.Created >= startDate);
+            if (endDate.HasValue)
+                ps = ps.Where(it => it.Created <= endDate);
+            if (productId.HasValue && productId != Guid.Empty)
+                ps = ps.Where(it => it.Product.Id == productId);
+            if (clientId!=null)
+            {
+                if (clientId != "0")
+                {
+                    if (clientId == "F")
+                        ps = ps.Where(it => (it.ClientIdentifier == "F" || it.ClientIdentifier == "f"));
+                    else
+                        ps = ps.Where(it => (it.ClientIdentifier == "N" || it.ClientIdentifier == "n"));
+                }
+            }
 
             var psms = new List<ProductSaleModel>();
             foreach (var productSale in ps.ToList())
@@ -146,7 +168,7 @@ namespace Web.Areas.StockAdministration.Controllers
                 psms.Add(psm);
             }
           
-            return Json(new ProductsSoldOutputModel
+            return Json(new ProductsSaleOutputModel
             {
                 ProductSales = psms.ToArray(),
                 TotalItems = 0
@@ -228,6 +250,59 @@ namespace Web.Areas.StockAdministration.Controllers
                    Message = "The Historical stock level has been saved."
                });
         }
+
+        [HttpGet]
+        public JsonResult GetProducts(Guid? countryId, Guid? regionId, Guid? districtId, Guid? outpostId)
+        {
+            LoadUserAndClient();
+            var prodsList = new List<ReferenceModel>();
+            prodsList.Add(new ReferenceModel() { Id = Guid.Empty, Name = "All" });
+
+            if (!countryId.HasValue && !regionId.HasValue && !districtId.HasValue && !outpostId.HasValue)
+            {
+                return Json(new ProductsReferenceOutputModel
+                {
+                    Products = prodsList.ToArray(),
+                    TotalItems = prodsList.Count()
+                }, JsonRequestBehavior.AllowGet);
+
+            }
+
+
+            var osls = QueryStockLevel.Query().Where(it => it.Client.Id == this._client.Id);
+            if (countryId.HasValue && countryId != Guid.Empty)
+            {
+                osls = osls.Where(it => it.Outpost.Country.Id == countryId);
+            }
+            if (regionId.HasValue && regionId != Guid.Empty)
+            {
+                osls = osls.Where(it => it.Outpost.Region.Id == regionId);
+            }
+            if (districtId.HasValue && districtId != Guid.Empty)
+            {
+                osls = osls.Where(it => it.Outpost.District.Id == districtId);
+            }
+            if (outpostId.HasValue && outpostId != Guid.Empty)
+            {
+                osls = osls.Where(it => it.Outpost.Id == outpostId);
+            }
+            IQueryable<Product> prodsDistinct = (from p in osls select p.Product).Distinct();//.OrderBy(p=>p.Name);
+            
+            foreach (var p in prodsDistinct.ToList())
+            {
+               prodsList.Add(new ReferenceModel() { Id = p.Id, Name = p.Name });
+            }
+
+            return Json(new ProductsReferenceOutputModel
+            {
+                Products = prodsList.ToArray(),
+                TotalItems = prodsList.Count()
+            }, JsonRequestBehavior.AllowGet);
+
+
+        }
+
+        
 
         [HttpGet]
         public JsonResult GetOutposts(Guid? districtId)
