@@ -5,6 +5,7 @@ using System.Web.Mvc;
 using Web.Controllers;
 using Web.ReceiveSmsUseCase.Services.MessageParsers;
 using Web.ReceiveSmsUseCase.Services.MessageParsers.Fonkoze;
+using Web.Utils;
 
 namespace Web.Bootstrap.Container
 {
@@ -24,6 +25,7 @@ namespace Web.Bootstrap.Container
             container.RegisterSource(new AnyConcreteTypeNotAlreadyRegisteredSource(type => type.Assembly.FullName.StartsWith("Web")));
 
             container.RegisterType<FonkozeSmsTextParserService>().As<ISmsTextParserService>();
+            container.RegisterType<Logger>().As<ILogger>();
         }
 
         private static void AutoWireControllerProperties(ContainerBuilder container)

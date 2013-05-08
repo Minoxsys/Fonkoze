@@ -1,59 +1,49 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Core.Domain;
-using NHibernate.Linq;
-using NHibernate;
+﻿using Core.Domain;
 using Core.Persistence;
+using NHibernate;
+using NHibernate.Linq;
+using System;
+using System.Linq;
 
 namespace Persistence.Queries
 {
-	public class NHibernateQueryService<ENTITY> : IQueryService<ENTITY> where ENTITY: DomainEntity
-	{
-		ISession unitOfWork;
+    public class NHibernateQueryService<TEntity> : IQueryService<TEntity> where TEntity : DomainEntity
+    {
+        private readonly ISession _unitOfWork;
 
-		public NHibernateQueryService(ISession unitOfWork)
-		{
-            
-			this.unitOfWork = unitOfWork;
-
-		}
-		public ENTITY Load(Guid id)
-		{
-			var entity = unitOfWork.Get<ENTITY>(id);
-
-			return entity;
-		}
-
-		public IQueryable<ENTITY> Query()
-		{
-			IQueryable<ENTITY> query = unitOfWork.Query<ENTITY>();
-			
-			return query;
-		}
-
-        public IQueryable<ENTITY> QueryWithCacheRefresh()
+        public NHibernateQueryService(ISession unitOfWork)
         {
-            IQueryable<ENTITY> query = unitOfWork.Query<ENTITY>().CacheMode<ENTITY>(CacheMode.Refresh);
+            _unitOfWork = unitOfWork;
+        }
 
+        public TEntity Load(Guid id)
+        {
+            var entity = _unitOfWork.Get<TEntity>(id);
+            return entity;
+        }
+
+        public IQueryable<TEntity> Query()
+        {
+            IQueryable<TEntity> query = _unitOfWork.Query<TEntity>();
             return query;
         }
 
-		public IQueryable<ENTITY> Query( IDomainQuery<ENTITY> whereQuery )
-		{			
-			var query = Query().Where(whereQuery.Expression);
+        public IQueryable<TEntity> QueryWithCacheRefresh()
+        {
+            IQueryable<TEntity> query = _unitOfWork.Query<TEntity>().CacheMode<TEntity>(CacheMode.Refresh);
+            return query;
+        }
 
-			return query;
-		}
+        public IQueryable<TEntity> Query(IDomainQuery<TEntity> whereQuery)
+        {
+            var query = Query().Where(whereQuery.Expression);
+            return query;
+        }
 
-        public IQueryable<ENTITY> QueryWithCacheRefresh(IDomainQuery<ENTITY> whereQuery)
+        public IQueryable<TEntity> QueryWithCacheRefresh(IDomainQuery<TEntity> whereQuery)
         {
             var query = QueryWithCacheRefresh().Where(whereQuery.Expression);
-
             return query;
         }
-
-
-	}
+    }
 }

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Web.Services;
+using Web.Utils;
 using WebBackgrounder;
 
 namespace Web.BackgroundJobs
@@ -20,7 +21,7 @@ namespace Web.BackgroundJobs
 
         public TimeSpan Timeout
         {
-            get { return TimeSpan.FromMinutes(5); }
+            get { return TimeSpan.FromMinutes(10); }
         }
 
         public string Name
@@ -31,12 +32,14 @@ namespace Web.BackgroundJobs
         private readonly Func<IQueryService<ProductLevelRequest>> _queryProductLevelRequests;
         private readonly Func<IQueryService<RequestRecord>> _queryExistingRequests;
         private readonly Func<IProductLevelRequestMessagesDispatcherService> _dispatcherService;
+        private readonly ILogger _logger;
 
         public CampaignExecutionJob(
             Func<IQueryService<ProductLevelRequest>> queryProductLevelRequests,
             Func<IQueryService<RequestRecord>> queryExecutedCampaign,
-            Func<IProductLevelRequestMessagesDispatcherService> dispatcherService)
+            Func<IProductLevelRequestMessagesDispatcherService> dispatcherService, ILogger logger)
         {
+            _logger = logger;
             _queryProductLevelRequests = queryProductLevelRequests;
             _queryExistingRequests = queryExecutedCampaign;
             _dispatcherService = dispatcherService;
@@ -46,13 +49,20 @@ namespace Web.BackgroundJobs
         {
             return new Task(() =>
                 {
-                    IEnumerable<ProductLevelRequest> needToBeExecuted = GetListOfProductLevelRequestsThatNeedToBeExecuted();
-                    var dispatcher = _dispatcherService();
-                    foreach (var productLevelRequest in needToBeExecuted)
+                    try
                     {
-                        dispatcher.DispatchMessagesForProductLevelRequest(productLevelRequest);
+                        IEnumerable<ProductLevelRequest> needToBeExecuted = GetListOfProductLevelRequestsThatNeedToBeExecuted();
+                        var dispatcher = _dispatcherService();
+                        foreach (var productLevelRequest in needToBeExecuted)
+                        {
+                            dispatcher.DispatchMessagesForProductLevelRequest(productLevelRequest);
+                        }
                     }
-
+                    catch (Exception ex)
+                    {
+                        _logger.LogError(ex, "Campaign job has failed.");
+                        throw;
+                    }
                 });
         }
 

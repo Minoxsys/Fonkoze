@@ -8,6 +8,7 @@ using Web.Bootstrap.Routes;
 using Web.CustomModelBinders;
 using Web.CustomViewEngine;
 using Web.Security;
+using Web.Utils;
 using WebBackgrounder;
 
 namespace Web
@@ -90,7 +91,7 @@ namespace Web
                     _container.Resolve<CampaignExecutionJob>(),
                     _container.Resolve<OutpostInactivityJob>(),
                     _container.Resolve<SmsMessagesMonitoringJob>(),
-                    new TrimLogJob(() => _container.Resolve<INHibernateSessionFactory>().CreateSession()) 
+                    new TrimLogJob(() => _container.Resolve<INHibernateSessionFactory>().CreateSession(), _container.Resolve<ILogger>()) 
                     //new SampleJob(TimeSpan.FromSeconds(35), TimeSpan.FromSeconds(60)),
                     /* new ExceptionJob(TimeSpan.FromSeconds(15)), */
                     // new WorkItemCleanupJob(TimeSpan.FromMinutes(1), TimeSpan.FromMinutes(5), new WorkItemsContext())

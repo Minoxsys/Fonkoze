@@ -1,6 +1,7 @@
-﻿using System;
+﻿using NHibernate;
+using System;
 using System.Threading.Tasks;
-using NHibernate;
+using Web.Utils;
 using WebBackgrounder;
 
 namespace Web.BackgroundJobs
@@ -9,9 +10,11 @@ namespace Web.BackgroundJobs
     {
         private readonly Func<ISession> _sessionThunk;
         private ISession _session;
+        private readonly ILogger _logger;
 
-        public TrimLogJob(Func<ISession> sessionThunk)
+        public TrimLogJob(Func<ISession> sessionThunk, ILogger logger)
         {
+            _logger = logger;
             _sessionThunk = sessionThunk;
             _session = _sessionThunk();
         }
@@ -20,18 +23,27 @@ namespace Web.BackgroundJobs
         {
             return new Task(() =>
                 {
-                    _session = _sessionThunk();
-                    var query = _session.CreateSQLQuery("exec TrimLogTable @cutoffdays=:days");
-                    query.SetInt32("days", 30);
-                    query.ExecuteUpdate();
-                    _session.Dispose();
+                    try
+                    {
+                        _session = _sessionThunk();
+                        var query = _session.CreateSQLQuery("exec TrimLogTable @cutoffdays=:days");
+                        query.SetInt32("days", 30);
+                        query.ExecuteUpdate();
+                        _session.Dispose();
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError(ex, "Trim job has failed");
+                        throw;
+                    }
+
                 });
         }
 
         public TimeSpan Interval
         {
             //23 hours and 3 minutes
-            get { return TimeSpan.FromMinutes(1383); }
+            get { return TimeSpan.FromMinutes(60); }
         }
 
         public string Name

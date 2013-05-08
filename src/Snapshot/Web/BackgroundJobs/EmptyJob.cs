@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Web.Utils;
 using WebBackgrounder;
 using Domain;
 using Core.Persistence;
@@ -12,9 +13,11 @@ namespace Web.BackgroundJobs
         private const string EmptyJobName = "EmptyJob";
         private readonly Func<IQueryService<WorkItem>> _queryWorkItems;
         private readonly Func<IDeleteCommand<WorkItem>> _deleteWorkItems;
+        private readonly ILogger _logger;
 
-        public EmptyJob(Func<IQueryService<WorkItem>> queryWorkItems, Func<IDeleteCommand<WorkItem>> deleteWorkItems)
+        public EmptyJob(Func<IQueryService<WorkItem>> queryWorkItems, Func<IDeleteCommand<WorkItem>> deleteWorkItems, ILogger logger)
         {
+            _logger = logger;
             _queryWorkItems = queryWorkItems;
             _deleteWorkItems = deleteWorkItems;
         }
@@ -23,14 +26,22 @@ namespace Web.BackgroundJobs
         {
             return new Task(() =>
                 {
-                    var cutoffDate = DateTime.UtcNow.Subtract(TimeSpan.FromHours(4));
-                    var oldItems = _queryWorkItems().Query().Where(w => w.Completed != null && w.Completed < cutoffDate).ToList();
-                    if (oldItems.Any())
+                    try
                     {
+                        var cutoffDate = DateTime.UtcNow.Subtract(TimeSpan.FromHours(4));
+                        var oldItems = _queryWorkItems().Query().Where(w => w.Completed != null && w.Completed < cutoffDate).ToList();
+                        if (!oldItems.Any()) 
+                            return;
+                        
                         foreach (var workItem in oldItems)
                         {
                             _deleteWorkItems().Execute(workItem);
                         }
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError(ex, "EmptyJpob has failed");
+                        throw;
                     }
                 });
         }
@@ -38,7 +49,7 @@ namespace Web.BackgroundJobs
         public TimeSpan Interval
         {
             //23 hours and 53 minutes
-            get { return TimeSpan.FromMinutes(20); }
+            get { return TimeSpan.FromMinutes(30); }
         }
 
         public string Name
@@ -48,7 +59,7 @@ namespace Web.BackgroundJobs
 
         public TimeSpan Timeout
         {
-            get { return TimeSpan.FromMinutes(10); }
+            get { return TimeSpan.FromMinutes(15); }
         }
     }
 }

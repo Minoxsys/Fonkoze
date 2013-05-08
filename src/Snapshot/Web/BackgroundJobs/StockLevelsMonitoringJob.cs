@@ -8,6 +8,7 @@ using Web.LocalizationResources;
 using Web.Models.Alerts;
 using Web.Services;
 using Web.Services.SendEmail;
+using Web.Utils;
 using WebBackgrounder;
 
 namespace Web.BackgroundJobs
@@ -20,18 +21,19 @@ namespace Web.BackgroundJobs
         private readonly Func<IQueryService<Client>> _queryClients;
         private readonly PreconfiguredEmailService _preconfiguredEmailService;
         private readonly ISendSmsService _sendSmsService;
+        private readonly ILogger _logger;
 
         private const string JobName = "StockLevelsMonitoringJob";
 
         public TimeSpan Interval
         {
             //1 hour 32 minutes
-            get { return TimeSpan.FromMinutes(5); }
+            get { return TimeSpan.FromMinutes(10); }
         }
 
         public TimeSpan Timeout
         {
-            get { return TimeSpan.FromMinutes(5); }
+            get { return TimeSpan.FromMinutes(9); }
         }
 
         public string Name
@@ -41,8 +43,9 @@ namespace Web.BackgroundJobs
 
         public StockLevelsMonitoringJob(Func<ISaveOrUpdateCommand<Alert>> saveOrUpdateCommand, Func<IQueryService<Alert>> queryAlerts,
                             Func<IQueryService<OutpostStockLevel>> queryOutpostStockLevel, Func<IQueryService<Client>> queryClients,
-                            PreconfiguredEmailService preconfiguredEmailService, ISendSmsService sendSmsService)
+                            PreconfiguredEmailService preconfiguredEmailService, ISendSmsService sendSmsService, ILogger logger)
         {
+            _logger = logger;
             _sendSmsService = sendSmsService;
             _preconfiguredEmailService = preconfiguredEmailService;
             _saveOrUpdateCommand = saveOrUpdateCommand;
@@ -55,37 +58,45 @@ namespace Web.BackgroundJobs
         {
             return new Task(() =>
                 {
-                    var foos =
-                        (from outpostStockLevel in
-                             _queryOutpostStockLevel().Query().Where(it => it.Updated.Value >= DateTime.UtcNow.AddHours(-2) && it.Created != it.Updated)
-                         where
-                             outpostStockLevel.StockLevel <= outpostStockLevel.Product.LowerLimit
-                         select new AlertOutputModel
-                             {
-                                 OutpostId = outpostStockLevel.Outpost.Id,
-                                 OutpostName = outpostStockLevel.Outpost.Name,
-                                 ProductGroupId = outpostStockLevel.ProductGroup.Id,
-                                 ProductGroupName = outpostStockLevel.ProductGroup.Name,
-                                 OutpostStockLevelId = outpostStockLevel.Id,
-                                 Contact = outpostStockLevel.Outpost.DetailMethod,
-                                 StockLevel = outpostStockLevel.StockLevel,
-                                 LastUpdated = outpostStockLevel.Updated,
-                                 RefCode = outpostStockLevel.Product.SMSReferenceCode,
-                                 ClientId = outpostStockLevel.Client.Id,
-                                 ProductLimit = outpostStockLevel.Product.LowerLimit,
-                                 DistrictManagerPhoneNumber = outpostStockLevel.Outpost.GetDistrictManagersPhoneNumberAsString()
-                             }).ToList();
-
-                    foreach (var f in foos)
+                    try
                     {
-                        if (!ExistsAlert(f.OutpostStockLevelId, f.LastUpdated))
-                        {
-                            Alert alert = CreateAlert(f);
-                            _saveOrUpdateCommand().Execute(alert);
+                        var foos =
+                            (from outpostStockLevel in
+                                 _queryOutpostStockLevel().Query().Where(it => it.Updated.Value >= DateTime.UtcNow.AddHours(-2) && it.Created != it.Updated)
+                             where
+                                 outpostStockLevel.StockLevel <= outpostStockLevel.Product.LowerLimit
+                             select new AlertOutputModel
+                                 {
+                                     OutpostId = outpostStockLevel.Outpost.Id,
+                                     OutpostName = outpostStockLevel.Outpost.Name,
+                                     ProductGroupId = outpostStockLevel.ProductGroup.Id,
+                                     ProductGroupName = outpostStockLevel.ProductGroup.Name,
+                                     OutpostStockLevelId = outpostStockLevel.Id,
+                                     Contact = outpostStockLevel.Outpost.DetailMethod,
+                                     StockLevel = outpostStockLevel.StockLevel,
+                                     LastUpdated = outpostStockLevel.Updated,
+                                     RefCode = outpostStockLevel.Product.SMSReferenceCode,
+                                     ClientId = outpostStockLevel.Client.Id,
+                                     ProductLimit = outpostStockLevel.Product.LowerLimit,
+                                     DistrictManagerPhoneNumber = outpostStockLevel.Outpost.GetDistrictManagersPhoneNumberAsString()
+                                 }).ToList();
 
-                            SendEmailToCentralAccount(f);
-                            SendSmsMessageToDistrictManager(f);
+                        foreach (var f in foos)
+                        {
+                            if (!ExistsAlert(f.OutpostStockLevelId, f.LastUpdated))
+                            {
+                                Alert alert = CreateAlert(f);
+                                _saveOrUpdateCommand().Execute(alert);
+
+                                SendEmailToCentralAccount(f);
+                                SendSmsMessageToDistrictManager(f);
+                            }
                         }
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError(ex, "Stock level monitoring job has failed.");
+                        throw;
                     }
                 });
         }

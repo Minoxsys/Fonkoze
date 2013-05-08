@@ -10,6 +10,7 @@ using Web.LocalizationResources;
 using Web.Services;
 using Web.Services.Configuration;
 using Web.Services.SendEmail;
+using Web.Utils;
 using WebBackgrounder;
 
 namespace Web.BackgroundJobs
@@ -21,11 +22,13 @@ namespace Web.BackgroundJobs
         private readonly Func<IQueryService<OutpostStockLevel>> _queryOutpostStockLevel;
         private readonly ISendSmsService _sendSmsService;
         private readonly ISaveOrUpdateCommand<Alert> _alertSaveOrUpdateCommand;
+        private readonly ILogger _logger;
 
         public OutpostInactivityJob(Func<IQueryService<OutpostStockLevel>> queryOutpostStockLevel,
                                     PreconfiguredEmailService preconfiguredEmailService, IConfigurationService configurationService,
-                                    ISendSmsService sendSmsService, ISaveOrUpdateCommand<Alert> alertSaveOrUpdateCommand)
+                                    ISendSmsService sendSmsService, ISaveOrUpdateCommand<Alert> alertSaveOrUpdateCommand, ILogger logger)
         {
+            _logger = logger;
             _alertSaveOrUpdateCommand = alertSaveOrUpdateCommand;
             _sendSmsService = sendSmsService;
             _queryOutpostStockLevel = queryOutpostStockLevel;
@@ -37,12 +40,20 @@ namespace Web.BackgroundJobs
         {
             return new Task(() =>
                 {
-                    var inactiveOutposts = SearchForInactiveOutposts();
-                    if (inactiveOutposts.Count > 0)
+                    try
                     {
-                        NotifyCentralAccountOfInactiveOutposts(inactiveOutposts);
-                        NotifyDistrictManagersForInactiveOutposts(inactiveOutposts);
-                        PostAlerts(inactiveOutposts);
+                        var inactiveOutposts = SearchForInactiveOutposts();
+                        if (inactiveOutposts.Count > 0)
+                        {
+                            NotifyCentralAccountOfInactiveOutposts(inactiveOutposts);
+                            NotifyDistrictManagersForInactiveOutposts(inactiveOutposts);
+                            PostAlerts(inactiveOutposts);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError(ex, "OutpostInactivity job has failed");
+                        throw;
                     }
                 });
         }
@@ -71,12 +82,12 @@ namespace Web.BackgroundJobs
         public TimeSpan Interval
         {
             //11 hours and 33 minutes
-            get { return TimeSpan.FromMinutes(10); }
+            get { return TimeSpan.FromMinutes(20); }
         }
 
         public TimeSpan Timeout
         {
-            get { return TimeSpan.FromMinutes(5); }
+            get { return TimeSpan.FromMinutes(19); }
         }
 
         public string Name

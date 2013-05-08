@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Web.LocalizationResources;
 using Web.Services;
 using Web.Services.Helper;
+using Web.Utils;
 using WebBackgrounder;
 
 namespace Web.BackgroundJobs
@@ -15,6 +16,7 @@ namespace Web.BackgroundJobs
         private readonly IQueryService<RawSmsReceived> _rawSmsQueryService;
         private readonly ISendSmsService _sendSmsService;
         private readonly ISenderInformationService _senderInformationService;
+        private readonly ILogger _logger;
         private const string JobName = "SmsMessagesMonitoringJob";
 
         public TimeSpan Interval
@@ -25,7 +27,7 @@ namespace Web.BackgroundJobs
 
         public TimeSpan Timeout
         {
-            get { return TimeSpan.FromMinutes(5); }
+            get { return TimeSpan.FromMinutes(14); }
         }
 
         public string Name
@@ -34,8 +36,9 @@ namespace Web.BackgroundJobs
         }
 
         public SmsMessagesMonitoringJob(IQueryService<RawSmsReceived> rawSmsQueryService, ISendSmsService sendSmsService,
-                                        ISenderInformationService senderInformationService)
+                                        ISenderInformationService senderInformationService, ILogger logger)
         {
+            _logger = logger;
             _senderInformationService = senderInformationService;
             _sendSmsService = sendSmsService;
             _rawSmsQueryService = rawSmsQueryService;
@@ -45,30 +48,38 @@ namespace Web.BackgroundJobs
         {
             return new Task(() =>
                 {
-                    var latestSmsBySender =
-                        _rawSmsQueryService.Query()
-                                           .Where(sms => sms.Created > DateTime.UtcNow.AddHours(-6))
-                                           .OrderByDescending(r => r.Created)
-                                           .GroupBy(r => r.Sender).Select(g => g);
-
-                    foreach (IGrouping<string, RawSmsReceived> smsGroup in latestSmsBySender)
+                    try
                     {
-                        Outpost senderOutpost = _senderInformationService.GetOutpostWithActiveSender(smsGroup.Key);
-                        if (senderOutpost == null)
-                            continue;
+                        var latestSmsBySender =
+                            _rawSmsQueryService.Query()
+                                               .Where(sms => sms.Created > DateTime.UtcNow.AddHours(-6))
+                                               .OrderByDescending(r => r.Created)
+                                               .GroupBy(r => r.Sender).Select(g => g);
 
-                        var latestSmsMessage = smsGroup.FirstOrDefault();
-                        if (latestSmsMessage == null)
-                            continue;
-
-                        if (!latestSmsMessage.ParseSucceeded && latestSmsMessage.Created < DateTime.UtcNow.AddHours(-4))
+                        foreach (IGrouping<string, RawSmsReceived> smsGroup in latestSmsBySender)
                         {
-                            var phoneNumber = senderOutpost.GetDistrictManagersPhoneNumberAsString();
-                            if (!string.IsNullOrEmpty(phoneNumber))
+                            Outpost senderOutpost = _senderInformationService.GetOutpostWithActiveSender(smsGroup.Key);
+                            if (senderOutpost == null)
+                                continue;
+
+                            var latestSmsMessage = smsGroup.FirstOrDefault();
+                            if (latestSmsMessage == null)
+                                continue;
+
+                            if (!latestSmsMessage.ParseSucceeded && latestSmsMessage.Created < DateTime.UtcNow.AddHours(-4))
                             {
-                                _sendSmsService.SendSms(phoneNumber, ComposeMessage(senderOutpost, latestSmsMessage.Created), true);
+                                var phoneNumber = senderOutpost.GetDistrictManagersPhoneNumberAsString();
+                                if (!string.IsNullOrEmpty(phoneNumber))
+                                {
+                                    _sendSmsService.SendSms(phoneNumber, ComposeMessage(senderOutpost, latestSmsMessage.Created), true);
+                                }
                             }
                         }
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError(ex, "Sms monitorign job has failed");
+                        throw;
                     }
                 });
         }
