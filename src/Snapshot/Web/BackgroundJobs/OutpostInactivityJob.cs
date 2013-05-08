@@ -82,12 +82,12 @@ namespace Web.BackgroundJobs
         public TimeSpan Interval
         {
             //11 hours and 33 minutes
-            get { return TimeSpan.FromMinutes(20); }
+            get { return TimeSpan.FromMinutes(5); }
         }
 
         public TimeSpan Timeout
         {
-            get { return TimeSpan.FromMinutes(19); }
+            get { return TimeSpan.FromMinutes(4); }
         }
 
         public string Name

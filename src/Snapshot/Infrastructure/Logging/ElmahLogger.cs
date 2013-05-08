@@ -31,19 +31,7 @@ namespace Infrastructure.Logging
 
         public void LogInfo(string message)
         {
-            try
-            {
-                if (!string.IsNullOrEmpty(message))
-                {
-                    //elmah is designed to log exceptions so we improvize
-                    var annotatedException = new Exception("INFO: " + message);
-                    ErrorSignal.FromCurrentContext().Raise(annotatedException, HttpContext.Current);
-                }
-            }
-            catch
-            {
-                //just keep going
-            }
+            throw new NotImplementedException();
         }
     }
 }

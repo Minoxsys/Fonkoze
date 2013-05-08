@@ -28,12 +28,12 @@ namespace Web.BackgroundJobs
         public TimeSpan Interval
         {
             //1 hour 32 minutes
-            get { return TimeSpan.FromMinutes(10); }
+            get { return TimeSpan.FromMinutes(9); }
         }
 
         public TimeSpan Timeout
         {
-            get { return TimeSpan.FromMinutes(9); }
+            get { return TimeSpan.FromMinutes(8); }
         }
 
         public string Name

@@ -18,7 +18,6 @@ namespace Web
     public class MvcApplication : System.Web.HttpApplication, IContainerAccessor
     {
         private static JobManager _jobManager;
-        private readonly ILogger _logger = new ElmahLogger();
         private static IContainer _container;
 
         IContainer IContainerAccessor.Container
@@ -33,8 +32,6 @@ namespace Web
 
         protected void Application_Start()
         {
-            _logger.LogInfo("Application is starting");
-
             ReplaceDefaultViewEngine();
 
             InitializeContainer();
@@ -48,7 +45,6 @@ namespace Web
 
             RegisterGlobalFilters(GlobalFilters.Filters);
             RoutesRegistrar.Register();
-            _logger.LogInfo("Application is started");
         }
 
         private void ReplaceDefaultViewEngine()
@@ -101,8 +97,7 @@ namespace Web
                 };
 
             var coordinator =
-                new WebFarmJobCoordinator(new NHibernateWorkItemRepository(() => _container.Resolve<INHibernateSessionFactory>().CreateSession(),
-                                                                           () => _container.Resolve<ILogger>()));
+                new WebFarmJobCoordinator(new NHibernateWorkItemRepository(() => _container.Resolve<INHibernateSessionFactory>().CreateSession()));
             var manager = new JobManager(jobs, coordinator) {RestartSchedulerOnFailure = true};
             manager.Fail(ex => Elmah.ErrorLog.GetDefault(null).Log(new Elmah.Error(ex)));
 

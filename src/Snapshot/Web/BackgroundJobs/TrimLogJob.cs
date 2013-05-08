@@ -37,14 +37,13 @@ namespace Web.BackgroundJobs
                         _logger().LogError(ex, "Trim job has failed");
                         throw;
                     }
-
                 });
         }
 
         public TimeSpan Interval
         {
             //23 hours and 3 minutes
-            get { return TimeSpan.FromMinutes(60); }
+            get { return TimeSpan.FromMinutes(2); }
         }
 
         public string Name
@@ -54,7 +53,7 @@ namespace Web.BackgroundJobs
 
         public TimeSpan Timeout
         {
-            get { return TimeSpan.FromMinutes(15); }
+            get { return TimeSpan.FromMinutes(1); }
         }
     }
 }
