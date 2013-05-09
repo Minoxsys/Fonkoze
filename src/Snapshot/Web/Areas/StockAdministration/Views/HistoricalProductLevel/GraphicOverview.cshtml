@@ -193,33 +193,6 @@ Historical Product Level: Overview
             data: [['0','All'],['F','Fonkoze'],['N','Non-Fonkoze']]
         })
 
-       @* window.feature.gridOutpostStore = Ext.create('Ext.data.Store', {
-            remoteSort: true,
-            fields: ['Id', 'Name', 'ProductGroupId', 'ProductGroupName', 'SMSResponseDate', 'NumberOfProducts'],
-            groupField: 'Name',
-            proxy: {
-                type: 'ajax',
-                url: '@Url.RouteUrl(StockAdministrationAreaRegistration.DEFAULT_ROUTE, new { controller = "HistoricalProductLevel", action = "GetHistoricalProductLevel" })',
-                reader: {
-                    type: 'json',
-                    root: 'Historical',                    
-                    totalProperty: 'TotalItems'
-                },
-                extraParams: { 
-                    countryId: '', 
-                    regionId: '', 
-                    districtId: '', 
-                    outpostId: '' 
-                },
-                
-                simpleSortMode: true
-            },
-            sorters: [{
-                property: 'Name',
-                direction: 'ASC'
-            }]
-        });*@
-
       
         function ClearDistrictStore(){
             var noOfItemsToDelete = window.feature.districtStore.getCount()-1;
@@ -516,7 +489,56 @@ Historical Product Level: Overview
                         }
 
                     }]
-                }]
+                },
+                {
+                    xtype: 'container',
+                    flex: 1,
+                    layout: {
+                        align: 'stretch',
+                        type: 'vbox'
+                    },
+                    padding: '0 0 0 20',
+                    items: [{
+                        xtype: 'container',
+                        id: 'DivChartContainer',
+                        flex: 2,
+                        layout: {
+                            align: 'stretch',
+                            type: 'vbox'
+                        },
+                        autoScroll: true,
+                        items: [
+                            //{
+                            //    id: 'productSalesTotalChart',
+                            //    xtype: 'chart',
+                            //    axes: [
+                            //        {
+                            //            type: 'Numeric',
+                            //            grid: true,
+                            //            position: 'left',
+                            //            fields: productFields,
+                            //            title: 'Product Sales',
+                            //            minimum: 0,
+                                      
+                            //        }, {
+                            //            type: 'Category',
+                            //            position: 'bottom',
+                            //            fields: ['OutpostName'],
+                            //            title: 'Days',
+                            //            grid: true
+                            //        }
+                            //    ],
+                            //    series: [
+                            //        {
+
+                            //        }
+                            //    ]
+                            //}
+
+                        ]
+                    }]
+                }
+               ]
             },
 
             ]
