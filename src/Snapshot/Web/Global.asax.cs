@@ -31,7 +31,6 @@ namespace Web
 
         protected void Application_Start()
         {
-            HibernatingRhinos.Profiler.Appender.NHibernate.NHibernateProfiler.Initialize();
             ReplaceDefaultViewEngine();
 
             InitializeContainer();

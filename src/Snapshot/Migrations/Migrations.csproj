@@ -50,6 +50,7 @@
     <Compile Include="19_Managers.cs" />
     <Compile Include="21_ProductCodeWithTwoLetters.cs" />
     <Compile Include="23_Elmah.cs" />
+    <Compile Include="24_ApplicationActivity.cs" />
     <Compile Include="2_OutpostAdministration.cs" />
     <Compile Include="1_BasicAuthenticationInfrastructure.cs" />
     <Compile Include="3_ProductAdministration.cs" />
