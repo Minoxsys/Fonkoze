@@ -1,7 +1,6 @@
 ﻿using Core.Persistence;
 using Domain;
 using Domain.Enums;
-using Infrastructure.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,13 +21,12 @@ namespace Web.BackgroundJobs
         private readonly Func<IQueryService<OutpostStockLevel>> _queryOutpostStockLevel;
         private readonly Func<ISendSmsService> _sendSmsService;
         private readonly Func<ISaveOrUpdateCommand<Alert>> _alertSaveOrUpdateCommand;
-        private readonly Func<ILogger> _logger;
+        private const string JobName = "OutpostInactivityJob";
 
         public OutpostInactivityJob(Func<IQueryService<OutpostStockLevel>> queryOutpostStockLevel,
                                     Func<PreconfiguredEmailService> preconfiguredEmailService, Func<IConfigurationService> configurationService,
-                                    Func<ISendSmsService> sendSmsService, Func<ISaveOrUpdateCommand<Alert>> alertSaveOrUpdateCommand, Func<ILogger> logger)
+                                    Func<ISendSmsService> sendSmsService, Func<ISaveOrUpdateCommand<Alert>> alertSaveOrUpdateCommand)
         {
-            _logger = logger;
             _alertSaveOrUpdateCommand = alertSaveOrUpdateCommand;
             _sendSmsService = sendSmsService;
             _queryOutpostStockLevel = queryOutpostStockLevel;
@@ -36,24 +34,31 @@ namespace Web.BackgroundJobs
             _preconfiguredEmailService = preconfiguredEmailService;
         }
 
+        public TimeSpan Interval
+        {
+            //23 hours 15 minutes
+            get { return TimeSpan.FromMinutes(1395); }
+        }
+
+        public TimeSpan Timeout
+        {
+            get { return TimeSpan.FromMinutes(30); }
+        }
+
+        public string Name
+        {
+            get { return JobName; }
+        }
         public Task Execute()
         {
             return new Task(() =>
                 {
-                    try
+                    var inactiveOutposts = SearchForInactiveOutposts();
+                    if (inactiveOutposts.Count > 0)
                     {
-                        var inactiveOutposts = SearchForInactiveOutposts();
-                        if (inactiveOutposts.Count > 0)
-                        {
-                            NotifyCentralAccountOfInactiveOutposts(inactiveOutposts);
-                            NotifyDistrictManagersForInactiveOutposts(inactiveOutposts);
-                            PostAlerts(inactiveOutposts);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        _logger().LogError(ex, "OutpostInactivity job has failed");
-                        throw;
+                        NotifyCentralAccountOfInactiveOutposts(inactiveOutposts);
+                        NotifyDistrictManagersForInactiveOutposts(inactiveOutposts);
+                        PostAlerts(inactiveOutposts);
                     }
                 });
         }
@@ -77,23 +82,7 @@ namespace Web.BackgroundJobs
             }
         }
 
-        private const string JobName = "OutpostInactivityJob";
-
-        public TimeSpan Interval
-        {
-            //11 hours and 33 minutes
-            get { return TimeSpan.FromMinutes(5); }
-        }
-
-        public TimeSpan Timeout
-        {
-            get { return TimeSpan.FromMinutes(4); }
-        }
-
-        public string Name
-        {
-            get { return JobName; }
-        }
+       
 
         private void NotifyCentralAccountOfInactiveOutposts(IEnumerable<Outpost> inactiveOutposts)
         {

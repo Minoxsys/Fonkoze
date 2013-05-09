@@ -1,7 +1,6 @@
 ﻿using Core.Persistence;
 using Domain;
 using Domain.Enums;
-using Infrastructure.Logging;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,25 +14,24 @@ namespace Web.BackgroundJobs
 {
     public class StockLevelsMonitoringJob : IJob
     {
-        private readonly Func<ISaveOrUpdateCommand<Alert>> _saveOrUpdateCommand;
-        private readonly Func<IQueryService<Alert>> _queryAlerts;
-        private readonly Func<IQueryService<OutpostStockLevel>> _queryOutpostStockLevel;
-        private readonly Func<IQueryService<Client>> _queryClients;
-        private readonly Func<PreconfiguredEmailService> _preconfiguredEmailService;
-        private readonly Func<ISendSmsService> _sendSmsService;
-        private readonly Func<ILogger> _logger;
+        private readonly ISaveOrUpdateCommand<Alert> _saveOrUpdateCommand;
+        private readonly IQueryService<Alert> _queryAlerts;
+        private readonly IQueryService<OutpostStockLevel> _queryOutpostStockLevel;
+        private readonly IQueryService<Client> _queryClients;
+        private readonly PreconfiguredEmailService _preconfiguredEmailService;
+        private readonly ISendSmsService _sendSmsService;
 
         private const string JobName = "StockLevelsMonitoringJob";
 
         public TimeSpan Interval
         {
             //1 hour 32 minutes
-            get { return TimeSpan.FromMinutes(9); }
+            get { return TimeSpan.FromMinutes(92); }
         }
 
         public TimeSpan Timeout
         {
-            get { return TimeSpan.FromMinutes(8); }
+            get { return TimeSpan.FromMinutes(30); }
         }
 
         public string Name
@@ -41,11 +39,10 @@ namespace Web.BackgroundJobs
             get { return JobName; }
         }
 
-        public StockLevelsMonitoringJob(Func<ISaveOrUpdateCommand<Alert>> saveOrUpdateCommand, Func<IQueryService<Alert>> queryAlerts,
-                                        Func<IQueryService<OutpostStockLevel>> queryOutpostStockLevel, Func<IQueryService<Client>> queryClients,
-                                        Func<PreconfiguredEmailService> preconfiguredEmailService, Func<ISendSmsService> sendSmsService, Func<ILogger> logger)
+        public StockLevelsMonitoringJob(ISaveOrUpdateCommand<Alert> saveOrUpdateCommand, IQueryService<Alert> queryAlerts,
+                                        IQueryService<OutpostStockLevel> queryOutpostStockLevel, IQueryService<Client> queryClients,
+                                        PreconfiguredEmailService preconfiguredEmailService, ISendSmsService sendSmsService)
         {
-            _logger = logger;
             _sendSmsService = sendSmsService;
             _preconfiguredEmailService = preconfiguredEmailService;
             _saveOrUpdateCommand = saveOrUpdateCommand;
@@ -58,45 +55,37 @@ namespace Web.BackgroundJobs
         {
             return new Task(() =>
                 {
-                    try
-                    {
-                        var foos =
-                            (from outpostStockLevel in
-                                 _queryOutpostStockLevel().Query().Where(it => it.Updated.Value >= DateTime.UtcNow.AddHours(-2) && it.Created != it.Updated)
-                             where
-                                 outpostStockLevel.StockLevel <= outpostStockLevel.Product.LowerLimit
-                             select new AlertOutputModel
-                                 {
-                                     OutpostId = outpostStockLevel.Outpost.Id,
-                                     OutpostName = outpostStockLevel.Outpost.Name,
-                                     ProductGroupId = outpostStockLevel.ProductGroup.Id,
-                                     ProductGroupName = outpostStockLevel.ProductGroup.Name,
-                                     OutpostStockLevelId = outpostStockLevel.Id,
-                                     Contact = outpostStockLevel.Outpost.DetailMethod,
-                                     StockLevel = outpostStockLevel.StockLevel,
-                                     LastUpdated = outpostStockLevel.Updated,
-                                     RefCode = outpostStockLevel.Product.SMSReferenceCode,
-                                     ClientId = outpostStockLevel.Client.Id,
-                                     ProductLimit = outpostStockLevel.Product.LowerLimit,
-                                     DistrictManagerPhoneNumber = outpostStockLevel.Outpost.GetDistrictManagersPhoneNumberAsString()
-                                 }).ToList();
+                    var foos =
+                        (from outpostStockLevel in
+                             _queryOutpostStockLevel.Query().Where(it => it.Updated.Value >= DateTime.UtcNow.AddHours(-2) && it.Created != it.Updated)
+                         where
+                             outpostStockLevel.StockLevel <= outpostStockLevel.Product.LowerLimit
+                         select new AlertOutputModel
+                             {
+                                 OutpostId = outpostStockLevel.Outpost.Id,
+                                 OutpostName = outpostStockLevel.Outpost.Name,
+                                 ProductGroupId = outpostStockLevel.ProductGroup.Id,
+                                 ProductGroupName = outpostStockLevel.ProductGroup.Name,
+                                 OutpostStockLevelId = outpostStockLevel.Id,
+                                 Contact = outpostStockLevel.Outpost.DetailMethod,
+                                 StockLevel = outpostStockLevel.StockLevel,
+                                 LastUpdated = outpostStockLevel.Updated,
+                                 RefCode = outpostStockLevel.Product.SMSReferenceCode,
+                                 ClientId = outpostStockLevel.Client.Id,
+                                 ProductLimit = outpostStockLevel.Product.LowerLimit,
+                                 DistrictManagerPhoneNumber = outpostStockLevel.Outpost.GetDistrictManagersPhoneNumberAsString()
+                             }).ToList();
 
-                        foreach (var f in foos)
+                    foreach (var f in foos)
+                    {
+                        if (!ExistsAlert(f.OutpostStockLevelId, f.LastUpdated))
                         {
-                            if (!ExistsAlert(f.OutpostStockLevelId, f.LastUpdated))
-                            {
-                                Alert alert = CreateAlert(f);
-                                _saveOrUpdateCommand().Execute(alert);
+                            Alert alert = CreateAlert(f);
+                            _saveOrUpdateCommand.Execute(alert);
 
-                                SendEmailToCentralAccount(f);
-                                SendSmsMessageToDistrictManager(f);
-                            }
+                            SendEmailToCentralAccount(f);
+                            SendSmsMessageToDistrictManager(f);
                         }
-                    }
-                    catch (Exception ex)
-                    {
-                        _logger().LogError(ex, "Stock level monitoring job has failed.");
-                        throw;
                     }
                 });
         }
@@ -105,7 +94,7 @@ namespace Web.BackgroundJobs
         {
             if (!string.IsNullOrEmpty(alertOutputModel.DistrictManagerPhoneNumber))
             {
-                _sendSmsService().SendSms(alertOutputModel.DistrictManagerPhoneNumber, BuildSmsMessage(alertOutputModel), true);
+                _sendSmsService.SendSms(alertOutputModel.DistrictManagerPhoneNumber, BuildSmsMessage(alertOutputModel), true);
             }
         }
 
@@ -117,24 +106,24 @@ namespace Web.BackgroundJobs
 
         private void SendEmailToCentralAccount(AlertOutputModel model)
         {
-            var message = _preconfiguredEmailService().CreatePartialMailMessageFromConfig();
+            var message = _preconfiguredEmailService.CreatePartialMailMessageFromConfig();
             message.Subject = Strings.StockBellowLimitEmailSubject;
             message.Body = string.Format(Strings.StockBellowLimitEmailBody, Environment.NewLine,
                                          model.OutpostName, model.RefCode, model.StockLevel, model.Contact, Strings.AutoGeneratedEmail, model.ProductLimit);
 
-            _preconfiguredEmailService().SendEmail(message);
+            _preconfiguredEmailService.SendEmail(message);
         }
 
         private bool ExistsAlert(Guid outpostStockLevelId, DateTime? lastUpdated)
         {
-            return _queryAlerts().Query().Any(it => it.OutpostStockLevelId == outpostStockLevelId && it.Created >= lastUpdated);
+            return _queryAlerts.Query().Any(it => it.OutpostStockLevelId == outpostStockLevelId && it.Created >= lastUpdated);
         }
 
         private Alert CreateAlert(AlertOutputModel f)
         {
             return new Alert
                 {
-                    Client = _queryClients().Load(f.ClientId),
+                    Client = _queryClients.Load(f.ClientId),
                     Contact = f.Contact,
                     LastUpdate = f.LastUpdated,
                     LowLevelStock = f.RefCode + " - " + f.StockLevel,

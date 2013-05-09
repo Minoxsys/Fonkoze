@@ -1,8 +1,7 @@
-﻿using System;
-namespace Core.Persistence{
-	public interface ISaveOrUpdateCommand<ENTITY>
-	 where ENTITY : Core.Domain.DomainEntity
-	{
-		void Execute( ENTITY entity );
-	}
+﻿namespace Core.Persistence
+{
+    public interface ISaveOrUpdateCommand<TEntity> where TEntity : Domain.DomainEntity
+    {
+        void Execute(TEntity entity);
+    }
 }

@@ -1,20 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Core.Domain;
+using System;
 using System.Linq;
-using System.Text;
-using Core.Domain;
 
-namespace Core.Persistence{
-	public interface IQueryService<ENTITY> where ENTITY : DomainEntity
-	{
-		ENTITY Load(Guid id);
+namespace Core.Persistence
+{
+    public interface IQueryService<TEntity> where TEntity : DomainEntity
+    {
+        TEntity Load(Guid id);
 
-		IQueryable<ENTITY> Query();
+        IQueryable<TEntity> Query();
 
-		IQueryable<ENTITY> Query( IDomainQuery<ENTITY> whereQuery );
+        IQueryable<TEntity> Query(IDomainQuery<TEntity> whereQuery);
 
-        IQueryable<ENTITY> QueryWithCacheRefresh();
+        IQueryable<TEntity> QueryWithCacheRefresh();
 
-        IQueryable<ENTITY> QueryWithCacheRefresh(IDomainQuery<ENTITY> whereQuery);
-	}
+        IQueryable<TEntity> QueryWithCacheRefresh(IDomainQuery<TEntity> whereQuery);
+    }
 }

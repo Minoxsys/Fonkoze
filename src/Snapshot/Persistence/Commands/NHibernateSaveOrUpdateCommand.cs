@@ -1,45 +1,42 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Core.Domain;
-using NHibernate;
+﻿using Core.Domain;
 using Core.Persistence;
+using NHibernate;
+using System;
 
 namespace Persistence.Commands
 {
-	public class NHibernateSaveOrUpdateCommand<ENTITY> : ISaveOrUpdateCommand<ENTITY> where ENTITY : DomainEntity
-	{
-		private ISession session;
-		public NHibernateSaveOrUpdateCommand(
-			ISession session)
-		{
-			this.session = session;
-		}
+    public class NHibernateSaveOrUpdateCommand<TEntity> : ISaveOrUpdateCommand<TEntity> where TEntity : DomainEntity
+    {
+        private readonly ISession _session;
 
-		public void Execute(ENTITY entity)
-		{
-			ITransaction transaction = session.BeginTransaction();
+        public NHibernateSaveOrUpdateCommand(ISession session)
+        {
+            _session = session;
+        }
 
-			entity.Updated = DateTime.UtcNow;
-			try
-			{
-				if (entity.Created == DateTime.MinValue)
-					entity.Created = DateTime.UtcNow;
+        public void Execute(TEntity entity)
+        {
+            ITransaction transaction = _session.BeginTransaction();
 
-				session.SaveOrUpdate(entity);
-				transaction.Commit();
-			}
-			catch (NHibernate.Exceptions.GenericADOException ex)
-			{
-				transaction.Rollback();
-                throw ex;
-			}
-			finally
-			{
-				transaction.Dispose();
-				transaction = null;
-			}
-		}
-	}
+            entity.Updated = DateTime.UtcNow;
+            try
+            {
+                if (entity.Created == DateTime.MinValue)
+                    entity.Created = DateTime.UtcNow;
+
+                _session.SaveOrUpdate(entity);
+                transaction.Commit();
+            }
+            catch (NHibernate.Exceptions.GenericADOException)
+            {
+                transaction.Rollback();
+                throw;
+            }
+            finally
+            {
+                transaction.Dispose();
+                transaction = null;
+            }
+        }
+    }
 }

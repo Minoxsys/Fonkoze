@@ -37,7 +37,7 @@ namespace Persistence
         public IWorkItem GetLastWorkItem(IJob job)
         {
             var workItemRecord = (from w in _session.Query<WorkItem>()
-                                  where w.JobName == job.Name
+                                  where w.JobName == job.Name && w.Completed == null
                                   orderby w.Started descending
                                   select w).FirstOrDefault();
 

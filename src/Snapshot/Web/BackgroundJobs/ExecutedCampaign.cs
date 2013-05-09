@@ -1,6 +1,5 @@
 ﻿using Core.Persistence;
 using Domain;
-using Infrastructure.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,14 +13,28 @@ namespace Web.BackgroundJobs
     {
         private const string JobName = "CampaignExecutionJob";
 
+        private readonly Func<IQueryService<ProductLevelRequest>> _queryProductLevelRequests;
+        private readonly Func<IQueryService<RequestRecord>> _queryExistingRequests;
+        private readonly Func<IProductLevelRequestMessagesDispatcherService> _dispatcherService;
+
+        public CampaignExecutionJob(Func<IQueryService<ProductLevelRequest>> queryProductLevelRequests,
+                                    Func<IQueryService<RequestRecord>> queryExecutedCampaign,
+                                    Func<IProductLevelRequestMessagesDispatcherService> dispatcherService)
+        {
+            _queryProductLevelRequests = queryProductLevelRequests;
+            _queryExistingRequests = queryExecutedCampaign;
+            _dispatcherService = dispatcherService;
+        }
+
         public TimeSpan Interval
         {
+            //3 hours 43 minutes
             get { return TimeSpan.FromMinutes(223); }
         }
 
         public TimeSpan Timeout
         {
-            get { return TimeSpan.FromMinutes(10); }
+            get { return TimeSpan.FromMinutes(30); }
         }
 
         public string Name
@@ -29,39 +42,15 @@ namespace Web.BackgroundJobs
             get { return JobName; }
         }
 
-        private readonly Func<IQueryService<ProductLevelRequest>> _queryProductLevelRequests;
-        private readonly Func<IQueryService<RequestRecord>> _queryExistingRequests;
-        private readonly Func<IProductLevelRequestMessagesDispatcherService> _dispatcherService;
-        private readonly Func<ILogger> _logger;
-
-        public CampaignExecutionJob(
-            Func<IQueryService<ProductLevelRequest>> queryProductLevelRequests,
-            Func<IQueryService<RequestRecord>> queryExecutedCampaign,
-            Func<IProductLevelRequestMessagesDispatcherService> dispatcherService, Func<ILogger> logger)
-        {
-            _logger = logger;
-            _queryProductLevelRequests = queryProductLevelRequests;
-            _queryExistingRequests = queryExecutedCampaign;
-            _dispatcherService = dispatcherService;
-        }
-
         public Task Execute()
         {
             return new Task(() =>
                 {
-                    try
+                    IEnumerable<ProductLevelRequest> needToBeExecuted = GetListOfProductLevelRequestsThatNeedToBeExecuted();
+                    var dispatcher = _dispatcherService();
+                    foreach (var productLevelRequest in needToBeExecuted)
                     {
-                        IEnumerable<ProductLevelRequest> needToBeExecuted = GetListOfProductLevelRequestsThatNeedToBeExecuted();
-                        var dispatcher = _dispatcherService();
-                        foreach (var productLevelRequest in needToBeExecuted)
-                        {
-                            dispatcher.DispatchMessagesForProductLevelRequest(productLevelRequest);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        _logger().LogError(ex, "Campaign job has failed.");
-                        throw;
+                        dispatcher.DispatchMessagesForProductLevelRequest(productLevelRequest);
                     }
                 });
         }
@@ -82,7 +71,8 @@ namespace Web.BackgroundJobs
                 var lastExecuted = GetLastExecuted(productLevelRequest);
 
                 if (productLevelRequest.Created.HasValue && (!lastExecuted.HasValue &&
-                                                            DateTime.UtcNow.Date >= NextExecutionDate(productLevelRequest.Created.Value, productLevelRequest.Schedule.FrequencyValue)))
+                                                             DateTime.UtcNow.Date >=
+                                                             NextExecutionDate(productLevelRequest.Created.Value, productLevelRequest.Schedule.FrequencyValue)))
                     //Has not been Executed yet
                 {
                     needToBeExecuted.Add(productLevelRequest);

@@ -1,6 +1,5 @@
 ﻿using Autofac;
 using Autofac.Integration.Mvc;
-using Infrastructure.Logging;
 using Persistence;
 using System.Web.Mvc;
 using Web.BackgroundJobs;
@@ -32,6 +31,7 @@ namespace Web
 
         protected void Application_Start()
         {
+            HibernatingRhinos.Profiler.Appender.NHibernate.NHibernateProfiler.Initialize();
             ReplaceDefaultViewEngine();
 
             InitializeContainer();
@@ -90,7 +90,7 @@ namespace Web
                     _container.Resolve<CampaignExecutionJob>(),
                     _container.Resolve<OutpostInactivityJob>(),
                     _container.Resolve<SmsMessagesMonitoringJob>(),
-                    new TrimLogJob(() => _container.Resolve<INHibernateSessionFactory>().CreateSession(), () => _container.Resolve<ILogger>()) 
+                    new TrimLogJob(() => _container.Resolve<INHibernateSessionFactory>().CreateSession()) 
                     //new SampleJob(TimeSpan.FromSeconds(35), TimeSpan.FromSeconds(60)),
                     /* new ExceptionJob(TimeSpan.FromSeconds(15)), */
                     // new WorkItemCleanupJob(TimeSpan.FromMinutes(1), TimeSpan.FromMinutes(5), new WorkItemsContext())
