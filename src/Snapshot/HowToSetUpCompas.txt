@@ -15,3 +15,9 @@ images_path = relative_path
 
 //if error
 Line 115 of _frame.scss: Functions may not be defined within control directives or other mixins. -> because of missing sass 3.1.11
+
+
+HOT TO RECOMPILE THEME:
+move to:
+..\fonkozeproject\src\Snapshot\Web\Assets\sass
+run command compass compile
