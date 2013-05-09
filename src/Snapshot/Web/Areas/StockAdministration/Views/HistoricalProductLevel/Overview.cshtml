@@ -581,6 +581,8 @@ Historical Product Level: Overview
             window.feature.productSalesStore.proxy.extraParams.countryId = null;
             window.feature.productSalesStore.proxy.extraParams.productId = null;
             window.feature.productSalesStore.proxy.extraParams.clientId = null;
+            window.feature.productSalesStore.proxy.extraParams.startDate = null;
+            window.feature.productSalesStore.proxy.extraParams.endDate = null;
         };
 
         function SetNewExtraParams(){
@@ -612,6 +614,14 @@ Historical Product Level: Overview
             var clientSelectedValue = window.feature.container.down('#' + window.feature.clientComboboxId).getValue();
             if (productSelectedValue != null) {
                 window.feature.productSalesStore.proxy.extraParams.clientId = clientSelectedValue;
+            }
+            var startDateSelValue = window.feature.container.down('#' + window.feature.startDateId).getValue();
+            if (productSelectedValue != null) {
+                window.feature.productSalesStore.proxy.extraParams.startDate = startDateSelValue;
+            }
+            var endDateSelValue = window.feature.container.down('#' + window.feature.endDateId).getValue();
+            if (productSelectedValue != null) {
+                window.feature.productSalesStore.proxy.extraParams.endDate = endDateSelValue;
             }
         };
 
