@@ -75,6 +75,7 @@ namespace Web
         {
             var builder = new ContainerBuilder();
             builder.RegisterControllers(typeof (MvcApplication).Assembly);
+            builder.RegisterFilterProvider();
             ContainerRegistrar.Register(builder);
             _container = builder.Build();
             DependencyResolver.SetResolver(new AutofacDependencyResolver(_container));
