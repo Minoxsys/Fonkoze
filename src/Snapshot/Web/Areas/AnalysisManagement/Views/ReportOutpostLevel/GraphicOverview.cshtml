@@ -25,121 +25,7 @@ Analysis: Product level information at seller level
         var reportBtn = Ext.getCmp(reportBtnId);
         reportBtn.toggle(true);
 
-        //Ext.override(Ext.chart.series.Bar, {
-        //    drawSeries: function () {
-        //        var me = this,
-        //            chart = me.chart,
-        //            store = chart.getChartStore(),
-        //            surface = chart.surface,
-        //            animate = chart.animate,
-        //            stacked = me.stacked,
-        //            column = me.column,
-        //            enableShadows = chart.shadow,
-        //            shadowGroups = me.shadowGroups,
-        //            shadowGroupsLn = shadowGroups.length,
-        //            group = me.group,
-        //            seriesStyle = me.seriesStyle,
-        //            items, ln, i, j, baseAttrs, sprite, rendererAttributes, shadowIndex, shadowGroup,
-        //            bounds, endSeriesStyle, barAttr, attrs, anim;
-
-        //        // ---- start edit ----
-        //        var currentCol, currentStoreIndex;
-        //        // ---- end edit ----
-
-
-        //        if (!store || !store.getCount()) {
-        //            return;
-        //        }
-
-        //        //fill colors are taken from the colors array.
-        //        delete seriesStyle.fill;
-        //        endSeriesStyle = Ext.apply(seriesStyle, this.style);
-        //        me.unHighlightItem();
-        //        me.cleanHighlights();
-
-        //        me.getPaths();
-        //        bounds = me.bounds;
-        //        items = me.items;
-
-        //        baseAttrs = column ? {
-        //            y: bounds.zero,
-        //            height: 0
-        //        } : {
-        //            x: bounds.zero,
-        //            width: 0
-        //        };
-        //        ln = items.length;
-        //        // Create new or reuse sprites and animate/display
-        //        for (i = 0; i < ln; i++) {
-        //            sprite = group.getAt(i);
-        //            barAttr = items[i].attr;
-
-        //            if (enableShadows) {
-        //                items[i].shadows = me.renderShadows(i, barAttr, baseAttrs, bounds);
-        //            }
-
-        //            // ---- start edit ----
-        //            if (stacked && items[i].storeItem.index != currentStoreIndex) {
-        //                //console.log("i: %o, barsLen: %o, j: %o, items[i]: %o",i,bounds.barsLen,i / bounds.barsLen,items[i]);
-        //                currentStoreIndex = items[i].storeItem.index;
-        //                currentCol = 0;
-        //            }
-        //            else {
-        //                ++currentCol;
-        //            }
-        //            // ---- end edit ----
-
-        //            // Create a new sprite if needed (no height)
-        //            if (!sprite) {
-        //                attrs = Ext.apply({}, baseAttrs, barAttr);
-        //                attrs = Ext.apply(attrs, endSeriesStyle || {});
-        //                sprite = surface.add(Ext.apply({}, {
-        //                    type: 'rect',
-        //                    group: group
-        //                }, attrs));
-        //            }
-        //            if (animate) {
-        //                // ---- start edit ----
-        //                rendererAttributes = me.renderer(sprite, items[i].storeItem, barAttr, (stacked ? currentStoreIndex : i), store, (stacked ? currentCol : undefined));
-        //                // ---- end edit ----
-        //                sprite._to = rendererAttributes;
-        //                anim = me.onAnimate(sprite, { to: Ext.apply(rendererAttributes, endSeriesStyle) });
-        //                if (enableShadows && stacked && (i % bounds.barsLen === 0)) {
-        //                    j = i / bounds.barsLen;
-        //                    for (shadowIndex = 0; shadowIndex < shadowGroupsLn; shadowIndex++) {
-        //                        anim.on('afteranimate', function () {
-        //                            this.show(true);
-        //                        }, shadowGroups[shadowIndex].getAt(j));
-        //                    }
-        //                }
-        //            }
-        //            else {
-        //                // ---- start edit ----
-        //                rendererAttributes = me.renderer(sprite, items[i].storeItem, Ext.apply(barAttr, { hidden: false }), (stacked ? currentStoreIndex : i), store, (stacked ? currentCol : undefined));
-        //                // ---- end edit ----
-        //                sprite.setAttributes(Ext.apply(rendererAttributes, endSeriesStyle), true);
-        //            }
-        //            items[i].sprite = sprite;
-        //        }
-
-        //        // Hide unused sprites
-        //        ln = group.getCount();
-        //        for (j = i; j < ln; j++) {
-        //            group.getAt(j).hide(true);
-        //        }
-        //        // Hide unused shadows
-        //        if (enableShadows) {
-        //            for (shadowIndex = 0; shadowIndex < shadowGroupsLn; shadowIndex++) {
-        //                shadowGroup = shadowGroups[shadowIndex];
-        //                ln = shadowGroup.getCount();
-        //                for (j = i; j < ln; j++) {
-        //                    shadowGroup.getAt(j).hide(true);
-        //                }
-        //            }
-        //        }
-        //        me.renderLabels();
-        //    }
-        //});
+       
     });
 
 </script>
@@ -491,7 +377,7 @@ Analysis: Product level information at seller level
             cont.add({
                 id: 'chart2DistrictLevel',
                 xtype: 'chart',
-                flex: 5.5,               
+                flex: 5,               
                 //minHeight: 650,
                 margin: '0 0 0 70',
                 // animate: true,
@@ -557,7 +443,7 @@ Analysis: Product level information at seller level
                         renderer: Ext.util.Format.numberRenderer('0 under threshold'),
                         orientation: 'horizontal',
                         'text-anchor':'middle',
-                      font: '14px Helvetica, sans-serif'
+                        font: '14px Helvetica, sans-serif'
                        
                     },
                     selectionTolerance: 4,
