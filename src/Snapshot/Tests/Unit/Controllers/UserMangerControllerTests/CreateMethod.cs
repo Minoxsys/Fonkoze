@@ -40,7 +40,7 @@ namespace Tests.Unit.Controllers.UserMangerControllerTests
             var response = jsonResult.Data as JsonActionResponse;
             Assert.IsNotNull(response);
             Assert.That(response.Status, Is.EqualTo("Success"));
-            Assert.That(response.Message, Is.EqualTo("Username admin has been saved."));
+            Assert.That(response.Message, Is.EqualTo("Username admin has been created."));
         }
 
         [Test]

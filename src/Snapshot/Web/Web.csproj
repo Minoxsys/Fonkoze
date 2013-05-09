@@ -319,6 +319,7 @@
     <Compile Include="Bootstrap\Container\ServicesConventionsRegistrar.cs" />
     <Compile Include="Controllers\AccountOptionsController.cs" />
     <Compile Include="Controllers\SendMessageController.cs" />
+    <Compile Include="CustomFilters\ApplicationActivityFilterAttribute.cs" />
     <Compile Include="CustomViewEngine\CustomPathsRazorViewEngine.cs" />
     <Compile Include="Helpers\ProjectLinkExtensions.cs" />
     <Compile Include="LocalizationResources\Strings.Designer.cs">

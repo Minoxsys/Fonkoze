@@ -44,8 +44,9 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration.ProductControllerTest
             var productInputModel = SetProductInputModelFields();
 
             objectMother.queryService.Expect(it => it.Load(objectMother.product.Id)).Return(objectMother.product);
-            objectMother.saveOrUpdateProduct.Expect(it => it.Execute(Arg<Product>.Matches(st => st.Name.Equals(objectMother.product.Name) && st.Id == objectMother.product.Id)));
-            objectMother.queryService.Expect(it => it.Query()).Return(new Product[] { }.AsQueryable());
+            objectMother.saveOrUpdateProduct.Expect(
+                it => it.Execute(Arg<Product>.Matches(st => st.Name.Equals(objectMother.product.Name) && st.Id == objectMother.product.Id)));
+            objectMother.queryService.Expect(it => it.Query()).Return(new Product[] {}.AsQueryable());
 
             //act
             var result = objectMother.controller.Edit(productInputModel);
@@ -57,9 +58,7 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration.ProductControllerTest
 
             Assert.IsNotNull(response);
             Assert.AreEqual(response.Status, "Success");
-            Assert.AreEqual(response.Message, "The product has been updated!");
-
-
+            Assert.AreEqual(response.Message, "The product " + objectMother.product.Name + " has been updated!");
         }
 
         [Test]

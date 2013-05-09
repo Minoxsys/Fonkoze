@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Web.CustomFilters;
 using Web.Models.UserManager;
 using Core.Domain;
 using Core.Persistence;
@@ -42,6 +43,7 @@ namespace Web.Controllers
         }
 
         [HttpPost]
+        [ApplicationActivityFilter]
         public JsonResult Create(UserManagerInputModel inputModel)
         {
             var user = new User();
@@ -60,7 +62,7 @@ namespace Web.Controllers
                     new JsonActionResponse
                         {
                             Status = "Success",
-                            Message = String.Format("Username {0} has been saved.", inputModel.UserName)
+                            Message = String.Format("Username {0} has been created.", inputModel.UserName)
                         });
             }
             return Json(
@@ -72,6 +74,7 @@ namespace Web.Controllers
         }
 
         [HttpPost]
+        [ApplicationActivityFilter]
         public JsonResult Edit(UserManagerInputModel inputModel)
         {
             if (inputModel.Id == Guid.Empty)
@@ -97,11 +100,12 @@ namespace Web.Controllers
                 new JsonActionResponse
                     {
                         Status = "Success",
-                        Message = String.Format("Username {0} has been saved.", inputModel.UserName)
+                        Message = String.Format("Username {0} has been updated.", inputModel.UserName)
                     });
         }
 
         [HttpPost]
+        [ApplicationActivityFilter]
         public JsonResult Delete(Guid? userId)
         {
             if (userId.HasValue == false)

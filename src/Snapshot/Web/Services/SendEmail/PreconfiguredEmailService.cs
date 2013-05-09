@@ -1,4 +1,6 @@
 ﻿using System.Net.Mail;
+using Core.Persistence;
+using Domain;
 using Web.Services.Configuration;
 
 namespace Web.Services.SendEmail
@@ -7,21 +9,24 @@ namespace Web.Services.SendEmail
     {
         private readonly IEmailSendingService _emailService;
         private readonly IConfigurationService _configurationService;
+        private readonly ISaveOrUpdateCommand<ApplicationActivity> _appActivitySaveCmd;
 
-        public PreconfiguredEmailService(IEmailSendingService emailService, IConfigurationService configurationService)
+        public PreconfiguredEmailService(IEmailSendingService emailService, IConfigurationService configurationService,
+                                         ISaveOrUpdateCommand<ApplicationActivity> appActivitySaveCmd)
         {
+            _appActivitySaveCmd = appActivitySaveCmd;
             _configurationService = configurationService;
             _emailService = emailService;
         }
 
-        public bool SendEmail(MailMessage message, SmtpServerDetails serverDeteails)
-        {
-            return _emailService.SendEmail(message, serverDeteails);
-        }
-
         public  bool SendEmail(MailMessage message)
         {
-            return _emailService.SendEmail(message, PrepareServerConfig());
+            if (_emailService.SendEmail(message, PrepareServerConfig()))
+            {
+                _appActivitySaveCmd.Execute(new ApplicationActivity { Message = string.Format("M")});
+                return true;
+            }
+            return false;
         }
 
         public SmtpServerDetails PrepareServerConfig()

@@ -11,6 +11,7 @@ using Web.Areas.OutpostManagement.Models.Region;
 using Web.Areas.OutpostManagement.Models.District;
 using Web.Areas.OutpostManagement.Models.Client;
 using Core.Domain;
+using Web.CustomFilters;
 using Web.Models.Shared;
 using Web.Security;
 using Core.Security;
@@ -190,6 +191,7 @@ namespace Web.Areas.StockAdministration.Controllers
         }
 
         [HttpPost]
+        [ApplicationActivityFilter]
         public JsonResult Create(ProductInputModel inputProductModel)
         {
             LoadUserAndClient();
@@ -252,6 +254,7 @@ namespace Web.Areas.StockAdministration.Controllers
         }
 
         [HttpPost]
+        [ApplicationActivityFilter]
         public JsonResult Edit(ProductInputModel inputProductModel)
         {
             LoadUserAndClient();
@@ -260,35 +263,40 @@ namespace Web.Areas.StockAdministration.Controllers
             {
                 return Json(
                     new ToModalJsonActionResponse
-                    {
-                        Status = "Error",
-                        Message = "The product has not been updated!",
-                        CloseModal = true
-                    });
+                        {
+                            Status = "Error",
+                            Message = "The product has not been updated!",
+                            CloseModal = true
+                        });
             }
             var products = QueryService.Query()
                                        .Where(it => it.Client == _client && it.Id != inputProductModel.Id)
                                        .Where(it => it.ProductGroup.Id == inputProductModel.ProductGroup.Id);
-            if (products.Where(it=>it.Name == inputProductModel.Name).Count() > 0)
+            if (products.Where(it => it.Name == inputProductModel.Name).Count() > 0)
             {
                 return Json(
                     new ToModalJsonActionResponse
-                    {
-                        Status = "Error",
-                        Message = string.Format("The Product Group already contains a product with the name {0}! Please insert a different name!",inputProductModel.Name),
-                        CloseModal = false
-                    });
+                        {
+                            Status = "Error",
+                            Message =
+                                string.Format("The Product Group already contains a product with the name {0}! Please insert a different name!",
+                                              inputProductModel.Name),
+                            CloseModal = false
+                        });
             }
 
             if (products.Where(it => it.SMSReferenceCode == inputProductModel.SMSReferenceCode).Count() > 0)
             {
                 return Json(
-                   new ToModalJsonActionResponse
-                   {
-                       Status = "Error",
-                       Message = string.Format("The Product Group already contains a product with SMS Reference code {0}! Please insert a different SMS Reference Code!", inputProductModel.SMSReferenceCode),
-                       CloseModal = false
-                   });
+                    new ToModalJsonActionResponse
+                        {
+                            Status = "Error",
+                            Message =
+                                string.Format(
+                                    "The Product Group already contains a product with SMS Reference code {0}! Please insert a different SMS Reference Code!",
+                                    inputProductModel.SMSReferenceCode),
+                            CloseModal = false
+                        });
 
             }
 
@@ -306,14 +314,15 @@ namespace Web.Areas.StockAdministration.Controllers
 
             return Json(
                 new ToModalJsonActionResponse
-                {
-                    Status = "Success",
-                    Message = "The product has been updated!",
-                    CloseModal = true
-                });
+                    {
+                        Status = "Success",
+                        Message = string.Format("The product {0} has been updated!", product.Name),
+                        CloseModal = true
+                    });
         }
 
         [HttpPost]
+        [ApplicationActivityFilter]
         public JsonResult Delete(Guid guid)
         {
             var product = QueryService.Load(guid);

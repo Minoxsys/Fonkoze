@@ -8,6 +8,7 @@ using AutoMapper;
 using Core.Persistence;
 using Domain;
 using Core.Domain;
+using Web.CustomFilters;
 using Web.Models.Shared;
 using Web.Security;
 using Core.Security;
@@ -87,6 +88,7 @@ namespace Web.Areas.OutpostManagement.Controllers
         }
 
 		[HttpPost]
+        [ApplicationActivityFilter]
 		public JsonResult Delete(Guid outpostId)
 		{
 			var outpost = QueryService.Load(outpostId);
@@ -258,6 +260,7 @@ namespace Web.Areas.OutpostManagement.Controllers
 		}
 
 		[HttpPost]
+        [ApplicationActivityFilter]
 		public JsonResult Create(CreateOutpostInputModel model)
 		{
 			LoadUserAndClient();
@@ -301,6 +304,7 @@ namespace Web.Areas.OutpostManagement.Controllers
 		}
 
 		[HttpPost]
+        [ApplicationActivityFilter]
 		public JsonResult Edit(EditOutpostInputModel model)
 		{
 			LoadUserAndClient();
@@ -336,7 +340,7 @@ namespace Web.Areas.OutpostManagement.Controllers
 
 			return Json(new JsonActionResponse
 			{
-				Message = string.Format("Saved successfully outpost {0}", outpost.Name),
+				Message = string.Format("Updated successfully outpost {0}", outpost.Name),
 				Status = "Success"
 			});
 		}
