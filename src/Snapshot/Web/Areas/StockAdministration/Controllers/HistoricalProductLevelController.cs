@@ -154,9 +154,9 @@ namespace Web.Areas.StockAdministration.Controllers
             if (outpostId.HasValue && outpostId.ToString() != GUID_FOR_ALL_OPTION_ON_OUTPOST_LIST)
                 ps = ps.Where(it => it.Outpost.Id == outpostId);
             if (startDate.HasValue)
-                ps = ps.Where(it => it.Created >= startDate);
+                ps = ps.Where(it => it.Created.Value.Date >= startDate.Value.Date);
             if (endDate.HasValue)
-                ps = ps.Where(it => it.Created <= endDate);
+                ps = ps.Where(it => it.Created.Value.Date <= endDate.Value.Date);
             if (productId.HasValue && productId != Guid.Empty)
                 ps = ps.Where(it => it.Product.Id == productId);
             if (clientId!=null)
