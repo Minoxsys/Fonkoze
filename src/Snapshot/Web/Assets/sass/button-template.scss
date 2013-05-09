@@ -1,5 +1,5 @@
 @import 'header-template.scss';
-
+/*
 @include extjs-button-ui(
     'snapshot-add-btn-small',
 
@@ -51,7 +51,7 @@
     $font-family-pressed: $global2-font-family,
     $font-family-disabled: $global2-font-family
 );
-
+*/
 @include extjs-button-ui(
     'snapshot-add-btn-small',
 
@@ -73,11 +73,11 @@
     $background-color-pressed:  #207cca,
     $background-color-disabled:  #207cca,
 
-    $background-gradient: color_stops(#207cca 0%,#4e92c9 0%,#95caf9 1%,#64b0f4 3%,#4e92c9 100%),
-    $background-gradient-over: color_stops(#207cca 0%,#4e92c9 0%,#95caf9 1%,#64b0f4 3%,#4e92c9 100%),
-    $background-gradient-focus: color_stops(#207cca 0%,#4e92c9 0%,#95caf9 1%,#64b0f4 3%,#4e92c9 100%), //like $background-gradient
-    $background-gradient-pressed: color_stops(#207cca 0%,#4e92c9 0%,#95caf9 1%,#64b0f4 3%,#4e92c9 100%),
-    $background-gradient-disabled: color_stops(#207cca 0%,#4e92c9 0%,#95caf9 1%,#64b0f4 3%,#4e92c9 100%),
+    $background-gradient: color_stops(#5842a1 0%,#5842a1 0%,#3d268a 92%,#281761 100%),
+    $background-gradient-over: color_stops(#5842a1 0%,#5842a1 0%,#3d268a 92%,#281761 100%),
+    $background-gradient-focus: color_stops(#5842a1 0%,#5842a1 0%,#3d268a 92%,#281761 100%), //like $background-gradient
+    $background-gradient-pressed: color_stops(#5842a1 0%,#5842a1 0%,#3d268a 92%,#281761 100%),
+    $background-gradient-disabled: color_stops(#5842a1 0%,#5842a1 0%,#3d268a 92%,#281761 100%),
 
     $color: $default-button-color,
     $color-over: $default-button-color,
@@ -120,15 +120,15 @@
     $text-padding: 0px,
 
     $background-color:transparent,
-    $background-color-over:  #415b71,
-    $background-color-focus:  #415b71,
-    $background-color-pressed:  #415b71,
+    $background-color-over:  #261462,
+    $background-color-focus:  #261462,
+    $background-color-pressed:  #261462,
     $background-color-disabled:  transparent,
 
     $background-gradient: transparent,
-    $background-gradient-over: color_stops(#415b71 0%,#3d5468 100%),
-    $background-gradient-focus: color_stops(#415b71 0%,#3d5468 100%), //like $background-gradient
-    $background-gradient-pressed: color_stops(#415b71 0%,#3d5468 100%),
+    $background-gradient-over: transparent,
+    $background-gradient-focus: transparent, //like $background-gradient
+    $background-gradient-pressed: transparent,
     $background-gradient-disabled: transparent,
 
     $color: $default-button-color,
