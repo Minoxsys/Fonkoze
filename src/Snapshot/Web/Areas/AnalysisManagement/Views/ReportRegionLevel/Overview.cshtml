@@ -294,11 +294,15 @@ Analysis: Product level information at region level
                     if (!rec.get('leaf') && rec.get('Name').indexOf('Number of Sellers:') == -1) {
 
                         window.feature.ProductsStore.proxy.extraParams.productGroupId = rec.get('Id');
-                        window.feature.ProductsStore.load();
-                        window.feature.MatrixStore.proxy.extraParams.productGroupId = rec.get('Id');
-                        window.feature.MatrixStore.load();
+                        window.feature.ProductsStore.load({
+                            callback: function () {
+                                window.feature.MatrixStore.proxy.extraParams.productGroupId = rec.get('Id');
+                                window.feature.MatrixStore.load({callback:window.feature.execute.delay(1000) });
 
-                        window.feature.execute.delay(500);
+                                
+                            }
+                        });
+                       
                     }
                 }
             },
