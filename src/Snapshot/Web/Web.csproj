@@ -227,6 +227,7 @@
     <Compile Include="Areas\CampaignManagement\Models\Campaign\LocationEntityModel.cs" />
     <Compile Include="Areas\CampaignManagement\Models\ProductLevelRequest\StopProductLevelRequestInput.cs" />
     <Compile Include="Areas\CampaignManagement\Models\RequestSchedule\RequestScheduleInputModel.cs" />
+    <Compile Include="Areas\MessagesManagement\Controllers\ApplicationActivityController.cs" />
     <Compile Include="Areas\MessagesManagement\Controllers\WarehouseController.cs" />
     <Compile Include="Areas\MessagesManagement\Controllers\SellerController.cs" />
     <Compile Include="Areas\MessagesManagement\Controllers\SentMessagesController.cs" />

@@ -6,7 +6,8 @@
             group: 'SideBarGroup',
             seller: 'Sidebar-Messages-Seller-Button',
             warehouse: 'Sidebar-Messages-Warehouse-Button',
-            sentMessage: 'Sidebar-Messages-Sent-Message-Button'
+            sentMessage: 'Sidebar-Messages-Sent-Message-Button',
+            otherActivity: 'Sidebar-Messages-Other-Activity-Button'
         }
     };
     Ext.onReady(function () {
@@ -46,7 +47,7 @@
                                 id: contentRes.maincontent.sidebar.seller,
                                 toggleGroup: contentRes.maincontent.sidebar.group,
                                 enableToggle: true,
-                                text: 'Seller',
+                                text: 'Seller Messages',
                                 margin: '45 40 0 0',
                                 height: 30,
                                 ui: 'snapshot-sidebar-btn',
@@ -58,7 +59,7 @@
                                 xtype: 'button',
                                 id: contentRes.maincontent.sidebar.warehouse,
                                 toggleGroup: contentRes.maincontent.sidebar.group,
-                                text: 'Warehouse',
+                                text: 'Warehouse Messages',
                                 height: 30,
                                 enableToggle: true,
                                 margin: '0 40 0 0',
@@ -79,6 +80,19 @@
                                 ui: 'snapshot-sidebar-btn',
                                 handler: function () {
                                     navigateTo(window.res.link.sentMessage);
+                                }
+                            },
+                            {
+                                xtype: 'button',
+                                id: contentRes.maincontent.sidebar.otherActivity,
+                                toggleGroup: contentRes.maincontent.sidebar.group,
+                                text: 'Other Activity',
+                                height: 30,
+                                enableToggle: true,
+                                margin: '0 40 0 0',
+                                ui: 'snapshot-sidebar-btn',
+                                handler: function () {
+                                    navigateTo(window.res.link.otherActivity);
                                 }
                             }
                         ]
