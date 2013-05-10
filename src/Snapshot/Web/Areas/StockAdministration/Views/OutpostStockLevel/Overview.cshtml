@@ -10,11 +10,7 @@ Seller Stock Level Current
 
 @model Web.Areas.OutpostManagement.Models.Outpost.OutpostOverviewModel
 
-<style>
-    .x-mask, .x-mask.x-mask-gray {
-        background-color: transparent;
-    }
-</style>           
+
 
 <script type="text/javascript">
     Ext.onReady(function () {
@@ -425,6 +421,17 @@ Seller Stock Level Current
             store: window.feature.treeStore,
             multiSelect: true,
             singleExpand: false,
+            listeners: {
+                itemclick: function(view, node) {
+                    if(node.isLeaf()) {
+                        // some functionality to open the leaf(document) in a tabpanel
+                    } else if(node.isExpanded()) {
+                        node.collapse();
+                    } else {
+                        node.expand();
+                    }
+                }
+            },
             columns: [{
                 xtype: 'treecolumn',
                 text: 'Products',

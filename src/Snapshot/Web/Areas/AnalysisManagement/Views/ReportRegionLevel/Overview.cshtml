@@ -291,6 +291,13 @@ Analysis: Product level information at region level
             singleExpand: false,
             listeners: {
                 itemclick: function (view, rec, item, index, eventObj) {
+                    if (rec.isLeaf()) {
+                        // some functionality to open the leaf(document) in a tabpanel
+                    } else if (rec.isExpanded()) {
+                        rec.collapse();
+                    } else {
+                        rec.expand();
+                    }
                     if (!rec.get('leaf') && rec.get('Name').indexOf('Number of Sellers:') == -1) {
 
                         window.feature.ProductsStore.proxy.extraParams.productGroupId = rec.get('Id');

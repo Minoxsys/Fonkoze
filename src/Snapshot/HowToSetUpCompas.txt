@@ -7,12 +7,14 @@ If other sass versions are installed, remove them:
 getting sass 3.1.11: gem install sass -v 3.1.11
 removing sass 3.1.15: gem uninstall sass -v 3.1.15
 
+
+//DONT DO THIS!!!**************************
 Update utils.rb:
 Fonkoze\src\Snapshot\Web\Assets\resources\themes\lib\utils.rb -> line #62:
 change images_path = File.join($ext_path, 'resources', 'themes', 'images', theme)
 to
 images_path = relative_path
-
+************************************************
 //if error
 Line 115 of _frame.scss: Functions may not be defined within control directives or other mixins. -> because of missing sass 3.1.11
 
