@@ -1,6 +1,6 @@
-﻿namespace Web.Areas.MessagesManagement.Models.SentMessages
+﻿namespace Web.Areas.MessagesManagement.Models.ApplicationActivity
 {
-    public class SentMessagesIndexModel
+    public class OtherActivityIndexModel
     {
         public string _dc { get; set; }
 

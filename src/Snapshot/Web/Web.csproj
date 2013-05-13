@@ -232,6 +232,9 @@
     <Compile Include="Areas\MessagesManagement\Controllers\SellerController.cs" />
     <Compile Include="Areas\MessagesManagement\Controllers\SentMessagesController.cs" />
     <Compile Include="Areas\MessagesManagement\MessagesManagementAreaRegistration.cs" />
+    <Compile Include="Areas\MessagesManagement\Models\ApplicationActivity\OtherActivityIndexOuputModel.cs" />
+    <Compile Include="Areas\MessagesManagement\Models\ApplicationActivity\ApplicationActivityViewModel.cs" />
+    <Compile Include="Areas\MessagesManagement\Models\ApplicationActivity\OtherActivityIndexModel.cs" />
     <Compile Include="Areas\MessagesManagement\Models\Messages\MessageIndexOuputModel.cs" />
     <Compile Include="Areas\MessagesManagement\Models\Messages\MessageModel.cs" />
     <Compile Include="Areas\MessagesManagement\Models\Messages\MessagesIndexModel.cs" />
@@ -2654,6 +2657,7 @@
     <Content Include="Assets\resources\themes\stylesheets\snapshot\default\_widgets.scss" />
     <Content Include="Assets\resources\themes\templates\resources\sass\config.rb" />
     <Content Include="Assets\resources\themes\templates\resources\sass\my-ext-theme.scss" />
+    <Content Include="Areas\MessagesManagement\Views\ApplicationActivity\Overview.cshtml" />
     <None Include="Assets\sass\toolbar-template.scss" />
     <None Include="Assets\sass\panel-template.scss" />
     <None Include="ClassDiagram1.cd" />
