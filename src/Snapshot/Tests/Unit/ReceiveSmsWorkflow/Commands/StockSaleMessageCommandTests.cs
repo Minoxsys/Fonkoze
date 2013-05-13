@@ -1,5 +1,7 @@
-﻿using NUnit.Framework;
+﻿using System.Collections.Generic;
+using NUnit.Framework;
 using Tests.Unit.ReceiveSmsWorkflow.Base;
+using Web.Models.Parsing;
 using Web.ReceiveSmsUseCase.Models;
 using Web.ReceiveSmsUseCase.SmsMessageCommands;
 using Web.Services.StockUpdates;
@@ -16,6 +18,7 @@ namespace Tests.Unit.ReceiveSmsWorkflow.Commands
                                                RawSmsQueryServiceMock.Object, ProductQueryServiceMock.Object, SaveProductSaleCmdMock.Object);
         }
 
+        [Test]
         public override void ExecutingTheCommand_UpdatesStockForProducts_WhenMessageParsedSuccesfully()
         {
             SetupKnownSender();
@@ -25,5 +28,7 @@ namespace Tests.Unit.ReceiveSmsWorkflow.Commands
 
             UpdateProductStockServiceMock.Verify(s => s.DecrementProductStocksForOutpost(parseResult, OutpostMock.Object.Id, StockUpdateMethod.SMS));
         }
+
+       
     }
 }
