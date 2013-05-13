@@ -136,8 +136,17 @@ namespace Web.Areas.StockAdministration.Controllers
                 .Where(it => it.UpdateDate.Value.Day == dateTime.Day).Count();
         }
 
-        
-
+        //[HttpGet]
+        //public JsonResult GetChartDataAtDayGranularity(Guid? countryId, Guid? regionId, Guid? districtId, Guid? outpostId, DateTime? startDate, DateTime? endDate, Guid? productId, string clientId)
+        //{
+        //    List<ProductSaleChartModel> lstProdSale = new List<ProductSaleChartModel>();
+            
+        //    return Json(new ProductsSaleOutputModel
+        //    {
+        //        ProductSales = psms.ToArray(),
+        //        TotalItems = 0
+        //    }, JsonRequestBehavior.AllowGet);
+        //}
 
         [HttpGet]
         public JsonResult GetProductSales(Guid? countryId, Guid? regionId, Guid? districtId, Guid? outpostId, DateTime? startDate, DateTime? endDate, Guid? productId, string clientId)
@@ -180,7 +189,7 @@ namespace Web.Areas.StockAdministration.Controllers
             return Json(new ProductsSaleOutputModel
             {
                 ProductSales = psms.ToArray(),
-                TotalItems = 0
+                TotalItems = psms.Count
             }, JsonRequestBehavior.AllowGet);
         }
 
@@ -216,16 +225,16 @@ namespace Web.Areas.StockAdministration.Controllers
                     productGroupLevels.Add(level);
                 }
 
-                return Json(new ProductsIndexOutputModel
+                return Json(new StoreOutputModel<ProductGroupLevelModel>
                 {
-                    Products = productGroupLevels.ToArray(),
+                    Items = productGroupLevels.ToArray(),
                     TotalItems = productGroupLevels.Count()
                 }, JsonRequestBehavior.AllowGet);
             }
 
-            return Json(new ProductsIndexOutputModel
+            return Json(new StoreOutputModel<ProductGroupLevelModel>
             {
-                Products = null,
+                Items = null,
                 TotalItems = 0
             }, JsonRequestBehavior.AllowGet);
         }
@@ -269,9 +278,9 @@ namespace Web.Areas.StockAdministration.Controllers
 
             if (!countryId.HasValue && !regionId.HasValue && !districtId.HasValue && !outpostId.HasValue)
             {
-                return Json(new ProductsReferenceOutputModel
+                return Json(new StoreOutputModel<ReferenceModel>
                 {
-                    Products = prodsList.ToArray(),
+                    Items = prodsList.ToArray(),
                     TotalItems = prodsList.Count()
                 }, JsonRequestBehavior.AllowGet);
 
@@ -302,17 +311,16 @@ namespace Web.Areas.StockAdministration.Controllers
                prodsList.Add(new ReferenceModel() { Id = p.Id, Name = p.Name });
             }
 
-            return Json(new ProductsReferenceOutputModel
+            JsonResult s =  Json(new StoreOutputModel<ReferenceModel>
             {
-                Products = prodsList.ToArray(),
+                Items = prodsList.ToArray(),
                 TotalItems = prodsList.Count()
             }, JsonRequestBehavior.AllowGet);
 
-
+            return s;
         }
 
         
-
         [HttpGet]
         public JsonResult GetOutposts(Guid? districtId)
         {

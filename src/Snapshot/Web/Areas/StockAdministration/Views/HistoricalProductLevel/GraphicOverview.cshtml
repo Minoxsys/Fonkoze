@@ -136,7 +136,7 @@ Historical Product Level: Overview
                 url: '@Url.RouteUrl(StockAdministrationAreaRegistration.DEFAULT_ROUTE, new { controller = "HistoricalProductLevel", action = "GetProducts" })',
                 reader: {
                     type: 'json',
-                    root: 'Products',
+                    root: 'Items',
                     totalProperty: 'TotalItems'
                 },
                 extraParams: { countryId: '', regionId:'',districId:'',outpostId:'' },
@@ -229,7 +229,34 @@ Historical Product Level: Overview
                           itemId:window.feature.endDateId,
                           value: currentDate,
                          
+                      },
+                      {
+                          xtype: 'label',
+                          margin:'30 0 0 20',
+                          text:'Granularity: '
+
+                      },
+                      {
+                          xtype: 'checkbox',
+                          id:'chkDay',
+                          boxLabel: 'Day',
+                          margin:'26 0 0 10'
                       }
+                      ,
+                      {
+                          xtype: 'checkbox',
+                          id: 'chkWeek',
+                          boxLabel: 'week',
+                          margin: '26 0 0 10'
+                      }
+                      ,
+                      {
+                          xtype: 'checkbox',
+                          id: 'chkMonth',
+                          boxLabel: 'Month',
+                          margin: '26 0 0 10'
+                      }
+
                       
                  ]},
                 {

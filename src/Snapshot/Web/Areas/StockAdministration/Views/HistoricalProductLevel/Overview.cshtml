@@ -138,7 +138,7 @@ Historical Product Level: Overview
                 url: '@Url.RouteUrl(StockAdministrationAreaRegistration.DEFAULT_ROUTE, new { controller = "HistoricalProductLevel", action = "GetProducts" })',
                 reader: {
                     type: 'json',
-                    root: 'Products',
+                    root: 'Items',
                     totalProperty: 'TotalItems'
                 },
                 extraParams: { countryId: '', regionId:'',districId:'',outpostId:'' },
