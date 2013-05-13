@@ -451,7 +451,7 @@ Seller Stock Level Current
                 align: 'center',
                 tpl: Ext.create('Ext.XTemplate', '{ProductLevel:this.ProductLevel}', {
                     ProductLevel: function (value) {
-                        if (value === 0) {
+                        if (value === -1) {
                             return '';
                         }
                         else { return value; }

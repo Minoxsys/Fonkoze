@@ -1,14 +1,14 @@
-﻿using System;
+﻿using Core.Domain;
+using Core.Persistence;
+using Core.Security;
+using Domain;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-using Core.Domain;
-using Core.Persistence;
-using Domain;
 using Web.Areas.OutpostManagement.Models.Outpost;
 using Web.Areas.StockAdministration.Models.OutpostStockLevel;
 using Web.Models.Shared;
-using Core.Security;
 using Web.Security;
 
 namespace Web.Areas.StockAdministration.Controllers
@@ -41,7 +41,7 @@ namespace Web.Areas.StockAdministration.Controllers
 
         public IPermissionsService PermissionService { get; set; }
 
-        private const String CURRENTOUTPOSTSTOCKLEVEL_EDIT_PERMISSION = "CurrentOutpostStockLevel.Edit";
+        private const String CurrentoutpoststocklevelEditPermission = "CurrentOutpostStockLevel.Edit";
 
         private Client _client;
         private User _user;
@@ -51,7 +51,7 @@ namespace Web.Areas.StockAdministration.Controllers
         [Requires(Permissions = "CurrentOutpostStockLevel.View")]
         public ActionResult Overview(Guid? outpostId)
         {
-            ViewBag.HasNoRightsToEdit = (PermissionService.HasPermissionAssigned(CURRENTOUTPOSTSTOCKLEVEL_EDIT_PERMISSION, User.Identity.Name) == true) ? false.ToString().ToLowerInvariant() : true.ToString().ToLowerInvariant();
+            ViewBag.HasNoRightsToEdit = PermissionService.HasPermissionAssigned(CurrentoutpoststocklevelEditPermission, User.Identity.Name) ? false.ToString().ToLowerInvariant() : true.ToString().ToLowerInvariant();
 
             OutpostOverviewModel model = new OutpostOverviewModel();
             if (outpostId.HasValue && outpostId.Value != Guid.Empty)
@@ -71,7 +71,7 @@ namespace Web.Areas.StockAdministration.Controllers
         private void LoadUserAndClient()
         {
             var loggedUser = User.Identity.Name;
-            this._user = QueryUsers.Query().FirstOrDefault(m => m.UserName == loggedUser);
+            _user = QueryUsers.Query().FirstOrDefault(m => m.UserName == loggedUser);
 
             if (_user == null)
                 throw new NullReferenceException("User is not logged in");
@@ -80,7 +80,7 @@ namespace Web.Areas.StockAdministration.Controllers
             if (_user.ClientId != Guid.Empty)
                 clientId = _user.ClientId;
 
-            this._client = QueryClients.Load(clientId);
+            _client = QueryClients.Load(clientId);
         }
 
         public JsonResult GetCountries()
@@ -109,16 +109,16 @@ namespace Web.Areas.StockAdministration.Controllers
 
         public JsonResult GetOutpostStockLevelData(OverviewInputModel input)
         {
-            var outpostStockLevelCurrentTreeModel = new OutpostStockLevelCurrentTreeModel() { Name = "root" };
+            var outpostStockLevelCurrentTreeModel = new OutpostStockLevelCurrentTreeModel { Name = "root" };
 
             LoadUserAndClient();
 
             var queryOutpost = QueryOutpost.Query().Where(it => it.Client.Id == _client.Id);
-            if (input.CountryId != null && input.CountryId != Guid.Empty)
+            if (input.CountryId != Guid.Empty)
                 queryOutpost = queryOutpost.Where(it => it.Country.Id == input.CountryId);
-            if (input.RegionId != null && input.RegionId != Guid.Empty)
+            if (input.RegionId != Guid.Empty)
                 queryOutpost = queryOutpost.Where(it => it.Region.Id == input.RegionId);
-            if (input.DistrictId != null && input.DistrictId != Guid.Empty)
+            if (input.DistrictId != Guid.Empty)
                 queryOutpost = queryOutpost.Where(it => it.District.Id == input.DistrictId);
 
             if (input.OutpostId.Equals(GUID_FOR_ALL_OPTION_ON_OUTPOST_LIST))
@@ -142,8 +142,11 @@ namespace Web.Areas.StockAdministration.Controllers
 
         private OutpostStockLevelCurrentTreeModel ToOutpostNode(OverviewInputModel input, Outpost outpost)
         {
-            var treeModel = new OutpostStockLevelCurrentTreeModel();
-            treeModel.Name = outpost.Name;
+            var treeModel = new OutpostStockLevelCurrentTreeModel
+                {
+                    Name = outpost.Name,
+                    ProductLevel = -1
+                };
 
             var outpostStockLevelCurrentGroupedByProductGroup = GetOutpostStockLevelsGroupedByProductGroup(outpost.Id);
 
@@ -160,20 +163,19 @@ namespace Web.Areas.StockAdministration.Controllers
             return treeModel;
         }
 
-        private static OutpostStockLevelCurrentTreeModel ToProductGroupNode( IGrouping<ProductGroup, OutpostStockLevel> outpostStockLevelGrouping)
+        private static OutpostStockLevelCurrentTreeModel ToProductGroupNode(IGrouping<ProductGroup, OutpostStockLevel> outpostStockLevelGrouping)
         {
-            var productGroupTreeModel = new OutpostStockLevelCurrentTreeModel();
-
-            productGroupTreeModel.Name = outpostStockLevelGrouping.Key.Name;
+            var productGroupTreeModel = new OutpostStockLevelCurrentTreeModel
+                {
+                    Name = outpostStockLevelGrouping.Key.Name,
+                    ProductLevel = -1
+                };
 
             foreach (var outpostStockLevel in outpostStockLevelGrouping)
             {
                 var productTreeModel = ToProductLeafNode(outpostStockLevel);
-
                 productGroupTreeModel.children.Add(productTreeModel);
             }
-
-          
 
             return productGroupTreeModel;
         }
@@ -193,7 +195,9 @@ namespace Web.Areas.StockAdministration.Controllers
             productTreeModel.PreviousLevel = outpostStockLevel.PrevStockLevel;
             productTreeModel.ProductLevel = outpostStockLevel.StockLevel;
 
-            productTreeModel.LastUpdate = outpostStockLevel.Updated.Value.ToString("dd-MMM-yyyy");
+            if (outpostStockLevel.Updated != null) 
+                productTreeModel.LastUpdate = outpostStockLevel.Updated.Value.ToString("dd-MMM-yyyy");
+
             productTreeModel.UpdateMethod = outpostStockLevel.UpdateMethod;
             
             productTreeModel.ProductGroupName = outpostStockLevel.ProductGroup.Name;
@@ -222,16 +226,19 @@ namespace Web.Areas.StockAdministration.Controllers
         {
             LoadUserAndClient();
 
-            var outpostStockLevel = QueryOutpostStockLevel.Load(outpostStockLevelInput.Id.Value);
+            if (outpostStockLevelInput.Id != null)
+            {
+                var outpostStockLevel = QueryOutpostStockLevel.Load(outpostStockLevelInput.Id.Value);
 
-            var outpostHistoricalStockLevel = SetOutpostHistoricalStockLevelFromPreviousOutpostStockLevelCurrentData(outpostStockLevel);
+                var outpostHistoricalStockLevel = SetOutpostHistoricalStockLevelFromPreviousOutpostStockLevelCurrentData(outpostStockLevel);
 
-            outpostStockLevel.PrevStockLevel = outpostStockLevel.StockLevel;
-            outpostStockLevel.StockLevel = outpostStockLevelInput.StockLevel;
-            outpostStockLevel.UpdateMethod = OutpostStockLevel.MANUAL_UPDATE;
+                outpostStockLevel.PrevStockLevel = outpostStockLevel.StockLevel;
+                outpostStockLevel.StockLevel = outpostStockLevelInput.StockLevel;
+                outpostStockLevel.UpdateMethod = OutpostStockLevel.MANUAL_UPDATE;
 
-            SaveOrUpdateOutpostStockLevelHistorical.Execute(outpostHistoricalStockLevel);
-            SaveOrUpdateOutpostStockLevel.Execute(outpostStockLevel);
+                SaveOrUpdateOutpostStockLevelHistorical.Execute(outpostHistoricalStockLevel);
+                SaveOrUpdateOutpostStockLevel.Execute(outpostStockLevel);
+            }
 
             return Json(new JsonActionResponse { Status = "Success", Message = "Outpost Stock Level successfully updated !" }, JsonRequestBehavior.AllowGet);
         }
