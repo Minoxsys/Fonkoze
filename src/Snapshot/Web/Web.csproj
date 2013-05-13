@@ -293,6 +293,7 @@
     <Compile Include="Areas\StockAdministration\Controllers\OutpostStockLevelController.cs" />
     <Compile Include="Areas\StockAdministration\Controllers\ProductController.cs" />
     <Compile Include="Areas\StockAdministration\Controllers\ProductGroupController.cs" />
+    <Compile Include="Areas\StockAdministration\Models\HistoricalProductLevel\ProductSaleChartModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\HistoricalProductLevel\HistoricalInputModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\HistoricalProductLevel\OutpostGridModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\HistoricalProductLevel\OutpostIndexGridModel.cs" />

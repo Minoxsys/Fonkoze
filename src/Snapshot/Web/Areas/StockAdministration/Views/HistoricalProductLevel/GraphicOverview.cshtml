@@ -23,7 +23,8 @@ Historical Product Level: Overview
 
 <script type="text/javascript">
 
-    Ext.onReady(function () {
+    Ext.onReady(function ()
+    {
         window.feature = {};
         window.feature.countryComboboxId = 'Overview-Combobox-Country-Historical';
         window.feature.regionComboboxId = 'Overview-Combobox-Region-Historical';
@@ -37,22 +38,16 @@ Historical Product Level: Overview
         window.feature.startDateId = 'Overview-Datefield-StartDate';
         window.feature.endDateId = 'Overview-Datefield-EndDate';
 
-        // window.feature.outpostName = 'Product-Group-Level-Outpost-Name';
-      //  window.feature.productGroupName = 'Product-Group-Level-Product-Group-Name';
-      //  window.feature.editLastUpdated = 'Edit-Last-Updated-Historical-Id';
-      //  window.feature.editDescription = 'Edit-Description-Historical-Id';
-       // window.feature.editProductGroup = 'Edit-Product-Group-Historical-Id';
-       // window.feature.editProductStockLevel = 'Edit-Product-Stock-Level-Historical-Id';
-       // window.feature.editUpdateMethod = 'Edit-Update-Method-Historical-Id';
-       // window.feature.editSMSCode = 'Edit-SMS-Code-Historical-Id';
-        //window.feature.editProductName = 'Edit-Product-Name-Historical-Id';
-       // window.feature.editOutpostName = 'Edit-Outpost-Name-Historical-Id';
+        window.feature.chartContainerId = 'Overview-ChartContainer-Id';
+        window.feature.chartId = 'Overview-productSalesTotalChart-Id';
         
         var currentDate = new Date();
         var prevMonthDate = new Date();
         prevMonthDate.setMonth(currentDate.getMonth() - 1);
-       
-        window.feature.countryStore = Ext.create('Ext.data.Store', {
+
+//#region Main
+        window.feature.countryStore = Ext.create('Ext.data.Store',
+        {
             remoteSort: true,
             fields: ['Id','Name'],
             proxy: {
@@ -69,7 +64,9 @@ Historical Product Level: Overview
                 property: 'Name',
                 direction: 'ASC'
             }]
-        });
+        }
+        );
+//#endregion
 
         window.feature.regionStore = Ext.create('Ext.data.Store', {
             remoteSort: true,
@@ -90,6 +87,7 @@ Historical Product Level: Overview
                 direction: 'ASC'
             }]
         });
+
 
         window.feature.districtStore = Ext.create('Ext.data.Store', {
             remoteSort: true,
@@ -151,90 +149,13 @@ Historical Product Level: Overview
         })
 
        
-        Ext.define('ProductSales', {
-            extend: 'Ext.data.Model',
-            fields: ['OutpostName', 'ProductName', 'Date', {
-                name: 'Quantity',
-                type: 'int'
-            }]
-        });
-
-        window.feature.productSalesStore = Ext.create('Ext.data.Store', {
-            model: 'ProductSales',
-            proxy: {
-                type: 'ajax',
-                url: '@Url.RouteUrl(StockAdministrationAreaRegistration.DEFAULT_ROUTE, new { controller = "HistoricalProductLevel", action = "GetProductSales" })',
-                reader: {
-                    type: 'json',
-                    root: 'ProductSales',
-                    totalProperty: 'TotalItems'
-                },
-                extraParams: {
-                    countryId: '',
-                    regionId: '',
-                    districtId: '',
-                    outpostId: '',
-                    startDate: '',
-                    endDate: '',
-                    productId: '',
-                    clientId:''
-                },
-                simpleSortMode: true
-             },
-            sorters: [{
-                property: 'Date',
-                direction: 'DESC'
-            }],
-            groupField: 'OutpostName'
-        })
-
+        
         window.feature.clientStore = Ext.create('Ext.data.ArrayStore', {
             fields: ['Id', 'Name'],
             data: [['0','All'],['F','Fonkoze'],['N','Non-Fonkoze']]
         })
 
-      
-        function ClearDistrictStore(){
-            var noOfItemsToDelete = window.feature.districtStore.getCount()-1;
-            window.feature.districtStore.removeAt(1, noOfItemsToDelete);
-        };
-
-        function ClearOutpostStore(){
-            var noOfItemsToDelete = window.feature.outpostStore.getCount()-1;
-            window.feature.outpostStore.removeAt(1, noOfItemsToDelete);
-        };
-
-        function ResetCountryDependencies(){
-            var regionCombobox = window.feature.container.down('#'+window.feature.regionComboboxId);
-            regionCombobox.setValue('@Guid.Empty'); 
-
-            var districtCombobox = window.feature.container.down('#'+window.feature.districtComboboxId);
-            districtCombobox.setValue('@Guid.Empty'); 
-
-            var outpostCombobox = window.feature.container.down('#'+window.feature.outpostComboboxId);
-            outpostCombobox.setValue('@Guid.Empty'); 
-
-            ClearDistrictStore();
-            ClearOutpostStore();
-        };
-
-        function ResetDistrictDependencies(){
-            var outpostCombobox = window.feature.container.down('#'+window.feature.outpostComboboxId);
-            outpostCombobox.setValue('@Guid.Empty'); 
-        };
-
-        function ResetRegionDependencies(){
-            var districtCombobox = window.feature.container.down('#'+window.feature.districtComboboxId);
-            districtCombobox.setValue('@Guid.Empty'); 
-
-            window.feature.districtStore.proxy.extraParams.regionId = districtCombobox.getValue();
-            outpostCombobox.setValue('@Guid.Empty'); 
-
-            ClearOutpostStore();
-        };
-
-              
-
+            
         window.feature.container = Ext.create('Ext.container.Container', {
             margin: '15 15 15 15',
             padding: '20 20 0 20',
@@ -310,7 +231,7 @@ Historical Product Level: Overview
                          
                       }
                       
-                      ]},
+                 ]},
                 {
                     xtype: 'container',
                     height: 65,
@@ -485,56 +406,28 @@ Historical Product Level: Overview
                         handler: function(){
                             ResetExtraParams();
                             SetNewExtraParams();
-                            window.feature.productSalesStore.load();  
+                           // window.feature.productSalesStore.load();  
                         }
 
                     }]
                 },
                 {
                     xtype: 'container',
-                    flex: 1,
-                    layout: {
-                        align: 'stretch',
-                        type: 'vbox'
-                    },
+                    flex: 5,
+                    minHeight:400,
+                    layout:'fit',
                     padding: '0 0 0 20',
                     items: [{
                         xtype: 'container',
-                        id: 'DivChartContainer',
-                        flex: 2,
+                        id: window.feature.chartContainerId,
+                       // flex: 2,
                         layout: {
                             align: 'stretch',
                             type: 'vbox'
                         },
                         autoScroll: true,
                         items: [
-                            //{
-                            //    id: 'productSalesTotalChart',
-                            //    xtype: 'chart',
-                            //    axes: [
-                            //        {
-                            //            type: 'Numeric',
-                            //            grid: true,
-                            //            position: 'left',
-                            //            fields: productFields,
-                            //            title: 'Product Sales',
-                            //            minimum: 0,
-                                      
-                            //        }, {
-                            //            type: 'Category',
-                            //            position: 'bottom',
-                            //            fields: ['OutpostName'],
-                            //            title: 'Days',
-                            //            grid: true
-                            //        }
-                            //    ],
-                            //    series: [
-                            //        {
-
-                            //        }
-                            //    ]
-                            //}
-
+                           
                         ]
                     }]
                 }
@@ -544,6 +437,100 @@ Historical Product Level: Overview
             ]
         });
 
+ //-----Chart Stuff ------
+
+        window.feature.chartStore = Ext.create('Ext.data.ArrayStore', {
+            fields: ['Day', {name:'Quantity',type:'int'},'Date'],
+            data: [['1', '5', '9-May-2013'], ['5', '9', '9-May-2013'], ['10', '2', '9-May-2013'], ['15', '10', '9-May-2013'], ['20', '14', '9-May-2013'], ['25', '25', '9-May-2013'], ['30', '11', '9-May-2013']]
+        })
+
+        window.feature.executeDelayedChartDisplay = new Ext.util.DelayedTask(function () {
+            var chartContainer = Ext.getCmp(window.feature.chartContainerId);
+
+            chartContainer.add(
+                {
+                    id: window.feature.chartId,
+                    xtype: 'chart',
+                    minHeight:300,
+                    flex: 1,
+                    store: window.feature.chartStore,
+                    
+                    axes: [{
+                        type: 'Numeric',
+                        position: 'left',
+                        fields: ['Quantity'],
+                        title: 'Total Sales Quantity',
+                        minimum: 0,
+                        grid:true
+                    },
+                    {
+                        type: 'Category',
+                        position: 'bottom',
+                        fields: ['Day'],
+                        title: 'Day of the Month',
+                       
+
+                    }],
+                    series: [{
+                        type: 'line',
+                        xField: 'Day',
+                        yField: 'Quantity',
+                        axis: 'left',
+                        tips: {
+                            trackMouse: true,
+                            width: 140,
+                            renderer: function (storeItem, item) {
+                                this.setTitle('Quantity: '+ String(item.value[1])+"<br/> Date: " + storeItem.get('Date'));
+                            }
+                        }
+                    }]
+                }
+                )
+        })
+
+ 
+
+        window.feature.executeDelayedChartDisplay.delay(100);
+        function ClearDistrictStore() {
+            var noOfItemsToDelete = window.feature.districtStore.getCount() - 1;
+            window.feature.districtStore.removeAt(1, noOfItemsToDelete);
+        };
+
+        function ClearOutpostStore() {
+            var noOfItemsToDelete = window.feature.outpostStore.getCount() - 1;
+            window.feature.outpostStore.removeAt(1, noOfItemsToDelete);
+        };
+
+        function ResetCountryDependencies() {
+            var regionCombobox = window.feature.container.down('#' + window.feature.regionComboboxId);
+            regionCombobox.setValue('@Guid.Empty');
+
+            var districtCombobox = window.feature.container.down('#' + window.feature.districtComboboxId);
+            districtCombobox.setValue('@Guid.Empty');
+
+            var outpostCombobox = window.feature.container.down('#' + window.feature.outpostComboboxId);
+            outpostCombobox.setValue('@Guid.Empty');
+
+            ClearDistrictStore();
+            ClearOutpostStore();
+        };
+
+        function ResetDistrictDependencies() {
+            var outpostCombobox = window.feature.container.down('#' + window.feature.outpostComboboxId);
+            outpostCombobox.setValue('@Guid.Empty');
+        };
+
+        function ResetRegionDependencies() {
+            var districtCombobox = window.feature.container.down('#' + window.feature.districtComboboxId);
+            districtCombobox.setValue('@Guid.Empty');
+
+            window.feature.districtStore.proxy.extraParams.regionId = districtCombobox.getValue();
+            outpostCombobox.setValue('@Guid.Empty');
+
+            ClearOutpostStore();
+        };
+
+
         function ResetExtraParams(){
             window.feature.productSalesStore.proxy.extraParams.outpostId = null;
             window.feature.productSalesStore.proxy.extraParams.districtId = null;
@@ -552,7 +539,7 @@ Historical Product Level: Overview
             window.feature.productSalesStore.proxy.extraParams.productId = null;
             window.feature.productSalesStore.proxy.extraParams.clientId = null;
         };
-
+        
         function SetNewExtraParams(){
             var outpostSelectedValue = window.feature.container.down('#'+window.feature.outpostComboboxId).getValue();
             if (outpostSelectedValue != null){
