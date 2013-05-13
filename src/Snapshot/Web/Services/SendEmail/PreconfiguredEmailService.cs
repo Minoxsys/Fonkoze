@@ -1,6 +1,8 @@
-﻿using System.Net.Mail;
-using Core.Persistence;
+﻿using Core.Persistence;
 using Domain;
+using System.Net.Mail;
+using System.Text;
+using Web.LocalizationResources;
 using Web.Services.Configuration;
 
 namespace Web.Services.SendEmail
@@ -19,14 +21,33 @@ namespace Web.Services.SendEmail
             _emailService = emailService;
         }
 
-        public  bool SendEmail(MailMessage message)
+        public bool SendEmail(MailMessage message)
         {
             if (_emailService.SendEmail(message, PrepareServerConfig()))
             {
-                _appActivitySaveCmd.Execute(new ApplicationActivity { Message = string.Format("M")});
+                _appActivitySaveCmd.Execute(new ApplicationActivity
+                    {
+                        Message = string.Format(Strings.EmailAppActivityText, GetDestinationAddresses(message.To), message.Body)
+                    });
                 return true;
             }
             return false;
+        }
+
+        private string GetDestinationAddresses(MailAddressCollection toList)
+        {
+            var sb = new StringBuilder();
+            int count = 0;
+            foreach (MailAddress mailAddress in toList)
+            {
+                sb.Append(mailAddress.Address);
+                if (count < toList.Count - 1)
+                {
+                    sb.Append(",");
+                }
+                count++;
+            }
+            return sb.ToString();
         }
 
         public SmtpServerDetails PrepareServerConfig()

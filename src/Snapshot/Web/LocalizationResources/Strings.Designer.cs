@@ -115,6 +115,15 @@ namespace Web.LocalizationResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Email sent to {0}. Email Message: {1}.
+        /// </summary>
+        internal static string EmailAppActivityText {
+            get {
+                return ResourceManager.GetString("EmailAppActivityText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The following sellers have not sent stock or sell updates in {0} days:
         ///.
         /// </summary>

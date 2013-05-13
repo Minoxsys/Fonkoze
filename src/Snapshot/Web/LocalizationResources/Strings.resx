@@ -193,4 +193,7 @@
   <data name="CSV_file_failed_products" xml:space="preserve">
     <value>The file uploaded successfully. The following Products could not be updated:</value>
   </data>
+  <data name="EmailAppActivityText" xml:space="preserve">
+    <value>Email sent to {0}. Email Message: {1}</value>
+  </data>
 </root>

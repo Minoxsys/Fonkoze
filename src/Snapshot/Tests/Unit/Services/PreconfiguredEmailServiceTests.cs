@@ -22,7 +22,7 @@ namespace Tests.Unit.Services
             _emailSendingServiceMock = new Mock<IEmailSendingService>();
             _configurationServiceMock = new Mock<IConfigurationService>();
             _saveActivityCmdMock = new Mock<ISaveOrUpdateCommand<ApplicationActivity>>();
-            _sut = new PreconfiguredEmailService(_emailSendingServiceMock.Object, _configurationServiceMock.Object,_saveActivityCmdMock.Object);
+            _sut = new PreconfiguredEmailService(_emailSendingServiceMock.Object, _configurationServiceMock.Object, _saveActivityCmdMock.Object);
         }
 
         [Test]
@@ -32,9 +32,9 @@ namespace Tests.Unit.Services
             _configurationServiceMock.Setup(s => s[It.IsAny<string>()]).Returns(string.Empty);
             _emailSendingServiceMock.Setup(s => s.SendEmail(It.IsAny<MailMessage>(), It.IsAny<SmtpServerDetails>())).Returns(true);
 
-            var result = _sut.SendEmail(new MailMessage());
+            var result = _sut.SendEmail(new MailMessage("f@f.com", "a@a.com") {Body = "123abc"});
 
-            _saveActivityCmdMock.Verify(s => s.Execute(It.Is<ApplicationActivity>(a => !string.IsNullOrEmpty(a.Message))));
+            _saveActivityCmdMock.Verify(s => s.Execute(It.Is<ApplicationActivity>(a => a.Message.Contains("a@a.com") && a.Message.Contains("123abc"))));
             Assert.IsTrue(result);
         }
     }
