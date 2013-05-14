@@ -32,7 +32,7 @@
         var warehouseAdministrationBtnId = window.res.header.subnavigation.buttonTabs.warehouse;
         var warehouseAdministrationBtn = Ext.getCmp(warehouseAdministrationBtnId);
         warehouseAdministrationBtn.toggle(true);
-        warehouseAdministrationBtn.setIcon('@(Url.RouteUrl<AssetsController>(it => it.Shared("/img/Administration/SubMenu/LocationSelected.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))');
+        warehouseAdministrationBtn.setIcon('@(Url.RouteUrl<AssetsController>(it => it.Shared("/img/Administration/SubMenu/WarehouseGreenSelected.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))');
 
         var warehousesBtnId = window.res.content.maincontent.sidebar.warehouse;
         var warehousesBtn = Ext.getCmp(warehousesBtnId);
@@ -380,7 +380,9 @@
                                             html: '&nbsp;'
                                         }, {
                                             xtype: 'image',
-                                            src: '@(Url.RouteUrl<AssetsController>(it => it.Shared("/img/Administration/Content/outpost.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                                            height: 30,
+                                            width: 30,
+                                            src: '@(Url.RouteUrl<AssetsController>(it => it.Shared("/img/Administration/Content/WarehouseGreen.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
                                             margin: '0 10 10 0'
                                         }, {
                                             xtype: 'label',

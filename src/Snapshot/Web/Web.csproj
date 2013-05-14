@@ -605,6 +605,7 @@
     <Content Include="Assets\resources\img\logologinFon.png" />
     <Content Include="Assets\resources\img\Logout.png" />
     <Content Include="Assets\resources\img\manually.png" />
+    <Content Include="Assets\resources\img\Menu\ActivityHeaderIcon.png" />
     <Content Include="Assets\resources\img\Menu\Administration.png" />
     <Content Include="Assets\resources\img\Menu\Alerts.png" />
     <Content Include="Assets\resources\img\Menu\Analysis.png" />
