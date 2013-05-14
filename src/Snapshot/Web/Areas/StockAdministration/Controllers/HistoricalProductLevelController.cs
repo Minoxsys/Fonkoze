@@ -136,23 +136,9 @@ namespace Web.Areas.StockAdministration.Controllers
                 .Where(it => it.UpdateDate.Value.Day == dateTime.Day).Count();
         }
 
-        //[HttpGet]
-        //public JsonResult GetChartDataAtDayGranularity(Guid? countryId, Guid? regionId, Guid? districtId, Guid? outpostId, DateTime? startDate, DateTime? endDate, Guid? productId, string clientId)
-        //{
-        //    List<ProductSaleChartModel> lstProdSale = new List<ProductSaleChartModel>();
-            
-        //    return Json(new ProductsSaleOutputModel
-        //    {
-        //        ProductSales = psms.ToArray(),
-        //        TotalItems = 0
-        //    }, JsonRequestBehavior.AllowGet);
-        //}
-
-        [HttpGet]
-        public JsonResult GetProductSales(Guid? countryId, Guid? regionId, Guid? districtId, Guid? outpostId, DateTime? startDate, DateTime? endDate, Guid? productId, string clientId)
+        private IQueryable<ProductSale> FilterProductSale(Guid? countryId, Guid? regionId, Guid? districtId, Guid? outpostId, DateTime? startDate, DateTime? endDate, Guid? productId, string clientId)
         {
-
-            var ps = QueryProductSale.Query();                  
+            var ps = QueryProductSale.Query();
 
             if (countryId.HasValue && countryId != Guid.Empty)
                 ps = ps.Where(it => it.Outpost.Country.Id == countryId);
@@ -168,7 +154,7 @@ namespace Web.Areas.StockAdministration.Controllers
                 ps = ps.Where(it => it.Created.Value.Date <= endDate.Value.Date);
             if (productId.HasValue && productId != Guid.Empty)
                 ps = ps.Where(it => it.Product.Id == productId);
-            if (clientId!=null)
+            if (!String.IsNullOrEmpty(clientId))
             {
                 if (clientId != "0")
                 {
@@ -179,6 +165,173 @@ namespace Web.Areas.StockAdministration.Controllers
                 }
             }
 
+            return ps;
+        }
+
+        [HttpGet]
+        public JsonResult GetChartData(Guid? countryId, Guid? regionId, Guid? districtId, Guid? outpostId, DateTime? startDate, DateTime? endDate, Guid? productId, string clientId, string granularity)
+        {
+
+
+            var ps = FilterProductSale(countryId, regionId, districtId, outpostId, startDate, endDate, productId, clientId);
+
+            ps = ps.OrderBy(it => it.Created);
+            List<ProductSale> psList = ps.ToList();
+            List<ProductSaleChartModel> lstChartModel = new List<ProductSaleChartModel>();
+
+            if (granularity == "") granularity = "d";
+            switch (granularity)
+            { 
+                case "d":
+                    GetProductSaleChartModelDayGranularity(psList, ref lstChartModel);
+                    break;
+                case "w":
+                    GetProductSaleChartModelWeekGranularity(startDate.Value.Date,endDate.Value.Date,psList, ref lstChartModel);
+                    break;
+                case "m":
+                    GetProductSaleChartModelMonthGranularity(startDate.Value.Date, endDate.Value.Date, psList, ref lstChartModel);
+                    break;
+            }
+
+
+            return Json(new StoreOutputModel<ProductSaleChartModel>
+            {
+                Items = lstChartModel.ToArray(),
+                TotalItems = lstChartModel.Count
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        private void GetProductSaleChartModelDayGranularity(List<ProductSale> psList,ref List<ProductSaleChartModel> lstChartModel)
+        {
+            IEnumerable<IGrouping<DateTime, ProductSale>> psGroupingByDt = psList.GroupBy(it => it.Created.Value.Date);
+            foreach (IGrouping<DateTime, ProductSale> group in psGroupingByDt)
+            {
+                var chartModel = new ProductSaleChartModel() { Day = group.Key.Day.ToString(), Date = group.Key.Date.ToString("d-MMM-yyyy"), Quantity = 0 };
+                chartModel.Quantity = GetTotalSales(group);
+                lstChartModel.Add(chartModel);
+            }
+            
+        }
+        private void GetProductSaleChartModelWeekGranularity(DateTime startDate, DateTime endDate, List<ProductSale> psList,ref List<ProductSaleChartModel> lstChartModel)
+        {
+            int noOfWeeks = GetNoOfWeeks(startDate, endDate);
+            
+            for (int i = 1; i <= noOfWeeks; i++)
+            {
+               lstChartModel.Add(BuildProductSaleChartModelWeek(startDate.Date.AddDays(7 * (i - 1)), startDate.Date.AddDays(7 * i), psList, i));
+
+            }
+            if (startDate.AddDays(noOfWeeks * 7) < endDate)
+            {
+                lstChartModel.Add(BuildProductSaleChartModelWeek(startDate.AddDays(noOfWeeks * 7), endDate, psList, noOfWeeks+1));
+               
+            }
+            
+        }
+
+        private void GetProductSaleChartModelMonthGranularity(DateTime startDate, DateTime endDate, List<ProductSale> psList, ref List<ProductSaleChartModel> lstChartModel)
+        {
+            DateTime sDt=startDate;
+            DateTime eDt = new DateTime(startDate.Year,startDate.Month,DateTime.DaysInMonth(startDate.Year,startDate.Month));
+            int i = 1;
+            while (sDt < endDate)
+            {
+                lstChartModel.Add(BuildProductSaleChartModelMonth(sDt, eDt, psList, i));
+                i++;
+                sDt = new DateTime(sDt.Year,sDt.Month+1,1);
+                eDt = sDt.AddMonths(1);
+
+            }
+        }
+
+        private ProductSaleChartModel BuildProductSaleChartModelMonth(DateTime startDate, DateTime endDate, List<ProductSale> psList, int noOfMonths)
+        {
+            List<ProductSale> psMonthLst = psList.FindAll(it => (it.Created.Value.Date >= startDate && it.Created.Value.Date <= endDate));
+            var chartModel = new ProductSaleChartModel() { Date = startDate.ToString("d-MMM-yyyy") + " / " + endDate.ToString("d-MMM-yyyy"), Day = startDate.ToString("MMMM"), Quantity = 0 };
+            int totalQuantity = 0;
+            foreach (var p in psMonthLst)
+            {
+                totalQuantity += p.Quantity;
+            }
+            chartModel.Quantity = totalQuantity;
+            return chartModel;
+        }
+
+        private ProductSaleChartModel BuildProductSaleChartModelWeek(DateTime startDate, DateTime endDate, List<ProductSale> psList, int noOfWeeks)
+        {
+            List<ProductSale> psWeekLst = psList.FindAll(it => (it.Created.Value.Date >= startDate && it.Created.Value.Date <= endDate));
+            var chartModel = new ProductSaleChartModel() { Date = startDate.ToString("d-MMM-yyyy") + " / " + endDate.ToString("d-MMM-yyyy"), Day = "Week " + (noOfWeeks + 1), Quantity = 0 };
+            int totalQuantity = 0;
+            foreach (var p in psWeekLst)
+            {
+                totalQuantity += p.Quantity;
+            }
+            chartModel.Quantity = totalQuantity;
+            return chartModel;
+        }
+
+        private int GetNoOfWeeks(DateTime startDate, DateTime endDate)
+        {
+            int weekNo = 0;
+            TimeSpan tt =  endDate - startDate;
+            weekNo = tt.Days / 7;           
+
+            return weekNo;
+
+        }
+
+        [HttpGet]
+        public JsonResult GetChartDataAtDayGranularity(Guid? countryId, Guid? regionId, Guid? districtId, Guid? outpostId, DateTime? startDate, DateTime? endDate, Guid? productId, string clientId)
+        {
+           
+            var ps = FilterProductSale(countryId, regionId, districtId, outpostId, startDate, endDate, productId, clientId);
+
+            ps = ps.OrderBy(it => it.Created);
+            List<ProductSale> psList = ps.ToList();
+
+            List<ProductSaleChartModel> lstChartModel = new List<ProductSaleChartModel>();
+            IEnumerable<IGrouping<DateTime, ProductSale>> psGroupingByDt = psList.GroupBy(it => it.Created.Value.Date);
+            foreach (IGrouping<DateTime, ProductSale> group in psGroupingByDt)
+            {
+                var chartModel = new ProductSaleChartModel() { Day = group.Key.Day.ToString(), Date = group.Key.Date.ToString("d-MMM-yyyy"), Quantity = 0 };
+                chartModel.Quantity = GetTotalSales(group);
+                lstChartModel.Add(chartModel);
+            }
+                     
+            return Json(new StoreOutputModel<ProductSaleChartModel>
+            {
+                Items = lstChartModel.ToArray(),
+                TotalItems = lstChartModel.Count
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        private int GetTotalSales(IGrouping<DateTime, ProductSale> group)
+        {
+            int total = 0;
+            foreach (ProductSale ps in group)
+            {
+                total += ps.Quantity;
+            }
+            return total;
+        }
+
+        private Dictionary<DateTime,int> GetDayArray(DateTime startDate, DateTime endDate)
+        { 
+            Dictionary<DateTime,int> days = new Dictionary<DateTime,int>();
+            for (var dt = startDate; dt <= endDate; dt = dt.AddDays(1))
+            {
+                days.Add(dt.Date,dt.Day);
+            }
+
+            return days;
+        }
+
+        [HttpGet]
+        public JsonResult GetProductSales(Guid? countryId, Guid? regionId, Guid? districtId, Guid? outpostId, DateTime? startDate, DateTime? endDate, Guid? productId, string clientId)
+        {
+
+            var ps = FilterProductSale(countryId, regionId, districtId, outpostId, startDate, endDate, productId, clientId);
+            
             var psms = new List<ProductSaleModel>();
             foreach (var productSale in ps.ToList())
             {

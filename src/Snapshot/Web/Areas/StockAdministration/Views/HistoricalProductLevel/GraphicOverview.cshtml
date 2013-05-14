@@ -167,6 +167,7 @@ Historical Product Level: Overview
             },
             items: [{
                 xtype: 'container',
+                flex:1,
                 layout: {
                     align: 'stretch',
                     type: 'vbox'
@@ -231,33 +232,57 @@ Historical Product Level: Overview
                          
                       },
                       {
-                          xtype: 'label',
-                          margin:'30 0 0 20',
-                          text:'Granularity: '
+                          xtype: 'radiogroup',
+                          margin: '20 0 0 40',
+                          fieldLabel: 'Granularity ',
+                          verical: false,
+                          width:300,
+                          items: [
+                               {
+                                   id: 'chkDay',
+                                   boxLabel: 'Day',
+                                   checked: true,
+                                   inputValue: 'd',
+                                   name:'rb',
+                                   listeners: {
+                                       change: function (chk, checked) {
+                                           if (checked)
+                                               window.feature.chartStore.proxy.extraParams.granularity = "d";
+                                       }
+                                   }
 
-                      },
-                      {
-                          xtype: 'checkbox',
-                          id:'chkDay',
-                          boxLabel: 'Day',
-                          margin:'26 0 0 10'
-                      }
+                               }
                       ,
                       {
-                          xtype: 'checkbox',
                           id: 'chkWeek',
-                          boxLabel: 'week',
-                          margin: '26 0 0 10'
+                          boxLabel: 'Week',
+                          inputValue: 'w',
+                          name: 'rb',
+                          listeners: {
+                              change: function (chk, checked) {
+                                  if (checked)
+                                      window.feature.chartStore.proxy.extraParams.granularity = "w";
+                              }
+                          }
                       }
                       ,
                       {
-                          xtype: 'checkbox',
                           id: 'chkMonth',
                           boxLabel: 'Month',
-                          margin: '26 0 0 10'
+                          inputValue: 'm',
+                          name: 'rb',
+                          listeners: {
+                              change: function (chk, checked) {
+                                  if (checked)
+                                      window.feature.chartStore.proxy.extraParams.granularity = "m";
+                              }
+                          }
                       }
 
-                      
+                          ]
+
+                      },
+                     
                  ]},
                 {
                     xtype: 'container',
@@ -273,13 +298,13 @@ Historical Product Level: Overview
                         labelAlign: 'top',
                         fieldLabel: 'Selected Country',
                         displayField: 'Name',
-                        valueField:'Id',
+                        valueField: 'Id',
                         labelClsExtra: 'combo-label',
-                        emptyText: 'Country List', 
+                        emptyText: 'Country List',
                         typeAhead: true,
                         editable: false,
-                        listeners:{
-                            'select': function(combo, record){
+                        listeners: {
+                            'select': function (combo, record) {
                                 ResetCountryDependencies();
 
                                 window.feature.regionStore.proxy.extraParams.countryId = combo.getValue();
@@ -288,17 +313,17 @@ Historical Product Level: Overview
                                 window.feature.productStore.proxy.extraParams.countryId = combo.getValue();
                                 window.feature.productStore.load();
 
-                                var regionCombobox = window.feature.container.down('#'+window.feature.regionComboboxId);
+                                var regionCombobox = window.feature.container.down('#' + window.feature.regionComboboxId);
                                 regionCombobox.enable();
                             },
-                            specialkey: function(field, e){
+                            specialkey: function (field, e) {
                                 if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
                                     field.setValue('@Guid.Empty');
                                     ResetCountryDependencies();
                                 }
                             }
-                        } 
-                    },{ 
+                        }
+                    },{
                         xtype: 'combobox',
                         itemId: window.feature.regionComboboxId,
                         store: window.feature.regionStore,
@@ -432,22 +457,22 @@ Historical Product Level: Overview
                         itemId: window.feature.viewProductStockLevelId,
                         handler: function(){
                             ResetExtraParams();
-                            SetNewExtraParams();
-                           // window.feature.productSalesStore.load();  
+                            SetNewExtraParams();                                                      
+                            window.feature.chartStore.load();
+                            window.feature.executeDelayedChartDisplay.delay(500);
                         }
 
                     }]
                 },
                 {
                     xtype: 'container',
-                    flex: 5,
-                    minHeight:400,
+                    flex: 1,
+                    minHeight:300,
                     layout:'fit',
-                    padding: '0 0 0 20',
+                    padding: '0 20 0 20',
                     items: [{
                         xtype: 'container',
                         id: window.feature.chartContainerId,
-                       // flex: 2,
                         layout: {
                             align: 'stretch',
                             type: 'vbox'
@@ -467,35 +492,78 @@ Historical Product Level: Overview
  //-----Chart Stuff ------
 
         window.feature.chartStore = Ext.create('Ext.data.ArrayStore', {
-            fields: ['Day', {name:'Quantity',type:'int'},'Date'],
-            data: [['1', '5', '9-May-2013'], ['5', '9', '9-May-2013'], ['10', '2', '9-May-2013'], ['15', '10', '9-May-2013'], ['20', '14', '9-May-2013'], ['25', '25', '9-May-2013'], ['30', '11', '9-May-2013']]
+            remoteSort:true,
+            fields: ['Day', { name: 'Quantity', type: 'int' }, 'Date'],
+            proxy: {
+                type: 'ajax',
+                url: '@Url.RouteUrl(StockAdministrationAreaRegistration.DEFAULT_ROUTE, new { controller = "HistoricalProductLevel", action = "GetChartData" })',
+                reader: {
+                    type: 'json',
+                    root: 'Items',
+                    totalProperty: 'TotalItems'
+                },
+                extraParams: {
+                    countryId: '',
+                    regionId: '',
+                    districtId: '',
+                    outpostId: '',
+                    startDate: '',
+                    endDate: '',
+                    productId: '',
+                    clientId: '',
+                    granularity:''
+                },
+                simpleSortMode: true
+            }
+            
+           // data: [['1', '5', '9-May-2013'], ['5', '9', '9-May-2013'], ['10', '2', '9-May-2013'], ['15', '10', '9-May-2013'], ['20', '14', '9-May-2013'], ['25', '25', '9-May-2013'], ['30', '11', '9-May-2013']]
         })
+
+        function setChartTitle()
+        {
+            if (window.feature.chartStore.proxy.extraParams.granularity == "" || window.feature.chartStore.proxy.extraParams.granularity == "d")
+                return "Day of the Month";
+            else if (window.feature.chartStore.proxy.extraParams.granularity == "w")
+                return "Week";
+            return "Month";
+        }
 
         window.feature.executeDelayedChartDisplay = new Ext.util.DelayedTask(function () {
             var chartContainer = Ext.getCmp(window.feature.chartContainerId);
+            var previousChart = Ext.getCmp(window.feature.chartId);
+            chartContainer.remove(previousChart);
+            var lbl = Ext.getCmp('lblNoSales');
+            chartContainer.remove(lbl);
+
+            if (window.feature.chartStore.getCount() == 0)
+            {
+                chartContainer.add({ xtype: 'label',id:'lblNoSales', margin: '50 0 0 10', text: 'There are no sales for the selected filter.', cls: 'x-title-label' });
+                return;
+            }
+            
 
             chartContainer.add(
                 {
                     id: window.feature.chartId,
                     xtype: 'chart',
-                    minHeight:300,
-                    flex: 1,
+                    minHeight: 300,
+                    flex: 2,
                     store: window.feature.chartStore,
-                    
+                    animate: true,
                     axes: [{
                         type: 'Numeric',
                         position: 'left',
                         fields: ['Quantity'],
-                        title: 'Total Sales Quantity',
+                        title: 'Total Sales - Quantity',
                         minimum: 0,
-                        grid:true
+                        grid: true
                     },
                     {
                         type: 'Category',
                         position: 'bottom',
                         fields: ['Day'],
-                        title: 'Day of the Month',
-                       
+                        title: setChartTitle(),
+
 
                     }],
                     series: [{
@@ -503,21 +571,25 @@ Historical Product Level: Overview
                         xField: 'Day',
                         yField: 'Quantity',
                         axis: 'left',
+                        highlight:true,
                         tips: {
                             trackMouse: true,
-                            width: 140,
+                            width: 220,
                             renderer: function (storeItem, item) {
-                                this.setTitle('Quantity: '+ String(item.value[1])+"<br/> Date: " + storeItem.get('Date'));
+                                this.setTitle('Quantity: ' + String(item.value[1]) + "<br/> Date: " + storeItem.get('Date'));
                             }
-                        }
+                        },
+                        
                     }]
                 }
-                )
+                );
+
+            
         })
 
  
 
-        window.feature.executeDelayedChartDisplay.delay(100);
+        
         function ClearDistrictStore() {
             var noOfItemsToDelete = window.feature.districtStore.getCount() - 1;
             window.feature.districtStore.removeAt(1, noOfItemsToDelete);
@@ -559,44 +631,56 @@ Historical Product Level: Overview
 
 
         function ResetExtraParams(){
-            window.feature.productSalesStore.proxy.extraParams.outpostId = null;
-            window.feature.productSalesStore.proxy.extraParams.districtId = null;
-            window.feature.productSalesStore.proxy.extraParams.regionId = null;
-            window.feature.productSalesStore.proxy.extraParams.countryId = null;
-            window.feature.productSalesStore.proxy.extraParams.productId = null;
-            window.feature.productSalesStore.proxy.extraParams.clientId = null;
+            window.feature.chartStore.proxy.extraParams.outpostId = null;
+            window.feature.chartStore.proxy.extraParams.districtId = null;
+            window.feature.chartStore.proxy.extraParams.regionId = null;
+            window.feature.chartStore.proxy.extraParams.countryId = null;
+            window.feature.chartStore.proxy.extraParams.productId = null;
+            window.feature.chartStore.proxy.extraParams.clientId = null;
+            window.feature.chartStore.proxy.extraParams.startDate = null;
+            window.feature.chartStore.proxy.extraParams.endDate = null;
+            
         };
         
         function SetNewExtraParams(){
             var outpostSelectedValue = window.feature.container.down('#'+window.feature.outpostComboboxId).getValue();
             if (outpostSelectedValue != null){
-                window.feature.productSalesStore.proxy.extraParams.outpostId = outpostSelectedValue;
+                window.feature.chartStore.proxy.extraParams.outpostId = outpostSelectedValue;
             }
 
             var districtSelectedValue = window.feature.container.down('#'+window.feature.districtComboboxId).getValue();
             if (districtSelectedValue != null){
-                window.feature.productSalesStore.proxy.extraParams.districtId = districtSelectedValue;
+                window.feature.chartStore.proxy.extraParams.districtId = districtSelectedValue;
             }
 
             var regionSelectedValue = window.feature.container.down('#'+window.feature.regionComboboxId).getValue();
             if (regionSelectedValue != null){
-                window.feature.productSalesStore.proxy.extraParams.regionId = regionSelectedValue;
+                window.feature.chartStore.proxy.extraParams.regionId = regionSelectedValue;
             }
 
             var countrySelectedValue = window.feature.container.down('#'+window.feature.countryComboboxId).getValue();
             if (countrySelectedValue != null){
-                window.feature.productSalesStore.proxy.extraParams.countryId = countrySelectedValue;
+                window.feature.chartStore.proxy.extraParams.countryId = countrySelectedValue;
             }
 
             var productSelectedValue = window.feature.container.down('#' + window.feature.productComboboxId).getValue();
             if (productSelectedValue != null)            {
-                window.feature.productSalesStore.proxy.extraParams.productId = productSelectedValue;
+                window.feature.chartStore.proxy.extraParams.productId = productSelectedValue;
             }
 
             var clientSelectedValue = window.feature.container.down('#' + window.feature.clientComboboxId).getValue();
             if (productSelectedValue != null) {
-                window.feature.productSalesStore.proxy.extraParams.clientId = clientSelectedValue;
+                window.feature.chartStore.proxy.extraParams.clientId = clientSelectedValue;
             }
+            var startDateSelValue = window.feature.container.down('#' + window.feature.startDateId).getValue();
+            if (productSelectedValue != null) {
+                window.feature.chartStore.proxy.extraParams.startDate = startDateSelValue;
+            }
+            var endDateSelValue = window.feature.container.down('#' + window.feature.endDateId).getValue();
+            if (productSelectedValue != null) {
+                window.feature.chartStore.proxy.extraParams.endDate = endDateSelValue;
+            }
+           
         };
 
         var contentRes = window.res.content;
