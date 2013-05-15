@@ -11,7 +11,7 @@ namespace Migrations
 
         public override void Up()
         {
-            this.IfDatabase("sqlserver").Execute.EmbeddedScript(@"Migrations.Scripts.sqlserver_InsertProductGroupDefaultRecord_20.sql");
+            IfDatabase("sqlserver").Execute.EmbeddedScript(@"Migrations.Scripts.sqlserver_InsertProductGroupDefaultRecord_20.sql");
         }
     }
 }

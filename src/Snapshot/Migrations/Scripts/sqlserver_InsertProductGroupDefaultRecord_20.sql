@@ -1,5 +1,5 @@
  GO
-if not exists(select [Name] from [ProductGroups] where [Name]='All Products' )
+if not exists(select [Name] from [ProductGroups] where [Name]='Uncategorized' )
 begin
 INSERT INTO ProductGroups
 		   (Id
@@ -12,7 +12,7 @@ INSERT INTO ProductGroups
 		   (newid()
 		   ,GETDATE()
 		   ,'BEEC53CE-A73C-4F03-A354-C617F68BC813'
-		   ,'All Products'
+		   ,'Uncategorized'
 		   ,'ALL'
 		   ,'Generic product group')
 end

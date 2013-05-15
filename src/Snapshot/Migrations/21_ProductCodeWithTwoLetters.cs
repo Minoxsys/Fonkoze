@@ -12,7 +12,7 @@ namespace Migrations
 
         public override void Down()
         {
-            Alter.Table("Products").AlterColumn("SMSReferenceCode").AsFixedLengthString(1);
+           // Alter.Table("Products").AlterColumn("SMSReferenceCode").AsFixedLengthString(1);
         }
     }
 }
