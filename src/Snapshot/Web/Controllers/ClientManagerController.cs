@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Web.CustomFilters;
 using Web.Models.ClientManager;
 using Domain;
 using AutoMapper;
@@ -38,6 +39,7 @@ namespace Web.Controllers
         }
 
         [HttpPost]
+        [ApplicationActivityFilter]
         public JsonResult Create(ClientManagerModel inputModel)
         {
             var client = new Client();
@@ -64,11 +66,12 @@ namespace Web.Controllers
                new JsonActionResponse
                {
                    Status = "Success",
-                   Message = String.Format("Client {0} has been saved.", inputModel.Name)
+                   Message = String.Format("Client {0} has been created.", inputModel.Name)
                });
         }
 
         [HttpPost]
+        [ApplicationActivityFilter]
         public JsonResult Edit(ClientManagerModel inputModel)
         {
 
@@ -106,11 +109,12 @@ namespace Web.Controllers
                new JsonActionResponse
                {
                    Status = "Success",
-                   Message = String.Format("Client {0} has been saved.", inputModel.Name)
+                   Message = String.Format("Client {0} has been updated.", inputModel.Name)
                });
         }
 
         [HttpPost]
+        [ApplicationActivityFilter]
         public JsonResult Delete(Guid? clientId)
         {
             if (clientId.HasValue == false)

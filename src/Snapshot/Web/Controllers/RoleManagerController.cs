@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Web.CustomFilters;
 using Web.Models.RoleManager;
 using Core.Domain;
 using Persistence.Commands;
@@ -119,6 +120,7 @@ namespace Web.Controllers
 
         [HttpPost]
         [Requires(Permissions = "Role.Edit")]
+        [ApplicationActivityFilter]
         public JsonResult Create(RoleManagerInputModel inputModel)
         {
             Role role = new Role();
@@ -130,10 +132,11 @@ namespace Web.Controllers
 
             UpdateRoleWithRoleManagerInputModel(role, inputModel);   
 
-            return Json(new JsonActionResponse() { Status = "Success", Message = string.Format("Role {0} has been saved.", role.Name) }, JsonRequestBehavior.AllowGet);
+            return Json(new JsonActionResponse() { Status = "Success", Message = string.Format("Role {0} has been created.", role.Name) }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
+        [ApplicationActivityFilter]
         public JsonResult Edit(RoleManagerInputModel inputModel)
         {
             if (inputModel.Id == Guid.Empty)
@@ -156,10 +159,11 @@ namespace Web.Controllers
 
             UpdateRoleWithRoleManagerInputModel(role, inputModel);
 
-            return Json(new JsonActionResponse() { Status = "Success", Message = string.Format("Role {0} has been saved.", role.Name) }, JsonRequestBehavior.AllowGet);
+            return Json(new JsonActionResponse() { Status = "Success", Message = string.Format("Role {0} has been updated.", role.Name) }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
+        [ApplicationActivityFilter]
         public JsonResult Delete(Guid? roleId)
         {
             if (!roleId.HasValue)

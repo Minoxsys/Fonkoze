@@ -199,11 +199,11 @@ namespace Web.Areas.StockAdministration.Controllers
             {
                 return Json(
                     new ToModalJsonActionResponse
-                    {
-                        Status = "Error",
-                        Message = "The product has not been saved!",
-                        CloseModal = true
-                    });
+                        {
+                            Status = "Error",
+                            Message = "The product has not been saved!",
+                            CloseModal = true
+                        });
             }
 
             CreateMappings();
@@ -212,27 +212,32 @@ namespace Web.Areas.StockAdministration.Controllers
                                        .Where(it => it.Client == _client)
                                        .Where(it => it.ProductGroup.Id == inputProductModel.ProductGroup.Id);
 
-            if (products.Where(it=>it.Name == inputProductModel.Name).Count() > 0)
+            if (products.Where(it => it.Name == inputProductModel.Name).Count() > 0)
             {
                 return Json(
                     new ToModalJsonActionResponse
-                    {
-                        Status = "Error",
-                        Message = string.Format("The Product Group already contains a product with the name {0}! Please insert a different name!", inputProductModel.Name),
-                        CloseModal = false
-                    });
+                        {
+                            Status = "Error",
+                            Message =
+                                string.Format("The Product Group already contains a product with the name {0}! Please insert a different name!",
+                                              inputProductModel.Name),
+                            CloseModal = false
+                        });
             }
 
             if (products.Where(it => it.SMSReferenceCode == inputProductModel.SMSReferenceCode).Count() > 0)
             {
                 return Json(
-                   new ToModalJsonActionResponse
-                   {
-                       Status = "Error",
-                       Message = string.Format("The Product Group already contains a product with SMS Reference code {0}! Please insert a different SMS Reference Code!", inputProductModel.SMSReferenceCode),
-                       CloseModal = false
-                   });
- 
+                    new ToModalJsonActionResponse
+                        {
+                            Status = "Error",
+                            Message =
+                                string.Format(
+                                    "The Product Group already contains a product with SMS Reference code {0}! Please insert a different SMS Reference Code!",
+                                    inputProductModel.SMSReferenceCode),
+                            CloseModal = false
+                        });
+
             }
             var product = new Product();
             Mapper.Map(inputProductModel, product);
@@ -246,11 +251,11 @@ namespace Web.Areas.StockAdministration.Controllers
 
             return Json(
                 new ToModalJsonActionResponse
-                {
-                    Status = "Success",
-                    Message = "The product has been saved!",
-                    CloseModal = true
-                });
+                    {
+                        Status = "Success",
+                        Message = string.Format("The product {0} has been created!", product.Name),
+                        CloseModal = true
+                    });
         }
 
         [HttpPost]
