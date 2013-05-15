@@ -1,20 +1,17 @@
 ﻿@model Web.Models.Home.IndexModel
+
 @section page_title{
-Snapshot Application
+    Fonkoze Application
 }
 
 <style>
     .imgHeight {
-      height:40px;
+        height:40px;
     }
   
-.alignRight  {
+    .alignRight  {
         text-align : right;
-       
-}
-
-
-
+    }
 </style>
 
 <script type="text/javascript">
@@ -35,111 +32,126 @@ Snapshot Application
             layout: 'vbox',
             items:
             [
-            {
-                xtype: 'container',
-                padding: '20 20 20 20',
-                layout: {
-                    type: 'table',
-                    columns: '2'
-                },
-                items: [
                 {
-                    xtype: 'image',
-                    autoEl: { html: "<a href='@(Url.RouteUrl<Web.Areas.AnalysisManagement.Controllers.LocationReportController>(x=>x.Overview(),Web.Areas.AnalysisManagement.AnalysisManagementAreaRegistration.DEFAULT_ROUTE))'><img height='60' src = '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Analysis/LocationReport.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))'/></a>" },
-                    margin: '0 20 0 20',
-                    height: 110,
-                    rowspan: 2
-                }, {
-                    xtype: 'label',
-                    tdAttrs: { height: 25, valign: 'top' },
-                    autoEl: { tag: 'a', cls: 'blue-label analysis-label', href: '@(Url.RouteUrl<Web.Areas.AnalysisManagement.Controllers.LocationReportController>(x=>x.Overview(),Web.Areas.AnalysisManagement.AnalysisManagementAreaRegistration.DEFAULT_ROUTE))', html: 'Location Report' }
+                    xtype: 'container',
+                    padding: '20 20 20 20',
+                    layout: {
+                        type: 'table',
+                        columns: '2'
+                    },
+                    items: [
+                        {
+                            xtype: 'image',
+                            autoEl:
+                            {
+                                 html: "<a href='@(Url.RouteUrl<Web.Areas.AnalysisManagement.Controllers.LocationReportController>(x=>x.Overview(),Web.Areas.AnalysisManagement.AnalysisManagementAreaRegistration.DEFAULT_ROUTE))'><img height='60' src = '@(Url.RouteUrl<AssetsController>(it => it.Shared("/img/Analysis/LocationReport.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))'/></a>"
+                            },
+                            margin: '0 20 0 20',
+                            height: 110,
+                            rowspan: 2
+                        }, {
+                            xtype: 'label',
+                            tdAttrs: { height: 25, valign: 'top' },
+                            autoEl:
+                            {
+                                tag: 'a',
+                                cls: 'blue-label analysis-label',
+                                href: '@(Url.RouteUrl<Web.Areas.AnalysisManagement.Controllers.LocationReportController>(x=>x.Overview(),Web.Areas.AnalysisManagement.AnalysisManagementAreaRegistration.DEFAULT_ROUTE))',
+                                html: 'Location Report'
+                            }
 
-                }, {
-                    xtype: 'label',
-                    tdAttrs: { valign: 'top' },
-                    text: 'This report will show stock levels for different outposts.'
-                }, {
-                    xtype: 'image',
-                    autoEl: { html: "<a href='@(Url.RouteUrl<Web.Areas.AnalysisManagement.Controllers.ReportRegionLevelController>(x => x.Overview(), Web.Areas.AnalysisManagement.AnalysisManagementAreaRegistration.DEFAULT_ROUTE))'><img height='60' src = '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Analysis/StockLevelInformationReport.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))'/></a>" },
-                    margin: '0 20 0 20',
-                    height: 110,
-                    rowspan: 2
-                }, {
-                    xtype: 'label',
-                    tdAttrs: { height: 25, valign: 'top' },
-                    autoEl: { tag: 'a', cls: 'blue-label analysis-label', href: '@(Url.RouteUrl<Web.Areas.AnalysisManagement.Controllers.ReportRegionLevelController>(x => x.Overview(), Web.Areas.AnalysisManagement.AnalysisManagementAreaRegistration.DEFAULT_ROUTE))', html: 'Product level information' }
-                }, {
-                    xtype: 'label',
-                    tdAttrs: { valign: 'top' },
-                    text: 'This report will show you the latest data of product levels.'
-                }, {
-                    xtype: 'image',
-                    autoEl: { html: "<a href='@(Url.RouteUrl<Web.Areas.StockAdministration.Controllers.HistoricalProductLevelController>(x => x.Overview(), Web.Areas.StockAdministration.StockAdministrationAreaRegistration.DEFAULT_ROUTE))'><img height='60' src = '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Analysis/ActivityReport.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))'/></a>" },
-                    margin: '0 20 0 20',
-                    height: 110,
-                    rowspan: 2
-                }, {
-                    xtype: 'label',
-                    tdAttrs: { height: 25, valign: 'top' },
-                    autoEl: { tag: 'a', cls: 'blue-label analysis-label', href: '@(Url.RouteUrl<Web.Areas.StockAdministration.Controllers.HistoricalProductLevelController>(x => x.Overview(), Web.Areas.StockAdministration.StockAdministrationAreaRegistration.DEFAULT_ROUTE))', html: 'Historical Report' }
-                }, {
-                    xtype: 'label',
-                    tdAttrs: { valign: 'top' },
-                    text: 'This report will show you the stock usage.'
-                }
-                
-
-                    @* xtype: 'image',
-                src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/charts2.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
-                width: 1400,
-                margin: '20 0 0 0'*@
-                
-                ]
-            },
-            {
-                xtype: 'container',
-                layout: {
-                    type: 'table',
-                    columns: '2'
+                        }, {
+                            xtype: 'label',
+                            tdAttrs: { valign: 'top' },
+                            text: 'This report will show stock levels for different outposts.'
+                        }, {
+                            xtype: 'image',
+                            autoEl:
+                            {
+                                 html: "<a href='@(Url.RouteUrl<Web.Areas.AnalysisManagement.Controllers.ReportRegionLevelController>(x => x.Overview(), Web.Areas.AnalysisManagement.AnalysisManagementAreaRegistration.DEFAULT_ROUTE))'><img height='60' src = '@(Url.RouteUrl<AssetsController>(it => it.Shared("/img/Analysis/StockLevelInformationReport.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))'/></a>"
+                            },
+                            margin: '0 20 0 20',
+                            height: 110,
+                            rowspan: 2
+                        }, {
+                            xtype: 'label',
+                            tdAttrs: { height: 25, valign: 'top' },
+                            autoEl:
+                            {
+                                tag: 'a',
+                                cls: 'blue-label analysis-label',
+                                href: '@(Url.RouteUrl<Web.Areas.AnalysisManagement.Controllers.ReportRegionLevelController>(x => x.Overview(), Web.Areas.AnalysisManagement.AnalysisManagementAreaRegistration.DEFAULT_ROUTE))',
+                                html: 'Product level information'
+                            }
+                        }, {
+                            xtype: 'label',
+                            tdAttrs: { valign: 'top' },
+                            text: 'This report will show you the latest data of product levels.'
+                        }, {
+                            xtype: 'image',
+                            autoEl:
+                            {
+                                 html: "<a href='@(Url.RouteUrl<Web.Areas.StockAdministration.Controllers.HistoricalProductLevelController>(x => x.Overview(), Web.Areas.StockAdministration.StockAdministrationAreaRegistration.DEFAULT_ROUTE))'><img height='60' src = '@(Url.RouteUrl<AssetsController>(it => it.Shared("/img/Analysis/ActivityReport.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))'/></a>"
+                            },
+                            margin: '0 20 0 20',
+                            height: 110,
+                            rowspan: 2
+                        }, {
+                            xtype: 'label',
+                            tdAttrs: { height: 25, valign: 'top' },
+                            autoEl:
+                            {
+                                tag: 'a',
+                                cls: 'blue-label analysis-label',
+                                href: '@(Url.RouteUrl<Web.Areas.StockAdministration.Controllers.HistoricalProductLevelController>(x => x.Overview(), Web.Areas.StockAdministration.StockAdministrationAreaRegistration.DEFAULT_ROUTE))',
+                                html: 'Historical Report'
+                            }
+                        }, {
+                            xtype: 'label',
+                            tdAttrs: { valign: 'top' },
+                            text: 'This report will show you the stock usage.'
+                        }
+                    ]
                 },
-                margin: '0 10 10 60',
-                items: [
-                    {
+                {
+                    xtype: 'container',
+                    layout: {
+                        type: 'table',
+                        columns: '2'
+                    },
+                    margin: '0 10 10 60',
+                    items: [
+                        {
+                            xtype: 'image',
+                            itemId: 'No-of-alerts-image',
+                            cls: 'imgHeight'
+                        }
+                        ,{
+                            xtype: 'label',
+                            cls:'blue-label analysis-label',
+                            padding: '0 0 0 30',
+                            itemId: 'No-of-alerts-label',
+                            autoEl: { tag: 'a', cls: 'blue-label analysis-label', href: '@(Url.RouteUrl<AlertsController>(x => x.Overview(), Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE))', html: '' }
+                        }
+                    ]
+                },
+                {
+                    xtype: 'container',
+                    layout: 'fit',
+                    width: content.container.lastBox.width - 80,
+                    padding: content.container.lastBox.height-400 +' 0 0 0',
+                    items: [{
                         xtype: 'image',
-                        itemId: 'No-of-alerts-image',
-                        cls: 'imgHeight'
-                    }
-                   ,{
-                       xtype: 'label',
-                       cls:'blue-label analysis-label',
-                       padding: '0 0 0 30',
-                       itemId: 'No-of-alerts-label',
-                       autoEl: { tag: 'a', cls: 'blue-label analysis-label', href: '@(Url.RouteUrl<AlertsController>(x => x.Overview(), Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE))', html: '' }
-                      
-                    }
-                ]
-            },
-             {
-                 xtype: 'container',
-                 layout: 'fit',
-                 width: content.container.lastBox.width - 80,
-                 padding: content.container.lastBox.height-400 +' 0 0 0',
-                 items: [{
-                     xtype: 'image',
-                     cls: 'alignRight',
-                     autoEl: { html: "<img height='35' src = '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/copyright.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))'/>" },
-                 }]
-
-                
-
-
-            }
-
-
+                        cls: 'alignRight',
+                        autoEl:
+                        {
+                             html: "<img height='35' src = '@(Url.RouteUrl<AssetsController>(it => it.Shared("/img/copyright.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))'/>"
+                        },
+                    }]
+                }
             ]
            
         });
-
 
         var noOfAlertsLabel = content.down('#No-of-alerts-label');
         var noOfAlertsImg = content.down('#No-of-alerts-image');
@@ -149,17 +161,14 @@ Snapshot Application
             var alertStr = 'alert';
             if (response == "0") {
                 alertStr += 's';
-                noOfAlertsImg.getEl().dom.src = '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/green-ok.gif"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))';
+                noOfAlertsImg.getEl().dom.src = '@(Url.RouteUrl<AssetsController>(it => it.Shared("/img/green-ok.gif"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))';
             }
             else {
                 if (response > 1) { alertStr += 's'; }
-                noOfAlertsImg.getEl().dom.src = '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/alert.gif"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))';
+                noOfAlertsImg.getEl().dom.src = '@(Url.RouteUrl<AssetsController>(it => it.Shared("/img/alert.gif"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))';
             }
             noOfAlertsLabel.setText(response + " " + alertStr + " received in the last two days!");
-                        
         });
-
-                     
     });
 </script>
 
@@ -181,20 +190,20 @@ Snapshot Application
                 type: 'vbox'
             },
             items: [{
-                xtype: 'container',
-                flex: 1,
-                items: [{
-                    xtype: 'label',
-                    html: '&nbsp;' 
+                    xtype: 'container',
+                    flex: 1,
+                    items: [{
+                        xtype: 'label',
+                        html: '&nbsp;' 
+                    }]
+                },{
+                    xtype: 'container',
+                    layout: {
+                        type: 'column'
+                    },
+                    flex: 1,
+                    items: []
                 }]
-            },{
-                xtype: 'container',
-                layout: {
-                    type: 'column'
-                },
-                flex: 1,
-                items: []
-            }]
         }]);
                         
         subnav.ownerCt.doLayout();

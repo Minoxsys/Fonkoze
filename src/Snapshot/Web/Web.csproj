@@ -622,6 +622,7 @@
     <Content Include="Assets\resources\img\open.png" />
     <Content Include="Assets\resources\img\OutpostStockLevel\CurrentProductLevel.png" />
     <Content Include="Assets\resources\img\OutpostStockLevel\HistoricalProductLevel.png" />
+    <Content Include="Assets\resources\img\OutpostStockLevel\InformationGreen.png" />
     <Content Include="Assets\resources\img\stop.png" />
     <Content Include="Assets\resources\img\unchecked.gif" />
     <Content Include="Assets\resources\img\Users\user.png" />
