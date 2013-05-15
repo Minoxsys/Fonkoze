@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using Domain;
+using Moq;
 using NUnit.Framework;
 using Tests.Unit.ReceiveSmsWorkflow.Base;
 using Web.Models.Parsing;
@@ -28,6 +30,24 @@ namespace Tests.Unit.ReceiveSmsWorkflow.Commands
 
             UpdateProductStockServiceMock.Verify(s => s.DecrementProductStocksForOutpost(parseResult, OutpostMock.Object.Id, StockUpdateMethod.SMS));
         }
+
+        [Test]
+        public void DoAfterStockUpdate_Saves2ProductSale_WhenSmsContains2DifferentProducts()
+        {
+            //Arrange
+            SetupKnownSender();
+            List<IParsedProduct> l = new List<IParsedProduct>();
+            l.Add(new ParsedProduct(){ProductGroupCode="ll",ProductCode="er",StockLevel=2,ClientIdentifier="f"});
+            l.Add(new ParsedProduct(){ProductGroupCode="ll",ProductCode="be",StockLevel=2,ClientIdentifier="n"});
+            var parseResult = new SmsParseResult { ParsedProducts = l };
+            //Act    
+            Sut.DoAfterStockUpdate(parseResult, OutpostMock.Object);
+            //Assert
+            //SaveProductSaleCmdMock.Verify(cmd=>cmd.Execute(It.Is<ProductSale>(ps=>ps.Outpost==OutpostMock.Object && ps.Product)))
+
+
+        }
+
 
        
     }
