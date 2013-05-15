@@ -12,6 +12,7 @@ using Web.ReceiveSmsUseCase.Models;
 using Web.Services;
 using Web.Services.SendEmail;
 using Web.Services.StockUpdates;
+using System.Diagnostics;
 
 namespace Web.ReceiveSmsUseCase.SmsMessageCommands
 {
@@ -45,16 +46,21 @@ namespace Web.ReceiveSmsUseCase.SmsMessageCommands
             if (parseResult.Success)
             {
                 StockUpdateResult result = UpdateProductStocksForOutpost(parseResult, outpost);
-                if (result != null && !result.Success)
+
+                // Debug.Assert(result==null,"This should not happen");
+                if (result != null)
                 {
-                    _sendSmsService.SendSms(smsData.Sender, ComposeUpdateStockFailMessage(result.FailedProducts), true);
-                   
-                    DoAfterStockUpdate(parseResult,outpost);
+                    if (!result.Success)
+                    {
+                        _sendSmsService.SendSms(smsData.Sender, ComposeUpdateStockFailMessage(result.FailedProducts), true);
+                    }
+                    else
+                    {
+                        _sendSmsService.SendSms(smsData.Sender, Strings.StockUpdateSuccessConfirmation, true);
+                    }
+                    DoAfterStockUpdate(parseResult.ParsedProducts, result.FailedProducts, outpost);
                 }
-                else
-                {
-                    _sendSmsService.SendSms(smsData.Sender, Strings.StockUpdateSuccessConfirmation, true);
-                }
+              
             }
             else
             {
@@ -89,7 +95,7 @@ namespace Web.ReceiveSmsUseCase.SmsMessageCommands
 
         internal abstract StockUpdateResult UpdateProductStocksForOutpost(ISmsParseResult parseResult, Outpost outpost);
 
-        internal virtual void DoAfterStockUpdate(ISmsParseResult parseResult, Outpost outpost)
+        internal virtual void DoAfterStockUpdate(List<IParsedProduct> parsedProducts, List<IParsedProduct> failedProducts, Outpost outpost)
         {
 
         }

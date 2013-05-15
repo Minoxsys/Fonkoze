@@ -171,8 +171,12 @@ namespace Tests.Unit.ReceiveSmsWorkflow.Base
         public void ExecutingTheCommand_SendConfirmationBackToSender_WhenStockUpdateSuccessfull()
         {
             SetupKnownSender();
+            var sut = CreatePartialMockedSut();
+            var parseResult = new SmsParseResult { Success = true };
+            sut.Setup(s => s.UpdateProductStocksForOutpost(parseResult, OutpostMock.Object))
+               .Returns(new StockUpdateResult { Success = true, FailedProducts = new List<IParsedProduct>() });
 
-            Sut.Execute(InputModel, new SmsParseResult {Success = true}, OutpostMock.Object);
+            sut.Object.Execute(InputModel, parseResult, OutpostMock.Object);
 
             SendSmsServiceMock.Verify(
                 s => s.SendSms(It.Is<string>(snd => snd == InputModel.Sender), "Stock updated successfully! Thank you for your message.", true));

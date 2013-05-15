@@ -6,6 +6,7 @@ using Web.ReceiveSmsUseCase.Models;
 using Web.Services;
 using Web.Services.SendEmail;
 using Web.Services.StockUpdates;
+using System.Collections.Generic;
 
 namespace Web.ReceiveSmsUseCase.SmsMessageCommands
 {
@@ -25,9 +26,18 @@ namespace Web.ReceiveSmsUseCase.SmsMessageCommands
 
         }
 
-        internal override void DoAfterStockUpdate(ISmsParseResult parseResult, Outpost outpost)
+        internal override void DoAfterStockUpdate(List<IParsedProduct> parsedProducts,List<IParsedProduct> failedProducts, Outpost outpost)
         {
-            foreach (ParsedProduct s in parseResult.ParsedProducts)
+            List<IParsedProduct> successfulProducts = new List<IParsedProduct>();
+            foreach (var p in parsedProducts)
+            {
+                if (failedProducts.FirstOrDefault(it => it.ProductCode == p.ProductCode)==null)
+                {
+                    successfulProducts.Add(p);
+                }
+            }
+
+            foreach (ParsedProduct s in successfulProducts)
             {
                 var ps = new ProductSale
                     {

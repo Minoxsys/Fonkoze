@@ -33,17 +33,17 @@ namespace Tests.Unit.ReceiveSmsWorkflow.Commands
         }
 
         [Test]
-        public void DoAfterStockUpdate_Saves2ProductSale_WhenSmsContains2DifferentProducts()
+        public void DoAfterStockUpdate_Saves2ProductSale_WhenSmsContains2DifferentProductsAndNoFailedProducts()
         {
             //Arrange
             SetupKnownSender();
-            List<IParsedProduct> l = new List<IParsedProduct>();
-            l.Add(new ParsedProduct(){ProductGroupCode="ll",ProductCode="er",StockLevel=2,ClientIdentifier="f"});
-            l.Add(new ParsedProduct(){ProductGroupCode="ll",ProductCode="be",StockLevel=2,ClientIdentifier="n"});
-            var parseResult = new SmsParseResult { ParsedProducts = l };
+            List<IParsedProduct> succesfullProducts = new List<IParsedProduct>();
+            succesfullProducts.Add(new ParsedProduct() { ProductGroupCode = "ll", ProductCode = "er", StockLevel = 2, ClientIdentifier = "f" });
+            succesfullProducts.Add(new ParsedProduct() { ProductGroupCode = "ll", ProductCode = "be", StockLevel = 2, ClientIdentifier = "n" });
+            
             ProductQueryServiceMock.Setup(s => s.Query()).Returns(new Product[] { new Product() { SMSReferenceCode = "er" }, new Product() { SMSReferenceCode = "be" } }.AsQueryable());
             //Act    
-            Sut.DoAfterStockUpdate(parseResult, OutpostMock.Object);
+            Sut.DoAfterStockUpdate(succesfullProducts,new List<IParsedProduct>(), OutpostMock.Object);
             //Assert
             SaveProductSaleCmdMock.Verify(cmd => cmd.Execute(It.Is<ProductSale>(ps => ps.Outpost == OutpostMock.Object
                                                                             && ps.Product.SMSReferenceCode == "er"
@@ -54,6 +54,44 @@ namespace Tests.Unit.ReceiveSmsWorkflow.Commands
 
 
         }
+        [Test]
+        public void DoAfterStockUpdate_Saves1ProductSale_WhenSmsContains2DifferentProductsAnd1FailedProduct()
+        {
+            //Arrange
+            SetupKnownSender();
+            List<IParsedProduct> succesfullProducts = new List<IParsedProduct>();
+            succesfullProducts.Add(new ParsedProduct() { ProductGroupCode = "ll", ProductCode = "er", StockLevel = 2, ClientIdentifier = "f" });
+            succesfullProducts.Add(new ParsedProduct() { ProductGroupCode = "ll", ProductCode = "be", StockLevel = 2, ClientIdentifier = "n" });
+           
+            List<IParsedProduct> failedProducts = new List<IParsedProduct>();
+            failedProducts.Add(new ParsedProduct() { ProductGroupCode = "ll", ProductCode = "er", StockLevel = 2, ClientIdentifier = "f" });
+            
+            //Act    
+            Sut.DoAfterStockUpdate(succesfullProducts, failedProducts, OutpostMock.Object);
+            //Assert
+            SaveProductSaleCmdMock.Verify(cmd => cmd.Execute(It.Is<ProductSale>(ps => ps.Outpost == OutpostMock.Object
+                                                                           && ps.Quantity == 2 && ps.ClientIdentifier == "n")));
+
+
+        }
+
+        [Test]
+        public void DoAfterStockUpdate_Saves0ProductSale_WhenSmsContains2DifferentProductsAnd2FailedProduct()
+        {
+            //Arrange
+            SetupKnownSender();
+            List<IParsedProduct> succesfullAndFailedProducts = new List<IParsedProduct>();
+            succesfullAndFailedProducts.Add(new ParsedProduct() { ProductGroupCode = "ll", ProductCode = "er", StockLevel = 2, ClientIdentifier = "f" });
+            succesfullAndFailedProducts.Add(new ParsedProduct() { ProductGroupCode = "ll", ProductCode = "be", StockLevel = 2, ClientIdentifier = "n" });
+                     
+            //Act    
+            Sut.DoAfterStockUpdate(succesfullAndFailedProducts, succesfullAndFailedProducts, OutpostMock.Object);
+            //Assert
+            SaveProductSaleCmdMock.Verify(cmd => cmd.Execute(It.IsAny<ProductSale>()),Times.Never());
+
+
+        }
+       
 
 
        
