@@ -59,7 +59,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.OutpostControllerTests
 			var jsonResult = _.controller.Create(model);
 			Assert.IsInstanceOf<JsonActionResponse>(jsonResult.Data);
 			var response = jsonResult.Data as JsonActionResponse;
-			Assert.AreEqual("Created successfully outpost Warehouse", response.Message);
+			Assert.AreEqual("Created successfully seller Warehouse", response.Message);
 
 			_.VerifyThatSaveHasBeendCalled();
 		}

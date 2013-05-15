@@ -46,7 +46,7 @@ namespace Tests.Unit.Controllers.RoleManagerControllerTests
             var response = jsonResult.Data as JsonActionResponse;
             Assert.IsNotNull(response);
             Assert.That(response.Status, Is.EqualTo("Success"));
-            Assert.That(response.Message, Is.EqualTo("Role " + ObjectMother.ROLE_NAME + " has been saved."));
+            Assert.That(response.Message, Is.EqualTo("Role " + ObjectMother.ROLE_NAME + " has been created."));
         }
 
         [Test]

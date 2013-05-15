@@ -56,7 +56,7 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration.ProductControllerTest
             objectMother.saveOrUpdateProduct.VerifyAllExpectations();
             Assert.IsNotNull(response);
             Assert.AreEqual(response.Status, "Success");
-            Assert.AreEqual(response.Message, "The product has been saved!");
+            Assert.AreEqual(response.Message, "The product "+productInputModel.Name +" has been created!");
 
         }
 

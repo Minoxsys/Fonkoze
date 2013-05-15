@@ -60,7 +60,7 @@ namespace Tests.Unit.Controllers.ClientManagerControllerTests
             var response = jsonResult.Data as JsonActionResponse;
             Assert.IsNotNull(response);
             Assert.That(response.Status, Is.EqualTo("Success"));
-            Assert.That(response.Message, Is.EqualTo("Client Edgard has been saved."));
+            Assert.That(response.Message, Is.EqualTo("Client Edgard has been updated."));
         }
 
         [Test]
