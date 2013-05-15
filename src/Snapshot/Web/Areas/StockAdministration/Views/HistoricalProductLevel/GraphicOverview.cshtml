@@ -219,6 +219,11 @@ Historical Product Level: Overview
                           labelAlign: 'top',
                           itemId: window.feature.startDateId,
                           value: prevMonthDate,
+                          listeners: {
+                              change: function (dt, newValue, oldValue, eOpts) {
+                                  showChart();
+                              }
+                          }
                          
                       },
                       {
@@ -229,7 +234,13 @@ Historical Product Level: Overview
                           format: 'd-M-Y',
                           itemId:window.feature.endDateId,
                           value: currentDate,
-                         
+                          maxValue: currentDate,
+                          listeners: {
+                              change: function (dt, newValue, oldValue, eOpts) {
+                                  showChart();
+                              }
+                          }
+                              
                       },
                       {
                           xtype: 'radiogroup',
@@ -246,8 +257,10 @@ Historical Product Level: Overview
                                    name:'rb',
                                    listeners: {
                                        change: function (chk, checked) {
-                                           if (checked)
+                                           if (checked) {
                                                window.feature.chartStore.proxy.extraParams.granularity = "d";
+                                               showChart();
+                                           }
                                        }
                                    }
 
@@ -260,8 +273,10 @@ Historical Product Level: Overview
                           name: 'rb',
                           listeners: {
                               change: function (chk, checked) {
-                                  if (checked)
+                                  if (checked) {
                                       window.feature.chartStore.proxy.extraParams.granularity = "w";
+                                      showChart();
+                                  }
                               }
                           }
                       }
@@ -273,8 +288,10 @@ Historical Product Level: Overview
                           name: 'rb',
                           listeners: {
                               change: function (chk, checked) {
-                                  if (checked)
+                                  if (checked) {
                                       window.feature.chartStore.proxy.extraParams.granularity = "m";
+                                      showChart();
+                                  }
                               }
                           }
                       }
@@ -315,6 +332,8 @@ Historical Product Level: Overview
 
                                 var regionCombobox = window.feature.container.down('#' + window.feature.regionComboboxId);
                                 regionCombobox.enable();
+
+                                showChart();
                             },
                             specialkey: function (field, e) {
                                 if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
@@ -348,6 +367,8 @@ Historical Product Level: Overview
 
                                 var districtCombobox = window.feature.container.down('#'+window.feature.districtComboboxId);
                                 districtCombobox.enable();
+
+                                showChart();
                             },
                             specialkey: function(field, e){
                                 if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
@@ -381,6 +402,8 @@ Historical Product Level: Overview
 
                                 var outpostCombobox = window.feature.container.down('#'+window.feature.outpostComboboxId);
                                 outpostCombobox.enable();
+
+                                showChart();
                             },
                             specialkey: function(field, e){
                                 if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
@@ -408,8 +431,10 @@ Historical Product Level: Overview
                                 window.feature.productStore.proxy.extraParams.outpostId = combo.getValue();
                                 window.feature.productStore.load();
 
-                                var viewButton = window.feature.container.down('#'+window.feature.viewProductStockLevelId);
-                                viewButton.enable();
+                                showChart();
+
+                                //var viewButton = window.feature.container.down('#'+window.feature.viewProductStockLevelId);
+                                //viewButton.enable();
                             },
                             specialkey: function(field, e){
                                 if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
@@ -445,29 +470,30 @@ Historical Product Level: Overview
                         emptyText: 'Client Type',
                         typeAhead: true,
                         editable: false,
-                        value:'0',
-                    },
-                    {
-                        xtype: 'button',
-                        margin: '25 0 0 0',
-                        text: 'View Product Sales',
-                        ui: 'snapshot-add-btn',
-                        cls: 'x-add-button-gradient',
-                        disabled: false,
-                        itemId: window.feature.viewProductStockLevelId,
-                        handler: function(){
-                            ResetExtraParams();
-                            SetNewExtraParams();                                                      
-                            window.feature.chartStore.load();
-                            window.feature.executeDelayedChartDisplay.delay(500);
+                        value: '0',
+                        listeners: {
+                            select: function (combo, record) { showChart(); }
                         }
+                    },
+                    //{
+                    //    xtype: 'button',
+                    //    margin: '25 0 0 0',
+                    //    text: 'View Product Sales',
+                    //    ui: 'snapshot-add-btn',
+                    //    cls: 'x-add-button-gradient',
+                    //    disabled: false,
+                    //    itemId: window.feature.viewProductStockLevelId,
+                    //    handler: function(){
+                          
+                    //    }
 
-                    }]
+                    //}
+                    ]
                 },
                 {
                     xtype: 'container',
                     flex: 1,
-                    minHeight:300,
+                    minHeight:200,
                     layout:'fit',
                     padding: '0 20 0 20',
                     items: [{
@@ -490,6 +516,18 @@ Historical Product Level: Overview
         });
 
  //-----Chart Stuff ------
+
+        function showChart()
+        {
+            ResetExtraParams();
+            SetNewExtraParams();
+            window.feature.chartStore.load({
+                callback: function () {
+                    window.feature.executeDelayedChartDisplay.delay(100);
+                }
+            });
+            
+        }
 
         window.feature.chartStore = Ext.create('Ext.data.ArrayStore', {
             remoteSort:true,
@@ -694,12 +732,26 @@ Historical Product Level: Overview
         var outpostCombobox = window.feature.container.down('#' + window.feature.outpostComboboxId);
         var productCombobox = window.feature.container.down('#' + window.feature.productComboboxId);
 
-        window.feature.countryStore.load();
-        window.feature.productStore.load();
-
+        countryCombobox.setValue('@Guid.Empty');
         window.feature.regionStore.load({
             params: { countryId: '@Guid.Empty' }
         });
+        window.feature.countryStore.load(
+            //{
+            //callback: function () {
+            //    if (countryCombobox.getStore().getCount() > 0) {
+            //        countryCombobox.setValue(countryCombobox.getStore().getAt(1).get(countryCombobox.valueField));
+            //        window.feature.regionStore.load({
+            //            params: { countryId: countryCombobox.getValue() }
+            //         });
+            //    }
+
+
+            //}
+            //}
+        );
+        window.feature.productStore.load();
+        
         window.feature.districtStore.load({
             params: { regionId: '@Guid.Empty' }
         });
@@ -707,11 +759,12 @@ Historical Product Level: Overview
             params: { districtId: '@Guid.Empty'} 
         });
 
-        countryCombobox.setValue('@Guid.Empty');
         regionCombobox.setValue('@Guid.Empty');
         districtCombobox.setValue('@Guid.Empty');
         outpostCombobox.setValue('@Guid.Empty');
         productCombobox.setValue('@Guid.Empty');
+
+        showChart();
         
        
     });
