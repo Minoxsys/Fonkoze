@@ -247,7 +247,7 @@ namespace Web.Areas.StockAdministration.Controllers
         private ProductSaleChartModel BuildProductSaleChartModelMonth(DateTime startDate, DateTime endDate, List<ProductSale> psList, int noOfMonths)
         {
             List<ProductSale> psMonthLst = psList.FindAll(it => (it.Created.Value.Date >= startDate && it.Created.Value.Date <= endDate));
-            var chartModel = new ProductSaleChartModel() { Date = startDate.ToString("d-MMM-yyyy") + " / " + endDate.ToString("d-MMM-yyyy"), Day = startDate.ToString("MMMM"), Quantity = 0 };
+            var chartModel = new ProductSaleChartModel() { Date = startDate.ToString("d-MMM-yyyy") + " to " + endDate.ToString("d-MMM-yyyy"), Day = startDate.ToString("MMMM"), Quantity = 0 };
             int totalQuantity = 0;
             foreach (var p in psMonthLst)
             {
@@ -260,7 +260,7 @@ namespace Web.Areas.StockAdministration.Controllers
         private ProductSaleChartModel BuildProductSaleChartModelWeek(DateTime startDate, DateTime endDate, List<ProductSale> psList, int noOfWeeks)
         {
             List<ProductSale> psWeekLst = psList.FindAll(it => (it.Created.Value.Date >= startDate && it.Created.Value.Date <= endDate));
-            var chartModel = new ProductSaleChartModel() { Date = startDate.ToString("d-MMM-yyyy") + " / " + endDate.ToString("d-MMM-yyyy"), Day = "Week " + (noOfWeeks + 1), Quantity = 0 };
+            var chartModel = new ProductSaleChartModel() { Date = startDate.ToString("d-MMM-yyyy") + " to " + endDate.ToString("d-MMM-yyyy"), Day = "Week " + (noOfWeeks + 1), Quantity = 0 };
             int totalQuantity = 0;
             foreach (var p in psWeekLst)
             {

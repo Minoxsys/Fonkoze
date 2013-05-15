@@ -456,6 +456,9 @@ Historical Product Level: Overview
                         emptyText: 'Product List',
                         typeAhead: true,
                         editable: false,
+                        listeners: {
+                            select: function (combo, record) { showChart(); }
+                        }
                        
                     },
                     {
