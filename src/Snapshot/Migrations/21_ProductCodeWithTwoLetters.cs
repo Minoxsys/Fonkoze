@@ -7,7 +7,7 @@ namespace Migrations
     {
         public override void Up()
         {
-            Alter.Table("Products").AlterColumn("SMSReferenceCode").AsString(5);
+            Alter.Table("Products").AlterColumn("SMSReferenceCode").AsString(2);
         }
 
         public override void Down()

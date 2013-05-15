@@ -29,13 +29,18 @@ namespace Web.ReceiveSmsUseCase.SmsMessageCommands
         internal override void DoAfterStockUpdate(List<IParsedProduct> parsedProducts,List<IParsedProduct> failedProducts, Outpost outpost)
         {
             List<IParsedProduct> successfulProducts = new List<IParsedProduct>();
-            foreach (var p in parsedProducts)
+            if (failedProducts != null)
             {
-                if (failedProducts.FirstOrDefault(it => it.ProductCode == p.ProductCode)==null)
+                foreach (var p in parsedProducts)
                 {
-                    successfulProducts.Add(p);
+                    if (failedProducts.FirstOrDefault(it => it.ProductCode == p.ProductCode) == null)
+                    {
+                        successfulProducts.Add(p);
+                    }
                 }
             }
+            else
+                successfulProducts = parsedProducts;
 
             foreach (ParsedProduct s in successfulProducts)
             {
