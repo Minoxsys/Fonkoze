@@ -252,7 +252,6 @@
                                     ui: 'snapshot-add-btn',
                                     cls: 'x-add-button-gradient',
                                     width: 160,
-                                    height: 24,
                                     margin: '0 0 0 70',
                                     handler: function () {                            
                                         var winAdd = new window.feature.modalAddProductGroup({
@@ -346,17 +345,16 @@
                             xtype: 'textarea',
                             name: 'Description',
                             fieldLabel: 'Description',
-    
                             itemId: window.feature.ProductDescriptionId,
                             value: me.recordDescription
-    
                         }, {
                             xtype: 'numberfield',
                             name: 'LowerLimit',
                             fieldLabel: 'Minimum Limit',
                             itemId: window.feature.ProductLowerLimitId,
-                            value: me.recordLowerLimit
-    
+                            value: me.recordLowerLimit,
+                            allowDecimals: false,
+                            minValue: 0
                         },{
                             xtype:'hiddenfield',
                             name: 'Id',
