@@ -8,6 +8,7 @@ using Domain;
 using MvcContrib.TestHelper.Fakes;
 using Rhino.Mocks;
 using Web.Areas.AnalysisManagement.Controllers;
+using Web.Services.StockUpdates;
 
 namespace Tests.Unit.Controllers.Areas.AnalysisManagement.GetCssClassAndInfoWindowContentForMarkerTests
 {
@@ -132,10 +133,12 @@ namespace Tests.Unit.Controllers.Areas.AnalysisManagement.GetCssClassAndInfoWind
             oslGreenId = Guid.NewGuid();
             oslGreen = MockRepository.GeneratePartialMock<OutpostStockLevel>();
             oslGreen.Stub(c => c.Id).Return(oslRedId);
+            oslGreen.Updated = new DateTime(2013,1,1);
             oslGreen.Client = client;
             oslGreen.Outpost = outpost;
             oslGreen.Product = product;
             oslGreen.StockLevel = 15;
+            oslGreen.UpdateMethod = StockUpdateMethod.SMS.ToString();
 
             oslGreenList.Add(oslGreen);
 

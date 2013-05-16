@@ -7,6 +7,7 @@ using Core.Persistence;
 using Domain;
 using Core.Domain;
 using Web.Areas.AnalysisManagement.Models.LocationReport;
+using Web.Services.StockUpdates;
 
 namespace Web.Areas.AnalysisManagement.Controllers
 {
@@ -76,8 +77,22 @@ namespace Web.Areas.AnalysisManagement.Controllers
                 result = result.Where(it => it.Outpost.Region.Id == region.Id);
             if (district != null)
                 result = result.Where(it => it.Outpost.District.Id == district.Id);
+            string lastUpdate="";
             if (outpost != null)
+            {
                 result = result.Where(it => it.Outpost.Id == outpost.Id);
+                if (result.Count() > 0)
+                {
+                    var updatedBySmsQuery = result.Where(it => it.UpdateMethod == StockUpdateMethod.SMS.ToString());
+                    if (updatedBySmsQuery.Count() > 0)
+                    {
+                        lastUpdate = "<br/>Last SMS: " + updatedBySmsQuery.Max(it => it.Updated).Value.ToString("d-MMM-yyyy");
+                    }
+                    else
+                        lastUpdate = "<br/>Last SMS: Never";
+                }
+            }
+                       
 
             if (result.Count<OutpostStockLevel>() == 0)
             {
@@ -95,6 +110,7 @@ namespace Web.Areas.AnalysisManagement.Controllers
             {
                 returnValue.CssClass = "badStock";
                 returnValue.InfoWinContent = GetInfoWindowContentForOutpost(outpost, resultRed);
+                
             }
             else
             {
@@ -109,10 +125,15 @@ namespace Web.Areas.AnalysisManagement.Controllers
                     returnValue.CssClass = "goodStock";
                     if (outpost != null)
                     {
-                        returnValue.InfoWinContent = "All Stock Levels Are Good.";
+                        returnValue.InfoWinContent = "All Stock Levels Are Good.<br/>";
                     }
                     
                 }
+                
+            }
+            if (outpost != null)
+            {
+                returnValue.InfoWinContent += lastUpdate;
             }
 
             return returnValue;

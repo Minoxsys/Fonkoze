@@ -151,7 +151,7 @@ namespace Tests.Unit.Controllers.Areas.AnalysisManagement.GetCssClassAndInfoWind
             //Assert
             objectMother.queryStockLevel.VerifyAllExpectations();
             Assert.AreEqual("goodStock", s.CssClass);
-            Assert.AreEqual("All Stock Levels Are Good.",s.InfoWinContent);
+            Assert.AreEqual("All Stock Levels Are Good.<br/><br/>Last SMS: 1-Jan-2013",s.InfoWinContent);
             
 
            
