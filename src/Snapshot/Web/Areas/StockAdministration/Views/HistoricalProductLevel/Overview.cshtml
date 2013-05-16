@@ -324,6 +324,11 @@ Historical Product Level: Overview
                           labelAlign: 'top',
                           itemId: window.feature.startDateId,
                           value: prevMonthDate,
+                          listeners: {
+                              change: function (dt, newValue, oldValue, eOpts) {
+                                  showTable();
+                              }
+                          }
                           
                       },
                       {
@@ -334,6 +339,11 @@ Historical Product Level: Overview
                           format: 'd-M-Y',
                           itemId:window.feature.endDateId,
                           value: currentDate,
+                          listeners: {
+                              change: function (dt, newValue, oldValue, eOpts) {
+                                  showTable();
+                              }
+                          }
                           
                       }
                       
@@ -369,6 +379,8 @@ Historical Product Level: Overview
 
                                 var regionCombobox = window.feature.container.down('#'+window.feature.regionComboboxId);
                                 regionCombobox.enable();
+
+                                showTable();
                             },
                             specialkey: function(field, e){
                                 if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
@@ -402,6 +414,8 @@ Historical Product Level: Overview
 
                                 var districtCombobox = window.feature.container.down('#'+window.feature.districtComboboxId);
                                 districtCombobox.enable();
+
+                                showTable();
                             },
                             specialkey: function(field, e){
                                 if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
@@ -435,6 +449,8 @@ Historical Product Level: Overview
 
                                 var outpostCombobox = window.feature.container.down('#'+window.feature.outpostComboboxId);
                                 outpostCombobox.enable();
+
+                                showTable();
                             },
                             specialkey: function(field, e){
                                 if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
@@ -462,8 +478,12 @@ Historical Product Level: Overview
                                 window.feature.productStore.proxy.extraParams.outpostId = combo.getValue();
                                 window.feature.productStore.load();
 
-                                var viewButton = window.feature.container.down('#'+window.feature.viewProductStockLevelId);
-                                viewButton.enable();
+                                //var viewButton = window.feature.container.down('#'+window.feature.viewProductStockLevelId);
+                                //viewButton.enable();
+                               
+                                showTable();
+                                      
+                               
                             },
                             specialkey: function(field, e){
                                 if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
@@ -485,6 +505,11 @@ Historical Product Level: Overview
                         emptyText: 'Product List',
                         typeAhead: true,
                         editable: false,
+                        listeners: {
+                            select: function (combo, record) {
+                                showTable();
+                            }
+                        }
                        
                     },
                     {
@@ -499,23 +524,29 @@ Historical Product Level: Overview
                         emptyText: 'Client Type',
                         typeAhead: true,
                         editable: false,
-                        value:'0',
-                    },
-                    {
-                        xtype: 'button',
-                        margin: '25 0 0 0',
-                        text: 'View Product Sales',
-                        ui: 'snapshot-add-btn',
-                        cls: 'x-add-button-gradient',
-                        disabled: false,
-                        itemId: window.feature.viewProductStockLevelId,
-                        handler: function(){
-                            ResetExtraParams();
-                            SetNewExtraParams();
-                            window.feature.productSalesStore.load();  
+                        value: '0',
+                        listeners: {
+                            select: function (combo, record) {
+                                showTable();
+                            }
                         }
+                    },
+                    //{
+                    //    xtype: 'button',
+                    //    margin: '25 0 0 0',
+                    //    text: 'View Product Sales',
+                    //    ui: 'snapshot-add-btn',
+                    //    cls: 'x-add-button-gradient',
+                    //    disabled: false,
+                    //    itemId: window.feature.viewProductStockLevelId,
+                    //    handler: function(){
+                    //        ResetExtraParams();
+                    //        SetNewExtraParams();
+                    //        window.feature.productSalesStore.load();  
+                    //    }
 
-                    }]
+                    //}
+                    ]
                 }]
             },{
                 xtype: 'gridpanel',
@@ -532,11 +563,6 @@ Historical Product Level: Overview
                     hideGroupedHeader: true,                    
                     startCollapsed: true
                 },
-                //{
-                //    id: 'totalSummary',
-                //    ftype: 'summary',
-
-                //}
                 ],
                 columns: [{
                     header: "Sellers and Products Sold",
@@ -571,8 +597,15 @@ Historical Product Level: Overview
                     }
                 }],
                 
-            }]
+            }] 
         });
+
+        function showTable()
+        {
+            ResetExtraParams();
+            SetNewExtraParams();
+            window.feature.productSalesStore.load();
+        }
 
         function ResetExtraParams(){
             window.feature.productSalesStore.proxy.extraParams.outpostId = null;
@@ -654,6 +687,8 @@ Historical Product Level: Overview
         districtCombobox.setValue('@Guid.Empty');
         outpostCombobox.setValue('@Guid.Empty');
         productCombobox.setValue('@Guid.Empty');
+
+        showTable();
         
        
     });
