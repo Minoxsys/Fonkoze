@@ -16,6 +16,7 @@ namespace Tests.Unit.WarehouseManagementWorkflow
         private WarehouseManagementWorkflowService _sut;
         private Mock<IStockUpdateCsvFileParserService> _stockUpdateCsvFileParser;
         private Mock<IUpdateStockService> _updateStockServiceMock;
+        private Mock<IAssigningExistingProductsToWarehouseService> _assigningExistingProductsToWarehouseServiceMock;
         private Mock<Stream> _dummyStream;
         private Guid _outpostId;
 
@@ -26,16 +27,78 @@ namespace Tests.Unit.WarehouseManagementWorkflow
             _dummyStream = new Mock<Stream>();
             _stockUpdateCsvFileParser = new Mock<IStockUpdateCsvFileParserService>();
             _updateStockServiceMock = new Mock<IUpdateStockService>();
-            _sut = new WarehouseManagementWorkflowService(_stockUpdateCsvFileParser.Object, _updateStockServiceMock.Object);
+            _assigningExistingProductsToWarehouseServiceMock = new Mock<IAssigningExistingProductsToWarehouseService>();
+            _sut = new WarehouseManagementWorkflowService(_stockUpdateCsvFileParser.Object, _updateStockServiceMock.Object, _assigningExistingProductsToWarehouseServiceMock.Object);
+        }
+
+        [Test]
+        public void ProcessWarehouseStockData_AssignExistingProductsToWarehouseFromUpdateStockFailedProducts_WhenParseSuccess()
+        {
+            _stockUpdateCsvFileParser.Setup(s => s.ParseStream(_dummyStream.Object))
+                                     .Returns(new CsvParseResult { Success = true });
+
+            var stockUpdateResult = new StockUpdateResult { Success = false, FailedProducts = new List<IParsedProduct>() };
+            _updateStockServiceMock.Setup(s => s.IncrementProductStocksForOutpost(It.IsAny<IParseResult>(), _outpostId, It.IsAny<StockUpdateMethod>()))
+                .Returns(stockUpdateResult);
+
+            _sut.ProcessWarehouseStockData(_dummyStream.Object, _outpostId);
+
+            _assigningExistingProductsToWarehouseServiceMock.Verify(
+                s => s.AssigningProductsToWarehouse(stockUpdateResult.FailedProducts, _outpostId));
+        }
+
+        [Test]
+        public void ProcessWarehouseStockData_DontAssignExistingProductsToWarehouseFromUpdateStockFailedProducts_WhenParseSuccessAndFailedProductsFromStockUpdateResultIsNull()
+        {
+            _stockUpdateCsvFileParser.Setup(s => s.ParseStream(_dummyStream.Object))
+                                     .Returns(new CsvParseResult { Success = true });
+
+            var stockUpdateResult = new StockUpdateResult { Success = false, FailedProducts = null };
+            _updateStockServiceMock.Setup(s => s.IncrementProductStocksForOutpost(It.IsAny<IParseResult>(), _outpostId, It.IsAny<StockUpdateMethod>()))
+                .Returns(stockUpdateResult);
+
+            _sut.ProcessWarehouseStockData(_dummyStream.Object, _outpostId);
+
+            _assigningExistingProductsToWarehouseServiceMock.Verify(
+                s => s.AssigningProductsToWarehouse(stockUpdateResult.FailedProducts, _outpostId), Times.Never());
+        }
+
+        [Test]
+        public void ProcessWarehouseStockData_TryToMakeAnotherStockUpdate_WhenParseSuccessAndThereAreFailedProducts()
+        {
+            _stockUpdateCsvFileParser.Setup(s => s.ParseStream(_dummyStream.Object))
+                                     .Returns(new CsvParseResult { Success = true });
+
+            var stockUpdateResult = new StockUpdateResult { Success = false, FailedProducts = CreateFailedProducts() };
+            _updateStockServiceMock.Setup(s => s.IncrementProductStocksForOutpost(It.IsAny<IParseResult>(), _outpostId, It.IsAny<StockUpdateMethod>()))
+                .Returns(stockUpdateResult);
+
+            var csvParseResult = new CsvParseResult
+            {
+                Success = true,
+                ParsedProducts = stockUpdateResult.FailedProducts
+            };
+
+            _sut.ProcessWarehouseStockData(_dummyStream.Object, _outpostId);
+
+            _updateStockServiceMock.Verify(
+                s => s.IncrementProductStocksForOutpost(It.Is<CsvParseResult>(x => x.Success == true), _outpostId, StockUpdateMethod.CSV));
+
+            _updateStockServiceMock.Verify(
+                s => s.IncrementProductStocksForOutpost(It.Is<CsvParseResult>(x => x.Success == true && x.ParsedProducts == stockUpdateResult.FailedProducts), _outpostId, StockUpdateMethod.CSV));
+
         }
 
         [Test]
         public void IncrementsStockLevelsFromParsedDataFromTheStream_WhenParsingSuccessful()
         {
             var list = new List<IParsedProduct>();
-            
+
             _stockUpdateCsvFileParser.Setup(s => s.ParseStream(_dummyStream.Object))
-                                     .Returns(new CsvParseResult {ParsedProducts = list, Success = true});
+                                     .Returns(new CsvParseResult { ParsedProducts = list, Success = true });
+
+            _updateStockServiceMock.Setup(s => s.IncrementProductStocksForOutpost(It.IsAny<IParseResult>(), _outpostId, It.IsAny<StockUpdateMethod>()))
+                .Returns(new StockUpdateResult());
 
             _sut.ProcessWarehouseStockData(_dummyStream.Object, _outpostId);
 
@@ -47,7 +110,7 @@ namespace Tests.Unit.WarehouseManagementWorkflow
         public void DoesNotIncrementStock_WhenParsingFails()
         {
             _stockUpdateCsvFileParser.Setup(s => s.ParseStream(_dummyStream.Object))
-                                     .Returns(new CsvParseResult {Success = false});
+                                     .Returns(new CsvParseResult { Success = false });
 
             _sut.ProcessWarehouseStockData(_dummyStream.Object, _outpostId);
 
@@ -59,7 +122,7 @@ namespace Tests.Unit.WarehouseManagementWorkflow
         public void ReturnsNullFailedProductsAndSuccessTrue_WhenParseSuccessAndNoFailedProducts()
         {
             _stockUpdateCsvFileParser.Setup(s => s.ParseStream(_dummyStream.Object))
-                                     .Returns(new CsvParseResult {Success = true});
+                                     .Returns(new CsvParseResult { Success = true });
 
             _updateStockServiceMock.Setup(s => s.IncrementProductStocksForOutpost(It.IsAny<CsvParseResult>(), _outpostId, StockUpdateMethod.CSV))
                                      .Returns(new StockUpdateResult { FailedProducts = null, Success = true });

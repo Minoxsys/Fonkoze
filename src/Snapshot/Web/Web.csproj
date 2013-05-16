@@ -530,6 +530,8 @@
     <Compile Include="Validation\ValidDate\ValidDate.cs" />
     <Compile Include="WarehouseMgmtUseCase\Controllers\WarehouseManagementController.cs" />
     <Compile Include="WarehouseMgmtUseCase\Model\CsvParseResult.cs" />
+    <Compile Include="WarehouseMgmtUseCase\Services\AssigningExistingProductsToWarehouseService.cs" />
+    <Compile Include="WarehouseMgmtUseCase\Services\IAssigningExistingProductsToWarehouseService.cs" />
     <Compile Include="WarehouseMgmtUseCase\Services\IStockUpdateCsvFileParserService.cs" />
     <Compile Include="WarehouseMgmtUseCase\Services\IWarehouseManagementWorkflowService.cs" />
     <Compile Include="WarehouseMgmtUseCase\Services\StockUpdateCsvFileParserService.cs" />
