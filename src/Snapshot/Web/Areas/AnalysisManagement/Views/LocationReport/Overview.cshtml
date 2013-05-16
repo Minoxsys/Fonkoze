@@ -228,25 +228,7 @@ Analysis: Location Report
                     combo.setValue('@Guid.Empty');
                 },
                 'select': function (combo, record) {
-                    ResetCountryDependencies('@Guid.Empty');
-                    ClearDistrictStore();
-
-                    window.feature.regionStore.proxy.extraParams.countryId = combo.getValue();
-                    window.feature.regionStore.load();
-                    window.feature.regionMarkersStore.proxy.extraParams.countryId = combo.getValue();
-                    window.feature.regionMarkersStore.load();
-                    window.feature.districtMarkersStore.proxy.extraParams.countryId = combo.getValue();
-                    window.feature.districtMarkersStore.load();
-                    window.feature.outpostMarkersStore.proxy.extraParams.countryId = combo.getValue();
-                    window.feature.outpostMarkersStore.load();
-
-                    ClearMarkers();
-
-                    window.feature.countryMarkersStore.proxy.extraParams.countryId = combo.getValue();
-                    window.feature.countryMarkersStore.load(function () {
-                        var map = googleMapPanel.getMap();
-                        map.setZoom(4);
-                    });
+                    loadMap(combo);
 
                 },
                 specialkey: function (field, e) {
@@ -277,6 +259,13 @@ Analysis: Location Report
                             map.setZoom(4);
                         });
                     }
+                }
+                ,
+                render: function (p) {
+                    p.setLoading({
+                        store: p.getStore(),
+                        shadow: false
+                    });
                 }
             }
         });
@@ -339,6 +328,13 @@ Analysis: Location Report
                         });
                     }
                 }
+                ,
+                render: function (p) {
+                    p.setLoading({
+                        store: p.getStore(),
+                        shadow: false
+                    });
+                }
             }
         });
 
@@ -388,6 +384,12 @@ Analysis: Location Report
                             map.setZoom(6);
                         });
                     }
+                },
+                render: function (p) {
+                    p.setLoading({
+                        store: p.getStore(),
+                        shadow: false
+                    });
                 }
             }
         });
@@ -446,6 +448,29 @@ Analysis: Location Report
                 }]
             }]
         });
+
+        function loadMap(combo)
+        {
+            ResetCountryDependencies('@Guid.Empty');
+            ClearDistrictStore();
+
+            window.feature.regionStore.proxy.extraParams.countryId = combo.getValue();
+            window.feature.regionStore.load();
+            window.feature.regionMarkersStore.proxy.extraParams.countryId = combo.getValue();
+            window.feature.regionMarkersStore.load();
+            window.feature.districtMarkersStore.proxy.extraParams.countryId = combo.getValue();
+            window.feature.districtMarkersStore.load();
+            window.feature.outpostMarkersStore.proxy.extraParams.countryId = combo.getValue();
+            window.feature.outpostMarkersStore.load();
+
+            ClearMarkers();
+
+            window.feature.countryMarkersStore.proxy.extraParams.countryId = combo.getValue();
+            window.feature.countryMarkersStore.load(function () {
+                var map = googleMapPanel.getMap();
+                map.setZoom(4);
+            });
+        }
 
         function centerOnPlace(country, map) {
             var geocoder = new google.maps.Geocoder();
@@ -582,7 +607,20 @@ Analysis: Location Report
         window.feature.districtMarkersStore.load();
         window.feature.outpostMarkersStore.load();
 
-        window.feature.countryStore.load();
+        window.feature.countryStore.load({
+            callback: function () {
+                var countryCombobox = window.feature.container.down('#' + window.feature.countryComboboxId);
+                if (countryCombobox.getStore().getCount() > 0) {
+                    countryCombobox.setValue(countryCombobox.getStore().getAt(1).get(countryCombobox.valueField));
+                    window.feature.regionStore.load({
+                        params: { countryId: countryCombobox.getValue() }
+                    });
+                    loadMap(countryCombobox);
+                }
+            }
+        });
+
+      
 
     });
 
