@@ -161,6 +161,36 @@ Analysis: Location Report
             }
         });
 
+        window.feature.districtProductsStore = Ext.create('Ext.data.Store', {
+            fields: ['Id', 'Name', 'Number', 'Coordonates'],
+            proxy: {
+                type: 'ajax',
+                url: '@Url.RouteUrl(Web.Areas.AnalysisManagement.AnalysisManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "LocationReport", action = "GetOutpostMarkers" })',
+                reader: {
+                    type: 'json',
+                    root: 'Districts',
+                    totalProperty: 'TotalItems'
+                },
+                extraParams: { countryId: '',regionId:'' },
+                simpleSortMode: true
+            }
+        });
+        window.feature.outpostProductsStore = Ext.create('Ext.data.Store', {
+            fields: ['Id', 'Name', 'Number', 'Coordonates'],
+            proxy: {
+                type: 'ajax',
+                url: '@Url.RouteUrl(Web.Areas.AnalysisManagement.AnalysisManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "LocationReport", action = "GetOutpostMarkers" })',
+                reader: {
+                    type: 'json',
+                    root: 'Outpost',
+                    totalProperty: 'TotalItems'
+                },
+                extraParams: { countryId: '', regionId: '' },
+                simpleSortMode: true
+            }
+        });
+
+
         function ResetCountryDependencies(value) {
             var regionCombobox = window.feature.container.down('#' + window.feature.regionComboboxId);
             regionCombobox.setValue(value);
@@ -394,7 +424,7 @@ Analysis: Location Report
             }
         });
 
-
+        
 
         window.feature.container = Ext.create('Ext.container.Container', {
             margin: '15 15 15 15',
@@ -402,12 +432,12 @@ Analysis: Location Report
             autoScroll: true,
             id: 'TopContainer',
             layout: {
-                align: 'stretch',
-                type: 'hbox'
+                //align: 'stretch',
+                type: 'fit'
             },
             items: [{
                 xtype: 'container',
-                flex: 1,
+               // flex: 1,
                 layout: {
                     align: 'stretch',
                     type: 'vbox'
@@ -435,17 +465,94 @@ Analysis: Location Report
                             window.feature.district
                         ]
                     }]
-                }, {
+                },
+                
+                {
                     xtype: 'container',
-                    flex: 1,
-                    layout: {
+                    flex:2,
+                    layout:{
                         align: 'stretch',
-                        type: 'vbox'
+                        //pack:'start',
+                        type: 'hbox'
                     },
-                    items: [
-                        googleMapPanel
+                    items:[
+                    {
+                        xtype: 'container',
+                        flex: 1,
+                        layout: {
+                            type:'vbox'
+                        },
+                        items:[{
+                            xtype: 'gridpanel',
+                            cls: 'white-border',
+                           // margin:'0 0 5 0' why u no work??!!
+                           // width:100,
+                            autoScroll: true,
+                            columns: [{
+                                header: 'Districts',
+                               // flex: 1,
+                              //  minWidth: 20,
+
+                            },
+                            {
+                                header: 'Green',
+                               // flex: 1,
+                              //  minWidth: 20,
+                            },
+                            {
+                                header: 'Red',
+                               // flex: 1,
+                               // minWidth: 20,
+                            },
+                            {
+                                header: 'Total',
+                              //  flex: 1,
+                               // minWidth: 20,
+                            },
+                            ]
+                        },
+                        {
+                            xtype: 'gridpanel',
+                            cls: 'white-border',
+
+                            autoScroll: true,
+                            columns: [{
+                                header: 'Sellers',
+                               
+
+                            },
+                            {
+                                header: 'Prod 1',
+                               
+                            },
+                            {
+                                header: ' Prod 2 ',
+                               
+                            },
+                            {
+                                header: 'Prod 3',
+                               
+                            },
+                            ]
+                        }]
+                        
+                    },
+                    {
+                        xtype: 'container',
+                        flex: 4,
+                        layout: {
+                            align: 'stretch',
+                            type: 'vbox'
+                        },
+                        items: [
+                            googleMapPanel
+                        ]
+                    }
                     ]
-                }]
+
+                    
+                }
+                ]
             }]
         });
 
