@@ -63,7 +63,7 @@
                         }, {
                             xtype: 'label',
                             tdAttrs: { valign: 'top' },
-                            text: 'This report will show stock levels for different outposts.'
+                            text: 'This report shows the geographical position of sellers and their stock levels.'
                         }, {
                             xtype: 'image',
                             autoEl:
@@ -81,12 +81,12 @@
                                 tag: 'a',
                                 cls: 'blue-label analysis-label',
                                 href: '@(Url.RouteUrl<Web.Areas.AnalysisManagement.Controllers.ReportRegionLevelController>(x => x.Overview(), Web.Areas.AnalysisManagement.AnalysisManagementAreaRegistration.DEFAULT_ROUTE))',
-                                html: 'Product level information'
+                                html: 'Product Level Information'
                             }
                         }, {
                             xtype: 'label',
                             tdAttrs: { valign: 'top' },
-                            text: 'This report will show you the latest data of product levels.'
+                            text: 'This report shows detailed information about stock levels.'
                         }, {
                             xtype: 'image',
                             autoEl:
@@ -104,12 +104,12 @@
                                 tag: 'a',
                                 cls: 'blue-label analysis-label',
                                 href: '@(Url.RouteUrl<Web.Areas.StockAdministration.Controllers.HistoricalProductLevelController>(x => x.Overview(), Web.Areas.StockAdministration.StockAdministrationAreaRegistration.DEFAULT_ROUTE))',
-                                html: 'Historical Report'
+                                html: 'Sales Report'
                             }
                         }, {
                             xtype: 'label',
                             tdAttrs: { valign: 'top' },
-                            text: 'This report will show you the stock usage.'
+                            text: 'This report shows details about product distribution to clients.'
                         }
                     ]
                 },
