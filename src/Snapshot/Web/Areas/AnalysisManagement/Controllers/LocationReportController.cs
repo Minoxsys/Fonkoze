@@ -8,6 +8,7 @@ using Domain;
 using Core.Domain;
 using Web.Areas.AnalysisManagement.Models.LocationReport;
 using Web.Services.StockUpdates;
+using Web.Models.Shared;
 
 namespace Web.Areas.AnalysisManagement.Controllers
 {
@@ -65,6 +66,62 @@ namespace Web.Areas.AnalysisManagement.Controllers
             }, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpGet]
+        public JsonResult GetDistrictsGridContent(FilterModel filter)
+        {
+            LoadUserAndClient();
+
+            var oslQueryable = QueryStockLevel.Query().Where(it => it.Client == _client);
+            if (filter.countryId != Guid.Empty)
+                oslQueryable = oslQueryable.Where(it => it.Outpost.Country.Id == filter.countryId);
+            if (filter.regionId != Guid.Empty)
+                oslQueryable = oslQueryable.Where(it => it.Outpost.Region.Id == filter.regionId);
+            if (filter.districtId != Guid.Empty)
+                oslQueryable = oslQueryable.Where(it => it.Outpost.District.Id == filter.districtId);
+           List<DistrictsGridModel> gridContentLst = new List<DistrictsGridModel>();
+          
+            List<OutpostStockLevel> oslLst = oslQueryable.ToList();
+            IEnumerable<IGrouping<District, OutpostStockLevel>> oslGroupByDistrict = oslLst.GroupBy(it => it.Outpost.District);
+            foreach (IGrouping<District, OutpostStockLevel> grDistrict in oslGroupByDistrict)
+            {
+                DistrictsGridModel gridItem = new DistrictsGridModel() { DistrictName=grDistrict.Key.Name,GreenOutposts=0,RedOutposts=0,TotalOutposts=0};
+
+                IEnumerable<IGrouping<Outpost, OutpostStockLevel>> oslGroupByOutpost = grDistrict.GroupBy(it => it.Outpost);
+                
+                gridItem.TotalOutposts = NoOfOutposts(grDistrict.Key);//* the grDistrict doesn't contain the outposts with no products assigned
+
+                foreach(IGrouping<Outpost, OutpostStockLevel> gr in oslGroupByOutpost)
+                {
+                    BuildDistrictGridItem(gr, ref gridItem);
+                    
+                }
+                gridItem.RedOutposts = gridItem.TotalOutposts - gridItem.GreenOutposts;
+                gridContentLst.Add(gridItem);
+            }
+
+
+            return Json(new StoreOutputModel<DistrictsGridModel>
+            {
+                Items = gridContentLst.ToArray(),
+                TotalItems = gridContentLst.Count
+            }, JsonRequestBehavior.AllowGet);
+        }
+        private void BuildDistrictGridItem(IGrouping<Outpost, OutpostStockLevel> group, ref DistrictsGridModel gridItem)
+        {
+            if (group.Count<OutpostStockLevel>() == 0)
+            {
+                return;
+            }
+            var resultRed = group.Where(it => it.StockLevel <= it.Product.LowerLimit);
+            if (resultRed.Count() > 0)
+            {
+                gridItem.RedOutposts++;
+            }
+            else
+            {
+                gridItem.GreenOutposts++;
+            }
+        }
 
         internal CssClassAndInfoWinContent GetCssClassAndInfoWindowContentForMarker(Country country, Region region, District district, Outpost outpost, Client client)
         {

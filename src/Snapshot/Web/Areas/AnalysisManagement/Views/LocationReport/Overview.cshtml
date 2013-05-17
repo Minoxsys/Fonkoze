@@ -161,17 +161,17 @@ Analysis: Location Report
             }
         });
 
-        window.feature.districtProductsStore = Ext.create('Ext.data.Store', {
-            fields: ['Id', 'Name', 'Number', 'Coordonates'],
+        window.feature.districtOutpostsStore = Ext.create('Ext.data.Store', {
+            fields: ['DistrictName', 'RedOutposts', 'GreenOutposts', 'TotalOutposts'],
             proxy: {
                 type: 'ajax',
-                url: '@Url.RouteUrl(Web.Areas.AnalysisManagement.AnalysisManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "LocationReport", action = "GetOutpostMarkers" })',
+                url: '@Url.RouteUrl(Web.Areas.AnalysisManagement.AnalysisManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "LocationReport", action = "GetDistrictsGridContent" })',
                 reader: {
                     type: 'json',
-                    root: 'Districts',
+                    root: 'Items',
                     totalProperty: 'TotalItems'
                 },
-                extraParams: { countryId: '',regionId:'' },
+                extraParams: { countryId: '',regionId:'',districtId:'' },
                 simpleSortMode: true
             }
         });
@@ -259,6 +259,7 @@ Analysis: Location Report
                 },
                 'select': function (combo, record) {
                     loadMap(combo);
+                    loadDistrictsGrid(combo,'country');
 
                 },
                 specialkey: function (field, e) {
@@ -268,6 +269,7 @@ Analysis: Location Report
                         ClearRegionsStore();
                         ClearDistrictStore();
 
+                        
                         window.feature.outpostMarkersStore.proxy.extraParams.districtId = '';
                         window.feature.outpostMarkersStore.proxy.extraParams.regionId = '';
                         window.feature.outpostMarkersStore.proxy.extraParams.countryId = '';
@@ -316,6 +318,7 @@ Analysis: Location Report
                 'afterrender': function (combo, record) {
                     window.feature.regionStore.load();
                     combo.setValue('@Guid.Empty');
+                    
                 },
                 'select': function (combo, record) {
                     ResetRegionDependencies('@Guid.Empty');
@@ -326,7 +329,7 @@ Analysis: Location Report
                     window.feature.districtMarkersStore.load();
                     window.feature.outpostMarkersStore.proxy.extraParams.regionId = combo.getValue();
                     window.feature.outpostMarkersStore.load();
-
+                    loadDistrictsGrid(combo,'region');
                     ClearMarkers();
 
                     window.feature.regionMarkersStore.proxy.extraParams.regionId = combo.getValue();
@@ -389,7 +392,7 @@ Analysis: Location Report
 
                     window.feature.outpostMarkersStore.proxy.extraParams.districtId = combo.getValue();
                     window.feature.outpostMarkersStore.load();
-
+                    loadDistrictsGrid(combo,'district');
                     ClearMarkers();
 
                     window.feature.districtMarkersStore.proxy.extraParams.districtId = combo.getValue();
@@ -485,27 +488,33 @@ Analysis: Location Report
                         items:[{
                             xtype: 'gridpanel',
                             cls: 'white-border',
+                            store:window.feature.districtOutpostsStore,
+                            layout:'fit',
                            // margin:'0 0 5 0' why u no work??!!
-                           // width:100,
                             autoScroll: true,
+                            disableSelection: true,
                             columns: [{
                                 header: 'Districts',
+                                dataIndex:'DistrictName',
                                // flex: 1,
                               //  minWidth: 20,
 
                             },
                             {
-                                header: 'Green',
+                                header: 'Red',
+                                dataIndex:'RedOutposts'
                                // flex: 1,
                               //  minWidth: 20,
                             },
                             {
-                                header: 'Red',
+                                header: 'Green',
+                                dataIndex:'GreenOutposts',
                                // flex: 1,
                                // minWidth: 20,
                             },
                             {
                                 header: 'Total',
+                                dataIndex:'TotalOutposts',
                               //  flex: 1,
                                // minWidth: 20,
                             },
@@ -555,6 +564,25 @@ Analysis: Location Report
                 ]
             }]
         });
+
+        function loadDistrictsGrid(combo,whichCombo)
+        {
+            switch(whichCombo)
+            {
+                case "country":
+                    window.feature.districtOutpostsStore.proxy.extraParams.countryId = combo.getValue();
+                    break;
+                case "region":
+                    window.feature.districtOutpostsStore.proxy.extraParams.regionId = combo.getValue();
+                    break;
+                case "district":
+                    window.feature.districtOutpostsStore.proxy.extraParams.districtId = combo.getValue();
+                    break;
+
+            }
+            window.feature.districtOutpostsStore.load();
+            
+        }
 
         function loadMap(combo)
         {
@@ -723,6 +751,7 @@ Analysis: Location Report
                         params: { countryId: countryCombobox.getValue() }
                     });
                     loadMap(countryCombobox);
+                    loadDistrictsGrid(countryCombobox,'country');
                 }
             }
         });
