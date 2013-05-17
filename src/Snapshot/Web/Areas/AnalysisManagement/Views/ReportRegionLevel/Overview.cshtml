@@ -409,6 +409,8 @@ Analysis: Product level information at region level
 
         mainContent.add(window.feature.container);
 
+        window.feature.treegrid.setRootNode(null);
+
         window.feature.CountryStore.load();
         window.feature.RegionStore.load({
             params: { CountryId: allCountryGUID }
@@ -416,5 +418,11 @@ Analysis: Product level information at region level
 
         window.feature.comboBoxCountries.setValue(allCountryGUID);
         window.feature.comboBoxRegions.setValue(allRegionGUID);
+
+        window.feature.treegrid.getStore().proxy.extraParams.CountryId = allCountryGUID;
+        window.feature.treegrid.getStore().proxy.extraParams.RegionId = allRegionGUID;
+
+        window.feature.treegrid.getRootNode().expand();
+        
     });
 </script>

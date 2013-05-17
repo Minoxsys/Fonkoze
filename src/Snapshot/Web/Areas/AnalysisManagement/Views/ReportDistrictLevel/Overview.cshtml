@@ -505,6 +505,8 @@ Analysis: Product level information at district level
 
         mainContent.add(window.feature.container);
 
+        window.feature.treegrid.setRootNode(null);
+
         window.feature.CountryStore.load();
         window.feature.RegionStore.load({
             params: { CountryId: allCountryGUID }
@@ -516,5 +518,11 @@ Analysis: Product level information at district level
         window.feature.comboBoxCountries.setValue(allCountryGUID);
         window.feature.comboBoxRegions.setValue(allRegionGUID);
         window.feature.comboBoxRegions.setValue(allDistrictGUID);
+
+        window.feature.treegrid.getStore().proxy.extraParams.CountryId = allCountryGUID;
+        window.feature.treegrid.getStore().proxy.extraParams.RegionId = allRegionGUID;
+        window.feature.treegrid.getStore().proxy.extraParams.DistrictId = allDistrictGUID;
+
+        window.feature.treegrid.getRootNode().expand();
     });
 </script>

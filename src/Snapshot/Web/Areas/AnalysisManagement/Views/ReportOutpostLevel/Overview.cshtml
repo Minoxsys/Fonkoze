@@ -91,7 +91,7 @@ Analysis: Product level information at seller level
             listeners: {
                 datachanged: function () {
                     var districtIdAll = this.data.items[0].data.Id;
-                    window.feature.comboboxDistricts.setValue(districtIdAll);
+                    window.feature.comboBoxDistricts.setValue(districtIdAll);
                 }
             }
         });
@@ -189,7 +189,7 @@ Analysis: Product level information at seller level
             }
         });
 
-        window.feature.comboboxDistricts = Ext.create('Ext.form.ComboBox', {
+        window.feature.comboBoxDistricts = Ext.create('Ext.form.ComboBox', {
             store: window.feature.DistrictStore,
             queryMode: 'local',
             id: window.feature.comboboxDistrictsId,
@@ -568,7 +568,7 @@ Analysis: Product level information at seller level
                         items: [
                                 window.feature.comboBoxCountries,
 							    window.feature.comboBoxRegions,
-                                window.feature.comboboxDistricts,
+                                window.feature.comboBoxDistricts,
                                 window.feature.comboBoxOutposts
                         ]
                   }]
@@ -603,6 +603,8 @@ Analysis: Product level information at seller level
 
         mainContent.add(window.feature.container);
 
+        window.feature.treegrid.setRootNode(null);
+
         window.feature.CountryStore.load();
         window.feature.RegionStore.load({
             params: { CountryId: allCountryGUID }
@@ -614,8 +616,14 @@ Analysis: Product level information at seller level
 
         window.feature.comboBoxCountries.setValue(allCountryGUID);
         window.feature.comboBoxRegions.setValue(allRegionGUID);
-        window.feature.comboBoxRegions.setValue(allDistrictGUID);
+        window.feature.comboBoxDistricts.setValue(allDistrictGUID);
         window.feature.comboBoxOutposts.setValue(allOutpostGUID);
 
+        window.feature.treegrid.getStore().proxy.extraParams.CountryId = allCountryGUID;
+        window.feature.treegrid.getStore().proxy.extraParams.RegionId = allRegionGUID;
+        window.feature.treegrid.getStore().proxy.extraParams.DistrictId = allDistrictGUID;
+        window.feature.treegrid.getStore().proxy.extraParams.OutpostId = allOutpostGUID;
+        
+        window.feature.treegrid.getRootNode().expand();
     });
 </script>
