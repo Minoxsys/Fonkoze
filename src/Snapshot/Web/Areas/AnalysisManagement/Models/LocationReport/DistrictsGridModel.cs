@@ -10,6 +10,7 @@ namespace Web.Areas.AnalysisManagement.Models.LocationReport
         public string DistrictName { get; set; }
         public int TotalOutposts { get; set; }
         public int GreenOutposts { get; set; }
+        public int AmberOutposts { get; set; }
         public int RedOutposts { get; set; }
     }
 }

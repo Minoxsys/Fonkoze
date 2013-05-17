@@ -162,7 +162,7 @@ Analysis: Location Report
         });
 
         window.feature.districtOutpostsStore = Ext.create('Ext.data.Store', {
-            fields: ['DistrictName', 'RedOutposts', 'GreenOutposts', 'TotalOutposts'],
+            fields: ['DistrictName', 'RedOutposts','AmberOutposts', 'GreenOutposts', 'TotalOutposts'],
             proxy: {
                 type: 'ajax',
                 url: '@Url.RouteUrl(Web.Areas.AnalysisManagement.AnalysisManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "LocationReport", action = "GetDistrictsGridContent" })',
@@ -505,6 +505,12 @@ Analysis: Location Report
                                 dataIndex:'RedOutposts'
                                // flex: 1,
                               //  minWidth: 20,
+                            },
+                            {
+                                header: 'Amber',
+                                dataIndex: 'AmberOutposts'
+                                // flex: 1,
+                                //  minWidth: 20,
                             },
                             {
                                 header: 'Green',

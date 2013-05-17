@@ -66,6 +66,12 @@ namespace Web.Areas.AnalysisManagement.Controllers
             }, JsonRequestBehavior.AllowGet);
         }
 
+        //[HttpGet]
+        //public JsonResult GetSellersGridContent(FilterModel filter)
+        //{ 
+        
+        //}
+
         [HttpGet]
         public JsonResult GetDistrictsGridContent(FilterModel filter)
         {
@@ -95,7 +101,7 @@ namespace Web.Areas.AnalysisManagement.Controllers
                     BuildDistrictGridItem(gr, ref gridItem);
                     
                 }
-                gridItem.RedOutposts = gridItem.TotalOutposts - gridItem.GreenOutposts;
+                gridItem.RedOutposts = gridItem.TotalOutposts - gridItem.GreenOutposts - gridItem.AmberOutposts;
                 gridContentLst.Add(gridItem);
             }
 
@@ -119,7 +125,11 @@ namespace Web.Areas.AnalysisManagement.Controllers
             }
             else
             {
-                gridItem.GreenOutposts++;
+                var resultAmber = group.Where(it => it.StockLevel <= (it.Product.LowerLimit + it.Product.LowerLimit * 20 / 100) && it.StockLevel > it.Product.LowerLimit);
+                if (resultAmber.Count() > 0)
+                    gridItem.AmberOutposts++;
+                else
+                    gridItem.GreenOutposts++;
             }
         }
 
