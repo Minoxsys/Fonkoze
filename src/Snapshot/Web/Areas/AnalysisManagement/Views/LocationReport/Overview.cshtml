@@ -276,7 +276,8 @@ Analysis: Location Report
                 },
                 'select': function (combo, record) {
                     loadMap(combo);
-                    loadDistrictsGrid(combo,'country');
+                    loadDistrictsGrid(combo, 'country');
+                    loadSellersGrid();
 
                 },
                 specialkey: function (field, e) {
@@ -346,7 +347,8 @@ Analysis: Location Report
                     window.feature.districtMarkersStore.load();
                     window.feature.outpostMarkersStore.proxy.extraParams.regionId = combo.getValue();
                     window.feature.outpostMarkersStore.load();
-                    loadDistrictsGrid(combo,'region');
+                    loadDistrictsGrid(combo, 'region');
+                    loadSellersGrid();
                     ClearMarkers();
 
                     window.feature.regionMarkersStore.proxy.extraParams.regionId = combo.getValue();
@@ -376,6 +378,7 @@ Analysis: Location Report
                         window.feature.regionMarkersStore.load(function () {
                             map.setZoom(5);
                         });
+                        loadSellersGrid();
                     }
                 }
                 ,
@@ -599,7 +602,7 @@ Analysis: Location Report
             gridColumns.push({
                 header: 'Sellers',
                 dataIndex: 'OutpostName',
-               // locked: true, *this might wotk after extjs update
+                //locked: true, //*this might wotk after extjs update
 
             });
             productFields.forEach(function (entry) {
@@ -677,11 +680,15 @@ Analysis: Location Report
             })
             gridStore.loadData(dataStore);
             var container = Ext.getCmp('gridsContainer');
+            var grid = Ext.getCmp('sellersGrid');
+            container.remove(grid);
 
             container.add({
                 xtype: 'gridpanel',
                 cls: 'white-border',
-                loadMask:true,
+                id:'sellersGrid',
+                loadMask: true,
+               // enableLocking:true,
                 disableSelection: true,
                 store:gridStore,
                 autoScroll: true,
