@@ -914,12 +914,16 @@
                         {
                             text: "Seller Name",
                             dataIndex: 'Name',
+                            style: 'cursor: pointer;',
                             flex: 1,
                             minWidth: 150,
                             menuDisabled: true,
                             sortable: true,
-                            renderer: addTooltip,
-                            processEvent: function (type, view, cell, recordIndex, cellIndex, e) {
+                            renderer: function (val, meta, rec, rowIdx, colIdx, ds) {
+                                meta.style = 'cursor: pointer;';
+                                addTooltip(val, meta, rec, rowIdx, colIdx, ds);
+                                return val; },
+                           processEvent: function (type, view, cell, recordIndex, cellIndex, e) {
                                 if (type == 'click'){
                                     if (@(ViewBag.HasNoRightsToAdd) === true){
                                         var msgAlert = Ext.Msg;
