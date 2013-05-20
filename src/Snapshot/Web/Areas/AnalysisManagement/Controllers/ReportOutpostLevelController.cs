@@ -9,6 +9,7 @@ using Domain;
 using Web.Areas.AnalysisManagement.Models.ReportDistrictLevel;
 using Web.Areas.AnalysisManagement.Models.ReportOutpostLevel;
 using Web.Areas.StockAdministration.Models.OutpostStockLevel;
+using Web.Models.Shared;
 
 
 namespace Web.Areas.AnalysisManagement.Controllers
@@ -35,9 +36,9 @@ namespace Web.Areas.AnalysisManagement.Controllers
             return View();
         }
 
-        public ActionResult GraphicOverview()
+        public ActionResult GraphicOverview(FilterModel filter)
         {
-            return View();
+            return View(filter);
         }
 
         public JsonResult GetReports(ReportOutpostLevelInputModel inputModel)

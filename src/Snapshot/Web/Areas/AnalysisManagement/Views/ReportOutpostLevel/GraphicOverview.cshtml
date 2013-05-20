@@ -12,6 +12,7 @@ Analysis: Product level information at seller level
     Html.RenderPartial("_AnalysisSideBar");
 }
 
+@model Web.Models.Shared.FilterModel
 
 <script type="text/javascript">
 
@@ -377,7 +378,7 @@ Analysis: Product level information at seller level
             cont.add({
                 id: 'chart2DistrictLevel',
                 xtype: 'chart',
-                flex: 5,               
+                flex: 3,               
                 //minHeight: 650,
                 margin: '0 0 0 70',
                 // animate: true,
@@ -554,6 +555,63 @@ Analysis: Product level information at seller level
 
         mainContent.add(window.feature.container);
         window.feature.CountryStore.load();
+        window.feature.OutpostStore.load({
+            callback: function () {
+                if ('@Model.outpostId' != '@Guid.Empty') {
+                    window.feature.comboBoxOutposts.setValue('@Model.outpostId');
+                 }
+            }
+        });
+
+        //window.feature.RegionStore.load({
+        //    params: { CountryId: allCountryGUID }
+        //});
+        //window.feature.DistrictStore.load({
+        //    params: { CountryId: allCountryGUID, RegionId: allRegionGUID }
+        //});
+        //window.feature.OutpostStore.load();
+
+        if ('@Model.countryId' == '@Guid.Empty' && '@Model.regionId' == '@Guid.Empty' && '@Model.districtId' == '@Guid.Empty' && '@Model.outpostId' == '@Guid.Empty') {
+            window.feature.RegionStore.load();
+            window.feature.DistrictStore.load();
+            
+        }
+        else {
+            if ('@Model.countryId' != '@Guid.Empty') {
+                
+                window.feature.RegionStore.load({
+                    params: { countryId: '@Model.countryId' },
+                    callback: function () {
+                        window.feature.comboBoxCountries.setValue('@Model.countryId');
+                    }
+            });
+
+        }
+        if ('@Model.regionId' != '@Guid.Empty') {
+               
+
+            window.feature.DistrictStore.load({
+                params: { regionId: '@Model.regionId' },
+                callback: function () {
+                    window.feature.comboBoxRegions.setValue('@Model.regionId');
+                }
+            });
+
+        }
+        if ('@Model.districtId' != '@Guid.Empty') {
+                
+
+            window.feature.OutpostStore.load({
+                params: { districtId: '@Model.districtId' },
+                callback: function () {
+                    window.feature.comboboxDistricts.setValue('@Model.districtId');
+                }
+            });
+        }
+       
+        }
+
+        
 
 
 

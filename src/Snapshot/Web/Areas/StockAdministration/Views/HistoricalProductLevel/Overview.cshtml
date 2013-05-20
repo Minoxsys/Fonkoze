@@ -193,33 +193,6 @@ Historical Product Level: Overview
             data: [['0','All'],['F','Fonkoze'],['N','Non-Fonkoze']]
         })
 
-       @* window.feature.gridOutpostStore = Ext.create('Ext.data.Store', {
-            remoteSort: true,
-            fields: ['Id', 'Name', 'ProductGroupId', 'ProductGroupName', 'SMSResponseDate', 'NumberOfProducts'],
-            groupField: 'Name',
-            proxy: {
-                type: 'ajax',
-                url: '@Url.RouteUrl(StockAdministrationAreaRegistration.DEFAULT_ROUTE, new { controller = "HistoricalProductLevel", action = "GetHistoricalProductLevel" })',
-                reader: {
-                    type: 'json',
-                    root: 'Historical',                    
-                    totalProperty: 'TotalItems'
-                },
-                extraParams: { 
-                    countryId: '', 
-                    regionId: '', 
-                    districtId: '', 
-                    outpostId: '' 
-                },
-                
-                simpleSortMode: true
-            },
-            sorters: [{
-                property: 'Name',
-                direction: 'ASC'
-            }]
-        });*@
-
       
         function ClearDistrictStore(){
             var noOfItemsToDelete = window.feature.districtStore.getCount()-1;
@@ -557,9 +530,18 @@ Historical Product Level: Overview
                 autoScroll: true,
                 features: [
                     {
-                    id: 'group',
-                    ftype: 'groupingsummary',
-                    groupHeaderTpl: '{name}',
+                        id: 'group',
+                        ftype: 'grouping',
+                        groupHeaderTpl: '{name}',
+                       // enableGroupingMenu: true,
+                      //  enableNoGroups:true,
+                       // showSummaryRow:false,
+                    }
+                    ,
+                    {
+                    id: 'totalSummary',
+                    ftype: 'summary',
+                    dock:'bottom',
                     hideGroupedHeader: true,                    
                     startCollapsed: true
                 },
@@ -571,7 +553,7 @@ Historical Product Level: Overview
                     flex: 1,
                     minWidth: 100,
                     sortable: true,
-                    summaryRenderer: function (value) {
+                    summaryRenderer: function (value,summaryData,dataIndex) {
                         return '<b> Total  </b>';
                     }
                    
@@ -592,8 +574,8 @@ Historical Product Level: Overview
                     align: 'center',
                     sortable: true,
                     summaryType: 'sum',
-                    summaryRenderer: function (value) {
-                        return '<b> ' + value + ' </b>';
+                    summaryRenderer: function (value, summaryData, dataIndex) {
+                          return '<b> ' + value + ' </b>';
                     }
                 }],
                 

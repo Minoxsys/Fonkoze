@@ -6,6 +6,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Domain;
 using Web.Areas.AnalysisManagement.Models.LocationReport;
+using Web.Models.Shared;
 
 namespace Tests.Unit.Controllers.Areas.AnalysisManagement.LocationReportControllerTests
 {

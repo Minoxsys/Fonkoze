@@ -172,7 +172,6 @@
     <Compile Include="Areas\AnalysisManagement\Controllers\LocationReportController.cs" />
     <Compile Include="Areas\AnalysisManagement\Controllers\ReportOutpostLevelController.cs" />
     <Compile Include="Areas\AnalysisManagement\Models\LocationReport\DistrictsGridModel.cs" />
-    <Compile Include="Areas\AnalysisManagement\Models\LocationReport\FilterModel.cs" />
     <Compile Include="Areas\AnalysisManagement\Models\LocationReport\MarkerIndexOutputModel.cs" />
     <Compile Include="Areas\AnalysisManagement\Models\LocationReport\MarkerModel.cs" />
     <Compile Include="Areas\AnalysisManagement\Models\LocationReport\OutpostGridModel.cs" />
@@ -184,6 +183,7 @@
     <Compile Include="Areas\AnalysisManagement\Models\ReportOutpostLevel\ProductStackedBarChartModel.cs" />
     <Compile Include="Areas\AnalysisManagement\Models\ReportRegionLevel\ChartInputModel.cs" />
     <Compile Include="Areas\AnalysisManagement\Models\ReportRegionLevel\ChartReferenceOutputModel.cs" />
+    <Compile Include="Models\Shared\FilterModel.cs" />
     <Compile Include="Models\Shared\StoreOutputModel.cs" />
     <Compile Include="Areas\AnalysisManagement\Models\ReportRegionLevel\ProductsReferenceOutputModel.cs" />
     <Compile Include="Areas\AnalysisManagement\Models\ReportOutpostLevel\ReportOutpostLevelTreeModel.cs" />

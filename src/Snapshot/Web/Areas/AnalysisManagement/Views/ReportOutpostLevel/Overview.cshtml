@@ -552,7 +552,10 @@ Analysis: Product level information at seller level
                             cls: 'x-add-button-gradient',
                             text: 'Graphic View',
                             handler: function () {
-                                navigateTo('@(Url.RouteUrl<ReportOutpostLevelController>(x=>x.GraphicOverview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))')
+                                var url = '@(Url.RouteUrl<ReportOutpostLevelController>(x=>x.GraphicOverview(null),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))';
+                                url = url + "/?countryId=" + window.feature.comboBoxCountries.getValue() + "&regionId=" + window.feature.comboBoxRegions.getValue() + "&districtId=" + window.feature.comboBoxDistricts.getValue();
+                                url+= "&outpostId=" + window.feature.comboBoxOutposts.getValue();
+                                navigateTo(url);
                             }
                         }
                         ]
