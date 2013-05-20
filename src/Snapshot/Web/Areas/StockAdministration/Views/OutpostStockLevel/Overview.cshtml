@@ -373,12 +373,14 @@ Seller Stock Level Current
                              window.feature.treegrid.getStore().proxy.extraParams.ProductGroupExpandedOnEdit = ProductGroupExpanded;
                              window.feature.treegrid.setRootNode(null);
                              window.feature.treegrid.getRootNode().expand();
+                             window.feature.treegrid.expandAll();
                              
                              me.close();
                              me.destroy();
 
                             });
                         }
+                        
                     }
                 }]
                 me.callParent(arguments);
@@ -404,7 +406,7 @@ Seller Stock Level Current
         window.feature.treeStore = Ext.create('Ext.data.TreeStore', {
             model: 'OutpostStockLevel',
             autoLoad: false,
-            root: {},
+            root: {expanded:true},
             proxy: {
                 type: 'ajax',
                 url: '@Url.RouteUrl(StockAdministrationAreaRegistration.DEFAULT_ROUTE, new { controller = "OutpostStockLevel", action = "GetOutpostStockLevelData" })',
@@ -686,7 +688,7 @@ Seller Stock Level Current
             
 
             viewProductStatusHandler();
-            window.feature.treegrid.expandAll();
+           
         }
 
         function viewProductStatusHandler() {
@@ -703,6 +705,7 @@ Seller Stock Level Current
                 window.feature.treegrid.getStore().proxy.extraParams.CountryId = selectedCountryId;
                 window.feature.treegrid.getStore().proxy.extraParams.ProductGroupExpandedOnEdit = '';
                 window.feature.treegrid.getRootNode().expand();
+                window.feature.treegrid.expandAll();
               
             } else {
                 var msgAlert = Ext.Msg;
@@ -714,7 +717,7 @@ Seller Stock Level Current
         };
 
         viewProductStatusHandler();
-        window.feature.treegrid.expandAll();
+       
     });
     
 
