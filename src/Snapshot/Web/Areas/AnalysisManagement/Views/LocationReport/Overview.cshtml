@@ -175,22 +175,39 @@ Analysis: Location Report
                 simpleSortMode: true
             }
         });
-        window.feature.outpostProductsStore = Ext.create('Ext.data.Store', {
-            fields: ['Id', 'Name', 'Number', 'Coordonates'],
+
+        Ext.regModel("StockLevelForOutposts", {
+            fields: ['OutpostName', 'Total'],
+            hasMany: { model: 'Product', name: 'Products' },
             proxy: {
-                type: 'ajax',
-                url: '@Url.RouteUrl(Web.Areas.AnalysisManagement.AnalysisManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "LocationReport", action = "GetOutpostMarkers" })',
+                type: 'rest',
+                url: '@Url.RouteUrl(AnalysisManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "LocationReport", action = "GetSellersGridContent" })',
                 reader: {
                     type: 'json',
-                    root: 'Outpost',
+                    root: 'Items',
                     totalProperty: 'TotalItems'
                 },
-                extraParams: { countryId: '', regionId: '' },
-                simpleSortMode: true
+                simpleSortMode: true,
+                extraParams: { CountryId: '', RegionId: '', DistrictId: ''}
             }
         });
 
+        Ext.regModel("Product", {
+            fields: [
+                'ProductName', 'StockLevel','LowerLimit'
+            ],
+            belongsTo: 'StockLevelForOutposts'
+        });
 
+
+        window.feature.StockLevelForOutpostsStore = Ext.create('Ext.data.Store', {
+            remoteSuport: true,
+            model: 'StockLevelForOutposts',
+           
+        });
+
+
+       
         function ResetCountryDependencies(value) {
             var regionCombobox = window.feature.container.down('#' + window.feature.regionComboboxId);
             regionCombobox.setValue(value);
@@ -472,15 +489,15 @@ Analysis: Location Report
                 
                 {
                     xtype: 'container',
-                    flex:2,
+                    flex: 2,
                     layout:{
                         align: 'stretch',
-                        //pack:'start',
                         type: 'hbox'
                     },
                     items:[
                     {
                         xtype: 'container',
+                        id: 'gridsContainer',
                         flex: 1,
                         layout: {
                             type:'vbox'
@@ -488,68 +505,45 @@ Analysis: Location Report
                         items:[{
                             xtype: 'gridpanel',
                             cls: 'white-border',
-                            store:window.feature.districtOutpostsStore,
-                            layout:'fit',
-                           // margin:'0 0 5 0' why u no work??!!
+                            store: window.feature.districtOutpostsStore,
+                            loadMask:true,
+                            maxWidth: 400,
+                            margin:'0 0 20 0',
                             autoScroll: true,
                             disableSelection: true,
                             columns: [{
                                 header: 'Districts',
-                                dataIndex:'DistrictName',
-                               // flex: 1,
-                              //  minWidth: 20,
+                                dataIndex: 'DistrictName',
+                                width:150,
+                                //lock:true,
 
                             },
                             {
                                 header: 'Red',
-                                dataIndex:'RedOutposts'
-                               // flex: 1,
-                              //  minWidth: 20,
+                                dataIndex:'RedOutposts',
+                               width: 60,
                             },
                             {
                                 header: 'Amber',
-                                dataIndex: 'AmberOutposts'
-                                // flex: 1,
-                                //  minWidth: 20,
+                                dataIndex: 'AmberOutposts',
+                                width: 60,
                             },
                             {
                                 header: 'Green',
                                 dataIndex:'GreenOutposts',
-                               // flex: 1,
-                               // minWidth: 20,
+                               width: 60,
                             },
                             {
                                 header: 'Total',
                                 dataIndex:'TotalOutposts',
-                              //  flex: 1,
-                               // minWidth: 20,
+                                width: 60,
                             },
-                            ]
+                            ],
+                            title: 'Seller status per district'
                         },
-                        {
-                            xtype: 'gridpanel',
-                            cls: 'white-border',
+                       
 
-                            autoScroll: true,
-                            columns: [{
-                                header: 'Sellers',
-                               
-
-                            },
-                            {
-                                header: 'Prod 1',
-                               
-                            },
-                            {
-                                header: ' Prod 2 ',
-                               
-                            },
-                            {
-                                header: 'Prod 3',
-                               
-                            },
-                            ]
-                        }]
+                        ]
                         
                     },
                     {
@@ -570,6 +564,122 @@ Analysis: Location Report
                 ]
             }]
         });
+
+      
+
+
+        function loadSellersGrid()
+        {
+            var getFromUrl = '@Url.RouteUrl(AnalysisManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "LocationReport", action = "GetProducts" })';
+            var action = $.get(getFromUrl,
+                   {
+                       countryId: window.feature.container.down('#' + window.feature.countryComboboxId).getValue(),
+                   })
+            action.success(function (response) {
+                productFields = response.split(",");
+                GenerateGridData()
+
+            })
+            
+
+        }
+        var storeFields = [];
+        var dataStore = [];
+        var gridColumns = [];
+        var productFields = [];
+
+        function GenerateGridData()
+        {
+            storeFields = [];
+            dataStore = [];
+            gridColumns = [];
+
+            storeFields.push({ name: 'OutpostName' });;
+            storeFields.push({ name: 'Total', type: 'int' });
+            gridColumns.push({
+                header: 'Sellers',
+                dataIndex: 'OutpostName',
+               // locked: true, *this might wotk after extjs update
+
+            });
+            productFields.forEach(function (entry) {
+                storeFields.push({ name: entry, type: 'int' });
+                gridColumns.push({
+                    header: entry,
+                    dataIndex: entry,
+                    //renderer: function (val, meta, record) {
+                        //Should have access to lowerlimit information somehow
+                        //if (record.data.StockLevel < record.data.LowerLevel) {
+                        //    return '<span style="color:red;">' + val + '</span>';
+                        //}
+                        //else
+                        //{
+                        //    return '<span style="color:green;">' + val + '</span>';
+                        //}
+                 //   }
+                });
+            })
+            gridColumns.push({ header: 'Total', dataIndex: 'Total' });
+
+            window.feature.StockLevelForOutpostsStore.load({
+                params: {
+                    CountryId: window.feature.container.down('#' + window.feature.countryComboboxId).getValue(),
+                    RegionId: window.feature.container.down('#' + window.feature.regionComboboxId).getValue(),
+                    DistrictId: window.feature.container.down('#' + window.feature.districtComboboxId).getValue(),
+                },
+                callback: function () {
+
+                    window.feature.StockLevelForOutpostsStore.each(function (outpost) {
+
+                        var row = new Array(productFields.length + 2);
+                        for (var j = 1; j < row.length; j++) {
+                            row[j] = 0;
+                        }
+                        row[0] = outpost.get('OutpostName');
+                        row[1] = outpost.get('Total');
+                        outpost.Products().each(function (product) {
+
+                            for (var i = 0; i < productFields.length; i++) {
+                                if (productFields[i] == product.get('ProductName')) {
+                                    row[i + 2] = product.get('StockLevel');
+                                    break;
+                                }
+                            }
+                        })
+                        dataStore.push(row);
+                    })
+                    window.feature.executeDelayedGridDisplay.delay(1000);
+                }
+
+
+            })
+
+
+        }
+
+        window.feature.executeDelayedGridDisplay= new Ext.util.DelayedTask(function () {
+
+           var gridStore = new Ext.data.ArrayStore({
+                fields: storeFields
+            })
+            gridStore.loadData(dataStore);
+            var container = Ext.getCmp('gridsContainer');
+
+            container.add({
+                xtype: 'gridpanel',
+                cls: 'white-border',
+                loadMask:true,
+                disableSelection: true,
+                store:gridStore,
+                autoScroll: true,
+                maxWidth:400,
+                maxHeight:800,
+                columns: gridColumns,
+                title:'Sellers and their product status'
+               
+
+            })
+        })
 
         function loadDistrictsGrid(combo,whichCombo)
         {
@@ -757,7 +867,8 @@ Analysis: Location Report
                         params: { countryId: countryCombobox.getValue() }
                     });
                     loadMap(countryCombobox);
-                    loadDistrictsGrid(countryCombobox,'country');
+                    loadDistrictsGrid(countryCombobox, 'country');
+                    loadSellersGrid();
                 }
             }
         });

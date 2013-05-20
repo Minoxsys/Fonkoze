@@ -66,11 +66,48 @@ namespace Web.Areas.AnalysisManagement.Controllers
             }, JsonRequestBehavior.AllowGet);
         }
 
-        //[HttpGet]
-        //public JsonResult GetSellersGridContent(FilterModel filter)
-        //{ 
-        
-        //}
+        [HttpGet]
+        public JsonResult GetSellersGridContent(FilterModel filter)
+        {
+            LoadUserAndClient();
+
+            var oslQueryable = QueryStockLevel.Query().Where(it => it.Client == _client);
+            if (filter.countryId != Guid.Empty)
+                oslQueryable = oslQueryable.Where(it => it.Outpost.Country.Id == filter.countryId);
+            if (filter.regionId != Guid.Empty)
+                oslQueryable = oslQueryable.Where(it => it.Outpost.Region.Id == filter.regionId);
+            if (filter.districtId != Guid.Empty)
+                oslQueryable = oslQueryable.Where(it => it.Outpost.District.Id == filter.districtId);
+           
+            List<OutpostStockLevel> oslLst = oslQueryable.ToList();
+            List<OutpostGridModel> gridContentLst = new List<OutpostGridModel>();
+
+            var oslGroupedByOutpost = oslLst.GroupBy(it => it.Outpost);
+
+            foreach (var byOutpostGroup in oslGroupedByOutpost)
+            {
+                OutpostGridModel gridItem = new OutpostGridModel() { OutpostName = byOutpostGroup.Key.Name };
+                int total = 0;
+                foreach (var osl in byOutpostGroup)
+                {
+                    ProductGridModel product = new ProductGridModel() { ProductName = osl.Product.Name, StockLevel = osl.StockLevel, LowerLimit = osl.Product.LowerLimit };
+
+                    total += osl.StockLevel;
+
+                    gridItem.Products.Add(product);
+                }
+                gridItem.Total = total;
+                gridContentLst.Add(gridItem);
+
+
+            }
+
+            return Json(new StoreOutputModel<OutpostGridModel>
+            {
+                Items = gridContentLst.ToArray(),
+                TotalItems = gridContentLst.Count()
+            }, JsonRequestBehavior.AllowGet);
+        }
 
         [HttpGet]
         public JsonResult GetDistrictsGridContent(FilterModel filter)
@@ -131,6 +168,28 @@ namespace Web.Areas.AnalysisManagement.Controllers
                 else
                     gridItem.GreenOutposts++;
             }
+        }
+
+        [HttpGet]
+        public string GetProducts(Guid countryId)
+        {
+            string products = "";
+            LoadUserAndClient();
+          
+            var osls = QueryStockLevel.Query().Where(it => it.Client.Id == this._client.Id);
+            if (countryId!=null && countryId != Guid.Empty)
+            {
+                osls = osls.Where(it => it.Outpost.Country.Id == countryId);
+            }
+           
+            IQueryable<Product> prodsDistinct = (from p in osls select p.Product).Distinct();
+
+            foreach (var p in prodsDistinct.ToList())
+            {
+                products+= p.Name+",";
+            }
+
+            return products.Trim(',');
         }
 
         internal CssClassAndInfoWinContent GetCssClassAndInfoWindowContentForMarker(Country country, Region region, District district, Outpost outpost, Client client)

@@ -315,16 +315,16 @@ namespace Web.Areas.StockAdministration.Controllers
             return total;
         }
 
-        private Dictionary<DateTime,int> GetDayArray(DateTime startDate, DateTime endDate)
-        { 
-            Dictionary<DateTime,int> days = new Dictionary<DateTime,int>();
-            for (var dt = startDate; dt <= endDate; dt = dt.AddDays(1))
-            {
-                days.Add(dt.Date,dt.Day);
-            }
+        //private Dictionary<DateTime, int> GetDayArray(DateTime startDate, DateTime endDate)
+        //{
+        //    Dictionary<DateTime, int> days = new Dictionary<DateTime, int>();
+        //    for (var dt = startDate; dt <= endDate; dt = dt.AddDays(1))
+        //    {
+        //        days.Add(dt.Date, dt.Day);
+        //    }
 
-            return days;
-        }
+        //    return days;
+        //}
 
         [HttpGet]
         public JsonResult GetProductSales(Guid? countryId, Guid? regionId, Guid? districtId, Guid? outpostId, DateTime? startDate, DateTime? endDate, Guid? productId, string clientId)
