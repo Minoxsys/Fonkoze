@@ -604,21 +604,32 @@ Analysis: Location Report
             });
             productFields.forEach(function (entry) {
                 storeFields.push({ name: entry, type: 'int' });
+                
                 gridColumns.push({
                     header: entry,
                     dataIndex: entry,
-                    //renderer: function (val, meta, record) {
-                        //Should have access to lowerlimit information somehow
-                        //if (record.data.StockLevel < record.data.LowerLevel) {
-                        //    return '<span style="color:red;">' + val + '</span>';
-                        //}
-                        //else
-                        //{
-                        //    return '<span style="color:green;">' + val + '</span>';
-                        //}
-                 //   }
+                    renderer: function (val, meta, record) {
+                        if (isNaN(val))
+                            return '<span style="color:green;">-</span>';
+
+                        if (val <= record.get(entry+"_Lower")) {
+                            return '<span style="color:red;">' + val + '</span>';
+                        }
+                        else if (val < (record.get(entry + "_Lower") + record.get(entry + "_Lower") * 20 / 100) && val > record.get(entry + "_Lower")) {
+                            return '<span style="color:#FFD24C;">' + val + '</span>';
+                        }
+                        else {
+                            return '<span style="color:green;">' + val + '</span>';
+                        }
+                    }
                 });
             })
+            productFields.forEach(function (entry) {
+                storeFields.push({ name: entry + "_Lower", type: 'int' });
+            })
+
+             
+
             gridColumns.push({ header: 'Total', dataIndex: 'Total' });
 
             window.feature.StockLevelForOutpostsStore.load({
@@ -628,22 +639,24 @@ Analysis: Location Report
                     DistrictId: window.feature.container.down('#' + window.feature.districtComboboxId).getValue(),
                 },
                 callback: function () {
-
+                    var prodFieldsLength =productFields.length;
                     window.feature.StockLevelForOutpostsStore.each(function (outpost) {
 
-                        var row = new Array(productFields.length + 2);
+                        var row = new Array(prodFieldsLength*2 + 2);
                         for (var j = 1; j < row.length; j++) {
-                            row[j] = 0;
+                            row[j] = '-';
                         }
                         row[0] = outpost.get('OutpostName');
                         row[1] = outpost.get('Total');
                         outpost.Products().each(function (product) {
 
-                            for (var i = 0; i < productFields.length; i++) {
+                            for (var i = 0; i < prodFieldsLength; i++) {
                                 if (productFields[i] == product.get('ProductName')) {
                                     row[i + 2] = product.get('StockLevel');
+                                    row[prodFieldsLength+2 + i] = product.get('LowerLimit');
                                     break;
                                 }
+                               
                             }
                         })
                         dataStore.push(row);
