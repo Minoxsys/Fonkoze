@@ -24,9 +24,9 @@ namespace Web.Areas.AnalysisManagement.Controllers
         private User _user;
 
         private const string NAME_ALL_OPTION = "All";
-        private Guid ID_ALL_OPTION_FOR_COUNTRIES = Guid.Parse("00000000-0000-0000-0000-000000000001");
-        private Guid ID_ALL_OPTION_FOR_REGIONS = Guid.Parse("00000000-0000-0000-0000-000000000002");
-        private Guid ID_ALL_OPTION_FOR_DISTRICTS = Guid.Parse("00000000-0000-0000-0000-000000000003");
+        private Guid ID_ALL_OPTION = Guid.Empty;
+        //private Guid ID_ALL_OPTION_FOR_REGIONS = Guid.Parse("00000000-0000-0000-0000-000000000002");
+        //private Guid ID_ALL_OPTION_FOR_DISTRICTS = Guid.Parse("00000000-0000-0000-0000-000000000003");
 
         private void LoadUserAndClient()
         {
@@ -47,17 +47,17 @@ namespace Web.Areas.AnalysisManagement.Controllers
             LoadUserAndClient();
 
             var districtList = new List<LocationEntityModel>();
-            districtList.Add(new LocationEntityModel { Name = NAME_ALL_OPTION, Id = ID_ALL_OPTION_FOR_DISTRICTS });
+            districtList.Add(new LocationEntityModel { Name = NAME_ALL_OPTION, Id = ID_ALL_OPTION });
 
             var districts = QueryDistrict.Query().Where(it => it.Client.Id == _client.Id);
 
-            if (RegionId.HasValue && (RegionId.Value != ID_ALL_OPTION_FOR_REGIONS))
+            if (RegionId.HasValue && (RegionId.Value != ID_ALL_OPTION))
             {
                 districts = districts.Where(it => it.Region.Id == RegionId);
             }
             else
             {
-                if (CountryId.HasValue && (CountryId.Value != ID_ALL_OPTION_FOR_COUNTRIES))
+                if (CountryId.HasValue && (CountryId.Value != ID_ALL_OPTION))
                     districts = districts.Where(it => it.Region.Country.Id == CountryId);
             }
 
@@ -80,19 +80,19 @@ namespace Web.Areas.AnalysisManagement.Controllers
 
             var reportDistrictLevel = QueryOutpostStockLevel.Query().Where(it => it.Client.Id == _client.Id).ToList();
 
-            if ((inputModel.DistrictId != ID_ALL_OPTION_FOR_DISTRICTS) && (inputModel.DistrictId != Guid.Empty))
+            if ((inputModel.DistrictId != ID_ALL_OPTION) && (inputModel.DistrictId != Guid.Empty))
             {
                 reportDistrictLevel = reportDistrictLevel.Where(it => it.Outpost.District.Id == inputModel.DistrictId).ToList();
             }
             else
             {
-                if ((inputModel.RegionId != ID_ALL_OPTION_FOR_REGIONS) && (inputModel.RegionId != Guid.Empty))
+                if ((inputModel.RegionId != ID_ALL_OPTION) && (inputModel.RegionId != Guid.Empty))
                 {
                     reportDistrictLevel = reportDistrictLevel.Where(it => it.Outpost.Region.Id == inputModel.RegionId).ToList();
                 }
                 else
                 {
-                    if ((inputModel.CountryId != ID_ALL_OPTION_FOR_COUNTRIES) && (inputModel.CountryId != Guid.Empty))
+                    if ((inputModel.CountryId != ID_ALL_OPTION) && (inputModel.CountryId != Guid.Empty))
                     {
                         reportDistrictLevel = reportDistrictLevel.Where(it => it.Outpost.Country.Id == inputModel.CountryId).ToList();
                     }

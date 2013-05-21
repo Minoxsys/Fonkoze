@@ -26,8 +26,7 @@ namespace Web.Areas.AnalysisManagement.Controllers
         private User _user;
 
         private const string NAME_ALL_OPTION = "All";
-        private Guid ID_ALL_OPTION_FOR_COUNTRIES = Guid.Parse("00000000-0000-0000-0000-000000000001");
-        private Guid ID_ALL_OPTION_FOR_REGIONS = Guid.Parse("00000000-0000-0000-0000-000000000002");
+        private Guid ID_ALL_OPTION = Guid.Empty;
 
         private void LoadUserAndClient()
         {
@@ -48,7 +47,7 @@ namespace Web.Areas.AnalysisManagement.Controllers
             LoadUserAndClient();
             var countryList = new List<LocationEntityModel>();
 
-            countryList.Add(new LocationEntityModel { Name = NAME_ALL_OPTION, Id = ID_ALL_OPTION_FOR_COUNTRIES });
+            countryList.Add(new LocationEntityModel { Name = NAME_ALL_OPTION, Id = ID_ALL_OPTION });
 
             var countries = QueryCountry.Query().Where(it => it.Client.Id == _client.Id);
 
@@ -70,11 +69,11 @@ namespace Web.Areas.AnalysisManagement.Controllers
             LoadUserAndClient();
             var regionList = new List<LocationEntityModel>();
 
-            regionList.Add(new LocationEntityModel { Name = NAME_ALL_OPTION, Id = ID_ALL_OPTION_FOR_REGIONS });
+            regionList.Add(new LocationEntityModel { Name = NAME_ALL_OPTION, Id = ID_ALL_OPTION });
 
             var regions = QueryRegion.Query().Where(it => it.Client.Id == _client.Id);
 
-            if (CountryId != ID_ALL_OPTION_FOR_COUNTRIES)
+            if (CountryId != ID_ALL_OPTION)
                 regions = regions.Where(it => it.Country.Id == CountryId);
 
             foreach (var region in regions)
@@ -97,13 +96,13 @@ namespace Web.Areas.AnalysisManagement.Controllers
 
             var reportRegionLevel = QueryOutpostStockLevel.Query().Where(it => it.Client.Id == _client.Id).ToList();
 
-            if ((inputModel.RegionId != ID_ALL_OPTION_FOR_REGIONS) && (inputModel.RegionId != Guid.Empty))
+            if ((inputModel.RegionId != ID_ALL_OPTION) && (inputModel.RegionId != Guid.Empty))
             {
                 reportRegionLevel = reportRegionLevel.Where(it => it.Outpost.Region.Id == inputModel.RegionId).ToList();
             }
             else
             {
-                if (inputModel.CountryId != ID_ALL_OPTION_FOR_COUNTRIES)
+                if (inputModel.CountryId != ID_ALL_OPTION)
                 {
                     reportRegionLevel = reportRegionLevel.Where(it => it.Outpost.Country.Id == inputModel.CountryId).ToList();
                 }

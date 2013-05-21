@@ -33,9 +33,9 @@ Analysis: Product level information at district level
         window.feature.comboboxRegionsId = 'combobxRegionsId';
         window.feature.comboboxDistrictsId = 'comboboxDistrictsId';
 
-        var allCountryGUID = '@Guid.Parse("00000000-0000-0000-0000-000000000001")';
-        var allRegionGUID = '@Guid.Parse("00000000-0000-0000-0000-000000000002")';
-        var allDistrictGUID = '@Guid.Parse("00000000-0000-0000-0000-000000000003")';
+        var allOptionGUID = '@Guid.Empty';
+       @* var allRegionGUID = '@Guid.Parse("00000000-0000-0000-0000-000000000002")';
+        var allDistrictGUID = '@Guid.Parse("00000000-0000-0000-0000-000000000003")';*@
 
         window.feature.CountryStore = Ext.create('Ext.data.Store', {
             fields: ['Name', 'Id'],
@@ -509,19 +509,19 @@ Analysis: Product level information at district level
 
         window.feature.CountryStore.load();
         window.feature.RegionStore.load({
-            params: { CountryId: allCountryGUID }
+            params: { CountryId: allOptionGUID }
         });
         window.feature.DistrictStore.load({
-            params: { CountryId: allCountryGUID, RegionId: allRegionGUID}
+            params: { CountryId: allOptionGUID, RegionId: allOptionGUID }
         });
 
-        window.feature.comboBoxCountries.setValue(allCountryGUID);
-        window.feature.comboBoxRegions.setValue(allRegionGUID);
-        window.feature.comboBoxRegions.setValue(allDistrictGUID);
+        window.feature.comboBoxCountries.setValue(allOptionGUID);
+        window.feature.comboBoxRegions.setValue(allOptionGUID);
+        window.feature.comboBoxRegions.setValue(allOptionGUID);
 
-        window.feature.treegrid.getStore().proxy.extraParams.CountryId = allCountryGUID;
+        window.feature.treegrid.getStore().proxy.extraParams.CountryId = allOptionGUID;
         window.feature.treegrid.getStore().proxy.extraParams.RegionId = allRegionGUID;
-        window.feature.treegrid.getStore().proxy.extraParams.DistrictId = allDistrictGUID;
+        window.feature.treegrid.getStore().proxy.extraParams.DistrictId = allOptionGUID;
 
         window.feature.treegrid.getRootNode().expand();
     });

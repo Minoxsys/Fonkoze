@@ -26,10 +26,11 @@ namespace Web.Areas.AnalysisManagement.Controllers
         private User _user;
 
         private const string NAME_ALL_OPTION = "All";
-        private Guid ID_ALL_OPTION_FOR_COUNTRIES = Guid.Parse("00000000-0000-0000-0000-000000000001");
-        private Guid ID_ALL_OPTION_FOR_REGIONS = Guid.Parse("00000000-0000-0000-0000-000000000002");
-        private Guid ID_ALL_OPTION_FOR_DISTRICTS = Guid.Parse("00000000-0000-0000-0000-000000000003");
-        private Guid ID_ALL_OPTION_FOR_OUTPOSTS = Guid.Parse("00000000-0000-0000-0000-000000000004");
+        private Guid ID_ALL_OPTION = Guid.Empty;
+        //private Guid ID_ALL_OPTION_FOR_COUNTRIES = Guid.Parse("00000000-0000-0000-0000-000000000001");
+        //private Guid ID_ALL_OPTION_FOR_REGIONS = Guid.Parse("00000000-0000-0000-0000-000000000002");
+        //private Guid ID_ALL_OPTION_FOR_DISTRICTS = Guid.Parse("00000000-0000-0000-0000-000000000003");
+        //private Guid ID_ALL_OPTION_FOR_OUTPOSTS = Guid.Parse("00000000-0000-0000-0000-000000000004");
 
         public ActionResult Overview()
         {
@@ -46,25 +47,25 @@ namespace Web.Areas.AnalysisManagement.Controllers
             LoadUserAndClient();
 
             var reportOutpostLevel = QueryOutpostStockLevel.Query().Where(it => it.Client.Id == _client.Id).ToList();
-            if ((inputModel.OutpostId != ID_ALL_OPTION_FOR_OUTPOSTS) && (inputModel.OutpostId != Guid.Empty))
+            if ((inputModel.OutpostId != ID_ALL_OPTION) && (inputModel.OutpostId != Guid.Empty))
             {
                 reportOutpostLevel = reportOutpostLevel.Where(it => it.Outpost.Id == inputModel.OutpostId).ToList();
             }
             else
             {
-                if ((inputModel.DistrictId != ID_ALL_OPTION_FOR_DISTRICTS) && (inputModel.DistrictId != Guid.Empty))
+                if ((inputModel.DistrictId != ID_ALL_OPTION) && (inputModel.DistrictId != Guid.Empty))
                 {
                     reportOutpostLevel = reportOutpostLevel.Where(it => it.Outpost.District.Id == inputModel.DistrictId).ToList();
                 }
                 else
                 {
-                    if ((inputModel.RegionId != ID_ALL_OPTION_FOR_REGIONS) && (inputModel.RegionId != Guid.Empty))
+                    if ((inputModel.RegionId != ID_ALL_OPTION) && (inputModel.RegionId != Guid.Empty))
                     {
                         reportOutpostLevel = reportOutpostLevel.Where(it => it.Outpost.Region.Id == inputModel.RegionId).ToList();
                     }
                     else
                     {
-                        if ((inputModel.CountryId != ID_ALL_OPTION_FOR_COUNTRIES) && (inputModel.CountryId != Guid.Empty))
+                        if ((inputModel.CountryId != ID_ALL_OPTION) && (inputModel.CountryId != Guid.Empty))
                         {
                             reportOutpostLevel = reportOutpostLevel.Where(it => it.Outpost.Country.Id == inputModel.CountryId).ToList();
                         }
@@ -250,25 +251,25 @@ namespace Web.Areas.AnalysisManagement.Controllers
             LoadUserAndClient();
 
             var oslList = QueryOutpostStockLevel.Query().Where(it => it.Client.Id == _client.Id).ToList();
-            if ((inputModel.OutpostId != ID_ALL_OPTION_FOR_OUTPOSTS) && (inputModel.OutpostId != Guid.Empty))
+            if ((inputModel.OutpostId != ID_ALL_OPTION) && (inputModel.OutpostId != Guid.Empty))
             {
                 oslList = oslList.Where(it => it.Outpost.Id == inputModel.OutpostId).ToList();
             }
             else
             {
-                if ((inputModel.DistrictId != ID_ALL_OPTION_FOR_DISTRICTS) && (inputModel.DistrictId != Guid.Empty))
+                if ((inputModel.DistrictId != ID_ALL_OPTION) && (inputModel.DistrictId != Guid.Empty))
                 {
                     oslList = oslList.Where(it => it.Outpost.District.Id == inputModel.DistrictId).ToList();
                 }
                 else
                 {
-                    if ((inputModel.RegionId != ID_ALL_OPTION_FOR_REGIONS) && (inputModel.RegionId != Guid.Empty))
+                    if ((inputModel.RegionId != ID_ALL_OPTION) && (inputModel.RegionId != Guid.Empty))
                     {
                         oslList = oslList.Where(it => it.Outpost.Region.Id == inputModel.RegionId).ToList();
                     }
                     else
                     {
-                        if ((inputModel.CountryId != ID_ALL_OPTION_FOR_COUNTRIES) && (inputModel.CountryId != Guid.Empty))
+                        if ((inputModel.CountryId != ID_ALL_OPTION) && (inputModel.CountryId != Guid.Empty))
                         {
                             oslList = oslList.Where(it => it.Outpost.Country.Id == inputModel.CountryId).ToList();
                         }
@@ -290,7 +291,7 @@ namespace Web.Areas.AnalysisManagement.Controllers
             var outpostList = new List<EntityModel>();
 
             var modelForAllOption = new EntityModel();
-            modelForAllOption.Id = ID_ALL_OPTION_FOR_OUTPOSTS;
+            modelForAllOption.Id = ID_ALL_OPTION;
             modelForAllOption.Name = "All";
             outpostList.Add(modelForAllOption);
 
@@ -322,6 +323,28 @@ namespace Web.Areas.AnalysisManagement.Controllers
                 outposts = outpostList,
                 TotalItems = outpostList.Count
             }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public ActionResult FromGoogleMap(Guid? id, string location)
+        {
+            //TempData.Clear();
+            if (!String.IsNullOrEmpty(location))
+            {
+                if (location == "outpost")
+                {
+                    return RedirectToAction("GraphicOverview", "ReportOutpostLevel", new { outpostId = id });
+                }
+                if (location == "district")
+                {
+
+                }
+                if (location == "region")
+                { 
+
+                }
+            }
+            return RedirectToAction("GraphicOverview", "ReportOutpostLevel", new { outpostId = id });
         }
 
         private void LoadUserAndClient()
