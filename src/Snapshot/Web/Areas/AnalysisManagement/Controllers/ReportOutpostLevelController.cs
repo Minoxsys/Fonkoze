@@ -328,7 +328,6 @@ namespace Web.Areas.AnalysisManagement.Controllers
         [HttpGet]
         public ActionResult FromGoogleMap(Guid? id, string location)
         {
-            //TempData.Clear();
             if (!String.IsNullOrEmpty(location))
             {
                 if (location == "outpost")
@@ -337,11 +336,11 @@ namespace Web.Areas.AnalysisManagement.Controllers
                 }
                 if (location == "district")
                 {
-
+                    return RedirectToAction("GraphicOverview", "ReportOutpostLevel", new { districtId = id });
                 }
                 if (location == "region")
-                { 
-
+                {
+                    return RedirectToAction("GraphicOverview", "ReportOutpostLevel", new { regionId = id });
                 }
             }
             return RedirectToAction("GraphicOverview", "ReportOutpostLevel", new { outpostId = id });

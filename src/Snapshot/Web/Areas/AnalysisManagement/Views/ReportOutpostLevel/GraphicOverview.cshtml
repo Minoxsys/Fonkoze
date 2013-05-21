@@ -305,8 +305,12 @@ Analysis: Product level information at seller level
             productFields.forEach(function (entry){
                 storeFields.push({name:entry, type: 'int'})
             })
+
+            //productFields.forEach(function (entry) {
+            //    storeFields.push({ name: entry+"_Lower", type: 'int' })
+            //})
+            
             storeFields.push({ name: 'Total', type: 'int' });
-           
             
             window.feature.StockLevelForOutpostsStore.load({
                 params: {
@@ -317,10 +321,11 @@ Analysis: Product level information at seller level
                           OnlyUnderTreshold: Ext.getCmp(window.feature.chkOnlyUnderTreshold).getValue()
                       },
                 callback: function () {
-                   
+                    var prodFieldsLength = productFields.length;
                     window.feature.StockLevelForOutpostsStore.each(function (outpost){
                         
-                        var row = new Array(productFields.length + 3);
+                        //var row = new Array(prodFieldsLength * 2 + 3);
+                        var row = new Array(prodFieldsLength + 3);
                         for (var j = 1; j < row.length; j++) {
                             row[j] = 0;
                         }
@@ -329,11 +334,12 @@ Analysis: Product level information at seller level
                         row[row.length - 1] = outpost.get('Total');
                         outpost.Products().each(function (product) {
                           
-                            for (var i=0;i<productFields.length;i++)
+                            for (var i = 0; i < prodFieldsLength; i++)
                             { 
                                 if (productFields[i] == product.get('ProductName'))
                                 {
                                     row[i + 2] = product.get('StockLevel');
+                                   // row[prodFieldsLength + 2 + i] = product.get('LowerLimit');
                                     break;
                                 }
                             }
@@ -348,20 +354,38 @@ Analysis: Product level information at seller level
           
         };
 
-        function getMax()
+        function getMaxProdsUnderTreshold()
         {
             var maxTotal=0;
             chartStore.each(function (record) {
-                var total = record.get('Total');
+                var total = record.get('ProductsUnderTresholdNo');
                 if (total > maxTotal)
                     maxTotal = total;
             });
 
-            if (maxTotal == 1)
-                maxTotal = 2;
-
             return maxTotal;
 
+        }
+        var countHolder = 0;
+        var storeIndexHolder = 0;
+        var recordHolder;
+        function getColorForBar(record,resetCountHolder,storeIndex,store)
+        {
+            //Are the bars loaded in order or async?
+            if (storeIndexHolder == 0)
+                recordHolder = record;
+            if (resetCountHolder == true) {
+                countHolder = 0;
+                recordHolder = record;//record becomes null at some point for no reason
+            }
+            var prodName = productFields[countHolder];
+            countHolder++;
+           // if (recordHolder == null) return '';
+            if (recordHolder.get(prodName) <= recordHolder.get(prodName + "_Lower"))
+            {
+                return 'rgb(212, 40, 40)';
+            }
+            return 'rgb(154, 205, 50)';
         }
         //-----Build CHART
         window.feature.execute = new Ext.util.DelayedTask(function () {
@@ -371,30 +395,45 @@ Analysis: Product level information at seller level
             })
             chartStore.loadData(dataStore);
 
-            var cont = Ext.getCmp('DivChartContainer');
+            var chartContainer = Ext.getCmp('DivChartContainer');
             var chart2 = Ext.getCmp('chart2DistrictLevel');
-            cont.remove(chart2);
+            chartContainer.remove(chart2);
+            var lbl = Ext.getCmp('lblNoSales');
+            chartContainer.remove(lbl);
 
-            cont.add({
+            if (chartStore.getCount() == 0) {
+                chartContainer.add({ xtype: 'label', id: 'lblNoSales', margin: '40 0 0 10', text: 'There is no data for the selected filter.', cls: 'x-title-label' });
+                return;
+            }
+           
+            chartContainer.add({
                 id: 'chart2DistrictLevel',
                 xtype: 'chart',
-                flex: 3,               
-                //minHeight: 650,
-                margin: '0 0 0 70',
-                // animate: true,
-                shadow:false,
+                flex: 1,
+                insetPadding:45,
+                maxWidth:chartStore.getCount()*700,
+                margin: '0 0 0 20',
+                animate: true,                
+                shadow:true,
                 store: chartStore,               
                 axes: [{
                     type: 'Numeric',
                     grid: true,
                     position: 'left',
                     fields: productFields,
-                    title: 'Product Stock Levels',
+                    title: 'Product Stock Levels (bars)',
                     minimum:0,
-                    //maximum: getMax(),
-                    //adjustMinimumByMajorUnit: 0,
-                                   
-                }, {
+                },
+                {
+                type: 'Numeric',
+                position: 'right',
+                fields: ['ProductsUnderTresholdNo'],
+                title: 'Products Under Threshold',
+                minimum: 0,
+                maximum: getMaxProdsUnderTreshold(),
+                majorTickSteps: getMaxProdsUnderTreshold() - 1,
+                }
+                , {
                     type: 'Category',
                     position: 'bottom',
                     fields: ['OutpostName'],
@@ -404,7 +443,8 @@ Analysis: Product level information at seller level
                 series: [{
                     type: 'column',
                     highlight: false,
-                    axis: 'bottom',                   
+                    axis: 'bottom',
+                    width:40,
                     tips: {
                         trackMouse: true,
                         width: 140,
@@ -414,39 +454,43 @@ Analysis: Product level information at seller level
                     },
                     xField: 'OutpostName',
                     yField: productFields,
-                    stacked: true
-                    //renderer: function (sprite, record, attr, storeIndex, store) {
-                    //    //barAttr.fill = (storeItem.data.StockLevel <= storeItem.data.LowerLimit ? 'rgb(212, 40, 40)' : 'rgb(154, 205, 50)');
-                    //    return attr;
-                    //},
+                    stacked: true,
+                    renderer: function (sprite, record, attr, storeIndex, store) {
+                        //if (storeIndex > store.getCount())
+                        //    return attr;
+                       // attr.fill = getColorForBar(record, (storeIndexHolder != storeIndex),storeIndex,store);
+                            //(storeItem.data.StockLevel <= storeItem.data.LowerLimit ? 'rgb(212, 40, 40)' : 'rgb(154, 205, 50)');
+                        //if (storeIndexHolder != storeIndex)
+                        //    storeIndexHolder = storeIndex;
+                        return attr;
+                    },
                   
                 },
                 {
-                    type: 'scatter',
+                    type: 'line',
                     xField: 'OutpostName',
-                    yField: ['Total'],
+                    yField: ['ProductsUnderTresholdNo'],
                     title:'UnderThreshold',
-                    axis: 'left',
+                    axis: 'right',
                     highlight: true,
-                    //markerConfig: {  size: 10 },
                     tips: {
                         trackMouse: true,
-                        width: 240,
-                        height: 60,
+                        width: 180,
+                        height: 30,
                         renderer: function(storeItem, item) {
-                            this.setTitle('Total Stock: ' + storeItem.get('Total') + ' <br/><br/> Products under threshold: ' + storeItem.get('ProductsUnderTresholdNo'));
+                            this.setTitle('Products under threshold: ' + storeItem.get('ProductsUnderTresholdNo'));
                         }
                     },
                    
-                    label: {
-                        display: 'over',
-                        field: 'ProductsUnderTresholdNo',
-                        renderer: Ext.util.Format.numberRenderer('0 under threshold'),
-                        orientation: 'horizontal',
-                        'text-anchor':'middle',
-                        font: '14px Helvetica, sans-serif'
+                    //label: {
+                    //    display: 'over',
+                    //    field: 'ProductsUnderTresholdNo',
+                    //    renderer: Ext.util.Format.numberRenderer('0 under threshold'),
+                    //    orientation: 'horizontal',
+                    //    'text-anchor':'middle',
+                    //    font: '14px Helvetica, sans-serif'
                        
-                    },
+                    //},
                     selectionTolerance: 4,
                     
                 }
@@ -499,7 +543,7 @@ Analysis: Product level information at seller level
                               margin: '0 10 0 20',
                               ui: 'snapshot-add-btn',
                               cls: 'x-add-button-gradient',
-                              text: 'Back',
+                              text: 'Tree View',
                               handler: function () {
                                   navigateTo('@(Url.RouteUrl<ReportOutpostLevelController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))')
                               }
@@ -535,7 +579,7 @@ Analysis: Product level information at seller level
                 xtype: 'container',              
                 layout:'fit',
                 padding: '0 0 0 0',
-                flex:5,
+                flex:4.5,
                 items: [{
                     xtype: 'container',
                     id: 'DivChartContainer',
@@ -554,65 +598,37 @@ Analysis: Product level information at seller level
         var mainContent = Ext.getCmp(contentRes.maincontent.id);
 
         mainContent.add(window.feature.container);
-        window.feature.CountryStore.load();
+
+        window.feature.CountryStore.load({
+            callback: function () {
+                if ('@Model.countryId'!=null)
+                    window.feature.comboBoxCountries.setValue('@Model.countryId');
+            }
+        });
+
         window.feature.OutpostStore.load({
             callback: function () {
-                if ('@Model.outpostId' != '@Guid.Empty') {
+                if ('@Model.outpostId' != null) {
                     window.feature.comboBoxOutposts.setValue('@Model.outpostId');
                  }
             }
         });
 
-        //window.feature.RegionStore.load({
-        //    params: { CountryId: allCountryGUID }
-        //});
-        //window.feature.DistrictStore.load({
-        //    params: { CountryId: allCountryGUID, RegionId: allRegionGUID }
-        //});
-        //window.feature.OutpostStore.load();
-
-        if ('@Model.countryId' == '@Guid.Empty' && '@Model.regionId' == '@Guid.Empty' && '@Model.districtId' == '@Guid.Empty' && '@Model.outpostId' == '@Guid.Empty') {
-            window.feature.RegionStore.load();
-            window.feature.DistrictStore.load();
-            
-        }
-        else {
-            if ('@Model.countryId' != '@Guid.Empty') {
-                
-                window.feature.RegionStore.load({
-                    params: { countryId: '@Model.countryId' },
-                    callback: function () {
-                        window.feature.comboBoxCountries.setValue('@Model.countryId');
-                    }
-            });
-
-        }
-        if ('@Model.regionId' != '@Guid.Empty') {
-               
-
-            window.feature.DistrictStore.load({
-                params: { regionId: '@Model.regionId' },
+        window.feature.RegionStore.load({
+                params: { countryId: '@Model.countryId' },
                 callback: function () {
-                    window.feature.comboBoxRegions.setValue('@Model.regionId');
+                    window.feature.comboBoxCountries.setValue('@Model.countryId');
                 }
-            });
+        });
 
-        }
-        if ('@Model.districtId' != '@Guid.Empty') {
-                
+        window.feature.DistrictStore.load({
+            params: { regionId: '@Model.regionId' },
+            callback: function () {
+                window.feature.comboBoxRegions.setValue('@Model.regionId');
+            }
+        });
 
-            window.feature.OutpostStore.load({
-                params: { districtId: '@Model.districtId' },
-                callback: function () {
-                    window.feature.comboboxDistricts.setValue('@Model.districtId');
-                }
-            });
-        }
-       
-        }
-
-        
-
+        showChart();
 
 
     });
