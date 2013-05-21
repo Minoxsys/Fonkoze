@@ -743,6 +743,19 @@ Analysis: Location Report
             });
         }
 
+        function GetLocation(zoomLevel) {
+            var location = '';
+            if (zoomLevel >= 7) {
+                location = 'outpost';
+            }
+            if (zoomLevel < 7 && zoomLevel >= 5) {
+                location = 'district';
+            }
+            if (zoomLevel < 5) {
+                location = 'region';
+            }
+            return location;
+        }
         function centerOnPlace(country, map) {
             var geocoder = new google.maps.Geocoder();
             geocoder.geocode({ 'address': country }, function (results, status) {
@@ -790,7 +803,7 @@ Analysis: Location Report
 
                     // !!! Implement here the navigate to seller report functionality :
 
-                   @* google.maps.event.addListener(marker, 'click', function () {
+                    google.maps.event.addListener(marker, 'click', function () {
                         var countryId = window.feature.container.down('#' + window.feature.countryComboboxId).getValue();
                         var regionId = window.feature.container.down('#' + window.feature.regionComboboxId).getValue();
                         var districtId = window.feature.container.down('#' + window.feature.districtComboboxId).getValue();
@@ -798,14 +811,12 @@ Analysis: Location Report
                         var map = googleMapPanel.getMap();
                         var zoomLevel = map.getZoom();
 
-                        var link = '@Url.RouteUrl(AnalysisManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "HealthFacilityReport", action = "FromGoogleMap" })';
+                        var link = '@Url.RouteUrl(AnalysisManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "ReportOutpostLevel", action = "FromGoogleMap" })';
                         link = link + "?id=" + marker.id;
                         link = link + "&location=" + GetLocation(zoomLevel);
-                        link = link + "&type=" + GetType(marker);
-
                         navigateTo(link);
 
-                     });*@
+                     });
 
                     markerArray[i] = marker;
                     i = i + 1;
