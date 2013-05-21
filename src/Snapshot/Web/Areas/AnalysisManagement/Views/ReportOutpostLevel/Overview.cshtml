@@ -37,10 +37,10 @@ Analysis: Product level information at seller level
         window.feature.comboboxDistrictsId = 'comboboxDistrictsId';
         window.feature.comboboxOutpostsId = 'comboboxOutpostId';
 
-        var allCountryGUID = '@Guid.Parse("00000000-0000-0000-0000-000000000001")';
-        var allRegionGUID = '@Guid.Parse("00000000-0000-0000-0000-000000000002")';
-        var allDistrictGUID = '@Guid.Parse("00000000-0000-0000-0000-000000000003")';
-        var allOutpostGUID = '@Guid.Parse("00000000-0000-0000-0000-000000000004")';
+        var allCountryGUID = '@Guid.Parse("00000000-0000-0000-0000-000000000000")';
+        var allRegionGUID = '@Guid.Parse("00000000-0000-0000-0000-000000000000")';
+        var allDistrictGUID = '@Guid.Parse("00000000-0000-0000-0000-000000000000")';
+        var allOutpostGUID = '@Guid.Parse("00000000-0000-0000-0000-000000000000")';
 
         window.feature.CountryStore = Ext.create('Ext.data.Store', {
             fields: ['Name', 'Id'],
@@ -477,7 +477,7 @@ Analysis: Product level information at seller level
                     } else {
                         rec.expand();
                     }
-                    if (!rec.get('leaf') && rec.get('Name').indexOf('Number of Sellers:') == -1) {
+                    if (!rec.get('leaf') && rec.parentNode.parentNode !=null) {
                         window.feature.ProductsStore.proxy.extraParams.productGroupId = rec.get('Id');
                         window.feature.ProductsStore.proxy.extraParams.outpostId = rec.get('ParentId');
 
