@@ -529,19 +529,19 @@ Historical Product Level: Overview
                 loadMask: true,
                 autoScroll: true,
                 features: [
-                    {
-                        id: 'group',
-                        ftype: 'grouping',
-                        groupHeaderTpl: '{name}',
-                       // enableGroupingMenu: true,
-                      //  enableNoGroups:true,
-                       // showSummaryRow:false,
-                    }
-                    ,
+                    //{
+                    //    id: 'group',
+                    //    ftype: 'grouping',
+                    //    groupHeaderTpl: '{name}',
+                    //   // enableGroupingMenu: true,
+                    //  //  enableNoGroups:true,
+                    //   // showSummaryRow:false,
+                    //}
+                    //,
                     {
                     id: 'totalSummary',
-                    ftype: 'summary',
-                    dock:'bottom',
+                    ftype: 'groupingsummary',
+                    groupHeaderTpl: '{name}',
                     hideGroupedHeader: true,                    
                     startCollapsed: true
                 },
