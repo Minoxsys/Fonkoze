@@ -98,7 +98,7 @@ Analysis: Product level information at seller level
             listeners: {
                 datachanged: function () {
                     var districtIdAll = this.data.items[0].data.Id;
-                    window.feature.comboboxDistricts.setValue(districtIdAll);
+                    window.feature.comboBoxDistricts.setValue(districtIdAll);
                 }
             }
         });
@@ -137,7 +137,7 @@ Analysis: Product level information at seller level
                 select: function (combo, record, index) {
                     var selectedCountryId = record[0].data.Id;
                     window.feature.comboBoxRegions.setValue(null);
-                    window.feature.comboboxDistricts.setValue(null);
+                    window.feature.comboBoxDistricts.setValue(null);
                     window.feature.comboBoxOutposts.setValue(null);
 
                     window.feature.RegionStore.load({
@@ -174,7 +174,7 @@ Analysis: Product level information at seller level
                 select: function (combo, record, index) {
                     var selectedRegionId = record[0].data.Id;
                     var selectedCountryId = Ext.getCmp(window.feature.comboboxCountriesId).getValue();
-                    window.feature.comboboxDistricts.setValue(null);
+                    window.feature.comboBoxDistricts.setValue(null);
                     window.feature.comboBoxOutposts.setValue(null);
 
                     window.feature.DistrictStore.load({
@@ -188,7 +188,7 @@ Analysis: Product level information at seller level
             }
         });
 
-        window.feature.comboboxDistricts = Ext.create('Ext.form.ComboBox', {
+        window.feature.comboBoxDistricts = Ext.create('Ext.form.ComboBox', {
             store: window.feature.DistrictStore,
             queryMode: 'local',
             id: window.feature.comboboxDistrictsId,
@@ -476,7 +476,7 @@ Analysis: Product level information at seller level
                     tips: {
                         trackMouse: true,
                         width: 180,
-                        height: 30,
+                        height: 27,
                         renderer: function(storeItem, item) {
                             this.setTitle('Products under threshold: ' + storeItem.get('ProductsUnderTresholdNo'));
                         }
@@ -545,7 +545,10 @@ Analysis: Product level information at seller level
                               cls: 'x-add-button-gradient',
                               text: 'Tree View',
                               handler: function () {
-                                  navigateTo('@(Url.RouteUrl<ReportOutpostLevelController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))')
+                                  var url = '@(Url.RouteUrl<ReportOutpostLevelController>(x=>x.Overview(null),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))';
+                                  url = url + "/?countryId=" + window.feature.comboBoxCountries.getValue() + "&regionId=" + window.feature.comboBoxRegions.getValue() + "&districtId=" + window.feature.comboBoxDistricts.getValue();
+                                  url += "&outpostId=" + window.feature.comboBoxOutposts.getValue();
+                                  navigateTo(url);
                               }
                           }
                           ]
@@ -558,7 +561,7 @@ Analysis: Product level information at seller level
                           items: [
                                   window.feature.comboBoxCountries,
                                   window.feature.comboBoxRegions,
-                                  window.feature.comboboxDistricts,
+                                  window.feature.comboBoxDistricts,
                                   window.feature.comboBoxOutposts,
                                  {
                                      xtype: 'checkbox',
@@ -617,14 +620,14 @@ Analysis: Product level information at seller level
         window.feature.RegionStore.load({
                 params: { countryId: '@Model.countryId' },
                 callback: function () {
-                    window.feature.comboBoxCountries.setValue('@Model.countryId');
+                    window.feature.comboBoxRegions.setValue('@Model.regionId');
                 }
         });
 
         window.feature.DistrictStore.load({
             params: { regionId: '@Model.regionId' },
             callback: function () {
-                window.feature.comboBoxRegions.setValue('@Model.regionId');
+                window.feature.comboBoxDistricts.setValue('@Model.districtId');
             }
         });
 
@@ -635,9 +638,3 @@ Analysis: Product level information at seller level
 
     </script>
 
-<style>
-    .alignBottom {
-    padding-top:20px;
-    }
-
-</style>

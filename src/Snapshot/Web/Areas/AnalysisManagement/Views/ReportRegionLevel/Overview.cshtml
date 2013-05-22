@@ -10,6 +10,7 @@ Analysis: Product level information at region level
     Html.RenderPartial("_EmptySubNavigation");
     Html.RenderPartial("_AnalysisSideBar");
 }
+@model Web.Models.Shared.FilterModel
 
 <script type="text/javascript">
     Ext.onReady(function () {
@@ -32,8 +33,7 @@ Analysis: Product level information at region level
         window.feature.comboboxRegionsId = 'combobxRegionsId';
 
         var allOptionGUID = '@Guid.Empty';
-        //var allRegionGUID = '@Guid.Parse("00000000-0000-0000-0000-000000000000")';
-
+       
         window.feature.CountryStore = Ext.create('Ext.data.Store', {
             fields: ['Name', 'Id'],
             proxy: {
@@ -413,16 +413,24 @@ Analysis: Product level information at region level
 
         window.feature.CountryStore.load();
         window.feature.RegionStore.load({
-            params: { CountryId: allOptionGUID }
+            params: { CountryId: allOptionGUID },
+            callback: function () {
+                if ('@Model.regionId' != null)
+                {
+                    window.feature.comboBoxRegions.setValue('@Model.regionId');
+                    window.feature.treegrid.getStore().proxy.extraParams.RegionId = window.feature.comboBoxRegions.getValue();
+                    window.feature.treegrid.getRootNode().expand();
+                }
+            }
         });
 
         window.feature.comboBoxCountries.setValue(allOptionGUID);
         window.feature.comboBoxRegions.setValue(allOptionGUID);
 
         window.feature.treegrid.getStore().proxy.extraParams.CountryId = allOptionGUID;
-        window.feature.treegrid.getStore().proxy.extraParams.RegionId = allOptionGUID;
+       
 
-        window.feature.treegrid.getRootNode().expand();
+       
         
     });
 </script>

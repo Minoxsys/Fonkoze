@@ -745,13 +745,13 @@ Analysis: Location Report
 
         function GetLocation(zoomLevel) {
             var location = '';
-            if (zoomLevel >= 7) {
+            if (zoomLevel >6) {
                 location = 'outpost';
             }
-            if (zoomLevel < 7 && zoomLevel >= 5) {
+            if (zoomLevel ==6) {
                 location = 'district';
             }
-            if (zoomLevel < 5) {
+            if (zoomLevel == 5) {
                 location = 'region';
             }
             return location;

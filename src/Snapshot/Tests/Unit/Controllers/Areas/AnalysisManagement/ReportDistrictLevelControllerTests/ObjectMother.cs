@@ -50,9 +50,9 @@ namespace Tests.Unit.Controllers.Areas.AnalysisManagement.ReportDistrictLevelCon
 
         const string USER_NAME = "admin";
         const string NAME_ALL_OPTION = "All";
-        public Guid ID_ALL_OPTION_FOR_COUNTRIES = Guid.Parse("00000000-0000-0000-0000-000000000001");
-        public Guid ID_ALL_OPTION_FOR_REGIONS = Guid.Parse("00000000-0000-0000-0000-000000000002");
-        public Guid ID_ALL_OPTION_FOR_DISTRICTS = Guid.Parse("00000000-0000-0000-0000-000000000003");
+        public Guid ID_ALL_OPTION = Guid.Empty;
+        //public Guid ID_ALL_OPTION_FOR_REGIONS = Guid.Parse("00000000-0000-0000-0000-000000000002");
+       // public Guid ID_ALL_OPTION_FOR_DISTRICTS = Guid.Parse("00000000-0000-0000-0000-000000000003");
 
         public void Init()
         {

@@ -25,7 +25,7 @@ namespace Tests.Unit.Controllers.Areas.AnalysisManagement.ReportRegionLevelContr
         public void Get_Reports_ReturnData_SpecificToAllRegions_BeacauseOf_JustCountryIdProvided()
         {
             //arrange
-            var reportInputModel = new InputModel
+            var reportInputModel = new FilterInputModel
             {
                 CountryId = objectMother.country.Id,
                 RegionId = Guid.Empty
@@ -53,7 +53,7 @@ namespace Tests.Unit.Controllers.Areas.AnalysisManagement.ReportRegionLevelContr
         public void Get_Reports_Return_OneRegionLevel_SpecificTo_RegionIdProvided()
         {
             //arrange
-            var reportInputModel = new InputModel
+            var reportInputModel = new FilterInputModel
             {
                 CountryId = objectMother.country.Id,
                 RegionId = objectMother.regions[0].Id

@@ -9,6 +9,7 @@ using Core.Domain;
 using Web.Areas.AnalysisManagement.Models.ReportRegionLevel;
 using Web.Security;
 using Web.Models.UserManager;
+using Web.Models.Shared;
 
 namespace Web.Areas.AnalysisManagement.Controllers
 {
@@ -89,7 +90,7 @@ namespace Web.Areas.AnalysisManagement.Controllers
 
         }    
     
-        public JsonResult GetReports(InputModel inputModel)
+        public JsonResult GetReports(FilterInputModel inputModel)
         {
             
             LoadUserAndClient();
@@ -170,9 +171,9 @@ namespace Web.Areas.AnalysisManagement.Controllers
         }
 
         [Requires(Permissions = "Report.View")]
-        public ActionResult Overview()
+        public ActionResult Overview(FilterModel filter)
         {
-            return View();
+            return View(filter);
         }
 
         [HttpGet]

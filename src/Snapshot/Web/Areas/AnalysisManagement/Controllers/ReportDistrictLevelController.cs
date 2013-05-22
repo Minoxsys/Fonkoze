@@ -9,6 +9,7 @@ using Core.Domain;
 using Web.Areas.AnalysisManagement.Models.ReportRegionLevel;
 using Web.Areas.AnalysisManagement.Models.ReportDistrictLevel;
 using Web.Security;
+using Web.Models.Shared;
 
 namespace Web.Areas.AnalysisManagement.Controllers
 {
@@ -163,9 +164,9 @@ namespace Web.Areas.AnalysisManagement.Controllers
         }
 
         [Requires(Permissions = "Report.View")]
-        public ActionResult Overview()
+        public ActionResult Overview(FilterModel filter)
         {
-            return View();
+            return View(filter);
         }
 
         public JsonResult GetProductsForChart(Guid? productGroupId, Guid? districtId) 

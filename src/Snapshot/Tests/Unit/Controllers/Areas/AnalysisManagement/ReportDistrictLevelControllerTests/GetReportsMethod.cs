@@ -29,7 +29,7 @@ namespace Tests.Unit.Controllers.Areas.AnalysisManagement.ReportDistrictLevelCon
             {                
                 CountryId = objectMother.country.Id,
                 RegionId = objectMother.region.Id,
-                DistrictId = objectMother.ID_ALL_OPTION_FOR_DISTRICTS
+                DistrictId = objectMother.ID_ALL_OPTION
             };
 
             objectMother.queryOutpostStockLevel.Expect(it => it.Query()).Return(objectMother.outpostStockLevelList.AsQueryable());

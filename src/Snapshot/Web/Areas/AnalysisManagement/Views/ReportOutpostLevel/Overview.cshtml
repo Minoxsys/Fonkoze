@@ -11,6 +11,7 @@ Analysis: Product level information at seller level
     Html.RenderPartial("_EmptySubNavigation");
     Html.RenderPartial("_AnalysisSideBar");
 }
+@model Web.Models.Shared.FilterModel
 
 <script type="text/javascript">
 
@@ -37,10 +38,10 @@ Analysis: Product level information at seller level
         window.feature.comboboxDistrictsId = 'comboboxDistrictsId';
         window.feature.comboboxOutpostsId = 'comboboxOutpostId';
 
-        var allCountryGUID = '@Guid.Parse("00000000-0000-0000-0000-000000000000")';
-        var allRegionGUID = '@Guid.Parse("00000000-0000-0000-0000-000000000000")';
+        var allOptionGUID = '@Guid.Parse("00000000-0000-0000-0000-000000000000")';
+      @*  var allRegionGUID = '@Guid.Parse("00000000-0000-0000-0000-000000000000")';
         var allDistrictGUID = '@Guid.Parse("00000000-0000-0000-0000-000000000000")';
-        var allOutpostGUID = '@Guid.Parse("00000000-0000-0000-0000-000000000000")';
+        var allOutpostGUID = '@Guid.Parse("00000000-0000-0000-0000-000000000000")'*@;
 
         window.feature.CountryStore = Ext.create('Ext.data.Store', {
             fields: ['Name', 'Id'],
@@ -66,7 +67,8 @@ Analysis: Product level information at seller level
                     root: 'regions',
                     disableCaching: true,
                     totalProperty: 'TotalItems'
-                }
+                },
+                extraParams: { CountryId: ''}
             },
             listeners: {
                 datachanged: function () {
@@ -86,7 +88,8 @@ Analysis: Product level information at seller level
                     root: 'districts',
                     disableCaching: true,
                     totalProperty: 'TotalItems'
-                }
+                },
+                extraParams: { CountryId: '', RegionId: '' }
             },
             listeners: {
                 datachanged: function () {
@@ -106,7 +109,8 @@ Analysis: Product level information at seller level
                     root: 'outposts',
                     disableCaching: true,
                     totalProperty: 'TotalItems'
-                }
+                },
+                extraParams: { CountryId: '', RegionId: '', DistrictId: ''}
             },
             listeners: {
                 datachanged: function () {
@@ -171,7 +175,7 @@ Analysis: Product level information at seller level
                 select: function (combo, record, index) {
                     var selectedRegionId = record[0].data.Id;
                     var selectedCountryId = Ext.getCmp(window.feature.comboboxCountriesId).getValue();
-                    window.feature.comboBoxOutposts.setValue(allOutpostGUID);
+                    window.feature.comboBoxOutposts.setValue(allOptionGUID);
                     window.feature.treegrid.getStore().proxy.extraParams.DistrictId = '';
 
                     window.feature.DistrictStore.load({
@@ -205,7 +209,7 @@ Analysis: Product level information at seller level
                 select: function (combo, record, index) {
                     var selectedDistrictId = record[0].data.Id;
 
-                    window.feature.comboBoxOutposts.setValue(allOutpostGUID);
+                    window.feature.comboBoxOutposts.setValue(allOptionGUID);
                     window.feature.OutpostStore.load({
                         params: { CountryId: selectedCountryId, RegionId: selectedRegionId, DistrictId:selectedDistrictId }
                     });
@@ -608,24 +612,52 @@ Analysis: Product level information at seller level
 
         window.feature.treegrid.setRootNode(null);
 
-        window.feature.CountryStore.load();
+        
+        window.feature.CountryStore.load({
+            callback: function () {
+                if ('@Model.countryId' != null) {
+                    window.feature.comboBoxCountries.setValue('@Model.countryId');
+                }
+
+            }
+        });
+        window.feature.treegrid.getStore().proxy.extraParams.CountryId = allOptionGUID;
+        window.feature.treegrid.getStore().proxy.extraParams.RegionId = allOptionGUID;
+        window.feature.treegrid.getStore().proxy.extraParams.DistrictId = allOptionGUID;
+        window.feature.treegrid.getStore().proxy.extraParams.OutpostId = allOptionGUID;
+
+        if ('@Model.countryId' != null) {
+            window.feature.RegionStore.proxy.extraParams.CountryId = '@Model.countryId';
+            window.feature.treegrid.getStore().proxy.extraParams.CountryId = '@Model.countryId';
+        }
+        if ('@Model.regionId' != null) {
+            window.feature.DistrictStore.proxy.extraParams.RegionId = '@Model.regionId';
+            window.feature.treegrid.getStore().proxy.extraParams.RegionId = '@Model.regionId';
+        }
+        if ('@Model.districtId' != null) {
+            window.feature.OutpostStore.proxy.extraParams.DistrictId = '@Model.districtId';
+            window.feature.treegrid.getStore().proxy.extraParams.DistrictId = '@Model.districtId';
+        }
+        if ('@Model.outpostId' != null) {
+            window.feature.treegrid.getStore().proxy.extraParams.OutpostId = '@Model.outpostId';
+        }
+
         window.feature.RegionStore.load({
-            params: { CountryId: allCountryGUID }
+            callback: function() {window.feature.comboBoxRegions.setValue('@Model.regionId')}
         });
         window.feature.DistrictStore.load({
-            params: { CountryId: allCountryGUID, RegionId: allRegionGUID }
+            callback: function () { window.feature.comboBoxDistricts.setValue('@Model.districtId') }
         });
-        window.feature.OutpostStore.load();
+        window.feature.OutpostStore.load({
+            callback: function () { window.feature.comboBoxOutposts.setValue('@Model.outpostId') }
+        });
 
-        window.feature.comboBoxCountries.setValue(allCountryGUID);
-        window.feature.comboBoxRegions.setValue(allRegionGUID);
-        window.feature.comboBoxDistricts.setValue(allDistrictGUID);
-        window.feature.comboBoxOutposts.setValue(allOutpostGUID);
+        //window.feature.comboBoxCountries.setValue(allOptionGUID);
+        //window.feature.comboBoxRegions.setValue(allOptionGUID);
+        //window.feature.comboBoxDistricts.setValue(allOptionGUID);
+        //window.feature.comboBoxOutposts.setValue(allOptionGUID);
 
-        window.feature.treegrid.getStore().proxy.extraParams.CountryId = allCountryGUID;
-        window.feature.treegrid.getStore().proxy.extraParams.RegionId = allRegionGUID;
-        window.feature.treegrid.getStore().proxy.extraParams.DistrictId = allDistrictGUID;
-        window.feature.treegrid.getStore().proxy.extraParams.OutpostId = allOutpostGUID;
+        
         
         window.feature.treegrid.getRootNode().expand();
     });

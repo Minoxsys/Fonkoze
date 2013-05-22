@@ -11,6 +11,8 @@ Analysis: Product level information at district level
     Html.RenderPartial("_AnalysisSideBar");
 }
 
+@model Web.Models.Shared.FilterModel
+
 <script type="text/javascript">
 
     Ext.onReady(function () {
@@ -512,7 +514,13 @@ Analysis: Product level information at district level
             params: { CountryId: allOptionGUID }
         });
         window.feature.DistrictStore.load({
-            params: { CountryId: allOptionGUID, RegionId: allOptionGUID }
+            params: { CountryId: allOptionGUID, RegionId: allOptionGUID },
+            callback: function () {
+                if ('@Model.districtId' != null) {
+                    window.feature.comboboxDistricts.setValue('@Model.districtId');
+                }
+            }
+       
         });
 
         window.feature.comboBoxCountries.setValue(allOptionGUID);
@@ -520,7 +528,7 @@ Analysis: Product level information at district level
         window.feature.comboBoxRegions.setValue(allOptionGUID);
 
         window.feature.treegrid.getStore().proxy.extraParams.CountryId = allOptionGUID;
-        window.feature.treegrid.getStore().proxy.extraParams.RegionId = allRegionGUID;
+        window.feature.treegrid.getStore().proxy.extraParams.RegionId = allOptionGUID;
         window.feature.treegrid.getStore().proxy.extraParams.DistrictId = allOptionGUID;
 
         window.feature.treegrid.getRootNode().expand();

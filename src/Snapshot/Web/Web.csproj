@@ -214,7 +214,7 @@
     <Compile Include="Areas\AnalysisManagement\Controllers\ReportRegionLevelController.cs" />
     <Compile Include="Areas\AnalysisManagement\Models\ReportDistrictLevel\ReportDistrictLevelInputModel.cs" />
     <Compile Include="Areas\AnalysisManagement\Models\ReportDistrictLevel\ReportDistrictLevelTreeModel.cs" />
-    <Compile Include="Areas\AnalysisManagement\Models\ReportRegionLevel\InputModel.cs" />
+    <Compile Include="Areas\AnalysisManagement\Models\ReportRegionLevel\FilterInputModel.cs" />
     <Compile Include="Areas\AnalysisManagement\Models\ReportRegionLevel\LocationEntityModel.cs" />
     <Compile Include="Areas\AnalysisManagement\Models\ReportRegionLevel\ReportRegionLevelTreeModel.cs" />
     <Compile Include="Areas\CampaignManagement\CampaignManagementAreaRegistration.cs" />

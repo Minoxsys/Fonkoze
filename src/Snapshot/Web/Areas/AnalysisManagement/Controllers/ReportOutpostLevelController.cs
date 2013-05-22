@@ -32,9 +32,9 @@ namespace Web.Areas.AnalysisManagement.Controllers
         //private Guid ID_ALL_OPTION_FOR_DISTRICTS = Guid.Parse("00000000-0000-0000-0000-000000000003");
         //private Guid ID_ALL_OPTION_FOR_OUTPOSTS = Guid.Parse("00000000-0000-0000-0000-000000000004");
 
-        public ActionResult Overview()
+        public ActionResult Overview(FilterModel filter)
         {
-            return View();
+            return View(filter);
         }
 
         public ActionResult GraphicOverview(FilterModel filter)
@@ -336,11 +336,11 @@ namespace Web.Areas.AnalysisManagement.Controllers
                 }
                 if (location == "district")
                 {
-                    return RedirectToAction("GraphicOverview", "ReportOutpostLevel", new { districtId = id });
+                    return RedirectToAction("Overview", "ReportDistrictLevel", new { districtId = id });
                 }
                 if (location == "region")
                 {
-                    return RedirectToAction("GraphicOverview", "ReportOutpostLevel", new { regionId = id });
+                    return RedirectToAction("Overview", "ReportRegionLevel", new { regionId = id });
                 }
             }
             return RedirectToAction("GraphicOverview", "ReportOutpostLevel", new { outpostId = id });

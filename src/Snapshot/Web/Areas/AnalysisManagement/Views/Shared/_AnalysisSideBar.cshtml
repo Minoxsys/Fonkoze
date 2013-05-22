@@ -15,9 +15,9 @@
     };
 
     
-    window.res.link.reportregionlevel = '@(Url.RouteUrl<ReportRegionLevelController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))';
-    window.res.link.reportdistrictlevel = '@(Url.RouteUrl<ReportDistrictLevelController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))';
-    window.res.link.reportsellerlevel = '@(Url.RouteUrl<ReportOutpostLevelController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))';
+    window.res.link.reportregionlevel = '@(Url.RouteUrl<ReportRegionLevelController>(x=>x.Overview(null),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))';
+    window.res.link.reportdistrictlevel = '@(Url.RouteUrl<ReportDistrictLevelController>(x=>x.Overview(null),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))';
+    window.res.link.reportsellerlevel = '@(Url.RouteUrl<ReportOutpostLevelController>(x=>x.Overview(null),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))';
     @*window.res.link.locationreport = '@(Url.RouteUrl<LocationReportController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))';*@
    
     Ext.onReady(function () {
