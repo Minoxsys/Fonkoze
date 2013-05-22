@@ -153,7 +153,7 @@ Historical Product Level: Overview
        
         Ext.define('ProductSales', {
             extend: 'Ext.data.Model',
-            fields: ['OutpostName', 'ProductName', 'Date', {
+            fields: ['Region','District','OutpostName', 'ProductName', 'Date', {
                 name: 'Quantity',
                 type: 'int'
             }]
@@ -166,7 +166,7 @@ Historical Product Level: Overview
                 url: '@Url.RouteUrl(StockAdministrationAreaRegistration.DEFAULT_ROUTE, new { controller = "HistoricalProductLevel", action = "GetProductSales" })',
                 reader: {
                     type: 'json',
-                    root: 'ProductSales',
+                    root: 'Items',
                     totalProperty: 'TotalItems'
                 },
                 extraParams: {
@@ -185,7 +185,7 @@ Historical Product Level: Overview
                 property: 'Date',
                 direction: 'DESC'
             }],
-            groupField: 'OutpostName'
+            //groupField: 'Region'
         })
 
         window.feature.clientStore = Ext.create('Ext.data.ArrayStore', {
@@ -233,7 +233,7 @@ Historical Product Level: Overview
             ClearOutpostStore();
         };
 
-              
+       
 
         window.feature.container = Ext.create('Ext.container.Container', {
             margin: '15 15 15 15',
@@ -453,8 +453,7 @@ Historical Product Level: Overview
 
                                 //var viewButton = window.feature.container.down('#'+window.feature.viewProductStockLevelId);
                                 //viewButton.enable();
-                               
-                                showTable();
+                                 showTable();
                                       
                                
                             },
@@ -521,72 +520,92 @@ Historical Product Level: Overview
                     //}
                     ]
                 }]
-            },{
-                xtype: 'gridpanel',
-                cls: 'white-border',
-                store: window.feature.productSalesStore,
-                flex: 2,
-                loadMask: true,
-                autoScroll: true,
-                features: [
-                    //{
-                    //    id: 'group',
-                    //    ftype: 'grouping',
-                    //    groupHeaderTpl: '{name}',
-                    //   // enableGroupingMenu: true,
-                    //  //  enableNoGroups:true,
-                    //   // showSummaryRow:false,
-                    //}
-                    //,
-                    {
-                    id: 'totalSummary',
-                    ftype: 'groupingsummary',
-                    groupHeaderTpl: '{name}',
-                    hideGroupedHeader: true,                    
-                    startCollapsed: true
-                },
-                ],
-                columns: [{
-                    header: "Sellers and Products Sold",
-                    dataIndex: 'ProductName',
-                    menuDisabled:true,
-                    flex: 1,
-                    minWidth: 100,
-                    sortable: true,
-                    summaryRenderer: function (value,summaryData,dataIndex) {
-                        return '<b> Total  </b>';
-                    }
-                   
-                   
-                },{
-                    header: "Date",
-                    dataIndex: 'Date',
-                    menuDisabled:true,
-                    flex: 1,
-                    minWidth: 100,
-                    sortable: true
-                },{
-                    header: "Quantity",
-                    dataIndex: 'Quantity',
-                    menuDisabled:true,
-                    flex: 1,
-                    minWidth: 100,
-                    align: 'center',
-                    sortable: true,
-                    summaryType: 'sum',
-                    summaryRenderer: function (value, summaryData, dataIndex) {
-                          return '<b> ' + value + ' </b>';
-                    }
-                }],
-                
-            }] 
+            },
+            
+            ]
         });
 
+        
+
+        var groupByStr = '';
+        var firstColumnName = '';
         function showTable()
         {
+            var container = Ext.getCmp('TopContainer');
+            var grid = Ext.getCmp('gridProductSales');
+            container.remove(grid);
+
             ResetExtraParams();
             SetNewExtraParams();
+
+            container.add(
+                {
+                    xtype: 'gridpanel',
+                    id: 'gridProductSales',
+                    cls: 'white-border',
+                    store: window.feature.productSalesStore,
+                    flex: 2,
+                    loadMask: true,
+                    autoScroll: true,
+                    features: [
+                        {
+                            id: 'totalSummary',
+                            ftype: 'groupingsummary',
+                            groupHeaderTpl: '{name}',
+                            // hideGroupedHeader: true,                    
+                            startCollapsed: true,
+                        },
+                    ],
+                    columns: [{
+                        header: firstColumnName,
+                        dataIndex: 'OutpostName',
+                        menuDisabled: true,
+                        flex: 1,
+                        minWidth: 100,
+                        sortable: true,
+                        summaryRenderer: function (value, summaryData, dataIndex) {
+                            return '<b> Total  </b>';
+                        }
+
+
+                    }
+                    , {
+                        header: "Product",
+                        dataIndex: 'ProductName',
+                        menuDisabled: true,
+                        flex: 1,
+                        minWidth: 100,
+                        sortable: true
+                    }
+                    , {
+                        header: "Date",
+                        dataIndex: 'Date',
+                        menuDisabled: true,
+                        flex: 1,
+                        minWidth: 100,
+                        sortable: true
+                    }, {
+                        header: "Quantity",
+                        dataIndex: 'Quantity',
+                        menuDisabled: true,
+                        flex: 1,
+                        minWidth: 100,
+                        align: 'center',
+                        sortable: true,
+                        summaryType: 'sum',
+                        summaryRenderer: function (value, summaryData, dataIndex) {
+                            return '<b> ' + value + ' </b>';
+                        }
+                    }],
+
+                }
+
+                );
+            
             window.feature.productSalesStore.load();
+            window.feature.productSalesStore.group(groupByStr);
+           
+           
         }
 
         function ResetExtraParams(){
@@ -601,24 +620,42 @@ Historical Product Level: Overview
         };
 
         function SetNewExtraParams(){
+            groupByStr = '';
+            firstColumnName = '';
             var outpostSelectedValue = window.feature.container.down('#'+window.feature.outpostComboboxId).getValue();
             if (outpostSelectedValue != null){
                 window.feature.productSalesStore.proxy.extraParams.outpostId = outpostSelectedValue;
+                if (outpostSelectedValue != '@Guid.Empty') {
+                    groupByStr = 'OutpostName';
+                    firstColumnName = 'Seller';
+                }
             }
 
             var districtSelectedValue = window.feature.container.down('#'+window.feature.districtComboboxId).getValue();
             if (districtSelectedValue != null){
                 window.feature.productSalesStore.proxy.extraParams.districtId = districtSelectedValue;
+                if (groupByStr == '' && districtSelectedValue != '@Guid.Empty') {
+                    groupByStr = 'OutpostName';
+                    firstColumnName = 'Sellers';
+                }
             }
 
             var regionSelectedValue = window.feature.container.down('#'+window.feature.regionComboboxId).getValue();
             if (regionSelectedValue != null){
                 window.feature.productSalesStore.proxy.extraParams.regionId = regionSelectedValue;
+                if (groupByStr == '' && regionSelectedValue != '@Guid.Empty') {
+                    groupByStr = 'District'
+                    firstColumnName = 'Districts / Sellers';
+                }
             }
 
             var countrySelectedValue = window.feature.container.down('#'+window.feature.countryComboboxId).getValue();
             if (countrySelectedValue != null){
                 window.feature.productSalesStore.proxy.extraParams.countryId = countrySelectedValue;
+                if (groupByStr == '' && countrySelectedValue != '@Guid.Empty') {
+                    groupByStr = 'Region';
+                    firstColumnName = 'Regions / Sellers';
+                }
             }
 
             var productSelectedValue = window.feature.container.down('#' + window.feature.productComboboxId).getValue();
@@ -638,6 +675,11 @@ Historical Product Level: Overview
             if (productSelectedValue != null) {
                 window.feature.productSalesStore.proxy.extraParams.endDate = endDateSelValue;
             }
+            if(groupByStr=='')
+                groupByStr = 'Region';
+            if (firstColumnName == '')
+                firstColumnName = 'Regions / Sellers';
+           
         };
 
         var contentRes = window.res.content;
@@ -669,7 +711,7 @@ Historical Product Level: Overview
         districtCombobox.setValue('@Guid.Empty');
         outpostCombobox.setValue('@Guid.Empty');
         productCombobox.setValue('@Guid.Empty');
-
+        
         showTable();
         
        

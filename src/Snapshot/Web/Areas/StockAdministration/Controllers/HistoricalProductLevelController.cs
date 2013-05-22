@@ -315,17 +315,7 @@ namespace Web.Areas.StockAdministration.Controllers
             return total;
         }
 
-        //private Dictionary<DateTime, int> GetDayArray(DateTime startDate, DateTime endDate)
-        //{
-        //    Dictionary<DateTime, int> days = new Dictionary<DateTime, int>();
-        //    for (var dt = startDate; dt <= endDate; dt = dt.AddDays(1))
-        //    {
-        //        days.Add(dt.Date, dt.Day);
-        //    }
-
-        //    return days;
-        //}
-
+        
         [HttpGet]
         public JsonResult GetProductSales(Guid? countryId, Guid? regionId, Guid? districtId, Guid? outpostId, DateTime? startDate, DateTime? endDate, Guid? productId, string clientId)
         {
@@ -335,13 +325,13 @@ namespace Web.Areas.StockAdministration.Controllers
             var psms = new List<ProductSaleModel>();
             foreach (var productSale in ps.ToList())
             {
-                var psm = new ProductSaleModel() { OutpostName = productSale.Outpost.Name, ProductName = productSale.Product.Name, Date = productSale.Created.ToString(), Quantity = productSale.Quantity };
+                var psm = new ProductSaleModel() {Region=productSale.Outpost.Region.Name , District = productSale.Outpost.District.Name, OutpostName = productSale.Outpost.Name, ProductName = productSale.Product.Name, Date = productSale.Created.ToString(), Quantity = productSale.Quantity };
                 psms.Add(psm);
             }
           
-            return Json(new ProductsSaleOutputModel
+            return Json(new StoreOutputModel<ProductSaleModel>
             {
-                ProductSales = psms.ToArray(),
+                Items = psms.ToArray(),
                 TotalItems = psms.Count
             }, JsonRequestBehavior.AllowGet);
         }
