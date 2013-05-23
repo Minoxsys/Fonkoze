@@ -108,7 +108,7 @@
             modal: true,
             ui: 'snapshot-popup-window',
             height: 250,
-            width: 700,
+            width: 380,
             closeAction: 'hide',
             resizable: false,
             renderTo: Ext.getBody(),
@@ -140,10 +140,10 @@
                     },
                     flex: 1,
                     items: [
-                        { xtype: 'label', text: 'Please select a frequency:' },
-                        { xtype: 'label', text: 'Recur every', padding: '0 0 0 20' },
+                        { xtype: 'label', text: 'Please select a frequency:', padding: '5 0 0 0' },
+                        { xtype: 'label', text: 'Recur every', padding: '5 0 0 20' },
                         { xtype: 'textfield', id: window.feature.recurEveryId, padding: '0 0 0 10', width: 30 },
-                        { xtype: 'label', text: 'days', padding: '0 0 0 10' }
+                        { xtype: 'label', text: 'days', padding: '5 0 0 10' }
                     ]
                 },{
                     xtype: 'container',
@@ -155,10 +155,10 @@
                         align: 'strech'
                     },
                     items: [
-                        { xtype: 'label', text: 'Please select a reminder:' },
-                        { xtype: 'label', text: 'Reminder ', padding: '0 0 0 20' },
-                        { xtype: 'textfield', id: window.feature.firstReminderId, padding: '0 0 0 10', width: 30 },
-                        { xtype: 'label', text: 'days later', padding: '0 0 0 10' }
+                        { xtype: 'label', text: 'Please select a reminder:', padding: '5 0 0 0' },
+                        { xtype: 'label', text: 'Reminder ', padding: '5 0 0 26' },
+                        { xtype: 'textfield', id: window.feature.firstReminderId, padding: '0 0 0 22', width: 30 },
+                        { xtype: 'label', text: 'days later', padding: '5 0 0 10' }
                     ]
                 }
             ],
@@ -175,7 +175,7 @@
                     }
                 },{
                     text: 'Save',
-                    margin: '10 10 20 0',
+                    margin: '10 12 20 0',
                     ui: 'snapshot-add-btn',
                     cls: 'x-add-button-gradient',
                     handler: SaveSchedule
