@@ -183,7 +183,17 @@
     <Compile Include="Areas\AnalysisManagement\Models\ReportOutpostLevel\ProductStackedBarChartModel.cs" />
     <Compile Include="Areas\AnalysisManagement\Models\ReportRegionLevel\ChartInputModel.cs" />
     <Compile Include="Areas\AnalysisManagement\Models\ReportRegionLevel\ChartReferenceOutputModel.cs" />
-    <Compile Include="Models\Shared\FilterModel.cs" />
+    <Compile Include="Models\Parsing\Outpost\IOutpostsParseResult.cs" />
+    <Compile Include="Models\Parsing\Outpost\OutpostsParseResult.cs" />
+    <Compile Include="Areas\OutpostManagement\Services\ContactsUpdateService.cs" />
+    <Compile Include="Areas\OutpostManagement\Services\IContactsUpdateService.cs" />
+    <Compile Include="Areas\OutpostManagement\Services\Parsing\IOutpostsFileParseService.cs" />
+    <Compile Include="Areas\OutpostManagement\Services\IOutpostsUpdateService.cs" />
+    <Compile Include="Areas\OutpostManagement\Services\Parsing\OutpostsFileParseService.cs" />
+    <Compile Include="Areas\OutpostManagement\Services\OutpostsUpdateService.cs" />
+    <Compile Include="Areas\OutpostManagement\Models\Outpost\OutpostsUpdateResult.cs" />
+    <Compile Include="Models\Parsing\Outpost\IParsedOutpost.cs" />
+    <Compile Include="Models\Parsing\Outpost\ParsedOutpost.cs" />
     <Compile Include="Models\Shared\StoreOutputModel.cs" />
     <Compile Include="Areas\AnalysisManagement\Models\ReportRegionLevel\ProductsReferenceOutputModel.cs" />
     <Compile Include="Areas\AnalysisManagement\Models\ReportOutpostLevel\ReportOutpostLevelTreeModel.cs" />
@@ -2269,7 +2279,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Areas\OutpostManagement\Services\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

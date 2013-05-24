@@ -315,7 +315,47 @@
             entityId: 'window-feature-hiddenfield-entityId',
             coordinatesId:'window-feature-textfield-coordinates'
         };
-    
+
+        window.feature.CSVmodal = Ext.define('Ext.feature.outpost.Modal', {
+            extend: 'Ext.window.Window',
+            modal: true,
+            ui: 'snapshot-popup-window',
+            height: 170,
+            width: 530,
+            title: 'Upload CSV file',
+            layout: {
+                align: 'stretch',
+                padding: 10,
+                type: 'vbox'
+            },
+
+            initComponent: function () {
+                var me = this;
+
+                Ext.applyIf(me, {
+                    items: [
+                        {
+                            xtype: 'panel',
+                            renderTo: Ext.getBody(),
+                            width: 500,
+                            bodyPadding: '20 20 20 20',
+                            border: '0 0 0 0',
+                            html: '<form action="Upload"' + 
+                                'enctype="multipart/form-data"' +
+                                'method="post">' +
+                                '<p> Please specify a CSV file:<br>' +
+                                '<input type="file" name="csvfile" size="60" onchange="validateFile();">' +
+                                '</p><br>' +
+                                '<div><input type="submit" value="Upload file" disabled="" id="upl"></div>' +
+                                '</form>'
+                        }
+                    ]//end items for modal
+                });
+
+                me.callParent(arguments);
+            }
+        });
+
         window.feature.modal = Ext.define('Ext.feature.outpost.Modal', {
             extend: 'Ext.window.Window',
             modal:true,
@@ -835,6 +875,20 @@
                                                 });
                                                 winAdd.show();       
                                             }
+                                        },{
+                                            xtype: 'button',
+                                            margin: '0 0 0 20',
+                                            text: 'Add New Sellers From CSV',
+                                            disabled: @(ViewBag.HasNoRightsToAdd),
+                                            ui: 'snapshot-add-btn',
+                                            cls: 'x-add-button-gradient',
+                                            handler: function(){
+                                                var winAdd = new window.feature.CSVmodal({
+                                                    maxWidth: 900,
+                                                    url: '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Outpost", action = "Upload" })'
+                                                });
+                                                winAdd.show();       
+                                            }
                                         }
                                     ]
                                 },{
@@ -893,7 +947,13 @@
                             items: [
                                 window.feature.comboBoxFilters.country,
                                 window.feature.comboBoxFilters.region,
-                                window.feature.comboBoxFilters.district							
+                                window.feature.comboBoxFilters.district,
+                                {
+                                    margin: '30 0 0 30',
+                                    xtype: 'label',
+                                    style: 'color: #7F0037;',
+                                    text: '@TempData["result"]',
+                                }
                             ]
                         }
                     ]
@@ -1130,5 +1190,16 @@
                 ));
         }
     });
+</script>
+
+<script type="text/javascript">
+    function validateFile() {
+        var value = $("input:file").val();
+        if (value != "") {
+            $("#upl").removeAttr("disabled");
+        } else {
+            $("#upl").attr("disabled", "");
+        }
+    }
 </script>
 

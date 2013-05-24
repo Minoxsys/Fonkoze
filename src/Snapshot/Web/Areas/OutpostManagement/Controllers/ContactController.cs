@@ -7,6 +7,7 @@ using AutoMapper;
 using Core.Persistence;
 using Domain;
 using Core.Domain;
+using Web.Areas.OutpostManagement.Services;
 
 namespace Web.Areas.OutpostManagement.Controllers
 {

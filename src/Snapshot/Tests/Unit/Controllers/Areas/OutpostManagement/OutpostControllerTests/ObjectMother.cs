@@ -9,6 +9,7 @@ using Moq;
 using MvcContrib.TestHelper.Fakes;
 using Web.Areas.OutpostManagement.Controllers;
 using Web.Areas.OutpostManagement.Models.Outpost;
+using Web.Areas.OutpostManagement.Services;
 
 namespace Tests.Unit.Controllers.Areas.OutpostManagement.OutpostControllerTests
 {
@@ -27,6 +28,9 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.OutpostControllerTests
         public Guid regionId;
         private Mock<Region> regionMock;
         private District[] districts;
+
+        internal Mock<IOutpostsFileParseService> _outpostsParserMock;
+        internal Mock<IOutpostsUpdateService> _outpostsUpdateService;
 
         internal void Init()
         {
@@ -60,7 +64,10 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.OutpostControllerTests
 
         private void InitializeController()
         {
-            controller = new OutpostController();
+            _outpostsParserMock = new Mock<IOutpostsFileParseService>();
+            _outpostsUpdateService = new Mock<IOutpostsUpdateService>();
+
+            controller = new OutpostController(_outpostsParserMock.Object, _outpostsUpdateService.Object);
 
             FakeControllerContext.Builder.HttpContext.User = new FakePrincipal(new FakeIdentity(FAKE_USERNAME), new string[] {});
             FakeControllerContext.Initialize(controller);

@@ -12,6 +12,10 @@ using Web.CustomFilters;
 using Web.Models.Shared;
 using Web.Security;
 using Core.Security;
+using System.Web;
+using Web.Areas.OutpostManagement.Services;
+using System.Text;
+using Web.LocalizationResources;
 
 namespace Web.Areas.OutpostManagement.Controllers
 {
@@ -53,6 +57,15 @@ namespace Web.Areas.OutpostManagement.Controllers
 		private Core.Domain.User _user;
 		private Client _client;
 
+        private readonly IOutpostsFileParseService _outpostsParser;
+        private readonly IOutpostsUpdateService _outpostsUpdateService;
+
+        public OutpostController(IOutpostsFileParseService outpostsParser, IOutpostsUpdateService outpostsUpdateService)
+        {
+            _outpostsParser = outpostsParser;
+            _outpostsUpdateService = outpostsUpdateService;
+
+        }
 
         [HttpGet]
         [Requires(Permissions = "Outpost.View")]
@@ -345,6 +358,38 @@ namespace Web.Areas.OutpostManagement.Controllers
 			});
 		}
 
+        [HttpPost]
+        public ActionResult Upload(HttpPostedFileBase csvFile, UserAndClientIdentity loggedUser)
+        {
+            if (csvFile != null && csvFile.ContentLength > 0)
+            {
+                var parseResult = _outpostsParser.ParseStream(csvFile.InputStream);
+
+                if (parseResult.Success)
+                {
+                    var outpostsUpdateResult = _outpostsUpdateService.ManageParseOutposts(loggedUser, parseResult);
+
+                    if (outpostsUpdateResult.Success)
+                    {
+                        TempData["result"] = Strings.CSV_outposts_file_uploaded_successfully;
+                    }
+                    else
+                    {
+                        TempData["result"] = Strings.CSV_file_failed_outposts + GetFailedOutpostsString(outpostsUpdateResult);
+                    }
+                }
+                else
+                {
+                    TempData["result"] = Strings.CSV_file_parsing_has_failed;
+                }
+            }
+            else
+            {
+                TempData["result"] = Strings.InvalidFileSelectedForUpload;
+            }
+            return this.RedirectToAction("Overview");
+        }
+
         public ActionResult CountryPrefix(Guid? countryId)
         {
             LoadUserAndClient();
@@ -377,5 +422,28 @@ namespace Web.Areas.OutpostManagement.Controllers
 				outpost.Warehouse = QueryService.Load(model.WarehouseId.Value);
 			}
 		}
+
+        private StringBuilder GetFailedOutpostsString(OutpostsUpdateResult outpostsUpdateResult)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            for (int i = 0; i <= outpostsUpdateResult.FailedOutposts.Count; ++i)
+            {
+                if (i == 0)
+                {
+                    sb.Append(" ").Append(outpostsUpdateResult.FailedOutposts[i].Name);
+                }
+                else if (i == outpostsUpdateResult.FailedOutposts.Count)
+                {
+                    sb.Append(".");
+                }
+                else
+                {
+                    sb.Append(", ").Append(outpostsUpdateResult.FailedOutposts[i].Name);
+                }
+            }
+
+            return sb;
+        }
 	}
 }
