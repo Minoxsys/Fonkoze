@@ -122,7 +122,8 @@
                 menuDisabled: true,
                 editor: {
                     xtype: 'textfield',
-                    id: 'EmailIdContactMethod'
+                    id: 'EmailIdContactMethod',
+                    maskRe: /^[1-9]+$/,
                 }
             }, {
                 xtype: 'booleancolumn',

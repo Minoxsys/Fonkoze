@@ -14,7 +14,8 @@
 <html>
     <head>
         <meta charset="utf-8" />
-        <title>@RenderSection("page_title", required: true)</title>
+        <title >@RenderSection("page_title", required: true)</title>
+        <link rel="shortcut icon" href="../../Assets/resources/img/logo_title.png" />
         <link href="@(Url.RouteUrl<CssController>(req => req.Index("theme"), ScriptsRoutesRegistrar.CSS))"
               rel="stylesheet" type="text/css" media="screen,projection" />
         <link href="@(Url.RouteUrl<CssController>(req => req.Index("button"), ScriptsRoutesRegistrar.CSS))"

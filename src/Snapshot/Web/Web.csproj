@@ -575,6 +575,7 @@
     <Content Include="Assets\css\snapshot-theme.css" />
     <Content Include="Assets\js\ext-all-debug-w-comments.js" />
     <Content Include="Assets\js\jquery-1.7.1.min.js" />
+    <Content Include="Assets\resources\img\logo_title.png" />
     <Content Include="Assets\resources\img\OutpostStockLevel\AppActivity.png" />
     <Content Include="Assets\resources\img\Administration\Content\ArrowDown.png" />
     <Content Include="Assets\resources\img\Administration\Content\ArrowUp.png" />
