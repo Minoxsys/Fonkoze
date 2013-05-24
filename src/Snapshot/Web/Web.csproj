@@ -194,6 +194,7 @@
     <Compile Include="Areas\OutpostManagement\Models\Outpost\OutpostsUpdateResult.cs" />
     <Compile Include="Models\Parsing\Outpost\IParsedOutpost.cs" />
     <Compile Include="Models\Parsing\Outpost\ParsedOutpost.cs" />
+    <Compile Include="Models\Shared\FilterModel.cs" />
     <Compile Include="Models\Shared\StoreOutputModel.cs" />
     <Compile Include="Areas\AnalysisManagement\Models\ReportRegionLevel\ProductsReferenceOutputModel.cs" />
     <Compile Include="Areas\AnalysisManagement\Models\ReportOutpostLevel\ReportOutpostLevelTreeModel.cs" />
