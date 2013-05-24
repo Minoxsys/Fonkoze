@@ -26,6 +26,7 @@
         window.feature = {};
         window.feature.searchMessage = "Search-Message-From-SentMessage-Id";
         window.feature.gridMessagesFromSentMessageId = "Grid-Messages-From-SentMessage-Id";
+        window.feature.comboboxDistrictsId = 'comboboxDistrictsId';
 
         window.feature.sentMessageStore = Ext.create('Ext.data.Store', {
             pageSize: 50,
@@ -38,7 +39,7 @@
                     root: 'Messages',
                     totalProperty: 'TotalItems'
                 },
-                extraParams: { searchValue: '' },
+                extraParams: { searchValue: '', DistrictId: '' },
                 simpleSortMode: true
             },
             remoteSort: true,
@@ -50,6 +51,47 @@
 
         window.feature.doSearch = new Ext.util.DelayedTask(function () {
             window.feature.sentMessageStore.loadPage(1);
+        });
+
+        window.feature.DistrictStore = Ext.create('Ext.data.Store', {
+            fields: ['Name', 'Id'],
+            proxy: {
+                type: 'ajax',
+                url: '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "SentMessages", action = "GetAllDistricts" })',
+                reader: {
+                    type: 'json',
+                    root: 'districts',
+                    disableCaching: true,
+                    totalProperty: 'TotalItems'
+                }
+            }
+        });
+
+        window.feature.comboBoxDistricts = Ext.create('Ext.form.ComboBox', {
+            store: window.feature.DistrictStore,
+            queryMode: 'local',
+            id: window.feature.comboboxDistrictsId,
+            labelAlign: 'top',
+            fieldLabel: 'Selected District',
+            labelClsExtra: 'combo-label',
+            displayField: 'Name',
+            valueField: 'Id',
+            disabled: false,
+            editable: false,
+            typeAhead: false,
+            emptyText: _t('District List'),
+            listeners: {
+                select: function (combo, record, index) {
+                    var selectedDistrictId = record[0].data.Id;
+
+                    window.feature.sentMessageStore.load({ params: { districtId: selectedDistrictId } });
+                },
+                render: function (p) {
+                    p.setLoading({
+                        store: p.getStore()
+                    });
+                }
+            }
         });
 
         window.feature.container = Ext.create('Ext.container.Container', {
@@ -64,24 +106,31 @@
             items: [{
                 xtype: 'container',
                 layout: {
-                    type: 'hbox'
+                    align: 'stretch',
+                    type: 'vbox'
                 },
-                height: 50,
+                height: 110,
                 items: [{
                     xtype: 'container',
-                    flex: 1,
-                    height: 50,
                     layout: {
-                        type: 'column'
+                        type: 'hbox'
                     },
+                    height: 50,
                     items: [{
                         xtype: 'container',
-                        height: 30,
-                        width: 30,
-                        html: '&nbsp;'
-                    }, {
-                        xtype: 'image',
-                        src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/OutpostStockLevel/HistoricalProductLevel.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                        flex: 1,
+                        height: 50,
+                        layout: {
+                            type: 'column'
+                        },
+                        items: [{
+                            xtype: 'container',
+                            height: 30,
+                            width: 30,
+                            html: '&nbsp;'
+                        }, {
+                            xtype: 'image',
+                            src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/OutpostStockLevel/HistoricalProductLevel.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
                         margin: '0 10 10 0'
                     }, {
                         xtype: 'label',
@@ -115,6 +164,18 @@
                         }
                     }]
 
+                }]
+                }, {
+                    xtype: 'container',
+                    id: 'combosContainer',
+                    height: 65,
+                    margin: '0 0 0 30',
+                    layout: {
+                        type: 'column'
+                    },
+                    items: [
+                        window.feature.comboBoxDistricts
+                    ]
                 }]
             }, {
                 xtype: 'gridpanel',
@@ -170,6 +231,13 @@
 
         mainContent.add(window.feature.container);
         window.feature.sentMessageStore.loadPage(1);
+
+        window.feature.DistrictStore.load({
+            params: { regionId: '@Guid.Empty' }
+        });
+        window.feature.comboBoxDistricts.setValue('@Guid.Empty');
+        window.feature.comboBoxDistricts.setDisabled(false);
+
     });
 
 </script>

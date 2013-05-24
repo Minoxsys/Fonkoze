@@ -274,6 +274,7 @@
     <Compile Include="Unit\Services\ProductLevelRequestMessagesDispatcherTests\ObjectMother.cs" />
     <Compile Include="Unit\Services\RawSmsMeesageQueryHelpersService.cs" />
     <Compile Include="Unit\ReceiveSmsWorkflow\ReceiveSmsWorkflowServiceTests.cs" />
+    <Compile Include="Unit\Services\RetrieveAllDistrictsServiceTests.cs" />
     <Compile Include="Unit\Services\SmsGatewayServiceTest\ObjectMother.cs" />
     <Compile Include="Unit\Services\SmsGatewayServiceTest\SendSmsMethod.cs" />
     <Compile Include="Unit\Services\SmsGatewayServiceTest\SendSmsRequestMethod.cs" />

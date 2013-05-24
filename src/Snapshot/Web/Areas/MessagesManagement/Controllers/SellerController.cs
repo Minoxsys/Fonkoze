@@ -3,12 +3,24 @@ using System.Web.Mvc;
 using Web.Areas.MessagesManagement.Models.Messages;
 using Web.Security;
 using Web.Services;
+using Web.Areas.StockAdministration.Models.OutpostStockLevel;
+using System;
+using System.Linq;
+using Domain;
+using Core.Domain;
+using Core.Persistence;
 
 namespace Web.Areas.MessagesManagement.Controllers
 {
     public class SellerController : Controller
     {
+        public IRetrieveAllDistrictsService retrieveAllDistrictsService { get; set; }
         public IRawSmsMeesageQueryHelpersService SmsQueryService { get; set; }
+        public IQueryService<Client> QueryClients { get; set; }
+        public IQueryService<User> QueryUsers { get; set; }
+
+        private Client _client;
+        private User _user;
 
         [HttpGet]
         [Requires(Permissions = "Messages.View")]
@@ -18,9 +30,38 @@ namespace Web.Areas.MessagesManagement.Controllers
         }
 
         [HttpGet]
-        public JsonResult GetMessagesFromSeller(MessagesIndexModel indexModel)
+        public JsonResult GetMessagesFromSeller(MessagesIndexModel indexModel, OverviewInputModel input = null)
         {
-            return Json(SmsQueryService.GetMessagesFromOutpost(indexModel, OutpostType.Seller), JsonRequestBehavior.AllowGet);
+            var districtId = input == null ? Guid.Empty : input.DistrictId;
+            return Json(SmsQueryService.GetMessagesFromOutpost(indexModel, OutpostType.Seller, districtId), JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetAllDistricts()
+        {
+            LoadUserAndClient();
+
+            var districtList = retrieveAllDistrictsService.GetAllDistrictsForOneClient(_client.Id);
+
+            return Json(new
+            {
+                districts = districtList,
+                TotalItems = districtList.Count
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        private void LoadUserAndClient()
+        {
+            var loggedUser = User.Identity.Name;
+            _user = QueryUsers.Query().FirstOrDefault(m => m.UserName == loggedUser);
+
+            if (_user == null)
+                throw new NullReferenceException("User is not logged in");
+
+            var clientId = Client.DEFAULT_ID;
+            if (_user.ClientId != Guid.Empty)
+                clientId = _user.ClientId;
+
+            _client = QueryClients.Load(clientId);
         }
     }
 }

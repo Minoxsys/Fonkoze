@@ -7,12 +7,22 @@ using System.Linq;
 using System.Web.Mvc;
 using Web.Areas.MessagesManagement.Models.SentMessages;
 using Web.Security;
+using Web.Areas.StockAdministration.Models.OutpostStockLevel;
+using Web.Services;
+using Core.Domain;
 
 namespace Web.Areas.MessagesManagement.Controllers
 {
     public class SentMessagesController : Controller
     {
+        public IRetrieveAllDistrictsService retrieveAllDistrictsService { get; set; }
         public IQueryService<SentSms> QuerySms { get; set; }
+        public IQueryService<Outpost> QueryOutpost { get; set; }
+        public IQueryService<Client> QueryClients { get; set; }
+        public IQueryService<User> QueryUsers { get; set; }
+
+        private Client _client;
+        private User _user;
 
         [HttpGet]
         [Requires(Permissions = "Messages.View")]
@@ -22,7 +32,7 @@ namespace Web.Areas.MessagesManagement.Controllers
         }
 
         [HttpGet]
-        public JsonResult GetSentMessages(SentMessagesIndexModel indexModel)
+        public JsonResult GetSentMessages(SentMessagesIndexModel indexModel, OverviewInputModel input = null)
         {
             Debug.Assert(indexModel.limit != null, "indexModel.limit != null");
             var pageSize = indexModel.limit.Value;
@@ -43,7 +53,16 @@ namespace Web.Areas.MessagesManagement.Controllers
             rawDataQuery = orderByColumnDirection[String.Format("{0}-{1}", indexModel.sort, indexModel.dir)].Invoke();
 
             if (!string.IsNullOrEmpty(indexModel.searchValue))
+            {
                 rawDataQuery = rawDataQuery.Where(it => it.Message.Contains(indexModel.searchValue));
+            }
+            if (input != null && input.DistrictId != Guid.Empty)
+            {
+                rawDataQuery = rawDataQuery
+                    .Where(it => QueryOutpost.Query()
+                        .Where(i => i.District.Id == input.DistrictId && (it.PhoneNumber.Equals(i.DetailMethod) || it.PhoneNumber.Equals('+' + i.DetailMethod)))
+                        .Count() != 0);
+            }
 
             var totalItems = rawDataQuery.Count();
 
@@ -69,5 +88,32 @@ namespace Web.Areas.MessagesManagement.Controllers
             }, JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult GetAllDistricts()
+        {
+            LoadUserAndClient();
+
+            var districtList = retrieveAllDistrictsService.GetAllDistrictsForOneClient(_client.Id);
+
+            return Json(new
+            {
+                districts = districtList,
+                TotalItems = districtList.Count
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        private void LoadUserAndClient()
+        {
+            var loggedUser = User.Identity.Name;
+            _user = QueryUsers.Query().FirstOrDefault(m => m.UserName == loggedUser);
+
+            if (_user == null)
+                throw new NullReferenceException("User is not logged in");
+
+            var clientId = Client.DEFAULT_ID;
+            if (_user.ClientId != Guid.Empty)
+                clientId = _user.ClientId;
+
+            _client = QueryClients.Load(clientId);
+        }
     }
 }

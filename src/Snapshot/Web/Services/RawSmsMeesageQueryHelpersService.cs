@@ -14,14 +14,13 @@ namespace Web.Services
         private readonly IQueryService<RawSmsReceived> _queryRawSmsService;
         private readonly IQueryService<Outpost> _queryOutpostService;
 
-
         public RawSmsMeesageQueryHelpersService(IQueryService<RawSmsReceived> queryRawSmsService, IQueryService<Outpost> queryOutpostService)
         {
             _queryOutpostService = queryOutpostService;
             _queryRawSmsService = queryRawSmsService;
         }
 
-        public MessageIndexOuputModel GetMessagesFromOutpost(MessagesIndexModel indexModel, OutpostType outpostType)
+        public MessageIndexOuputModel GetMessagesFromOutpost(MessagesIndexModel indexModel, OutpostType outpostType, Guid? districtId = null)
         {
             Debug.Assert(indexModel.limit != null, "indexModel.limit != null");
             var pageSize = indexModel.limit.Value;
@@ -44,7 +43,14 @@ namespace Web.Services
             rawDataQuery = orderByColumnDirection[String.Format("{0}-{1}", indexModel.sort, indexModel.dir)].Invoke();
 
             if (!string.IsNullOrEmpty(indexModel.searchValue))
+            {
                 rawDataQuery = rawDataQuery.Where(it => it.Content.Contains(indexModel.searchValue));
+            }
+            if (districtId != null && districtId != Guid.Empty)
+            {
+                rawDataQuery = rawDataQuery
+                    .Where(it => _queryOutpostService.Query().Where(i => i.District.Id == districtId).Where(j => j.Id == it.OutpostId).Count() != 0);
+            }
 
             var totalItems = rawDataQuery.Count();
 
@@ -59,7 +65,12 @@ namespace Web.Services
                 Outpost outpost = _queryOutpostService.Load(message.OutpostId);
                 list.Add(new MessageModel
                     {
-                        Sender = message.Sender, Date = message.ReceivedDate.ToString("dd/MM/yyyy HH:mm"), Content = message.Content, ParseSucceeded = message.ParseSucceeded, ParseErrorMessage = message.ParseErrorMessage, OutpostName = outpost != null ? outpost.Name : null
+                        Sender = message.Sender,
+                        Date = message.ReceivedDate.ToString("dd/MM/yyyy HH:mm"),
+                        Content = message.Content,
+                        ParseSucceeded = message.ParseSucceeded,
+                        ParseErrorMessage = message.ParseErrorMessage,
+                        OutpostName = outpost != null ? outpost.Name : null
                     });
             }
             var messagesModelListProjection = list.ToArray();

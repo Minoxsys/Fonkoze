@@ -494,8 +494,10 @@
     <Compile Include="Services\FormattingStrategy.cs" />
     <Compile Include="Services\GenerateProductLevelDetailsCommand.cs" />
     <Compile Include="Services\IRawSmsMeesageQueryHelpersService.cs" />
+    <Compile Include="Services\IRetrieveAllDistrictsService.cs" />
     <Compile Include="Services\ISendEmailService.cs" />
     <Compile Include="ReceiveSmsUseCase\Services\MessageParsers\ISmsTextParserService.cs" />
+    <Compile Include="Services\RetrieveAllDistrictsService.cs" />
     <Compile Include="Services\StockUpdates\IUpdateStockService.cs" />
     <Compile Include="Services\PathService.cs" />
     <Compile Include="Services\IPathService.cs" />

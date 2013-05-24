@@ -39,13 +39,13 @@ namespace Tests.Unit.Controllers.Areas.MessagesManagement.WarehouseControllerTes
 
             _sut.GetMessagesFromWarehouse(inputModel);
 
-            _rawSmsMeesageQueryHelpersServiceMock.Verify(service => service.GetMessagesFromOutpost(inputModel, OutpostType.Warehouse));
+            _rawSmsMeesageQueryHelpersServiceMock.Verify(service => service.GetMessagesFromOutpost(inputModel, OutpostType.Warehouse, It.IsAny<System.Guid>()));
         }
 
         [Test]
         public void GetMessagesFromWarehouse_ReturnsAsJsonTheOutputFromTheHelperService()
         {
-            _rawSmsMeesageQueryHelpersServiceMock.Setup(service => service.GetMessagesFromOutpost(It.IsAny<MessagesIndexModel>(), OutpostType.Warehouse))
+            _rawSmsMeesageQueryHelpersServiceMock.Setup(service => service.GetMessagesFromOutpost(It.IsAny<MessagesIndexModel>(), OutpostType.Warehouse, It.IsAny<System.Guid>()))
                                                  .Returns(new MessageIndexOuputModel {TotalItems = 1});
 
             var result = _sut.GetMessagesFromWarehouse(new MessagesIndexModel());

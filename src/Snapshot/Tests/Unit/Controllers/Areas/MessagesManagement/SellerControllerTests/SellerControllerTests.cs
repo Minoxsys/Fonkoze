@@ -39,13 +39,13 @@ namespace Tests.Unit.Controllers.Areas.MessagesManagement.SellerControllerTests
 
             _sut.GetMessagesFromSeller(inputModel);
 
-            _rawSmsMeesageQueryHelpersServiceMock.Verify(service => service.GetMessagesFromOutpost(inputModel, OutpostType.Seller));
+            _rawSmsMeesageQueryHelpersServiceMock.Verify(service => service.GetMessagesFromOutpost(inputModel, OutpostType.Seller, It.IsAny<System.Guid>()));
         }
 
         [Test]
         public void GetMessagesFromSeller_ReturnsAsJsonTheOutputFromTheHelperService()
         {
-            _rawSmsMeesageQueryHelpersServiceMock.Setup(service => service.GetMessagesFromOutpost(It.IsAny<MessagesIndexModel>(), OutpostType.Seller))
+            _rawSmsMeesageQueryHelpersServiceMock.Setup(service => service.GetMessagesFromOutpost(It.IsAny<MessagesIndexModel>(), OutpostType.Seller, It.IsAny<System.Guid>()))
                                                  .Returns(new MessageIndexOuputModel {TotalItems = 1});
 
             var result = _sut.GetMessagesFromSeller(new MessagesIndexModel());

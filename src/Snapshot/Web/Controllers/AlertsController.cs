@@ -8,14 +8,18 @@ using System.Linq;
 using System.Web.Mvc;
 using Web.Models.Alerts;
 using Web.Security;
+using Web.Areas.StockAdministration.Models.OutpostStockLevel;
+using Web.Services;
 
 namespace Web.Controllers
 {
     public class AlertsController : Controller
     {
+        public IRetrieveAllDistrictsService retrieveAllDistrictsService  { get; set; }
         public IQueryService<Client> QueryClients { get; set; }
         public IQueryService<User> QueryUsers { get; set; }
         public IQueryService<Alert> QueryAlerts { get; set; }
+        public IQueryService<Outpost> QueryOutpost { get; set; }
 
         private Client _client;
         private User _user;
@@ -27,7 +31,7 @@ namespace Web.Controllers
         }
 
         [HttpGet]
-        public JsonResult GetAlerts(AlertsIndexModel indexModel)
+        public JsonResult GetAlerts(AlertsIndexModel indexModel, OverviewInputModel input = null)
         {
             LoadUserAndClient();
 
@@ -60,6 +64,11 @@ namespace Web.Controllers
                 alertsDataQuery = alertsDataQuery
                     .Where(it => it.OutpostName.Contains(indexModel.searchValue));
             }
+            if (input != null && input.DistrictId != Guid.Empty)
+            {
+                alertsDataQuery = alertsDataQuery
+                    .Where(it => QueryOutpost.Query().Where(i => i.District.Id == input.DistrictId).Where(j => j.Id == it.OutpostId).Count() != 0);
+            }
 
             var totalItems = alertsDataQuery.Count();
 
@@ -80,7 +89,7 @@ namespace Web.Controllers
                                                      LastUpdate = alert.LastUpdate.HasValue ? alert.LastUpdate.Value.ToString("dd-MMM-yyyy, HH:mm") : "-",
                                                      Contact = alert.Contact,
                                                      AlertType = alert.AlertType.ToString(),
-                                                     Date = alert.Created.HasValue? alert.Created.Value.ToString("dd-MMM-yyyy, HH:mm"): "-"
+                                                     Date = alert.Created.HasValue ? alert.Created.Value.ToString("dd-MMM-yyyy, HH:mm") : "-"
                                                  }).ToArray();
 
             return Json(new AlertsIndexOutputModel
@@ -88,6 +97,19 @@ namespace Web.Controllers
                     Alerts = alertsModelListProjection,
                     TotalItems = totalItems
                 }, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetAllDistricts()
+        {
+            LoadUserAndClient();
+
+            var districtList = retrieveAllDistrictsService.GetAllDistrictsForOneClient(_client.Id);
+
+            return Json(new
+            {
+                districts = districtList,
+                TotalItems = districtList.Count
+            }, JsonRequestBehavior.AllowGet);
         }
 
         private void LoadUserAndClient()
