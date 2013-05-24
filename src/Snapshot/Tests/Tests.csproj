@@ -264,8 +264,9 @@
     <Compile Include="Unit\Security\SecurePassword_Tests.cs" />
     <Compile Include="Unit\Services\EmailRequestServiceTests\ObjectMother.cs" />
     <Compile Include="Unit\Services\EmailRequestServiceTests\SendProductLevelRequestMessageMethod.cs" />
-    <Compile Include="Unit\Services\OutpostsService\ContactsUpdateServiceTests.cs" />
-    <Compile Include="Unit\Services\OutpostsService\OutpostsUpdateServiceTests.cs" />
+    <Compile Include="Unit\Services\OutpostsServiceTests\ContactsUpdateServiceTests.cs" />
+    <Compile Include="Unit\Services\OutpostsServiceTests\FileParse\OutpostsFileParseTests.cs" />
+    <Compile Include="Unit\Services\OutpostsServiceTests\OutpostsUpdateServiceTests.cs" />
     <Compile Include="Unit\Services\PreconfiguredEmailServiceTests.cs" />
     <Compile Include="Unit\Services\ProductFilterByProductLevelRequestTests\CheckProductMethod.cs" />
     <Compile Include="Unit\Services\ProductFilterByProductLevelRequestTests\ObjectMother.cs" />
@@ -273,7 +274,6 @@
     <Compile Include="Unit\Services\ProductLevelRequestMessagesDispatcherTests\ObjectMother.cs" />
     <Compile Include="Unit\Services\RawSmsMeesageQueryHelpersService.cs" />
     <Compile Include="Unit\ReceiveSmsWorkflow\ReceiveSmsWorkflowServiceTests.cs" />
-    <Compile Include="Unit\Services\OutpostsService\FileParse\OutpostsFileParseTests.cs" />
     <Compile Include="Unit\Services\SmsGatewayServiceTest\ObjectMother.cs" />
     <Compile Include="Unit\Services\SmsGatewayServiceTest\SendSmsMethod.cs" />
     <Compile Include="Unit\Services\SmsGatewayServiceTest\SendSmsRequestMethod.cs" />
