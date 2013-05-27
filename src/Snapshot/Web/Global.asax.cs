@@ -22,6 +22,7 @@ namespace Web
         IContainer IContainerAccessor.Container
         {
             get { return _container; }
+
         }
 
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
