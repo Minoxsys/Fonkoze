@@ -287,7 +287,10 @@ Outpost Management Regions: Overview
 						    }
 						    return true;
 					    },
-                        renderer: addTooltip
+                        renderer: function (val, meta, rec, rowIdx, colIdx, ds) {
+                            meta.style = 'cursor: pointer;';
+                            addTooltip(val, meta, rec, rowIdx, colIdx, ds);
+                            return val; }
                     },{
                         xtype: 'actioncolumn',
 			            text: 'Actions',
@@ -295,6 +298,9 @@ Outpost Management Regions: Overview
                         flex: 1,
                         maxWidth: 170,
                         minWidth: 150,
+                        renderer: function (val, meta) {
+                            meta.style = 'cursor: pointer;';
+                            return val; },
                         items: [{
                             icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/edit.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',  
                             text: 'Edit',

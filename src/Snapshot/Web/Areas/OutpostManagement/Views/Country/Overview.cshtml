@@ -248,7 +248,10 @@
 						}
 						return true;
 					},
-                    renderer: addTooltip
+                    renderer: function (val, meta, rec, rowIdx, colIdx, ds) {
+                        meta.style = 'cursor: pointer;';
+                        addTooltip(val, meta, rec, rowIdx, colIdx, ds);
+                        return val; }
                 },{
                     text: "Country Abbreviation",
                     menuDisabled:true,
@@ -270,6 +273,9 @@
                     flex: 1,
                     maxWidth: 170,
                     minWidth: 150,
+                    renderer: function (val, meta) {
+                        meta.style = 'cursor: pointer;';
+                        return val; },
                     items: [
                         {
                             icon:'@(Url.RouteUrl<Web.Controllers.AssetsController>(_ => _.Shared("img/delete.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',

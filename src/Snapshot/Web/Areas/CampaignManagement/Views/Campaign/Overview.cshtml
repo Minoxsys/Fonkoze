@@ -554,6 +554,9 @@
                     flex: 1,
                     maxWidth: 190,
                     minWidth: 170,
+                    renderer: function (val, meta) {
+                        meta.style = 'cursor: pointer;';
+                        return val; },
                     items: [
                         {
                             icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/edit.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',

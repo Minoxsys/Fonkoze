@@ -260,7 +260,10 @@ Product Administration Product Groups: Overview
 						}
 						return true;
 					},
-                    renderer: addTooltip
+                    renderer: function (val, meta, rec, rowIdx, colIdx, ds) {
+                        meta.style = 'cursor: pointer;';
+                        addTooltip(val, meta, rec, rowIdx, colIdx, ds);
+                        return val; }
                 },{
                     text: "Number of Products",
                     dataIndex: 'ProductsNo',
@@ -274,6 +277,9 @@ Product Administration Product Groups: Overview
                     minWidth: 150,
                     maxWidth: 170,
                     menuDisabled: true,
+                    renderer: function (val, meta) {
+                        meta.style = 'cursor: pointer;';
+                        return val; },
                     items: [{
                         icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/edit.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))', 
                         action: 'Edit',
