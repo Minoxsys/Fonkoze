@@ -677,7 +677,7 @@
                             disabled: @(ViewBag.HasNoRightsToAdd),
                             text: 'Add New Product',
                             handler: function () {
-                                window.feature.comboBoxProductGroups.setValue(window.feature.comboBoxProductGroups.store.first());
+                                window.feature.comboBoxProductGroups.setValue('@Model.DEFAULT_UNCATEGORIZED_GUID');
                                 var productModal = new window.feature.modal({
                                     recordProductGroupId: window.feature.comboBoxProductGroups.getValue()
                                 });

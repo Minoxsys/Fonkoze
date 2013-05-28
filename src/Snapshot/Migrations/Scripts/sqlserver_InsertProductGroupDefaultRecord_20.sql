@@ -9,7 +9,7 @@ INSERT INTO ProductGroups
 		   ,ReferenceCode
 		   ,Description)
 	 VALUES
-		   (newid()
+		   ('C1D9B38A-D2C6-4A95-BE0E-215F569B782F'
 		   ,GETDATE()
 		   ,'BEEC53CE-A73C-4F03-A354-C617F68BC813'
 		   ,'Uncategorized'

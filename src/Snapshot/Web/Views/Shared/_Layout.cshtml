@@ -169,7 +169,7 @@
                                                             xtype: 'button',
                                                             id: res.header.navigation.dashboard,
                                                             height: 70,
-                                                            padding: '0 0 0 0',
+                                                            padding: '0 0 0 9',
                                                             width: 135,
                                                             icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Menu/Dashboard.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
                                                             iconAlign: 'left',
@@ -177,7 +177,7 @@
                                                             toggleGroup: res.header.navigation.toggleGroup,
                                                             enableToggle: true,
                                                             pressed: true,
-                                                            text: '&nbsp;&nbsp;&nbsp;&nbsp;Dashboard',
+                                                            text: '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Dashboard',
                                                             handler: function() {
                                                                 navigateTo(res.link.dashboard);
                                                             }
@@ -185,8 +185,8 @@
                                                             xtype: 'button',
                                                             id: res.header.navigation.administration,
                                                             height: 70,
-                                                            padding: '0 0 0 5',
-                                                            width: 170,
+                                                            padding: '0 0 0 7',
+                                                            width: 157,
                                                             icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Menu/Administration.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
                                                             iconAlign: 'left',
                                                             ui: 'snapshot-navigation-btn',
@@ -195,13 +195,13 @@
                                                                 navigateTo(res.link.administration);
                                                             },
                                                             enableToggle: true,
-                                                            text: '&nbsp;&nbsp;&nbsp;&nbsp;Administration'
+                                                            text: '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Administration'
                                                         }, {
                                                             xtype: 'button',
                                                             id: res.header.navigation.outpostStockLevel,
                                                             height: 70,
-                                                            padding: '0 0 0 5',
-                                                            width: 180,
+                                                            padding: '0 0 0 9',
+                                                            width: 165,
                                                             icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Menu/OutpostProductLevel.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
                                                             iconAlign: 'left',
                                                             ui: 'snapshot-navigation-btn',
@@ -210,13 +210,13 @@
                                                             handler: function() {
                                                                 navigateTo(res.link.outpostStockLevelCurrent);
                                                             },
-                                                            text: '&nbsp;&nbsp;&nbsp;&nbsp;Product status'
+                                                            text: '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Product status'
                                                         }, {
                                                             xtype: 'button',
                                                             id: res.header.navigation.alerts,
                                                             height: 70,
-                                                            padding: '0 0 0 5',
-                                                            width: 100,
+                                                            padding: '0 0 0 9',
+                                                            width: 105,
                                                             icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Menu/Alerts.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
                                                             iconAlign: 'left',
                                                             ui: 'snapshot-navigation-btn',
@@ -225,12 +225,12 @@
                                                             handler: function() {
                                                                 navigateTo(res.link.alerts);
                                                             },
-                                                            text: '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Alerts'
+                                                            text: '&nbsp;&nbsp;&nbsp;&nbsp;Alerts'
                                                         }, {
                                                             xtype: 'button',
                                                             id: res.header.navigation.messages,
                                                             height: 70,
-                                                            padding: '0 0 0 5',
+                                                            padding: '0 0 0 15',
                                                             width: 130,
                                                             icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Menu/ActivityHeaderIcon.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
                                                             iconAlign: 'left',
@@ -240,7 +240,7 @@
                                                             handler: function() {
                                                                 navigateTo(res.link.seller);
                                                             },
-                                                            text: '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Activity'
+                                                            text: '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Activity'
                                                         }
                                                                                                                                                                                                                  @*   , {
                                                             xtype: 'button',
