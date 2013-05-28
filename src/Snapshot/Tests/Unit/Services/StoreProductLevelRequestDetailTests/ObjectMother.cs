@@ -191,8 +191,8 @@ namespace Tests.Unit.Services.StoreProductLevelRequestDetailTests
             var contact = new Mock<Contact>();
 
             contact.SetupGet(p => p.Id).Returns(Guid.NewGuid());
-            contact.SetupGet(p => p.ContactType).Returns(Contact.EMAIL_CONTACT_TYPE);
-            contact.SetupGet(p => p.ContactDetail).Returns("someone@example.com");
+            contact.SetupGet(p => p.ContactType).Returns(Contact.MOBILE_NUMBER_CONTACT_TYPE);
+            contact.SetupGet(p => p.ContactDetail).Returns("891123");
 
             return contact.Object;
         }
@@ -249,8 +249,6 @@ namespace Tests.Unit.Services.StoreProductLevelRequestDetailTests
 
             switch (input.Contact.ContactType)
             {
-                case Contact.EMAIL_CONTACT_TYPE:
-                    return new FormattingStrategy().FormatEmail(input.ProductGroup.Name, "[link will be generated]");
                 case Contact.MOBILE_NUMBER_CONTACT_TYPE:
                     return new FormattingStrategy().FormatSms(input);
             }

@@ -205,9 +205,6 @@
     <Compile Include="Unit\Controllers\ClientManagerControllerTests\Overview.cs" />
     <Compile Include="Unit\Controllers\CssControllerTests\IndexMethod.cs" />
     <Compile Include="Unit\Controllers\CssControllerTests\ObjectMother.cs" />
-    <Compile Include="Unit\Controllers\EmailRequestControllerTests\CreateMethod.cs" />
-    <Compile Include="Unit\Controllers\EmailRequestControllerTests\ObjectMother.cs" />
-    <Compile Include="Unit\Controllers\EmailRequestControllerTests\ResponseMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\CampaignManagement\RequestScheduleController_Tests\CreateMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\CampaignManagement\RequestScheduleController_Tests\DeleteMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\CampaignManagement\RequestScheduleController_Tests\DoesScheduleExistMethod.cs" />
@@ -262,8 +259,6 @@
     <Compile Include="Unit\Security\AuthenticateUser_Tests.cs" />
     <Compile Include="Unit\Security\RequiresAttributeTests.cs" />
     <Compile Include="Unit\Security\SecurePassword_Tests.cs" />
-    <Compile Include="Unit\Services\EmailRequestServiceTests\ObjectMother.cs" />
-    <Compile Include="Unit\Services\EmailRequestServiceTests\SendProductLevelRequestMessageMethod.cs" />
     <Compile Include="Unit\Services\OutpostsServiceTests\ContactsUpdateServiceTests.cs" />
     <Compile Include="Unit\Services\OutpostsServiceTests\FileParse\OutpostsFileParseTests.cs" />
     <Compile Include="Unit\Services\OutpostsServiceTests\OutpostsUpdateServiceTests.cs" />

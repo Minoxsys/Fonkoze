@@ -392,7 +392,6 @@
     <Compile Include="BackgroundJobs\EmptyJob.cs" />
     <Compile Include="Controllers\AlertsController.cs" />
     <Compile Include="Controllers\ClientManagerController.cs" />
-    <Compile Include="Controllers\EmailRequestController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Areas\CampaignManagement\Controllers\RequestScheduleController.cs" />
     <Compile Include="Controllers\SmsRequestController.cs" />
@@ -501,7 +500,6 @@
     <Compile Include="Services\StockUpdates\IUpdateStockService.cs" />
     <Compile Include="Services\PathService.cs" />
     <Compile Include="Services\IPathService.cs" />
-    <Compile Include="Services\EmailRequestService.cs" />
     <Compile Include="Services\EmailService.cs" />
     <Compile Include="Services\IEmailService.cs" />
     <Compile Include="Services\IETagService.cs" />
@@ -2332,8 +2330,6 @@
     <Content Include="Views\Shared\_LoginLayout.cshtml" />
     <Content Include="Views\UserManager\Overview.cshtml" />
     <Content Include="Views\UnauthorizedAccess\Index.cshtml" />
-    <Content Include="Views\EmailRequest\Create.cshtml" />
-    <Content Include="Views\EmailRequest\Overview.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Shared\_SubNavigation.cshtml" />

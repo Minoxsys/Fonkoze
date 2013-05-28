@@ -84,8 +84,6 @@ namespace Web.Services
 
             switch (input.Contact.ContactType)
             {
-                case Contact.EMAIL_CONTACT_TYPE:
-                    return new FormattingStrategy().FormatEmail(input.ProductGroup.Name, "[link will be generated]");
                 case Contact.MOBILE_NUMBER_CONTACT_TYPE:
                     return new FormattingStrategy().FormatSms(input);
             }

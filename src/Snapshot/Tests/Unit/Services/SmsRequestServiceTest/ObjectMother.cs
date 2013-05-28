@@ -109,7 +109,7 @@ namespace Tests.Unit.Services.SmsRequestServiceTest
             outpostWithNoNumberContact = MockRepository.GeneratePartialMock<Outpost>();
             outpostWithNoNumberContact.Stub(c => c.Id).Return(outpostId);
             outpostWithNoNumberContact.Name = OUTPOST_NAME;
-            outpostWithNoNumberContact.Contacts = new Contact[] { new Contact() { ContactType = Contact.EMAIL_CONTACT_TYPE, ContactDetail = "a@a.ro", IsMainContact = true } }.ToList<Contact>();
+            outpostWithNoNumberContact.Contacts = new Contact[] { new Contact() {ContactType="Other", ContactDetail = "3212356", IsMainContact = true } }.ToList<Contact>();
 
             productGroup = MockRepository.GeneratePartialMock<ProductGroup>();
             productGroup.Stub(c => c.Id).Return(productGroupId);
@@ -195,7 +195,7 @@ namespace Tests.Unit.Services.SmsRequestServiceTest
             productLevelRequestMessageInputWithoutProducts = new ProductLevelRequestMessageInput
             {
                 Client = client,
-                Contact = new Contact { ContactDetail = PHONE_NUMBER },
+                Contact = new Contact {ContactType="Other", ContactDetail = PHONE_NUMBER },
                 Outpost = outpost,
                 ProductGroup = productGroup,
                 Products = new Product[] { }.ToList()
@@ -204,7 +204,7 @@ namespace Tests.Unit.Services.SmsRequestServiceTest
             productLevelRequestMessageInputWithoutMobileNumber = new ProductLevelRequestMessageInput
             {
                 Client = client,
-                Contact = new Contact { ContactType = Contact.EMAIL_CONTACT_TYPE, ContactDetail = "" },
+                Contact = new Contact {ContactType="Other", ContactDetail = "" },
                 Outpost = outpost,
                 ProductGroup = productGroup,
                 Products = new Product[] { product }.ToList()

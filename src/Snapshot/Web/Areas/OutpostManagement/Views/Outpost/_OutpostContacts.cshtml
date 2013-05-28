@@ -27,8 +27,7 @@
         window.feature.detailTypeStore = Ext.create('Ext.data.Store', {
             fields: ['name'],
             data: [
-                { name: "@Domain.Contact.MOBILE_NUMBER_CONTACT_TYPE" },
-                { name: "@Domain.Contact.EMAIL_CONTACT_TYPE" }
+                { name: "@Domain.Contact.MOBILE_NUMBER_CONTACT_TYPE" }
             ]
         });
 
@@ -116,7 +115,7 @@
                 menuDisabled: true,
                 editor: window.feature.editorRowCombo
             }, {
-                header: _t('Mobile Number/Email'),
+                header: _t('Mobile Number'),
                 dataIndex: 'ContactDetail',
                 flex: 2,
                 menuDisabled: true,

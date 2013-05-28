@@ -9,7 +9,6 @@ namespace Domain
 {
     public class Contact : DomainEntity
     {
-        public const string EMAIL_CONTACT_TYPE = "Email";
         public const string MOBILE_NUMBER_CONTACT_TYPE = "Phone";
 
         /// <summary>
