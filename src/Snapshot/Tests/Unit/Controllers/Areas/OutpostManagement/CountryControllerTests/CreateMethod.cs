@@ -25,7 +25,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.CountryControllerTests
         }
 
         [Fact]
-        public void Creates_Country_From_InputModel()
+        public void Creates_Country_From_InputModel_When_CountryIsValid()
         {
             var inputModel = new CountryInputModel()
             {
@@ -34,6 +34,8 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.CountryControllerTests
                 PhonePrefix = PHONE_PREFIX
             };
 
+            objectMother.QueryWorldCountryRecordsReturnsACountry();
+
             objectMother.saveCommand.Expect(call => call.Execute(Arg<Country>.Matches(c => c.ISOCode == ISO_CODE &&
                                                                                            c.Name == NAME && c.PhonePrefix == PHONE_PREFIX)));
 
@@ -41,6 +43,23 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.CountryControllerTests
 
 
             objectMother.saveCommand.VerifyAllExpectations();
+        }
+
+        [Fact]
+        public void DoesNotCreate_Country_From_InputModel_When_CountryIsNotValid()
+        {
+            var inputModel = new CountryInputModel()
+            {
+                ISOCode = ISO_CODE,
+                Name = NAME,
+                PhonePrefix = PHONE_PREFIX
+            };
+
+            objectMother.QueryWorldCountryRecordsReturnsEmptyResult();
+
+            objectMother.controller.Create(inputModel);
+
+            objectMother.saveCommand.AssertWasNotCalled(call => call.Execute(Arg<Country>.Is.Anything));
         }
     }
 }

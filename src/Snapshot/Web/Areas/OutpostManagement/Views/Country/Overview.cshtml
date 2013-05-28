@@ -123,7 +123,7 @@
                         var countryIsoCodeTextField = me.down('#' + window.feature.isocodeId);
                         var countryPhonePrefixTextField = me.down('#' + window.feature.phoneprefixId);
                         
-                        var ok = isValid(countryNameComboBox);
+                        var ok = isValid(countryNameComboBox, countryIsoCodeTextField, countryPhonePrefixTextField);
 
                         if (ok)
                         {
@@ -135,11 +135,23 @@
 
                             var postToUrl = '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Country", action = "Create" })';
                             var action = $.post(postToUrl, values);
-                            action.success(function(){
-                                me.close();
-                                me.destroy();
-                                window.feature.store.loadPage(1);
-                                window.feature.refreshModalStore();
+                            action.success(function(serverResponse){
+                                if(serverResponse.Status != "Success"){
+                                    me.close();
+                                    me.destroy();
+
+                                    var msgAlert = Ext.Msg;
+                                    msgAlert.ui = 'snapshot-popup-window';
+                                    msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                    msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+                                    msgAlert.alert("Error","Country cannot be added!");
+                                }
+                                else{
+                                    me.close();
+                                    me.destroy();
+                                    window.feature.store.loadPage(1);
+                                    window.feature.refreshModalStore();
+                                }
                             });
                         }
                     }
@@ -150,15 +162,30 @@
         }
     });
 
-    function isValid(countryNameComboBox)
+    function isValid(countryNameComboBox, countryIsoCodeTextField, countryPhonePrefixTextField)
     {
         var ok = true;
+
         var countryNameValue = countryNameComboBox.getValue();
         if ((countryNameValue == null) || ($.trim(countryNameValue) == "")){
-                countryNameComboBox.markInvalid('Field Country is required!');  
-                countryNameComboBox.setValue(null);
-                ok = false;
-            }
+            countryNameComboBox.markInvalid('Field Country is required!');  
+            countryNameComboBox.setValue(null);
+            ok = false;
+        }
+
+        var countryIsoCodeTextFieldValue = countryIsoCodeTextField.getValue();
+        if((countryIsoCodeTextFieldValue == null) || ($.trim(countryIsoCodeTextFieldValue) == "")){
+            countryIsoCodeTextField.markInvalid('Field Abbreviation is required!');  
+            countryIsoCodeTextField.setValue(null);
+            ok = false;
+        }
+
+        var countryPhonePrefixTextFieldValue = countryPhonePrefixTextField.getValue();
+        if((countryPhonePrefixTextFieldValue == null) || ($.trim(countryPhonePrefixTextFieldValue) == "")){
+            countryPhonePrefixTextField.markInvalid('Field Phone Prefix is required!');  
+            countryPhonePrefixTextField.setValue(null);
+            ok = false;
+        }
 
         return ok;
     }

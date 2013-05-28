@@ -116,21 +116,36 @@ namespace Web.Areas.OutpostManagement.Controllers
         [HttpPost]
         [ValidateInput(false)]
         //[Requires(Permissions = "OnBoarding.Candidate.CRUD")]
-        public EmptyResult Create(CountryInputModel countryModel)
+        public JsonResult Create(CountryInputModel countryModel)
         {
             LoadUserAndClient();
 
-            var country = new Country
+            var availableCountries = this.QueryWorldCountryRecords.Query().Where(c => c.Name == countryModel.Name && c.PhonePrefix == countryModel.PhonePrefix).FirstOrDefault();
+
+            if (availableCountries != null)
             {
-                Client = this._client,
-                Name = countryModel.Name,
-                ISOCode = countryModel.ISOCode,
-                PhonePrefix = countryModel.PhonePrefix
-            };
+                var country = new Country
+                {
+                    Client = this._client,
+                    Name = countryModel.Name,
+                    ISOCode = countryModel.ISOCode,
+                    PhonePrefix = countryModel.PhonePrefix
+                };
 
-            SaveOrUpdateCommand.Execute(country);
+                SaveOrUpdateCommand.Execute(country);
 
-            return new EmptyResult();
+                return Json(new JsonActionResponse
+                    {
+                        Status = "Success",
+                    });
+            }
+            else
+            {
+                return Json(new JsonActionResponse
+                {
+                    Status = "Error",
+                });
+            }
         }
 
         private void LoadUserAndClient()

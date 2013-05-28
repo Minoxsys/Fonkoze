@@ -186,6 +186,11 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.CountryControllerTests
             this.queryWorldCountryRecords.Expect(call => call.Query()).Return(new WorldCountryRecord[] { }.AsQueryable());
         }
 
+        internal void QueryWorldCountryRecordsReturnsACountry()
+        {
+            this.queryWorldCountryRecords.Stub(m => m.Query()).Return(new List<WorldCountryRecord>{(new WorldCountryRecord{ Name = "Romania", PhonePrefix = "0040", ISOCode = "RO" })}.AsQueryable());
+        }
+
 
         internal IQueryable<Country> ExpectQueryCountryToReturnPageOfCountryDataBasedOn(CountryIndexModel indexModel)
         {
