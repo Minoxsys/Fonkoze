@@ -295,28 +295,28 @@ Analysis: Product level information at seller level
                         'rgb(255, 218, 185)', 'rgb(32, 178, 170)',
         ];
 
-        function GenerateStoreStructure() {
-            storeFields = [];
-            productFields = [];
-            chartSeries = [];
-            var i = 0;
-            storeFields.push({ name: 'Day' });
+        //function GenerateStoreStructure() {
+        //    storeFields = [];
+        //    productFields = [];
+        //    chartSeries = [];
+        //    var i = 0;
+        //    storeFields.push({ name: 'Day' });
 
-            window.feature.ProductsStore.each(function (record) {
-                productFields.push(record.get('ProductName'));
-                storeFields.push({ name: record.get('ProductName'), type: 'int' });
-                chartSeries.push({
-                    type: 'line',
-                    xField: 'Day',
-                    yField: record.get('ProductName'),
-                    highlight: { size: 7, radius: 7 },
-                    axis: 'left', smooth: true,
-                    markerConfig: { type: 'circle', size: 5, radius: 4, 'stroke-width': 0, fill: colors[i % colors.length], stroke: colors[i % colors.length] },
-                    style: { fill: colors[i % colors.length], stroke: colors[i % colors.length], 'stroke-width': 2, opacity: 1 },
-                });
-                i = i + 1;
-            });
-        };
+        //    window.feature.ProductsStore.each(function (record) {
+        //        productFields.push(record.get('ProductName'));
+        //        storeFields.push({ name: record.get('ProductName'), type: 'int' });
+        //        chartSeries.push({
+        //            type: 'line',
+        //            xField: 'Day',
+        //            yField: record.get('ProductName'),
+        //            highlight: { size: 7, radius: 7 },
+        //            axis: 'left', smooth: true,
+        //            markerConfig: { type: 'circle', size: 5, radius: 4, 'stroke-width': 0, fill: colors[i % colors.length], stroke: colors[i % colors.length] },
+        //            style: { fill: colors[i % colors.length], stroke: colors[i % colors.length], 'stroke-width': 2, opacity: 1 },
+        //        });
+        //        i = i + 1;
+        //    });
+        //};
 
         function GenerateData() {
             dataStore = [];
@@ -345,12 +345,12 @@ Analysis: Product level information at seller level
         };
 
         window.feature.execute = new Ext.util.DelayedTask(function () {
-            GenerateStoreStructure();
-            var dataChart2 = GenerateData();
-            var storeChart2 = new Ext.data.SimpleStore({
-                fields: storeFields
-            });
-            storeChart2.loadData(dataChart2);
+            //GenerateStoreStructure();
+            //var dataChart2 = GenerateData();
+            //var storeChart2 = new Ext.data.SimpleStore({
+            //    fields: storeFields
+            //});
+            //storeChart2.loadData(dataChart2);
 
             var storeChart1 = new Ext.data.SimpleStore({
                 fields: [
@@ -420,43 +420,43 @@ Analysis: Product level information at seller level
 
             });
 
-            var chart2 = Ext.getCmp('chart2DistrictLevel');
-            cont.remove(chart2);
+            //var chart2 = Ext.getCmp('chart2DistrictLevel');
+            //cont.remove(chart2);
 
-            cont.add({
-                id: 'chart2DistrictLevel',
-                xtype: 'chart',
-                flex: 1,
-                minHeight: 300,
-                margin: '25 0 0 0',
-                style: 'background:#fff',
-                animate: true,
-                store: storeChart2,
-                shadow: true,
-                legend: {
-                    position: 'right',
-                    padding: 5,
-                    itemSpacing: 1
-                },
-                axes: [{
-                    type: 'Numeric',
-                    minimum: 0,
-                    position: 'left',
-                    fields: productFields,
-                    title: 'Historical Stock Level',
-                    minorTickSteps: 1
-                }, {
-                    type: 'Numeric',
-                    position: 'bottom',
-                    fields: ['Day'],
-                    title: 'Day of the Month'
-                }],
-                series: chartSeries,
-                legend: {
-                    position: 'right'
+            //cont.add({
+            //    id: 'chart2DistrictLevel',
+            //    xtype: 'chart',
+            //    flex: 1,
+            //    minHeight: 300,
+            //    margin: '25 0 0 0',
+            //    style: 'background:#fff',
+            //    animate: true,
+            //    store: storeChart2,
+            //    shadow: true,
+            //    legend: {
+            //        position: 'right',
+            //        padding: 5,
+            //        itemSpacing: 1
+            //    },
+            //    axes: [{
+            //        type: 'Numeric',
+            //        minimum: 0,
+            //        position: 'left',
+            //        fields: productFields,
+            //        title: 'Historical Stock Level',
+            //        minorTickSteps: 1
+            //    }, {
+            //        type: 'Numeric',
+            //        position: 'bottom',
+            //        fields: ['Day'],
+            //        title: 'Day of the Month'
+            //    }],
+            //    series: chartSeries,
+            //    legend: {
+            //        position: 'right'
 
-                }
-            });
+            //    }
+            //});
         });
 
 
