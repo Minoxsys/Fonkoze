@@ -7,6 +7,7 @@
         sidebar: {
             id: 'SideBar',
             group: 'SideBarGroup',
+            sellerOverview:'Sidebar-AnalysisAdministration-Report-Seller-Level-Overview-Btn',
             reportregionlevel: 'Sidebar-AnalysisAdministration-Report-Region-Level-Button',
             reportdistrictlevel: 'Sidebar-AnalysisAdministration-Report-District-Level-Button',
             reportsellerlevel: 'Sidebar-AnalysisAdministration-Report-Seller-Level-Button'
@@ -49,14 +50,35 @@
                     type: 'vbox'
                 },
                 items: [
+                    {
+                        xtype: 'label',
+                        margin: '45 10 5 10',
+                        cls:'boldTxt',
+                        text:'Product level information :'
+                    },
+                    {
+                        xtype: 'button',
+                        id: contentRes.maincontent.sidebar.sellerOverview,
+                        toggleGroup: contentRes.maincontent.sidebar.group,
+                        enableToggle: true,
+                        text: 'Overview',
+                        height: 45,
+                        margin: '0 30 0 0',
+                        ui: 'snapshot-sidebar-btn',
+                        handler: function () {
+                            var url = '@(Url.RouteUrl<ReportOutpostLevelController>(x=>x.GraphicOverview(null),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))';
+                            url = url + "/?countryId=" + window.feature.comboBoxCountries.getValue() + "&regionId=" + window.feature.comboBoxRegions.getValue();
+                            navigateTo(url);
+                        }
+                    },
                 {
                     xtype: 'button',
                     id: contentRes.maincontent.sidebar.reportregionlevel,
                     toggleGroup: contentRes.maincontent.sidebar.group,
                     enableToggle: true,
-                    text: 'Product level information at <br/> region level',
+                    text: 'Region level',
                     height: 45,
-                    margin: '45 20 0 0',
+                    margin: '0 30 0 0',
                     ui: 'snapshot-sidebar-btn',
                     handler: function () {
                         navigateTo(window.res.link.reportregionlevel);
@@ -66,9 +88,9 @@
                     xtype: 'button',
                     id: contentRes.maincontent.sidebar.reportdistrictlevel,
                     toggleGroup: contentRes.maincontent.sidebar.group,
-                    text: 'Product level information at <br/> district level',
+                    text: 'District level',
                     height: 45,
-                    margin: '0 20 0 0',
+                    margin: '0 30 0 0',
                     ui: 'snapshot-sidebar-btn',
                     handler: function () {
                         navigateTo(window.res.link.reportdistrictlevel);
@@ -78,9 +100,9 @@
                     xtype: 'button',
                     id: contentRes.maincontent.sidebar.reportsellerlevel,
                     toggleGroup: contentRes.maincontent.sidebar.group,
-                    text: 'Product level information at <br/> seller level',
+                    text: 'Seller level',
                     height: 45,
-                    margin: '0 20 0 0',
+                    margin: '0 30 0 0',
                     ui: 'snapshot-sidebar-btn',
                     handler: function () {
                         navigateTo(window.res.link.reportsellerlevel);
@@ -93,3 +115,8 @@
 
     });
 </script>
+<style>
+    .boldTxt {
+     font-weight:bold;
+    }
+</style>
