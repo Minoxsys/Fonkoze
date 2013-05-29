@@ -42,7 +42,7 @@
                 },{
                     xtype: 'container',
                     id: 'SideBar',
-                    width: 230,
+                    width: 280,
                     layout: {
                         align: 'stretch',
                         type: 'vbox'
@@ -51,7 +51,7 @@
                         {
                             xtype: 'label',
                             margin: '45 10 10 10',
-                            text: 'Requests',
+                            text: 'Previous Campaigns',
                             cls: 'x-userMenu-label'
                         },{
                             xtype: 'button',
@@ -60,8 +60,8 @@
                             enableToggle: true,
                             icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/arrow.gif"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
                             iconCls:'x-btn-text-icon',
-                            text: 'Existing Requests',
-                            margin: '0 20 0 0',
+                            text: 'Previous Campaigns',
+                            margin: '0 20 20 0',
                             padding: '0 0 0 20',
                             height: 30,
                             ui: 'snapshot-sidebar-btn',
@@ -70,18 +70,23 @@
                             }
                         },{
                             xtype: 'label',
-                            text: 'Management',
+                            text: 'New Campaigns',
                             margin: '0 50 10 10',
+                            cls: 'x-userMenu-label'
+                        },{
+                            xtype: 'label',
+                            text: 'Stock Level Request Campaign',
+                            margin: '0 50 10 40',
                             cls: 'x-userMenu-label'
                         },{
                             xtype: 'button',
                             id: contentRes.maincontent.sidebar.manageCampaigns,
                             toggleGroup: contentRes.maincontent.sidebar.group,
-                            text: 'Manage Campaigns',
+                            text: 'Configure',
                             icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/arrow.gif"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
                             iconCls:'x-btn-text-icon',
                             margin: '0 20 0 0',
-                            padding: '0 0 0 20',
+                            padding: '0 0 0 50',
                             height: 30,
                             ui: 'snapshot-sidebar-btn',
                             handler: function () {
@@ -92,9 +97,9 @@
                             xtype: 'button',
                             id: contentRes.maincontent.sidebar.automaticSchedules,
                             toggleGroup: contentRes.maincontent.sidebar.group,
-                            text: 'Automatic Schedules',
+                            text: 'Schedule',
                             margin: '0 20 0 0',
-                            padding: '0 0 0 20',
+                            padding: '0 0 0 50',
                             height: 30,
                             ui: 'snapshot-sidebar-btn',
                             icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/arrow.gif"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
@@ -107,9 +112,9 @@
                             xtype: 'button',
                             id: contentRes.maincontent.sidebar.createProductLevelRequests,
                             toggleGroup: contentRes.maincontent.sidebar.group,
-                            text: 'Product Level Requests',
-                            margin: '0 20 0 0',
-                            padding: '0 0 0 20',
+                            text: 'Start',
+                            margin: '0 20 10 0',
+                            padding: '0 0 0 50',
                             height: 30,
                             ui: 'snapshot-sidebar-btn',
                             icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/arrow.gif"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
@@ -118,13 +123,18 @@
                                 navigateTo(window.res.link.productLevelRequest);
                             },
                             enableToggle: true
-                        }, {
+                        },{
+                            xtype: 'label',
+                            text: 'Custom Campaigns',
+                            margin: '0 50 10 40',
+                            cls: 'x-userMenu-label'
+                        },{
                             xtype: 'button',
                             id: contentRes.maincontent.sidebar.sendMessages,
                             toggleGroup: contentRes.maincontent.sidebar.group,
-                            text: 'Send Messages',
+                            text: 'Custom Capaigns',
                             margin: '0 20 0 0',
-                            padding: '0 0 0 20',
+                            padding: '0 0 0 50',
                             height: 30,
                             ui: 'snapshot-sidebar-btn',
                             icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/arrow.gif"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
