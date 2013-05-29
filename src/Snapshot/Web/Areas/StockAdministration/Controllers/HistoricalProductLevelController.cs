@@ -181,12 +181,12 @@ namespace Web.Areas.StockAdministration.Controllers
 
             if (granularity == "") granularity = "d";
             switch (granularity)
-            { 
+            {
                 case "d":
-                    GetProductSaleChartModelDayGranularity(psList, ref lstChartModel);
+                    GetProductSaleChartModelDayGranularity(startDate.Value.Date, endDate.Value.Date, psList, ref lstChartModel);
                     break;
                 case "w":
-                    GetProductSaleChartModelWeekGranularity(startDate.Value.Date,endDate.Value.Date,psList, ref lstChartModel);
+                    GetProductSaleChartModelWeekGranularity(startDate.Value.Date, endDate.Value.Date, psList, ref lstChartModel);
                     break;
                 case "m":
                     GetProductSaleChartModelMonthGranularity(startDate.Value.Date, endDate.Value.Date, psList, ref lstChartModel);
@@ -201,17 +201,32 @@ namespace Web.Areas.StockAdministration.Controllers
             }, JsonRequestBehavior.AllowGet);
         }
 
-        private void GetProductSaleChartModelDayGranularity(List<ProductSale> psList,ref List<ProductSaleChartModel> lstChartModel)
+        private void GetProductSaleChartModelDayGranularity(DateTime startDate, DateTime endDate, List<ProductSale> psList, ref List<ProductSaleChartModel> lstChartModel)
         {
+            var thisDate = startDate;
             IEnumerable<IGrouping<DateTime, ProductSale>> psGroupingByDt = psList.GroupBy(it => it.Created.Value.Date);
-            foreach (IGrouping<DateTime, ProductSale> group in psGroupingByDt)
+
+            for (int i = 0; i <= (endDate - startDate).Days; i++)
             {
-                var chartModel = new ProductSaleChartModel() { Day = group.Key.Day.ToString(), Date = group.Key.Date.ToString("d-MMM-yyyy"), Quantity = 0 };
-                chartModel.Quantity = GetTotalSales(group);
-                lstChartModel.Add(chartModel);
+                var group = psGroupingByDt.FirstOrDefault(pg => (pg.Key.Date - thisDate).Days == 0);
+
+                if (group != null)
+                {
+                    var chartModel = new ProductSaleChartModel() { Day = group.Key.Date.ToString("MM/dd"), Date = group.Key.Date.ToString("d-MMM-yyyy"), Quantity = 0 };
+                    chartModel.Quantity = GetTotalSales(group);
+                    lstChartModel.Add(chartModel);
+                }
+                else
+                {
+                    var chartModel = new ProductSaleChartModel() { Day = thisDate.Date.ToString("MM/dd"), Date = thisDate.Date.ToString("d-MMM-yyyy"), Quantity = 0 };
+                    chartModel.Quantity = 0;
+                    lstChartModel.Add(chartModel);
+                }
+
+                thisDate = thisDate.AddDays(1);
             }
-            
         }
+
         private void GetProductSaleChartModelWeekGranularity(DateTime startDate, DateTime endDate, List<ProductSale> psList,ref List<ProductSaleChartModel> lstChartModel)
         {
             int noOfWeeks = GetNoOfWeeks(startDate, endDate);
