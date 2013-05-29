@@ -202,4 +202,7 @@
   <data name="EmailAppActivityText" xml:space="preserve">
     <value>Email sent to {0}. Email Message: {1}</value>
   </data>
+  <data name="MoreThanTwoConsecutiveInvalidSMSEmailBody" xml:space="preserve">
+    <value>Seller {0} with phone number {1} has send three or more consecutive invalid SMS. Please assist.</value>
+  </data>
 </root>

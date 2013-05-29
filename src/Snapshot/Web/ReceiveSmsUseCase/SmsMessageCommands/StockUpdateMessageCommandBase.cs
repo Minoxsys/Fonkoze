@@ -66,7 +66,15 @@ namespace Web.ReceiveSmsUseCase.SmsMessageCommands
             {
                 if (IsSecondOrMoreConsecutiveMistake(smsData))
                 {
-                    var msg = CreateMailMessage(smsData, outpost);
+                    MailMessage msg;
+                    if (IsThirdOrMoreConsecutiveMistake(smsData))
+                    {
+                        msg = CreateMailMessage(smsData, outpost, true);
+                    }
+                    else
+                    {
+                        msg = CreateMailMessage(smsData, outpost);
+                    }
                     _emailSendingService.SendEmail(msg);
 
                     var phoneNumber = outpost.GetDistrictManagersPhoneNumberAsString();
@@ -114,6 +122,15 @@ namespace Web.ReceiveSmsUseCase.SmsMessageCommands
             return beforePreviousMessage != null && !beforePreviousMessage.ParseSucceeded;
         }
 
+        private bool IsThirdOrMoreConsecutiveMistake(ReceivedSmsInputModel smsData)
+        {
+            var beforePreviousMessage =
+                _rawSmsReceivedQueryService.Query()
+                                           .OrderByDescending(m => m.Created).Where(m => m.Sender == smsData.Sender).Skip(2)
+                                           .FirstOrDefault();
+            return beforePreviousMessage != null && !beforePreviousMessage.ParseSucceeded;
+        }
+
         private string ComposeFailedParsingMessage(string detailsMessage)
         {
             return string.Format(Strings.InvalidSmsReceived, detailsMessage, Environment.NewLine);
@@ -130,12 +147,21 @@ namespace Web.ReceiveSmsUseCase.SmsMessageCommands
             return sb.ToString();
         }
 
-        private MailMessage CreateMailMessage(ReceivedSmsInputModel smsData, Outpost outpost)
+        private MailMessage CreateMailMessage(ReceivedSmsInputModel smsData, Outpost outpost, bool areMoreThanTwoIncorrectMessages = false)
         {
             var msg = _emailSendingService.CreatePartialMailMessageFromConfig();
             msg.Subject = Strings.IncorrectSMSAlertSubject;
-            msg.Body = string.Format(Strings.TwoConsecutiveInvalidSMSEmailBody, outpost.Name,
-                                     smsData.Sender);
+            if (areMoreThanTwoIncorrectMessages)
+            {
+                msg.Body = string.Format(Strings.MoreThanTwoConsecutiveInvalidSMSEmailBody, outpost.Name,
+                                         smsData.Sender);
+            }
+            else
+            {
+                msg.Body = string.Format(Strings.TwoConsecutiveInvalidSMSEmailBody, outpost.Name,
+                                         smsData.Sender);
+            }
+
             return msg;
         }
 
