@@ -472,6 +472,9 @@ Analysis: Product level information at seller level
             multiSelect: true,
             autoScroll: true,
             singleExpand: false,
+            viewConfig: {
+                emptyText: '<div align="center" style="margin-top:75px; font: 17px Lucida Sans Unicode,Arial,Verdana,Geneva,Helvetica,sans-serif; color: #666666;">No data matches the parameters specified.</div>',
+            },
             listeners: {
                 itemclick: function (view, rec, item, index, eventObj) {
                     if (rec.isLeaf()) {
