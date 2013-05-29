@@ -325,7 +325,7 @@ namespace Web.Areas.StockAdministration.Controllers
             var psms = new List<ProductSaleModel>();
             foreach (var productSale in ps.ToList())
             {
-                var psm = new ProductSaleModel() {Region=productSale.Outpost.Region.Name , District = productSale.Outpost.District.Name, OutpostName = productSale.Outpost.Name, ProductName = productSale.Product.Name, Date = productSale.Created.ToString(), Quantity = productSale.Quantity };
+                var psm = new ProductSaleModel() {Country=productSale.Outpost.Country.Name ,Region=productSale.Outpost.Region.Name , District = productSale.Outpost.District.Name, OutpostName = productSale.Outpost.Name, ProductName = productSale.Product.Name, Date = productSale.Created.ToString(), Quantity = productSale.Quantity };
                 psms.Add(psm);
             }
           

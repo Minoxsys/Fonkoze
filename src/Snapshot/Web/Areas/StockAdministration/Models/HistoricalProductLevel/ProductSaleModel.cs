@@ -8,6 +8,7 @@ namespace Web.Areas.StockAdministration.Models.HistoricalProductLevel
 {
     public class ProductSaleModel
     {
+        public string Country { get; set; }
         public string Region { get; set; }
         public string District { get; set; }
         public string OutpostName { get; set; }

@@ -153,7 +153,7 @@ Historical Product Level: Overview
        
         Ext.define('ProductSales', {
             extend: 'Ext.data.Model',
-            fields: ['Region','District','OutpostName', 'ProductName', 'Date', {
+            fields: ['Country','Region','District','OutpostName', 'ProductName', 'Date', {
                 name: 'Quantity',
                 type: 'int'
             }]
@@ -503,21 +503,7 @@ Historical Product Level: Overview
                             }
                         }
                     },
-                    //{
-                    //    xtype: 'button',
-                    //    margin: '25 0 0 0',
-                    //    text: 'View Product Sales',
-                    //    ui: 'snapshot-add-btn',
-                    //    cls: 'x-add-button-gradient',
-                    //    disabled: false,
-                    //    itemId: window.feature.viewProductStockLevelId,
-                    //    handler: function(){
-                    //        ResetExtraParams();
-                    //        SetNewExtraParams();
-                    //        window.feature.productSalesStore.load();  
-                    //    }
-
-                    //}
+                    
                     ]
                 }]
             },
@@ -655,9 +641,15 @@ Historical Product Level: Overview
             var countrySelectedValue = window.feature.container.down('#'+window.feature.countryComboboxId).getValue();
             if (countrySelectedValue != null){
                 window.feature.productSalesStore.proxy.extraParams.countryId = countrySelectedValue;
-                if (groupByStr == '' && countrySelectedValue != '@Guid.Empty') {
-                    groupByStr = 'Region';
+                if (countrySelectedValue != '@Guid.Empty') {
+                    if (groupByStr == '')
+                        groupByStr = 'Region';
                     firstColumnName = 'Regions / Sellers';
+                }
+                else {
+                    if (groupByStr == '')
+                        groupByStr = 'Country';
+                    firstColumnName = 'Countries / Sellers';
                 }
             }
 
