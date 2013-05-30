@@ -18,7 +18,6 @@ namespace Web.Areas.StockAdministration.Controllers
 {
     public class HistoricalProductLevelController : Controller
     {
-
         public IQueryService<Outpost> QueryOutpost { get; set; }
         public IQueryService<ProductGroup> QueryProductGroup { get; set; }
         public IQueryService<Product> QueryProduct { get; set; }
@@ -330,20 +329,69 @@ namespace Web.Areas.StockAdministration.Controllers
             return total;
         }
 
-        
+        private IQueryable<Outpost> FilterOutposts(Guid? countryId, Guid? regionId, Guid? districtId, Guid? outpostId)
+        {
+            IQueryable<Outpost> outposts = null;
+
+            if (countryId == null || countryId == Guid.Empty)
+            {
+                outposts = QueryOutpost.Query();
+            }
+            else
+            {
+                if (regionId == null || regionId == Guid.Empty)
+                {
+                    outposts = QueryOutpost.Query().Where(o => o.Country.Id == countryId);
+                }
+                else
+                {
+                    if (districtId == null || districtId == Guid.Empty)
+                    {
+                        outposts = QueryOutpost.Query().Where(o => o.Country.Id == countryId && o.Region.Id == regionId);
+                    }
+                    else
+                    {
+                        if (outpostId == null || outpostId == Guid.Empty)
+                        {
+                            outposts = QueryOutpost.Query().Where(o => o.Country.Id == countryId && o.Region.Id == regionId && o.District.Id == districtId);
+                        }
+                        else
+                        {
+                            outposts = QueryOutpost.Query().Where(o => o.Country.Id == countryId && o.Region.Id == regionId && o.District.Id == districtId && o.Id == outpostId);
+                        }
+                    }
+                }
+            }
+
+            return outposts;
+        }
+
         [HttpGet]
         public JsonResult GetProductSales(Guid? countryId, Guid? regionId, Guid? districtId, Guid? outpostId, DateTime? startDate, DateTime? endDate, Guid? productId, string clientId)
         {
-
+            var outposts = FilterOutposts(countryId, regionId, districtId, outpostId).ToList();
             var ps = FilterProductSale(countryId, regionId, districtId, outpostId, startDate, endDate, productId, clientId);
-            
             var psms = new List<ProductSaleModel>();
-            foreach (var productSale in ps.ToList())
+
+            foreach (var outpost in outposts)
             {
-                var psm = new ProductSaleModel() {Country=productSale.Outpost.Country.Name ,Region=productSale.Outpost.Region.Name , District = productSale.Outpost.District.Name, OutpostName = productSale.Outpost.Name, ProductName = productSale.Product.Name, Date = productSale.Created.ToString(), Quantity = productSale.Quantity };
-                psms.Add(psm);
+                var products = ps.Where(p => p.Outpost.Id == outpost.Id).ToList();
+
+                if (products == null || products.Count == 0)
+                {
+                    var psm = new ProductSaleModel() { Country = outpost.Country.Name, Region = outpost.Region.Name, District = outpost.District.Name, OutpostName = outpost.Name, Quantity = 0 };
+                    psms.Add(psm);
+                }
+                else
+                {
+                    foreach (var productSale in products)
+                    {
+                        var psm = new ProductSaleModel() { Country = productSale.Outpost.Country.Name, Region = productSale.Outpost.Region.Name, District = productSale.Outpost.District.Name, OutpostName = productSale.Outpost.Name, ProductName = productSale.Product.Name, Date = productSale.Created.ToString(), Quantity = productSale.Quantity };
+                        psms.Add(psm);
+                    }
+                }
             }
-          
+
             return Json(new StoreOutputModel<ProductSaleModel>
             {
                 Items = psms.ToArray(),
@@ -478,7 +526,6 @@ namespace Web.Areas.StockAdministration.Controllers
             return s;
         }
 
-        
         [HttpGet]
         public JsonResult GetOutposts(Guid? districtId)
         {
@@ -530,8 +577,6 @@ namespace Web.Areas.StockAdministration.Controllers
 
             this._client = QueryClients.Load(clientId);
         }
-
-
 
     }
 }
