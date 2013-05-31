@@ -224,7 +224,7 @@ namespace Web.LocalizationResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Seller {0} with phone number {1} has send three or more consecutive invalid SMS. Please assist..
+        ///   Looks up a localized string similar to Seller {0} with phone number {1} has send three or more consecutive invalid SMSes. Please assist..
         /// </summary>
         internal static string MoreThanTwoConsecutiveInvalidSMSEmailBody {
             get {
