@@ -139,6 +139,9 @@
                     flex:1,
                     minWidth: 100,
                     renderer: addTooltip,
+                    renderer: function (val, meta) {
+                        meta.style = 'cursor: pointer;';
+                        return val; },
                     processEvent: function (type, view, cell, recordIndex, cellIndex, e) {
 						if (type == 'click'){
                             var rec = view.panel.store.getAt(recordIndex);
@@ -205,7 +208,10 @@
 					flex: 1,
                     maxWidth: 170,
                     minWidth: 150,
-					xtype: 'actioncolumn',
+                    xtype: 'actioncolumn',
+                    renderer: function (val, meta) {
+                        meta.style = 'cursor: pointer;';
+                        return val; },
 					items:[
 						{
 							icon: '@Url.AssetUrl("/img/edit.png")',  

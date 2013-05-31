@@ -267,7 +267,10 @@
                     flex: 3,
                     minWidth: 150,
                     menuDisabled:true,
-                    sortable: true
+                    sortable: true,
+                    renderer: function (val, meta) {
+                        meta.style = 'cursor: pointer;';
+                        return val; },
                 },{
                     header: 'Basis',
                     dataIndex: 'Basis',
