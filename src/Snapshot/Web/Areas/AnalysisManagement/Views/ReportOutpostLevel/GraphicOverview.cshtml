@@ -463,7 +463,7 @@ Analysis: Product level information at seller level
                         trackMouse: true,
                         width: 140,
                         renderer: function (storeItem, item) {
-                            this.setTitle(item.yField +"<br/>"+"Product level: "+String(item.value[1]) + "<br/>" + "Minimum Limit: "+storeItem.get(item.yField + "_Lower"));
+                            this.setTitle(item.yField +"<br/>"+"Stock level: "+String(item.value[1]) + "<br/>" + "Minimum Limit: "+storeItem.get(item.yField + "_Lower"));
                         }
                     },
                     xField: 'OutpostName',

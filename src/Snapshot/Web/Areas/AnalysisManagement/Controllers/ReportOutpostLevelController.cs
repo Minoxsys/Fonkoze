@@ -337,7 +337,7 @@ namespace Web.Areas.AnalysisManagement.Controllers
             {
                 if (location == "outpost")
                 {
-                    return RedirectToAction("GraphicOverview", "ReportOutpostLevel", new { outpostId = id });
+                    return RedirectToAction("Overview", "ReportOutpostLevel", new { outpostId = id });
                 }
                 if (location == "district")
                 {
@@ -348,7 +348,7 @@ namespace Web.Areas.AnalysisManagement.Controllers
                     return RedirectToAction("Overview", "ReportRegionLevel", new { regionId = id });
                 }
             }
-            return RedirectToAction("GraphicOverview", "ReportOutpostLevel", new { outpostId = id });
+            return RedirectToAction("Overview", "ReportOutpostLevel", new { outpostId = id });
         }
 
         private void LoadUserAndClient()

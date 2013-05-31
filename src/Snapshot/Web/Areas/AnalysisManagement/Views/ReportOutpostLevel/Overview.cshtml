@@ -578,9 +578,8 @@ Analysis: Product level information at seller level
                     tips: {
                         trackMouse: true,
                         width: 140,
-                        height: 28,
                         renderer: function (storeItem, item) {
-                            this.setTitle(storeItem.get('ProductName') + ': ' + storeItem.get('StockLevel') + '');
+                            this.setTitle("<div style='padding-bottom:6px'>"+storeItem.get('ProductName') + '</div> Stock Level: ' + storeItem.get('StockLevel') + '<br/>Minimum Limit: '+storeItem.get('LowerLimit'));
                         }
                     },
                     xField: ['ProductName'],
@@ -655,7 +654,6 @@ Analysis: Product level information at seller level
                 xtype: 'chart',
                 flex: 1,
                 insetPadding: 45,
-                //maxWidth: chartStore.getCount() * 700,
                 margin: '0 0 0 20',
                 animate: true,
                 shadow: true,
@@ -693,7 +691,7 @@ Analysis: Product level information at seller level
                         trackMouse: true,
                         width: 140,
                         renderer: function (storeItem, item) {
-                            this.setTitle(item.yField + "<br/>" + "Product level: " + String(item.value[1]) + "<br/>" + "Minimum Limit: " + storeItem.get(item.yField + "_Lower"));
+                            this.setTitle("<div style='padding-bottom:6px'>"+item.yField + "</div>" + "Stock level: " + String(item.value[1]) + "<br/>" + "Minimum Limit: " + storeItem.get(item.yField + "_Lower"));
                         }
                     },
                     xField: 'OutpostName',
@@ -760,15 +758,15 @@ Analysis: Product level information at seller level
             viewConfig: {
                 emptyText: '<div align="center" style="margin-top:75px; font: 17px Lucida Sans Unicode,Arial,Verdana,Geneva,Helvetica,sans-serif; color: #666666;">No data matches the parameters specified.</div>',
             },
-            //listeners: {
-            //    itemclick: function (view, rec, item, index, eventObj) {
-            //        if (rec.isLeaf()) {
-            //            // some functionality to open the leaf(document) in a tabpanel
-            //        } else if (rec.isExpanded()) {
-            //            rec.collapse();
-            //        } else {
-            //            rec.expand();
-            //        }
+            listeners: {
+                itemclick: function (view, rec, item, index, eventObj) {
+                   if (rec.isLeaf()) {
+                        // some functionality to open the leaf(document) in a tabpanel
+                    } else if (rec.isExpanded()) {
+                       rec.collapse();
+                    } else {
+                        rec.expand();
+                   }
             //        if (!rec.get('leaf') && rec.parentNode.parentNode !=null) {
             //            window.feature.ProductsStore.proxy.extraParams.productGroupId = rec.get('Id');
             //            window.feature.ProductsStore.proxy.extraParams.outpostId = rec.get('ParentId');
@@ -777,8 +775,8 @@ Analysis: Product level information at seller level
 
             //            window.feature.execute.delay(300);
             //        }
-            //    }
-            //},
+                }
+            },
             columns: [{
                 xtype: 'treecolumn',
                 text: 'Seller / Product Group / Product',
@@ -949,7 +947,15 @@ Analysis: Product level information at seller level
             callback: function () { window.feature.comboBoxDistricts.setValue('@Model.districtId') }
         });
         window.feature.OutpostStore.load({
-            callback: function () { window.feature.comboBoxOutposts.setValue('@Model.outpostId') }
+            callback: function () {
+                window.feature.comboBoxOutposts.setValue('@Model.outpostId');
+                if ('@Model.outpostId' != null && '@Model.outpostId' != '@Guid.Empty') {
+                    showSellerChart();
+                }
+                else {
+                    showOverviewChart();
+                }
+            }
         });
 
         //window.feature.comboBoxCountries.setValue(allOptionGUID);
@@ -960,6 +966,7 @@ Analysis: Product level information at seller level
         
         
         window.feature.treegrid.getRootNode().expand();
-        showOverviewChart();
+       
+        
     });
 </script>

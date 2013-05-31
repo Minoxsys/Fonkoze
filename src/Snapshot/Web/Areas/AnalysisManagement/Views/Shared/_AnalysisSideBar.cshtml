@@ -7,7 +7,7 @@
         sidebar: {
             id: 'SideBar',
             group: 'SideBarGroup',
-            sellerOverview:'Sidebar-AnalysisAdministration-Report-Seller-Level-Overview-Btn',
+            //sellerOverview:'Sidebar-AnalysisAdministration-Report-Seller-Level-Overview-Btn',
             reportregionlevel: 'Sidebar-AnalysisAdministration-Report-Region-Level-Button',
             reportdistrictlevel: 'Sidebar-AnalysisAdministration-Report-District-Level-Button',
             reportsellerlevel: 'Sidebar-AnalysisAdministration-Report-Seller-Level-Button'
@@ -56,7 +56,7 @@
                         cls:'boldTxt',
                         text:'Product level information :'
                     },
-                    {
+                    @*{
                         xtype: 'button',
                         id: contentRes.maincontent.sidebar.sellerOverview,
                         toggleGroup: contentRes.maincontent.sidebar.group,
@@ -70,7 +70,7 @@
                             url = url + "/?countryId=" + window.feature.comboBoxCountries.getValue() + "&regionId=" + window.feature.comboBoxRegions.getValue();
                             navigateTo(url);
                         }
-                    },
+                    },*@
                 {
                     xtype: 'button',
                     id: contentRes.maincontent.sidebar.reportregionlevel,
