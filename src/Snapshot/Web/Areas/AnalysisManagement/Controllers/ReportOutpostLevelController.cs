@@ -136,18 +136,23 @@ namespace Web.Areas.AnalysisManagement.Controllers
             return productNode;
         }
 
-        public JsonResult GetProductsForChart(Guid? productGroupId, Guid? outpostId)
+        public JsonResult GetProductsForChart(Guid? outpostId)
         {
             List<ProductsChartModel> listOfProducts = new List<ProductsChartModel>();
 
-            if (!productGroupId.HasValue || !outpostId.HasValue)
+            if (!outpostId.HasValue)
                 return Json(new ProductsForChartOutputModel
                 {
                     Products = listOfProducts.ToArray(),
                     TotalItems = 0
                 }, JsonRequestBehavior.AllowGet);
-
-            listOfProducts = GetProductsAssociatedTo(productGroupId.Value, outpostId.Value);
+            
+           LoadUserAndClient();
+           var oslLst = QueryOutpostStockLevel.Query().Where(it => it.Client.Id == _client.Id).Where(it => it.Outpost.Id == outpostId.Value).ToList();
+           foreach (OutpostStockLevel s in oslLst)
+           {
+               listOfProducts.Add(new ProductsChartModel() { ProductName = s.Product.Name, StockLevel = s.StockLevel.ToString(), LowerLimit = s.Product.LowerLimit });
+           }
 
             return Json(new ProductsForChartOutputModel
             {
@@ -156,7 +161,7 @@ namespace Web.Areas.AnalysisManagement.Controllers
             }, JsonRequestBehavior.AllowGet);
         }
 
-        private List<ProductsChartModel> GetProductsAssociatedTo(Guid productGroupId, Guid outpostId)
+        private List<ProductsChartModel> GetProductsAssociatedTo(Guid outpostId)
         {
             LoadUserAndClient();
             List<ProductsChartModel> listOfProducts = new List<ProductsChartModel>();
@@ -165,8 +170,8 @@ namespace Web.Areas.AnalysisManagement.Controllers
             var reportOutpostLevelTreeModel = GetReportOutpostTreeModel(reportOutpostLevel);
 
             var outpost = reportOutpostLevelTreeModel.children.Find(it => it.Id == outpostId);
-            var pg = outpost.children.Find(it => it.Id == productGroupId);
-            foreach (var product in pg.children)
+            //var pg = outpost.children.Find(it => it.Id == productGroupId);
+            foreach (var product in outpost.children)
             {
                 ProductsChartModel model = new ProductsChartModel() { ProductName = product.Name, StockLevel = product.ProductLevelSum ,LowerLimit=product.LowerLimit};
                 listOfProducts.Add(model);
