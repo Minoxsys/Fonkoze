@@ -492,7 +492,7 @@ Analysis: Location Report
                 
                 {
                     xtype: 'container',
-                    flex: 2,
+                    flex: 1,
                     layout:{
                         align: 'stretch',
                         type: 'hbox'
@@ -522,17 +522,17 @@ Analysis: Location Report
 
                             },
                             {
-                                header: 'Red',
+                                header: '<img src="@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/LocationReport/red.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))"/>',
                                 dataIndex:'RedOutposts',
                                width: 60,
                             },
                             {
-                                header: 'Amber',
+                                header: '<img src="@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/LocationReport/amber.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))"/>',
                                 dataIndex: 'AmberOutposts',
                                 width: 60,
                             },
                             {
-                                header: 'Green',
+                                header: '<img src="@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/LocationReport/green.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))"/>',
                                 dataIndex:'GreenOutposts',
                                width: 60,
                             },
@@ -542,7 +542,7 @@ Analysis: Location Report
                                 width: 60,
                             },
                             ],
-                            title: 'Seller status per district'
+                            title: 'Seller Status'
                         },
                        
 
@@ -551,7 +551,7 @@ Analysis: Location Report
                     },
                     {
                         xtype: 'container',
-                        flex: 4,
+                        flex: 2,
                         layout: {
                             align: 'stretch',
                             type: 'vbox'
@@ -695,7 +695,7 @@ Analysis: Location Report
                 maxWidth:400,
                 maxHeight:800,
                 columns: gridColumns,
-                title:'Sellers and their product status'
+                title: 'Product Status'
                
 
             })
