@@ -751,7 +751,6 @@ Analysis: Product level information at seller level
             cls: 'white-border',
             rootVisible: false,
             flex: 1,
-           // width:660,
             scroll: 'vertical',
             root: {},
             store: window.feature.treeStore,
@@ -838,28 +837,13 @@ Analysis: Product level information at seller level
                             cls: 'x-title-label',
                             text: 'Product level information at seller level'
                         },
-                        @*{
-                            xtype: 'button',
-                            margin: '0 10 0 20',
-                            ui: 'snapshot-add-btn',
-                            cls: 'x-add-button-gradient',
-                            text: 'Graphic View',
-                            handler: function () {
-                                var url = '@(Url.RouteUrl<ReportOutpostLevelController>(x=>x.GraphicOverview(null),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))';
-                                url = url + "/?countryId=" + window.feature.comboBoxCountries.getValue() + "&regionId=" + window.feature.comboBoxRegions.getValue() + "&districtId=" + window.feature.comboBoxDistricts.getValue();
-                                url+= "&outpostId=" + window.feature.comboBoxOutposts.getValue();
-                                navigateTo(url);
-                            }
-                        }*@
+                        
                         ]
                        }, {
                         xtype: 'container',
                         height: 65,
                         layout: {
                             type: 'column',
-                            
-                            //align: 'left',
-                            //pack: 'start'
                         },
                         items: [
                                 window.feature.comboBoxCountries,
@@ -966,8 +950,6 @@ Analysis: Product level information at seller level
         //window.feature.comboBoxDistricts.setValue(allOptionGUID);
         //window.feature.comboBoxOutposts.setValue(allOptionGUID);
 
-        
-        
         window.feature.treegrid.getRootNode().expand();
        
         

@@ -176,6 +176,7 @@
     <Compile Include="Areas\AnalysisManagement\Models\LocationReport\MarkerModel.cs" />
     <Compile Include="Areas\AnalysisManagement\Models\LocationReport\OutpostGridModel.cs" />
     <Compile Include="Areas\AnalysisManagement\Models\LocationReport\ProductGridModel.cs" />
+    <Compile Include="Areas\AnalysisManagement\Models\ReportDistrictLevel\DistrictStackedBarChart.cs" />
     <Compile Include="Areas\AnalysisManagement\Models\ReportDistrictLevel\ProductsChartModel.cs" />
     <Compile Include="Areas\AnalysisManagement\Models\ReportDistrictLevel\ProductsForChartOutputModel.cs" />
     <Compile Include="Areas\AnalysisManagement\Models\ReportOutpostLevel\OutpostsForStackedBarChartOutputModel.cs" />

@@ -10,6 +10,7 @@ using Web.Areas.AnalysisManagement.Models.ReportRegionLevel;
 using Web.Areas.AnalysisManagement.Models.ReportDistrictLevel;
 using Web.Security;
 using Web.Models.Shared;
+using Web.Areas.AnalysisManagement.Models.ReportOutpostLevel;
 
 namespace Web.Areas.AnalysisManagement.Controllers
 {
@@ -207,6 +208,109 @@ namespace Web.Areas.AnalysisManagement.Controllers
 
             return listOfProducts;
         }
+
+        [HttpGet]
+        public string GetProductFields(Guid? countryId, Guid? regionId,Guid? districtId)
+        {
+            string productFields = "";
+            LoadUserAndClient();
+            List<OutpostStockLevel> oslList = QueryOutpostStockLevel.Query().Where(it => it.Client.Id == _client.Id).ToList();
+            if (districtId != null && districtId.Value != ID_ALL_OPTION)
+            {
+                oslList = oslList.Where(it => it.Outpost.District.Id == districtId).ToList();
+            }
+            else
+            {
+                if (regionId != null && regionId.Value != ID_ALL_OPTION)
+                {
+                    oslList = oslList.Where(it => it.Outpost.Region.Id == regionId).ToList();
+                }
+                else
+                {
+                    if (countryId != null && countryId != ID_ALL_OPTION)
+                    {
+                        oslList = oslList.Where(it => it.Outpost.Country.Id == countryId).ToList();
+                    }
+                }
+            }
+
+            var groupedByProduct = oslList.GroupBy(p => p.Product);
+            foreach (var pGroup in groupedByProduct)
+            {
+                if (!productFields.Contains(pGroup.Key.Name + ","))
+                    productFields += pGroup.Key.Name + ",";
+            }
+
+            return productFields.Trim(',');
+
+
+        }
+
+        [HttpGet]
+        public JsonResult GetDataForStackedBarChart(Guid? countryId, Guid? regionId, Guid? districtId)
+        {
+            List<DistrictStackedBarChartModel> chartData = new List<DistrictStackedBarChartModel>();
+
+            if (!countryId.HasValue && !regionId.HasValue)
+            {
+                return Json(new StoreOutputModel<DistrictStackedBarChartModel>
+                {
+                    Items = chartData.ToArray(),
+                    TotalItems = 0
+                }, JsonRequestBehavior.AllowGet);
+            }
+            LoadUserAndClient();
+
+            List<OutpostStockLevel> oslList = QueryOutpostStockLevel.Query().Where(it => it.Client.Id == _client.Id).ToList();
+            if (districtId != null && districtId.Value != ID_ALL_OPTION)
+            {
+                oslList = oslList.Where(it => it.Outpost.District.Id == districtId).ToList();
+            }
+            else
+            {
+                if (regionId != null && regionId.Value != ID_ALL_OPTION)
+                {
+                    oslList = oslList.Where(it => it.Outpost.Region.Id == regionId).ToList();
+                }
+                else
+                {
+                    if (countryId != null && countryId != ID_ALL_OPTION)
+                    {
+                        oslList = oslList.Where(it => it.Outpost.Country.Id == countryId).ToList();
+                    }
+                }
+            }
+            var groupedByDistrict = oslList.GroupBy(it => it.Outpost.District);
+            foreach (var reg in groupedByDistrict)
+            {
+                var item = new DistrictStackedBarChartModel() { DistrictName = reg.Key.Name };
+                var groupedByProduct = reg.GroupBy(it => it.Product);
+                foreach (var prod in groupedByProduct)
+                {
+                    var p = new ProductStackedBarChartModel() { ProductName = prod.Key.Name };
+                    p.StockLevel = GetTotalProductStock(prod);
+                    item.Products.Add(p);
+                }
+
+                chartData.Add(item);
+            }
+            return Json(new StoreOutputModel<DistrictStackedBarChartModel>
+            {
+                Items = chartData.ToArray(),
+                TotalItems = 0
+            }, JsonRequestBehavior.AllowGet);
+        }
+        private int GetTotalProductStock(IGrouping<Product, OutpostStockLevel> prod)
+        {
+            int total = 0;
+            foreach (var osl in prod)
+            {
+                total += osl.StockLevel;
+            }
+            return total;
+        }
+
+
 
     }
 }
