@@ -183,6 +183,7 @@
     <Compile Include="Areas\AnalysisManagement\Models\ReportOutpostLevel\ProductStackedBarChartModel.cs" />
     <Compile Include="Areas\AnalysisManagement\Models\ReportRegionLevel\ChartInputModel.cs" />
     <Compile Include="Areas\AnalysisManagement\Models\ReportRegionLevel\ChartReferenceOutputModel.cs" />
+    <Compile Include="Areas\AnalysisManagement\Models\ReportRegionLevel\RegionStackedBarChartModel.cs" />
     <Compile Include="Models\Parsing\Outpost\IOutpostsParseResult.cs" />
     <Compile Include="Models\Parsing\Outpost\OutpostsParseResult.cs" />
     <Compile Include="Areas\OutpostManagement\Services\ContactsUpdateService.cs" />

@@ -10,6 +10,7 @@ using Web.Areas.AnalysisManagement.Models.ReportRegionLevel;
 using Web.Security;
 using Web.Models.UserManager;
 using Web.Models.Shared;
+using Web.Areas.AnalysisManagement.Models.ReportOutpostLevel;
 
 namespace Web.Areas.AnalysisManagement.Controllers
 {
@@ -177,6 +178,36 @@ namespace Web.Areas.AnalysisManagement.Controllers
         }
 
         [HttpGet]
+        public string GetProductFields(Guid? countryId, Guid? regionId)
+        {
+            string productFields = "";
+            LoadUserAndClient();
+            List<OutpostStockLevel> oslList = QueryOutpostStockLevel.Query().Where(it => it.Client.Id == _client.Id).ToList();
+            if (regionId != null && regionId.Value != ID_ALL_OPTION)
+            {
+                oslList = oslList.Where(it => it.Outpost.Region.Id == regionId).ToList();
+            }
+            else
+            {
+                if (countryId != null && countryId != ID_ALL_OPTION)
+                {
+                    oslList = oslList.Where(it => it.Outpost.Country.Id == countryId).ToList();
+                }
+            }
+
+            var groupedByProduct = oslList.GroupBy(p => p.Product);
+            foreach (var pGroup in groupedByProduct)
+            {
+                if (!productFields.Contains(pGroup.Key.Name + ","))
+                    productFields += pGroup.Key.Name + ",";
+            }
+
+            return productFields.Trim(',');
+
+
+        }
+
+        [HttpGet]
         public JsonResult GetProducts(Guid? productGroupId)
         {
             List<ReferenceModel> listOfProducts = new List<ReferenceModel>();
@@ -218,56 +249,66 @@ namespace Web.Areas.AnalysisManagement.Controllers
         }
 
         [HttpGet]
-        public JsonResult GetChartData(Guid? productGroupId)
+        public JsonResult GetDataForStackedBarChart(Guid? countryId, Guid? regionId)
         {
-            List<ChartInputModel> chartData = new List<ChartInputModel>();
-            if (!productGroupId.HasValue)
+            List<RegionStackedBarChartModel> chartData = new List<RegionStackedBarChartModel>();
+           
+            if (!countryId.HasValue && !regionId.HasValue)
             {
-                return Json(new ChartReferenceOutputModel
+                return Json(new StoreOutputModel<RegionStackedBarChartModel>
                 {
-                    Products = chartData.ToArray(),
+                    Items = chartData.ToArray(),
                     TotalItems = 0
                 }, JsonRequestBehavior.AllowGet);
             }
-            List<ReferenceModel> allProductsForGroup = GetAllProductsFor(productGroupId.Value);
-            chartData = CreateChartDataFrom(allProductsForGroup, productGroupId.Value);
-
-            return Json(new ChartReferenceOutputModel
-            {
-                Products = chartData.ToArray(),
-                TotalItems = chartData.Count()
-            }, JsonRequestBehavior.AllowGet);
-        }
-
-        public List<ChartInputModel> CreateChartDataFrom(List<ReferenceModel> allProducts, Guid productGroupId)
-        {
-            List<ChartInputModel> charData = new List<ChartInputModel>();
             LoadUserAndClient();
 
-            var reportRegionLevel = QueryOutpostStockLevel.Query().Where(it => it.Client.Id == _client.Id).ToList();
-            var reportRegionLevelTreeModel = GetReportRegionTreeModel(reportRegionLevel);
-
-            foreach (var region in reportRegionLevelTreeModel.children)
+            List<OutpostStockLevel> oslList = QueryOutpostStockLevel.Query().Where(it => it.Client.Id == _client.Id).ToList();
+            if (regionId != null && regionId.Value != ID_ALL_OPTION)
             {
-                foreach (var product in allProducts)
+                oslList = oslList.Where(it => it.Outpost.Region.Id == regionId).ToList();
+            }
+            else
+            {
+                if (countryId != null && countryId != ID_ALL_OPTION)
                 {
-                    ChartInputModel model = new ChartInputModel();
-                    model.RegionName = region.Name.Substring(0,  region.Name.IndexOf(" ( Number of Sellers:"));
-                    model.ProductName = product.Name;
-                    var pg = region.children.Find(it => it.Id == productGroupId);
-                    if (pg != null)
-                    {
-                        var prod = pg.children.Find(it => it.Id == product.Id);
-                        if (prod != null)
-                            model.StockLevelSum = Int32.Parse(prod.ProductLevelSum);
-                        else model.StockLevelSum = 0;
-
-                        charData.Add(model);
-                    }
+                    oslList = oslList.Where(it => it.Outpost.Country.Id == countryId).ToList();
                 }
             }
 
-            return charData;
+            var groupedByRegion = oslList.GroupBy(it => it.Outpost.Region);
+            foreach (var reg in groupedByRegion)
+            {
+                var item = new RegionStackedBarChartModel() { RegionName = reg.Key.Name };
+                var groupedByProduct = reg.GroupBy(it => it.Product);
+                foreach (var prod in groupedByProduct)
+                {
+                    var p = new ProductStackedBarChartModel() { ProductName = prod.Key.Name};
+                    p.StockLevel = GetTotalProductStock(prod);
+                    item.Products.Add(p);
+                }
+               
+                chartData.Add(item);
+            }
+            return Json(new StoreOutputModel<RegionStackedBarChartModel>
+            {
+                Items = chartData.ToArray(),
+                TotalItems = 0
+            }, JsonRequestBehavior.AllowGet);
         }
+
+       
+
+        private int GetTotalProductStock(IGrouping<Product, OutpostStockLevel> prod)
+        {
+            int total = 0;
+            foreach (var osl in prod)
+            {
+                total += osl.StockLevel;
+            }
+            return total;
+        }
+
+     
     }
 }

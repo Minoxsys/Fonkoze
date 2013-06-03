@@ -465,15 +465,13 @@ Analysis: Product level information at seller level
 
         function showSellerChart()
         {
-            //window.feature.ProductsStore.proxy.extraParams.outpostId = Ext.getCmp(window.feature.comboboxOutpostsId).getValue();
-
             window.feature.ProductsStore.load({
                 params: { outpostId: Ext.getCmp(window.feature.comboboxOutpostsId).getValue() },
                 callback:function() {
                     window.feature.executeSellerChart.delay(100)
                 }
             });
-            //window.feature.executeSellerChart.delay(1000);
+            
         }
         function showOverviewChart() {
             var getFromUrl = '@Url.RouteUrl(AnalysisManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "ReportOutpostLevel", action = "GetProductFields" })';
@@ -493,8 +491,10 @@ Analysis: Product level information at seller level
                       var chartContainer = Ext.getCmp('DivChartContainer');
                       var lbl = Ext.getCmp('lblNoSales');
                       chartContainer.remove(lbl);
-                      var chart2 = Ext.getCmp('chart2DistrictLevel');
+                      var chart2 = Ext.getCmp('chartSellerOverviewLevel');
                       chartContainer.remove(chart2);
+                      var chart1 = Ext.getCmp('chart1OutpostLevel');
+                      chartContainer.remove(chart1);
 
                       chartContainer.add({ xtype: 'label', id: 'lblNoSales', margin: '40 0 0 10', text: 'There is no data for the selected filter.', cls: 'x-title-label' });
 
@@ -589,6 +589,7 @@ Analysis: Product level information at seller level
                         return barAttr;
                     },
                 }]
+                
 
             });
 
@@ -640,6 +641,8 @@ Analysis: Product level information at seller level
 
             var chartContainer = Ext.getCmp('DivChartContainer');
             var chart2 = Ext.getCmp('chartSellerOverviewLevel');
+            var chart1 = Ext.getCmp('chart1OutpostLevel');
+            chartContainer.remove(chart1);
             chartContainer.remove(chart2);
             var lbl = Ext.getCmp('lblNoSales');
             chartContainer.remove(lbl);

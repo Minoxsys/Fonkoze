@@ -90,6 +90,8 @@ Analysis: Product level information at region level
                     window.feature.treegrid.getStore().proxy.extraParams.RegionId = '';
                     window.feature.treegrid.getRootNode().expand();
 
+                    showChart();
+
                 }
             }
         });
@@ -111,6 +113,8 @@ Analysis: Product level information at region level
                     window.feature.treegrid.setRootNode(null);
                     window.feature.treegrid.getStore().proxy.extraParams.RegionId = selectedRegionId;
                     window.feature.treegrid.getRootNode().expand();
+
+                    showChart();
                 }
             }
         });
@@ -131,47 +135,7 @@ Analysis: Product level information at region level
         });
 
 
-        var productFields = [];
-        var storeFields = [];
-        var dataStore = [];
-
-        function GenerateStoreStructure() {
-            storeFields = [];
-            productFields = [];
-            storeFields.push({ name: 'RegionName' });
-
-            window.feature.ProductsStore.each(function (record) {
-                productFields.push(record.get('Name'));
-                storeFields.push({ name: record.get('Name'), type: 'int' });
-            });
-        };
-
-        function GenerateData() {
-            dataStore = [];
-            var fieldNo = window.feature.ProductsStore.count();
-            var rowNo = window.feature.MatrixStore.count();
-
-            var i = 0;
-            var row = [];
-            while (i < rowNo) {
-                if (i % fieldNo == 0) {
-                    row = [];
-                    row.push(window.feature.MatrixStore.getAt(i).get('RegionName'));
-                }
-
-                var stock = window.feature.MatrixStore.getAt(i).get('StockLevelSum');
-                row.push(stock);
-
-                if (i % fieldNo == 0) {
-                    if (row.length > 0) {
-                        dataStore.push(row);
-                    }
-                }
-                i++;
-            }
-
-            return dataStore;
-        };
+       
 
         window.feature.MatrixStore = Ext.create('Ext.data.Store', {
             fields: ['RegionName', 'ProductName', 'StockLevelSum'],
@@ -183,7 +147,7 @@ Analysis: Product level information at region level
                     root: 'Products',
                     totalProperty: 'TotalItems'
                 },
-                extraParams: { productGroupId: '' },
+                extraParams: { countryId: '',regionId:'' },
                 simpleSortMode: true
             }
         });
@@ -203,36 +167,61 @@ Analysis: Product level information at region level
             }
         });
 
-        Ext.define('Ext.chart.theme.MyTheme', {
-            extend: 'Ext.chart.theme.Base',
-            colors: ['rgb(45, 117, 226)', 'rgb(154, 205, 50)', 'rgb(212, 40, 40)', 'rgb(255, 165, 0)', 'rgb(255, 215, 0)', 'rgb(208, 32, 144)',
-                        'rgb(64, 224, 208)', 'rgb(190, 190, 190)', 'rgb(139, 69, 19)', 'rgb(250, 128, 114)', 'rgb(148, 0, 211)', 'rgb( 28, 134, 238)',
-                        'rgb(255, 64, 64 )', 'rgb(255, 130, 71)', 'rgb(0, 100, 0)', 'rgb(238, 18, 137)', 'rgb(202, 255, 112)', 'rgb(142, 35, 35)',
-                        'rgb(255, 218, 185)', 'rgb(32, 178, 170)'
-
-            ],
-            constructor: function (config) {
-                this.callParent([Ext.apply({
-                    colors: this.colors
-                }, config)]);
+        //-----------------------------------------------
+        Ext.regModel("StockLevelForRegions", {
+            fields: ['RegionName', 'ProductsUnderTresholdNo', 'Total'],
+            hasMany: { model: 'Product', name: 'Products' },
+            proxy: {
+                type: 'rest',
+                url: '@Url.RouteUrl(AnalysisManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "ReportRegionLevel", action = "GetDataForStackedBarChart" })',
+                reader: {
+                    type: 'json',
+                    root: 'Items',
+                    totalProperty: 'TotalItems'
+                },
+                simpleSortMode: true,
+                extraParams: { CountryId: '', RegionId: '' }
             }
         });
 
-        window.feature.execute = new Ext.util.DelayedTask(function () {
-            GenerateStoreStructure();
-            var myData = GenerateData();
+        Ext.regModel("Product", {
+            fields: [
+                'ProductName', 'StockLevel', 'LowerLimit'
+            ],
+            belongsTo: 'StockLevelForRegions'
+        });
 
-            var st = new Ext.data.SimpleStore({
+
+        window.feature.StockLevelForRegionsStore = Ext.create('Ext.data.Store', {
+            remoteSuport: true,
+            model: 'StockLevelForRegions',
+            sorters: [{
+                property: 'ProductsUnderTreshholdNo',
+                direction: 'Desc'
+            }]
+        });
+
+
+      
+        window.feature.execute = new Ext.util.DelayedTask(function () {
+                       
+            var chartStore = new Ext.data.SimpleStore({
                 fields: storeFields
             });
 
-            st.loadData(myData);
+            chartStore.loadData(dataStore);
 
-            var cont = Ext.getCmp('DivChartContainer');
+            var chartContainer = Ext.getCmp('DivChartContainer');
             var charttt = Ext.getCmp('chartIdRemove');
-            cont.remove(charttt);
+            chartContainer.remove(charttt);
+            var lbl = Ext.getCmp('lblNoSales');
+            chartContainer.remove(lbl);
+            if (chartStore.getCount() == 0) {
+                chartContainer.add({ xtype: 'label', id: 'lblNoSales', margin: '40 0 0 10', text: 'There is no data for the selected filter.', cls: 'x-title-label' });
+                return;
+            }
 
-            cont.add({
+            chartContainer.add({
                 id: 'chartIdRemove',
                 xtype: 'chart',
                 animate: true,
@@ -241,36 +230,35 @@ Analysis: Product level information at region level
                 minHeight: 580,
                 maxHeight: 600,
                 flex: 1,
-                store: st,
-                theme: 'MyTheme',
+                store: chartStore,
+                //theme: 'MyTheme',
                 axes: [{
-                    type: 'Category',
+                    type: 'Numeric',
                     position: 'left',
+                    grid:true,
+                    fields: productFields,
+                    title: 'Product Stock Level',
+                    minimum: 0
+                },{
+                    type: 'Category',
+                    position: 'bottom',
                     fields: ["RegionName"],
                     title: 'Regions'
-                }, {
-                    type: 'Numeric',
-                    position: 'bottom',
-                    fields: productFields,
-                    title: 'Current Stock Level',
-                    grid: true,
-                    minimum: 0
-                }],
+                } ],
                 series: [{
-                    type: 'bar',
+                    type: 'column',
                     axis: 'bottom',
                     highlight: true,
                     tips: {
                         trackMouse: true,
                         width: 140,
-                        height: 28,
                         renderer: function (storeItem, item) {
-                            this.setTitle(String('Stock level: ' + item.value[1] + ''));
+                            this.setTitle(item.yField+"<br/>" + String('Total Stock level: ' + item.value[1] + ''));
                         }
                     },
                     xField: "RegionName",
                     yField: productFields,
-                    stacked:true,
+                    stacked:isStacked,
                 }],
                 legend: {
                     position: 'right'
@@ -278,6 +266,176 @@ Analysis: Product level information at region level
             });
         });
 
+       
+
+        //function GenerateStoreStructure() {
+        //    storeFields = [];
+        //    productFields = [];
+        //    storeFields.push({ name: 'RegionName' });
+
+        //    window.feature.ProductsStore.each(function (record) {
+        //        productFields.push(record.get('Name'));
+        //        storeFields.push({ name: record.get('Name'), type: 'int' });
+        //    });
+        //};
+
+        //function GenerateData() {
+        //    dataStore = [];
+        //    var fieldNo = window.feature.ProductsStore.count();
+        //    var rowNo = window.feature.MatrixStore.count();
+
+        //    window.feature.MatrixStore.load({
+        //        params: {
+        //            CountryId: Ext.getCmp(window.feature.comboboxCountriesId).getValue(),
+        //            RegionId: Ext.getCmp(window.feature.comboboxRegionsId).getValue(),
+
+        //        },
+        //        callback: function () {
+        //            var prodFieldsLength = productFields.length;
+        //            window.feature.StockLevelForOutpostsStore.each(function (outpost) {
+
+                       
+        //                var row = new Array(prodFieldsLength + 1);
+        //                for (var j = 1; j < row.length; j++) {
+        //                    row[j] = 0;
+        //                }
+        //                row[0] = outpost.get('RegionName');
+        //                //row[1] = outpost.get('ProductsUnderTresholdNo');
+        //                row[row.length - 1] = outpost.get('Total');
+        //                outpost.Products().each(function (product) {
+
+        //                    for (var i = 0; i < prodFieldsLength; i++) {
+        //                        if (productFields[i] == product.get('ProductName')) {
+        //                            row[i + 2] = product.get('StockLevel');
+                                   
+        //                            break;
+        //                        }
+        //                    }
+        //                })
+        //                dataStore.push(row);
+        //            })
+        //            window.feature.execute.delay(1000);
+        //        }
+
+
+        //    })
+
+        //    var i = 0;
+        //    var row = [];
+        //    while (i < rowNo) {
+        //        if (i % fieldNo == 0) {
+        //            row = [];
+        //            row.push(window.feature.MatrixStore.getAt(i).get('RegionName'));
+        //        }
+
+        //        var stock = window.feature.MatrixStore.getAt(i).get('StockLevelSum');
+        //        row.push(stock);
+
+        //        if (i % fieldNo == 0) {
+        //            if (row.length > 0) {
+        //                dataStore.push(row);
+        //            }
+        //        }
+        //        i++;
+        //    }
+
+        //    return dataStore;
+        //};
+        var isStacked = true;
+        function showChart()
+        {
+            var regionSelVal = Ext.getCmp(window.feature.comboboxRegionsId).getValue();
+            isStacked = true;
+            if (regionSelVal != null && regionSelVal != '@Guid.Empty')
+            {
+                isStacked = false;
+            }
+            var getFromUrl = '@Url.RouteUrl(AnalysisManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "ReportRegionLevel", action = "GetProductFields" })';
+
+            var action = $.get(getFromUrl,
+                    {
+                        CountryId: Ext.getCmp(window.feature.comboboxCountriesId).getValue(),
+                        RegionId: Ext.getCmp(window.feature.comboboxRegionsId).getValue(),
+                    })
+            action.success(function (response) {
+                if (typeof (response) != "string")//there are no products
+                {
+                    var chartContainer = Ext.getCmp('DivChartContainer');
+                    var lbl = Ext.getCmp('lblNoSales');
+                    chartContainer.remove(lbl);
+                    var chart2 = Ext.getCmp('chart2DistrictLevel');
+                    chartContainer.remove(chart2);
+
+                    chartContainer.add({ xtype: 'label', id: 'lblNoSales', margin: '40 0 0 10', text: 'There is no data for the selected filter.', cls: 'x-title-label' });
+
+                }
+                else {
+                    productFields = response.split(",");
+                    GenerateChartStoreData()
+                }
+
+            })
+        }
+
+        var productFields = [];
+        var storeFields = [];
+        var dataStore = [];
+        function GenerateChartStoreData()
+        {
+            storeFields = [];
+            dataStore = [];
+
+            storeFields.push({ name: 'RegionName' });
+            storeFields.push({ name: 'ProductsUnderTresholdNo', type: 'int' });
+
+            productFields.forEach(function (entry) {
+                storeFields.push({ name: entry, type: 'int' })
+            })
+
+            //productFields.forEach(function (entry) {
+            //    storeFields.push({ name: entry + "_Lower", type: 'int' })
+            //})
+
+           // storeFields.push({ name: 'Total', type: 'int' });
+
+            window.feature.StockLevelForRegionsStore.load({
+                params: {
+                    CountryId: Ext.getCmp(window.feature.comboboxCountriesId).getValue(),
+                    RegionId: Ext.getCmp(window.feature.comboboxRegionsId).getValue(),
+                    //OnlyUnderTreshold: Ext.getCmp(window.feature.chkOnlyUnderTreshold).getValue()
+                },
+                callback: function () {
+                    var prodFieldsLength = productFields.length;
+                    window.feature.StockLevelForRegionsStore.each(function (outpost) {
+
+                        var row = new Array(prodFieldsLength + 2);
+
+                        for (var j = 1; j < row.length; j++) {
+                            row[j] = 0;
+                        }
+                        row[0] = outpost.get('RegionName');
+                        row[1] = outpost.get('ProductsUnderTresholdNo');
+                        // row[row.length - 1] = outpost.get('Total');
+                        outpost.Products().each(function (product) {
+
+                            for (var i = 0; i < prodFieldsLength; i++) {
+                                if (productFields[i] == product.get('ProductName')) {
+                                    row[i + 2] = product.get('StockLevel');
+                                    //row[prodFieldsLength + 2 + i] = product.get('LowerLimit');
+                                    break;
+                                }
+                            }
+                        })
+                        dataStore.push(row);
+                    });
+
+                    window.feature.execute.delay(1000);
+                }
+
+
+            })
+
+        }
 
         window.feature.treegrid = Ext.create('Ext.tree.Panel', {
             useArrows: true,
@@ -309,7 +467,7 @@ Analysis: Product level information at region level
                         window.feature.MatrixStore.proxy.extraParams.productGroupId = rec.get('Id');
                         window.feature.MatrixStore.load();
 
-                        window.feature.execute.delay(500);
+                        //window.feature.execute.delay(500);
                     }
                 }
             },
@@ -386,7 +544,7 @@ Analysis: Product level information at region level
                 ]
             }, {
                 xtype: 'container',
-                flex: 1,
+                flex: 2,
                 layout: {
                     align: 'stretch',
                     type: 'vbox'
@@ -423,7 +581,9 @@ Analysis: Product level information at region level
                     window.feature.comboBoxRegions.setValue('@Model.regionId');
                     window.feature.treegrid.getStore().proxy.extraParams.RegionId = window.feature.comboBoxRegions.getValue();
                     window.feature.treegrid.getRootNode().expand();
+
                 }
+                showChart();
             }
         });
 
@@ -432,7 +592,7 @@ Analysis: Product level information at region level
 
         window.feature.treegrid.getStore().proxy.extraParams.CountryId = allOptionGUID;
        
-
+       
        
         
     });
