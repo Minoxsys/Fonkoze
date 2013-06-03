@@ -11,7 +11,7 @@ namespace Tests.Unit.Services.SmsRequestServiceTest
     [TestFixture]
     class SendProductLevelRequestMessageMethod
     {
-        private const string SMS_MESSAGE_TEMPLATE = "Please provide current stock level for product group {0} using format\n{1}";
+        private const string SMS_MESSAGE_TEMPLATE = "Please provide current stock level for product group {0} using format\n SC {1}";
         private ObjectMother _ = new ObjectMother();
 
         [SetUp]
@@ -42,7 +42,7 @@ namespace Tests.Unit.Services.SmsRequestServiceTest
                      r.OutpostId.Equals(_.outpostId) &&
                      r.Number.Equals(ObjectMother.PHONE_NUMBER) &&
                      r.Client == _.client &&
-                     r.Message.Equals(string.Format(SMS_MESSAGE_TEMPLATE, ObjectMother.PRODUCT_GROUP_NAME, ObjectMother.PRODUCT_GROUP_REFERENCE_CODE + " A0"))
+                     r.Message.Equals(string.Format(SMS_MESSAGE_TEMPLATE, ObjectMother.PRODUCT_GROUP_NAME, ObjectMother.SMS_REFERENCE_CODE + "0 "))
                 )));
 
             _.smsGatewayService.Expect(call => call.SendSmsRequest(Arg<SmsRequest>.Matches(
@@ -51,7 +51,7 @@ namespace Tests.Unit.Services.SmsRequestServiceTest
                      r.OutpostId.Equals(_.outpostId) &&
                      r.Number.Equals(ObjectMother.PHONE_NUMBER) &&
                      r.Client == _.client &&
-                     r.Message.Equals(string.Format(SMS_MESSAGE_TEMPLATE, ObjectMother.PRODUCT_GROUP_NAME, ObjectMother.PRODUCT_GROUP_REFERENCE_CODE + " A0"))
+                     r.Message.Equals(string.Format(SMS_MESSAGE_TEMPLATE, ObjectMother.PRODUCT_GROUP_NAME, ObjectMother.SMS_REFERENCE_CODE + "0 "))
                                                                        ), Arg<bool>.Is.Equal(false))).Return("");
 
             // Act
