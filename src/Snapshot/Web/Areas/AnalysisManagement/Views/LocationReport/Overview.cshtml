@@ -1,5 +1,4 @@
-﻿@using Domain;
-@using Microsoft.Web.Mvc;
+﻿@using Microsoft.Web.Mvc;
 @using Web.Areas.AnalysisManagement;
 
 @section page_title{
@@ -446,7 +445,6 @@ Analysis: Location Report
                 }
             }
         });
-
         
 
         window.feature.container = Ext.create('Ext.container.Container', {
@@ -455,137 +453,125 @@ Analysis: Location Report
             autoScroll: true,
             id: 'TopContainer',
             layout: {
-                //align: 'stretch',
                 type: 'fit'
             },
             items: [{
                 xtype: 'container',
-               // flex: 1,
                 layout: {
                     align: 'stretch',
                     type: 'vbox'
                 },
                 items: [{
-                    xtype: 'container',
-                    layout: {
-                        align: 'stretch',
-                        type: 'vbox'
-                    },
-                    height: 60,
-                    items: [{
                         xtype: 'container',
-                        flex: 1,
-                        layout: {
-                            type: 'column'
-                        },
-                        items: [{
-                            xtype: 'label',
-                            cls: 'x-title-label',
-                            text: 'Location Report'
-                        },
-                            window.feature.country,
-                            window.feature.region,
-                            window.feature.district
-                        ]
-                    }]
-                },
-                
-                {
-                    xtype: 'container',
-                    flex: 1,
-                    layout:{
-                        align: 'stretch',
-                        type: 'hbox'
-                    },
-                    items:[
-                    {
-                        xtype: 'container',
-                        id: 'gridsContainer',
-                        flex: 1,
-                        layout: {
-                            type:'vbox'
-                        },
-                        items:[{
-                            xtype: 'gridpanel',
-                            cls: 'white-border',
-                            store: window.feature.districtOutpostsStore,
-                            loadMask:true,
-                            maxWidth: 400,
-                            margin:'0 0 20 0',
-                            autoScroll: true,
-                            disableSelection: true,
-                            columns: [{
-                                header: 'Districts',
-                                dataIndex: 'DistrictName',
-                                width:150,
-                                //lock:true,
-
-                            },
-                            {
-                                header: '<img src="@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/LocationReport/red.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))"/>',
-                                dataIndex:'RedOutposts',
-                               width: 60,
-                            },
-                            {
-                                header: '<img src="@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/LocationReport/amber.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))"/>',
-                                dataIndex: 'AmberOutposts',
-                                width: 60,
-                            },
-                            {
-                                header: '<img src="@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/LocationReport/green.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))"/>',
-                                dataIndex:'GreenOutposts',
-                               width: 60,
-                            },
-                            {
-                                header: 'Total',
-                                dataIndex:'TotalOutposts',
-                                width: 60,
-                            },
-                            ],
-                            title: 'Seller Status'
-                        },
-                       
-
-                        ]
-                        
-                    },
-                    {
-                        xtype: 'container',
-                        flex: 2,
                         layout: {
                             align: 'stretch',
                             type: 'vbox'
                         },
+                        height: 60,
+                        items: [{
+                            xtype: 'container',
+                            flex: 1,
+                            layout: {
+                                type: 'column'
+                            },
+                            items: [{
+                                    xtype: 'label',
+                                    cls: 'x-title-label',
+                                    text: 'Location Report'
+                                },
+                                window.feature.country,
+                                window.feature.region,
+                                window.feature.district
+                            ]
+                        }]
+                    },
+                    {
+                        xtype: 'container',
+                        flex: 1,
+                        layout: {
+                            align: 'stretch',
+                            type: 'hbox'
+                        },
+                       
                         items: [
-                            googleMapPanel
+                            {
+                                xtype: 'container',
+                                id: 'gridsContainer',
+                                flex: 1,
+                                layout: {
+                                    type: 'vbox',
+                                    align: 'stretch'
+                                },
+                               
+                                items: [{
+                                        xtype: 'gridpanel',
+                                        cls: 'white-border',
+                                        store: window.feature.districtOutpostsStore,
+                                        loadMask: true,
+                                        margin: '0 30 20 0',
+                                        autoScroll: true,
+                                        disableSelection: true,
+                                        columns: [{
+                                                header: 'Districts',
+                                                dataIndex: 'DistrictName',
+                                                width: 150,
+                                            },
+                                            {
+                                                header: '<img src="@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/LocationReport/red.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))"/>',
+                                                dataIndex: 'RedOutposts',
+                                                width: 60,
+                                            },
+                                            {
+                                                header: '<img src="@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/LocationReport/amber.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))"/>',
+                                                dataIndex: 'AmberOutposts',
+                                                width: 60,
+                                            },
+                                            {
+                                                header: '<img src="@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/LocationReport/green.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))"/>',
+                                                dataIndex: 'GreenOutposts',
+                                                width: 60,
+                                            },
+                                            {
+                                                header: 'Total',
+                                                dataIndex: 'TotalOutposts',
+                                                flex: 1
+                                            }
+                                        ],
+                                        title: 'Seller Status'
+                                    }
+                                ]
+                            },
+                            {
+                                xtype: 'container',
+                                flex: 2,
+                                layout: {
+                                    align: 'stretch',
+                                    type: 'vbox'
+                                },
+                                items: [
+                                    googleMapPanel
+                                ]
+                            }
                         ]
                     }
-                    ]
-
-                    
-                }
                 ]
             }]
         });
 
-      
 
-
-        function loadSellersGrid()
-        {
+        function loadSellersGrid() {
             var getFromUrl = '@Url.RouteUrl(AnalysisManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "LocationReport", action = "GetProducts" })';
             var action = $.get(getFromUrl,
-                   {
-                       countryId: window.feature.container.down('#' + window.feature.countryComboboxId).getValue(),
-                   })
-            action.success(function (response) {
+                {
+                    countryId: window.feature.container.down('#' + window.feature.countryComboboxId).getValue(),
+                });
+            action.success(function(response) {
                 productFields = response.split(",");
-                GenerateGridData()
+                GenerateGridData();
 
-            })
-            
-
+            });
         }
+
         var storeFields = [];
         var dataStore = [];
         var gridColumns = [];
@@ -633,7 +619,7 @@ Analysis: Location Report
 
              
 
-            gridColumns.push({ header: 'Total', dataIndex: 'Total' });
+            gridColumns.push({ header: 'Total', dataIndex: 'Total', flex: 1 });
 
             window.feature.StockLevelForOutpostsStore.load({
                 params: {
@@ -692,7 +678,8 @@ Analysis: Location Report
                 disableSelection: true,
                 store:gridStore,
                 autoScroll: true,
-                maxWidth:400,
+                //     maxWidth:400,
+                margin: '0 30 0 0',
                 maxHeight:800,
                 columns: gridColumns,
                 title: 'Product Status'
