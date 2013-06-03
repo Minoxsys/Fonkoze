@@ -1,7 +1,12 @@
-﻿@model Web.Models.Home.IndexModel
+﻿@using Web.Areas.AnalysisManagement
+@model Web.Models.Home.IndexModel
 
 @section page_title{
     Fonkoze Application
+}
+
+@{
+    Html.RenderPartial("SelectPositionGoogleMapWindow");
 }
 
 <style>
@@ -24,9 +29,45 @@
         
     };
 
-    Ext.onReady(function() {
+
+
+    Ext.onReady(function () {
+        window.feature = {};
+        var outpostMarkersArray = [];
+        
         var content = Ext.getCmp(window.res.content.id);
 
+        window.feature.outpostMarkersStore = Ext.create('Ext.data.Store', {
+            fields: ['Id', 'Name', 'Number', 'Coordonates', 'Type', 'InfoWindowContent'],
+            proxy: {
+                type: 'ajax',
+                url: '@Url.RouteUrl(AnalysisManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "LocationReport", action = "GetOutpostMarkers" })',
+                reader: {
+                    type: 'json',
+                    root: 'Markers',
+                    totalProperty: 'TotalItems'
+                },
+                extraParams: { countryId: '' },
+                simpleSortMode: true
+            }
+        });
+
+        window.feature.outpostMarkersStore.load({
+            callback: function () {
+                var map = googleMapPanel.getMap();
+                createMarker(window.feature.outpostMarkersStore, outpostMarkersArray, map);
+                centerOnPlace("Haiti", map);
+            }
+        });
+        
+        window.feature.outpostMarkersStore.load();
+
+        var googleMapPanelConfig = { flex: 1, margin: '40 50 10 0' };
+        googleMapPanelConfig.centerPosition = new google.maps.LatLng(0, 0);
+        googleMapPanelConfig.zoom = 7;
+        var googleMapPanel = Ext.create('Ext.feature.GoogleMapPanel', googleMapPanelConfig);
+      
+        
         content.add(
             {
                 xtype: 'container',
@@ -47,14 +88,14 @@
                         layout: {
                             type: 'hbox',
                             pack: 'start',
-                          //  align: 'stretch'
+                            align: 'stretch'
                         },
                         region: 'center',
                         items:
                         [
                             //main vbox
                             {
-                                xtype: 'container',
+                                xtype: 'container', 
                                 layout: 'vbox',
                                 width: 600,
                                 items:
@@ -111,7 +152,7 @@
                                                     tag: 'a',
                                                     cls: 'blue-label analysis-label',
                                                     href: '@(Url.RouteUrl<Web.Areas.AnalysisManagement.Controllers.LocationReportController>(x=>x.Overview(),Web.Areas.AnalysisManagement.AnalysisManagementAreaRegistration.DEFAULT_ROUTE))',
-                                                    html: 'Location Report'
+                                                    html: 'Detailed Location Report'
                                                 }
                                             }, {
                                                 xtype: 'label',
@@ -167,7 +208,8 @@
                                         ]
                                     }//end report links table
                                 ]//end left vbox items           
-                            } //end left vbox
+                            }, //end left vbox
+                            googleMapPanel
                         ]//end main hbox items
                     }, //end main hbox
 
@@ -211,7 +253,56 @@
         });
     });
 
-   
+    function centerOnPlace(country, map) {
+        var geocoder = new google.maps.Geocoder();
+        geocoder.geocode({ 'address': country }, function (results, status) {
+            if (status == google.maps.GeocoderStatus.OK) {
+                map.setCenter(results[0].geometry.location);
+            }
+        });
+    };
+    
+    function getGooglePositionFromText(coordinates) {
+        var a = parseFloat(coordinates.substring(1, coordinates.indexOf(',')));
+        var b = parseFloat(coordinates.substring(coordinates.indexOf(',') + 1, coordinates.length - 1));
+        return new google.maps.LatLng(a, b);
+    };
+
+    function createMarker(store, markerArray, map) {
+        var a = markerArray.length;
+
+        if (markerArray.length == 0) {
+            var i = 0;
+
+            store.each(function(item) {
+                var marker = new MarkerWithLabel({
+                    position: getGooglePositionFromText(item.get('Coordonates')),
+                    draggable: false,
+                    raiseOnDrag: true,
+                    map: map,
+                    labelContent: item.get('Number'),
+                    labelAnchor: new google.maps.Point(15, 0),
+                    labelClass: item.get('Type'),
+                    title: item.get('Name'),
+                    id: item.get('Id'),
+                    animation: google.maps.Animation.DROP
+                });
+                var infowindow = new google.maps.InfoWindow({
+                    content: "<h3>" + marker.title + "</h3><br/><p>" + item.get('InfoWindowContent') + "</p>"
+                });
+                google.maps.event.addListener(marker, 'mouseover', function() {
+                    infowindow.open(map, marker);
+                });
+
+                google.maps.event.addListener(marker, 'mouseout', function() {
+                    infowindow.close(map, marker);
+                });
+
+                markerArray[i] = marker;
+                i = i + 1;
+            }, this);
+        }
+    }
 
 </script>
 
