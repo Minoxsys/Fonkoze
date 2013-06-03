@@ -103,6 +103,7 @@ Analysis: Product level information at district level
             displayField: 'Name',
             valueField: 'Id',
             emptyText: _t('Country List'),
+            columnWidth: 0.25,
             listeners: {
                 select: function (combo, record, index) {
                     var selectedCountryId = record[0].data.Id;
@@ -139,6 +140,7 @@ Analysis: Product level information at district level
             valueField: 'Id',
             margin: '0 0 0 20',
             emptyText: _t('Region List'),
+            columnWidth: 0.25,
             listeners: {
                 select: function (combo, record, index) {
                     var selectedRegionId = record[0].data.Id;
@@ -168,6 +170,7 @@ Analysis: Product level information at district level
             valueField: 'Id',
             margin: '0 0 0 20',
             emptyText: _t('District List'),
+            columnWidth: 0.25,
             listeners: {
                 select: function (combo, record, index) {
                     var selectedDistrictId = record[0].data.Id;
