@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using Web.Areas.MessagesManagement.Models.SentMessages;
+using Web.Models.Shared;
 using Web.Security;
 using Web.Areas.StockAdministration.Models.OutpostStockLevel;
 using Web.Services;
@@ -32,9 +33,9 @@ namespace Web.Areas.MessagesManagement.Controllers
         }
 
         [HttpGet]
-        public JsonResult GetSentMessages(SentMessagesIndexModel indexModel, OverviewInputModel input = null)
+        public JsonResult GetSentMessages(IndexTableInputModel indexModel, OverviewInputModel input = null)
         {
-            Debug.Assert(indexModel.limit != null, "indexModel.limit != null");
+            Debug.Assert(indexModel.limit != null, "indexTableInputModel.limit != null");
             var pageSize = indexModel.limit.Value;
             var rawDataQuery = QuerySms.Query();
 
@@ -66,7 +67,7 @@ namespace Web.Areas.MessagesManagement.Controllers
 
             var totalItems = rawDataQuery.Count();
 
-            Debug.Assert(indexModel.start != null, "indexModel.start != null");
+            Debug.Assert(indexModel.start != null, "indexTableInputModel.start != null");
             rawDataQuery = rawDataQuery
                 .Take(pageSize)
                 .Skip(indexModel.start.Value);

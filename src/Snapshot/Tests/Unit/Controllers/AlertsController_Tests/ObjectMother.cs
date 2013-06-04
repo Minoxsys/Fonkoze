@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Web.Controllers;
 using Web.Models.Alerts;
+using Web.Models.Shared;
 
 namespace Tests.Unit.Controllers.AlertsController_Tests
 {
@@ -98,13 +99,13 @@ namespace Tests.Unit.Controllers.AlertsController_Tests
 
         }
 
-        public IQueryable<Alert> PageOfAlertsData(AlertsIndexModel indexModel)
+        public IQueryable<Alert> PageOfAlertsData(IndexTableInputModel indexTableInputModel)
         {
             var alertsPageList = new List<Alert>();
 
-            Debug.Assert(indexModel.start != null, "indexModel.start != null");
-            Debug.Assert(indexModel.limit != null, "indexModel.limit != null");
-            for (int i = indexModel.start.Value; i < indexModel.limit.Value; i++)
+            Debug.Assert(indexTableInputModel.start != null, "IndexTableInputModel.start != null");
+            Debug.Assert(indexTableInputModel.limit != null, "IndexTableInputModel.limit != null");
+            for (int i = indexTableInputModel.start.Value; i < indexTableInputModel.limit.Value; i++)
             {
                 alertsPageList.Add(new Alert
                     {

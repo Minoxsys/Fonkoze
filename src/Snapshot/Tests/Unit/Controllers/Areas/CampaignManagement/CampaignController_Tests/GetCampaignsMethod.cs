@@ -5,6 +5,7 @@ using System.Text;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Web.Areas.CampaignManagement.Models.Campaign;
+using Web.Models.Shared;
 
 namespace Tests.Unit.Controllers.Areas.CampaignManagement.CampaignController_Tests
 {
@@ -23,7 +24,7 @@ namespace Tests.Unit.Controllers.Areas.CampaignManagement.CampaignController_Tes
         public void Returns_The_Data_Paginated_BasedOnTheInputValues()
         {
             //Arrange
-            var indexModel = new CampaignOverviewInputModel
+            var indexModel = new IndexTableInputModel
             {
                 dir = "ASC",
                 limit = 50,
@@ -51,7 +52,7 @@ namespace Tests.Unit.Controllers.Areas.CampaignManagement.CampaignController_Tes
         public void Returns_Campaigns_Paginated_Order_ByName_DESC()
         {
             //Arrange
-            var indexModel = new CampaignOverviewInputModel
+            var indexModel = new IndexTableInputModel
             {
                 dir = "DESC",
                 limit = 50,
@@ -77,7 +78,7 @@ namespace Tests.Unit.Controllers.Areas.CampaignManagement.CampaignController_Tes
         public void Returns_Campaigns_Paginated_Order_ByEndDate_ASC()
         {
             //Arrange
-            var indexModel = new CampaignOverviewInputModel
+            var indexModel = new IndexTableInputModel
             {
                 dir = "ASC",
                 limit = 50,

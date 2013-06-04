@@ -35,7 +35,7 @@ namespace Web.Areas.AnalysisManagement.Controllers
         {
             LoadUserAndClient();
             var countryQuery = QueryCountries.Query().Where(it => it.Client == _client);
-            if (filtermodel.countryId != Guid.Empty)
+            if (filtermodel.countryId.HasValue && filtermodel.countryId.Value != Guid.Empty)
                 countryQuery = countryQuery.Where(it => it.Id == filtermodel.countryId);
 
             List<MarkerModel> countries = new List<MarkerModel>();
@@ -72,12 +72,12 @@ namespace Web.Areas.AnalysisManagement.Controllers
             LoadUserAndClient();
 
             var oslQueryable = QueryStockLevel.Query().Where(it => it.Client == _client);
-            if (filter.countryId != Guid.Empty)
-                oslQueryable = oslQueryable.Where(it => it.Outpost.Country.Id == filter.countryId);
-            if (filter.regionId != Guid.Empty)
-                oslQueryable = oslQueryable.Where(it => it.Outpost.Region.Id == filter.regionId);
-            if (filter.districtId != Guid.Empty)
-                oslQueryable = oslQueryable.Where(it => it.Outpost.District.Id == filter.districtId);
+            if (filter.countryId.HasValue && filter.countryId != Guid.Empty)
+                oslQueryable = oslQueryable.Where(it => it.Outpost.Country.Id == filter.countryId.Value);
+            if (filter.regionId.HasValue && filter.regionId != Guid.Empty)
+                oslQueryable = oslQueryable.Where(it => it.Outpost.Region.Id == filter.regionId.Value);
+            if (filter.districtId.HasValue && filter.districtId != Guid.Empty)
+                oslQueryable = oslQueryable.Where(it => it.Outpost.District.Id == filter.districtId.Value);
            
             List<OutpostStockLevel> oslLst = oslQueryable.ToList();
             List<OutpostGridModel> gridContentLst = new List<OutpostGridModel>();
@@ -115,11 +115,11 @@ namespace Web.Areas.AnalysisManagement.Controllers
             LoadUserAndClient();
 
             var oslQueryable = QueryStockLevel.Query().Where(it => it.Client == _client);
-            if (filter.countryId != Guid.Empty)
+            if (filter.countryId.HasValue && filter.countryId != Guid.Empty)
                 oslQueryable = oslQueryable.Where(it => it.Outpost.Country.Id == filter.countryId);
-            if (filter.regionId != Guid.Empty)
+            if (filter.regionId.HasValue && filter.regionId != Guid.Empty)
                 oslQueryable = oslQueryable.Where(it => it.Outpost.Region.Id == filter.regionId);
-            if (filter.districtId != Guid.Empty)
+            if (filter.districtId.HasValue && filter.districtId != Guid.Empty)
                 oslQueryable = oslQueryable.Where(it => it.Outpost.District.Id == filter.districtId);
            List<DistrictsGridModel> gridContentLst = new List<DistrictsGridModel>();
           
@@ -338,9 +338,9 @@ namespace Web.Areas.AnalysisManagement.Controllers
         {
             LoadUserAndClient();
             var regionQuery = QueryRegions.Query().Where(it => it.Client == _client);
-            if (filtermodal.countryId != Guid.Empty)
+            if (filtermodal.countryId.HasValue && filtermodal.countryId != Guid.Empty)
                 regionQuery = regionQuery.Where(it => it.Country.Id == filtermodal.countryId);
-            if (filtermodal.regionId != Guid.Empty)
+            if (filtermodal.regionId.HasValue && filtermodal.regionId != Guid.Empty)
                 regionQuery = regionQuery.Where(it => it.Id == filtermodal.regionId);
 
             List<MarkerModel> regions = new List<MarkerModel>();
@@ -382,11 +382,11 @@ namespace Web.Areas.AnalysisManagement.Controllers
         {
             LoadUserAndClient();
             var districtQuery = QueryDistricts.Query().Where(it => it.Client == _client);
-            if (filtermodal.countryId != Guid.Empty)
+            if (filtermodal.countryId.HasValue && filtermodal.countryId != Guid.Empty)
                 districtQuery = districtQuery.Where(it => it.Region.Country.Id == filtermodal.countryId);
-            if (filtermodal.regionId != Guid.Empty)
+            if (filtermodal.regionId.HasValue && filtermodal.regionId != Guid.Empty)
                 districtQuery = districtQuery.Where(it => it.Region.Id == filtermodal.regionId);
-            if (filtermodal.districtId != Guid.Empty)
+            if (filtermodal.districtId.HasValue && filtermodal.districtId != Guid.Empty)
                 districtQuery = districtQuery.Where(it => it.Id == filtermodal.districtId);
 
             List<MarkerModel> districts = new List<MarkerModel>();
@@ -428,11 +428,11 @@ namespace Web.Areas.AnalysisManagement.Controllers
         {
             LoadUserAndClient();
             var outpostQuery = QueryOutposts.Query().Where(it => it.Client == _client);
-            if (filtermodal.countryId != Guid.Empty)
+            if (filtermodal.countryId.HasValue && filtermodal.countryId != Guid.Empty)
                 outpostQuery = outpostQuery.Where(it => it.Country.Id == filtermodal.countryId);
-            if (filtermodal.regionId != Guid.Empty)
+            if (filtermodal.regionId.HasValue && filtermodal.regionId != Guid.Empty)
                 outpostQuery = outpostQuery.Where(it => it.Region.Id == filtermodal.regionId);
-            if (filtermodal.districtId != Guid.Empty)
+            if (filtermodal.districtId.HasValue && filtermodal.districtId != Guid.Empty)
                 outpostQuery = outpostQuery.Where(it => it.District.Id == filtermodal.districtId);
 
             List<MarkerModel> outposts = new List<MarkerModel>();

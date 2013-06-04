@@ -5,6 +5,7 @@ using NUnit.Framework;
 using Tests.Utils;
 using Web.Areas.MessagesManagement.Controllers;
 using Web.Areas.MessagesManagement.Models.Messages;
+using Web.Models.Shared;
 using Web.Services;
 
 namespace Tests.Unit.Controllers.Areas.MessagesManagement.WarehouseControllerTests
@@ -35,7 +36,7 @@ namespace Tests.Unit.Controllers.Areas.MessagesManagement.WarehouseControllerTes
         [Test]
         public void GetMessagesFromWarehouse_DelegatesQueryToHelperService_WithWarehouseSpecificParameter()
         {
-            var inputModel = new MessagesIndexModel();
+            var inputModel = new IndexTableInputModel();
 
             _sut.GetMessagesFromWarehouse(inputModel);
 
@@ -45,10 +46,10 @@ namespace Tests.Unit.Controllers.Areas.MessagesManagement.WarehouseControllerTes
         [Test]
         public void GetMessagesFromWarehouse_ReturnsAsJsonTheOutputFromTheHelperService()
         {
-            _rawSmsMeesageQueryHelpersServiceMock.Setup(service => service.GetMessagesFromOutpost(It.IsAny<MessagesIndexModel>(), OutpostType.Warehouse, It.IsAny<System.Guid>()))
+            _rawSmsMeesageQueryHelpersServiceMock.Setup(service => service.GetMessagesFromOutpost(It.IsAny<IndexTableInputModel>(), OutpostType.Warehouse, It.IsAny<System.Guid>()))
                                                  .Returns(new MessageIndexOuputModel {TotalItems = 1});
 
-            var result = _sut.GetMessagesFromWarehouse(new MessagesIndexModel());
+            var result = _sut.GetMessagesFromWarehouse(new IndexTableInputModel());
 
             Assert.That(result.GetValueFromJsonResultForModel<MessageIndexOuputModel, int>(m => m.TotalItems), Is.EqualTo(1));
         }

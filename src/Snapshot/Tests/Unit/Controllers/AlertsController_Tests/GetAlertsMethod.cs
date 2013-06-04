@@ -5,6 +5,7 @@ using System.Text;
 using NUnit.Framework;
 using Web.Models.Alerts;
 using Rhino.Mocks;
+using Web.Models.Shared;
 
 namespace Tests.Unit.Controllers.AlertsController_Tests
 {
@@ -23,7 +24,7 @@ namespace Tests.Unit.Controllers.AlertsController_Tests
         public void Returns_The_Data_Paginated_BasedOnTheInputValues()
         {
             //Arrange
-            var indexModel = new AlertsIndexModel
+            var indexModel = new IndexTableInputModel
             {
                 dir = "ASC",
                 limit = 50,
@@ -51,7 +52,7 @@ namespace Tests.Unit.Controllers.AlertsController_Tests
         public void Returns_Alerts_Order_ByOutpostName_DESC()
         {
             //Arrange
-            var indexModel = new AlertsIndexModel
+            var indexModel = new IndexTableInputModel
             {
                 dir = "DESC",
                 limit = 50,
@@ -79,7 +80,7 @@ namespace Tests.Unit.Controllers.AlertsController_Tests
         public void Returns_Alerts_WithSearchValue_Order_ByLastUpdated_DESC()
         {
             //Arrange
-            var indexModel = new AlertsIndexModel
+            var indexModel = new IndexTableInputModel
             {
                 dir = "DESC",
                 limit = 50,

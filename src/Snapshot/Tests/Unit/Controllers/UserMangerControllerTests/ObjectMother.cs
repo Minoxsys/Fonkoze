@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Web.Controllers;
+using Web.Models.Shared;
 using Web.Models.UserManager;
 using Web.Security;
 
@@ -111,13 +112,13 @@ namespace Tests.Unit.Controllers.UserMangerControllerTests
             User.RoleId = Role.Id;
         }
 
-        public IQueryable<User> PageOfUsersData(UserManagerIndexModel indexModel)
+        public IQueryable<User> PageOfUsersData(IndexTableInputModel indexTableInputModel)
         {
             var userPageList = new List<User>();
 
-            Debug.Assert(indexModel.start != null, "indexModel.start != null");
-            Debug.Assert(indexModel.limit != null, "indexModel.limit != null");
-            for (int i = indexModel.start.Value; i < indexModel.limit.Value; i++)
+            Debug.Assert(indexTableInputModel.start != null, "IndexTableInputModel.start != null");
+            Debug.Assert(indexTableInputModel.limit != null, "IndexTableInputModel.limit != null");
+            for (int i = indexTableInputModel.start.Value; i < indexTableInputModel.limit.Value; i++)
             {
                 userPageList.Add(new User
                     {

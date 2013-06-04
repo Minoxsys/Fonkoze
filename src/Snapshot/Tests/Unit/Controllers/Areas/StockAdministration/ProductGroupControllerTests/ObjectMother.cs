@@ -11,6 +11,7 @@ using Core.Domain;
 using MvcContrib.TestHelper.Fakes;
 using Core.Security;
 using Persistence.Security;
+using Web.Models.Shared;
 
 namespace Tests.Unit.Controllers.Areas.StockAdministration.ProductGroupControllerTests
 {
@@ -119,7 +120,7 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration.ProductGroupControlle
             productGroup.Client = client;
         }
 
-        public IQueryable<ProductGroup> PageOfProductGroupData(ProductGroupIndexModel indexModel)
+        public IQueryable<ProductGroup> PageOfProductGroupData(IndexTableInputModel indexModel)
         {
             List<ProductGroup> productGroupPageList = new List<ProductGroup>();
 

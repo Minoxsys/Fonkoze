@@ -3,6 +3,7 @@ using NUnit.Framework;
 using System.Web.Mvc;
 using Web.Areas.OutpostManagement.Models.Outpost;
 using FluentAssertions;
+using Web.Models.Shared;
 
 namespace Tests.Unit.Controllers.Areas.OutpostManagement.OutpostControllerTests
 {
@@ -21,7 +22,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.OutpostControllerTests
         {
             var inputModel = _.ExpectOutpostsToBeQueriedWithInputModelAskingOnlyForWarehouses();
 
-            var result = _.controller.GetOutposts(inputModel);
+            var result = _.controller.GetOutposts(inputModel,new FilterModel(), true);
 
             var models = (result.Data as GetOutpostsOutputModel).Outposts;
             models.Should().NotContain(om => om.IsWarehouse == false);
@@ -31,8 +32,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.OutpostControllerTests
 		public void Returns_The_JsonResult_With_TheCorrectPageOfData()
 		{
 			var inputModel = _.ExpectOutpostsToBeQueriedWithInputModel();
-			inputModel.districtId = null;
-			var viewResult = _.controller.GetOutposts(inputModel) as JsonResult;
+			var viewResult = _.controller.GetOutposts(inputModel,new FilterModel(), false) as JsonResult;
 
 			_.VerifyThatOutpostsHaveBeenQueried();
 			Assert.IsNotNull(viewResult);
@@ -42,8 +42,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.OutpostControllerTests
 		public void Queries_ForUser_And_Its_Client()
 		{
 			var inputModel = _.ExpectOutpostsToBeQueriedWithInputModel();
-			inputModel.districtId = null;
-			var viewResult = _.controller.GetOutposts(inputModel) as JsonResult;
+            var viewResult = _.controller.GetOutposts(inputModel, new FilterModel(), false) as JsonResult;
 
 			_.VerifyUserAndClientExpectations();
 		}
@@ -52,9 +51,9 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.OutpostControllerTests
 		public void Query_Only_Returns_A_Subset_OfThe_Data()
 		{
 			var inputModel = _.ExpectOutpostsToBeQueriedWithInputModel();
-			inputModel.districtId = null;
+			
 			inputModel.limit = 35;
-			var viewResult = _.controller.GetOutposts(inputModel) as JsonResult;
+            var viewResult = _.controller.GetOutposts(inputModel, new FilterModel(), false) as JsonResult;
 			var data = viewResult.Data as GetOutpostsOutputModel;
 
 			Assert.IsNotNull(data);
@@ -70,7 +69,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.OutpostControllerTests
 
 			inputModel.limit = 35;
 
-			var viewResult = _.controller.GetOutposts(inputModel);
+            var viewResult = _.controller.GetOutposts(inputModel, new FilterModel(), false);
 			var data = viewResult.Data as GetOutpostsOutputModel;
 
 			for (int i = 0; i < data.Outposts.Count(); i++)

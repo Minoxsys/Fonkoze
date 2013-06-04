@@ -132,9 +132,9 @@ namespace Web.Controllers
         }
 
         [HttpGet]
-        public JsonResult GetListOfUsers(UserManagerIndexModel indexModel)
+        public JsonResult GetListOfUsers(IndexTableInputModel indexTableInputModel)
         {
-            var pageSize = indexModel.limit.Value;
+            var pageSize = indexTableInputModel.limit.Value;
             var usersDataQuery = this.QueryUsers.Query();
 
             var orderByColumnDirection = new Dictionary<string, Func<IQueryable<User>>>()
@@ -149,18 +149,18 @@ namespace Web.Controllers
                 { "LastName-DESC", () => usersDataQuery.OrderByDescending(c => c.LastName) }
             };
 
-            usersDataQuery = orderByColumnDirection[String.Format("{0}-{1}", indexModel.sort, indexModel.dir)].Invoke();
+            usersDataQuery = orderByColumnDirection[String.Format("{0}-{1}", indexTableInputModel.sort, indexTableInputModel.dir)].Invoke();
 
-            if (!string.IsNullOrEmpty(indexModel.searchValue))
+            if (!string.IsNullOrEmpty(indexTableInputModel.searchValue))
             {
-                usersDataQuery = usersDataQuery.Where(it => it.UserName.Contains(indexModel.searchValue));
+                usersDataQuery = usersDataQuery.Where(it => it.UserName.Contains(indexTableInputModel.searchValue));
             }
 
             var totalItems = usersDataQuery.Count();
 
             usersDataQuery = usersDataQuery
                 .Take(pageSize)
-                .Skip(indexModel.start.Value);
+                .Skip(indexTableInputModel.start.Value);
 
             var usersModelListProjection = (from user in usersDataQuery.ToList()
                                             select new UserOutputModel

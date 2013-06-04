@@ -32,7 +32,7 @@ namespace Tests.Unit.Controllers.Areas.CampaignManagement.RequestScheduleControl
             objectMother.queryServicetSchedule.Expect(call => call.Query()).Return(new Schedule[] { objectMother.scheduleForClient, objectMother.scheduleForOtherClient }.AsQueryable());
 
             // Act
-            var jsonResult = objectMother.controller.GetListOfRequestSchedules(objectMother.indexModel);
+            var jsonResult = objectMother.controller.GetListOfRequestSchedules(objectMother.indexTableInputModel);
 
             // Assert
             objectMother.queryServiceUsers.VerifyAllExpectations();

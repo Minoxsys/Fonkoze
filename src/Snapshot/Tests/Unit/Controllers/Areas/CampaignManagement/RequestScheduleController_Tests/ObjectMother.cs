@@ -47,7 +47,7 @@ namespace Tests.Unit.Controllers.Areas.CampaignManagement.RequestScheduleControl
         public Schedule scheduleForOtherClient;
         public RequestReminder reminder;
         public RequestScheduleInputModel inputModel;
-        public IndexModel indexModel;
+        public IndexTableInputModel indexTableInputModel;
 
         public void Init_Controller_And_Mock_Services()
         {
@@ -103,7 +103,7 @@ namespace Tests.Unit.Controllers.Areas.CampaignManagement.RequestScheduleControl
             scheduleForOtherClient.Stub(s => s.Id).Return(scheduleForOtherClientId);
             scheduleForOtherClient.Client = otherClient;
 
-            indexModel = new IndexModel
+            indexTableInputModel = new IndexTableInputModel
             {
                 dir = "ASC",
                 limit = 50,

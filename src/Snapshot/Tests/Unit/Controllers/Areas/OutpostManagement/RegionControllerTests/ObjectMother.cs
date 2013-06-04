@@ -9,6 +9,7 @@ using Web.Areas.OutpostManagement.Controllers;
 using Rhino.Mocks;
 using MvcContrib.TestHelper.Fakes;
 using Web.Areas.OutpostManagement.Models.Region;
+using Web.Models.Shared;
 
 namespace Tests.Unit.Controllers.Areas.OutpostManagement.RegionControllerTests
 {
@@ -134,7 +135,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.RegionControllerTests
 
         }
 
-        public IQueryable<Region> PageOfRegionData(RegionIndexModel indexModel)
+        public IQueryable<Region> PageOfRegionData(IndexTableInputModel indexModel)
         {
             List<Region> regionPageList = new List<Region>();
 

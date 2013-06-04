@@ -44,7 +44,7 @@ namespace Tests.Unit.Controllers.RoleManagerControllerTests
         public User user;
 
         public IPermissionsService PermissionService;
-        public IndexModel indexModel;
+        public IndexTableInputModel indexTableInputModel;
         public RoleManagerInputModel inputModel;
         public Permission[] permissions;
 
@@ -105,7 +105,7 @@ namespace Tests.Unit.Controllers.RoleManagerControllerTests
 
             StubPermission();
 
-            indexModel = new IndexModel()
+            indexTableInputModel = new IndexTableInputModel()
             {
                 dir = "ASC",
                 limit = 50,

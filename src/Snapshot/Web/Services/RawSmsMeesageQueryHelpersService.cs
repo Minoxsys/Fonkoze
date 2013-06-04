@@ -6,6 +6,7 @@ using Core.Persistence;
 using Domain;
 using Domain.Enums;
 using Web.Areas.MessagesManagement.Models.Messages;
+using Web.Models.Shared;
 
 namespace Web.Services
 {
@@ -20,10 +21,10 @@ namespace Web.Services
             _queryRawSmsService = queryRawSmsService;
         }
 
-        public MessageIndexOuputModel GetMessagesFromOutpost(MessagesIndexModel indexModel, OutpostType outpostType, Guid? districtId = null)
+        public MessageIndexOuputModel GetMessagesFromOutpost(IndexTableInputModel indexTableInputModel, OutpostType outpostType, Guid? districtId = null)
         {
-            Debug.Assert(indexModel.limit != null, "indexModel.limit != null");
-            var pageSize = indexModel.limit.Value;
+            Debug.Assert(indexTableInputModel.limit != null, "indexTableInputModel.limit != null");
+            var pageSize = indexTableInputModel.limit.Value;
             var rawDataQuery = _queryRawSmsService.Query().Where(it => it.OutpostType == outpostType);
 
             var orderByColumnDirection = new Dictionary<string, Func<IQueryable<RawSmsReceived>>>
@@ -40,11 +41,11 @@ namespace Web.Services
                     {"ParseErrorMessage-DESC", () => rawDataQuery.OrderByDescending(c => c.ParseErrorMessage)}
                 };
 
-            rawDataQuery = orderByColumnDirection[String.Format("{0}-{1}", indexModel.sort, indexModel.dir)].Invoke();
+            rawDataQuery = orderByColumnDirection[String.Format("{0}-{1}", indexTableInputModel.sort, indexTableInputModel.dir)].Invoke();
 
-            if (!string.IsNullOrEmpty(indexModel.searchValue))
+            if (!string.IsNullOrEmpty(indexTableInputModel.searchValue))
             {
-                rawDataQuery = rawDataQuery.Where(it => it.Content.Contains(indexModel.searchValue));
+                rawDataQuery = rawDataQuery.Where(it => it.Content.Contains(indexTableInputModel.searchValue));
             }
             if (districtId != null && districtId != Guid.Empty)
             {
@@ -54,10 +55,10 @@ namespace Web.Services
 
             var totalItems = rawDataQuery.Count();
 
-            Debug.Assert(indexModel.start != null, "indexModel.start != null");
+            Debug.Assert(indexTableInputModel.start != null, "indexTableInputModel.start != null");
             rawDataQuery = rawDataQuery
                 .Take(pageSize)
-                .Skip(indexModel.start.Value);
+                .Skip(indexTableInputModel.start.Value);
 
             List<MessageModel> list = new List<MessageModel>();
             foreach (RawSmsReceived message in rawDataQuery.ToList())

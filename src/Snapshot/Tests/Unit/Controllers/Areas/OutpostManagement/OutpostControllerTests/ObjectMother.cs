@@ -10,6 +10,7 @@ using MvcContrib.TestHelper.Fakes;
 using Web.Areas.OutpostManagement.Controllers;
 using Web.Areas.OutpostManagement.Models.Outpost;
 using Web.Areas.OutpostManagement.Services;
+using Web.Models.Shared;
 
 namespace Tests.Unit.Controllers.Areas.OutpostManagement.OutpostControllerTests
 {
@@ -129,12 +130,11 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.OutpostControllerTests
             queryDistricts.Verify(c => c.Query());
         }
 
-        internal GetOutpostsInputModel ExpectOutpostsToBeQueriedWithInputModel()
+        internal IndexTableInputModel ExpectOutpostsToBeQueriedWithInputModel()
         {
-            var model = new GetOutpostsInputModel()
+            var model = new IndexTableInputModel()
                 {
                     dir = "ASC",
-                    districtId = null,
                     limit = 50,
                     page = 1,
                     sort = "Name",
@@ -148,17 +148,15 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.OutpostControllerTests
             return model;
         }
 
-        internal GetOutpostsInputModel ExpectOutpostsToBeQueriedWithInputModelAskingOnlyForWarehouses()
+        internal IndexTableInputModel ExpectOutpostsToBeQueriedWithInputModelAskingOnlyForWarehouses()
         {
-            var model = new GetOutpostsInputModel
+            var model = new IndexTableInputModel
                 {
                     dir = "ASC",
-                    districtId = null,
                     limit = 50,
                     page = 1,
                     sort = "Name",
                     start = 0,
-                    OnlyWarehouses = true
                 };
 
             var queryOutposts = Mock.Get(controller.QueryService);
@@ -293,17 +291,16 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.OutpostControllerTests
         }
 
 
-        internal GetOutpostsInputModel ExepectOutpostsToBeQueriedByName(string outpostName)
+        internal IndexTableInputModel ExepectOutpostsToBeQueriedByName(string outpostName)
         {
-            var model = new GetOutpostsInputModel()
+            var model = new IndexTableInputModel()
                 {
                     dir = "ASC",
-                    districtId = null,
                     limit = 50,
                     page = 1,
                     sort = "Name",
                     start = 0,
-                    search = outpostName
+                    searchValue = outpostName
                 };
 
             var queryOutposts = Mock.Get(controller.QueryService);

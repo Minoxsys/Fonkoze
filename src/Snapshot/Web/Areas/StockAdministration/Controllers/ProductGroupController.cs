@@ -202,7 +202,7 @@ namespace Web.Areas.StockAdministration.Controllers
         }
 
         [HttpGet]
-        public JsonResult GetProductGroups(ProductGroupIndexModel indexModel)
+        public JsonResult GetProductGroups(IndexTableInputModel indexModel)
         {
             LoadUserAndClient();
 

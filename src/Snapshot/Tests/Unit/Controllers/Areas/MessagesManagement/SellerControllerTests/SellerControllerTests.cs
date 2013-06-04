@@ -4,6 +4,7 @@ using Moq;
 using NUnit.Framework;
 using Web.Areas.MessagesManagement.Controllers;
 using Web.Areas.MessagesManagement.Models.Messages;
+using Web.Models.Shared;
 using Web.Services;
 using Tests.Utils;
 
@@ -35,7 +36,7 @@ namespace Tests.Unit.Controllers.Areas.MessagesManagement.SellerControllerTests
         [Test]
         public void GetMessagesFromSeller_DelegatesQueryToHelperService_WithSellerSpecificParameter()
         {
-            var inputModel = new MessagesIndexModel();
+            var inputModel = new IndexTableInputModel();
 
             _sut.GetMessagesFromSeller(inputModel);
 
@@ -45,10 +46,10 @@ namespace Tests.Unit.Controllers.Areas.MessagesManagement.SellerControllerTests
         [Test]
         public void GetMessagesFromSeller_ReturnsAsJsonTheOutputFromTheHelperService()
         {
-            _rawSmsMeesageQueryHelpersServiceMock.Setup(service => service.GetMessagesFromOutpost(It.IsAny<MessagesIndexModel>(), OutpostType.Seller, It.IsAny<System.Guid>()))
+            _rawSmsMeesageQueryHelpersServiceMock.Setup(service => service.GetMessagesFromOutpost(It.IsAny<IndexTableInputModel>(), OutpostType.Seller, It.IsAny<System.Guid>()))
                                                  .Returns(new MessageIndexOuputModel {TotalItems = 1});
 
-            var result = _sut.GetMessagesFromSeller(new MessagesIndexModel());
+            var result = _sut.GetMessagesFromSeller(new IndexTableInputModel());
 
             Assert.That(result.GetValueFromJsonResultForModel<MessageIndexOuputModel, int>(m => m.TotalItems), Is.EqualTo(1));
         }

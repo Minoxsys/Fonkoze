@@ -213,7 +213,7 @@ namespace Web.Areas.OutpostManagement.Controllers
         }
 
         [HttpGet]
-        public JsonResult GetRegions(RegionIndexModel indexModel)
+        public JsonResult GetRegions(IndexTableInputModel indexModel, string countryId)
         {
             LoadUserAndClient();
 
@@ -229,9 +229,9 @@ namespace Web.Areas.OutpostManagement.Controllers
             regionDataQuery = orderByColumnDirection[String.Format("{0}-{1}", indexModel.sort, indexModel.dir)].Invoke();
             
                     
-            if (!string.IsNullOrEmpty(indexModel.countryId))
+            if (!string.IsNullOrEmpty(countryId))
             {
-                Guid id = new Guid(indexModel.countryId);
+                Guid id = new Guid(countryId);
                 if (id != Guid.Empty)
                     regionDataQuery = regionDataQuery.Where(it => it.Country.Id == id);
             }
@@ -292,7 +292,7 @@ namespace Web.Areas.OutpostManagement.Controllers
                 countryModelListProjection.Add(model);
             }
 
-            return Json(new CountryIndexOutputModel
+            return Json(new 
             {
                 Countries = countryModelListProjection.ToArray(),
                 TotalItems = countryModelListProjection.Count()

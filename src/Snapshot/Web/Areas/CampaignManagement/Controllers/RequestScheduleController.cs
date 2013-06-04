@@ -60,11 +60,11 @@ namespace Web.Areas.CampaignManagement.Controllers
         }
 
         [HttpGet]
-        public JsonResult GetListOfRequestSchedules(IndexModel indexModel)
+        public JsonResult GetListOfRequestSchedules(IndexTableInputModel indexTableInputModel)
         {
             LoadUserAndClient();
 
-            var pageSize = indexModel.limit.Value;
+            var pageSize = indexTableInputModel.limit.Value;
             var schedulesDataQuery = QueryServiceSchedule.Query().Where(s => s.Client.Id == _client.Id);
 
             var orderByColumnDirection = new Dictionary<string, Func<IQueryable<Schedule>>>()
@@ -79,18 +79,18 @@ namespace Web.Areas.CampaignManagement.Controllers
                 { "Created-DESC", () => schedulesDataQuery.OrderByDescending(r => r.Created) }
             };
 
-            schedulesDataQuery = orderByColumnDirection[String.Format("{0}-{1}", indexModel.sort, indexModel.dir)].Invoke();
+            schedulesDataQuery = orderByColumnDirection[String.Format("{0}-{1}", indexTableInputModel.sort, indexTableInputModel.dir)].Invoke();
 
-            if (!string.IsNullOrEmpty(indexModel.searchValue))
+            if (!string.IsNullOrEmpty(indexTableInputModel.searchValue))
             {
-                schedulesDataQuery = schedulesDataQuery.Where(it => it.Name.Contains(indexModel.searchValue));
+                schedulesDataQuery = schedulesDataQuery.Where(it => it.Name.Contains(indexTableInputModel.searchValue));
             }
 
             var totalItems = schedulesDataQuery.Count();
 
             schedulesDataQuery = schedulesDataQuery
                 .Take(pageSize)
-                .Skip(indexModel.start.Value);
+                .Skip(indexTableInputModel.start.Value);
 
             var scheduleListOfReferenceModelsProjection = (from schedule in schedulesDataQuery.ToList()
                                                            select new RequestScheduleReferenceModel

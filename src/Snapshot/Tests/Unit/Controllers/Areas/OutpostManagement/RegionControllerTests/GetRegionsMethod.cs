@@ -6,6 +6,7 @@ using NUnit.Framework;
 using Web.Areas.OutpostManagement.Models.Region;
 using Rhino.Mocks;
 using System.Web.Mvc;
+using Web.Models.Shared;
 
 namespace Tests.Unit.Controllers.Areas.OutpostManagement.RegionControllerTests
 {
@@ -24,7 +25,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.RegionControllerTests
         public void Returns_The_Data_Paginated_BasedOnTheInputValues()
         {
             //Arrange
-            var indexModel = new RegionIndexModel
+            var indexModel = new IndexTableInputModel
             {
                 dir = "ASC",
                 limit = 50,
@@ -36,7 +37,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.RegionControllerTests
             objectMother.queryRegion.Expect(call => call.Query()).Return(pageOfData);
 
             //Act
-            var jsonResult = objectMother.controller.GetRegions(indexModel);
+            var jsonResult = objectMother.controller.GetRegions(indexModel, string.Empty);
 
             //Assert
             objectMother.queryRegion.VerifyAllExpectations();
@@ -52,14 +53,13 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.RegionControllerTests
         public void Returns_Regions_For_Country_Order_ByName_DESC()
         {
             //Arrange
-            var indexModel = new RegionIndexModel
+            var indexModel = new IndexTableInputModel
             {
                 dir = "DESC",
                 limit = 50,
                 page = 1,
                 start = 0,
                 sort = "Name",
-                countryId = objectMother.countryId.ToString()
             };
 
             var pageOfData = objectMother.PageOfRegionData(indexModel);
@@ -67,7 +67,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.RegionControllerTests
 
             //Act
 
-            var jsonResult = objectMother.controller.GetRegions(indexModel);
+            var jsonResult = objectMother.controller.GetRegions(indexModel, objectMother.countryId.ToString());
 
             //Assert
             objectMother.queryCountry.VerifyAllExpectations();

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Rhino.Mocks;
 using NUnit.Framework;
+using Web.Models.Shared;
 using Web.Models.UserManager;
 using System.Web.Mvc;
 
@@ -24,7 +25,7 @@ namespace Tests.Unit.Controllers.UserMangerControllerTests
         public void Returns_The_Data_Paginated_BasedOnTheInputValues()
         {
             //Arrange
-            var indexModel = new UserManagerIndexModel
+            var indexModel = new IndexTableInputModel
             {
                 dir = "ASC",
                 limit = 50,
@@ -52,7 +53,7 @@ namespace Tests.Unit.Controllers.UserMangerControllerTests
         public void Returns_Users_With_ShearchValue_And_Order_ByEmail_DESC()
         {
             //Arrange
-            var indexModel = new UserManagerIndexModel
+            var indexModel = new IndexTableInputModel
             {
                 dir = "DESC",
                 limit = 50,

@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace Web.Areas.MessagesManagement.Models.Messages
+﻿namespace Web.Models.Shared
 {
-    public class MessagesIndexModel
+    public class IndexTableInputModel
     {
         public string _dc { get; set; }
 

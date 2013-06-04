@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Web.Mvc;
 using Web.Models.Alerts;
+using Web.Models.Shared;
 using Web.Security;
 using Web.Areas.StockAdministration.Models.OutpostStockLevel;
 using Web.Services;
@@ -31,12 +32,12 @@ namespace Web.Controllers
         }
 
         [HttpGet]
-        public JsonResult GetAlerts(AlertsIndexModel indexModel, OverviewInputModel input = null)
+        public JsonResult GetAlerts(IndexTableInputModel indexTableInputModel, OverviewInputModel input = null)
         {
             LoadUserAndClient();
 
-            Debug.Assert(indexModel.limit != null, "indexModel.limit != null");
-            var pageSize = indexModel.limit.Value;
+            Debug.Assert(indexTableInputModel.limit != null, "indexTableInputModel.limit != null");
+            var pageSize = indexTableInputModel.limit.Value;
             var alertsDataQuery = QueryAlerts.Query().Where(it => it.Client.Id == _client.Id);
 
             var orderByColumnDirection = new Dictionary<string, Func<IQueryable<Alert>>>
@@ -57,12 +58,12 @@ namespace Web.Controllers
                     {"Date-DESC", () => alertsDataQuery.OrderByDescending(c => c.Created)},
                 };
 
-            alertsDataQuery = orderByColumnDirection[String.Format("{0}-{1}", indexModel.sort, indexModel.dir)].Invoke();
+            alertsDataQuery = orderByColumnDirection[String.Format("{0}-{1}", indexTableInputModel.sort, indexTableInputModel.dir)].Invoke();
 
-            if (!string.IsNullOrEmpty(indexModel.searchValue))
+            if (!string.IsNullOrEmpty(indexTableInputModel.searchValue))
             {
                 alertsDataQuery = alertsDataQuery
-                    .Where(it => it.OutpostName.Contains(indexModel.searchValue));
+                    .Where(it => it.OutpostName.Contains(indexTableInputModel.searchValue));
             }
             if (input != null && input.DistrictId != Guid.Empty)
             {
@@ -72,10 +73,10 @@ namespace Web.Controllers
 
             var totalItems = alertsDataQuery.Count();
 
-            Debug.Assert(indexModel.start != null, "indexModel.start != null");
+            Debug.Assert(indexTableInputModel.start != null, "indexTableInputModel.start != null");
             alertsDataQuery = alertsDataQuery
                 .Take(pageSize)
-                .Skip(indexModel.start.Value);
+                .Skip(indexTableInputModel.start.Value);
 
             var alertsModelListProjection = (from alert in alertsDataQuery.ToList()
                                              select new AlertModel

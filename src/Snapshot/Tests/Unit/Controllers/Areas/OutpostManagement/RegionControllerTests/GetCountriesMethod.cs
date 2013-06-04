@@ -36,8 +36,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.RegionControllerTests
             objectMother.queryCountry.VerifyAllExpectations();
 
             Assert.IsNotNull(jsonResult);
-            Assert.IsInstanceOf<CountryIndexOutputModel>(jsonResult.Data);
-            var jsonData = jsonResult.Data as CountryIndexOutputModel;
+            dynamic jsonData = jsonResult.Data;
             Assert.IsNotNull(jsonData);
 
             Assert.AreEqual(2, jsonData.TotalItems);           

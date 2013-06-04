@@ -7,6 +7,7 @@ using Rhino.Mocks;
 using Web.Models.ClientManager;
 using System.Web.Mvc;
 using Core.Domain;
+using Web.Models.Shared;
 
 namespace Tests.Unit.Controllers.ClientManagerControllerTests
 {
@@ -25,7 +26,7 @@ namespace Tests.Unit.Controllers.ClientManagerControllerTests
         public void Returns_The_Data_Paginated_BasedOnTheInputValues()
         {
             //Arrange
-            var indexModel = new ClientManagerIndexModel
+            var indexModel = new IndexTableInputModel
             {
                 dir = "ASC",
                 limit = 50,
@@ -55,7 +56,7 @@ namespace Tests.Unit.Controllers.ClientManagerControllerTests
         public void Returns_Clients_With_ShearchValue_And_Order_ByName_DESC()
         {
             //Arrange
-            var indexModel = new ClientManagerIndexModel
+            var indexModel = new IndexTableInputModel
             {
                 dir = "DESC",
                 limit = 50,

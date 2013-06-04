@@ -73,9 +73,9 @@ namespace Web.Controllers
         }
 
         [HttpGet]
-        public JsonResult GetListOfRoles(IndexModel indexModel)
+        public JsonResult GetListOfRoles(IndexTableInputModel indexTableInputModel)
         {
-            var pageSize = indexModel.limit.Value;
+            var pageSize = indexTableInputModel.limit.Value;
             var rolesDataQuery = QueryServiceRole.Query();
 
             var orderByColumnDirection = new Dictionary<string, Func<IQueryable<Role>>>()
@@ -84,18 +84,18 @@ namespace Web.Controllers
                 { "Name-DESC", () => rolesDataQuery.OrderByDescending(r => r.Name) }
             };
 
-            rolesDataQuery = orderByColumnDirection[String.Format("{0}-{1}", indexModel.sort, indexModel.dir)].Invoke();
+            rolesDataQuery = orderByColumnDirection[String.Format("{0}-{1}", indexTableInputModel.sort, indexTableInputModel.dir)].Invoke();
 
-            if (!string.IsNullOrEmpty(indexModel.searchValue))
+            if (!string.IsNullOrEmpty(indexTableInputModel.searchValue))
             {
-                rolesDataQuery = rolesDataQuery.Where(it => it.Name.Contains(indexModel.searchValue));
+                rolesDataQuery = rolesDataQuery.Where(it => it.Name.Contains(indexTableInputModel.searchValue));
             }
 
             var totalItems = rolesDataQuery.Count();
 
             rolesDataQuery = rolesDataQuery
                 .Take(pageSize)
-                .Skip(indexModel.start.Value);
+                .Skip(indexTableInputModel.start.Value);
 
             var roleListOfReferenceModelsProjection = (from role in rolesDataQuery.ToList()
                                                        select new RoleReferenceModel

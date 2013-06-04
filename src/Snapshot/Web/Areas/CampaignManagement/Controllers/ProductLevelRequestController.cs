@@ -125,7 +125,7 @@ namespace Web.Areas.CampaignManagement.Controllers
 
 		}
 
-        public JsonResult GetProductLevelRequests(GetProductLevelRequestInput input)
+        public JsonResult GetProductLevelRequests(IndexTableInputModel input)
         {
 
             LoadUserAndClient();

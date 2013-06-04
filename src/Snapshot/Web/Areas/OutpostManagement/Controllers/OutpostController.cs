@@ -146,7 +146,7 @@ namespace Web.Areas.OutpostManagement.Controllers
 			});
 		}
 
-		public JsonResult GetOutposts(GetOutpostsInputModel input)
+        public JsonResult GetOutposts(IndexTableInputModel input, FilterModel filterModel, bool onlyWarehouses)
 		{
 			var model = new GetOutpostsOutputModel();
 			LoadUserAndClient();
@@ -154,27 +154,27 @@ namespace Web.Areas.OutpostManagement.Controllers
 			var outpostsQueryData = QueryService.Query().
 			Where(c => c.Client == this._client);
 
-			if (input.countryId.HasValue && input.countryId.Value != Guid.Empty)
+            if (filterModel.countryId.HasValue && filterModel.countryId.Value != Guid.Empty)
 			{
-				outpostsQueryData = outpostsQueryData.Where(o => o.Country.Id == input.countryId.Value);
+                outpostsQueryData = outpostsQueryData.Where(o => o.Country.Id == filterModel.countryId.Value);
 			}
 
-			if (input.regionId.HasValue && input.regionId.Value != Guid.Empty)
+            if (filterModel.regionId.HasValue && filterModel.regionId.Value != Guid.Empty)
 			{
-				outpostsQueryData = outpostsQueryData.Where(o => o.Region.Id == input.regionId.Value);
+                outpostsQueryData = outpostsQueryData.Where(o => o.Region.Id == filterModel.regionId.Value);
 			}
 
-			if (input.districtId.HasValue && input.districtId.Value != Guid.Empty)
+            if (filterModel.districtId.HasValue && filterModel.districtId.Value != Guid.Empty)
 			{
-				outpostsQueryData = outpostsQueryData.Where(o => o.District.Id == input.districtId.Value);
+                outpostsQueryData = outpostsQueryData.Where(o => o.District.Id == filterModel.districtId.Value);
 			}
 
-			if (!string.IsNullOrEmpty(input.search))
+			if (!string.IsNullOrEmpty(input.searchValue))
 			{
-				outpostsQueryData = outpostsQueryData.Where(o => o.Name.Contains(input.search));
+				outpostsQueryData = outpostsQueryData.Where(o => o.Name.Contains(input.searchValue));
 			}
 
-		    if (input.OnlyWarehouses)
+		    if (onlyWarehouses)
 		    {
 		        outpostsQueryData = outpostsQueryData.Where(o => o.IsWarehouse);
 		    }

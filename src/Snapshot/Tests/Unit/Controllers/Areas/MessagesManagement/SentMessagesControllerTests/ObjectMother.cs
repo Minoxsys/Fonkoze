@@ -7,6 +7,7 @@ using Domain;
 using Rhino.Mocks;
 using Web.Areas.MessagesManagement.Controllers;
 using Web.Areas.MessagesManagement.Models.SentMessages;
+using Web.Models.Shared;
 
 namespace Tests.Unit.Controllers.Areas.MessagesManagement.SentMessagesControllerTests
 {
@@ -35,12 +36,12 @@ namespace Tests.Unit.Controllers.Areas.MessagesManagement.SentMessagesController
             QuerySms = MockRepository.GenerateMock<IQueryService<SentSms>>();
         }
 
-        public IQueryable<SentSms> PageOfData(SentMessagesIndexModel indexModel)
+        public IQueryable<SentSms> PageOfData(IndexTableInputModel indexModel)
         {
             var smsList = new List<SentSms>();
 
-            Debug.Assert(indexModel.start != null, "indexModel.start != null");
-            Debug.Assert(indexModel.limit != null, "indexModel.limit != null");
+            Debug.Assert(indexModel.start != null, "IndexTableInputModel.start != null");
+            Debug.Assert(indexModel.limit != null, "IndexTableInputModel.limit != null");
             for (int i = indexModel.start.Value; i < indexModel.limit.Value; i++)
             {
                 smsList.Add(new SentSms

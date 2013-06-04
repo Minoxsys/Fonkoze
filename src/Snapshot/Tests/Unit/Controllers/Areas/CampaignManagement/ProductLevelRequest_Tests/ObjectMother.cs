@@ -10,6 +10,7 @@ using Autofac;
 using MvcContrib.TestHelper.Fakes;
 using System.Collections.Generic;
 using Web.Areas.CampaignManagement.Models.ProductLevelRequest;
+using Web.Models.Shared;
 using Web.Services;
 using NUnit.Framework;
 
@@ -280,9 +281,9 @@ namespace Tests.Unit.Controllers.Areas.CampaignManagement.ProductLevelRequest_Te
 
         }
 
-        internal GetProductLevelRequestInput GetProductLevelRequestsInput()
+        internal IndexTableInputModel GetProductLevelRequestsInput()
         {
-            var model = new GetProductLevelRequestInput
+            var model = new IndexTableInputModel
             {
                 dir = "ASC",
                 limit = 10,

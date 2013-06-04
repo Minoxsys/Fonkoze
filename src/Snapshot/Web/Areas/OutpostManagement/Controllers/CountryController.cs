@@ -1,17 +1,16 @@
-﻿using System;
+﻿using Core.Domain;
+using Core.Persistence;
+using Core.Security;
+using Domain;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
-using Core.Domain;
-using Core.Persistence;
-using Domain;
-using FluentNHibernate.Conventions;
 using Web.Areas.OutpostManagement.Models.Country;
 using Web.Models.Shared;
-using NHibernate.Linq;
 using Web.Security;
-using Core.Security;
+
 
 namespace Web.Areas.OutpostManagement.Controllers
 {
@@ -69,11 +68,11 @@ namespace Web.Areas.OutpostManagement.Controllers
         }
 
         [HttpGet]
-        public JsonResult Index(CountryIndexModel indexModel)
+        public JsonResult Index(IndexTableInputModel indexTableInputModel)
         {
             LoadUserAndClient();
 
-            var pageSize = indexModel.limit.Value;
+            var pageSize = indexTableInputModel.limit.Value;
 
             var countryDataQuery = this.QueryCountry.Query()
             .Where(c => c.Client.Id == _client.Id);
@@ -89,14 +88,14 @@ namespace Web.Areas.OutpostManagement.Controllers
             };
 
 			Func<IQueryable<Country>> orderCountries;
-			if (orderByColumnDirection.TryGetValue(String.Format("{0}-{1}", indexModel.sort, indexModel.dir), out orderCountries))
+			if (orderByColumnDirection.TryGetValue(String.Format("{0}-{1}", indexTableInputModel.sort, indexTableInputModel.dir), out orderCountries))
 			{
 				countryDataQuery = orderCountries.Invoke();
 			}
 
             var totalItems = countryDataQuery.Count();
             countryDataQuery = countryDataQuery.Take(pageSize)
-                                               .Skip(indexModel.start.Value);
+                                               .Skip(indexTableInputModel.start.Value);
 
             var countryModelListProjection = (from countryData in countryDataQuery.ToList() select new CountryModel
             {
@@ -106,7 +105,7 @@ namespace Web.Areas.OutpostManagement.Controllers
                 PhonePrefix = countryData.PhonePrefix
             }).ToArray();
 
-            return Json(new CountryIndexOutputModel
+            return Json(new 
             {
                 Countries = countryModelListProjection,
                 TotalItems = totalItems

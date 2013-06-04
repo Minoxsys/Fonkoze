@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Web.Areas.MessagesManagement.Models.Messages;
+using Web.Models.Shared;
 using Web.Services;
 
 namespace Tests.Unit.Services
@@ -31,7 +32,7 @@ namespace Tests.Unit.Services
         public void GetMessagesFromOutpost_DoesNotReturnWarehouseItems_WhenThereAreNoWarehouses()
         {
             //Arrange
-            var indexModel = new MessagesIndexModel
+            var indexModel = new IndexTableInputModel
             {
                 dir = "ASC",
                 limit = 50,
@@ -53,7 +54,7 @@ namespace Tests.Unit.Services
         public void GetMessagesFromOutpost_ReturnsOnlySellerMessages_WhenOutpostTypeIsSeller()
         {
             //Arrange
-            var indexModel = new MessagesIndexModel
+            var indexModel = new IndexTableInputModel
                 {
                     dir = "ASC",
                     limit = 50,
@@ -75,7 +76,7 @@ namespace Tests.Unit.Services
         public void GetMessagesFromOutpost_ReturnsMessagesDescedingByContent_WhenContentIsTheSortingKeyAndDirectionIsDesc()
         {
             //Arrange
-            var indexModel = new MessagesIndexModel
+            var indexModel = new IndexTableInputModel
             {
                 dir = "DESC",
                 limit = 9,
@@ -97,7 +98,7 @@ namespace Tests.Unit.Services
         public void GetMessagesFromOutpost_ReturnsOnlyMessagesWhereContentContainsSearchValue()
         {
             //Arrange
-            var indexModel = new MessagesIndexModel
+            var indexModel = new IndexTableInputModel
             {
                 dir = "ASC",
                 limit = 9,
@@ -116,13 +117,13 @@ namespace Tests.Unit.Services
             Assert.That(result.Messages[0].Content, Is.EqualTo("abc-8"));
         }
 
-        private IQueryable<RawSmsReceived> PageOfMixedMessagesProportion50_50(MessagesIndexModel indexModel)
+        private IQueryable<RawSmsReceived> PageOfMixedMessagesProportion50_50(IndexTableInputModel indexTableInputModel)
         {
             var rawSmsList = new List<RawSmsReceived>();
 
-            Debug.Assert(indexModel.start != null, "indexModel.start != null");
-            Debug.Assert(indexModel.limit != null, "indexModel.limit != null");
-            for (int i = indexModel.start.Value; i < indexModel.limit.Value; i++)
+            Debug.Assert(indexTableInputModel.start != null, "IndexTableInputModel.start != null");
+            Debug.Assert(indexTableInputModel.limit != null, "IndexTableInputModel.limit != null");
+            for (int i = indexTableInputModel.start.Value; i < indexTableInputModel.limit.Value; i++)
             {
                 rawSmsList.Add(new RawSmsReceived
                     {

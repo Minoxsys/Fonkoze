@@ -30,7 +30,7 @@ namespace Tests.Unit.Controllers.RoleManagerControllerTests
             objectMother.queryServiceUser.Expect(call => call.Query()).Return(new User[] { }.AsQueryable());
 
             // Act
-            var jsonResult = objectMother.controller.GetListOfRoles(objectMother.indexModel);
+            var jsonResult = objectMother.controller.GetListOfRoles(objectMother.indexTableInputModel);
             
             // Assert
             objectMother.queryServiceRole.VerifyAllExpectations();

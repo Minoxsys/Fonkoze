@@ -1,6 +1,7 @@
 ﻿using Domain.Enums;
 using System.Web.Mvc;
 using Web.Areas.MessagesManagement.Models.Messages;
+using Web.Models.Shared;
 using Web.Security;
 using Web.Services;
 using Web.Areas.StockAdministration.Models.OutpostStockLevel;
@@ -30,10 +31,10 @@ namespace Web.Areas.MessagesManagement.Controllers
         }
 
         [HttpGet]
-        public JsonResult GetMessagesFromWarehouse(MessagesIndexModel indexModel, OverviewInputModel input = null)
+        public JsonResult GetMessagesFromWarehouse(IndexTableInputModel indexTableInputModel, OverviewInputModel input = null)
         {
             var districtId = input == null ? Guid.Empty : input.DistrictId;
-            return Json(SmsQueryService.GetMessagesFromOutpost(indexModel, OutpostType.Warehouse, districtId), JsonRequestBehavior.AllowGet);
+            return Json(SmsQueryService.GetMessagesFromOutpost(indexTableInputModel, OutpostType.Warehouse, districtId), JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult GetAllDistricts()

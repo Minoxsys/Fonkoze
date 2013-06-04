@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using Rhino.Mocks;
 using Web.Areas.MessagesManagement.Models.SentMessages;
+using Web.Models.Shared;
 
 namespace Tests.Unit.Controllers.Areas.MessagesManagement.SentMessagesControllerTests
 {
@@ -19,7 +20,7 @@ namespace Tests.Unit.Controllers.Areas.MessagesManagement.SentMessagesController
         public void Returns_The_Data_Paginated_BasedOnTheInputValues()
         {
             //Arrange
-            var indexModel = new SentMessagesIndexModel
+            var indexModel = new IndexTableInputModel
             {
                 dir = "ASC",
                 limit = 50,
@@ -47,7 +48,7 @@ namespace Tests.Unit.Controllers.Areas.MessagesManagement.SentMessagesController
         public void Returns_Messages_Order_DESC_by_ContentMessage()
         {
             //Arrange
-            var indexModel = new SentMessagesIndexModel
+            var indexModel = new IndexTableInputModel
             {
                 dir = "DESC",
                 limit = 50,
@@ -73,7 +74,7 @@ namespace Tests.Unit.Controllers.Areas.MessagesManagement.SentMessagesController
         public void Returns_Messages_WhereMessageContentContains_SearchValue()
         {
             //Arrange
-            var indexModel = new SentMessagesIndexModel
+            var indexModel = new IndexTableInputModel
             {
                 dir = "ASC",
                 limit = 50,

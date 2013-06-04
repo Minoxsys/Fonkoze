@@ -11,6 +11,7 @@ using Web.Models.ClientManager;
 using MvcContrib.TestHelper.Fakes;
 using Core.Security;
 using Persistence.Security;
+using Web.Models.Shared;
 
 namespace Tests.Unit.Controllers.ClientManagerControllerTests
 {
@@ -85,11 +86,11 @@ namespace Tests.Unit.Controllers.ClientManagerControllerTests
             permission.Stub(it => it.Id).Return(permissionId);
         }
 
-        public IQueryable<Client> PageOfClientsData(ClientManagerIndexModel indexModel)
+        public IQueryable<Client> PageOfClientsData(IndexTableInputModel indexTableInputModel)
         {
             List<Client> clientPageList = new List<Client>();
 
-            for (int i = indexModel.start.Value; i < indexModel.limit.Value; i++)
+            for (int i = indexTableInputModel.start.Value; i < indexTableInputModel.limit.Value; i++)
             {
                 clientPageList.Add(new Client
                 {

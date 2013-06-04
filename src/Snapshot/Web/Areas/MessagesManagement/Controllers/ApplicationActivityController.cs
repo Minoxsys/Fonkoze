@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Web.Mvc;
 using Web.Areas.MessagesManagement.Models.ApplicationActivity;
+using Web.Models.Shared;
 using Web.Security;
 
 namespace Web.Areas.MessagesManagement.Controllers
@@ -27,7 +28,7 @@ namespace Web.Areas.MessagesManagement.Controllers
         }
 
         [HttpGet]
-        public JsonResult GetActivityItems(OtherActivityIndexModel inputModel)
+        public JsonResult GetActivityItems(IndexTableInputModel inputModel)
         {
             Debug.Assert(inputModel.limit != null, "inputModel.limit != null");
             var pageSize = inputModel.limit.Value;
@@ -61,7 +62,7 @@ namespace Web.Areas.MessagesManagement.Controllers
                                                         }).ToArray();
 
 
-            return Json(new OtherActivityIndexOuputModel
+            return Json(new
                 {
                     Activities = otherActivityModelListProjection,
                     TotalItems = totalItems

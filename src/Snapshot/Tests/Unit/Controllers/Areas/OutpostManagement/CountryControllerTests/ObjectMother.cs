@@ -11,6 +11,7 @@ using MvcContrib.TestHelper.Fakes;
 using Web.Areas.OutpostManagement.Models.Country;
 using Core.Security;
 using Persistence.Security;
+using Web.Models.Shared;
 
 namespace Tests.Unit.Controllers.Areas.OutpostManagement.CountryControllerTests
 {
@@ -130,11 +131,11 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.CountryControllerTests
         }
 
 
-        internal IQueryable<Country> PageOfCountryData(CountryIndexModel indexModel)
+        internal IQueryable<Country> PageOfCountryData(IndexTableInputModel indexTableInputModel)
         {
             List<Country> countryPageList = new List<Country>();
             
-            for (int i = indexModel.start.Value; i < indexModel.limit.Value; i++)
+            for (int i = indexTableInputModel.start.Value; i < indexTableInputModel.limit.Value; i++)
             {
                 countryPageList.Add(new Country
                 {
@@ -192,9 +193,9 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.CountryControllerTests
         }
 
 
-        internal IQueryable<Country> ExpectQueryCountryToReturnPageOfCountryDataBasedOn(CountryIndexModel indexModel)
+        internal IQueryable<Country> ExpectQueryCountryToReturnPageOfCountryDataBasedOn(IndexTableInputModel indexTableInputModel)
         {
-            var pageOfData = this.PageOfCountryData(indexModel);
+            var pageOfData = this.PageOfCountryData(indexTableInputModel);
 
             this.queryCountry.Expect(call => call.Query()).Return(pageOfData);
             return pageOfData;

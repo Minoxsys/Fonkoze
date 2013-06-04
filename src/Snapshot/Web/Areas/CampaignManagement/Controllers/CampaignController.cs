@@ -142,7 +142,7 @@ namespace Web.Areas.CampaignManagement.Controllers
         }
 
 
-        public JsonResult GetCampaigns(CampaignOverviewInputModel overviewInputModel)
+        public JsonResult GetCampaigns(IndexTableInputModel overviewInputModel)
         {
             LoadUserAndClient();
 

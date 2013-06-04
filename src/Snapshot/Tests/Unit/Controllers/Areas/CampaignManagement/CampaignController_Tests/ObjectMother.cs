@@ -9,6 +9,7 @@ using Core.Domain;
 using Rhino.Mocks;
 using MvcContrib.TestHelper.Fakes;
 using Web.Areas.CampaignManagement.Models.Campaign;
+using Web.Models.Shared;
 
 namespace Tests.Unit.Controllers.Areas.CampaignManagement.CampaignController_Tests
 {
@@ -161,7 +162,7 @@ namespace Tests.Unit.Controllers.Areas.CampaignManagement.CampaignController_Tes
 
         }
 
-        public IQueryable<Campaign> PageOfCampaignData(CampaignOverviewInputModel model)
+        public IQueryable<Campaign> PageOfCampaignData(IndexTableInputModel model)
         {
             List<Campaign> campaignPageList = new List<Campaign>();
 

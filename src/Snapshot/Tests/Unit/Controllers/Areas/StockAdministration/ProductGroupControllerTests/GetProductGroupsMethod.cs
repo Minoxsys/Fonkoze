@@ -7,6 +7,7 @@ using Rhino.Mocks;
 using Web.Areas.StockAdministration.Models.ProductGroup;
 using System.Web.Mvc;
 using Domain;
+using Web.Models.Shared;
 
 namespace Tests.Unit.Controllers.Areas.StockAdministration.ProductGroupControllerTests
 {
@@ -26,7 +27,7 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration.ProductGroupControlle
         [Test]
         public void Loads_The_UserAndClient()
         {
-            var indexModel = new ProductGroupIndexModel
+            var indexModel = new IndexTableInputModel
             {
                 dir = "ASC",
                 limit = 50,
@@ -44,7 +45,7 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration.ProductGroupControlle
         public void Returns_The_Data_Paginated_BasedOnTheInputValues()
         {
             //Arrange
-            var indexModel = new ProductGroupIndexModel
+            var indexModel = new IndexTableInputModel
             {
                 dir = "ASC",
                 limit = 50,
@@ -73,7 +74,7 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration.ProductGroupControlle
         public void Returns_ProductGroups_Order_ByName_DESC()
         {
             //Arrange
-            var indexModel = new ProductGroupIndexModel
+            var indexModel = new IndexTableInputModel
             {
                 dir = "DESC",
                 limit = 50,
@@ -97,7 +98,7 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration.ProductGroupControlle
 
         }
 
-        private void MockPageOfData(ProductGroupIndexModel indexModel)
+        private void MockPageOfData(IndexTableInputModel indexModel)
         {
             pageOfData = objectMother.PageOfProductGroupData(indexModel);
             objectMother.queryProductGroup.Expect(call => call.Query()).Return(pageOfData);

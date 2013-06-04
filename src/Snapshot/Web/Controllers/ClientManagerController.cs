@@ -1,17 +1,16 @@
-﻿using System;
+﻿using AutoMapper;
+using Core.Domain;
+using Core.Persistence;
+using Core.Security;
+using Domain;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using Web.CustomFilters;
 using Web.Models.ClientManager;
-using Domain;
-using AutoMapper;
 using Web.Models.Shared;
-using Core.Persistence;
-using Core.Domain;
 using Web.Security;
-using Core.Security;
 
 namespace Web.Controllers
 {
@@ -155,9 +154,9 @@ namespace Web.Controllers
         }
 
         [HttpGet]
-        public JsonResult GetListOfClients(ClientManagerIndexModel indexModel)
+        public JsonResult GetListOfClients(IndexTableInputModel indexTableInputModel)
         {
-            var pageSize = indexModel.limit.Value;
+            var pageSize = indexTableInputModel.limit.Value;
             var clientsDataQuery = this.QueryClients.Query();
 
             var orderByColumnDirection = new Dictionary<string, Func<IQueryable<Client>>>()
@@ -167,18 +166,18 @@ namespace Web.Controllers
                 
             };
 
-            clientsDataQuery = orderByColumnDirection[String.Format("{0}-{1}", indexModel.sort, indexModel.dir)].Invoke();
+            clientsDataQuery = orderByColumnDirection[String.Format("{0}-{1}", indexTableInputModel.sort, indexTableInputModel.dir)].Invoke();
 
-            if (!string.IsNullOrEmpty(indexModel.searchValue))
+            if (!string.IsNullOrEmpty(indexTableInputModel.searchValue))
             {
-                clientsDataQuery = clientsDataQuery.Where(it => it.Name.Contains(indexModel.searchValue));
+                clientsDataQuery = clientsDataQuery.Where(it => it.Name.Contains(indexTableInputModel.searchValue));
             }
 
             var totalItems = clientsDataQuery.Count();
 
             clientsDataQuery = clientsDataQuery
                 .Take(pageSize)
-                .Skip(indexModel.start.Value);
+                .Skip(indexTableInputModel.start.Value);
 
             var clientsModelListProjection = (from client in clientsDataQuery.ToList()
                                             select new ClientManagerOutputModel

@@ -110,7 +110,7 @@
                     districtId: null,
                     countryId:null,
                     regionId:null,
-                    search:null
+                    searchValue:null
                 },
                 simpleSortMode: true
             },
@@ -915,7 +915,7 @@
                                                         extraParams.countryId = comboFilters.country.getValue(); 
                                                         extraParams.regionId = comboFilters.region.getValue(); 
                                                         extraParams.districtId = comboFilters.district.getValue(); 
-                                                        extraParams.search = '';
+                                                        extraParams.searchValue = '';
     
                                                         field.setValue('');
     
@@ -928,7 +928,7 @@
                                                     extraParams.countryId = comboFilters.country.getValue(); 
                                                     extraParams.regionId = comboFilters.region.getValue(); 
                                                     extraParams.districtId = comboFilters.district.getValue(); 
-                                                    extraParams.search = textField.getValue();
+                                                    extraParams.searchValue = textField.getValue();
     
                                                     window.feature.doSearch.delay(500);
                                                 }

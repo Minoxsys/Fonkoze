@@ -214,7 +214,6 @@
     <Compile Include="Areas\CampaignManagement\Models\ProductLevelRequest\CampaignModel.cs" />
     <Compile Include="Areas\CampaignManagement\Models\ProductLevelRequest\EditProductLevelRequestInput.cs" />
     <Compile Include="Areas\CampaignManagement\Models\ProductLevelRequest\CreateProductLevelRequestInput.cs" />
-    <Compile Include="Areas\CampaignManagement\Models\ProductLevelRequest\GetProductLevelRequestInput.cs" />
     <Compile Include="Areas\CampaignManagement\Models\ProductLevelRequest\GetProductLevelRequestModel.cs" />
     <Compile Include="Areas\CampaignManagement\Models\ProductLevelRequest\GetProductLevelRequestResponse.cs" />
     <Compile Include="Areas\CampaignManagement\Models\ProductLevelRequest\GetProductsInput.cs" />
@@ -234,7 +233,6 @@
     <Compile Include="Areas\CampaignManagement\Models\Campaign\CampaignInputModel.cs" />
     <Compile Include="Areas\CampaignManagement\Models\Campaign\CampaignModel.cs" />
     <Compile Include="Areas\CampaignManagement\Models\Campaign\CampaignOutputModel.cs" />
-    <Compile Include="Areas\CampaignManagement\Models\Campaign\CampaignOverviewInputModel.cs" />
     <Compile Include="Areas\CampaignManagement\Models\Campaign\CampaignOverviewOutputModel.cs" />
     <Compile Include="Areas\CampaignManagement\Models\Campaign\OptionsModel.cs" />
     <Compile Include="Areas\CampaignManagement\Models\Campaign\ReferenceModel.cs" />
@@ -249,15 +247,11 @@
     <Compile Include="Areas\MessagesManagement\Controllers\SellerController.cs" />
     <Compile Include="Areas\MessagesManagement\Controllers\SentMessagesController.cs" />
     <Compile Include="Areas\MessagesManagement\MessagesManagementAreaRegistration.cs" />
-    <Compile Include="Areas\MessagesManagement\Models\ApplicationActivity\OtherActivityIndexOuputModel.cs" />
     <Compile Include="Areas\MessagesManagement\Models\ApplicationActivity\ApplicationActivityViewModel.cs" />
-    <Compile Include="Areas\MessagesManagement\Models\ApplicationActivity\OtherActivityIndexModel.cs" />
     <Compile Include="Areas\MessagesManagement\Models\Messages\MessageIndexOuputModel.cs" />
     <Compile Include="Areas\MessagesManagement\Models\Messages\MessageModel.cs" />
-    <Compile Include="Areas\MessagesManagement\Models\Messages\MessagesIndexModel.cs" />
     <Compile Include="Areas\MessagesManagement\Models\SentMessages\SentMessageIndexOuputModel.cs" />
     <Compile Include="Areas\MessagesManagement\Models\SentMessages\SentMessageModel.cs" />
-    <Compile Include="Areas\MessagesManagement\Models\SentMessages\SentMessagesIndexModel.cs" />
     <Compile Include="Areas\OutpostManagement\Controllers\AssignProductGroupController.cs" />
     <Compile Include="Areas\OutpostManagement\Controllers\ContactController.cs" />
     <Compile Include="Areas\OutpostManagement\Controllers\CountryController.cs" />
@@ -269,8 +263,6 @@
     <Compile Include="Areas\OutpostManagement\Models\Contact\ContactModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Contact\ContactsOverviewModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Country\CountriesList.cs" />
-    <Compile Include="Areas\OutpostManagement\Models\Country\CountryIndexModel.cs" />
-    <Compile Include="Areas\OutpostManagement\Models\Country\CountryIndexOutputModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Country\CountryOutputModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Country\CountryInputModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Country\CountryModel.cs" />
@@ -282,7 +274,6 @@
     <Compile Include="Areas\OutpostManagement\Models\Outpost\CreateOutpostInputModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Outpost\EditOutpostInputModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Outpost\GetDistrictsOutputModel.cs" />
-    <Compile Include="Areas\OutpostManagement\Models\Outpost\GetOutpostsInputModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Outpost\GetOutpostsOutputModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Outpost\GetWarehousesOutputModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Outpost\OutpostInputModel.cs" />
@@ -293,7 +284,6 @@
     <Compile Include="Areas\OutpostManagement\Models\Outpost\OutpostOverviewModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\PagingInfo.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Region\FromCountryModel.cs" />
-    <Compile Include="Areas\OutpostManagement\Models\Region\RegionIndexModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Region\RegionIndexOuputModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Region\RegionInputModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Region\RegionOutputModel.cs" />
@@ -321,7 +311,6 @@
     <Compile Include="Areas\StockAdministration\Models\OutpostStockLevel\OutpostStockLevelCurrentTreeModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\OutpostStockLevel\OutpostStockLevelInputModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\OutpostStockLevel\OverviewInputModel.cs" />
-    <Compile Include="Areas\StockAdministration\Models\ProductGroup\ProductGroupIndexModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\ProductGroup\ProductGroupIndexOutputModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\ProductGroup\ProductGroupOutputModel.cs" />
     <Compile Include="Areas\StockAdministration\Models\ProductGroup\ProductGroupInputModel.cs" />
@@ -435,10 +424,8 @@
     <Compile Include="Models\Account\RegisterModel.cs" />
     <Compile Include="Models\Alerts\AlertModel.cs" />
     <Compile Include="Models\Alerts\AlertOutputModel.cs" />
-    <Compile Include="Models\Alerts\AlertsIndexModel.cs" />
     <Compile Include="Models\Alerts\AlertsIndexOutputModel.cs" />
     <Compile Include="Models\ClientManager\ClientIndexOutputModel.cs" />
-    <Compile Include="Models\ClientManager\ClientManagerIndexModel.cs" />
     <Compile Include="Models\ClientManager\ClientManagerModel.cs" />
     <Compile Include="Models\ClientManager\ClientManagerOutputModel.cs" />
     <Compile Include="Models\EmailRequest\EmailCreateModel.cs" />
@@ -460,7 +447,7 @@
     <Compile Include="Models\RoleManager\RoleReferenceModel.cs" />
     <Compile Include="Models\Shared\Event.cs" />
     <Compile Include="Models\Shared\EventsCalendarModel.cs" />
-    <Compile Include="Models\Shared\IndexModel.cs" />
+    <Compile Include="Models\Shared\IndexTableInputModel.cs" />
     <Compile Include="Models\Shared\JsonActionResponse.cs" />
     <Compile Include="Models\Shared\FormattingExtensions.cs" />
     <Compile Include="Models\Shared\InputModel.cs" />
@@ -477,7 +464,6 @@
     <Compile Include="Models\UserManager\UserManagerCreateInputModel.cs" />
     <Compile Include="Models\UserManager\UserManagerCreateModel.cs" />
     <Compile Include="Models\UserManager\UserManagerEditModel.cs" />
-    <Compile Include="Models\UserManager\UserManagerIndexModel.cs" />
     <Compile Include="Models\UserManager\UserManagerInputModel.cs" />
     <Compile Include="Models\UserManager\UserManagerListModel.cs" />
     <Compile Include="Models\UserManager\UserModel.cs" />
