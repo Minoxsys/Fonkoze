@@ -9,7 +9,7 @@ using Rhino.Mocks;
 using Web.Areas.AnalysisManagement.Models.ReportOutpostLevel;
 using Web.Models.Shared;
 
-namespace Tests.Unit.Controllers.Areas.ReportOutpostLevelControllerTests
+namespace Tests.Unit.Controllers.Areas.AnalysisManagement.ReportOutpostLevelControllerTests
 {
     [TestFixture]
     public class GetDataForStackedBarChartMethod

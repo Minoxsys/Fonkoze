@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NUnit.Framework;
-using Tests.Unit.Controllers.Areas.ReportOutpostLevelControllerTests;
+using Tests.Unit.Controllers.Areas.AnalysisManagement.ReportOutpostLevelControllerTests;
 using Web.Areas.AnalysisManagement.Controllers;
 using Web.Areas.AnalysisManagement.Models.ReportOutpostLevel;
 using Rhino.Mocks;

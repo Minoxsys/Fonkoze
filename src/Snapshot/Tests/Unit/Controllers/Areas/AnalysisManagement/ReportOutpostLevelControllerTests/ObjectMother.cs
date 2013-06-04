@@ -9,7 +9,7 @@ using MvcContrib.TestHelper.Fakes;
 using Rhino.Mocks;
 using Web.Areas.AnalysisManagement.Controllers;
 
-namespace Tests.Unit.Controllers.Areas.ReportOutpostLevelControllerTests
+namespace Tests.Unit.Controllers.Areas.AnalysisManagement.ReportOutpostLevelControllerTests
 {
     public class ObjectMother
     {
@@ -35,7 +35,6 @@ namespace Tests.Unit.Controllers.Areas.ReportOutpostLevelControllerTests
         public Guid outpostId;
 
         public List<OutpostStockLevel> oslList;
-        public List<OutpostStockLevel> oslListUnderThreshold;
 
         public void Init()
         {
@@ -117,7 +116,7 @@ namespace Tests.Unit.Controllers.Areas.ReportOutpostLevelControllerTests
         internal void CreateReturnOSL()
         {
             oslList = new List<OutpostStockLevel>();
-            oslListUnderThreshold = new List<OutpostStockLevel>();
+           
             Product product = MockRepository.GeneratePartialMock<Product>();
             product.Name = "ProductAboveThreshold";
             product.LowerLimit = 10;
@@ -143,7 +142,7 @@ namespace Tests.Unit.Controllers.Areas.ReportOutpostLevelControllerTests
             oslList.Add(osl1);
             oslList.Add(osl2);
 
-            oslListUnderThreshold.Add(osl2);           
+               
            
             
         }

@@ -23,8 +23,11 @@ namespace Tests.Unit.Controllers.Areas.AnalysisManagement.ReportDistrictLevelCon
 
         public Country country;
         public Region region;
+        public District district;
+        public District district2;
         public List<District> districts;
         public Outpost outpost;
+        public Outpost outpost2;
         public ProductGroup productGroup;
         public Product product;
         public List<OutpostStockLevel> outpostStockLevelList;
@@ -51,8 +54,8 @@ namespace Tests.Unit.Controllers.Areas.AnalysisManagement.ReportDistrictLevelCon
         const string USER_NAME = "admin";
         const string NAME_ALL_OPTION = "All";
         public Guid ID_ALL_OPTION = Guid.Empty;
-        //public Guid ID_ALL_OPTION_FOR_REGIONS = Guid.Parse("00000000-0000-0000-0000-000000000002");
-       // public Guid ID_ALL_OPTION_FOR_DISTRICTS = Guid.Parse("00000000-0000-0000-0000-000000000003");
+
+        public List<OutpostStockLevel> oslList;
 
         public void Init()
         {
@@ -66,6 +69,14 @@ namespace Tests.Unit.Controllers.Areas.AnalysisManagement.ReportDistrictLevelCon
             StubProduct();            
             StubOutpostStockLevelList();
 
+        }
+        public void InitForChart()
+        {
+            SetUpServices();
+            SetUpController();
+            StubUserAndItsClient();
+            StubCountryRegionDistrictOutpost();
+            CreateReturnOSL();
         }
 
         internal void SetUpServices()
@@ -207,6 +218,77 @@ namespace Tests.Unit.Controllers.Areas.AnalysisManagement.ReportDistrictLevelCon
                 }
                 outpostStockLevelList.Add(outpostStockLevel);
             }
+
+        }
+        internal void StubCountryRegionDistrictOutpost()
+        {
+            countryId = Guid.NewGuid();
+            country = MockRepository.GeneratePartialMock<Country>();
+            country.Stub(b => b.Id).Return(countryId);
+            country.Name = "CountryName";
+
+            regionId = Guid.NewGuid();
+            region = MockRepository.GeneratePartialMock<Region>();
+            region.Stub(b => b.Id).Return(regionId);
+            region.Name = "RegionName";
+            region.Country = country;
+
+            districtId = Guid.NewGuid();
+            district = MockRepository.GeneratePartialMock<District>();
+            district.Stub(b => b.Id).Return(districtId);
+            district.Name = "DistrictName";
+            district.Region = region;
+            
+                       
+            outpost = MockRepository.GeneratePartialMock<Outpost>();
+            outpost.Name = "OutpostName";
+            outpost.Country = country;
+            outpost.Region = region;
+            outpost.District = district;
+
+            outpost2 = new Outpost();
+            outpost2 = MockRepository.GeneratePartialMock<Outpost>();
+            outpost2.Name = "OutpostName2";
+            outpost2.Country = country;
+            outpost2.Region = region;
+            outpost2.District = district;
+
+        }
+
+        internal void CreateReturnOSL()
+        {
+            oslList = new List<OutpostStockLevel>();
+            Product product = MockRepository.GeneratePartialMock<Product>();
+            product.Name = "ProductAboveThreshold";
+            product.LowerLimit = 10;
+
+            Product productUnderThreshold = MockRepository.GeneratePartialMock<Product>();
+            productUnderThreshold.Name = "ProdUnderThreshold";
+            productUnderThreshold.LowerLimit = 6;
+
+            OutpostStockLevel osl1 = MockRepository.GeneratePartialMock<OutpostStockLevel>();
+            osl1.Client = client;
+            osl1.Outpost = outpost;
+            osl1.Product = product;
+            osl1.StockLevel = 20;
+
+            OutpostStockLevel osl2 = MockRepository.GeneratePartialMock<OutpostStockLevel>();
+            osl2.Client = client;
+            osl2.Outpost = outpost;
+            osl2.Product = productUnderThreshold;
+            osl2.StockLevel = 2;
+
+            OutpostStockLevel osl3 = MockRepository.GeneratePartialMock<OutpostStockLevel>();
+            osl3.Client = client;
+            osl3.Outpost = outpost2;
+            osl3.Product = productUnderThreshold;
+            osl3.StockLevel = 5;
+
+            oslList.Add(osl1);
+            oslList.Add(osl2);
+            oslList.Add(osl3);
+
+
 
         }
     }

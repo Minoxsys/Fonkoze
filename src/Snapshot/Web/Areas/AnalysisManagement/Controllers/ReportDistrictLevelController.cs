@@ -295,9 +295,10 @@ namespace Web.Areas.AnalysisManagement.Controllers
             return Json(new StoreOutputModel<DistrictStackedBarChartModel>
             {
                 Items = chartData.ToArray(),
-                TotalItems = 0
+                TotalItems = chartData.Count()
             }, JsonRequestBehavior.AllowGet);
         }
+       
         private int GetTotalProductStock(IGrouping<Product, OutpostStockLevel> prod)
         {
             int total = 0;
