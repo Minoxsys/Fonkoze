@@ -88,7 +88,7 @@
                 url: '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "RequestSchedule", action = "GetListOfRequestSchedules" })',
                 reader: {
                     type: 'json',
-                    root: 'RequestSchedules',
+                    root: 'Items',
                     totalProperty: 'TotalItems'
                 },
                 extraParams: { searchValue: '' },

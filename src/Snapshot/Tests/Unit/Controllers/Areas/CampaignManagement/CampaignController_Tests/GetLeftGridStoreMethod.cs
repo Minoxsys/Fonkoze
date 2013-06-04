@@ -6,6 +6,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Domain;
 using Web.Areas.CampaignManagement.Models.Campaign;
+using Web.Models.Shared;
 
 namespace Tests.Unit.Controllers.Areas.CampaignManagement.CampaignController_Tests
 {
@@ -32,8 +33,8 @@ namespace Tests.Unit.Controllers.Areas.CampaignManagement.CampaignController_Tes
             //Assert
             objectMother.queryCountries.VerifyAllExpectations();
 
-            Assert.IsInstanceOf<ReferenceModelOutput>(jsonResult.Data);
-            var jsonData = jsonResult.Data as ReferenceModelOutput;
+            Assert.IsInstanceOf<StoreOutputModel<ReferenceModel>>(jsonResult.Data);
+            var jsonData = jsonResult.Data as StoreOutputModel<ReferenceModel>;
             Assert.IsNotNull(jsonData);
 
             Assert.AreEqual(2, jsonData.TotalItems);
@@ -51,8 +52,8 @@ namespace Tests.Unit.Controllers.Areas.CampaignManagement.CampaignController_Tes
             //Assert
             objectMother.queryCountries.VerifyAllExpectations();
 
-            Assert.IsInstanceOf<ReferenceModelOutput>(jsonResult.Data);
-            var jsonData = jsonResult.Data as ReferenceModelOutput;
+            Assert.IsInstanceOf<StoreOutputModel<ReferenceModel>>(jsonResult.Data);
+            var jsonData = jsonResult.Data as StoreOutputModel<ReferenceModel>;
             Assert.IsNotNull(jsonData);
 
             Assert.AreEqual(2, jsonData.TotalItems);
@@ -69,8 +70,8 @@ namespace Tests.Unit.Controllers.Areas.CampaignManagement.CampaignController_Tes
             //Assert
             objectMother.queryRegion.VerifyAllExpectations();
 
-            Assert.IsInstanceOf<ReferenceModelOutput>(jsonResult.Data);
-            var jsonData = jsonResult.Data as ReferenceModelOutput;
+            Assert.IsInstanceOf<StoreOutputModel<ReferenceModel>>(jsonResult.Data);
+            var jsonData = jsonResult.Data as StoreOutputModel<ReferenceModel>;
             Assert.IsNotNull(jsonData);
 
             Assert.AreEqual(0, jsonData.TotalItems);
@@ -88,8 +89,8 @@ namespace Tests.Unit.Controllers.Areas.CampaignManagement.CampaignController_Tes
             //Assert
             objectMother.queryDistrict.VerifyAllExpectations();
 
-            Assert.IsInstanceOf<ReferenceModelOutput>(jsonResult.Data);
-            var jsonData = jsonResult.Data as ReferenceModelOutput;
+            Assert.IsInstanceOf<StoreOutputModel<ReferenceModel>>(jsonResult.Data);
+            var jsonData = jsonResult.Data as StoreOutputModel<ReferenceModel>;
             Assert.IsNotNull(jsonData);
 
             Assert.AreEqual(2, jsonData.TotalItems);
@@ -106,8 +107,8 @@ namespace Tests.Unit.Controllers.Areas.CampaignManagement.CampaignController_Tes
             //Assert
             objectMother.queryRegion.VerifyAllExpectations();
 
-            Assert.IsInstanceOf<ReferenceModelOutput>(jsonResult.Data);
-            var jsonData = jsonResult.Data as ReferenceModelOutput;
+            Assert.IsInstanceOf<StoreOutputModel<ReferenceModel>>(jsonResult.Data);
+            var jsonData = jsonResult.Data as StoreOutputModel<ReferenceModel>;
             Assert.IsNotNull(jsonData);
 
             Assert.AreEqual(0, jsonData.TotalItems);
@@ -125,8 +126,8 @@ namespace Tests.Unit.Controllers.Areas.CampaignManagement.CampaignController_Tes
             //Assert
             objectMother.queryOutposts.VerifyAllExpectations();
 
-            Assert.IsInstanceOf<ReferenceModelOutput>(jsonResult.Data);
-            var jsonData = jsonResult.Data as ReferenceModelOutput;
+            Assert.IsInstanceOf<StoreOutputModel<ReferenceModel>>(jsonResult.Data);
+            var jsonData = jsonResult.Data as StoreOutputModel<ReferenceModel>;
             Assert.IsNotNull(jsonData);
 
             Assert.AreEqual(2, jsonData.TotalItems);
@@ -143,8 +144,8 @@ namespace Tests.Unit.Controllers.Areas.CampaignManagement.CampaignController_Tes
             //Assert
             objectMother.queryRegion.VerifyAllExpectations();
 
-            Assert.IsInstanceOf<ReferenceModelOutput>(jsonResult.Data);
-            var jsonData = jsonResult.Data as ReferenceModelOutput;
+            Assert.IsInstanceOf<StoreOutputModel<ReferenceModel>>(jsonResult.Data);
+            var jsonData = jsonResult.Data as StoreOutputModel<ReferenceModel>;
             Assert.IsNotNull(jsonData);
 
             Assert.AreEqual(0, jsonData.TotalItems);

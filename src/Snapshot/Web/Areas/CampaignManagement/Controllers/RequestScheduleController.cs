@@ -108,9 +108,9 @@ namespace Web.Areas.CampaignManagement.Controllers
                                                                         }).ToList()
                                                        }).ToArray();
 
-            return Json(new RequestScheduleListForJsonOutput
-            {
-                RequestSchedules = scheduleListOfReferenceModelsProjection,
+            return Json(new StoreOutputModel<RequestScheduleReferenceModel>
+                {
+                Items = scheduleListOfReferenceModelsProjection,
                 TotalItems = totalItems
             }, JsonRequestBehavior.AllowGet);
         }

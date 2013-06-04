@@ -75,7 +75,7 @@
                 url: '@Url.RouteUrl(CampaignManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Campaign", action = "GetCampaigns" })',
                 reader: {
                     type: 'json',
-                    root: 'Campaigns',
+                    root: 'Items',
                     totalProperty: 'TotalItems'
                 },
                 extraParams: { searchValue: '' },

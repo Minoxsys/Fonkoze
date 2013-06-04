@@ -207,7 +207,6 @@
     <Compile Include="Areas\CampaignManagement\Models\ProductLevelRequest\ProductLevelDetailModel.cs" />
     <Compile Include="Areas\CampaignManagement\Models\ExistingRequests\GetExistingRequestModel.cs" />
     <Compile Include="Areas\CampaignManagement\Models\ExistingRequests\GetExistingRequestsInput.cs" />
-    <Compile Include="Areas\CampaignManagement\Models\ExistingRequests\GetExistingRequestsOutput.cs" />
     <Compile Include="Areas\CampaignManagement\Models\ExistingRequests\GetOutpostsInput.cs" />
     <Compile Include="Areas\CampaignManagement\Models\ExistingRequests\GetOutpostsOutput.cs" />
     <Compile Include="Areas\CampaignManagement\Controllers\ProductLevelRequestController.cs" />
@@ -215,7 +214,6 @@
     <Compile Include="Areas\CampaignManagement\Models\ProductLevelRequest\EditProductLevelRequestInput.cs" />
     <Compile Include="Areas\CampaignManagement\Models\ProductLevelRequest\CreateProductLevelRequestInput.cs" />
     <Compile Include="Areas\CampaignManagement\Models\ProductLevelRequest\GetProductLevelRequestModel.cs" />
-    <Compile Include="Areas\CampaignManagement\Models\ProductLevelRequest\GetProductLevelRequestResponse.cs" />
     <Compile Include="Areas\CampaignManagement\Models\ProductLevelRequest\GetProductsInput.cs" />
     <Compile Include="Areas\CampaignManagement\Models\ProductLevelRequest\ProductModel.cs" />
     <Compile Include="Areas\CampaignManagement\Models\ProductLevelRequest\RequestReminderModel.cs" />
@@ -233,10 +231,8 @@
     <Compile Include="Areas\CampaignManagement\Models\Campaign\CampaignInputModel.cs" />
     <Compile Include="Areas\CampaignManagement\Models\Campaign\CampaignModel.cs" />
     <Compile Include="Areas\CampaignManagement\Models\Campaign\CampaignOutputModel.cs" />
-    <Compile Include="Areas\CampaignManagement\Models\Campaign\CampaignOverviewOutputModel.cs" />
     <Compile Include="Areas\CampaignManagement\Models\Campaign\OptionsModel.cs" />
     <Compile Include="Areas\CampaignManagement\Models\Campaign\ReferenceModel.cs" />
-    <Compile Include="Areas\CampaignManagement\Models\Campaign\ReferenceModelOutput.cs" />
     <Compile Include="Areas\CampaignManagement\Controllers\CampaignController.cs" />
     <Compile Include="Areas\CampaignManagement\Models\Campaign\LocationEntitiesInput.cs" />
     <Compile Include="Areas\CampaignManagement\Models\Campaign\LocationEntityModel.cs" />
@@ -433,7 +429,6 @@
     <Compile Include="Models\EmailRequest\ReferenceModel.cs" />
     <Compile Include="Models\Home\AboutModel.cs" />
     <Compile Include="Models\Home\IndexModel.cs" />
-    <Compile Include="Areas\CampaignManagement\Models\RequestSchedule\RequestScheduleListForJsonOutput.cs" />
     <Compile Include="Areas\CampaignManagement\Models\RequestSchedule\RequestScheduleReferenceModel.cs" />
     <Compile Include="Models\RoleManager\RoleManagerAssignModel.cs" />
     <Compile Include="Models\RoleManager\RoleManagerCreateInput.cs" />

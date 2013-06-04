@@ -8,6 +8,7 @@ using Domain;
 using System.Web.Mvc;
 using Web.Areas.CampaignManagement.Models.RequestSchedule;
 using Core.Domain;
+using Web.Models.Shared;
 
 namespace Tests.Unit.Controllers.Areas.CampaignManagement.RequestScheduleController_Tests
 {
@@ -41,12 +42,12 @@ namespace Tests.Unit.Controllers.Areas.CampaignManagement.RequestScheduleControl
 
             Assert.IsNotNull(jsonResult);
             Assert.IsInstanceOf(typeof(JsonResult), jsonResult);
-            Assert.IsInstanceOf(typeof(RequestScheduleListForJsonOutput), jsonResult.Data);
+            Assert.IsInstanceOf(typeof(StoreOutputModel<RequestScheduleReferenceModel>), jsonResult.Data);
 
-            var jsonData = jsonResult.Data as RequestScheduleListForJsonOutput;
+            var jsonData = jsonResult.Data as StoreOutputModel<RequestScheduleReferenceModel>;
             Assert.IsNotNull(jsonData);
 
-            Assert.AreEqual(1, jsonData.RequestSchedules.Count());
+            Assert.AreEqual(1, jsonData.Items.Count());
             Assert.AreEqual(1, jsonData.TotalItems);
         }
     }

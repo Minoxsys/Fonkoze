@@ -97,9 +97,9 @@ namespace Web.Areas.CampaignManagement.Controllers
                                          Selected = false
                                     };
                 outpostModelListProjection.Add(refModel);
-            }           
+            }
 
-            return Json(new ReferenceModelOutput
+            return Json(new StoreOutputModel<ReferenceModel>
             {
                 Items = outpostModelListProjection.ToArray(),
                 TotalItems = outpostModelListProjection.Count()

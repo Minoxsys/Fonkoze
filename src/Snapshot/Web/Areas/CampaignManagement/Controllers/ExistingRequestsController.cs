@@ -4,6 +4,7 @@ using System.Web.Mvc;
 using Domain;
 using Core.Persistence;
 using Web.Areas.CampaignManagement.Models.ExistingRequests;
+using Web.Models.Shared;
 using Web.Security;
 using System.Collections.Generic;
 using Web.Areas.CampaignManagement.Models.ProductLevelRequest;
@@ -134,10 +135,10 @@ namespace Web.Areas.CampaignManagement.Controllers
                     }
                 ).ToArray();
 
-            var output = new GetExistingRequestsOutput
+            var output = new StoreOutputModel<GetExistingRequestModel>
             {
                 TotalItems = totalItems,
-                ExitingRequests = requestModels
+                Items = requestModels
             };
 
             return Json(output, JsonRequestBehavior.AllowGet);

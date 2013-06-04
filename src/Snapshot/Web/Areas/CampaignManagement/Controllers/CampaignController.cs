@@ -191,15 +191,15 @@ namespace Web.Areas.CampaignManagement.Controllers
 
                     campaignList.Add(campaignModel);
                 }
-                return Json(new CampaignOverviewOutputModel
-                {
-                    Campaigns = campaignList.ToArray(),
+                return Json(new StoreOutputModel<CampaignOutputModel>
+                    {
+                    Items = campaignList.ToArray(),
                     TotalItems = totalItems
                 }, JsonRequestBehavior.AllowGet);
             }
-            return Json(new CampaignOverviewOutputModel
+            return Json(new StoreOutputModel<CampaignOutputModel>
             {
-                Campaigns = null,
+                Items = null,
                 TotalItems = 0
             }, JsonRequestBehavior.AllowGet);
             
@@ -225,7 +225,7 @@ namespace Web.Areas.CampaignManagement.Controllers
                 }
             }
 
-            return Json(new ReferenceModelOutput
+            return Json(new StoreOutputModel<ReferenceModel>
             {
                 Items = null,
                 TotalItems = 0
@@ -252,7 +252,7 @@ namespace Web.Areas.CampaignManagement.Controllers
                 }
             }
 
-            return Json(new ReferenceModelOutput
+            return Json(new StoreOutputModel<ReferenceModel>
             {
                 Items = null,
                 TotalItems = 0
@@ -329,7 +329,7 @@ namespace Web.Areas.CampaignManagement.Controllers
         {
             if (string.IsNullOrEmpty(countryIdList))
             {
-                return Json(new ReferenceModelOutput
+                return Json(new StoreOutputModel<ReferenceModel>
                 {
                     Items = null,
                     TotalItems = 0
@@ -353,7 +353,7 @@ namespace Web.Areas.CampaignManagement.Controllers
                                                   Selected = false
                                               }).ToArray();
 
-            return Json(new ReferenceModelOutput
+            return Json(new StoreOutputModel<ReferenceModel>
             {
                 Items = regionModelListProjection,
                 TotalItems = regionModelListProjection.Count()
@@ -364,7 +364,7 @@ namespace Web.Areas.CampaignManagement.Controllers
         {
             if (string.IsNullOrEmpty(regionIdList))
             {
-                return Json(new ReferenceModelOutput
+                return Json(new StoreOutputModel<ReferenceModel>
                 {
                     Items = null,
                     TotalItems = 0
@@ -388,7 +388,7 @@ namespace Web.Areas.CampaignManagement.Controllers
                                                   Selected = false
                                               }).ToArray();
 
-            return Json(new ReferenceModelOutput
+            return Json(new StoreOutputModel<ReferenceModel>
             {
                 Items = districtModelListProjection,
                 TotalItems = districtModelListProjection.Count()
@@ -399,7 +399,7 @@ namespace Web.Areas.CampaignManagement.Controllers
         {
             if (string.IsNullOrEmpty(districtIdList))
             {
-                return Json(new ReferenceModelOutput
+                return Json(new StoreOutputModel<ReferenceModel>
                 {
                     Items = null,
                     TotalItems = 0
@@ -423,7 +423,7 @@ namespace Web.Areas.CampaignManagement.Controllers
                                                    Selected = false
                                                }).ToArray();
 
-            return Json(new ReferenceModelOutput
+            return Json(new StoreOutputModel<ReferenceModel>
             {
                 Items = outpostModelListProjection,
                 TotalItems = outpostModelListProjection.Count()
@@ -445,7 +445,7 @@ namespace Web.Areas.CampaignManagement.Controllers
                                               }).ToArray();
 
 
-            return Json(new ReferenceModelOutput
+            return Json(new StoreOutputModel<ReferenceModel>
             {
                 Items = countryModelListProjection,
                 TotalItems = totalItems
@@ -456,7 +456,7 @@ namespace Web.Areas.CampaignManagement.Controllers
         {
             if (string.IsNullOrEmpty(idList))
             {
-                return Json(new ReferenceModelOutput
+                return Json(new StoreOutputModel<ReferenceModel>
                 {
                     Items = null,
                     TotalItems = 0
@@ -480,7 +480,7 @@ namespace Web.Areas.CampaignManagement.Controllers
                                                   Selected = false
                                               }).ToArray();
 
-            return Json(new ReferenceModelOutput
+            return Json(new StoreOutputModel<ReferenceModel>
             {
                 Items = countryModelListProjection,
                 TotalItems = countryModelListProjection.Count()
@@ -491,7 +491,7 @@ namespace Web.Areas.CampaignManagement.Controllers
         {
             if (string.IsNullOrEmpty(idList))
             {
-                return Json(new ReferenceModelOutput
+                return Json(new StoreOutputModel<ReferenceModel>
                 {
                     Items = null,
                     TotalItems = 0
@@ -515,7 +515,7 @@ namespace Web.Areas.CampaignManagement.Controllers
                                                   Selected = false
                                               }).ToArray();
 
-            return Json(new ReferenceModelOutput
+            return Json(new StoreOutputModel<ReferenceModel>
             {
                 Items = countryModelListProjection,
                 TotalItems = countryModelListProjection.Count()
@@ -526,7 +526,7 @@ namespace Web.Areas.CampaignManagement.Controllers
         {
             if (string.IsNullOrEmpty(idList))
             {
-                return Json(new ReferenceModelOutput
+                return Json(new StoreOutputModel<ReferenceModel>
                 {
                     Items = null,
                     TotalItems = 0
@@ -550,7 +550,7 @@ namespace Web.Areas.CampaignManagement.Controllers
                                                   Selected = false
                                               }).ToArray();
 
-            return Json(new ReferenceModelOutput
+            return Json(new StoreOutputModel<ReferenceModel>
             {
                 Items = countryModelListProjection,
                 TotalItems = countryModelListProjection.Count()
@@ -561,7 +561,7 @@ namespace Web.Areas.CampaignManagement.Controllers
         {
             if (string.IsNullOrEmpty(idList))
             {
-                return Json(new ReferenceModelOutput
+                return Json(new StoreOutputModel<ReferenceModel>
                 {
                     Items = null,
                     TotalItems = 0
@@ -585,7 +585,7 @@ namespace Web.Areas.CampaignManagement.Controllers
                                                   Selected = false
                                               }).ToArray();
 
-            return Json(new ReferenceModelOutput
+            return Json(new StoreOutputModel<ReferenceModel>
             {
                 Items = countryModelListProjection,
                 TotalItems = countryModelListProjection.Count()

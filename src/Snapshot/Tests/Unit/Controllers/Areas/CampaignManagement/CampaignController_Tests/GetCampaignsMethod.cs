@@ -41,8 +41,8 @@ namespace Tests.Unit.Controllers.Areas.CampaignManagement.CampaignController_Tes
             //Assert
             objectMother.queryCampaign.VerifyAllExpectations();
 
-            Assert.IsInstanceOf<CampaignOverviewOutputModel>(jsonResult.Data);
-            var jsonData = jsonResult.Data as CampaignOverviewOutputModel;
+            Assert.IsInstanceOf<StoreOutputModel<CampaignOutputModel>>(jsonResult.Data);
+            var jsonData = jsonResult.Data as StoreOutputModel<CampaignOutputModel>;
             Assert.IsNotNull(jsonData);
 
             Assert.AreEqual(pageOfData.Count(), jsonData.TotalItems);
@@ -70,9 +70,9 @@ namespace Tests.Unit.Controllers.Areas.CampaignManagement.CampaignController_Tes
             //Assert
             objectMother.queryCampaign.VerifyAllExpectations();
 
-            var jsonData = jsonResult.Data as CampaignOverviewOutputModel;
+            var jsonData = jsonResult.Data as StoreOutputModel<CampaignOutputModel>;
 
-            Assert.That(jsonData.Campaigns[0].Name, Is.EqualTo("Campaign9"));
+            Assert.That(jsonData.Items[0].Name, Is.EqualTo("Campaign9"));
         }
         [Test]
         public void Returns_Campaigns_Paginated_Order_ByEndDate_ASC()
@@ -95,9 +95,9 @@ namespace Tests.Unit.Controllers.Areas.CampaignManagement.CampaignController_Tes
 
             //Assert
             objectMother.queryCampaign.VerifyAllExpectations();
-            var jsonData = jsonResult.Data as CampaignOverviewOutputModel;
+            var jsonData = jsonResult.Data as StoreOutputModel<CampaignOutputModel>;
 
-            Assert.That(jsonData.Campaigns[0].EndDate, Is.EqualTo(objectMother.campaign.EndDate.Value.ToString("dd-MMM-yyyy")));
+            Assert.That(jsonData.Items[0].EndDate, Is.EqualTo(objectMother.campaign.EndDate.Value.ToString("dd-MMM-yyyy")));
         }
 
     }

@@ -179,10 +179,10 @@ namespace Web.Areas.CampaignManagement.Controllers
 
 
 
-            return Json(new GetProductLevelRequestResponse
-            {
+            return Json(new StoreOutputModel<GetProductLevelRequestModel>
+                {
                 TotalItems = totalItems,
-                ProductLevelRequests = productLevelRequests
+                Items = productLevelRequests
             }, JsonRequestBehavior.AllowGet);
         }
 
