@@ -45,7 +45,7 @@ Outpost Management Regions: Overview
                 url: '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Region", action = "GetRegions" })',
                 reader: {
                     type: 'json',
-                    root: 'Regions',
+                    root: 'Items',
                     totalProperty: 'TotalItems'
                 },
                 extraParams: { countryId: '' },

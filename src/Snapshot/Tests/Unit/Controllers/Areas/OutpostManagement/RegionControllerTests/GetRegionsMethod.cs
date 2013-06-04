@@ -42,8 +42,8 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.RegionControllerTests
             //Assert
             objectMother.queryRegion.VerifyAllExpectations();
 
-            Assert.IsInstanceOf<RegionIndexOuputModel>(jsonResult.Data);
-            var jsonData = jsonResult.Data as RegionIndexOuputModel;
+            Assert.IsInstanceOf<StoreOutputModel<RegionModel>>(jsonResult.Data);
+            var jsonData = jsonResult.Data as StoreOutputModel<RegionModel>;
             Assert.IsNotNull(jsonData);
 
             Assert.AreEqual(pageOfData.Count(), jsonData.TotalItems);
@@ -72,10 +72,10 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.RegionControllerTests
             //Assert
             objectMother.queryCountry.VerifyAllExpectations();
 
-            var jsonData = jsonResult.Data as RegionIndexOuputModel;
+            var jsonData = jsonResult.Data as StoreOutputModel<RegionModel>;
 
-            Assert.That(jsonData.Regions[0].Name, Is.EqualTo("RegionName9"));
-            Assert.That(jsonData.Regions[0].CountryId, Is.EqualTo(objectMother.countryId));
+            Assert.That(jsonData.Items[0].Name, Is.EqualTo("RegionName9"));
+            Assert.That(jsonData.Items[0].CountryId, Is.EqualTo(objectMother.countryId));
 
         }
     }

@@ -253,9 +253,9 @@ namespace Web.Areas.OutpostManagement.Controllers
                                              }).ToArray();
 
 
-            return Json(new RegionIndexOuputModel
-            {
-                Regions = regionModelListProjection,
+            return Json(new StoreOutputModel<RegionModel>
+                {
+                Items = regionModelListProjection,
                 TotalItems = totalItems
             }, JsonRequestBehavior.AllowGet);
         }

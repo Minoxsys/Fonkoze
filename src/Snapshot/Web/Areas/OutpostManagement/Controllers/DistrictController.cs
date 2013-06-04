@@ -146,9 +146,9 @@ namespace Web.Areas.OutpostManagement.Controllers
                 districtModelList = districtModelList.Take(pageSize).Skip(indexModel.Start.Value).ToList();
             }
 
-            return Json(new DistrictIndexOutputModel
-            {
-                districts = districtModelList,
+            return Json(new StoreOutputModel<DistrictModel>
+                {
+                Items = districtModelList.ToArray(),
                 TotalItems = totalItems
             }, JsonRequestBehavior.AllowGet);
         }
@@ -187,8 +187,7 @@ namespace Web.Areas.OutpostManagement.Controllers
 
             return Json(new
             {
-                countries = countryModelList
-            ,
+                countries = countryModelList,
                 TotalItems = countryModelList.Count
             }, JsonRequestBehavior.AllowGet);
         }

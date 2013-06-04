@@ -544,7 +544,7 @@ Districts: Overview
                 url: '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "District", action = "Index" })',
                 extraParams: { regionId: '', countryId: '', searchName: '' },
                 reader: { type: 'json',
-                    root: 'districts',
+                    root: 'Items',
                     totalProperty: 'TotalItems'
                 },
                 simpleSortMode: true

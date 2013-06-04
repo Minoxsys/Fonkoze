@@ -7,6 +7,7 @@ using Web.Areas.OutpostManagement.Models.District;
 using Rhino.Mocks;
 using System.Web.Mvc;
 using Domain;
+using Web.Models.Shared;
 
 namespace Tests.Unit.Controllers.Areas.OutpostManagement.DistrictControllerTests
 {
@@ -46,9 +47,9 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.DistrictControllerTests
             objectMother.queryService.VerifyAllExpectations();
             Assert.IsInstanceOf<JsonResult>(jsonResult);
 
-            var jsonData = jsonResult.Data as DistrictIndexOutputModel;
+            var jsonData = jsonResult.Data as StoreOutputModel<DistrictModel>;
 
-            Assert.AreEqual(jsonData.districts[0].Name, "District9");
+            Assert.AreEqual(jsonData.Items[0].Name, "District9");
             Assert.AreEqual(jsonData.TotalItems, pageOfData.Count());
 
         }
@@ -78,9 +79,9 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.DistrictControllerTests
             objectMother.queryService.VerifyAllExpectations();
             Assert.IsInstanceOf<JsonResult>(jsonResult);
 
-            var jsonData = jsonResult.Data as DistrictIndexOutputModel;
+            var jsonData = jsonResult.Data as StoreOutputModel<DistrictModel>;
 
-            Assert.AreEqual(jsonData.districts[0].Name, "District0");
+            Assert.AreEqual(jsonData.Items[0].Name, "District0");
             Assert.AreEqual(jsonData.TotalItems, pageOfData.Count());
 
         }
@@ -110,9 +111,9 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.DistrictControllerTests
             objectMother.queryService.VerifyAllExpectations();
             Assert.IsInstanceOf<JsonResult>(jsonResult);
 
-            var jsonData = jsonResult.Data as DistrictIndexOutputModel;
+            var jsonData = jsonResult.Data as StoreOutputModel<DistrictModel>;
 
-            Assert.AreEqual(jsonData.districts[0].Name, "District0");
+            Assert.AreEqual(jsonData.Items[0].Name, "District0");
             Assert.AreEqual(jsonData.TotalItems, pageOfData.Count());
 
         }
@@ -142,10 +143,10 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.DistrictControllerTests
             objectMother.queryService.VerifyAllExpectations();
             Assert.IsInstanceOf<JsonResult>(jsonResult);
 
-            var jsonData = jsonResult.Data as DistrictIndexOutputModel;
+            var jsonData = jsonResult.Data as StoreOutputModel<DistrictModel>;
 
             Assert.AreEqual(jsonData.TotalItems, 0);
-            Assert.AreEqual(jsonData.districts.Count, 0);
+            Assert.AreEqual(jsonData.Items.Count(), 0);
 
         }
        
