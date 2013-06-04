@@ -2672,6 +2672,7 @@
     <Content Include="Areas\MessagesManagement\Views\ApplicationActivity\Overview.cshtml" />
     <None Include="Assets\sass\toolbar-template.scss" />
     <None Include="Assets\sass\panel-template.scss" />
+    <Content Include="Assets\sass\window-template.scss" />
     <None Include="ClassDiagram1.cd" />
     <Content Include="Views\Shared\_EmptySideBar.cshtml" />
     <Content Include="Views\AccountOptions\Overview.cshtml" />

@@ -3519,14 +3519,20 @@ table.x-datepicker-inner {
 /* line 125, ../resources/themes/stylesheets/ext4/snapshot/widgets/_grid.scss */
 .x-nlg .x-grid-header-ct,
 .x-nlg .x-column-header {
-  background: repeat-x 0 top;
-  background-image: url('../resources/themes/images/default/grid/column-header-bg.gif'); }
+  /*background: repeat-x 0 top;
+  background-image: url('../resources/themes/images/default/grid/column-header-bg.gif');*/
+    background-image:none !important;
+    background-color:transparent !important;
+}
 /* line 132, ../resources/themes/stylesheets/ext4/snapshot/widgets/_grid.scss */
 .x-nlg .x-column-header-over,
 .x-nlg .x-column-header-sort-ASC,
 .x-nlg .x-column-header-sort-DESC {
-  background: #ebf3fd repeat-x 0 top;
-  background-image: url('../resources/themes/images/default/grid/column-header-over-bg.gif'); }
+  /*background: #ebf3fd repeat-x 0 top;
+  background-image: url('../resources/themes/images/default/grid/column-header-over-bg.gif');*/
+    background-image:none !important;
+    background-color:transparent !important;
+}
 
 /* line 139, ../resources/themes/stylesheets/ext4/snapshot/widgets/_grid.scss */
 .x-column-header-trigger {

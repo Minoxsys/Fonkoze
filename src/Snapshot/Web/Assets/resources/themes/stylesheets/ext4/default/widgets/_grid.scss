@@ -123,15 +123,15 @@
         .#{$prefix}nlg {
             .#{$prefix}grid-header-ct,
             .#{$prefix}column-header {
-                background: repeat-x 0 top;
-                background-image: theme-background-image($theme-name, 'grid/column-header-bg.gif');
+       //         background: repeat-x 0 top;
+   //             background-image: theme-background-image($theme-name, 'grid/column-header-bg.gif');
             }
 
             .#{$prefix}column-header-over,
             .#{$prefix}column-header-sort-ASC,
             .#{$prefix}column-header-sort-DESC {
-                background: #ebf3fd repeat-x 0 top;
-                background-image: theme-background-image($theme-name, 'grid/column-header-over-bg.gif');
+   //             background: #ebf3fd repeat-x 0 top;
+ //               background-image: theme-background-image($theme-name, 'grid/column-header-over-bg.gif');
             }
         }
     }
