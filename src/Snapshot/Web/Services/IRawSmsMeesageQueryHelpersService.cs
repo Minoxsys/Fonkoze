@@ -7,6 +7,6 @@ namespace Web.Services
 {
     public interface IRawSmsMeesageQueryHelpersService
     {
-        MessageIndexOuputModel GetMessagesFromOutpost(IndexTableInputModel indexTableInputModel, OutpostType outpostType, Guid? districtId = null);
+        StoreOutputModel<MessageModel> GetMessagesFromOutpost(IndexTableInputModel indexTableInputModel, OutpostType outpostType, Guid? districtId = null);
     }
 }

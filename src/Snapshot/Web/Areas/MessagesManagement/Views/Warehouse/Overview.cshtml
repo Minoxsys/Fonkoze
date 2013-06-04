@@ -36,7 +36,7 @@
                 url: '@Url.RouteUrl(MessagesManagementAreaRegistration.DefaultRoute, new { controller = "Warehouse", action = "GetMessagesFromWarehouse" })',
                 reader: {
                     type: 'json',
-                    root: 'Messages',
+                    root: 'Items',
                     totalProperty: 'TotalItems'
                 },
                 extraParams: { searchValue: '', DistrictId: '' },

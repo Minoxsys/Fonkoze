@@ -7,7 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using Web.Areas.MessagesManagement.Models.Messages;
 using Web.Models.Shared;
 using Web.Services;
 
@@ -91,7 +90,7 @@ namespace Tests.Unit.Services
             //act
             var result = _sut.GetMessagesFromOutpost(indexModel, OutpostType.Seller);
 
-            Assert.That(result.Messages[0].Content, Is.EqualTo("abc-8"));
+            Assert.That(result.Items[0].Content, Is.EqualTo("abc-8"));
         }
 
         [Test]
@@ -114,7 +113,7 @@ namespace Tests.Unit.Services
             //act
             var result = _sut.GetMessagesFromOutpost(indexModel, OutpostType.Seller);
 
-            Assert.That(result.Messages[0].Content, Is.EqualTo("abc-8"));
+            Assert.That(result.Items[0].Content, Is.EqualTo("abc-8"));
         }
 
         private IQueryable<RawSmsReceived> PageOfMixedMessagesProportion50_50(IndexTableInputModel indexTableInputModel)

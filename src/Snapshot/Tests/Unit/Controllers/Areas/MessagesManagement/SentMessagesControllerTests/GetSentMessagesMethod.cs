@@ -37,8 +37,8 @@ namespace Tests.Unit.Controllers.Areas.MessagesManagement.SentMessagesController
             //Assert
             _objectMother.QuerySms.VerifyAllExpectations();
 
-            Assert.IsInstanceOf<SentMessageIndexOuputModel>(jsonResult.Data);
-            var jsonData = jsonResult.Data as SentMessageIndexOuputModel;
+            Assert.IsInstanceOf<StoreOutputModel<SentMessageModel>>(jsonResult.Data);
+            var jsonData = jsonResult.Data as StoreOutputModel<SentMessageModel>;
             Assert.IsNotNull(jsonData);
 
             Assert.AreEqual(50, jsonData.TotalItems);
@@ -65,9 +65,9 @@ namespace Tests.Unit.Controllers.Areas.MessagesManagement.SentMessagesController
             //Assert
             _objectMother.QuerySms.VerifyAllExpectations();
 
-            var jsonData = jsonResult.Data as SentMessageIndexOuputModel;
+            var jsonData = jsonResult.Data as StoreOutputModel<SentMessageModel>;
             Assert.NotNull(jsonData);
-            Assert.That(jsonData.Messages[0].Message, Is.EqualTo(ObjectMother.Message+"9"));
+            Assert.That(jsonData.Items[0].Message, Is.EqualTo(ObjectMother.Message+"9"));
         }
 
         [Test]
@@ -93,8 +93,8 @@ namespace Tests.Unit.Controllers.Areas.MessagesManagement.SentMessagesController
             //Assert
             _objectMother.QuerySms.VerifyAllExpectations();
 
-            Assert.IsInstanceOf<SentMessageIndexOuputModel>(jsonResult.Data);
-            var jsonData = jsonResult.Data as SentMessageIndexOuputModel;
+            Assert.IsInstanceOf<StoreOutputModel<SentMessageModel>>(jsonResult.Data);
+            var jsonData = jsonResult.Data as StoreOutputModel<SentMessageModel>;
             Assert.IsNotNull(jsonData);
             Assert.AreEqual(5, jsonData.TotalItems);
         }

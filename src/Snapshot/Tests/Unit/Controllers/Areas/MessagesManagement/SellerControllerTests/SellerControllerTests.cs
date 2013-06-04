@@ -1,12 +1,12 @@
-﻿using System.Web.Mvc;
-using Domain.Enums;
+﻿using Domain.Enums;
 using Moq;
 using NUnit.Framework;
+using System.Web.Mvc;
+using Tests.Utils;
 using Web.Areas.MessagesManagement.Controllers;
 using Web.Areas.MessagesManagement.Models.Messages;
 using Web.Models.Shared;
 using Web.Services;
-using Tests.Utils;
 
 namespace Tests.Unit.Controllers.Areas.MessagesManagement.SellerControllerTests
 {
@@ -47,11 +47,11 @@ namespace Tests.Unit.Controllers.Areas.MessagesManagement.SellerControllerTests
         public void GetMessagesFromSeller_ReturnsAsJsonTheOutputFromTheHelperService()
         {
             _rawSmsMeesageQueryHelpersServiceMock.Setup(service => service.GetMessagesFromOutpost(It.IsAny<IndexTableInputModel>(), OutpostType.Seller, It.IsAny<System.Guid>()))
-                                                 .Returns(new MessageIndexOuputModel {TotalItems = 1});
+                                                 .Returns(new StoreOutputModel<MessageModel> { TotalItems = 1 });
 
             var result = _sut.GetMessagesFromSeller(new IndexTableInputModel());
 
-            Assert.That(result.GetValueFromJsonResultForModel<MessageIndexOuputModel, int>(m => m.TotalItems), Is.EqualTo(1));
+            Assert.That(result.GetValueFromJsonResultForModel<StoreOutputModel<MessageModel>, int>(m => m.TotalItems), Is.EqualTo(1));
         }
     }
 }

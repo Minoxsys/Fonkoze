@@ -82,9 +82,9 @@ namespace Web.Areas.MessagesManagement.Controllers
                                                }).ToArray();
 
 
-            return Json(new SentMessageIndexOuputModel
-            {
-                Messages = messagesModelListProjection,
+            return Json(new StoreOutputModel<SentMessageModel>
+                {
+                Items = messagesModelListProjection,
                 TotalItems = totalItems
             }, JsonRequestBehavior.AllowGet);
         }

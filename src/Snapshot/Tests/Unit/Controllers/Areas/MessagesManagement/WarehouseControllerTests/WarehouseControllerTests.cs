@@ -1,7 +1,7 @@
-﻿using System.Web.Mvc;
-using Domain.Enums;
+﻿using Domain.Enums;
 using Moq;
 using NUnit.Framework;
+using System.Web.Mvc;
 using Tests.Utils;
 using Web.Areas.MessagesManagement.Controllers;
 using Web.Areas.MessagesManagement.Models.Messages;
@@ -47,11 +47,11 @@ namespace Tests.Unit.Controllers.Areas.MessagesManagement.WarehouseControllerTes
         public void GetMessagesFromWarehouse_ReturnsAsJsonTheOutputFromTheHelperService()
         {
             _rawSmsMeesageQueryHelpersServiceMock.Setup(service => service.GetMessagesFromOutpost(It.IsAny<IndexTableInputModel>(), OutpostType.Warehouse, It.IsAny<System.Guid>()))
-                                                 .Returns(new MessageIndexOuputModel {TotalItems = 1});
+                                                 .Returns(new StoreOutputModel<MessageModel> { TotalItems = 1 });
 
             var result = _sut.GetMessagesFromWarehouse(new IndexTableInputModel());
 
-            Assert.That(result.GetValueFromJsonResultForModel<MessageIndexOuputModel, int>(m => m.TotalItems), Is.EqualTo(1));
+            Assert.That(result.GetValueFromJsonResultForModel<StoreOutputModel<MessageModel>, int>(m => m.TotalItems), Is.EqualTo(1));
         }
     }
 }

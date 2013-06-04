@@ -21,7 +21,7 @@ namespace Web.Services
             _queryRawSmsService = queryRawSmsService;
         }
 
-        public MessageIndexOuputModel GetMessagesFromOutpost(IndexTableInputModel indexTableInputModel, OutpostType outpostType, Guid? districtId = null)
+        public StoreOutputModel<MessageModel> GetMessagesFromOutpost(IndexTableInputModel indexTableInputModel, OutpostType outpostType, Guid? districtId = null)
         {
             Debug.Assert(indexTableInputModel.limit != null, "indexTableInputModel.limit != null");
             var pageSize = indexTableInputModel.limit.Value;
@@ -77,9 +77,9 @@ namespace Web.Services
             var messagesModelListProjection = list.ToArray();
 
 
-            return new MessageIndexOuputModel
+            return new StoreOutputModel<MessageModel>
                 {
-                    Messages = messagesModelListProjection,
+                    Items = messagesModelListProjection,
                     TotalItems = totalItems
                 };
         }

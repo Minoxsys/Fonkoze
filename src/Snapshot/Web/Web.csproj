@@ -244,9 +244,7 @@
     <Compile Include="Areas\MessagesManagement\Controllers\SentMessagesController.cs" />
     <Compile Include="Areas\MessagesManagement\MessagesManagementAreaRegistration.cs" />
     <Compile Include="Areas\MessagesManagement\Models\ApplicationActivity\ApplicationActivityViewModel.cs" />
-    <Compile Include="Areas\MessagesManagement\Models\Messages\MessageIndexOuputModel.cs" />
     <Compile Include="Areas\MessagesManagement\Models\Messages\MessageModel.cs" />
-    <Compile Include="Areas\MessagesManagement\Models\SentMessages\SentMessageIndexOuputModel.cs" />
     <Compile Include="Areas\MessagesManagement\Models\SentMessages\SentMessageModel.cs" />
     <Compile Include="Areas\OutpostManagement\Controllers\AssignProductGroupController.cs" />
     <Compile Include="Areas\OutpostManagement\Controllers\ContactController.cs" />
