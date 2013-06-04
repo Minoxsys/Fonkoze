@@ -27,11 +27,7 @@ namespace Web.Areas.AnalysisManagement.Controllers
 
         private const string NAME_ALL_OPTION = "All";
         private Guid ID_ALL_OPTION = Guid.Empty;
-        //private Guid ID_ALL_OPTION_FOR_COUNTRIES = Guid.Parse("00000000-0000-0000-0000-000000000001");
-        //private Guid ID_ALL_OPTION_FOR_REGIONS = Guid.Parse("00000000-0000-0000-0000-000000000002");
-        //private Guid ID_ALL_OPTION_FOR_DISTRICTS = Guid.Parse("00000000-0000-0000-0000-000000000003");
-        //private Guid ID_ALL_OPTION_FOR_OUTPOSTS = Guid.Parse("00000000-0000-0000-0000-000000000004");
-
+        
         public ActionResult Overview(FilterModel filter)
         {
             return View(filter);
@@ -213,6 +209,7 @@ namespace Web.Areas.AnalysisManagement.Controllers
                 }
                 outpostStackedBarChart.ProductsUnderTresholdNo = i;
                 outpostStackedBarChart.Total = total;
+               
                 if (inputModel.OnlyUnderTreshold)
                 {
                     if(outpostStackedBarChart.ProductsUnderTresholdNo>0)
@@ -256,25 +253,25 @@ namespace Web.Areas.AnalysisManagement.Controllers
             LoadUserAndClient();
 
             var oslList = QueryOutpostStockLevel.Query().Where(it => it.Client.Id == _client.Id).ToList();
-            if ((inputModel.OutpostId != ID_ALL_OPTION) && (inputModel.OutpostId != Guid.Empty))
+            if (inputModel.OutpostId != ID_ALL_OPTION)
             {
                 oslList = oslList.Where(it => it.Outpost.Id == inputModel.OutpostId).ToList();
             }
             else
             {
-                if ((inputModel.DistrictId != ID_ALL_OPTION) && (inputModel.DistrictId != Guid.Empty))
+                if (inputModel.DistrictId != ID_ALL_OPTION)
                 {
                     oslList = oslList.Where(it => it.Outpost.District.Id == inputModel.DistrictId).ToList();
                 }
                 else
                 {
-                    if ((inputModel.RegionId != ID_ALL_OPTION) && (inputModel.RegionId != Guid.Empty))
+                    if (inputModel.RegionId != ID_ALL_OPTION)
                     {
                         oslList = oslList.Where(it => it.Outpost.Region.Id == inputModel.RegionId).ToList();
                     }
                     else
                     {
-                        if ((inputModel.CountryId != ID_ALL_OPTION) && (inputModel.CountryId != Guid.Empty))
+                        if (inputModel.CountryId != ID_ALL_OPTION)
                         {
                             oslList = oslList.Where(it => it.Outpost.Country.Id == inputModel.CountryId).ToList();
                         }

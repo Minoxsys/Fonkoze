@@ -107,10 +107,11 @@
     <Compile Include="Unit\Controllers\Areas\AnalysisManagement\LocationReportControllerTests\GetRegionMarkersMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\AnalysisManagement\LocationReportControllerTests\ObjectMother.cs" />
     <Compile Include="Unit\Controllers\Areas\AnalysisManagement\ReportDistrictLevelControllerTests\GetProductsForChart.cs" />
+    <Compile Include="Unit\Controllers\Areas\AnalysisManagement\ReportOutpostLevelControllerTests\GetProductFields.cs" />
     <Compile Include="Unit\Controllers\Areas\AnalysisManagement\ReportRegionLevelControllerTests\GetChartDataMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\AnalysisManagement\ReportRegionLevelControllerTests\GetProductsMethod.cs" />
-	 <Compile Include="Unit\Controllers\Areas\AnalysisManagement\ReportOutpostLevelControllerTests\GetDataForStackedBarChartMethod.cs" />
-	 <Compile Include="Unit\Controllers\Areas\AnalysisManagement\ReportOutpostLevelControllerTests\ObjectMother.cs" />
+    <Compile Include="Unit\Controllers\Areas\AnalysisManagement\ReportOutpostLevelControllerTests\GetDataForStackedBarChartMethod.cs" />
+    <Compile Include="Unit\Controllers\Areas\AnalysisManagement\ReportOutpostLevelControllerTests\ObjectMother.cs" />
     <Compile Include="Unit\Controllers\Areas\CampaignManagement\ExistingRequests_Tests\GetExistingRequestsMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\CampaignManagement\ExistingRequests_Tests\GetOutpostsMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\CampaignManagement\ExistingRequests_Tests\ObjectMother.cs" />

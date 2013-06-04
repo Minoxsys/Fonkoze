@@ -103,9 +103,9 @@ namespace Tests.Unit.Controllers.Areas.ReportOutpostLevelControllerTests
             district.Region = region;
 
             outpost = new Outpost();
-           // outpostId = Guid.NewGuid();
+            outpostId = Guid.NewGuid();
             outpost = MockRepository.GeneratePartialMock<Outpost>();
-            //outpost.Stub(b => b.Id).Return(outpostId);
+            outpost.Stub(b => b.Id).Return(outpostId);
             outpost.Name = "OutpostName";
             outpost.Country = country;
             outpost.Region = region;
