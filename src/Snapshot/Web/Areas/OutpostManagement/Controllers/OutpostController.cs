@@ -146,13 +146,12 @@ namespace Web.Areas.OutpostManagement.Controllers
 			});
 		}
 
-        public JsonResult GetOutposts(IndexTableInputModel input, FilterModel filterModel, bool onlyWarehouses)
+        public JsonResult GetOutposts(IndexTableInputModel input, FilterModel filterModel, bool? onlyWarehouses)
 		{
 			var model = new GetOutpostsOutputModel();
 			LoadUserAndClient();
 
-			var outpostsQueryData = QueryService.Query().
-			Where(c => c.Client == this._client);
+			var outpostsQueryData = QueryService.Query().Where(c => c.Client == _client);
 
             if (filterModel.countryId.HasValue && filterModel.countryId.Value != Guid.Empty)
 			{
@@ -174,7 +173,7 @@ namespace Web.Areas.OutpostManagement.Controllers
 				outpostsQueryData = outpostsQueryData.Where(o => o.Name.Contains(input.searchValue));
 			}
 
-		    if (onlyWarehouses)
+		    if (onlyWarehouses.HasValue && onlyWarehouses.Value)
 		    {
 		        outpostsQueryData = outpostsQueryData.Where(o => o.IsWarehouse);
 		    }
