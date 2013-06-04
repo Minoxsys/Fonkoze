@@ -11,7 +11,7 @@ using Rhino.Mocks;
 namespace Tests.Unit.Controllers.Areas.AnalysisManagement.ReportOutpostLevelControllerTests
 {
     [TestFixture]
-    public class GetProductFields
+    public class GetProductFieldsMethod
     {
         private ObjectMother objMother = new ObjectMother();
         [SetUp]

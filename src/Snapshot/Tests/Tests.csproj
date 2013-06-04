@@ -107,7 +107,7 @@
     <Compile Include="Unit\Controllers\Areas\AnalysisManagement\LocationReportControllerTests\GetRegionMarkersMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\AnalysisManagement\LocationReportControllerTests\ObjectMother.cs" />
     <Compile Include="Unit\Controllers\Areas\AnalysisManagement\ReportDistrictLevelControllerTests\GetProductsForChart.cs" />
-    <Compile Include="Unit\Controllers\Areas\AnalysisManagement\ReportOutpostLevelControllerTests\GetProductFields.cs" />
+    <Compile Include="Unit\Controllers\Areas\AnalysisManagement\ReportOutpostLevelControllerTests\GetProductFieldsMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\AnalysisManagement\ReportRegionLevelControllerTests\GetChartDataMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\AnalysisManagement\ReportRegionLevelControllerTests\GetProductsMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\AnalysisManagement\ReportOutpostLevelControllerTests\GetDataForStackedBarChartMethod.cs" />

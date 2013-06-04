@@ -27,9 +27,7 @@ namespace Web.Areas.AnalysisManagement.Controllers
 
         private const string NAME_ALL_OPTION = "All";
         private Guid ID_ALL_OPTION = Guid.Empty;
-        //private Guid ID_ALL_OPTION_FOR_REGIONS = Guid.Parse("00000000-0000-0000-0000-000000000002");
-        //private Guid ID_ALL_OPTION_FOR_DISTRICTS = Guid.Parse("00000000-0000-0000-0000-000000000003");
-
+        
         private void LoadUserAndClient()
         {
             var loggedUser = User.Identity.Name;
