@@ -30,9 +30,9 @@ namespace Tests.Unit.Controllers.Areas.ReportOutpostLevelControllerTests
             var jsonResult = objMother.controller.GetDataForStackedBarChart(new ReportOutpostLevelInputModel() {OnlyUnderTreshold=false});
 
             Assert.IsNotNull(jsonResult);
-            var jsonData = jsonResult.Data as StoreOutputModel<OutpostStackedBarChartModel>;
+            dynamic jsonData = jsonResult.Data;
             Assert.AreEqual(1, jsonData.TotalItems);
-            Assert.AreEqual(2, jsonData.Items[0].Products.Count());
+            Assert.AreEqual(2, jsonData.Items[0].Products.Count);
 
         }
 
@@ -44,9 +44,9 @@ namespace Tests.Unit.Controllers.Areas.ReportOutpostLevelControllerTests
             var jsonResult = objMother.controller.GetDataForStackedBarChart(new ReportOutpostLevelInputModel() { OnlyUnderTreshold=true});
 
             Assert.IsNotNull(jsonResult);
-            var jsonData = jsonResult.Data as StoreOutputModel<OutpostStackedBarChartModel>;
+            dynamic jsonData = jsonResult.Data;
             Assert.AreEqual(1, jsonData.TotalItems);
-            Assert.AreEqual(1, jsonData.Items[0].Products.Count());
+            Assert.AreEqual(1, jsonData.Items[0].Products.Count);
             Assert.AreEqual("ProdUnderThreshold", jsonData.Items[0].Products[0].ProductName);
         }
 

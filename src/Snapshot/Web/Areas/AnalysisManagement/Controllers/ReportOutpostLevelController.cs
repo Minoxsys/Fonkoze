@@ -226,7 +226,7 @@ namespace Web.Areas.AnalysisManagement.Controllers
                 nestedResult = nestedResult.OrderByDescending(c => c.ProductsUnderTresholdNo).ToList();
             }
 
-            return Json(new StoreOutputModel<OutpostStackedBarChartModel>
+            return Json(new
             {
                 Items = nestedResult.ToArray(),
                 TotalItems = nestedResult.Count()
