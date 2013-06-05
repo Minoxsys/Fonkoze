@@ -7,7 +7,8 @@
             seller: 'Sidebar-Messages-Seller-Button',
             warehouse: 'Sidebar-Messages-Warehouse-Button',
             sentMessage: 'Sidebar-Messages-Sent-Message-Button',
-            otherActivity: 'Sidebar-Messages-Other-Activity-Button'
+            otherActivity: 'Sidebar-Messages-Other-Activity-Button',
+            errorRates: 'Sidebar-Messages-ErrorRates-Button'
         }
     };
     Ext.onReady(function () {
@@ -93,6 +94,19 @@
                                 ui: 'snapshot-sidebar-btn',
                                 handler: function () {
                                     navigateTo(window.res.link.otherActivity);
+                                }
+                            },
+                            {
+                                xtype: 'button',
+                                id: contentRes.maincontent.sidebar.errorRates,
+                                toggleGroup: contentRes.maincontent.sidebar.group,
+                                text: 'Error Rates',
+                                height: 30,
+                                enableToggle: true,
+                                margin: '0 40 0 0',
+                                ui: 'snapshot-sidebar-btn',
+                                handler: function () {
+                                    navigateTo(window.res.link.errorRates);
                                 }
                             }
                         ]

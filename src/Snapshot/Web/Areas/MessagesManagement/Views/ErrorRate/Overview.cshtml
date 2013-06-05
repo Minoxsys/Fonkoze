@@ -1,0 +1,187 @@
+﻿@using Web.Areas.MessagesManagement;
+@using Microsoft.Web.Mvc;
+
+@section page_title{
+    Message Error Rates: Overview
+}
+@{
+    Html.RenderPartial("_EmptySubNavigation");
+    Html.RenderPartial("_MessagesSideBar");
+}
+<script type="text/javascript">
+    Ext.onReady(function () {
+
+        var messagesBtnId = window.res.header.navigation.messages;
+        var messagesBtn = Ext.getCmp(messagesBtnId);
+        messagesBtn.toggle(true);
+
+        var sidebarBtnId = window.res.content.maincontent.sidebar.errorRates;
+        var sideBarBtn = Ext.getCmp(sidebarBtnId);
+        sideBarBtn.toggle(true);
+
+    });
+</script>
+<script type="text/javascript">
+    Ext.onReady(function () {
+        window.feature = {};
+        window.feature.searchErrorRates = "Search-Error-Rates-Id";
+        window.feature.gridErrorRatesId = "Grid-ErrorRates-Id";
+
+        window.feature.errorRatesStore = Ext.create('Ext.data.Store', {
+            pageSize: 50,
+            fields: ['Id', 'Sender', 'SellerName', 'ErrorMessages', 'TotalMessages', 'ErrorRate'],
+            proxy: {
+                type: 'ajax',
+                url: '@Url.RouteUrl(MessagesManagementAreaRegistration.DefaultRoute, new { controller = "ErrorRate", action = "GetErrorRateItems" })',
+                reader: {
+                    type: 'json',
+                    root: 'Items',
+                    totalProperty: 'TotalItems'
+                },
+                extraParams: { searchValue: '' },
+                simpleSortMode: true
+            },
+            remoteSort: true,
+            sorters: [{
+                property: 'SellerName',
+                direction: 'ASC'
+            }]
+        });
+
+        window.feature.doSearch = new Ext.util.DelayedTask(function () {
+            window.feature.errorRatesStore.loadPage(1);
+        });
+
+        window.feature.container = Ext.create('Ext.container.Container', {
+            margin: '15 15 15 15',
+            padding: '20 20 0 20',
+            autoScroll: true,
+            id: 'TopContainer',
+            layout: {
+                align: 'stretch',
+                type: 'vbox'
+            },
+            items: [{
+                xtype: 'container',
+                layout: {
+                    type: 'hbox'
+                },
+                height: 50,
+                items: [{
+                    xtype: 'container',
+                    flex: 1,
+                    height: 50,
+                    layout: {
+                        type: 'column'
+                    },
+                    items: [{
+                        xtype: 'container',
+                        height: 30,
+                        width: 30,
+                        html: '&nbsp;'
+                    }, {
+                        xtype: 'image',
+                        height: 30,
+                        width: 30,
+                        src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/OutpostStockLevel/InformationGreen.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                        margin: '0 10 10 0'
+                    }, {
+                        xtype: 'label',
+                        cls: 'x-title-label',
+                        text: 'Sms error rates'
+                    }]
+                }, {
+                    xtype: 'container',
+                    flex: 1,
+                    layout: {
+                        type: 'hbox',
+                        pack: 'end'
+                    },
+                    height: 80,
+                    items: [{
+                        xtype: 'textfield',
+                        itemId: window.feature.searchErrorRates,
+                        width: 200,
+                        frame: true,
+                        cls: 'text-field-rounded',
+                        emptyText: 'Seller Search',
+                        enableKeyEvents: true,
+                        listeners: {
+                            'keyup': {
+                                fn: function () {
+                                    var searchValue = window.feature.container.down('#' + window.feature.searchErrorRates).getValue();
+                                    window.feature.errorRatesStore.proxy.extraParams.searchValue = searchValue;
+                                    window.feature.doSearch.delay(500);
+                                }
+                            }
+                        }
+                    }]
+
+                }]
+            }, {
+                xtype: 'gridpanel',
+                cls: 'white-border',
+                itemId: window.feature.gridErrorRatesId,
+                store: window.feature.errorRatesStore,
+                loadMask: true,
+                disableSelection: true,
+                flex: 3,
+                layout: 'fit',
+                autoScroll: true,
+                viewConfig: {
+                    emptyText: '<div align="center" style="margin-top:75px; font: 17px Lucida Sans Unicode,Arial,Verdana,Geneva,Helvetica,sans-serif; color: #666666;">No data to display.</div>',
+                },
+                columns: [{
+                    header: "Phone Number",
+                    dataIndex: 'Sender',
+                    flex: 1,
+                    minWidth: 200,
+                    menuDisabled: true,
+                    sortable: true
+                }, {
+                    header: "Seller",
+                    dataIndex: 'SellerName',
+                    flex: 1,
+                    minWidth: 300,
+                    menuDisabled: true,
+                    sortable: true
+                }, {
+                    header: "Incorrect messages",
+                    dataIndex: 'ErrorMessages',
+                    flex: 1,
+                    minWidth: 50,
+                    menuDisabled: true,
+                    sortable: true
+                }, {
+                    header: "Total messages",
+                    dataIndex: 'TotalMessages',
+                    flex: 1,
+                    minWidth: 50,
+                    menuDisabled: true,
+                    sortable: true
+                }, {
+                    header: "Error rate (%)",
+                    dataIndex: 'ErrorRate',
+                    flex: 1,
+                    minWidth: 70,
+                    menuDisabled: true,
+                    sortable: true
+                }],
+                bbar: Ext.create('Ext.PagingToolbar', {
+                    store: window.feature.errorRatesStore,
+                    displayInfo: true,
+                    displayMsg: 'Displaying topics {0} - {1} of {2}',
+                    emptyMsg: "",
+                    ui: 'snapshot-pagination-toolbar'
+                })
+            }]
+        });
+
+        var contentRes = window.res.content;
+        var mainContent = Ext.getCmp(contentRes.maincontent.id);
+
+        mainContent.add(window.feature.container);
+        window.feature.errorRatesStore.loadPage(1);
+    });
+
+</script>

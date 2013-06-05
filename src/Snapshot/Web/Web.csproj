@@ -181,6 +181,8 @@
     <Compile Include="Areas\AnalysisManagement\Models\ReportOutpostLevel\ProductStackedBarChartModel.cs" />
     <Compile Include="Areas\AnalysisManagement\Models\ReportRegionLevel\ChartInputModel.cs" />
     <Compile Include="Areas\AnalysisManagement\Models\ReportRegionLevel\RegionStackedBarChartModel.cs" />
+    <Compile Include="Areas\MessagesManagement\Controllers\ErrorRateController.cs" />
+    <Compile Include="Areas\MessagesManagement\Models\ErrorRate\ErrorRateViewModel.cs" />
     <Compile Include="Models\Parsing\Outpost\IOutpostsParseResult.cs" />
     <Compile Include="Models\Parsing\Outpost\OutpostsParseResult.cs" />
     <Compile Include="Areas\OutpostManagement\Services\ContactsUpdateService.cs" />
@@ -2639,6 +2641,7 @@
     <Content Include="Assets\resources\themes\templates\resources\sass\config.rb" />
     <Content Include="Assets\resources\themes\templates\resources\sass\my-ext-theme.scss" />
     <Content Include="Areas\MessagesManagement\Views\ApplicationActivity\Overview.cshtml" />
+    <Content Include="Areas\MessagesManagement\Views\ErrorRate\Overview.cshtml" />
     <None Include="Assets\sass\toolbar-template.scss" />
     <None Include="Assets\sass\panel-template.scss" />
     <Content Include="Assets\sass\window-template.scss" />
