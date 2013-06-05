@@ -18,7 +18,7 @@ namespace Tests.Unit.ReceiveSmsWorkflow.Commands
         {
             return new StockSaleMessageCommand(UpdateProductStockServiceMock.Object, SendSmsServiceMock.Object, SaveAlertCmdMock.Object,
                                                SendEmailServiceMock.Object,
-                                               RawSmsQueryServiceMock.Object, ProductQueryServiceMock.Object, SaveProductSaleCmdMock.Object);
+                                               RawSmsQueryServiceMock.Object, ProductQueryServiceMock.Object, SaveProductSaleCmdMock.Object, UpdateRawSmsreceivedCmdMock.Object);
         }
 
         [Test]

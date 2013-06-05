@@ -21,18 +21,20 @@ namespace Web.ReceiveSmsUseCase.SmsMessageCommands
         protected readonly IUpdateStockService UpdateStockService;
         private readonly ISendSmsService _sendSmsService;
         private readonly ISaveOrUpdateCommand<Alert> _saveOrUpdateAlertCommand;
+        private readonly ISaveOrUpdateCommand<RawSmsReceived> _saveOrUpdateRawSmsReceived;
         private readonly IPreconfiguredEmailService _emailSendingService;
         private readonly IQueryService<RawSmsReceived> _rawSmsReceivedQueryService;
 
         protected StockUpdateMessageCommandBase(IUpdateStockService updateStockService, ISendSmsService sendSmsService,
                                          ISaveOrUpdateCommand<Alert> saveOrUpdateAlertCommand, IPreconfiguredEmailService emailSendingService,
-                                         IQueryService<RawSmsReceived> rawSmsReceived)
+                                         IQueryService<RawSmsReceived> rawSmsReceived, ISaveOrUpdateCommand<RawSmsReceived> updateRawSmsReceived)
         {
             _rawSmsReceivedQueryService = rawSmsReceived;
             _emailSendingService = emailSendingService;
             UpdateStockService = updateStockService;
             _sendSmsService = sendSmsService;
             _saveOrUpdateAlertCommand = saveOrUpdateAlertCommand;
+            _saveOrUpdateRawSmsReceived = updateRawSmsReceived;
         }
 
         public void Execute(ReceivedSmsInputModel smsData, ISmsParseResult parseResult, Outpost outpost)
@@ -52,7 +54,13 @@ namespace Web.ReceiveSmsUseCase.SmsMessageCommands
                 {
                     if (!result.Success)
                     {
-                        _sendSmsService.SendSms(smsData.Sender, ComposeUpdateStockFailMessage(result.FailedProducts), true);
+                        string errorMsg = ComposeUpdateStockFailMessage(result.FailedProducts);
+                        _sendSmsService.SendSms(smsData.Sender, errorMsg, true);
+                        
+                        RawSmsReceived rawSms = _rawSmsReceivedQueryService.Query()
+                                          .OrderByDescending(m => m.Created).Where(m => m.Sender == smsData.Sender && m.Content == smsData.Content).FirstOrDefault();
+                        rawSms.ParseErrorMessage = errorMsg;
+                        _saveOrUpdateRawSmsReceived.Execute(rawSms);
                     }
                     else
                     {

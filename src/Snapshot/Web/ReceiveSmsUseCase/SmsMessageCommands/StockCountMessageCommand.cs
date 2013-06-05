@@ -11,8 +11,8 @@ namespace Web.ReceiveSmsUseCase.SmsMessageCommands
     {
         public StockCountMessageCommand(IUpdateStockService updateStockService, ISendSmsService sendSmsService,
                                         ISaveOrUpdateCommand<Alert> saveOrUpdateAlertCommand, IPreconfiguredEmailService emailSendingService,
-                                        IQueryService<RawSmsReceived> rawSmsReceived)
-            : base(updateStockService, sendSmsService, saveOrUpdateAlertCommand, emailSendingService, rawSmsReceived)
+                                        IQueryService<RawSmsReceived> rawSmsReceived, ISaveOrUpdateCommand<RawSmsReceived> updateRawSmsReceived)
+            : base(updateStockService, sendSmsService, saveOrUpdateAlertCommand, emailSendingService, rawSmsReceived, updateRawSmsReceived)
         {
         }
 

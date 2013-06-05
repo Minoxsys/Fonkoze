@@ -26,6 +26,7 @@ namespace Tests.Unit.ReceiveSmsWorkflow.Base
         protected Mock<IUpdateStockService> UpdateProductStockServiceMock;
         protected Mock<ISendSmsService> SendSmsServiceMock;
         protected Mock<ISaveOrUpdateCommand<Alert>> SaveAlertCmdMock;
+        protected Mock<ISaveOrUpdateCommand<RawSmsReceived>> UpdateRawSmsreceivedCmdMock;
         protected Mock<IPreconfiguredEmailService> SendEmailServiceMock;
         protected Mock<Outpost> OutpostMock;
         protected ReceivedSmsInputModel InputModel;
@@ -43,6 +44,7 @@ namespace Tests.Unit.ReceiveSmsWorkflow.Base
             SendEmailServiceMock = new Mock<IPreconfiguredEmailService>();
             ProductQueryServiceMock = new Mock<IQueryService<Product>>();
             SaveProductSaleCmdMock = new Mock<ISaveOrUpdateCommand<ProductSale>>();
+            UpdateRawSmsreceivedCmdMock = new Mock<ISaveOrUpdateCommand<RawSmsReceived>>();
             Sut = CreateConcreteCommand();
 
             InputModel = new ReceivedSmsInputModel {Sender = "123"};
@@ -140,6 +142,8 @@ namespace Tests.Unit.ReceiveSmsWorkflow.Base
             sut.Setup(s => s.UpdateProductStocksForOutpost(parseResult, OutpostMock.Object))
                .Returns(new StockUpdateResult {Success = false, FailedProducts = new List<IParsedProduct>()});
 
+            RawSmsQueryServiceMock.Setup(s => s.Query()).Returns(new List<RawSmsReceived> { new RawSmsReceived { Sender = InputModel.Sender, Content = InputModel.Content } }.AsQueryable());
+
             sut.Object.Execute(InputModel, parseResult, OutpostMock.Object);
 
             SendSmsServiceMock.Verify(s => s.SendSms(InputModel.Sender, It.IsAny<string>(), true));
@@ -150,7 +154,7 @@ namespace Tests.Unit.ReceiveSmsWorkflow.Base
             return new Mock<StockUpdateMessageCommandBase>(new object[]
                 {
                     UpdateProductStockServiceMock.Object, SendSmsServiceMock.Object, SaveAlertCmdMock.Object, SendEmailServiceMock.Object,
-                    RawSmsQueryServiceMock.Object
+                    RawSmsQueryServiceMock.Object, UpdateRawSmsreceivedCmdMock.Object
                 })
                 {
                     CallBase = true
@@ -183,6 +187,7 @@ namespace Tests.Unit.ReceiveSmsWorkflow.Base
         }
 
         #region Helpers
+       
 
         private void SetupTwoConsecutiveIncorrectMessages()
         {

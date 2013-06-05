@@ -7,5 +7,6 @@ namespace Web.Services.StockUpdates
     {
         public bool Success { get; set; }
         public List<IParsedProduct> FailedProducts { get; set; }
+        
     }
 }

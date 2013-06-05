@@ -18,8 +18,8 @@ namespace Web.ReceiveSmsUseCase.SmsMessageCommands
         public StockSaleMessageCommand(IUpdateStockService updateStockService, ISendSmsService sendSmsService,
                                        ISaveOrUpdateCommand<Alert> saveOrUpdateAlertCommand, IPreconfiguredEmailService emailSendingService,
                                        IQueryService<RawSmsReceived> rawSmsReceived, IQueryService<Product> queryProductService,
-                                       ISaveOrUpdateCommand<ProductSale> saveProductSale)
-            : base(updateStockService, sendSmsService, saveOrUpdateAlertCommand, emailSendingService, rawSmsReceived)
+                                       ISaveOrUpdateCommand<ProductSale> saveProductSale, ISaveOrUpdateCommand<RawSmsReceived> updateRawSmsReceived)
+            : base(updateStockService, sendSmsService, saveOrUpdateAlertCommand, emailSendingService, rawSmsReceived, updateRawSmsReceived)
         {
             _queryProductService = queryProductService;
             _saveProductSale = saveProductSale;

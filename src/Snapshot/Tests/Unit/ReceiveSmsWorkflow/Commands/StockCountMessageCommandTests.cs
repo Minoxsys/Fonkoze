@@ -12,7 +12,7 @@ namespace Tests.Unit.ReceiveSmsWorkflow.Commands
         protected override StockUpdateMessageCommandBase CreateConcreteCommand()
         {
             return new StockCountMessageCommand(UpdateProductStockServiceMock.Object, SendSmsServiceMock.Object, SaveAlertCmdMock.Object,
-                                                SendEmailServiceMock.Object, RawSmsQueryServiceMock.Object);
+                                                SendEmailServiceMock.Object, RawSmsQueryServiceMock.Object,UpdateRawSmsreceivedCmdMock.Object);
         }
 
         public override void ExecutingTheCommand_UpdatesStockForProducts_WhenMessageParsedSuccesfully()

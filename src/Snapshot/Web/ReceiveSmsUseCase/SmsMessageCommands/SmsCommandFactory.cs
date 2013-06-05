@@ -18,10 +18,12 @@ namespace Web.ReceiveSmsUseCase.SmsMessageCommands
         private readonly IQueryService<RawSmsReceived> _rawSmsReceivedQueryService;
         private IQueryService<Product> _queryProductService;
         private ISaveOrUpdateCommand<ProductSale> _saveProductSale;
+        private ISaveOrUpdateCommand<RawSmsReceived> _updateRawSmsReceived;
 
         public SmsCommandFactory(IContactMethodsService contactMethodsService, ISaveOrUpdateCommand<Alert> saveOrUpdateAlertCommand,
                                  IUpdateStockService updateStockService, ISendSmsService sendSmsService,
-                                 IPreconfiguredEmailService emailSendingService, IQueryService<RawSmsReceived> rawSmsReceivedQueryService, IQueryService<Product> queryProductService, ISaveOrUpdateCommand<ProductSale> saveProductSale)
+                                 IPreconfiguredEmailService emailSendingService, IQueryService<RawSmsReceived> rawSmsReceivedQueryService, IQueryService<Product> queryProductService, ISaveOrUpdateCommand<ProductSale> saveProductSale,
+            ISaveOrUpdateCommand<RawSmsReceived> updateRawSmsReceived)
         {
             _rawSmsReceivedQueryService = rawSmsReceivedQueryService;
             _emailSendingService = emailSendingService;
@@ -31,6 +33,7 @@ namespace Web.ReceiveSmsUseCase.SmsMessageCommands
             _updateStockService = updateStockService;
             _queryProductService = queryProductService;
             _saveProductSale = saveProductSale;
+            _updateRawSmsReceived = updateRawSmsReceived;
         }
 
         public ISmsMessageCommand CreateSmsMessageCommand(MessageType messageType)
@@ -44,17 +47,17 @@ namespace Web.ReceiveSmsUseCase.SmsMessageCommands
                 case MessageType.StockSale:
                     {
                         return new StockSaleMessageCommand(_updateStockService, _sendSmsService, _saveOrUpdateAlertCommand, _emailSendingService,
-                                                           _rawSmsReceivedQueryService,_queryProductService,_saveProductSale);
+                                                           _rawSmsReceivedQueryService, _queryProductService, _saveProductSale, _updateRawSmsReceived);
                     }
                 case MessageType.StockCount:
                     {
                         return new StockCountMessageCommand(_updateStockService, _sendSmsService, _saveOrUpdateAlertCommand, _emailSendingService,
-                                                            _rawSmsReceivedQueryService);
+                                                            _rawSmsReceivedQueryService, _updateRawSmsReceived);
                     }
                 case MessageType.ReceivedStock:
                     {
                         return new StockReceivedMessageCommand(_updateStockService, _sendSmsService, _saveOrUpdateAlertCommand, _emailSendingService,
-                                                               _rawSmsReceivedQueryService);
+                                                               _rawSmsReceivedQueryService, _updateRawSmsReceived);
                     }
                 default:
                     return new NullObjectCommand();
