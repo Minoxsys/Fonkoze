@@ -107,7 +107,7 @@ Analysis: Location Report
                 url: '@Url.RouteUrl(Web.Areas.AnalysisManagement.AnalysisManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "LocationReport", action = "GetCountryMarkers" })',
                 reader: {
                     type: 'json',
-                    root: 'Markers',
+                    root: 'Items',
                     totalProperty: 'TotalItems'
                 },
                 extraParams: { countryId: '' },
@@ -122,7 +122,7 @@ Analysis: Location Report
                 url: '@Url.RouteUrl(Web.Areas.AnalysisManagement.AnalysisManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "LocationReport", action = "GetRegionMarkers" })',
                 reader: {
                     type: 'json',
-                    root: 'Markers',
+                    root: 'Items',
                     totalProperty: 'TotalItems'
                 },
                 extraParams: { countryId: '' },
@@ -137,7 +137,7 @@ Analysis: Location Report
                 url: '@Url.RouteUrl(Web.Areas.AnalysisManagement.AnalysisManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "LocationReport", action = "GetDistrictMarkers" })',
                 reader: {
                     type: 'json',
-                    root: 'Markers',
+                    root: 'Items',
                     totalProperty: 'TotalItems'
                 },
                 extraParams: { countryId: '' },
@@ -152,7 +152,7 @@ Analysis: Location Report
                 url: '@Url.RouteUrl(Web.Areas.AnalysisManagement.AnalysisManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "LocationReport", action = "GetOutpostMarkers" })',
                 reader: {
                     type: 'json',
-                    root: 'Markers',
+                    root: 'Items',
                     totalProperty: 'TotalItems'
                 },
                 extraParams: { countryId: '' },

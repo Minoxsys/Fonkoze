@@ -137,9 +137,9 @@ namespace Web.Areas.AnalysisManagement.Controllers
             List<ProductsChartModel> listOfProducts = new List<ProductsChartModel>();
 
             if (!outpostId.HasValue)
-                return Json(new ProductsForChartOutputModel
+                return Json(new StoreOutputModel<ProductsChartModel>
                 {
-                    Products = listOfProducts.ToArray(),
+                    Items = listOfProducts.ToArray(),
                     TotalItems = 0
                 }, JsonRequestBehavior.AllowGet);
             
@@ -150,9 +150,9 @@ namespace Web.Areas.AnalysisManagement.Controllers
                listOfProducts.Add(new ProductsChartModel() { ProductName = s.Product.Name, StockLevel = s.StockLevel.ToString(), LowerLimit = s.Product.LowerLimit });
            }
 
-            return Json(new ProductsForChartOutputModel
+           return Json(new StoreOutputModel<ProductsChartModel>
             {
-                Products = listOfProducts.ToArray(),
+                Items = listOfProducts.ToArray(),
                 TotalItems = listOfProducts.Count()
             }, JsonRequestBehavior.AllowGet);
         }

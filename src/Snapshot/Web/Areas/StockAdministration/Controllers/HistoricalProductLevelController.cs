@@ -64,9 +64,9 @@ namespace Web.Areas.StockAdministration.Controllers
             List<OutpostGridModel> historicalModelListProjection = GetHistoricalStockLevelsFor(outpostsList);
             int totalItems = historicalModelListProjection.Count();
 
-            return Json(new OutpostIndexGridModel
+            return Json(new StoreOutputModel<OutpostGridModel>
             {
-                Historical = historicalModelListProjection.ToArray(),
+                Items = historicalModelListProjection.ToArray(),
                 TotalItems = totalItems
             }, JsonRequestBehavior.AllowGet);
         }
@@ -556,9 +556,9 @@ namespace Web.Areas.StockAdministration.Controllers
                 outpostModelListProjection.Add(model);
             }
 
-            return Json(new GetOutpostsOutputModel
+            return Json(new StoreOutputModel<GetOutpostsOutputModel.OutpostModel>
             {
-                Outposts = outpostModelListProjection.ToArray(),
+                Items = outpostModelListProjection.ToArray(),
                 TotalItems = totalItems
             }, JsonRequestBehavior.AllowGet);
         }

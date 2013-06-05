@@ -5,6 +5,7 @@ using System.Text;
 using NUnit.Framework;
 using Web.Areas.StockAdministration.Models.Product;
 using Rhino.Mocks;
+using Web.Models.Shared;
 
 namespace Tests.Unit.Controllers.Areas.StockAdministration.ProductControllerTests
 {
@@ -46,9 +47,9 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration.ProductControllerTest
             var result = objectMother.controller.GetProducts(indexModel);
 
             //assert
-            Assert.IsInstanceOf<ProductIndexOutputModel>(result.Data);
-            var resultData = (ProductIndexOutputModel)result.Data;
-            Assert.AreEqual(resultData.products[0].Name, "Product9");
+            Assert.IsInstanceOf<StoreOutputModel<ProductModel>>(result.Data);
+            var resultData = (StoreOutputModel<ProductModel>)result.Data;
+            Assert.AreEqual(resultData.Items[0].Name, "Product9");
             Assert.AreEqual(resultData.TotalItems, pageOfData.Count());
         }
 
@@ -64,9 +65,9 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration.ProductControllerTest
             var result = objectMother.controller.GetProducts(indexModel);
 
             //assert
-            Assert.IsInstanceOf<ProductIndexOutputModel>(result.Data);
-            var resultData = (ProductIndexOutputModel)result.Data;
-            Assert.AreEqual(resultData.products[0].Name, "Product0");
+            Assert.IsInstanceOf<StoreOutputModel<ProductModel>>(result.Data);
+            var resultData = (StoreOutputModel<ProductModel>)result.Data;
+            Assert.AreEqual(resultData.Items[0].Name, "Product0");
             Assert.AreEqual(resultData.TotalItems, pageOfData.Count());
 
         }

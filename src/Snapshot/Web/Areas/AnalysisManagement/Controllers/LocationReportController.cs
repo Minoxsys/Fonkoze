@@ -59,9 +59,9 @@ namespace Web.Areas.AnalysisManagement.Controllers
                 }
             }
 
-            return Json(new MarkerIndexOutputModel
+            return Json(new StoreOutputModel<MarkerModel>
             {
-                Markers = countries.ToArray(),
+                Items = countries.ToArray(),
                 TotalItems = countries.Count
             }, JsonRequestBehavior.AllowGet);
         }
@@ -364,9 +364,9 @@ namespace Web.Areas.AnalysisManagement.Controllers
                 }
             }
 
-            return Json(new MarkerIndexOutputModel
+            return Json(new StoreOutputModel<MarkerModel>
             {
-                Markers = regions.ToArray(),
+                Items = regions.ToArray(),
                 TotalItems = regions.Count
             }, JsonRequestBehavior.AllowGet);
         }
@@ -410,9 +410,9 @@ namespace Web.Areas.AnalysisManagement.Controllers
                 }
             }
 
-            return Json(new MarkerIndexOutputModel
+            return Json(new StoreOutputModel<MarkerModel>
             {
-                Markers = districts.ToArray(),
+                Items = districts.ToArray(),
                 TotalItems = districts.Count
             }, JsonRequestBehavior.AllowGet);
         }
@@ -451,9 +451,9 @@ namespace Web.Areas.AnalysisManagement.Controllers
                 outposts.Add(model);
             }
 
-            return Json(new MarkerIndexOutputModel
+            return Json(new StoreOutputModel<MarkerModel>
             {
-                Markers = outposts.ToArray(),
+                Items = outposts.ToArray(),
                 TotalItems = outposts.Count
             }, JsonRequestBehavior.AllowGet);
         }

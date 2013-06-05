@@ -39,13 +39,13 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration.HistoricalProductLeve
             objectMother.queryProductGroups.VerifyAllExpectations();
 
             Assert.IsNotNull(jsonResult);
-            Assert.IsInstanceOf<OutpostIndexGridModel>(jsonResult.Data);
-            var jsonData = jsonResult.Data as OutpostIndexGridModel;
+            Assert.IsInstanceOf<StoreOutputModel<OutpostGridModel>>(jsonResult.Data);
+            var jsonData = jsonResult.Data as StoreOutputModel<OutpostGridModel>;
             Assert.IsNotNull(jsonData);
 
             Assert.AreEqual(2, jsonData.TotalItems);
-            Assert.AreEqual(2, jsonData.Historical[0].NumberOfProducts);
-            Assert.AreEqual(1, jsonData.Historical[1].NumberOfProducts);
+            Assert.AreEqual(2, jsonData.Items[0].NumberOfProducts);
+            Assert.AreEqual(1, jsonData.Items[1].NumberOfProducts);
         }
 
         [Test]
@@ -65,12 +65,12 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration.HistoricalProductLeve
             objectMother.queryProductGroups.VerifyAllExpectations();
 
             Assert.IsNotNull(jsonResult);
-            Assert.IsInstanceOf<OutpostIndexGridModel>(jsonResult.Data);
-            var jsonData = jsonResult.Data as OutpostIndexGridModel;
+            Assert.IsInstanceOf<StoreOutputModel<OutpostGridModel>>(jsonResult.Data);
+            var jsonData = jsonResult.Data as StoreOutputModel<OutpostGridModel>;
             Assert.IsNotNull(jsonData);
 
             Assert.AreEqual(1, jsonData.TotalItems);
-            Assert.AreEqual(2, jsonData.Historical[0].NumberOfProducts);
+            Assert.AreEqual(2, jsonData.Items[0].NumberOfProducts);
         }
 
         [Test]
@@ -88,8 +88,8 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration.HistoricalProductLeve
             objectMother.queryHistorical.VerifyAllExpectations();
 
             Assert.IsNotNull(jsonResult);
-            Assert.IsInstanceOf<OutpostIndexGridModel>(jsonResult.Data);
-            var jsonData = jsonResult.Data as OutpostIndexGridModel;
+            Assert.IsInstanceOf<StoreOutputModel<OutpostGridModel>>(jsonResult.Data);
+            var jsonData = jsonResult.Data as StoreOutputModel<OutpostGridModel>;
             Assert.IsNotNull(jsonData);
 
             Assert.AreEqual(0, jsonData.TotalItems);

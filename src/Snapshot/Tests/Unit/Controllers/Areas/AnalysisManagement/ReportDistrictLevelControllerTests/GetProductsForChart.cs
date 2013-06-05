@@ -6,6 +6,7 @@ using Rhino.Mocks;
 using NUnit.Framework;
 using Domain;
 using Web.Areas.AnalysisManagement.Models.ReportDistrictLevel;
+using Web.Models.Shared;
 
 namespace Tests.Unit.Controllers.Areas.AnalysisManagement.ReportDistrictLevelControllerTests
 {
@@ -31,8 +32,8 @@ namespace Tests.Unit.Controllers.Areas.AnalysisManagement.ReportDistrictLevelCon
 
             //Assert
             Assert.IsNotNull(jsonResult);
-            Assert.IsInstanceOf<ProductsForChartOutputModel>(jsonResult.Data);
-            var jsonData = jsonResult.Data as ProductsForChartOutputModel;
+            Assert.IsInstanceOf<StoreOutputModel<ProductsChartModel>>(jsonResult.Data);
+            var jsonData = jsonResult.Data as StoreOutputModel<ProductsChartModel>;
             Assert.IsNotNull(jsonData);
 
             Assert.AreEqual(0, jsonData.TotalItems);
@@ -48,8 +49,8 @@ namespace Tests.Unit.Controllers.Areas.AnalysisManagement.ReportDistrictLevelCon
 
             //Assert
             Assert.IsNotNull(jsonResult);
-            Assert.IsInstanceOf<ProductsForChartOutputModel>(jsonResult.Data);
-            var jsonData = jsonResult.Data as ProductsForChartOutputModel;
+            Assert.IsInstanceOf<StoreOutputModel<ProductsChartModel>>(jsonResult.Data);
+            var jsonData = jsonResult.Data as StoreOutputModel<ProductsChartModel>;
             Assert.IsNotNull(jsonData);
 
             Assert.AreEqual(0, jsonData.TotalItems);
@@ -67,13 +68,13 @@ namespace Tests.Unit.Controllers.Areas.AnalysisManagement.ReportDistrictLevelCon
 
             //Assert
             Assert.IsNotNull(jsonResult);
-            Assert.IsInstanceOf<ProductsForChartOutputModel>(jsonResult.Data);
-            var jsonData = jsonResult.Data as ProductsForChartOutputModel;
+            Assert.IsInstanceOf<StoreOutputModel<ProductsChartModel>>(jsonResult.Data);
+            var jsonData = jsonResult.Data as StoreOutputModel<ProductsChartModel>;
             Assert.IsNotNull(jsonData);
 
             Assert.AreEqual(1, jsonData.TotalItems);
-            Assert.AreEqual("product", jsonData.Products[0].ProductName);
-            Assert.AreEqual("5", jsonData.Products[0].StockLevel);
+            Assert.AreEqual("product", jsonData.Items[0].ProductName);
+            Assert.AreEqual("5", jsonData.Items[0].StockLevel);
         }
     }
 }

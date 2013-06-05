@@ -198,7 +198,7 @@ Analysis: Product level information at district level
             }
         });
 
-        window.feature.ProductsStore = Ext.create('Ext.data.Store', {
+       @* window.feature.ProductsStore = Ext.create('Ext.data.Store', {
             remoteSuport: true,
             fields: [
                 { name: 'ProductName' },
@@ -209,7 +209,7 @@ Analysis: Product level information at district level
                 url: '@Url.RouteUrl(AnalysisManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "ReportDistrictLevel", action = "GetProductsForChart" })',
                 reader: {
                     type: 'json',
-                    root: 'Products',
+                    root: 'Items',
                     totalProperty: 'TotalItems'
                 },
                 simpleSortMode: true,
@@ -219,7 +219,7 @@ Analysis: Product level information at district level
                 property: 'Name',
                 direction: 'ASC'
             }]
-        });
+        });*@
 
         //-----------------------------------------------
         Ext.regModel("StockLevelForDistricts", {

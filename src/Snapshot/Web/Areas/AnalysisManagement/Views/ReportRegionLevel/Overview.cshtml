@@ -137,35 +137,35 @@ Analysis: Product level information at region level
 
        
 
-        window.feature.MatrixStore = Ext.create('Ext.data.Store', {
+       @* window.feature.MatrixStore = Ext.create('Ext.data.Store', {
             fields: ['RegionName', 'ProductName', 'StockLevelSum'],
             proxy: {
                 type: 'ajax',
                 url: '@Url.RouteUrl(AnalysisManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "ReportRegionLevel", action = "GetChartData" })',
                 reader: {
                     type: 'json',
-                    root: 'Products',
+                    root: 'Items',
                     totalProperty: 'TotalItems'
                 },
                 extraParams: { countryId: '',regionId:'' },
                 simpleSortMode: true
             }
-        });
+        });*@
 
-        window.feature.ProductsStore = Ext.create('Ext.data.Store', {
+      @*  window.feature.ProductsStore = Ext.create('Ext.data.Store', {
             fields: ['Name', 'Id'],
             proxy: {
                 type: 'ajax',
                 url: '@Url.RouteUrl(AnalysisManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "ReportRegionLevel", action = "GetProducts" })',
                 reader: {
                     type: 'json',
-                    root: 'Products',
+                    root: 'Items',
                     totalProperty: 'TotalItems'
                 },
                 extraParams: { productGroupId: '' },
                 simpleSortMode: true
             }
-        });
+        });*@
 
         //-----------------------------------------------
         Ext.regModel("StockLevelForRegions", {
@@ -457,15 +457,15 @@ Analysis: Product level information at region level
                     } else {
                         rec.expand();
                     }
-                    if (!rec.get('leaf') && rec.get('Name').indexOf('Number of Sellers:') == -1) {
+                    //if (!rec.get('leaf') && rec.get('Name').indexOf('Number of Sellers:') == -1) {
 
-                        window.feature.ProductsStore.proxy.extraParams.productGroupId = rec.get('Id');
-                        window.feature.ProductsStore.load();
-                        window.feature.MatrixStore.proxy.extraParams.productGroupId = rec.get('Id');
-                        window.feature.MatrixStore.load();
+                    //    window.feature.ProductsStore.proxy.extraParams.productGroupId = rec.get('Id');
+                    //    window.feature.ProductsStore.load();
+                    //    window.feature.MatrixStore.proxy.extraParams.productGroupId = rec.get('Id');
+                    //    window.feature.MatrixStore.load();
 
                         //window.feature.execute.delay(500);
-                    }
+                   // }
                 }
             },
             columns: [{

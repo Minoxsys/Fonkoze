@@ -153,9 +153,9 @@ namespace Web.Areas.StockAdministration.Controllers
                 productList.Add(productModel);
             }
 
-            return Json(new ProductIndexOutputModel
+            return Json(new StoreOutputModel<ProductModel>
             {
-                products = productList,
+                Items = productList.ToArray(),
                 TotalItems = totalItems
             }, JsonRequestBehavior.AllowGet);
         }

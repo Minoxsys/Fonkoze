@@ -6,6 +6,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using System.Web.Mvc;
 using Web.Areas.OutpostManagement.Models.Outpost;
+using Web.Models.Shared;
 
 namespace Tests.Unit.Controllers.Areas.StockAdministration.HistoricalProductLevelControllerTests
 {
@@ -33,8 +34,8 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration.HistoricalProductLeve
             objectMother.queryOutposts.VerifyAllExpectations();
 
             Assert.IsNotNull(jsonResult);
-            Assert.IsInstanceOf<GetOutpostsOutputModel>(jsonResult.Data);
-            var jsonData = jsonResult.Data as GetOutpostsOutputModel;
+            Assert.IsInstanceOf<StoreOutputModel<GetOutpostsOutputModel.OutpostModel>>(jsonResult.Data);
+            var jsonData = jsonResult.Data as StoreOutputModel<GetOutpostsOutputModel.OutpostModel>;
             Assert.IsNotNull(jsonData);
 
             Assert.AreEqual(2, jsonData.TotalItems);

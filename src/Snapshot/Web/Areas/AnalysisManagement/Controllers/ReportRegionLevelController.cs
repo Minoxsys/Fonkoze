@@ -213,17 +213,17 @@ namespace Web.Areas.AnalysisManagement.Controllers
             List<ReferenceModel> listOfProducts = new List<ReferenceModel>();
 
             if (!productGroupId.HasValue)
-                return Json(new ProductsReferenceOutputModel
+                return Json(new StoreOutputModel<ReferenceModel>
                 {
-                    Products = listOfProducts.ToArray(),
+                    Items = listOfProducts.ToArray(),
                     TotalItems = 0
                 }, JsonRequestBehavior.AllowGet);
 
             listOfProducts = GetAllProductsFor(productGroupId.Value);
 
-            return Json(new ProductsReferenceOutputModel
+            return Json(new StoreOutputModel<ReferenceModel>
             {
-                Products = listOfProducts.ToArray(),
+                Items = listOfProducts.ToArray(),
                 TotalItems = listOfProducts.Count()
             }, JsonRequestBehavior.AllowGet);
         }

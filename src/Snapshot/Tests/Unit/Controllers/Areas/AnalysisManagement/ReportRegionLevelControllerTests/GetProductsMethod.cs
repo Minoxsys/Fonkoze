@@ -6,6 +6,7 @@ using NUnit.Framework;
 using Web.Models.Shared;
 using Rhino.Mocks;
 using Web.Areas.AnalysisManagement.Models.ReportRegionLevel;
+using Web.Models.UserManager;
 
 namespace Tests.Unit.Controllers.Areas.AnalysisManagement.ReportRegionLevelControllerTests
 {
@@ -31,8 +32,8 @@ namespace Tests.Unit.Controllers.Areas.AnalysisManagement.ReportRegionLevelContr
 
             //Assert
             Assert.IsNotNull(jsonResult);
-            Assert.IsInstanceOf<ProductsReferenceOutputModel>(jsonResult.Data);
-            var jsonData = jsonResult.Data as ProductsReferenceOutputModel;
+            Assert.IsInstanceOf<StoreOutputModel<ReferenceModel>>(jsonResult.Data);
+            var jsonData = jsonResult.Data as StoreOutputModel<ReferenceModel>;
             Assert.IsNotNull(jsonData);
 
             Assert.AreEqual(0, jsonData.TotalItems);
@@ -49,8 +50,8 @@ namespace Tests.Unit.Controllers.Areas.AnalysisManagement.ReportRegionLevelContr
 
             //Assert
             Assert.IsNotNull(jsonResult);
-            Assert.IsInstanceOf<ProductsReferenceOutputModel>(jsonResult.Data);
-            var jsonData = jsonResult.Data as ProductsReferenceOutputModel;
+            Assert.IsInstanceOf<StoreOutputModel<ReferenceModel>>(jsonResult.Data);
+            var jsonData = jsonResult.Data as StoreOutputModel<ReferenceModel>;
             Assert.IsNotNull(jsonData);
 
             Assert.AreEqual(1, jsonData.TotalItems);

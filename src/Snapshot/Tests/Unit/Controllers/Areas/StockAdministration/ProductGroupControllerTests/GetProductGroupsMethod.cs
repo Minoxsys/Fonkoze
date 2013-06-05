@@ -63,8 +63,8 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration.ProductGroupControlle
             objectMother.queryProductGroup.VerifyAllExpectations();
             objectMother.queryProduct.VerifyAllExpectations();
 
-            Assert.IsInstanceOf<ProductGroupIndexOutputModel>(jsonResult.Data);
-            var jsonData = jsonResult.Data as ProductGroupIndexOutputModel;
+            Assert.IsInstanceOf<StoreOutputModel<ProductGroupModel>>(jsonResult.Data);
+            var jsonData = jsonResult.Data as StoreOutputModel<ProductGroupModel>;
             Assert.IsNotNull(jsonData);
 
             Assert.AreEqual(pageOfData.Count(), jsonData.TotalItems);
@@ -91,10 +91,10 @@ namespace Tests.Unit.Controllers.Areas.StockAdministration.ProductGroupControlle
             objectMother.queryProductGroup.VerifyAllExpectations();
             objectMother.queryProduct.VerifyAllExpectations();
 
-            var jsonData = jsonResult.Data as ProductGroupIndexOutputModel;
+            var jsonData = jsonResult.Data as StoreOutputModel<ProductGroupModel>;
 
-            Assert.That(jsonData.ProductGroups[0].Name, Is.EqualTo("Malaria9"));
-            Assert.That(jsonData.ProductGroups[0].Description, Is.EqualTo("9 Descriere pentru malaria"));
+            Assert.That(jsonData.Items[0].Name, Is.EqualTo("Malaria9"));
+            Assert.That(jsonData.Items[0].Description, Is.EqualTo("9 Descriere pentru malaria"));
 
         }
 

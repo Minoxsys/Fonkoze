@@ -119,7 +119,7 @@ Historical Product Level: Overview
                 url: '@Url.RouteUrl(StockAdministrationAreaRegistration.DEFAULT_ROUTE, new { controller = "HistoricalProductLevel", action = "GetOutposts" })',
                 reader: {
                     type: 'json',
-                    root: 'Outposts',
+                    root: 'Items',
                     totalProperty: 'TotalItems'
                 },
                 extraParams: { districtId: '' },
@@ -642,14 +642,16 @@ Historical Product Level: Overview
             if (countrySelectedValue != null){
                 window.feature.productSalesStore.proxy.extraParams.countryId = countrySelectedValue;
                 if (countrySelectedValue != '@Guid.Empty') {
-                    if (groupByStr == '')
+                    if (groupByStr == '') {
                         groupByStr = 'Region';
-                    firstColumnName = 'Regions / Sellers';
+                        firstColumnName = 'Regions / Sellers';
+                    }
                 }
                 else {
-                    if (groupByStr == '')
+                    if (groupByStr == '') {
                         groupByStr = 'Country';
-                    firstColumnName = 'Countries / Sellers';
+                        firstColumnName = 'Countries / Sellers';
+                    }
                 }
             }
 

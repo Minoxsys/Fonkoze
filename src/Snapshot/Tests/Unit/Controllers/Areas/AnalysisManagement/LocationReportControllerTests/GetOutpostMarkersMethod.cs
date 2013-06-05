@@ -36,8 +36,8 @@ namespace Tests.Unit.Controllers.Areas.AnalysisManagement.LocationReportControll
             objectMother.queryStockLevel.VerifyAllExpectations();
 
             Assert.IsNotNull(jsonResult);
-            Assert.IsInstanceOf<MarkerIndexOutputModel>(jsonResult.Data);
-            var jsonData = jsonResult.Data as MarkerIndexOutputModel;
+            Assert.IsInstanceOf<StoreOutputModel<MarkerModel>>(jsonResult.Data);
+            var jsonData = jsonResult.Data as StoreOutputModel<MarkerModel>;
             Assert.IsNotNull(jsonData);
 
             Assert.AreEqual(10, jsonData.TotalItems);
@@ -59,8 +59,8 @@ namespace Tests.Unit.Controllers.Areas.AnalysisManagement.LocationReportControll
             objectMother.queryStockLevel.VerifyAllExpectations();
 
             Assert.IsNotNull(jsonResult);
-            Assert.IsInstanceOf<MarkerIndexOutputModel>(jsonResult.Data);
-            var jsonData = jsonResult.Data as MarkerIndexOutputModel;
+            Assert.IsInstanceOf<StoreOutputModel<MarkerModel>>(jsonResult.Data);
+            var jsonData = jsonResult.Data as StoreOutputModel<MarkerModel>;
             Assert.IsNotNull(jsonData);
 
             Assert.AreEqual(1, jsonData.TotalItems);
@@ -82,8 +82,8 @@ namespace Tests.Unit.Controllers.Areas.AnalysisManagement.LocationReportControll
             objectMother.queryStockLevel.VerifyAllExpectations();
 
             Assert.IsNotNull(jsonResult);
-            Assert.IsInstanceOf<MarkerIndexOutputModel>(jsonResult.Data);
-            var jsonData = jsonResult.Data as MarkerIndexOutputModel;
+            Assert.IsInstanceOf<StoreOutputModel<MarkerModel>>(jsonResult.Data);
+            var jsonData = jsonResult.Data as StoreOutputModel<MarkerModel>;
             Assert.IsNotNull(jsonData);
 
             Assert.AreEqual(1, jsonData.TotalItems);
@@ -105,8 +105,8 @@ namespace Tests.Unit.Controllers.Areas.AnalysisManagement.LocationReportControll
             objectMother.queryStockLevel.VerifyAllExpectations();
 
             Assert.IsNotNull(jsonResult);
-            Assert.IsInstanceOf<MarkerIndexOutputModel>(jsonResult.Data);
-            var jsonData = jsonResult.Data as MarkerIndexOutputModel;
+            Assert.IsInstanceOf<StoreOutputModel<MarkerModel>>(jsonResult.Data);
+            var jsonData = jsonResult.Data as StoreOutputModel<MarkerModel>;
             Assert.IsNotNull(jsonData);
 
             Assert.AreEqual(1, jsonData.TotalItems);

@@ -241,9 +241,9 @@ namespace Web.Areas.StockAdministration.Controllers
                                                    }).ToArray();
 
     
-            return Json(new ProductGroupIndexOutputModel
+            return Json(new StoreOutputModel<ProductGroupModel>
             {
-                ProductGroups = productGroupModelListProjection,
+                Items = productGroupModelListProjection,
                 TotalItems = totalItems
             }, JsonRequestBehavior.AllowGet);
         }

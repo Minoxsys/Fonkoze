@@ -173,17 +173,17 @@ namespace Web.Areas.AnalysisManagement.Controllers
             List<ProductsChartModel> listOfProducts = new List<ProductsChartModel>();
 
             if (!productGroupId.HasValue || !districtId.HasValue)
-                return Json(new ProductsForChartOutputModel
+                return Json(new StoreOutputModel<ProductsChartModel>
                 {
-                    Products = listOfProducts.ToArray(),
+                    Items = listOfProducts.ToArray(),
                     TotalItems = 0
                 }, JsonRequestBehavior.AllowGet);
 
             listOfProducts = GetProductsAssociatedTo(productGroupId.Value, districtId.Value);
             
-            return Json(new ProductsForChartOutputModel
+            return Json(new StoreOutputModel<ProductsChartModel>
             {
-                Products = listOfProducts.ToArray(),
+                Items = listOfProducts.ToArray(),
                 TotalItems = listOfProducts.Count()
             }, JsonRequestBehavior.AllowGet);
         }

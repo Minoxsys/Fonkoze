@@ -48,7 +48,7 @@ Product Administration Product Groups: Overview
                 url: '@Url.RouteUrl(StockAdministrationAreaRegistration.DEFAULT_ROUTE, new { controller = "ProductGroup", action = "GetProductGroups" })',
                 reader: {
                     type: 'json',
-                    root: 'ProductGroups',
+                    root: 'Items',
                     totalProperty: 'TotalItems'
                 },
                 extraParams: { searchValue: '' },
