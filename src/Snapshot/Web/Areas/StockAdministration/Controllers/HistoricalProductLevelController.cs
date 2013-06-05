@@ -531,13 +531,13 @@ namespace Web.Areas.StockAdministration.Controllers
         {
             LoadUserAndClient();
 
-            var outpostModelListProjection = new List<GetOutpostsOutputModel.OutpostModel>();
-            outpostModelListProjection.Add(new GetOutpostsOutputModel.OutpostModel() { Id = GUID_FOR_ALL_OPTION_ON_OUTPOST_LIST, Name = " All" });
+            var outpostModelListProjection = new List<ReferenceModel>();
+            outpostModelListProjection.Add(new ReferenceModel() { Id = Guid.Empty, Name = " All" });
 
             if (!districtId.HasValue)
-                return Json(new GetOutpostsOutputModel
+                return Json(new StoreOutputModel<ReferenceModel>
                 {
-                    Outposts = outpostModelListProjection.ToArray(),
+                    Items = outpostModelListProjection.ToArray(),
                     TotalItems = 0
                 }, JsonRequestBehavior.AllowGet);
 
@@ -550,13 +550,13 @@ namespace Web.Areas.StockAdministration.Controllers
 
             foreach (var outpost in outposts.ToList())
             {
-                var model = new GetOutpostsOutputModel.OutpostModel();
-                model.Id = outpost.Id.ToString();
+                var model = new ReferenceModel();
+                model.Id = outpost.Id;
                 model.Name = outpost.Name;
                 outpostModelListProjection.Add(model);
             }
 
-            return Json(new StoreOutputModel<GetOutpostsOutputModel.OutpostModel>
+            return Json(new StoreOutputModel<ReferenceModel>
             {
                 Items = outpostModelListProjection.ToArray(),
                 TotalItems = totalItems
