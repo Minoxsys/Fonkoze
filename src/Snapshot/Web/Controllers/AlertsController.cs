@@ -16,7 +16,7 @@ namespace Web.Controllers
 {
     public class AlertsController : Controller
     {
-        public IRetrieveAllDistrictsService retrieveAllDistrictsService  { get; set; }
+        public IRetrieveAllDistrictsService RetrieveAllDistrictsService  { get; set; }
         public IQueryService<Client> QueryClients { get; set; }
         public IQueryService<User> QueryUsers { get; set; }
         public IQueryService<Alert> QueryAlerts { get; set; }
@@ -93,9 +93,9 @@ namespace Web.Controllers
                                                      Date = alert.Created.HasValue ? alert.Created.Value.ToString("dd-MMM-yyyy, HH:mm") : "-"
                                                  }).ToArray();
 
-            return Json(new AlertsIndexOutputModel
+            return Json(new StoreOutputModel<AlertModel>
                 {
-                    Alerts = alertsModelListProjection,
+                    Items = alertsModelListProjection,
                     TotalItems = totalItems
                 }, JsonRequestBehavior.AllowGet);
         }
@@ -104,7 +104,7 @@ namespace Web.Controllers
         {
             LoadUserAndClient();
 
-            var districtList = retrieveAllDistrictsService.GetAllDistrictsForOneClient(_client.Id);
+            var districtList = RetrieveAllDistrictsService.GetAllDistrictsForOneClient(_client.Id);
 
             return Json(new
             {

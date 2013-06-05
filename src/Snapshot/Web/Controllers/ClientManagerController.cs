@@ -18,21 +18,23 @@ namespace Web.Controllers
     {
         public IQueryService<Client> QueryClients { get; set; }
         public IQueryService<User> QueryUsers { get; set; }
-
         public ISaveOrUpdateCommand<Client> SaveOrUpdateCommand { get; set; }
         public IDeleteCommand<Client> DeleteCommand { get; set; }
-
         public IPermissionsService PermissionService { get; set; }
 
-        private const String CLIENT_ADD_PERMISSION = "Client.Edit";
-        private const String CLIENT_DELETE_PERMISSION = "Client.Delete";
+        private const String ClientAddPermission = "Client.Edit";
+        private const String ClientDeletePermission = "Client.Delete";
 
         [HttpGet]
         [Requires(Permissions = "Client.View")]
         public ViewResult Overview()
         {
-            ViewBag.HasNoRightsToAdd = (PermissionService.HasPermissionAssigned(CLIENT_ADD_PERMISSION, User.Identity.Name) == true) ? false.ToString().ToLowerInvariant() : true.ToString().ToLowerInvariant();
-            ViewBag.HasNoRightsToDelete = (PermissionService.HasPermissionAssigned(CLIENT_DELETE_PERMISSION, User.Identity.Name) == true) ? false.ToString().ToLowerInvariant() : true.ToString().ToLowerInvariant();           
+            ViewBag.HasNoRightsToAdd = PermissionService.HasPermissionAssigned(ClientAddPermission, User.Identity.Name)
+                                           ? false.ToString().ToLowerInvariant()
+                                           : true.ToString().ToLowerInvariant();
+            ViewBag.HasNoRightsToDelete = PermissionService.HasPermissionAssigned(ClientDeletePermission, User.Identity.Name)
+                                              ? false.ToString().ToLowerInvariant()
+                                              : true.ToString().ToLowerInvariant();
 
             return View();
         }
@@ -48,25 +50,25 @@ namespace Web.Controllers
 
             var existingClientsWithSameName = QueryClients.Query().Where(it => it.Name == inputModel.Name);
 
-            if (existingClientsWithSameName.Count() > 0)
+            if (existingClientsWithSameName.Any())
             {
-              return Json(
-               new JsonActionResponse
-               {
-                   Status = "Error",
-                   Message = String.Format("There already exist a client with name {0}. Please insert a different name!", inputModel.Name)
-               });
- 
+                return Json(
+                    new JsonActionResponse
+                        {
+                            Status = "Error",
+                            Message = String.Format("There already exist a client with name {0}. Please insert a different name!", inputModel.Name)
+                        });
+
             }
 
             SaveOrUpdateCommand.Execute(client);
 
             return Json(
-               new JsonActionResponse
-               {
-                   Status = "Success",
-                   Message = String.Format("Client {0} has been created.", inputModel.Name)
-               });
+                new JsonActionResponse
+                    {
+                        Status = "Success",
+                        Message = String.Format("Client {0} has been created.", inputModel.Name)
+                    });
         }
 
         [HttpPost]
@@ -77,11 +79,11 @@ namespace Web.Controllers
             if (inputModel.Id == Guid.Empty)
             {
                 return Json(
-                   new JsonActionResponse
-                   {
-                       Status = "Error",
-                       Message = "You must supply a clientId in order to edit the client."
-                   });
+                    new JsonActionResponse
+                        {
+                            Status = "Error",
+                            Message = "You must supply a clientId in order to edit the client."
+                        });
             }
 
             var existingClientsWithSameName = QueryClients.Query().Where(it => it.Name == inputModel.Name && it.Id != inputModel.Id);
@@ -89,11 +91,11 @@ namespace Web.Controllers
             if (existingClientsWithSameName.Count() > 0)
             {
                 return Json(
-                 new JsonActionResponse
-                 {
-                     Status = "Error",
-                     Message = String.Format("There already exist a client with name {0}. Please insert a different name!", inputModel.Name)
-                 });
+                    new JsonActionResponse
+                        {
+                            Status = "Error",
+                            Message = String.Format("There already exist a client with name {0}. Please insert a different name!", inputModel.Name)
+                        });
 
             }
 
@@ -105,11 +107,11 @@ namespace Web.Controllers
             SaveOrUpdateCommand.Execute(client);
 
             return Json(
-               new JsonActionResponse
-               {
-                   Status = "Success",
-                   Message = String.Format("Client {0} has been updated.", inputModel.Name)
-               });
+                new JsonActionResponse
+                    {
+                        Status = "Success",
+                        Message = String.Format("Client {0} has been updated.", inputModel.Name)
+                    });
         }
 
         [HttpPost]
@@ -119,10 +121,10 @@ namespace Web.Controllers
             if (clientId.HasValue == false)
             {
                 return Json(new JsonActionResponse
-                {
-                    Status = "Error",
-                    Message = "You must supply a clientId in order to remove the client."
-                });
+                    {
+                        Status = "Error",
+                        Message = "You must supply a clientId in order to remove the client."
+                    });
             }
 
             var client = QueryClients.Load(clientId.Value);
@@ -132,39 +134,39 @@ namespace Web.Controllers
                 if (users.ToList().Count != 0)
                 {
                     return Json(new JsonActionResponse
-                    {
-                        Status = "Error",
-                        Message = String.Format("Client {0} has {1} user(s) associated, and can not be removed.", client.Name, users.ToList().Count)
-                    });
+                        {
+                            Status = "Error",
+                            Message = String.Format("Client {0} has {1} user(s) associated, and can not be removed.", client.Name, users.ToList().Count)
+                        });
                 }
                 DeleteCommand.Execute(client);
                 return Json(
                     new JsonActionResponse
-                    {
-                        Status = "Success",
-                        Message = String.Format("Client {0} was removed.", client.Name)
-                    });
+                        {
+                            Status = "Success",
+                            Message = String.Format("Client {0} was removed.", client.Name)
+                        });
             }
             return Json(
                 new JsonActionResponse
-                {
-                    Status = "Error",
-                    Message = String.Format("There is no client asociated with that id.")
-                });
+                    {
+                        Status = "Error",
+                        Message = String.Format("There is no client asociated with that id.")
+                    });
         }
 
         [HttpGet]
         public JsonResult GetListOfClients(IndexTableInputModel indexTableInputModel)
         {
             var pageSize = indexTableInputModel.limit.Value;
-            var clientsDataQuery = this.QueryClients.Query();
+            var clientsDataQuery = QueryClients.Query();
 
             var orderByColumnDirection = new Dictionary<string, Func<IQueryable<Client>>>()
-            {
-                { "Name-ASC", () => clientsDataQuery.OrderBy(c => c.Name) },
-                { "Name-DESC", () => clientsDataQuery.OrderByDescending(c => c.Name) }
-                
-            };
+                {
+                    {"Name-ASC", () => clientsDataQuery.OrderBy(c => c.Name)},
+                    {"Name-DESC", () => clientsDataQuery.OrderByDescending(c => c.Name)}
+
+                };
 
             clientsDataQuery = orderByColumnDirection[String.Format("{0}-{1}", indexTableInputModel.sort, indexTableInputModel.dir)].Invoke();
 
@@ -180,27 +182,27 @@ namespace Web.Controllers
                 .Skip(indexTableInputModel.start.Value);
 
             var clientsModelListProjection = (from client in clientsDataQuery.ToList()
-                                            select new ClientManagerOutputModel
-                                            {
-                                                Id = client.Id,
-                                                Name = client.Name,
-                                                NoOfUsers = GetNumberOfUsers(client.Id)
-                                                
-                                            }).ToArray();
+                                              select new ClientManagerOutputModel
+                                                  {
+                                                      Id = client.Id,
+                                                      Name = client.Name,
+                                                      NoOfUsers = GetNumberOfUsers(client.Id)
+
+                                                  }).ToArray();
 
 
-            return Json(new ClientIndexOutputModel
-            {
-                Clients = clientsModelListProjection,
-                TotalItems = totalItems
-            }, JsonRequestBehavior.AllowGet);
+            return Json(new StoreOutputModel<ClientManagerOutputModel>
+                {
+                    Items = clientsModelListProjection,
+                    TotalItems = totalItems
+                }, JsonRequestBehavior.AllowGet);
         }
 
         private int GetNumberOfUsers(Guid? guid)
         {
             if (guid.HasValue)
             {
-                return QueryUsers.Query().Where(it => it.ClientId == guid.Value).ToList().Count();
+                return QueryUsers.Query().Count(it => it.ClientId == guid.Value);
             }
             return 0;
         }
@@ -210,6 +212,5 @@ namespace Web.Controllers
             Mapper.CreateMap<ClientManagerModel, Client>();
             Mapper.CreateMap<Client, ClientManagerModel>();
         }
-
     }
 }

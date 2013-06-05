@@ -1,12 +1,9 @@
-﻿using System;
-using System.Text;
-using System.Collections.Generic;
-using System.Linq;
-using Rhino.Mocks;
-using NUnit.Framework;
-using Web.Controllers;
+﻿using Core.Domain;
 using Core.Persistence;
-using Core.Domain;
+using NUnit.Framework;
+using Rhino.Mocks;
+using System;
+using Web.Controllers;
 using Web.Models.RoleManager;
 
 namespace UnitTests.ModelProviders

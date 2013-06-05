@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using Core.Domain;
 using NUnit.Framework;
 using Rhino.Mocks;
+using System.Linq;
 using Web.Models.ClientManager;
-using System.Web.Mvc;
-using Core.Domain;
 using Web.Models.Shared;
 
 namespace Tests.Unit.Controllers.ClientManagerControllerTests
@@ -45,8 +41,8 @@ namespace Tests.Unit.Controllers.ClientManagerControllerTests
             objectMother.queryClient.VerifyAllExpectations();
             objectMother.queryUsers.VerifyAllExpectations();
 
-            Assert.IsInstanceOf<ClientIndexOutputModel>(jsonResult.Data);
-            var jsonData = jsonResult.Data as ClientIndexOutputModel;
+            Assert.IsInstanceOf<StoreOutputModel<ClientManagerOutputModel>>(jsonResult.Data);
+            var jsonData = jsonResult.Data as StoreOutputModel<ClientManagerOutputModel>;
             Assert.IsNotNull(jsonData);
 
             Assert.AreEqual(pageOfData.Count(), jsonData.TotalItems);
@@ -77,9 +73,9 @@ namespace Tests.Unit.Controllers.ClientManagerControllerTests
             objectMother.queryClient.VerifyAllExpectations();
             objectMother.queryUsers.VerifyAllExpectations();
 
-            var jsonData = jsonResult.Data as ClientIndexOutputModel;
+            var jsonData = jsonResult.Data as StoreOutputModel<ClientManagerOutputModel>;
 
-            Assert.That(jsonData.Clients[0].Name, Is.EqualTo("9Edgard"));
+            Assert.That(jsonData.Items[0].Name, Is.EqualTo("9Edgard"));
         }
     }
 }

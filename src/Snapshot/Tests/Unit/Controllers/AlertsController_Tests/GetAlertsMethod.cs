@@ -41,8 +41,8 @@ namespace Tests.Unit.Controllers.AlertsController_Tests
             //Assert
             objectMother.queryAlerts.VerifyAllExpectations();
 
-            Assert.IsInstanceOf<AlertsIndexOutputModel>(jsonResult.Data);
-            var jsonData = jsonResult.Data as AlertsIndexOutputModel;
+            Assert.IsInstanceOf<StoreOutputModel<AlertModel>>(jsonResult.Data);
+            var jsonData = jsonResult.Data as StoreOutputModel<AlertModel>;
             Assert.IsNotNull(jsonData);
 
             Assert.AreEqual(pageOfData.Count(), jsonData.TotalItems);
@@ -69,11 +69,11 @@ namespace Tests.Unit.Controllers.AlertsController_Tests
             //Assert
             objectMother.queryAlerts.VerifyAllExpectations();
 
-            Assert.IsInstanceOf<AlertsIndexOutputModel>(jsonResult.Data);
-            var jsonData = jsonResult.Data as AlertsIndexOutputModel;
+            Assert.IsInstanceOf<StoreOutputModel<AlertModel>>(jsonResult.Data);
+            var jsonData = jsonResult.Data as StoreOutputModel<AlertModel>;
             Assert.IsNotNull(jsonData);
 
-            Assert.That(jsonData.Alerts[0].OutpostName, Is.EqualTo("Outpost1 9"));
+            Assert.That(jsonData.Items[0].OutpostName, Is.EqualTo("Outpost1 9"));
 
         }
         [Test]
@@ -98,8 +98,8 @@ namespace Tests.Unit.Controllers.AlertsController_Tests
             //Assert
             objectMother.queryAlerts.VerifyAllExpectations();
 
-            Assert.IsInstanceOf<AlertsIndexOutputModel>(jsonResult.Data);
-            var jsonData = jsonResult.Data as AlertsIndexOutputModel;
+            Assert.IsInstanceOf<StoreOutputModel<AlertModel>>(jsonResult.Data);
+            var jsonData = jsonResult.Data as StoreOutputModel<AlertModel>;
             Assert.IsNotNull(jsonData);
 
             Assert.AreEqual(5, jsonData.TotalItems);

@@ -158,10 +158,10 @@ Send message
                             var cc = window.feature.container.down('#' + window.feature.cc).getValue();
 
                             var values = {
-                                Message: emailmessage,
-                                Subject: subject,
-                                TO: to,
-                                CC: cc 
+                                message: emailmessage,
+                                subject: subject,
+                                to: to,
+                                cc: cc 
                             };
                             var postToUrl = '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "SendMessage", action = "SendEmail" })';
                             var action = $.post(postToUrl, values);

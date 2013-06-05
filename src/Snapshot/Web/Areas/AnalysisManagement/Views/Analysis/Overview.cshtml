@@ -57,7 +57,7 @@ Analysis
                         },
                         items: [{
                             xtype: 'image',
-                            autoEl: { html: "<a href='@(Url.RouteUrl<ReportRegionLevelController>(x=>x.Overview(null),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))'><img height='60' src = '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Analysis/StockLevelInformationReport.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))'/></a>" },
+                            autoEl: { html: "<a href='@(Url.RouteUrl<ReportRegionLevelController>(x=>x.Overview(null),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))'><img height='60' src = '@(Url.RouteUrl<AssetsController>(it => it.Shared("/img/Analysis/StockLevelInformationReport.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))'/></a>" },
                             margin: '0 20 0 20',
                             height: 110,
                             rowspan: 2
@@ -84,7 +84,7 @@ Analysis
                          },
                          items: [{
                              xtype: 'image',
-                             autoEl: { html: "<a href='@(Url.RouteUrl<LocationReportController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))'><img height='60' src = '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Analysis/LocationReport.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))'/></a>" },
+                             autoEl: { html: "<a href='@(Url.RouteUrl<LocationReportController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))'><img height='60' src = '@(Url.RouteUrl<AssetsController>(it => it.Shared("/img/Analysis/LocationReport.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))'/></a>" },
                              margin: '0 20 0 20',
                              height: 110,
                              rowspan: 2

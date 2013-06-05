@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Core.Services;
+using System;
 using System.Linq;
+using System.Net;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
-using System.Text;
-using Core.Services;
-using System.IO;
-using System.Net;
-using System.Security.Cryptography;
 using Web.Bootstrap;
 using Web.Services;
 
@@ -19,15 +16,15 @@ namespace Web.Controllers
     public class JavascriptController : Controller
     {
         #region Constants
-        private const string IF_NONE_MATCH_HEADER = "If-None-Match";
-        private const string LAST_MODIFIED_SINCE_HEADER = "If-Modified-Since";
-        private const string JS_FOLDER = "~/Assets/js/";
+        private const string IfNoneMatchHeader = "If-None-Match";
+        private const string LastModifiedSinceHeader = "If-Modified-Since";
+        private const string JsFolder = "~/Assets/js/";
 
         #endregion
 
         #region Fields
 
-        private readonly IJavaScriptProviderService scriptProviderService;
+        private readonly IJavaScriptProviderService _scriptProviderService;
         public IPathService PathService {get; set;}
         public IETagService ETagService {get; set;}
 
@@ -38,20 +35,20 @@ namespace Web.Controllers
 
         public JavascriptController(IJavaScriptProviderService scriptProviderService)
         {
-            this.scriptProviderService = scriptProviderService;
+            _scriptProviderService = scriptProviderService;
         }
 
         #endregion
 
         #region Actions
+
         /// <summary>
         /// Returns the script
         /// </summary>
-        /// <param name="path"></param>
         /// <returns></returns>
         public ActionResult Index(string group)
         {
-            string absolutePath = Server.MapPath(JS_FOLDER);
+            string absolutePath = Server.MapPath(JsFolder);
 
             if (!PathService.Exists(absolutePath))
             {
@@ -80,14 +77,14 @@ namespace Web.Controllers
             // 200 - OK
             AddCachingHeaders(lEtag, lLastModified, AppSettings.StaticFileHttpMaxAge);
 
-            string content = string.Empty;
+            string content;
             try
             {
-                content = scriptProviderService.GetScript(group);
+                content = _scriptProviderService.GetScript(group);
             }
             catch (Exception ex)
             {
-                content = ex.ToString() + ex.StackTrace + ex.Source;
+                content = ex + ex.StackTrace + ex.Source;
             }
 
 
@@ -105,26 +102,26 @@ namespace Web.Controllers
 
         private bool BrowserIsRequestingFileIdentifiedBy(string etag)
         {
-            if (Request.Headers[IF_NONE_MATCH_HEADER] == null)
+            if (Request.Headers[IfNoneMatchHeader] == null)
             {
                 return false;
             }
 
-            string lIfNoneMatch = Request.Headers[IF_NONE_MATCH_HEADER];
+            string lIfNoneMatch = Request.Headers[IfNoneMatchHeader];
 
             return lIfNoneMatch.Equals(etag, StringComparison.InvariantCultureIgnoreCase);
         }
 
         private bool BrowserIsRequestingFileUnmodifiedSince(DateTime lastModified)
         {
-            if (Request.Headers[LAST_MODIFIED_SINCE_HEADER] == null)
+            if (Request.Headers[LastModifiedSinceHeader] == null)
             {
                 return false;
             }
 
             // Header values may have additional attributes separated by semi-colons
-            string ifModifiedSince = Request.Headers[LAST_MODIFIED_SINCE_HEADER];
-            if (ifModifiedSince.IndexOf(";") > -1)
+            string ifModifiedSince = Request.Headers[LastModifiedSinceHeader];
+            if (ifModifiedSince.IndexOf(";", StringComparison.Ordinal) > -1)
             {
                 ifModifiedSince = ifModifiedSince.Split(';').First();
             }

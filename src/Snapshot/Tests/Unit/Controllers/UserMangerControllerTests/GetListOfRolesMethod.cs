@@ -9,6 +9,7 @@ using Domain;
 using Rhino.Mocks;
 using NUnit.Framework;
 using System.Web.Mvc;
+using Web.Models.Shared;
 using Web.Models.UserManager;
 
 namespace Tests.Unit.Controllers.UserMangerControllerTests
@@ -37,8 +38,8 @@ namespace Tests.Unit.Controllers.UserMangerControllerTests
             objectMother.QueryRole.VerifyAllExpectations();
 
             Assert.IsNotNull(jsonResult);
-            Assert.IsInstanceOf<RolesIndexOutputModel>(jsonResult.Data);
-            var jsonData = jsonResult.Data as RolesIndexOutputModel;
+            Assert.IsInstanceOf<StoreOutputModel<ReferenceModel>>(jsonResult.Data);
+            var jsonData = jsonResult.Data as StoreOutputModel<ReferenceModel>;
             Assert.IsNotNull(jsonData);
 
             Assert.AreEqual(1, jsonData.TotalItems);

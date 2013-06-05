@@ -49,7 +49,7 @@ User Administration Users: Overview
                 url: '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "UserManager", action = "GetListOfUsers" })',
                 reader: {
                     type: 'json',
-                    root: 'Users',
+                    root: 'Items',
                     totalProperty: 'TotalItems'
                 },
                 extraParams: { searchValue: '' },
@@ -70,7 +70,7 @@ User Administration Users: Overview
                 url: '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "UserManager", action = "GetListOfClients" })',
                 reader: {
                     type: 'json',
-                    root: 'Clients',
+                    root: 'Items',
                     totalProperty: 'TotalItems'
                 },
                 simpleSortMode: true
@@ -89,7 +89,7 @@ User Administration Users: Overview
                 url: '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "UserManager", action = "GetListOfRoles" })',
                 reader: {
                     type: 'json',
-                    root: 'Roles',
+                    root: 'Items',
                     totalProperty: 'TotalItems'
                 },
                 simpleSortMode: true

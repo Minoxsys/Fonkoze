@@ -1,18 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using Web.CustomFilters;
-using Web.Models.UserManager;
+﻿using AutoMapper;
 using Core.Domain;
 using Core.Persistence;
-using Web.Security;
-using AutoMapper;
+using Core.Security;
 using Core.Services;
 using Domain;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.Mvc;
+using Web.CustomFilters;
 using Web.Models.Shared;
-using Core.Security;
+using Web.Models.UserManager;
+using Web.Security;
 
 namespace Web.Controllers
 {
@@ -21,23 +20,24 @@ namespace Web.Controllers
         public IQueryService<User> QueryUsers { get; set; }
         public IQueryService<Role> QueryRoles { get; set; }
         public IQueryService<Client> QueryClients { get; set; }
-
         public ISaveOrUpdateCommand<User> SaveOrUpdateCommand { get; set; }
         public IDeleteCommand<User> DeleteCommand { get; set; }
-
         public ISecurePassword SecurePassword { get; set; }
-
         public IPermissionsService PermissionService { get; set; }
 
-        private const String USER_ADD_PERMISSION = "User.Edit";
-        private const String USER_DELETE_PERMISSION = "User.Delete";
+        private const String UserAddPermission = "User.Edit";
+        private const String UserDeletePermission = "User.Delete";
 
         [HttpGet]
         [Requires(Permissions = "User.View")]
         public ViewResult Overview()
         {
-            ViewBag.HasNoRightsToAdd = (PermissionService.HasPermissionAssigned(USER_ADD_PERMISSION, User.Identity.Name) == true) ? false.ToString().ToLowerInvariant() : true.ToString().ToLowerInvariant();
-            ViewBag.HasNoRightsToDelete = (PermissionService.HasPermissionAssigned(USER_DELETE_PERMISSION, User.Identity.Name) == true) ? false.ToString().ToLowerInvariant() : true.ToString().ToLowerInvariant();           
+            ViewBag.HasNoRightsToAdd = PermissionService.HasPermissionAssigned(UserAddPermission, User.Identity.Name)
+                                           ? false.ToString().ToLowerInvariant()
+                                           : true.ToString().ToLowerInvariant();
+            ViewBag.HasNoRightsToDelete = PermissionService.HasPermissionAssigned(UserDeletePermission, User.Identity.Name)
+                                              ? false.ToString().ToLowerInvariant()
+                                              : true.ToString().ToLowerInvariant();
 
             return View();
         }
@@ -111,43 +111,49 @@ namespace Web.Controllers
             if (userId.HasValue == false)
             {
                 return Json(new JsonActionResponse
-                {
-                    Status = "Error",
-                    Message = "You must supply a userId in order to remove the user."
-                });
+                    {
+                        Status = "Error",
+                        Message = "You must supply a userId in order to remove the user."
+                    });
             }
 
             var user = QueryUsers.Load(userId.Value);
             if (user != null)
             {
                 DeleteCommand.Execute(user);
-            }
 
+                return Json(
+                    new JsonActionResponse
+                        {
+                            Status = "Success",
+                            Message = String.Format("Username {0} was removed.", user.UserName)
+                        });
+            }
             return Json(
                 new JsonActionResponse
-                {
-                    Status = "Success",
-                    Message = String.Format("Username {0} was removed.", user.UserName)
-                });
+                    {
+                        Status = "Error",
+                        Message = String.Format("Username wasnot found")
+                    });
         }
 
         [HttpGet]
         public JsonResult GetListOfUsers(IndexTableInputModel indexTableInputModel)
         {
             var pageSize = indexTableInputModel.limit.Value;
-            var usersDataQuery = this.QueryUsers.Query();
+            var usersDataQuery = QueryUsers.Query();
 
             var orderByColumnDirection = new Dictionary<string, Func<IQueryable<User>>>()
-            {
-                { "UserName-ASC", () => usersDataQuery.OrderBy(c => c.UserName) },
-                { "UserName-DESC", () => usersDataQuery.OrderByDescending(c => c.UserName) },
-                { "Email-ASC", () => usersDataQuery.OrderBy(c => c.Email) },
-                { "Email-DESC", () => usersDataQuery.OrderByDescending(c => c.Email) },
-                { "FirstName-ASC", () => usersDataQuery.OrderBy(c => c.FirstName) },
-                { "FirstName-DESC", () => usersDataQuery.OrderByDescending(c => c.FirstName) },
-                { "LastName-ASC", () => usersDataQuery.OrderBy(c => c.LastName) },
-                { "LastName-DESC", () => usersDataQuery.OrderByDescending(c => c.LastName) }
-            };
+                {
+                    {"UserName-ASC", () => usersDataQuery.OrderBy(c => c.UserName)},
+                    {"UserName-DESC", () => usersDataQuery.OrderByDescending(c => c.UserName)},
+                    {"Email-ASC", () => usersDataQuery.OrderBy(c => c.Email)},
+                    {"Email-DESC", () => usersDataQuery.OrderByDescending(c => c.Email)},
+                    {"FirstName-ASC", () => usersDataQuery.OrderBy(c => c.FirstName)},
+                    {"FirstName-DESC", () => usersDataQuery.OrderByDescending(c => c.FirstName)},
+                    {"LastName-ASC", () => usersDataQuery.OrderBy(c => c.LastName)},
+                    {"LastName-DESC", () => usersDataQuery.OrderByDescending(c => c.LastName)}
+                };
 
             usersDataQuery = orderByColumnDirection[String.Format("{0}-{1}", indexTableInputModel.sort, indexTableInputModel.dir)].Invoke();
 
@@ -164,26 +170,26 @@ namespace Web.Controllers
 
             var usersModelListProjection = (from user in usersDataQuery.ToList()
                                             select new UserOutputModel
-                                            {
-                                                Id = user.Id,
-                                                FirstName = user.FirstName,
-                                                LastName = user.LastName,
-                                                UserName = user.UserName,
-                                                Email = user.Email,
-                                                Password = user.Password,
-                                                ClientName = GetClientName(user.ClientId),
-                                                RoleName = GetRoleName(user.RoleId),
-                                                PhoneNumber = user.PhoneNumber,
-                                                ClientId = user.ClientId,
-                                                RoleId = user.RoleId
-                                            }).ToArray();
+                                                {
+                                                    Id = user.Id,
+                                                    FirstName = user.FirstName,
+                                                    LastName = user.LastName,
+                                                    UserName = user.UserName,
+                                                    Email = user.Email,
+                                                    Password = user.Password,
+                                                    ClientName = GetClientName(user.ClientId),
+                                                    RoleName = GetRoleName(user.RoleId),
+                                                    PhoneNumber = user.PhoneNumber,
+                                                    ClientId = user.ClientId,
+                                                    RoleId = user.RoleId
+                                                }).ToArray();
 
 
-            return Json(new UserIndexOutputModel
-            {
-                Users = usersModelListProjection,
-                TotalItems = totalItems
-            }, JsonRequestBehavior.AllowGet);
+            return Json(new StoreOutputModel<UserOutputModel>
+                {
+                    Items = usersModelListProjection,
+                    TotalItems = totalItems
+                }, JsonRequestBehavior.AllowGet);
         }
 
         private string GetRoleName(Guid guid)
@@ -210,17 +216,17 @@ namespace Web.Controllers
 
             var clientModelListProjection = (from client in clients.ToList()
                                              select new ReferenceModel
-                                             {
-                                                 Id = client.Id,
-                                                 Name = client.Name
-                                             }).ToArray();
+                                                 {
+                                                     Id = client.Id,
+                                                     Name = client.Name
+                                                 }).ToArray();
 
 
-            return Json(new ClientsIndexOutputModel
-            {
-                Clients = clientModelListProjection,
-                TotalItems = totalItems
-            }, JsonRequestBehavior.AllowGet);
+            return Json(new StoreOutputModel<ReferenceModel>
+                {
+                    Items = clientModelListProjection,
+                    TotalItems = totalItems
+                }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]
@@ -231,17 +237,17 @@ namespace Web.Controllers
 
             var roleModelListProjection = (from role in roles.ToList()
                                            select new ReferenceModel
-                                           {
-                                               Id = role.Id,
-                                               Name = role.Name
-                                           }).ToArray();
+                                               {
+                                                   Id = role.Id,
+                                                   Name = role.Name
+                                               }).ToArray();
 
 
-            return Json(new RolesIndexOutputModel
-            {
-                Roles = roleModelListProjection,
-                TotalItems = totalItems
-            }, JsonRequestBehavior.AllowGet);
+            return Json(new StoreOutputModel<ReferenceModel>
+                {
+                    Items = roleModelListProjection,
+                    TotalItems = totalItems
+                }, JsonRequestBehavior.AllowGet);
         }
 
         private void CreateMapping()

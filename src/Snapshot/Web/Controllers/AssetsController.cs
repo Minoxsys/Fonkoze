@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Core.Services;
+using System;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -7,7 +8,6 @@ using System.Text;
 using System.Web;
 using System.Web.Caching;
 using System.Web.Mvc;
-using Core.Services;
 using Web.Bootstrap;
 
 namespace Web.Controllers
@@ -21,9 +21,9 @@ namespace Web.Controllers
 	public class AssetsController : Controller
 	{
 		#region Constants
-		private const string IF_NONE_MATCH_HEADER = "If-None-Match";
-		private const string LAST_MODIFIED_SINCE_HEADER = "If-Modified-Since";
-		private const string SHARED_FOLDER = "~/Assets/resources/";
+		private const string IfNoneMatchHeader = "If-None-Match";
+		private const string LastModifiedSinceHeader = "If-Modified-Since";
+		private const string SharedFolder = "~/Assets/resources/";
 		#endregion
 
 
@@ -35,12 +35,7 @@ namespace Web.Controllers
 
 		#region Constructor
 
-		public AssetsController()
-		{
-         
-		}
-
-		#endregion
+	    #endregion
 
 		#region Actions
 
@@ -50,7 +45,7 @@ namespace Web.Controllers
 		[AcceptVerbs(HttpVerbs.Get | HttpVerbs.Head)]
 		public ActionResult Shared(string file)
 		{
-			string relativePath = SHARED_FOLDER + file;
+			string relativePath = SharedFolder + file;
 			string absolutePath = Server.MapPath(relativePath);
 
 			// 404 (NotFound)
@@ -125,14 +120,14 @@ namespace Web.Controllers
 
 		private bool BrowserIsRequestingFileUnmodifiedSince(DateTime lastModified)
 		{
-			if (Request.Headers[LAST_MODIFIED_SINCE_HEADER] == null)
+			if (Request.Headers[LastModifiedSinceHeader] == null)
 			{
 				return false;
 			}
 
 			// Header values may have additional attributes separated by semi-colons
-			string ifModifiedSince = Request.Headers[LAST_MODIFIED_SINCE_HEADER];
-			if (ifModifiedSince.IndexOf(";") > -1)
+			string ifModifiedSince = Request.Headers[LastModifiedSinceHeader];
+			if (ifModifiedSince.IndexOf(";", StringComparison.Ordinal) > -1)
 			{
 				ifModifiedSince = ifModifiedSince.Split(';').First();
 			}
@@ -156,12 +151,12 @@ namespace Web.Controllers
 
 		private bool BrowserIsRequestingFileIdentifiedBy(string etag)
 		{
-			if (Request.Headers[IF_NONE_MATCH_HEADER] == null)
+			if (Request.Headers[IfNoneMatchHeader] == null)
 			{
 				return false;
 			}
 
-			string lIfNoneMatch = Request.Headers[IF_NONE_MATCH_HEADER];
+			string lIfNoneMatch = Request.Headers[IfNoneMatchHeader];
 
 			return lIfNoneMatch.Equals(etag, StringComparison.InvariantCultureIgnoreCase);
 		}

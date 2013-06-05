@@ -235,9 +235,6 @@
     <Compile Include="Unit\ReceiveSmsWorkflow\FonkozeSmsTextParserServiceTests.cs" />
     <Compile Include="Unit\ReceiveSmsWorkflow\SmsReceiveEndpointControllerTest\SmsReceiveEndpointControllerTests.cs" />
     <Compile Include="Unit\Controllers\UnautorizedAccessController_Tests.cs" />
-    <Compile Include="Unit\Controllers\CssControllerTests.cs" />
-    <Compile Include="Unit\Controllers\JavascriptControllerTests.cs" />
-    <Compile Include="Unit\Controllers\RoleManagerTests.cs" />
     <Compile Include="Unit\Controllers\UserMangerControllerTests\CreateMethod.cs" />
     <Compile Include="Unit\Controllers\UserMangerControllerTests\DeleteMethod.cs" />
     <Compile Include="Unit\Controllers\UserMangerControllerTests\EditMethod.cs" />

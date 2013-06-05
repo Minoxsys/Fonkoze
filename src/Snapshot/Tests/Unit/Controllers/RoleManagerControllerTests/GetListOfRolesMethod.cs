@@ -7,6 +7,7 @@ using Rhino.Mocks;
 using Core.Domain;
 using System.Web.Mvc;
 using Web.Models.RoleManager;
+using Web.Models.Shared;
 
 namespace Tests.Unit.Controllers.RoleManagerControllerTests
 {
@@ -38,12 +39,12 @@ namespace Tests.Unit.Controllers.RoleManagerControllerTests
 
             Assert.IsNotNull(jsonResult);
             Assert.IsInstanceOf(typeof(JsonResult), jsonResult);
-            Assert.IsInstanceOf(typeof(RoleManagerListForJsonOutput), jsonResult.Data);
+            Assert.IsInstanceOf(typeof(StoreOutputModel<RoleReferenceModel>), jsonResult.Data);
 
-            var jsonData = jsonResult.Data as RoleManagerListForJsonOutput;
+            var jsonData = jsonResult.Data as StoreOutputModel<RoleReferenceModel>;
             Assert.IsNotNull(jsonData);
 
-            Assert.AreEqual(1, jsonData.Roles.Count());
+            Assert.AreEqual(1, jsonData.Items.Count());
             Assert.AreEqual(1, jsonData.TotalItems);
         }
     }

@@ -205,4 +205,10 @@
   <data name="MoreThanTwoConsecutiveInvalidSMSEmailBody" xml:space="preserve">
     <value>Seller {0} with phone number {1} has send three or more consecutive invalid SMSes. Please assist.</value>
   </data>
+  <data name="AccountController_LogOn_The_user_name_or_password_provided_is_incorrect_" xml:space="preserve">
+    <value>The user name or password provided is incorrect.</value>
+  </data>
+  <data name="ChangePasswordModel_ChangePasswordModel_The_new_password_and_confirmation_password_do_not_match_" xml:space="preserve">
+    <value>The new password and confirmation password do not match.</value>
+  </data>
 </root>

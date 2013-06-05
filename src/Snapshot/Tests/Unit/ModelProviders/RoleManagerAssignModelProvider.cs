@@ -1,16 +1,11 @@
-﻿using System;
-using System.Text;
-using System.Collections.Generic;
-using System.Linq;
-using Rhino.Mocks;
-using NUnit.Framework;
+﻿using Core.Domain;
 using Core.Persistence;
-using Core.Domain;
+using NUnit.Framework;
+using Rhino.Mocks;
+using System;
 using Web.Models.RoleManager;
-using Web.Controllers;
 
-
-namespace UnitTests.ModelProviders
+namespace Tests.Unit.ModelProviders
 {
 	[TestFixture]
 	public class RoleManagerAssignModelProvider

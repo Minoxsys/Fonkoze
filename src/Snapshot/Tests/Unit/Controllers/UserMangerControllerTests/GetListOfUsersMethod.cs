@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using NUnit.Framework;
 using Rhino.Mocks;
-using NUnit.Framework;
+using System.Linq;
 using Web.Models.Shared;
 using Web.Models.UserManager;
-using System.Web.Mvc;
 
 namespace Tests.Unit.Controllers.UserMangerControllerTests
 {
@@ -42,8 +38,8 @@ namespace Tests.Unit.Controllers.UserMangerControllerTests
             //Assert
             objectMother.QueryUsers.VerifyAllExpectations();
 
-            Assert.IsInstanceOf<UserIndexOutputModel>(jsonResult.Data);
-            var jsonData = jsonResult.Data as UserIndexOutputModel;
+            Assert.IsInstanceOf<StoreOutputModel<UserOutputModel>>(jsonResult.Data);
+            var jsonData = jsonResult.Data as StoreOutputModel<UserOutputModel>;
             Assert.IsNotNull(jsonData);
 
             Assert.AreEqual(pageOfData.Count(), jsonData.TotalItems);
@@ -73,10 +69,10 @@ namespace Tests.Unit.Controllers.UserMangerControllerTests
             //Assert
             objectMother.QueryUsers.VerifyAllExpectations();
 
-            var jsonData = jsonResult.Data as UserIndexOutputModel;
+            var jsonData = jsonResult.Data as StoreOutputModel<UserOutputModel>;
 
-            Assert.That(jsonData.Users[0].UserName, Is.EqualTo("9admin"));
-            Assert.That(jsonData.Users[0].Email, Is.EqualTo("9"+objectMother.User.Email));
+            Assert.That(jsonData.Items[0].UserName, Is.EqualTo("9admin"));
+            Assert.That(jsonData.Items[0].Email, Is.EqualTo("9"+objectMother.User.Email));
 
         }
 

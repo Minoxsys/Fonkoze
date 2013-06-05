@@ -1,39 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using Core.Domain;
-using Persistence.Queries;
-using Persistence;
-using Persistence.Commands;
+﻿using Core.Domain;
 using Core.Persistence;
+using System;
 
 namespace Web.Models.RoleManager
 {
-	public class RoleManagerAssignModel
-	{
-		private readonly IQueryService<Role> queryRole;
-		private readonly IQueryService<Permission> queryFunction;
-		private readonly ISaveOrUpdateCommand<Role> updateRole;
+    public class RoleManagerAssignModel
+    {
+        private readonly IQueryService<Role> _queryRole;
+        private readonly IQueryService<Permission> _queryFunction;
+        private readonly ISaveOrUpdateCommand<Role> _updateRole;
 
-		public RoleManagerAssignModel(IQueryService<Role> queryRole,
-			IQueryService<Permission> queryFunction,
-			ISaveOrUpdateCommand<Role> updateRole)
-		{
-			this.queryFunction = queryFunction;
-			this.queryRole = queryRole;
+        public RoleManagerAssignModel(IQueryService<Role> queryRole,
+                                      IQueryService<Permission> queryFunction,
+                                      ISaveOrUpdateCommand<Role> updateRole)
+        {
+            _queryFunction = queryFunction;
+            _queryRole = queryRole;
+            _updateRole = updateRole;
+        }
 
-			this.updateRole = updateRole;
-		}
+        public virtual void LinkFunctionToRole(Guid functionId, Guid roleId)
+        {
+            var function = _queryFunction.Load(functionId);
+            var role = _queryRole.Load(roleId);
 
-		public virtual void LinkFunctionToRole( Guid functionId, Guid roleId )
-		{
-			var function = queryFunction.Load(functionId);
-			var role = queryRole.Load(roleId);
+            role.AddFunction(function);
 
-			role.AddFunction(function);
-
-			updateRole.Execute(role);
-		}
-	}
+            _updateRole.Execute(role);
+        }
+    }
 }
