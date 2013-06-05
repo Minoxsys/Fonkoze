@@ -27,13 +27,13 @@ namespace Web.Areas.AnalysisManagement.Controllers
 
         private const string NAME_ALL_OPTION = "All";
         private Guid ID_ALL_OPTION = Guid.Empty;
-        
-        public ActionResult Overview(FilterModel filter)
+
+        public ActionResult Overview(NotNullableFilterModel filter)
         {
             return View(filter);
         }
 
-        public ActionResult GraphicOverview(FilterModel filter)
+        public ActionResult GraphicOverview(NotNullableFilterModel filter)
         {
             return View(filter);
         }

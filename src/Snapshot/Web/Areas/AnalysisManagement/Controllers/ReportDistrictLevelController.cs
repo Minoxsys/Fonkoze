@@ -163,7 +163,7 @@ namespace Web.Areas.AnalysisManagement.Controllers
         }
 
         [Requires(Permissions = "Report.View")]
-        public ActionResult Overview(FilterModel filter)
+        public ActionResult Overview(NotNullableFilterModel filter)
         {
             return View(filter);
         }
