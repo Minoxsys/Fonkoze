@@ -324,6 +324,16 @@ namespace Web.LocalizationResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No product(s) for this seller matched those assigned to this product level request.
+        /// </summary>
+        internal static string StoreProductLevelRequestDetailService_GetReqMessage_No_product_s__for_this_seller_matched_those_assigned_to_this_product_level_request {
+            get {
+                return ResourceManager.GetString("StoreProductLevelRequestDetailService_GetReqMessage_No_product_s__for_this_seller" +
+                        "_matched_those_assigned_to_this_product_level_request", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Seller {0} with phone number {1} has send the second consecutive invalid SMS. Please assist..
         /// </summary>
         internal static string TwoConsecutiveInvalidSMSEmailBody {

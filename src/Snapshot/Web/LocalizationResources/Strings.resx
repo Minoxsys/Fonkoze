@@ -211,4 +211,7 @@
   <data name="ChangePasswordModel_ChangePasswordModel_The_new_password_and_confirmation_password_do_not_match_" xml:space="preserve">
     <value>The new password and confirmation password do not match.</value>
   </data>
+  <data name="StoreProductLevelRequestDetailService_GetReqMessage_No_product_s__for_this_seller_matched_those_assigned_to_this_product_level_request" xml:space="preserve">
+    <value>No product(s) for this seller matched those assigned to this product level request</value>
+  </data>
 </root>
