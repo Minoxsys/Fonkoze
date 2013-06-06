@@ -183,6 +183,14 @@
     <Compile Include="Areas\AnalysisManagement\Models\ReportRegionLevel\RegionStackedBarChartModel.cs" />
     <Compile Include="Areas\MessagesManagement\Controllers\ErrorRateController.cs" />
     <Compile Include="Areas\MessagesManagement\Models\ErrorRate\ErrorRateViewModel.cs" />
+    <Compile Include="BackgroundJobs\BackgroundJobsServices\CampaignJobExecutionService.cs" />
+    <Compile Include="BackgroundJobs\BackgroundJobsServices\EmptyJobExecutionService.cs" />
+    <Compile Include="BackgroundJobs\BackgroundJobsServices\IJobExecutionService.cs" />
+    <Compile Include="BackgroundJobs\BackgroundJobsServices\OutpostInactivityJobExecutionService.cs" />
+    <Compile Include="BackgroundJobs\BackgroundJobsServices\SmsMessageMonitoringJobExecutionService.cs" />
+    <Compile Include="BackgroundJobs\BackgroundJobsServices\StockLevelsMonitoringJobExecutionService.cs" />
+    <Compile Include="BackgroundJobs\BackgroundJobsServices\TrimLogJobExecutionService.cs" />
+    <Compile Include="BackgroundJobs\JobExecutionType.cs" />
     <Compile Include="Models\Parsing\Outpost\IOutpostsParseResult.cs" />
     <Compile Include="Models\Parsing\Outpost\OutpostsParseResult.cs" />
     <Compile Include="Areas\OutpostManagement\Services\ContactsUpdateService.cs" />

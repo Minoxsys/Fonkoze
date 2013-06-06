@@ -9,7 +9,7 @@ namespace Migrations
         {
             Create.Table("ApplicationActivities").
                 WithCommonColumns().
-                WithColumn("Message").AsString().Nullable();
+                WithColumn("Message").AsString(5000).Nullable();
 
             Create.AddForeignKey("ApplicationActivities");
         }

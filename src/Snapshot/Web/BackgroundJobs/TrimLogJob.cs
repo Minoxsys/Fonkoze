@@ -2,18 +2,18 @@
 using System;
 using System.Threading.Tasks;
 using WebBackgrounder;
+using Web.BackgroundJobs.BackgroundJobsServices;
+using Autofac.Features.Indexed;
 
 namespace Web.BackgroundJobs
 {
     public class TrimLogJob : IJob
     {
-        private readonly Func<ISession> _sessionThunk;
-        private ISession _session;
+        IIndex<JobExecutionType, IJobExecutionService> _executionTypes;
 
-        public TrimLogJob(Func<ISession> sessionThunk)
+        public TrimLogJob(IIndex<JobExecutionType, IJobExecutionService> executionTypes)
         {
-            _sessionThunk = sessionThunk;
-            _session = _sessionThunk();
+            _executionTypes = executionTypes;
         }
 
         public TimeSpan Interval
@@ -36,11 +36,7 @@ namespace Web.BackgroundJobs
         {
             return new Task(() =>
                 {
-                    _session = _sessionThunk();
-                    var query = _session.CreateSQLQuery("exec TrimLogTable @cutoffdays=:days");
-                    query.SetInt32("days", 30);
-                    query.ExecuteUpdate();
-                    _session.Dispose();
+                    _executionTypes[JobExecutionType.TrimLogType].ExecuteJob();
                 });
         }
     }

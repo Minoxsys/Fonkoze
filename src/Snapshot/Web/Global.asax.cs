@@ -9,6 +9,7 @@ using Web.CustomModelBinders;
 using Web.CustomViewEngine;
 using Web.Security;
 using WebBackgrounder;
+using Web.BackgroundJobs.BackgroundJobsServices;
 
 namespace Web
 {
@@ -41,7 +42,7 @@ namespace Web
 
             AreaRegistration.RegisterAllAreas();
 
-            ModelBinders.Binders.Add(typeof (UserAndClientIdentity), _container.Resolve<UserAndClientIdentityModelBinder>());
+            ModelBinders.Binders.Add(typeof(UserAndClientIdentity), _container.Resolve<UserAndClientIdentityModelBinder>());
 
             RegisterGlobalFilters(GlobalFilters.Filters);
             RoutesRegistrar.Register();
@@ -75,7 +76,7 @@ namespace Web
         protected static void InitializeContainer()
         {
             var builder = new ContainerBuilder();
-            builder.RegisterControllers(typeof (MvcApplication).Assembly);
+            builder.RegisterControllers(typeof(MvcApplication).Assembly);
             builder.RegisterFilterProvider();
             ContainerRegistrar.Register(builder);
             _container = builder.Build();
@@ -84,6 +85,7 @@ namespace Web
 
         private static JobManager CreateJobWorkersManager()
         {
+
             var jobs = new IJob[]
                 {
                     _container.Resolve<EmptyJob>(),
@@ -91,7 +93,8 @@ namespace Web
                     _container.Resolve<CampaignExecutionJob>(),
                     _container.Resolve<OutpostInactivityJob>(),
                     _container.Resolve<SmsMessagesMonitoringJob>(),
-                    new TrimLogJob(() => _container.Resolve<INHibernateSessionFactory>().CreateSession()) 
+                    _container.Resolve<TrimLogJob>(),
+                    //new TrimLogJob(() => new _container.Resolve<INHibernateSessionFactory>().CreateSession()) 
                     //new SampleJob(TimeSpan.FromSeconds(35), TimeSpan.FromSeconds(60)),
                     /* new ExceptionJob(TimeSpan.FromSeconds(15)), */
                     // new WorkItemCleanupJob(TimeSpan.FromMinutes(1), TimeSpan.FromMinutes(5), new WorkItemsContext())
@@ -99,7 +102,7 @@ namespace Web
 
             var coordinator =
                 new WebFarmJobCoordinator(new NHibernateWorkItemRepository(() => _container.Resolve<INHibernateSessionFactory>().CreateSession()));
-            var manager = new JobManager(jobs, coordinator) {RestartSchedulerOnFailure = true};
+            var manager = new JobManager(jobs, coordinator) { RestartSchedulerOnFailure = true };
             manager.Fail(ex => Elmah.ErrorLog.GetDefault(null).Log(new Elmah.Error(ex)));
 
             return manager;

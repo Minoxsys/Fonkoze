@@ -7,15 +7,16 @@ using Web.LocalizationResources;
 using Web.Services;
 using Web.Services.Helper;
 using WebBackgrounder;
+using Web.BackgroundJobs.BackgroundJobsServices;
+using Autofac.Features.Indexed;
 
 namespace Web.BackgroundJobs
 {
     public class SmsMessagesMonitoringJob : IJob
     {
-        private readonly Func<IQueryService<RawSmsReceived>> _rawSmsQueryService;
-        private readonly Func<ISendSmsService> _sendSmsService;
-        private readonly Func<ISenderInformationService> _senderInformationService;
         private const string JobName = "SmsMessagesMonitoringJob";
+
+        IIndex<JobExecutionType, IJobExecutionService> _executionTypes;
 
         public TimeSpan Interval
         {
@@ -33,50 +34,17 @@ namespace Web.BackgroundJobs
             get { return JobName; }
         }
 
-        public SmsMessagesMonitoringJob(Func<IQueryService<RawSmsReceived>> rawSmsQueryService, Func<ISendSmsService> sendSmsService,
-                                        Func<ISenderInformationService> senderInformationService)
+        public SmsMessagesMonitoringJob(    IIndex<JobExecutionType, IJobExecutionService> executionTypes)
         {
-            _senderInformationService = senderInformationService;
-            _sendSmsService = sendSmsService;
-            _rawSmsQueryService = rawSmsQueryService;
+            _executionTypes = executionTypes;
         }
 
         public Task Execute()
         {
             return new Task(() =>
                 {
-                    var latestSmsBySender =
-                        _rawSmsQueryService().Query()
-                                             .Where(sms => sms.Created > DateTime.UtcNow.AddHours(-24))
-                                             .OrderByDescending(r => r.Created)
-                                             .GroupBy(r => r.Sender).Select(g => g);
-
-                    foreach (IGrouping<string, RawSmsReceived> smsGroup in latestSmsBySender)
-                    {
-                        Outpost senderOutpost = _senderInformationService().GetOutpostWithActiveSender(smsGroup.Key);
-                        if (senderOutpost == null)
-                            continue;
-
-                        var latestSmsMessage = smsGroup.FirstOrDefault();
-                        if (latestSmsMessage == null)
-                            continue;
-
-                        if (!latestSmsMessage.ParseSucceeded && latestSmsMessage.Created < DateTime.UtcNow.AddHours(-4))
-                        {
-                            var phoneNumber = senderOutpost.GetDistrictManagersPhoneNumberAsString();
-                            if (!string.IsNullOrEmpty(phoneNumber))
-                            {
-                                _sendSmsService().SendSms(phoneNumber, ComposeMessage(senderOutpost, latestSmsMessage.Created), true);
-                            }
-                        }
-                    }
+                    _executionTypes[JobExecutionType.SmsMessageMonitoringType].ExecuteJob();
                 });
-        }
-
-        private string ComposeMessage(Outpost senderOutpost, DateTime? msgDateTime)
-        {
-            return string.Format(Strings.LastSmsInvalidNoFollowUpSmsMessage, senderOutpost.Name,
-                                 senderOutpost.DetailMethod, msgDateTime);
         }
     }
 }
