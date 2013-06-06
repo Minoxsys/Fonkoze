@@ -323,9 +323,12 @@
     };
     
     function getGooglePositionFromText(coordinates) {
-        var a = parseFloat(coordinates.substring(1, coordinates.indexOf(',')));
-        var b = parseFloat(coordinates.substring(coordinates.indexOf(',') + 1, coordinates.length - 1));
-        return new google.maps.LatLng(a, b);
+        if (coordinates != null) {
+            var a = parseFloat(coordinates.substring(1, coordinates.indexOf(',')));
+            var b = parseFloat(coordinates.substring(coordinates.indexOf(',') + 1, coordinates.length - 1));
+            return new google.maps.LatLng(a, b);
+        }
+        return null;
     };
 
     function createMarker(store, markerArray, map) {
@@ -335,8 +338,12 @@
             var i = 0;
 
             store.each(function(item) {
+                var coords = getGooglePositionFromText(item.get('Coordonates'));
+                if (coords == null)
+                    return;
+                
                 var marker = new MarkerWithLabel({
-                    position: getGooglePositionFromText(item.get('Coordonates')),
+                    position: coords,
                     draggable: false,
                     raiseOnDrag: true,
                     map: map,
