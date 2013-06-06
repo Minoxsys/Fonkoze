@@ -21,6 +21,12 @@
 
     });
 </script>
+<style>
+.wrap .x-grid-cell-inner {
+    white-space: normal;
+}
+
+</style>
 <script type="text/javascript">
     Ext.onReady(function () {
         window.feature = {};
@@ -237,7 +243,8 @@
                     flex: 2,
                     minWidth: 250,
                     menuDisabled: true,
-                    sortable: false
+                    sortable: false,
+                    tdCls:'wrap'
                 }],
                 bbar: Ext.create('Ext.PagingToolbar', {
                     store: window.feature.messageFromSeller,
