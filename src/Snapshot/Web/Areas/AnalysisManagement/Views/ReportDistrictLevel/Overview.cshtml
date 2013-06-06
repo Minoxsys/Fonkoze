@@ -612,7 +612,7 @@ Analysis: Product level information at district level
                     items: [{
                         xtype: 'label',
                         cls: 'x-title-label',
-                        text: 'Product level information at district level'
+                        text: 'Product level information'
                     }]
                 }, {
                     xtype: 'container',
@@ -639,7 +639,7 @@ Analysis: Product level information at district level
                 items: [{
                     xtype: 'container',
                     id: 'DivChartContainer',
-                    flex: 2,
+                    flex: 1,
                     layout: {
                         align: 'stretch',
                         type: 'vbox'
@@ -682,5 +682,6 @@ Analysis: Product level information at district level
         window.feature.treegrid.getStore().proxy.extraParams.DistrictId = allOptionGUID;
 
         window.feature.treegrid.getRootNode().expand();
+        window.feature.treegrid.expandAll();
     });
 </script>

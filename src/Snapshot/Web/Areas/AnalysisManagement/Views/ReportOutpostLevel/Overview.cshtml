@@ -653,8 +653,8 @@ Analysis: Product level information at seller level
                 id: 'chartSellerOverviewLevel',
                 xtype: 'chart',
                 flex: 1,
-                insetPadding: 45,
-                margin: '0 0 0 20',
+               // insetPadding: 45,
+               // margin: '0 0 0 20',
                 animate: true,
                 shadow: true,
                 store: chartStore,
@@ -680,6 +680,12 @@ Analysis: Product level information at seller level
                     position: 'bottom',
                     fields: ['OutpostName'],
                     title: 'Sellers',
+                    label: {
+                        orientation: 'horizontal',
+                        rotate: {
+                            degrees: 60
+                        }
+                    },
                     grid: true
                 }],
                 series: [{
@@ -738,7 +744,7 @@ Analysis: Product level information at seller level
                 }
                 ],
                 legend: {
-                    position: 'right'
+                    position: 'left'
                 }
             });
         });
@@ -832,7 +838,7 @@ Analysis: Product level information at seller level
                         items: [{
                             xtype: 'label',
                             cls: 'x-title-label',
-                            text: 'Product level information at seller level'
+                            text: 'Product level information'
                         },
                         
                         ]
@@ -875,7 +881,7 @@ Analysis: Product level information at seller level
                             xtype: 'checkbox',
                             id: window.feature.chkOnlyUnderTreshold,
                             boxLabel: '<b>Show products under threshold only</b>',
-                            margin: '30 0 0 10',
+                            margin: '0 0 10 10',
                             listeners: {
                                 change: function (chk, checked) {
                                     showOverviewChart();
@@ -948,6 +954,7 @@ Analysis: Product level information at seller level
         //window.feature.comboBoxOutposts.setValue(allOptionGUID);
 
         window.feature.treegrid.getRootNode().expand();
+        window.feature.treegrid.expandAll();
        
         
     });

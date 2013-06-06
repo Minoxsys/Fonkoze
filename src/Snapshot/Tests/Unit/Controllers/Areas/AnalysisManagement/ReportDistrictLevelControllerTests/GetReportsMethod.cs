@@ -46,7 +46,7 @@ namespace Tests.Unit.Controllers.Areas.AnalysisManagement.ReportDistrictLevelCon
 
             var reportDistrictLevelTree = (ReportDistrictLevelTreeModel)result.Data;
             Assert.AreEqual(reportDistrictLevelTree.children.Count, 3);
-            Assert.AreEqual(reportDistrictLevelTree.children[2].Name, "district2 ( Number of Sellers: 1 ) ");
+            Assert.AreEqual(reportDistrictLevelTree.children[2].Name, "district2 ( Sellers: 1 ) ");
             Assert.AreEqual(reportDistrictLevelTree.children[2].children[0].children[0].ProductLevelSum, "5");
         }
 

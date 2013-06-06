@@ -524,7 +524,7 @@ Analysis: Product level information at region level
                     items: [{
                         xtype: 'label',
                         cls: 'x-title-label',
-                        text: 'Product level information at region level'
+                        text: 'Product level information'
                     }]
                 }, {
                     xtype: 'container',
@@ -550,7 +550,7 @@ Analysis: Product level information at region level
                 items: [{
                     xtype: 'container',
                     id: 'DivChartContainer',
-                    flex: 2,
+                    flex: 1,
                     layout: {
                         align: 'stretch',
                         type: 'vbox'
@@ -589,7 +589,7 @@ Analysis: Product level information at region level
 
         window.feature.treegrid.getStore().proxy.extraParams.CountryId = allOptionGUID;
        
-       
+        window.feature.treegrid.expandAll();
        
         
     });
