@@ -48,8 +48,49 @@
             }]
         });
 
+        window.feature.DistrictStore = Ext.create('Ext.data.Store', {
+            fields: ['Name', 'Id'],
+            proxy: {
+                type: 'ajax',
+                url: '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "Seller", action = "GetAllDistricts" })',
+                reader: {
+                    type: 'json',
+                    root: 'districts',
+                    disableCaching: true,
+                    totalProperty: 'TotalItems'
+                }
+            }
+         });
+
         window.feature.doSearch = new Ext.util.DelayedTask(function () {
             window.feature.errorRatesStore.loadPage(1);
+        });
+
+        window.feature.comboBoxDistricts = Ext.create('Ext.form.ComboBox', {
+            store: window.feature.DistrictStore,
+            queryMode: 'local',
+            id: window.feature.comboboxDistrictsId,
+            labelAlign: 'top',
+            fieldLabel: 'Selected District',
+            labelClsExtra: 'combo-label',
+            displayField: 'Name',
+            valueField: 'Id',
+            disabled: false,
+            editable: false,
+            typeAhead: false,
+            emptyText: _t('District List'),
+            listeners: {
+                select: function (combo, record, index) {
+                    var selectedDistrictId = record[0].data.Id;
+
+                    window.feature.errorRatesStore.load({ params: { districtId: selectedDistrictId } });
+                },
+                render: function (p) {
+                    p.setLoading({
+                        store: p.getStore()
+                    });
+                }
+            }
         });
 
         window.feature.container = Ext.create('Ext.container.Container', {
@@ -64,59 +105,78 @@
             items: [{
                 xtype: 'container',
                 layout: {
-                    type: 'hbox'
+                    align: 'stretch',
+                    type: 'vbox'
                 },
-                height: 50,
+                height: 110,
                 items: [{
                     xtype: 'container',
-                    flex: 1,
-                    height: 50,
                     layout: {
-                        type: 'column'
+                        type: 'hbox'
                     },
+                    height: 50,
                     items: [{
                         xtype: 'container',
-                        height: 30,
-                        width: 30,
-                        html: '&nbsp;'
+                        flex: 1,
+                        height: 50,
+                        layout: {
+                            type: 'column'
+                        },
+                        items: [{
+                            xtype: 'container',
+                            height: 30,
+                            width: 30,
+                            html: '&nbsp;'
+                        }, {
+                            xtype: 'image',
+                            height: 30,
+                            width: 30,
+                            src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/OutpostStockLevel/InformationGreen.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                            margin: '0 10 10 0'
+                        }, {
+                            xtype: 'label',
+                            cls: 'x-title-label',
+                            text: 'SMS error rates'
+                        }]
                     }, {
-                        xtype: 'image',
-                        height: 30,
-                        width: 30,
-                        src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/OutpostStockLevel/InformationGreen.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
-                        margin: '0 10 10 0'
-                    }, {
-                        xtype: 'label',
-                        cls: 'x-title-label',
-                        text: 'Sms error rates'
+                        xtype: 'container',
+                        flex: 1,
+                        layout: {
+                            type: 'hbox',
+                            pack: 'end'
+                        },
+                        height: 80,
+                        items: [{
+                            xtype: 'textfield',
+                            itemId: window.feature.searchErrorRates,
+                            width: 200,
+                            frame: true,
+                            cls: 'text-field-rounded',
+                            emptyText: 'Seller Search',
+                            enableKeyEvents: true,
+                            listeners: {
+                                'keyup': {
+                                    fn: function (key) {
+                                        var searchValue = window.feature.container.down('#' + window.feature.searchErrorRates).getValue();
+                                        window.feature.errorRatesStore.proxy.extraParams.searchValue = searchValue;
+                                        window.feature.doSearch.delay(500);
+                                    }
+                                }
+                            }
+                        }]
+
                     }]
                 }, {
                     xtype: 'container',
-                    flex: 1,
+                    id: 'combosContainer',
+                    height: 65,
+                    margin: '0 0 0 30',
                     layout: {
-                        type: 'hbox',
-                        pack: 'end'
+                        type: 'column'
                     },
-                    height: 80,
-                    items: [{
-                        xtype: 'textfield',
-                        itemId: window.feature.searchErrorRates,
-                        width: 200,
-                        frame: true,
-                        cls: 'text-field-rounded',
-                        emptyText: 'Seller Search',
-                        enableKeyEvents: true,
-                        listeners: {
-                            'keyup': {
-                                fn: function () {
-                                    var searchValue = window.feature.container.down('#' + window.feature.searchErrorRates).getValue();
-                                    window.feature.errorRatesStore.proxy.extraParams.searchValue = searchValue;
-                                    window.feature.doSearch.delay(500);
-                                }
-                            }
-                        }
-                    }]
-
+                    items: [
+                        window.feature.comboBoxDistricts
+                    ]
                 }]
             }, {
                 xtype: 'gridpanel',
@@ -175,13 +235,19 @@
                     ui: 'snapshot-pagination-toolbar'
                 })
             }]
-        });
+       });
 
         var contentRes = window.res.content;
         var mainContent = Ext.getCmp(contentRes.maincontent.id);
 
         mainContent.add(window.feature.container);
         window.feature.errorRatesStore.loadPage(1);
+        
+        window.feature.DistrictStore.load({
+            params: { regionId: '@Guid.Empty' }
+          });
+        window.feature.comboBoxDistricts.setValue('@Guid.Empty');
+        window.feature.comboBoxDistricts.setDisabled(false);
     });
 
 </script>

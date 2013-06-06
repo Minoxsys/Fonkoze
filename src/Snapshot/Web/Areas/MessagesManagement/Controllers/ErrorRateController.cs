@@ -29,7 +29,7 @@ namespace Web.Areas.MessagesManagement.Controllers
             return View();
         }
 
-        public ActionResult GetErrorRateItems(IndexTableInputModel inputModel)
+        public ActionResult GetErrorRateItems(IndexTableInputModel inputModel, Guid? districtId)
         {
             Debug.Assert(inputModel.limit != null, "inputModel.limit != null");
             var pageSize = inputModel.limit.Value;
@@ -42,6 +42,9 @@ namespace Web.Areas.MessagesManagement.Controllers
                 int incorrectMsg = rawSmsGroup.Count(s => !s.ParseSucceeded);
                 int totalMsg = rawSmsGroup.Count();
 
+                if (!OutpostIsInDistrict(outpost, districtId))
+                    continue;
+
                 errorRates.Add(new ErrorRateViewModel
                     {
                         SellerName = outpost != null ? outpost.Name : "-",
@@ -53,7 +56,6 @@ namespace Web.Areas.MessagesManagement.Controllers
             }
 
             var errorRateQuery = errorRates.AsQueryable();
-
 
             var orderByColumnDirection = new Dictionary<string, Func<IQueryable<ErrorRateViewModel>>>
                 {
@@ -86,6 +88,20 @@ namespace Web.Areas.MessagesManagement.Controllers
                     Items = errorRateQuery.ToArray(),
                     TotalItems = totalItems
                 }, JsonRequestBehavior.AllowGet);
+        }
+
+        private bool OutpostIsInDistrict(Outpost outpost, Guid? districtId)
+        {
+            if (!districtId.HasValue)
+                return true;
+
+            if (districtId.Value == Guid.Empty)//all districts
+                return true;
+
+            if (outpost == null)
+                return false;
+
+            return outpost.District.Id == districtId.Value;
         }
     }
 }
