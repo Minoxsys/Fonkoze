@@ -114,12 +114,12 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.OutpostControllerTests
 
         private void AssertSuccessMessageIsPostedInTempData()
         {
-            Assert.That(_.controller.TempData["result"], Is.EqualTo("The outposts update was succesful."));
+            Assert.That(_.controller.TempData["result"], Is.EqualTo("The Sellers update was succesful."));
         }
 
         private void AssertFailedProductsMessageIsPostedInTempData()
         {
-            Assert.That(_.controller.TempData["result"], Is.EqualTo("The file uploaded successfully. The following Outposts could not be updated:" + " Name1, Name2."));
+            Assert.That(_.controller.TempData["result"], Is.EqualTo("The file uploaded successfully. The following Sellers could not be updated:" + " Name1, Name2."));
         }
 
         private IList<IParsedOutpost> CreateParsedOutposts()
