@@ -190,6 +190,7 @@
     <Compile Include="BackgroundJobs\BackgroundJobsServices\SmsMessageMonitoringJobExecutionService.cs" />
     <Compile Include="BackgroundJobs\BackgroundJobsServices\StockLevelsMonitoringJobExecutionService.cs" />
     <Compile Include="BackgroundJobs\BackgroundJobsServices\TrimLogJobExecutionService.cs" />
+	<Compile Include="BackgroundJobs\BackgroundJobsServices\CampaignJobExecutionService.cs" />
     <Compile Include="BackgroundJobs\JobExecutionType.cs" />
     <Compile Include="Models\Parsing\Outpost\IOutpostsParseResult.cs" />
     <Compile Include="Models\Parsing\Outpost\OutpostsParseResult.cs" />
