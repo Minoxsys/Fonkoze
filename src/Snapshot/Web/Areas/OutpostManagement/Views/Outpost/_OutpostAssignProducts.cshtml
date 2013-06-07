@@ -248,7 +248,19 @@
                                     valueField:'Id',
                                     displayField:'Name',
                                     editable:false,
-                                    listeners:{
+                                    listeners: {
+                                        'afterrender': function (combo, record) {
+                                            var UncategorizedProdGroupId = "c1d9b38a-d2c6-4a95-be0e-215f569b782f";
+
+                                            me.productsStore.getProxy().extraParams = {
+                                                ProductGroupId: UncategorizedProdGroupId,
+                                                OutpostId: me.outpostId
+                                            };
+
+                                            me.productsStore.load();
+                                            me.productGroupsStore.load();
+                                            combo.setValue(UncategorizedProdGroupId);
+                                        },
                                         'select':function(combo, record){
                                             if (combo.getValue()){
                                                 me.productsStore.getProxy().extraParams={
