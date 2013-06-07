@@ -85,19 +85,6 @@
                             },
                             {
                                 xtype: 'button',
-                                id: contentRes.maincontent.sidebar.otherActivity,
-                                toggleGroup: contentRes.maincontent.sidebar.group,
-                                text: 'Other Activity',
-                                height: 30,
-                                enableToggle: true,
-                                margin: '0 40 0 0',
-                                ui: 'snapshot-sidebar-btn',
-                                handler: function () {
-                                    navigateTo(window.res.link.otherActivity);
-                                }
-                            },
-                            {
-                                xtype: 'button',
                                 id: contentRes.maincontent.sidebar.errorRates,
                                 toggleGroup: contentRes.maincontent.sidebar.group,
                                 text: 'Error Rates',
@@ -107,6 +94,19 @@
                                 ui: 'snapshot-sidebar-btn',
                                 handler: function () {
                                     navigateTo(window.res.link.errorRates);
+                                }
+                            },
+                            {
+                                xtype: 'button',
+                                id: contentRes.maincontent.sidebar.otherActivity,
+                                toggleGroup: contentRes.maincontent.sidebar.group,
+                                text: 'Other Activity',
+                                height: 30,
+                                enableToggle: true,
+                                margin: '0 40 0 0',
+                                ui: 'snapshot-sidebar-btn',
+                                handler: function () {
+                                    navigateTo(window.res.link.otherActivity);
                                 }
                             }
                         ]
