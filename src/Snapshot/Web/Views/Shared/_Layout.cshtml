@@ -78,7 +78,7 @@
                     clientsOverview: '@(Url.RouteUrl<ClientManagerController>( x=>x.Overview() ,  DefaultRouteRegistrar.DEFAULT_ROUTE ))',
                     outpostStockLevelCurrent: '@(Url.RouteUrl<OutpostStockLevelController>(x=>x.Overview(null),Web.Areas.StockAdministration.StockAdministrationAreaRegistration.DEFAULT_ROUTE))',
                     rolesOverview: '@(Url.RouteUrl<RoleManagerController>( x=>x.Overview() ,  DefaultRouteRegistrar.DEFAULT_ROUTE ))',
-                    historicalLevel: '@(Url.RouteUrl<HistoricalProductLevelController>( x=>x.Overview() ,  Web.Areas.StockAdministration.StockAdministrationAreaRegistration.DEFAULT_ROUTE ))',
+                    historicalLevel: '@(Url.RouteUrl<HistoricalProductLevelController>( x=>x.GraphicOverview() ,  Web.Areas.StockAdministration.StockAdministrationAreaRegistration.DEFAULT_ROUTE ))',
                     campaignOverview: '@(Url.RouteUrl<CampaignController>(x=>x.Overview(),CampaignManagementAreaRegistration.DEFAULT_ROUTE))',
                     alerts: '@(Url.RouteUrl<AlertsController>(x => x.Overview(), DefaultRouteRegistrar.DEFAULT_ROUTE))',
                     automaticSchedules: '@(Url.RouteUrl<RequestScheduleController>(x=>x.Overview(),CampaignManagementAreaRegistration.DEFAULT_ROUTE))',

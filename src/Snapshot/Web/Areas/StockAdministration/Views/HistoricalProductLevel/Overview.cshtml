@@ -8,6 +8,7 @@ Historical Product Level: Overview
     Html.RenderPartial("_OutpostStockLevelSubNavigation");
     Html.RenderPartial("_OutpostStockLevelSideBar");
 }
+@model  Web.Areas.StockAdministration.Models.HistoricalProductLevel.ProductSalesFilterModel
 
 <script type="text/javascript">
     Ext.onReady(function () {
@@ -72,7 +73,7 @@ Historical Product Level: Overview
         });
 
         window.feature.regionStore = Ext.create('Ext.data.Store', {
-            remoteSort: true,
+            //remoteSort: true,
             fields: ['Id','Name'],
             proxy: {
                 type: 'ajax',
@@ -278,7 +279,9 @@ Historical Product Level: Overview
                        cls: 'x-add-button-gradient',
                        text: 'Graphic View',
                        handler: function () {
-                           navigateTo('@(Url.RouteUrl<HistoricalProductLevelController>( x=>x.GraphicOverview() ,  Web.Areas.StockAdministration.StockAdministrationAreaRegistration.DEFAULT_ROUTE ))')
+                           var url = '@Url.RouteUrl(StockAdministrationAreaRegistration.DEFAULT_ROUTE, new { controller = "HistoricalProductLevel", action = "GoToGraphicView" })'
+                           url += BuildQueryString();
+                           navigateTo(url);
                        }
                    }
                    ]
@@ -333,6 +336,7 @@ Historical Product Level: Overview
                         itemId: window.feature.countryComboboxId,
                         store: window.feature.countryStore,
                         labelAlign: 'top',
+                        queryMode: 'local',
                         fieldLabel: 'Selected Country',
                         displayField: 'Name',
                         valueField:'Id',
@@ -366,6 +370,7 @@ Historical Product Level: Overview
                         xtype: 'combobox',
                         itemId: window.feature.regionComboboxId,
                         store: window.feature.regionStore,
+                        queryMode: 'local',
                         disabled: false,
                         labelAlign: 'top',
                         fieldLabel: 'Selected Region',
@@ -402,6 +407,7 @@ Historical Product Level: Overview
                         itemId: window.feature.districtComboboxId,
                         store: window.feature.districtStore,
                         disabled: false,
+                        queryMode: 'local',
                         labelAlign: 'top',
                         fieldLabel: 'Selected District',
                         displayField: 'Name',
@@ -437,6 +443,7 @@ Historical Product Level: Overview
                         itemId: window.feature.outpostComboboxId,
                         store: window.feature.outpostStore,
                         disabled: false,
+                        queryMode: 'local',
                         labelAlign: 'top',
                         labelClsExtra: 'combo-label',
                         fieldLabel: 'Selected Seller',
@@ -469,6 +476,7 @@ Historical Product Level: Overview
                         itemId: window.feature.productComboboxId,
                         store: window.feature.productStore,
                         disabled: false,
+                        queryMode: 'local',
                         labelAlign: 'top',
                         labelClsExtra: 'combo-label',
                         fieldLabel: 'Selected Product',
@@ -608,6 +616,20 @@ Historical Product Level: Overview
             window.feature.productSalesStore.proxy.extraParams.endDate = null;
         };
 
+        function BuildQueryString() {
+            var startDtSelValue = window.feature.container.down('#' + window.feature.startDateId).rawValue;
+            var endDtSelValue = window.feature.container.down('#' + window.feature.endDateId).rawValue;
+            var countrySelValue = window.feature.container.down('#' + window.feature.countryComboboxId).getValue();
+            var regionSelValue = window.feature.container.down('#' + window.feature.regionComboboxId).getValue();
+            var districtSelValue = window.feature.container.down('#' + window.feature.districtComboboxId).getValue();
+            var outpostSelValue = window.feature.container.down('#' + window.feature.outpostComboboxId).getValue();
+            var productSelValue = window.feature.container.down('#' + window.feature.productComboboxId).getValue();
+            var clientSelValue = window.feature.container.down('#' + window.feature.clientComboboxId).getValue();
+            var queryStr = "?StartDate=" + startDtSelValue + "&EndDate=" + endDtSelValue + "&CountryId=" + countrySelValue + "&RegionId=" + regionSelValue +
+                "&DistrictId=" + districtSelValue + "&OutpostId=" + outpostSelValue + "&ProductId=" + productSelValue + "&Client=" + clientSelValue
+            return queryStr;
+        }
+
         function SetNewExtraParams(){
             groupByStr = '';
             firstColumnName = '';
@@ -684,6 +706,8 @@ Historical Product Level: Overview
 
         mainContent.add(window.feature.container);
 
+        var startDataCtrl = window.feature.container.down('#' + window.feature.startDateId);
+        var endDataCtrl = window.feature.container.down('#' + window.feature.endDateId);
         var countryCombobox = window.feature.container.down('#'+window.feature.countryComboboxId);
         var regionCombobox = window.feature.container.down('#'+window.feature.regionComboboxId);
         var districtCombobox = window.feature.container.down('#'+window.feature.districtComboboxId);
@@ -691,25 +715,79 @@ Historical Product Level: Overview
         var productCombobox = window.feature.container.down('#' + window.feature.productComboboxId);
 
         window.feature.countryStore.load();
-        window.feature.productStore.load();
+        window.feature.productStore.load({
+            callback: function () {
 
-        window.feature.regionStore.load({
-            params: { countryId: '@Guid.Empty' }
-        });
-        window.feature.districtStore.load({
-            params: { regionId: '@Guid.Empty' }
-        });
-        window.feature.outpostStore.load({ 
-            params: { districtId: '@Guid.Empty'} 
+                if ('@Model.ProductId' != '' && '@Model.ProductId' != '@Guid.Empty') {
+                    productCombobox.setValue('@Model.ProductId');
+                }
+                else {
+                    productCombobox.setValue('@Guid.Empty');
+                }
+            }
         });
 
-        countryCombobox.setValue('@Guid.Empty');
-        regionCombobox.setValue('@Guid.Empty');
-        districtCombobox.setValue('@Guid.Empty');
-        outpostCombobox.setValue('@Guid.Empty');
-        productCombobox.setValue('@Guid.Empty');
-        
+        if ('@Model.CountryId' != '' && '@Model.CountryId' != '@Guid.Empty') {
+            window.feature.regionStore.load({
+                params: { countryId: '@Model.CountryId' },
+            });
+            countryCombobox.setValue('@Model.CountryId');
+         }
+         else {
+             window.feature.regionStore.load({
+                 params: { countryId: '@Guid.Empty' },
+             });
+            countryCombobox.setValue('@Guid.Empty');
+        }
+
+        if ('@Model.RegionId' != '' && '@Model.RegionId' != '@Guid.Empty') {
+            window.feature.districtStore.load({
+                params: { regionId: '@Model.RegionId' },
+             });
+            regionCombobox.setValue('@Model.RegionId');
+        }
+        else {
+            window.feature.districtStore.load({
+                params: { regionId: '@Guid.Empty' },
+                
+            });
+            regionCombobox.setValue('@Guid.Empty');
+        }
+        if ('@Model.DistrictId' != '' && '@Model.DistrictId' != '@Guid.Empty') {
+            window.feature.outpostStore.load({
+                params: { districtId: '@Model.DistrictId' },
+            });
+            districtCombobox.setValue('@Model.DistrictId');
+        }
+        else {
+            window.feature.outpostStore.load({
+                params: { districtId: '@Guid.Empty' },
+              });
+              districtCombobox.setValue('@Guid.Empty');
+        }
+
+        if ('@Model.OutpostId' != '' && '@Model.OutpostId' != '@Guid.Empty') {
+            outpostCombobox.setValue('@Model.OutpostId');
+        }
+        else {
+            outpostCombobox.setValue('@Guid.Empty');
+        }
+
+        if ('@Model.StartDate' != '')
+        {
+            startDataCtrl.setValue('@Model.StartDate');
+        }
+        if ('@Model.EndDate' != '' ) {
+            endDataCtrl.setValue('@Model.EndDate');
+        }
+       
+        if ('@Model.Client' != '') {
+            var clientCombobox = window.feature.container.down('#' + window.feature.clientComboboxId);
+            clientCombobox.setValue('@Model.Client');
+        }
+
         showTable();
+       
         
        
     });

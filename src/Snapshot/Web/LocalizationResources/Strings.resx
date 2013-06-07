@@ -158,10 +158,10 @@
     <value>Region is required</value>
   </data>
   <data name="InvalidCodesPart1" xml:space="preserve">
-    <value>Invalid codes:{0}</value>
+    <value>Invalid codes:{0}.</value>
   </data>
   <data name="InvalidCodesPart2" xml:space="preserve">
-    <value>Others updated successfully</value>
+    <value>Others updated successfully.</value>
   </data>
   <data name="InvalidSmsReceived" xml:space="preserve">
     <value>Invalid sms: {0}{1}Please call this toll free number to get assistance: +000000000000</value>

@@ -42,8 +42,17 @@ namespace Web.Areas.StockAdministration.Controllers
         {
             ViewBag.HasNoRightsToEdit = (PermissionService.HasPermissionAssigned(HISTORICALOUTPOSTSTOCKLEVEL_EDIT_PERMISSION, User.Identity.Name) == true) ? false.ToString().ToLowerInvariant() : true.ToString().ToLowerInvariant();
            
+            ProductSalesFilterModel filter = new ProductSalesFilterModel();
+            filter.StartDate = (string)TempData["StartDate"];
+            filter.EndDate = (string)TempData["EndDate"];
+            filter.CountryId = (Guid?)TempData["CountryId"];
+            filter.RegionId = (Guid?)TempData["RegionId"];
+            filter.DistrictId = (Guid?)TempData["DistrictId"];
+            filter.OutpostId = (Guid?)TempData["OutpostId"];
+            filter.ProductId = (Guid?)TempData["ProductId"];
+            filter.Client = (string)TempData["Client"];
 
-            return View();
+            return View(filter);
         }
 
          [Requires(Permissions = "HistoricalOutpostStockLevel.View")]
@@ -51,9 +60,45 @@ namespace Web.Areas.StockAdministration.Controllers
         {
             ViewBag.HasNoRightsToEdit = (PermissionService.HasPermissionAssigned(HISTORICALOUTPOSTSTOCKLEVEL_EDIT_PERMISSION, User.Identity.Name) == true) ? false.ToString().ToLowerInvariant() : true.ToString().ToLowerInvariant();
 
+            ProductSalesFilterModel filter = new ProductSalesFilterModel();
+            filter.StartDate = (string)TempData["StartDate"];
+            filter.EndDate = (string)TempData["EndDate"];
+            filter.CountryId = (Guid?)TempData["CountryId"];
+            filter.RegionId = (Guid?)TempData["RegionId"];
+            filter.DistrictId = (Guid?)TempData["DistrictId"];
+            filter.OutpostId = (Guid?)TempData["OutpostId"];
+            filter.ProductId = (Guid?)TempData["ProductId"];
+            filter.Client = (string)TempData["Client"];
 
-            return View();
+            return View(filter);
         }
+
+         
+         public ActionResult GoToTableView(ProductSalesFilterModel s)
+         {
+             SetTempData(s);
+             return RedirectToAction("Overview");
+         }
+          
+         public ActionResult GoToGraphicView(ProductSalesFilterModel s)
+         {
+             SetTempData(s);
+             return RedirectToAction("GraphicOverview");
+         }
+
+         private void SetTempData(ProductSalesFilterModel s)
+         {
+             TempData.Clear();
+             TempData.Add("StartDate", s.StartDate);
+             TempData.Add("EndDate", s.EndDate);
+             TempData.Add("CountryId", s.CountryId);
+             TempData.Add("RegionId", s.RegionId);
+             TempData.Add("DistrictId", s.DistrictId);
+             TempData.Add("OutpostId", s.OutpostId);
+             TempData.Add("ProductId",s.ProductId);
+             TempData.Add("Client", s.Client);
+         }
+        
 
         [HttpGet]
         public JsonResult GetHistoricalProductLevel(Guid? countryId, Guid? regionId, Guid? districtId, Guid? outpostId)
@@ -482,15 +527,15 @@ namespace Web.Areas.StockAdministration.Controllers
             var prodsList = new List<ReferenceModel>();
             prodsList.Add(new ReferenceModel() { Id = Guid.Empty, Name = "All" });
 
-            if (!countryId.HasValue && !regionId.HasValue && !districtId.HasValue && !outpostId.HasValue)
-            {
-                return Json(new StoreOutputModel<ReferenceModel>
-                {
-                    Items = prodsList.ToArray(),
-                    TotalItems = prodsList.Count()
-                }, JsonRequestBehavior.AllowGet);
+            //if (!countryId.HasValue && !regionId.HasValue && !districtId.HasValue && !outpostId.HasValue)
+            //{
+            //    return Json(new StoreOutputModel<ReferenceModel>
+            //    {
+            //        Items = prodsList.ToArray(),
+            //        TotalItems = prodsList.Count()
+            //    }, JsonRequestBehavior.AllowGet);
 
-            }
+            //}
 
 
             var osls = QueryStockLevel.Query().Where(it => it.Client.Id == this._client.Id);
