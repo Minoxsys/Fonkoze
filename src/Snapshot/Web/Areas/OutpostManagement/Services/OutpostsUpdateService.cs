@@ -18,13 +18,14 @@ namespace Web.Areas.OutpostManagement.Services
         private IQueryService<Country> _queryCountry;
         private IQueryService<Region> _queryRegion;
         private IQueryService<District> _queryDistrict;
+        private IQueryService<Contact> _queryContact;
 
         private ISaveOrUpdateCommand<Outpost> _saveOrUpdateCommandOutpost;
 
         private readonly IContactsUpdateService _contactsUpdateService;
 
         public OutpostsUpdateService(IContactsUpdateService contactsUpdateService, IQueryService<Outpost> queryservice, IQueryService<Country> queryCountry, 
-            IQueryService<Region> queryRegion, IQueryService<District> queryDistrict, ISaveOrUpdateCommand<Outpost> saveOrUpdateCommandOutpost)
+            IQueryService<Region> queryRegion, IQueryService<District> queryDistrict, ISaveOrUpdateCommand<Outpost> saveOrUpdateCommandOutpost, IQueryService<Contact> queryContact)
         {
             _contactsUpdateService = contactsUpdateService;
             _queryService = queryservice;
@@ -32,6 +33,7 @@ namespace Web.Areas.OutpostManagement.Services
             _queryRegion = queryRegion;
             _queryDistrict = queryDistrict;
             _saveOrUpdateCommandOutpost = saveOrUpdateCommandOutpost;
+            _queryContact = queryContact;
         }
 
         private bool TryMapParseOutputAsOutput(UserAndClientIdentity loggedUser, Outpost outpost, IParsedOutpost parsedOutpost)
@@ -41,21 +43,23 @@ namespace Web.Areas.OutpostManagement.Services
             outpost.Latitude = "(" + parsedOutpost.Latitude + "," + parsedOutpost.Longitude + ")";
             outpost.Client = loggedUser.Client;
             outpost.ByUser = loggedUser.User;
+            outpost.DetailMethod = parsedOutpost.ContactDetail;
 
             outpost.Country = _queryCountry.Query().Where(it => it.Name == parsedOutpost.Country).FirstOrDefault();
-            outpost.Region = _queryRegion.Query().Where(it => it.Name == parsedOutpost.Region).FirstOrDefault();
-            outpost.District = _queryDistrict.Query().Where(it => it.Name == parsedOutpost.District).FirstOrDefault();
+            outpost.Region = _queryRegion.Query().Where(it => it.Name == parsedOutpost.Region && it.Country == outpost.Country).FirstOrDefault();
+            outpost.District = _queryDistrict.Query().Where(it => it.Name == parsedOutpost.District && it.Region == outpost.Region).FirstOrDefault();
 
             if (string.IsNullOrWhiteSpace(outpost.Name) || string.IsNullOrWhiteSpace(outpost.Latitude) || outpost.Country == null || 
-                outpost.Region == null || outpost.District == null) return false;
+                string.IsNullOrWhiteSpace(outpost.DetailMethod) || outpost.Region == null || outpost.District == null) return false;
 
             return true;
         }
 
         private bool TryUpdateOutpost(UserAndClientIdentity loggedUser, Outpost existentOutpost, Outpost existentCoordonatesOutpost, IParsedOutpost parsedOutpost)
         {
-            // 
-            if (existentCoordonatesOutpost != null && existentOutpost != existentCoordonatesOutpost) return false;
+            var existentContact = _queryContact.Query().Where(c => c.ContactDetail == parsedOutpost.ContactDetail && c.IsMainContact && c.Outpost != existentOutpost).FirstOrDefault();
+
+            if (existentCoordonatesOutpost != null && existentOutpost != existentCoordonatesOutpost || existentContact != null) return false;
 
             if (TryMapParseOutputAsOutput(loggedUser, existentOutpost, parsedOutpost))
             {
@@ -71,7 +75,9 @@ namespace Web.Areas.OutpostManagement.Services
 
         private bool TryAddOutpost(Outpost existentCoordonatesOutpost, UserAndClientIdentity loggedUser, IParsedOutpost parsedOutpost)
         {
-            if (existentCoordonatesOutpost != null) return false;
+            var existentContact = _queryContact.Query().Where(c => c.ContactDetail == parsedOutpost.ContactDetail && c.IsMainContact).FirstOrDefault();
+
+            if (existentCoordonatesOutpost != null || existentContact != null) return false;
 
             var outpost = new Outpost();
 

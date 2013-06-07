@@ -27,6 +27,7 @@ namespace Web.Areas.OutpostManagement.Services
                 Client = loggedUser.Client,
                 ByUser = loggedUser.User,
                 Outpost = outpost,
+                IsMainContact = true,
                 ContactType = Contact.MOBILE_NUMBER_CONTACT_TYPE,
             };
 
@@ -55,7 +56,18 @@ namespace Web.Areas.OutpostManagement.Services
 
             if (existentContact == null)
             {
+                DeactivateExistentContacts(existentOutpost);
                 AddContact(loggedUser, existentOutpost, parsedOutpost);
+            }
+        }
+
+        private void DeactivateExistentContacts(Outpost existentOutpost)
+        {
+            var contactsForOutpost = _queryContact.Query().Where(c => c.Outpost == existentOutpost);
+
+            foreach(var contact in contactsForOutpost)
+            {
+                contact.IsMainContact = false;
             }
         }
     }

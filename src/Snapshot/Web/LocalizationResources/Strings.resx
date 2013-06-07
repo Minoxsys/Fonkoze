@@ -194,10 +194,10 @@
     <value>The file uploaded successfully. The following Products could not be updated:</value>
   </data>
   <data name="CSV_file_failed_outposts" xml:space="preserve">
-    <value>The file uploaded successfully. The following Outposts could not be updated:</value>
+    <value>The file uploaded successfully. The following Sellers could not be updated:</value>
   </data>
   <data name="CSV_outposts_file_uploaded_successfully" xml:space="preserve">
-    <value>The outposts update was succesful.</value>
+    <value>The Sellers update was succesful.</value>
   </data>
   <data name="EmailAppActivityText" xml:space="preserve">
     <value>Email sent to {0}. Email Message: {1}</value>
