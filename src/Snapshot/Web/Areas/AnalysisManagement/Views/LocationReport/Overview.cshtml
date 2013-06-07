@@ -502,15 +502,16 @@ Analysis: Location Report
                                     type: 'vbox',
                                     align: 'stretch'
                                 },
-                               
                                 items: [{
                                         xtype: 'gridpanel',
                                         cls: 'white-border',
                                         store: window.feature.districtOutpostsStore,
                                         loadMask: true,
                                         margin: '0 30 20 0',
-                                        autoScroll: true,
+                                        overflowX: 'auto',
+                                        overflowY: 'auto',
                                         disableSelection: true,
+                                        maxHeight: 200,
                                         columns: [{
                                                 header: 'Districts',
                                                 dataIndex: 'DistrictName',
@@ -674,13 +675,12 @@ Analysis: Location Report
                 cls: 'white-border',
                 id:'sellersGrid',
                 loadMask: true,
-               // enableLocking:true,
+                flex: 1,
                 disableSelection: true,
-                store:gridStore,
-                autoScroll: true,
-                //     maxWidth:400,
-                margin: '0 30 0 0',
-                maxHeight:800,
+                store: gridStore,
+                overflowX: 'auto',
+                overflowY: 'auto',
+                margin: '0 30 10 0',
                 columns: gridColumns,
                 title: 'Product Status'
                
