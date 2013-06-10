@@ -301,7 +301,7 @@ Historical Product Level: Overview
                           itemId: window.feature.startDateId,
                           value: prevMonthDate,
                           listeners: {
-                              change: function (dt, newValue, oldValue, eOpts) {
+                              select: function (dt, newValue, oldValue, eOpts) {
                                   showTable();
                               }
                           }
@@ -316,7 +316,7 @@ Historical Product Level: Overview
                           itemId:window.feature.endDateId,
                           value: currentDate,
                           listeners: {
-                              change: function (dt, newValue, oldValue, eOpts) {
+                              select: function (dt, newValue, oldValue, eOpts) {
                                   showTable();
                               }
                           }
@@ -497,6 +497,7 @@ Historical Product Level: Overview
                         itemId: window.feature.clientComboboxId,
                         store: window.feature.clientStore,
                         labelAlign: 'top',
+                        queryMode: 'local',
                         labelClsExtra: 'combo-label',
                         fieldLabel: 'Selected Client',
                         displayField: 'Name',
@@ -598,12 +599,16 @@ Historical Product Level: Overview
                 }
 
                 );
-            
+
             window.feature.productSalesStore.load();
             window.feature.productSalesStore.group(groupByStr);
+            
            
            
         }
+        window.feature.executeDelayedTableDisplay = new Ext.util.DelayedTask(function () {
+            showTable();
+        })
 
         function ResetExtraParams(){
             window.feature.productSalesStore.proxy.extraParams.outpostId = null;
@@ -683,15 +688,15 @@ Historical Product Level: Overview
             }
 
             var clientSelectedValue = window.feature.container.down('#' + window.feature.clientComboboxId).getValue();
-            if (productSelectedValue != null) {
+            if (clientSelectedValue != null) {
                 window.feature.productSalesStore.proxy.extraParams.clientId = clientSelectedValue;
             }
             var startDateSelValue = window.feature.container.down('#' + window.feature.startDateId).getValue();
-            if (productSelectedValue != null) {
+            if (startDateSelValue != null) {
                 window.feature.productSalesStore.proxy.extraParams.startDate = startDateSelValue;
             }
             var endDateSelValue = window.feature.container.down('#' + window.feature.endDateId).getValue();
-            if (productSelectedValue != null) {
+            if (endDateSelValue != null) {
                 window.feature.productSalesStore.proxy.extraParams.endDate = endDateSelValue;
             }
             if(groupByStr=='')
@@ -786,8 +791,7 @@ Historical Product Level: Overview
             clientCombobox.setValue('@Model.Client');
         }
 
-        showTable();
-       
+        window.feature.executeDelayedTableDisplay.delay(4000);
         
        
     });

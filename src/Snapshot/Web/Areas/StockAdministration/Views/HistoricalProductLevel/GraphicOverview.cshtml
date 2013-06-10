@@ -224,7 +224,7 @@ Historical Product Level: Overview
                           itemId: window.feature.startDateId,
                           value: prevMonthDate,
                           listeners: {
-                              change: function (dt, newValue, oldValue, eOpts) {
+                              select: function (dt, newValue, oldValue, eOpts) {
                                   showChart();
                               }
                           }
@@ -240,7 +240,7 @@ Historical Product Level: Overview
                           value: currentDate,
                           maxValue: currentDate,
                           listeners: {
-                              change: function (dt, newValue, oldValue, eOpts) {
+                              select: function (dt, newValue, oldValue, eOpts) {
                                   showChart();
                               }
                           }
@@ -475,6 +475,7 @@ Historical Product Level: Overview
                         itemId: window.feature.clientComboboxId,
                         store: window.feature.clientStore,
                         labelAlign: 'top',
+                        queryMode: 'local',
                         labelClsExtra: 'combo-label',
                         fieldLabel: 'Selected Client',
                         displayField: 'Name',
@@ -529,17 +530,6 @@ Historical Product Level: Overview
 
  //-----Chart Stuff ------
 
-        function showChart()
-        {
-            ResetExtraParams();
-            SetNewExtraParams();
-            window.feature.chartStore.load({
-                callback: function () {
-                    window.feature.executeDelayedChartDisplay.delay(100);
-                }
-            });
-            
-        }
 
         window.feature.chartStore = Ext.create('Ext.data.ArrayStore', {
             remoteSort:true,
@@ -578,7 +568,22 @@ Historical Product Level: Overview
             return "Month";
         }
 
+        function showChart() {
+            ResetExtraParams();
+            SetNewExtraParams();
+            window.feature.chartStore.load({
+                callback: function () {
+                    window.feature.executeDelayedChartDisplay.delay(1000);
+                }
+            });
+
+        }
+        window.feature.executeDelayed = new Ext.util.DelayedTask(function () {
+            showChart();
+        })
+
         window.feature.executeDelayedChartDisplay = new Ext.util.DelayedTask(function () {
+
             var chartContainer = Ext.getCmp(window.feature.chartContainerId);
             var previousChart = Ext.getCmp(window.feature.chartId);
             chartContainer.remove(previousChart);
@@ -832,7 +837,7 @@ Historical Product Level: Overview
             clientCombobox.setValue('@Model.Client');
         }
 
-        showChart();
+        window.feature.executeDelayed.delay(4000);
         
        
     });
