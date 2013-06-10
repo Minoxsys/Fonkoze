@@ -8,6 +8,7 @@ using Domain;
 using MvcContrib.TestHelper.Fakes;
 using Autofac;
 using Web.Areas.OutpostManagement.Models.Contact;
+using System.Collections.Generic;
 
 namespace Tests.Unit.Controllers.Areas.OutpostManagement.ContactControllerTests
 {
@@ -193,6 +194,21 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.ContactControllerTests
             loadContact.Setup(l => l.Load(contact.Id.Value)).Returns(contactFake.Object);
         }
 
+        internal void StubQueryContact(string contactDetails)
+        {
+            var contactFake = new Mock<Contact>();
+            contactFake.Setup(c=>c.Outpost).Returns(new Mock<Outpost>().Object);
+            contactFake.Setup(c=>c.IsMainContact).Returns(true);
+            contactFake.Setup(c=>c.ContactDetail).Returns(contactDetails);
+            contactFake.Setup(c => c.ContactType).Returns(Contact.MOBILE_NUMBER_CONTACT_TYPE);
+
+            contactFake.Setup(c => c.Client).Returns(clientMock.Object);
+            contactFake.Setup(c => c.ByUser).Returns(userMock.Object);
+
+            var queryContact = Mock.Get(this.controller.QueryContact);
+
+            queryContact.Setup(q => q.Query()).Returns(new List<Contact> { contactFake.Object }.AsQueryable());
+        }
 
         internal void VerifyDeleteCommandExecuted()
         {

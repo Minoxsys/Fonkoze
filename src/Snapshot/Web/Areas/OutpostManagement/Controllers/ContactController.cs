@@ -8,6 +8,9 @@ using Core.Persistence;
 using Domain;
 using Core.Domain;
 using Web.Areas.OutpostManagement.Services;
+using System.Text;
+using Web.Areas.OutpostManagement.Models.Outpost;
+using Web.Models.Shared;
 
 namespace Web.Areas.OutpostManagement.Controllers
 {
@@ -111,6 +114,34 @@ namespace Web.Areas.OutpostManagement.Controllers
             };
         }
 
+        [HttpPost]
+        public JsonResult VerifyIfContactExistent(List<string> contactDetails, Guid outpostId)
+        {
+            var outpost = QueryOutposts.Load(outpostId);
+
+            var existentContacts = new List<Contact>();
+
+            foreach (var cDetails in contactDetails)
+            {
+                var contact = QueryContact.Query().Where(c => c.ContactDetail == cDetails && c.Outpost != outpost 
+                                                            && c.IsMainContact).FirstOrDefault();
+
+                if (contact != null)
+                {
+                    existentContacts.Add(contact);
+                }
+            }
+
+            if (existentContacts.Any())
+            {
+                return Json(new JsonActionResponse{ Status = "ERROR", Message = GetExistentContactsString(existentContacts).ToString() });
+            }
+            else
+            {
+                return Json(new JsonActionResponse { Status = "OK" });
+            }
+        }
+
         public class PutContactIndex : ContactModel
         {
         }
@@ -169,6 +200,31 @@ namespace Web.Areas.OutpostManagement.Controllers
                 clientId = _user.ClientId;
 
             this._client = LoadClient.Load(clientId);
+        }
+
+        private StringBuilder GetExistentContactsString(List<Contact> existentContacts)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            sb.Append("The following active Contact details already exist:");
+
+            for (int i = 0; i <= existentContacts.Count; ++i)
+            {
+                if (i == 0)
+                {
+                    sb.Append(" ").Append(existentContacts[i].ContactDetail);
+                }
+                else if (i == existentContacts.Count)
+                {
+                    sb.Append(".");
+                }
+                else
+                {
+                    sb.Append(", ").Append(existentContacts[i].ContactDetail);
+                }
+            }
+
+            return sb;
         }
     }
 }

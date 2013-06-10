@@ -156,6 +156,7 @@
     <Compile Include="Unit\Controllers\Areas\OutpostManagement\AssignProductGroupController_Tests\ObjectMother.cs" />
     <Compile Include="Unit\Controllers\Areas\OutpostManagement\ContactControllerTests\IndexMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\OutpostManagement\ContactControllerTests\ObjectMother.cs" />
+    <Compile Include="Unit\Controllers\Areas\OutpostManagement\ContactControllerTests\VerifyIfExistingContactMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\OutpostManagement\CountryControllerTests\CreateMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\OutpostManagement\CountryControllerTests\DeleteMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\OutpostManagement\CountryControllerTests\IndexMethod.cs" />

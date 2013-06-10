@@ -1,7 +1,7 @@
 ﻿@using Web.Areas.OutpostManagement.Models.Outpost
 @model OutpostOverviewModel
 @section page_title{
-    Outpost Management: Overview
+Outpost Management: Overview
 }
 @{
     Html.RenderPartial("_SubNavigation");
@@ -507,20 +507,41 @@
     
                             if (!errorsFound){
     
-                                var createAction = $.post(me.url, form.getValues());
-                                createAction.success(function(serverResponse){
-                                    if (serverResponse.Status === "Error"){
-                                        msgAlert.alert(serverResponse.Status, serverResponse.Message);
-                                    }
-                                    else{
-                                        me.postContactsFromMemoryProxy(serverResponse.OutpostId || me.entityId);
-                                        me.close();
-                                        me.destroy();
+                                var contactDetails = [];
 
-                                        window.feature.outpostsStore.loadPage(1);
-                                    }
+                                for (var i = 0; i < me.contactsStore.count(); i++)
+                                {
+                                    contactDetails.push(me.contactsStore.data.items[i].get('ContactDetail'));
+                                }
+
+                                $.ajax({
+                                    type: "POST",
+                                    url: '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Contact", action = "VerifyIfContactExistent" })',
+                                    data: {contactDetails: contactDetails, outpostId: form.getValues().EntityId},
+                                    dataType: "json",
+                                    traditional: true,
+                                    success: function(data){
+                                        if(data.Status == "OK"){
+                                            var createAction = $.post(me.url, form.getValues());
+                                            createAction.success(function(serverResponse){
+                                                if (serverResponse.Status === "Error"){
+                                                    msgAlert.alert(serverResponse.Status, serverResponse.Message);
+                                                }
+                                                else{
+                                                    me.postContactsFromMemoryProxy(serverResponse.OutpostId || me.entityId);
+                                                    me.close();
+                                                    me.destroy();
+
+                                                    window.feature.outpostsStore.loadPage(1);
+                                                }
+                                            });
+                                        }
+                                        else{
+
+                                            msgAlert.alert("Error", data.Message);
+                                        }
+                                    },
                                 });
-    
                             }
                         }  
                     }
@@ -793,17 +814,17 @@
                                 // Create a record instance through the ModelManager
                                 var r = new window.feature.ContactModel({
                                     'ContactType': '@Domain.Contact.MOBILE_NUMBER_CONTACT_TYPE', 
-                                        'ContactDetail': null,
-                                        'IsMainContact': false,
-                                    });
+                                    'ContactDetail': null,
+                                    'IsMainContact': false,
+                                });
     
-                                    me.contactsStore.insert(0, r);
-                                    var buttons = window.feature.rowEditor.buttons;
-                                    window.feature.rowEditor.startEdit(0, 0);
-                                }
+                                me.contactsStore.insert(0, r);
+                                var buttons = window.feature.rowEditor.buttons;
+                                window.feature.rowEditor.startEdit(0, 0);
+                            }
     
-                            }]
-                        },
+                        }]
+                    },
                         me.contactsGrid
                     ]
                 });
@@ -985,7 +1006,7 @@
                                 meta.style = 'cursor: pointer;';
                                 addTooltip(val, meta, rec, rowIdx, colIdx, ds);
                                 return val; },
-                           processEvent: function (type, view, cell, recordIndex, cellIndex, e) {
+                            processEvent: function (type, view, cell, recordIndex, cellIndex, e) {
                                 if (type == 'click'){
                                     if (@(ViewBag.HasNoRightsToAdd) === true){
                                         var msgAlert = Ext.Msg;
@@ -1008,7 +1029,7 @@
                                     }
                                     return true;
                                 }
-                            }
+                           }
                         },{
                             text: "Contact Method",
                             dataIndex: 'ContactMethod',
